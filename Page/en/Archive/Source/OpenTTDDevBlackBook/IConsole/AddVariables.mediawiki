@@ -6,3 +6,25 @@ the first thing you ll need if you want to do anything within the console is
 include "console.h"
 </pre>
 this gives you the ability to access all IConsole functions and structures you will have to use if you are intending to add Commands/Functions/Variables to the Console.
+
+==adding an c++ variable==
+to add an c++ variable to the console variable list you only need to put this somewhere in your sourcecode where it is executed during the openttd initialization process:
+<pre>
+IConsoleVarRegister("myvar",(void *) &my_static_var,ICONSOLE_VAR_BYTE);
+</pre>
+ICONSOLE_VAR_BYTE can be replaced with another variable type according to your c++ variable definition.
+
+==adding an virtual c++ variable==
+this is as easy as the procedure for adding an c++ variable.
+<pre>
+_iconsole_var * var;
+var = IConsoleVarAlloc(ICONSOLE_VAR_BOOLEAN);
+IConsoleVarInsert(var,"temp_bool");
+var = IConsoleVarAlloc(ICONSOLE_VAR_INT16);
+IConsoleVarInsert(var,"temp_int16");
+</pre>
+this adds two virtual variables.. virtual variables arent mapped to an c++ variable so they were only accessable over the console or from within c++ over
+<pre>
+_iconsole_var * IConsoleVarGet(byte * name);
+</pre>
+this allows the usage of instance based strings in c++. for a description of instance based strings read [[en/Archive/Source/OpenTTDDevBlackBook/IConsole/Scripting|Using Console Scripting]]
