@@ -240,3 +240,24 @@ int main ( void ) {
 }
 
 </pre>
+
+==Considerations==
+I was a bit worried about the amount of computation some of these structs, as you would first need to get the split part, then & or | that, and it would take too much CPU (in contrast to now of course). My worse fears became reality when I saw the assembly output of "<b><i>if (tile.height & 2) ...</i></b>" which resulted in:
+<pre>
+; 199  :  if (tile.height & 2) return 1;
+	mov	al, BYTE PTR ?tile@@3UTile@@A+4
+	shr	al, 4
+	and	al, 15					; 0000000fH
+	movzx	ecx, al
+	and	ecx, 2
+	je	SHORT $L876
+</pre>
+
+Thank god it was debug build, and optimized it resulted into the following, so all my doubts are gone like clouds in the sun:
+<pre>
+; 199  :  if (tile.height & 2) return 1;
+	mov	al, BYTE PTR ?tile@@3UTile@@A+4
+	add	esp, 32					; 00000020H
+	test	al, 32					; 00000020H
+	je	SHORT $L876
+</pre>
