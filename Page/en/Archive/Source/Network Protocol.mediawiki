@@ -39,6 +39,10 @@ In the old protocol this happened a lot, mostly because of a bad network-protoco
 
 By default, the seeds are checked once in the 100 frames. You can alter this with '*net_sync_freq = <number>'. Do not make this number too low, because it increases bandwidth by a lot.
 
+== Endian ==
+
+The network protocol is 100% endian safe. We made that possible by creating our own endian, sort to speak. We do not send packets, but we send bytes over the network. For example, when we want to send a int64, we send first byte 1, then byte 2, and so on. So the byte order is ALWAYS 1 2 3 4. This way we know for sure that every client can join every server, looking to endianess.
+
 == LAN-detection ==
 
 OpenTTD has a function which can detect LAN-servers. This is done via UDP. At the moment you select LAN-mode on the server, the server also starts an UDP-listener. When a client on the same LAN presses Find Server in LAN-mode, it sends an UDP-broadcast. This is one of the best things UDP has: broadcast. The server receives it, and sends his game_info back to the client. This way the client can discover a server on the local LAN. This is the only place where UDP is used.
