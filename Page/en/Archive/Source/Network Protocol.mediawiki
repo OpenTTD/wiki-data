@@ -78,49 +78,72 @@ After that, all clients receive every frame (1 frame = 27ms in normal speed) a N
 |-
 ! Packet name !! From whom !! To whom !! Params !! Information
 |-
-|PACKET_CLIENT_GAME_INFO || Client1 || Server || <none> || Requests info about the server (current game/players/password protected)
+!class="unclaimed"| PACKET_CLIENT_GAME_INFO 
+| Client1 
+|| Server || <none> || Requests info about the server (current game/players/password protected)
 |-
-|PACKET_SERVER_GAME_INFO || Server || Client1 || GameInfo || Sends the info of the server
+!class="unclaimed"| PACKET_SERVER_GAME_INFO 
+| Server || Client1 || GameInfo || Sends the info of the server
 |-
-|PACKET_CLIENT_JOIN || Client1 || Server || UserName / GamePassword || Request to join the server (with a username and a gamepassword if needed)
+!class="unclaimed"| PACKET_CLIENT_JOIN 
+| Client1 || Server || UserName / GamePassword || Request to join the server (with a username and a gamepassword if needed)
 |-
-|PACKET_SERVER_ERROR || Server || Client1 || ErrorCode || ErrorCode (login denied, kicked, stuff like that)
+!class="unclaimed"| PACKET_SERVER_ERROR 
+| Server || Client1 || ErrorCode || ErrorCode (login denied, kicked, stuff like that)
 |-
-|PACKET_SERVER_WELCOME || Server || Client1 || Other player info || Info about other players, MOTD
+!class="unclaimed"| PACKET_SERVER_WELCOME 
+| Server || Client1 || Other player info || Info about other players, MOTD
 |-
-|PACKET_CLIENT_GETMAP || Client1 || Server || <none> || The client wants the map of the server
+!class="checked"| PACKET_CLIENT_GETMAP 
+| Client1 || Server || <none> || The client wants the map of the server
 |-
-|PACKET_SERVER_MAP || Server || Client1 || Savegame || The savegame of the current map (multiple packages)
+!class="checked"| PACKET_SERVER_MAP 
+| Server || Client1 || Savegame || The savegame of the current map (multiple packages)
 |-
-|PACKET_CLIENT_MAP_OK || Client1 || Server || <none> || The client received the map correctly and is ready to join
+!class="checked"| PACKET_CLIENT_MAP_OK 
+| Client1 || Server || <none> || The client received the map correctly and is ready to join
 |-
-|PACKET_SERVER_JOIN || Server || ClientX || Playername || Player joins the game
+!class="checked"| PACKET_SERVER_JOIN 
+| Server || ClientX || Playername || Player joins the game
 |-
-|PACKET_SERVER_FRAME || Server || ClientX || frame || The server sends this command every frame. The clients may only proceed to this frame!
+!class="checked"| PACKET_SERVER_FRAME 
+| Server || ClientX || frame || The server sends this command every frame. The clients may only proceed to this frame!
 |-
-|PACKET_SERVER_SYNC || Server || ClientX || RandomSeed1 || The server sends the random-seed-1 to check if the clients are still in sync
+!class="checked"| PACKET_SERVER_SYNC 
+| Server || ClientX || RandomSeed1 || The server sends the random-seed-1 to check if the clients are still in sync
 |-
-|PACKET_CLIENT_ACK || Client1 || Server || frame || The client is done executing this frame and is in sync
+!class="unclaimed"| PACKET_CLIENT_ACK 
+| Client1 || Server || frame || The client is done executing this frame and is in sync
 |-
-|PACKET_CLIENT_COMMAND || Client1 || Server || Command, p1, p2 || The clients sends a DoCommand to the server
+!class="checked" |PACKET_CLIENT_COMMAND 
+| Client1 || Server || Command, p1, p2 || The clients sends a DoCommand to the server
 |-
-|PACKET_SERVER_COMMAND || Server || ClientX || Command, p1, p2, player, RandomSeed1, frame || There was a command on a frame, the server says which frame and how the RandomSeed was before the StateGameLoop.
+!class="checked"| PACKET_SERVER_COMMAND 
+| Server || ClientX || Command, p1, p2, player, RandomSeed1, frame || There was a command on a frame, the server says which frame and how the RandomSeed was before the StateGameLoop.
 |-
-|PACKET_CLIENT_CHAT || Client1 || Server || String, Type, Player || Chat message (type: 0=broadcast, 1=team, 2=client) -- A team is all clients connected to 1 game-player.
+!class="wip"| PACKET_CLIENT_CHAT 
+| Client1 || Server || String, Type, Player || Chat message (type: 0=broadcast, 1=team, 2=client) -- A team is all clients connected to 1 game-player.
 |-
-|PACKET_SERVER_CHAT || Server || ClientX || FromPlayer, Type, string || Chat message
+!class="wip"| PACKET_SERVER_CHAT 
+| Server || ClientX || FromPlayer, Type, string || Chat message
 |-
-|PACKET_CLIENT_QUIT || Client1 || Server || Reason || The client wants to quit the server
+!class="checked"| PACKET_CLIENT_QUIT 
+| Client1 || Server || Reason || The client wants to quit the server
 |-
-|PACKET_CLIENT_ERROR || Client1 || Server || ErrorNo || The client made an error and is going to be disconnected. Inform the server about it (OpenTTD crash / DeSync)
+!class="checked"| PACKET_CLIENT_ERROR 
+| Client1 || Server || ErrorNo || The client made an error and is going to be disconnected. Inform the server about it (OpenTTD crash / DeSync)
 |-
-|PACKET_SERVER_QUIT || Server || ClientX || Player, reason || A player left the game (also sent to the quiting player)
+!class="checked"| PACKET_SERVER_QUIT 
+| Server || ClientX || Player, reason || A player left the game (also sent to the quiting player)
 |-
-|PACKET_SERVER_ERROR_QUIT || Server || ClientX || Player, ErrorNo || A player left the game (also sent to the quiting player) with an error
+!class="checked"| PACKET_SERVER_ERROR_QUIT 
+| Server || ClientX || Player, ErrorNo || A player left the game (also sent to the quiting player) with an error
 |-
-|PACKET_SERVER_SHUTDOWN || Server || ClientX || Reason || The server shuts down with a given reason, all clients are disconnected shortly after this
+!class="unclaimed"| PACKET_SERVER_SHUTDOWN 
+| Server || ClientX || Reason || The server shuts down with a given reason, all clients are disconnected shortly after this
 |-
-|PACKET_SERVER_NEWGAME || Server || ClientX || <none> || The server loaded a new game (or loaded an old game, it is just the same). The clients need to send a PACKET_CLIENT_GETMAP after this to receive the new map and rejoin
+!class="unclaimed"| PACKET_SERVER_NEWGAME 
+| Server || ClientX || <none> || The server loaded a new game (or loaded an old game, it is just the same). The clients need to send a PACKET_CLIENT_GETMAP after this to receive the new map and rejoin
 |}
 
 == Thinks to remember ==
