@@ -15,7 +15,8 @@ This way, all the ground tiles can be statically allocated in an array. The non-
 ''We have a few options here. The simplest options would be allocating and deleting every tile when needed (malloc/free) but that would be too much overhead. We could also statically allocate an array of tiles and use tiles from that array when we need new tiles (this is how the code below works, this is the _mapextra array). The main disadvantage of this is that there is a hard maximum. An alternative would be mallocing tiles in large blocks, or reallocing the array.''
 
 A different thing used here, is indirection from the tile to the info about it. Every tile stores two indices, LandscapeInfo and BuildInfo, which are indices into the LI and BI arrays, resp. These LandscapeInfo and BuildInfo structs store information about the tile, and about what is (built) on it. The reason that these are not just embedded into the MapInfo struct, is that a lot of tiles will have identical info, so we only have to store the info once, and tiles can share the info. This means that whenever the info of a tile changes, the indices will have to be changed to point to the correct info (which might be added to LI or BI if it isn't there yet).
-'''We will need to keep a hashmap that will allow us to easily find a given info in the LI and BI arrays.'''
+
+''We will need to keep a hashmap that will allow us to easily find a given info in the LI and BI arrays.''
 
 <pre>
 struct {
