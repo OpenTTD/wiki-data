@@ -135,9 +135,9 @@ typedef struct Tile {
     struct {
       uint16 index;       // index of the checkpoint (allowing checkpoints to spawn across tiles)
       uint8 track_type:4; // rail, electric rail, monorail, trams, maglev ...
-      uint8 dir:1;        // direction
-      uint8 type:1;       // road or rail if we want road checkpoints later on
-      /* 26 unused bits */
+      uint8 dir:2;        // direction
+      uint8 transport_type:2;       // road/rail/bouys
+      /* 24 unused bits */
     } checkpoint_t; /* 48 bits */
 
     struct {
@@ -286,7 +286,6 @@ int main ( void ) {
   printf("Old-Tile (total):   %3.0f (Mapsize %dx%d %.0fKB)\n", 6.25*8, MAPSIZEX, MAPSIZEY, (6.25*MAPSIZEX*MAPSIZEY)/1024);
   return 0;
 }
-
 </pre>
 
 ==Considerations==
