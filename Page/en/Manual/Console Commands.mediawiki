@@ -1,69 +1,46 @@
 [[Translation:en/Manual/Console Commands]]
-Default Commands
-
-''(version 0.3.6)''
-----
-* '''alias <name> <command>''' -- ''Create an alias''
-** This command creates an alias named <name>, which executes the commands specified in <command>. To read more about aliases, look at [[en/Manual/Console Aliases|Aliases]]
-* '''ban <Client-ID>''' -- ''ban client''
-* '''banlist''' -- ''list banned clients''
-* '''clients''' -- ''Show information about the currently connected network clients''
-* '''connect <server>''' -- ''Connect to the network game running at <server>''
-* '''debug_level <level>''' -- ''Set the debug level to <level> (0-9, the higher the more sensitive)''
-* '''dump_vars''' -- ''Print out all known variables and their values''
-* '''echo <text>''' -- ''Print out <text>''
-* '''echoc <color> <text>''' -- ''Prints out <text> in color <color>''
-* '''exec <file>''' -- ''Execute the script file located at <file>''
-* '''exit''' -- ''Quit the game''
-* '''goto_dir <dir-no>''' -- ''Change directory. Use list_files in advance.''
-* '''help''' -- ''Display simple console help''
-* '''info_cmd <command>''' -- ''Show technical information on the command <command>''
-* '''info_var <variable>''' -- ''Show technical information on the variable <variable>''
-* '''kick <player>''' -- ''Kick the player with player-id <player> from the network game''
-* '''list_aliases''' -- ''List all available aliases''
-* '''list_cmds <filter>''' -- ''List all available commands''
-* '''list_files''' -- ''List files of current directory. Use goto_dir to change the working directory.''
-* '''list_vars <filter>''' -- ''List all available variables''
-* '''load <file-no>''' -- ''Load saved game by the given file number. Use list_files in advance.''
-* '''name "<client's new name>"''' -- ''changes existing client's name to a new name specified''
-* '''newgame''' -- ''Start a new game''
-* '''printf <format> [<arg_1> .. <arg_n>]''' -- ''Print out a string, printf style''
-* '''printfc <color> <format> [<arg_1> .. <arg_n>]''' -- ''Print out a string with color <color>, printf style''
-* '''quit''' -- ''Quit the game''
-* '''random''' -- ''Generate a random number''
-* '''rcon <password> <command>''' -- ''Execute a remote control comand on the server while connected as a client. Password must be set by "set rcon_pw <password>" in advance.''
-* '''reset_company <company-id>''' -- ''a company is deleted by a server using this command''
-* '''return''' -- ''Return (exit) from the running script''
-* '''say <text>''' -- ''Send a chatmessage containing <text> to all players''
-* '''say_client <client> <text>''' -- ''Send a chatmessage containing <text> to the client with client-id <client>''
-* '''say_player <player> <text>''' -- ''Send a chatmessage containing <text> to the player with player-id <player>''
-* '''scan_files <file-name>''' -- ''Result is position of the given file. See list_files.''
-* '''screenshot [big/no_con]''' -- ''Make a screenshot''
-** By default the screenshot will be made of your screen. If you supply the optional [big] paramenter (''screenshot big''), a big screenshot will be made.
-* '''script [<file>]''' -- ''Record a script to the file named <file>''
-* '''scrollto <tile>''' -- ''Scroll to the tile numbered <tile>; hexadecimal (prexifed with 0x) and decimal values supported''
-* '''set <setting> <value>''' -- ''Set <setting> to <value>''
-** This command can be used to set various game-related options. The following options are known:
-*** ''autoclean_companies on/off'' -- Enable this to declare empty companies (companies with no activate clients) bankrupt after a certain amount of months (see below)
-*** ''autoclean_protected <months>'' -- Delay in game months before a protected company is declared bankrupt
-*** ''autoclean_unprotected <months>'' -- Delay in game months before an unprotected company is declared bankrupt
-*** ''company_pw "<password>"'' -- Sets the password of the current players company. Set the password to * to disable it.
-*** ''name "<playername>"'' -- Sets the current players name
-*** ''server_name "<name>"'' -- Sets the servers name
-*** ''server_advertise on/off'' -- Enable this to report your server to the master server. This controls whether your server is visible in the internet server list or not
-*** ''server_bind_ip <ip>'' -- Binds the server to a specific IP. Standard setting is 0.0.0.0 so the server binds itself to all available IPs of the computer
-*** ''server_port <port>'' -- Sets the port where the server listens for connections.
-*** ''server_pw "<password>"'' -- Sets the password which is needed to join the server. Set the password to * to disable it.
-*** ''rcon_pw "<password>"'' -- Sets the rcon password (see the rcon command).
-*** ''restart_game_date "<year>"'' -- Sets the year when the game ends and a new one starts
-*** ''patch <patch_name> [<value>]'' -- Changes the value of a patch or reads its value out.
-* '''status''' -- ''Get status information on all currently connected clients''
-* '''unban <ip>''' -- ''Remove given IP out of the ban list.''
-
-
-Debug Commands [not available in release + network games]
-----
-* '''resetengines''' -- ''resets all use-age and availablitly of engines''
-* '''resettile''' -- ''clears (independent of owner, ratings, etc.) a tile and resets it to bare land''
+== Default commands ==
+; alias <name> <command> : Create an alias named <name> bound to <command>.
+; ban <client-id> : Ban the client with id <client-id>.
+; banlist : List banned clients.
+; cd <directory | number> : Change the working directory to <directory> or <number>. Note: this command was added in version 0.4.0.
+; clients : Show information about all clients currently connected.
+; connect <host> : Connect to a network game running on <host>.
+; debug_level <level> : Switch the debug level to <level>, ranging from 0 to 9 (the higher the more sensitive).
+; dump_vars : Print all known variables and their values.
+; echo <text> : Print out <text> on the console.
+; echoc <color> <text> : Print out <text> in color <color>.
+; exit : Quit the game.
+; goto_dir <number> : Change the working directory to <number>. Use list_files in advance. Note: This command has been replaced by '''cd''' since version 0.4.0.
+; help : Display basic console help.
+; info_cmd <command> : Show technical information on the command <commmand>.
+; info_var <variable> : Show technical information on the variable <variable>.
+; list_aliases : List all available aliases.
+; list_cmds [<filter>] : List all available commands, optionally only commands starting with <filter>.
+; list_files : List files of current directory. Use '''goto_dir''' to change the working directory. Note: This command has been replaced by '''ls''' since version 0.4.0.
+; list_vars [<filter>] : List all registered variables, optionally only commands starting with <filter>.
+; load <number | file> : Load the savegame <number> or <file>. Use '''ls''' in advance when loading by <number>. Note: The <file> alternative was added in version 0.4.0.
+; ls : List files of current directory. Use '''cd''' to change the working directory. Note: This command was added in version 0.4.0.
+; newgame : Start a new game.
+; printf <format> [<arg_0> .. <arg_n>] : Print out a string, using printf-style.
+; printf <color> <format> [<arg_0> .. <arg_n>] : Print out a string with color <color>, using printf-style.
+; quit : Quit the game.
+; random : Generate a pseudo-random number.
+; rcon <password> <command> : Execute <command> on the server authenticated by <password> while connected as a client. The password must be set by "set rcon_pw <password>" on the server in advance.
+; reset_company <company-id> : Delete the company identified by <company-id>.
+; return : Return (exit) from the running script.
+; say <text> : Send a chatmessage containing <text> to all players.
+; say_client <client-id> : Send a chatmessage containing <text> to the client identified by <client-id>.
+; say_player <player> : Send a chatmessage containing <text> to the player identified by <player>.
+; scan_files <file> : Result is position of the given file; see '''list_files'''. Note: This command has been removed since version 0.4.0.
+; screenshot [big]: Take a screenshot. By default the screenshot will cover your current screen, if you supply the optional big parameter, a big screenshot will be taken.
+; script <file> : Record a script to the file named <file>.
+; scrollto <tile> : Scroll to the tile numbered <tile>; hexadecimal (prexifed with 0x) and decimal values supported. Use the land area information tool to get the number of a specific tile.
+; set <setting> <value> : Set <setting> to <value>. See [[en/Archive/Manual/Settings/Console Settings|Console Settings]] for a listing of all available settings.
+; status : Get the status information on all currently connected clients.
+; unban <ip> : Remove a ban on <ip>.
+== Debug Commands [not available in release + network games] ==
+; resetengines : Resets all use-age and availability of engines.
+; resettile : Clears (independent of owner, ratings, etc.) a tile and resets it to bare land.
 
 [[Category:en/Manual/Console]]
