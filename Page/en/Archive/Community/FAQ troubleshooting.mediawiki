@@ -2,13 +2,13 @@
 <-- [[en/Archive/Community/FAQ]]s<br/>
 This FAQ covers troubleshooting errors of [[en/Manual/Main Page]].
 
-
-#I cannot start the game, it complains about missing files?
+__FORCETOC__
+=====I cannot start the game, it complains about missing files?=====
 #* *Nix style OS's (Linux, OSX, Morhops, etc.)<br/>If you get an error like ''Error: Cannot open file '/usr/share/games/openttd/data/sample.cat'', that means that you are missing files. Since currently OpenTTD is using the original TTDLX data files, you will need to copy those to your OpenTTD ''data/'' directory. This means all '''*.grf''' files (trg1r.grf, trgcr.grf, trghr.grf, trgir.grf and trgtr.grf) and '''sample.cat'''.
 #* Windows OS (Win98, Win2k, WinXP, etc.)<br/>An error message window pops up informing you ''Cannot open file '<OpenTTD Install Directory>\data\sample.cat'', that means that you are missing some files. Installing OpenTTD with the attached installer will ask you for your your TTDLX data files directory (usually the CD), and copy those files appropiately. If you are not using the installer, you need to do the same as for *nix systems.
-#The game crashes on Win98(SE)
+=====The game crashes on Win98(SE)=====
 #* Windows98/98SE has problems with DirectX and DirectMusic. Try to start the game with: <pre>openttd.exe -m win32</pre>
-#When loading an older game my airports are screwed
+=====When loading an older game my airports are screwed=====
 #* If you have used some earlier [[en/Archive/Community/Nightly build]] in the early era of development of larger airports, some of the indexes could be messed up. Copy the code below somewhere to your OpenTTD source and call the function once. Most problems should be fixed. It could be that you only have a subproblem, eg. not all are faulty, then you need to filter on ''st->index'' (easiest to get by going to station_gui.c line 396 (''"ScrollMainWindowToTile(DEREF_STATION(w->window_number)->xy);"''), setting a breakpoint there. ''"w->window_number"'' is the index of the station.
 
 ::<pre><nowiki>void FixSVNVersion() 
