@@ -1,0 +1,51 @@
+== Idea for modeling tracks in the new map ==
+
+K, I have this idea, let's see what people think.
+
+== Definitions ==
+First, let's just define some stuff. Look at the image for examples.
+
+[[File:en/Archive/Development/RadicalTrackIdea.png|thumb|Example tracks, combos and placables]]
+
+=== Tracks ===
+These model track pieces. This is basically the information that the train controller and the pathfinder need. Information stored is:
+* Entry point on the tile
+* Exit point on the tile
+* Length of the track
+* All the points on the track (x,y,z,direction tupels)
+
+=== Combos ===
+A combo models an allowed combination of tracks. I think all of the single tracks should also be a combo?
+Information stored is:
+* A list of Tracks that compose this combo
+* The sprite used to render this combo
+* A list of possible signal positions??
+* Info on which tracks are in contact with which tracks, for signalling to work?
+
+=== Placables ===
+These are actual things the user can place on the map. We place a condition here on the tracks used in the placable: every entry point should have a corresponding exit point on the next tile, except for entry and exit points on a limited number of (predefined) control points (ie, corner of the tile, middle of tileborder, etc.).
+* A list of Tracks that compose this combo.
+Information stored is:
+* Size of the placable (N x M tiles)
+* A list of combo's to be placed, along with where to place them
+
+=== Now what? ===
+== Storing tracks ==
+For each tile, we will want to store which tracks are present. Since tracks can only be present in the listed combinations, we will only need to store the combination that is present on this tile. We might also want to store which placable(s) this tile is part of, for when clearing the tile.
+
+== Building tracks ==
+The user will select a placable and put it down on the map somewhere. For each tile in the placable, you make a list of all the tracks that are currently in the tile and all the tracks that would be placed by the placable (typically 1). Then, you search the list of combo's, to see if there is a combo that is composed of the listed tracks. If not, the placing is illegal. If so, store this new combo in the tile, and add the placable just placed to the list of placables on each modified tile.
+Simple, eh? :-)
+
+== Bulldozing tracks ==
+If a track is removed that is part of a small (1-tile) placable, then no worries. But, here comes the tricky part, what to do if a user dynamites a tile that was part of a larger placable? If we only remove the tracks on the given tile, we would end up with weird unfinished tiles that do not satisfy the condition on placables (ie they have exit points that have no corresponding entry point, but are not on a control point either). This is possible, though it makes it quite hard to properly re-attach a fitting track.
+The better (IMO) option is to delete the entire placable when a part of it is deleted. This way, track endings will always be on well-defined control points.
+
+== Compound placables ==
+Another thought of mine was to define compound placables, ie placables that are composed of other placables. This makes it possible to predefine complex junctions and put them down in one go for example. If we would do the same, but build the placable directly from combo's, we couldn't edit it, but only remove it in one go. This might need another name, though :-)
+
+== Pathfinder ==
+This system is quite usable for the pathfinder, since it can easily get a list of tracks on a tile and each track has enough information about planning a route.
+
+== Signals == 
+Signals might pose a problem, specifically because it is non-trivial to determine which tracks are joined together. We could just specify this explicitely, but it will change according to which signals are placed. So, needs thought.
