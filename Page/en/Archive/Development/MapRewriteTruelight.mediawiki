@@ -1,0 +1,204 @@
+Okay, I copied the map of Celester, I thrust he did a good job on the struct, else we will slap him, I mean, no problem :)
+
+What I changed is this:
+
+We create a magic big pool of tiles, in this form:
+
+<pre>
+Tile *_tile_pool;
+_tile_pool = realloc(_tile_pool, sizeof(Tile) * 1024);
+_map[0][0] = _tile_pool[0];
+</pre>
+
+And the above in a nice function like: AllocTile or something, which returns the pointer which can be used, and blablabla. In _map[0][0].next there can be a next tile, that is in the same x/y, but on a different h. The highest h is always on top, and the lowest h, always on the bottom. This way, the memory usage is as low as it can get, TileLoop can easily be called (just looping through all the _tile_pool items), and we have a nice multi-level system.
+
+Just my 2 pennies.
+
+<pre>
+#include <stdio.h>
+#define MAP_SIZE_X 1024
+#define MAP_SIZE_Y 1024
+
+typedef unsigned char uint8;
+typedef unsigned short uint16;
+typedef unsigned long uint32;
+
+typedef struct ground_t {
+	uint8 type:4;	//Bare Land, grass, snow, desert, rocks and and
+	uint8 amount:2;	//amount of snow 
+	uint8 counter:2; //is this large enough? how often will it be incremented?
+	//put the hedge somewhere else maybe?
+} ground_t;
+
+typedef struct water_t {
+	//FIXME - compare to canal_t
+	uint8 type:3;
+	uint8 part:4;	//for the canal locks
+} water_t;
+
+typedef struct bridge_t {
+	uint8 type:4;	//type of the bridge, e.g. wooden, concrete, tubular
+	uint8 dir:2;	//direction, we want to allow more than just two in the future
+	uint8 section:1;	//is it a middle part, or a "endcap"? endcaps will not be needed for cliffs maybe
+} bridge_t;
+
+typedef struct support_t {
+	//Blathis needs to detail this
+	uint8 type:4;		//different types of support, also depending on year
+} support_t;
+
+typedef struct industry_t {
+	uint16 index;
+	uint8 type;	//type of the industry
+	uint8 built:1;
+	uint8 stage:2;
+	uint8 counter:3;
+} industry_t;
+
+typedef struct station_t {
+	uint16 index;	//index of the station
+	uint16 part:7;	//FIXME - dunno .. airport stuff maybe??
+	uint16 type:4;	//FIXME - dunno this either, possibly type of vehicles served
+	uint16 track_type:3;
+} station_t;
+
+typedef struct checkpoint_t {
+	uint8 dir:1;	//direction
+	uint8 type:1;	//road or rail if we want road checkpoints later on
+	uint8 track_type:3;	//rail, electric rail, monorail, trams, maglev ...
+} checkpoint_t;
+
+typedef struct depot_t {
+	uint8 dir:2;	//direction
+	uint8 type:3;	//road, ship, (air), or rail?
+	uint8 section:4;	//part of the depot
+	uint8 track_type:3;	//rail, maglev ....
+} depot_t;
+
+typedef struct tunnel_t {	//This might end up in the support_t stuff one day
+	uint8 type:2;	//road or rail 
+	uint8 dir:2;	//direction
+	uint8 track_type:3;	// well .. you got the point
+} tunnel_t;
+
+typedef struct canal_t {
+	uint8 dir:1;
+	uint8 type:1;	//canal or lock
+	uint8 part:3;	//part of the lock
+	uint8 status;	//if we want to have REAL locks sometime, we need 
+			// astatus of the doors/lift
+} canal_t;
+
+typedef struct signal_t {
+	uint8 present:2;	//what signals are found
+	uint8 type:3;		//type of signals/presignals, maybe Advance later on
+	uint8 semaphore:1;	//is it a semaphore?
+	uint8 status:2;		//status of the signal
+} signal_t;
+
+typedef struct track_t {
+	uint16 tracks:13;	//which tracks are present
+	uint16 track_type:3;	//what type of track
+	signal_t signal[2];	//signals on the tile
+} track_t;
+
+typedef struct tram_t {
+	//void currently
+} tram_t;
+
+typedef struct road_t {
+	uint8 type:2;	//type of the road (when is it used)?
+	uint8 pieces;	//roads which are present in the tile
+} road_t;
+
+typedef struct roadnrail_t {
+	//this is for diagonal roads, if we wanna have
+	//road and rail side-by-side
+	uint8 trackbits;	//0 - horizontal, 1 - vertical
+	uint8 roadpieces;
+	signal_t signal;	//only one signal can be here
+	uint8 road_owner;
+} roadnrail_t;
+
+typedef struct crossing_t {
+	uint8 road_owner;	
+	uint8 dir:2;	//do we want to be more flexible in the future
+	uint8 track_type:3; 
+} crossing_t;
+
+typedef struct lift_t {
+	uint8 pos:7;	//position
+	uint8 moving:1;	//is it moving?
+	uint8 dest:6;	//where is it going to?
+} lift_t;
+
+typedef struct town_t {
+	uint8 type;
+	uint8 stage:2;
+	uint8 counter:3;
+	lift_t lift;
+} town_t;
+	
+typedef struct trees_t {
+	uint8 type;
+	uint8 counter:4;
+	uint8 count:2;
+	uint8 growth:3;
+} trees_t;
+
+typedef struct fields_t {
+	uint8 type;
+	uint8 counter:5;
+	uint8 state:3;		//do we need this stuff here 
+	uint8 hedge_SW:3;
+	uint8 hedge_SE:3;
+	uint8 hedge_NE:3;
+	uint8 hedge_NW:3;
+} fields_t;
+
+typedef struct unmovable_t {
+	uint8 type;
+	uint8 part;
+} unmovable_t;
+
+typedef struct {
+	uint8 altitude_N;	//NO BITPACKING
+	uint8 altitude_S;	//NO BITPACKING
+	uint8 altitude_E;	//NO BITPACKING
+	uint8 altitude_W;	//NO BITPACKING
+	//uint8 slope;
+	uint8 owner;
+	uint8 groundtype:3;
+	uint8 buildtype:5;
+	Tile *next; // Pointer to the next Tile
+	uint8 height; // The height of the tile. 0 = top, 255 = bottom
+	union {
+		ground_t ground;
+		water_t water;
+		bridge_t bridge;
+		support_t support;
+	} base;
+	union {
+		industry_t industry;
+		station_t station;
+		checkpoint_t checkpoint;
+		depot_t depot;
+		tunnel_t tunnel;
+		canal_t canal;
+		track_t track;
+		tram_t tram;
+		roadnrail_t road_n_rail;
+		road_t road;
+		crossing_t crossing;
+		town_t town;
+		trees_t trees;
+		fields_t fields;
+		unmovable_t unmovable;
+	} build;
+} Tile;
+
+// Pointer links to the tile at this point
+//  NULL if there is no tile at that point (not really possible ;))
+Tile *_map[MAP_SIZE_X][MAP_SIZE_Y];
+
+</pre>
