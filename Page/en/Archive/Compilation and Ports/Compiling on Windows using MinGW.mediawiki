@@ -11,8 +11,9 @@ This page will contains guideline of compiling Open Transport Tycoon in Win32 wi
 ** gcc-g++-3.4.2-20040916-1
 ** mingw-runtime-3.5
 ** w32api-3.1
+** zlib-1.2.1
 * Others
-** SDL and zlib will not be used here.
+** SDL will not be used here.
 ** SVN will not be used here, however it is recommended to have it.
 
 ==Setting up MinGW==
@@ -37,22 +38,33 @@ This page will contains guideline of compiling Open Transport Tycoon in Win32 wi
 ==Testing the MinGW installation==
 * Run the following commands.<box><code>make -v<br>gcc -v</code></box>
 * They should output something.  Check if something goes wrong.
+* Run MSYS.
+
+==Compiling zlib==
+# Obtain source code of zlib from http://www.gzip.org/zlib/
+# Extract the source code to a folder.
+# Run MSYS, change the working directory to the source folder.
+# Run: <box><code>./configure<br>make<br>make test</code></box> You should see: <box><code>*** zlib test OK ***</code></box>
+# Run: <box><code>make install prefix=/mingw</code></box> Change <code>(path)</code>
+# Compiling completed.
 
 ==Compiling OTTD==
 '''If you cannot compile, DON'T PANIC.  Sometimes it may deal to coding errors.'''
-# Create Makefile.config:
+: The followings can be done in MSYS mode or Win32 command mode.
+# Obtain OTTD source.  Please refer to [http://wiki.openttd.org/index.php/FAQ_development#How_can_I_obtain_the_source_code.3F How can I obtain the source code?]
+# Change the working directory to the OTTD source folder.
+# Create <code>Makefile.config</code>:
 #: Run: <box><code>make Makefile.config</code></box>
-#: That should be OK if some error about "ls", "/bin/sh.exe" and "svnversion" is shown.  It should say: <box><code>make: Makefile.config is up to date.</code></box>
+#: That should be OK if some error about <code>ls</code>, <code>/bin/sh.exe</code> and <code>svnversion</code> is shown.  It should say: <box><code>make: Makefile.config is up to date.</code></box>
 #: Then the file will be created in the folder.
-# Modify the Makefile.config:
-#: Change the following parameters: <box><code>WITH_ZLIB:=<br>WITH_SDL:=<br>WIN32:=1<br>UNIX:=<br>OSX:=<br>FREEBSD:=<br>MORPHOS:=<br>BEOS:=<br>SUNOS:=<br>CYGWIN:=1<br>MINGW:=1</code></box>
+# Modify the <code>Makefile.config</code>:
+#: Change the following parameters: <box><code>WITH_ZLIB:=1<br>WITH_SDL:=<br>STATIC_ZLIB_PATH:=/mingw/lib/libz.a<br>WIN32:=1<br>UNIX:=<br>OSX:=<br>FREEBSD:=<br>MORPHOS:=<br>BEOS:=<br>SUNOS:=<br>CYGWIN:=1<br>MINGW:=1</code></box>
 #: Some slots are made empty to disable.
-#: Don't change the Makefile.config into Win32 txt format.  Otherwise all changes will be lost.
-# Run "make".  Some warnings will be shown, but doesn't matter.
-# The compiling is completed when openttd.exe is made.
+#: Don't change the <code>Makefile.config</code> into Win32 txt format.  Otherwise all changes will be lost.
+# Run <box><code>make</code></box> Some warnings will be shown, but doesn't matter.
+# The compiling is completed when <code>openttd.exe</code> is made.
 
 ==Testing OTTD==
-# Copy the following files from (TTD)\data\ to (OTTD)\data\: <box><code>sample.cat<br>trg1r.grf<br>trgcr.grf<br>trghr.grf<br>trgir.grf<br>trgtr.grf</code></box>
-# Run openttd.exe.
-# A warning about missing zlib will be shown. Ignore.
+# Copy the following files from <code>(TTD)\data\</code> to <code>(OTTD)\data\</code>: <box><code>sample.cat<br>trg1r.grf<br>trgcr.grf<br>trghr.grf<br>trgir.grf<br>trgtr.grf</code></box>
+# Run <code>openttd.exe</code>.
 # Enjoy!
