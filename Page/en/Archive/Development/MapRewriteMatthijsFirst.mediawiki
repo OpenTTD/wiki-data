@@ -1,0 +1,76 @@
+==Some thoughts and some design==
+When I wrote this about a month ago (august 2004) I expected Vurlix to be done with his new map array. After that a multilevel addition could be made to the map array. Since then, nothing has changed to the map array and we will probably do both changes at the same time, along with some more redesigning.
+I originally wrote this on paper and I haven't come to putting it online until now. Some of the stuff here is probably deprecated already and this text would probably need some adaptation. It also does not explicitely consider underground building, signals on bridges etc. I have thought of these when writing this, just didn't write that down :-) Still, I will put it here unchanged and will edit it later.
+
+If you have any comments about this text, please tell me. You'll always find me on #openttd, so just drop by. You can also just put your comments at the bottom of this wiki page.
+
+Matthijs (blathijs)
+
+==Features==
+Before really thinking about how to implement new stuff, I will just list a few things that should be supported.
+===Bridges===
+*Bridges can only be straight, no switches or crossings, though they can be diagonal.
+*You can constructs above and below a bridge.
+*Some bridges might actually support construction on top of the bridge.
+*Some brige types couldbe multilayered, ie support multiple levels of railway track above each other, or road and railroad above each other.
+*Bridges should be able to cross. They should go over each other (not supporting each other). Maybe the could even be built on top of each other, so that the top bridge uses the lower bridge as support. Possibly some bridges could even  cross? Though I think that would get ugly.
+*Bridges are supported on pillars. The distance between pillars is not necesarily 1 tile, and might be variable. This also means that the tiles between two pillars are dependant on the distance between the pillars. Take a suspension bridge for example, if there are 4 tiles between two pillars, the suspension cables should reach each other in the middle, so they have some steepness. If there are 6 tiles between two pillars, the cables should either have different steepness, (which implies that all tiles between the pillars are different), or there should just be 2 extra tiles inserted in the middle, where no suspension is present (this is the current solution). The first would require extra flexibility in the bridge, but would probably be harder. The second is probably easier.
+
+===Supports===
+For lack of a better name, I will call these supports. A supports is basically a highway style elevation on which tracks can be built. It is supported on pillars, the type and/or position of every pillar might be different for different tiles. There are multiple types of supports, similar to multiple types of bridges.
+*Supports can contain different track combinations, not only straights. They can theoratically contain any combination, though limitations should be able to be imposed, possibly depending on the type of support, or the position or amount of pillars underneath (see below)
+*Different tracks on top of the support might require different pillars underneath.
+*The pillars under the highway will block some tracks and other construction underneath, depending on where the pillars are located. For example, you could imagine one big pillar in the middle of the square, which would then block straight tracks and all building, but not diagonal tracks. Or you could have two pillars at the edge of a tile, which blocks all tracks but the straight track that is perendicular to te supports.
+*Not every tile of the support requires pillars, some tiles might be unsupported. This will only work if there are tiles near that are supported. Some kind of rules have to be defined for how much support is required. There should be never unsupported tiles at the end, ie which are only attached to other tiles on one side, of maybe even only on two sides that are not opposite.
+*Supports have limited height, probably only 1 or 2 tiles (maybe depending on the type of support)
+*Supports could be stacked, the pillars of the top support are built on top of another support (though we should be  careful that this does not allow the height limitation to be circumvented).
+*As time progress, different, more powerful types of support should come available.
+
+===Morphing===
+Thinking some more about supports, I concluded that there would be quite some rules about what combinations of tracks on top, underneath and pillars are permittable. It would probably be quite complicated (also for the UI) to allow the user to control every aspect of this. The solution I have in mind, is "morphing", which means that the user just builds tracks. The game will have a list of permittable combinations, which it uses to change the tile and tiles around to get an acceptable situation. This requires very well defined rules about combinations. Most of these rules should be specified explicetely in some format for every different type, or at least be heavily parameterized.
+
+===Stations===
+*Stations should be buildable on top of supports.
+*Stations (and possibly other stuff) could be built on top of (special) stations.
+*Stations should be buildable in the mountainside, which not only means the should be buildable underground, but also in (not on) slopes.
+*Stations could be built underground with a single tile entrance, subway style.
+*Airports, docks and bus/truck stops should probably just remain unchanged, all this stuff isn't really useful there.
+
+===Tunnels===
+*Nothing fancy, no support pillars or stuff above needed like bridges.
+*Tunnels only straight, or maybe turns? Could switches be supported underground?
+*Diagonal tunnels. What slope should be used for entrance?
+
+===Signals and switches===
+The data structure should support building every track combination and every signal combination everywhere where building tracks is supported. Some combinations might be forbidden in some places, but should never be unsupported.
+
+==="Slopes"===
+Building on slopes should be supported as it is currently. (ie, when building on a slope, it is automatically flattened). It should be supported in a cleaner way, for I think right now the map array doesn't record the slope building, but only the renderer determines that it is used...
+
+
+==Solution, first part -- Using multilayer==
+(Note: I will here use the word tile to describe both an (x,y) combination and a (x,y,z) combination depending on context... Sorry about that)
+This first part just describes the things necessary to use a multilayer map, given that it is already build somehow. Using here means not building anything, just letting the simulation roll along.
+
+We surely need more information for each tile.
+
+A naive solution would be to just add a z component to our map array, meaning that we store stuff for every (x,y,z) tile, instead of for every (x,y) tile. This is the easiest and fastest solution. It will require a lot of extra storage, since we allocate memory for every layer on every tile, even while most (95% ?) of the tiles will only be single layered.
+
+A better solution would be to just allocate memory for the ground tile, since every tile on the map will have at least one ground tile. The ground tile will then have two pointers, to the tiles above and below (or possibly just one pointer for above or below). For tiles that are single-layered, these pointers are just NULL, otherwise they will store a pointer to the tile above or below.
+Each tile will also store its Z-coordinate. Currently this is stored as the z coordinate of the northern corner, but I have a gut feeling that it would make sense to store the z coordinate of the lowest corner, and then store the offsets of every corner to this value. The offsets could just be coded as a 4 bit value, one bit for every corner: raised or not raised. There would be complications with tiles with tileh >= 15 though, these are tiles whose highest and lowest corner are 2 apart. Maybe these things could be stored on two different levels, ie they would be treated as two different tiles. Problem with that is that we should have some way of storing that a corner is _not_ present in a given tile. The plus side of this solution is that we could have diagonal cliffs...
+
+Every tile would also need extra info about the pillars below and suspensions above for bridges and supports, etc. This info would be needed to render and later to determine what can be built around it.
+
+==Solution, second part - Building around multilayer==
+This part describes building normal tracks and stations around bridges and supports and so.
+
+For each tile, we need to store what can be built on top of it. We also need to store what tracks/construction it blocks below and how far down (pillars will block all the way down, but for some bridges, they will only block the tile directly below for example. For this we would need to choose number of blocking points, for example, the center of a tile, the for corners, the centers of the sides are the 9 points that would make the most sense to me. Here can be noted that the corner blocking points block only tile filling constructions such as stations and town buildings, but the center blocking point will also block straight tracks, etc.
+
+With this information we can quickly determine whether something can be built or not. When it can't be built directly morphing should/could be applied, but that's for the next part.
+
+==Solution, third part - Building multilayer==
+The central part of this third part would be morphing and determining how to store information so that it can be used to morph tiles. Unfortuanetely I have not yet written this part (though I have given extensive thought to it).
+
+
+==Comments==
+Put your comments here, if you have them. I will do so soon.
