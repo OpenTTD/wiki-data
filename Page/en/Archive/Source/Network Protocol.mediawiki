@@ -60,93 +60,206 @@ As always, not everything is done. Some things that needs to be done:
 
 == The protocol ==
 
-Below is described which packets are send (first packets is type 0, and the type increases with every packet) to or from the server. Also is added which data is expected to be in there.
+Below is described which packets are send (for the real ID of a packet, check network_data.h (enum PacketType)) to or from the server. Also is added which data is expected to be in there.
 
 The client can get the server info without authorization. But before it gets the map, it needs authorization. After it received the map, it starts playing, and also the player is announced to the other clients.
 
+Below first the packets the client can send to the server. After that, the packets the server can send to the client.
 
-<warning> OLD version of the protocol. Will be updated soon </warning>
-
-* Client1 = one client
-* ClientX = all clients connected
-* Server = server
 
 {| border="1"
-|+ Network Protocol
+|+ Client Network Protocol
 |-
-! Packet name !! From whom !! To whom !! Params !! Information
+! Packet name !! Info !! Data
 |-
-!class="checked"| PACKET_SERVER_FULL
-| Server 
-|| Client1 || <none> || You get this packet when you try to connect to a server which is full
+| PACKET_CLIENT_GAME_INFO
+| Request server-info (first packet, always needed)
+| 
+  - String: OpenTTD revision of the client (norev000 if no revision)
 |-
-!class="checked"| PACKET_CLIENT_GAME_INFO 
-| Client1 
-|| Server || <none> || Requests info about the server (current game/players/password protected)
+| PACKET_CLIENT_JOIN
+| Try to join the server
+| 
+  - String[40]: Playername
+  - Uint8: Playas (between 1 and MAX_PLAYERS)
+  - Uint8: LanguageID
 |-
-!class="checked"| PACKET_SERVER_GAME_INFO 
-| Server || Client1 || GameInfo || Sends the info of the server
+| PACKET_CLIENT_PASSWORD
+| Send a password to the server to authorize ourself
+|
+  - Uint8: Type of password (Game-Password (0) or Company-Password (1))
+  - String[20]: Password
 |-
-!class="checked"| PACKET_SERVER_CLIENT_INFO
-| Server || Client1 || ClientInfo || Sends info about 1 client to other clients
+| PACKET_CLIENT_GETMAP
+| Request the map from the server
+|
+  <none>
 |-
-!class="checked"| PACKET_CLIENT_JOIN 
-| Client1 || Server || UserName / GamePassword || Request to join the server (with a username and a gamepassword if needed)
+| PACKET_CLIENT_MAP_OK
+| Tell the server that we are done receiving/loading the map
+|
+  <none>
 |-
-!class="checked"| PACKET_SERVER_ERROR 
-| Server || Client1 || ErrorCode || ErrorCode (login denied, kicked, stuff like that)
+| PACKET_CLIENT_ACK
+| Tell the server we are done with this frame
+|
+  - Uint32: _frame_counter of the client
 |-
-!class="checked"| PACKET_SERVER_WELCOME 
-| Server || Client1 || <none> || Tell the client that he is joined
+| PACKET_CLIENT_COMMAND
+| Send a DoCommand to the Server
+|
+  - Uint8: PlayerID (0..MAX_PLAYERS-1)
+  - Uint32: CommandID (see command.h)
+  - Uint32: P1 (free variables used in DoCommand)
+  - Uint32: P2
+  - Uint32: Tile (tile of DoCommand)
+  - Uint32: decode_params
+  < 10 times the last one (lengthof(cp->dp)) >
+  - Uint8: CallBackID (see callback_table.c)
 |-
-!class="checked"| PACKET_CLIENT_GETMAP 
-| Client1 || Server || <none> || The client wants the map of the server
+| PACKET_CLIENT_CHAT
+| Send a chat-packet to the server
+|
+  - Uint8: ActionID (see network_data.h, NetworkAction)
+  - Uint8: Destination Type (see network_data.h, DestType);
+  - Uint8: Destination Player (1..MAX_PLAYERS)
+  - String[MAX_TEXT_MSG_LEN]: Message
 |-
-!class="checked"| PACKET_SERVER_MAP 
-| Server || Client1 || Savegame || The savegame of the current map (multiple packages)
+| PACKET_CLIENT_ERROR
+| The client made an error and is quiting the game
+|
+  - Uint8: ErrorID (see network_data.h, NetworkErrorCode)
 |-
-!class="checked"| PACKET_CLIENT_MAP_OK 
-| Client1 || Server || <none> || The client received the map correctly and is ready to join
+| PACKET_CLIENT_SET_PASSWORD
+| Set the password for the clients current company
+|
+  - String[20]: Password
 |-
-!class="checked"| PACKET_SERVER_JOIN 
-| Server || ClientX || Playername || Player joins the game
+| PACKET_CLIENT_QUIT
+| The client is quiting the game
+|
+  - String[100]: Leave message
+|}
+
+
+{| border="1"
+|+ Server Network Protocol
 |-
-!class="checked"| PACKET_SERVER_FRAME 
-| Server || ClientX || frame || The server sends this command every frame. The clients may only proceed to this frame!
+! Packet name !! Info !! Data
 |-
-!class="checked"| PACKET_SERVER_SYNC 
-| Server || ClientX || RandomSeed1 || The server sends the random-seed-1 to check if the clients are still in sync
+| PACKET_SERVER_CLIENT_INFO
+| Sends info about a client (you receive this packet during the whole game (whenever someone joins or changes his name)
+|
+  - Uint8: The index of the client (always unique on a server. 1 = server)
+  - Uint8: As which player the client is playing
+  - String[40]: The name of the client
 |-
-!class="checked"| PACKET_CLIENT_ACK 
-| Client1 || Server || frame || The client is done executing this frame and is in sync
+| PACKET_SERVER_GAME_INFO
+| Sends info about the server
+|
+  - String: The servername
+  - String: The revision of the server (norev000 if not supported)
+  - Uint8: The LangaugeID of the server
+  - Uint8: If the server is using a password
+  - Uint8: Max allowed clients on the server
+  - Uint8: Current clients
+  - Uint8: Current spectators
+  - Uint16: Current game-date of the server
+  - String: Name of the current map (Random is random)
+  - Uint16: Width of the map
+  - Uint16: Height of the map
+  - Uint8: Set of the map (0..3)
 |-
-!class="checked" |PACKET_CLIENT_COMMAND 
-| Client1 || Server || Command, p1, p2 || The clients sends a DoCommand to the server
+| PACKET_SERVER_ERROR
+| The client, who receives this message, made an error
+|
+  - Uint8: ErrorID (see network_data.h, NetworkErrorCode)
 |-
-!class="checked"| PACKET_SERVER_COMMAND 
-| Server || ClientX || Command, p1, p2, player, RandomSeed1, frame || There was a command on a frame, the server says which frame and how the RandomSeed was before the StateGameLoop.
+| PACKET_SERVER_NEED_PASSWORD
+| Indication to the client that the server needs a password
+|
+  - Uint8: Type of password (game-password (0) or company-password (1))
 |-
-!class="checked"| PACKET_CLIENT_CHAT 
-| Client1 || Server || String, Type, Player || Chat message (type: 0=broadcast, 1=team, 2=client) -- A team is all clients connected to 1 game-player.
+| PACKET_SERVER_WELCOME
+| The client is joined and ready to receive his map
+|
+  - Uint8: own ClientID (unique number per server session)
 |-
-!class="checked"| PACKET_SERVER_CHAT 
-| Server || ClientX || FromPlayer, Type, string || Chat message
+| PACKET_SERVER_WAIT
+| The client can not receive the map at the moment because someone else is already receiving the map
+|
+  - Uint8: Clients awaiting map
 |-
-!class="checked"| PACKET_CLIENT_QUIT 
-| Client1 || Server || Reason || The client wants to quit the server
+| PACKET_SERVER_MAP
+| Sends the map to the client, or a part of it (it is splitted in a lot of multiple packets)
+|
+  - uint8: packet-type (MAP_PACKET_START, MAP_PACKET_NORMAL and MAP_PACKET_END)
+   if MAP_PACKET_START:
+    - uint32: The current FrameCounter
+   if MAP_PACKET_NORMAL:
+    - uint8[SEND_MTU]: piece of the map (till max-size of packet)
+   if MAP_PACKET_END:
+    - uint32: seed0 of player
+    - uint32: seed1 of player
+    < last 2 are repeated MAX_PLAYERS time >
 |-
-!class="checked"| PACKET_CLIENT_ERROR 
-| Client1 || Server || ErrorNo || The client made an error and is going to be disconnected. Inform the server about it (OpenTTD crash / DeSync)
+| PACKET_SERVER_JOIN
+| A client is joined (also the client who just joined receives this message)
+|
+  - Uint8: ClientID
 |-
-!class="checked"| PACKET_SERVER_QUIT 
-| Server || ClientX || Player, reason || A player left the game (also sent to the quiting player)
+| PACKET_SERVER_FRAME
+| Sends the current frame-counter to the client
+|
+  - Uint32: Frame Counter
+  - Uint32: Frame Counter Max (how far may the client walk?)
+  - [Uint32: general-seed-1]
+  - [Uint32: general-seed-2]
+    (last two depends on compile-settings, and are not default settings)  
 |-
-!class="checked"| PACKET_SERVER_ERROR_QUIT 
-| Server || ClientX || Player, ErrorNo || A player left the game (also sent to the quiting player) with an error
+| PACKET_SERVER_SYNC
+| Sends a sync-check to the client
+|
+  - Uint32: Frame Counter
+  - Uint32: General-seed-1
+  - [Uint32: general-seed-2]
+    (last one depends on compile-settings, and are not default settings)
 |-
-!class="unclaimed"| PACKET_SERVER_SHUTDOWN 
-| Server || ClientX || Reason || The server shuts down with a given reason, all clients are disconnected shortly after this
+| PACKET_SERVER_COMMAND
+| Sends a DoCommand to the client
+|
+  - Uint8: PlayerID (0..MAX_PLAYERS-1)
+  - Uint32: CommandID (see command.h)
+  - Uint32: P1 (free variables used in DoCommand)
+  - Uint32: P2
+  - Uint32: Tile (tile of DoCommand)
+  - Uint32: decode_params
+  < 10 times the last one (lengthof(cp->dp)) >
+  - Uint8: CallBackID (see callback_table.c)
+  - Uint32: Frame of execution
 |-
-!class="unclaimed"| PACKET_SERVER_NEWGAME 
-| Server || ClientX || <none> || The server loaded a new game (or loaded an old game, it is just the same). The clients need to send a PACKET_CLIENT_GETMAP after this to receive the new map and rejoin
+| PACKET_SERVER_CHAT
+| Sends a chat-packet to the client
+|
+  - Uint8:  ActionID (see network_data.h, NetworkAction)
+  - Uint8:  ClientID
+  - String[MAX_TEXT_MSG_LEN]: Message
+|-
+| PACKET_SERVER_ERROR_QUIT
+| One of the clients made an error and is quiting the game. This packet informs the other clients of that.
+|
+  - Uint8:  ClientID
+  - Uint8:  ErrorID (see network_data.h, NetworkErrorCode)
+|-
+| PACKET_SERVER_QUIT
+|
+|
+|-
+| PACKET_SERVER_SHUTDOWN
+|
+|
+|-
+| PACKET_SERVER_NEWGAME
+|
+|
 |}
