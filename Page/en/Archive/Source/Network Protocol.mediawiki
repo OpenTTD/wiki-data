@@ -64,7 +64,8 @@ char _network_game_password[20]; // The gamepassword
 == Protocol ==
 
 
-The general idea behind the protocol is, is that the clients are always 1 frame behind the server, so commands can be handled correctly. When the server received PACKET_MAP_OK from the client, it assumes that the client is ready and is shown as joined to everyone. Then the client receives the commands done by other clients between the time of the savegame and the time of PACKET_MAP_OK for the right frame and the client is supposed to quick run through all the frames and handle the commands at the given time, till it reached the frame of the server - 1. From that point on, the client is in sync and continues normally (only receiving PACKET_COMMAND, PACKET_SYNC and PACKET_CHAT)
+The idea: a clients logs in, verify hisself, and when it sends out a PACKET_MAP_OK, the server assumes that the client is ready and announce the user to the other players. Then the game starts. First, the joined client receives the missing frames/seed/commands between the map-frame and the current frame, so it get's in sync.
+After that, all clients receive every frame (1 frame = 27ms in normal speed) a NO-OP packet when there was no command or a SERVER_COMMAND when there was a command on that frame. A client is not allowed to proceed behond the frame given in the package. When a client is done with the frame, it sends an ACK. When a server does not receive an ACK for like 5 frames, it slows down and waits for the clients.
 
 
 
@@ -95,11 +96,13 @@ The general idea behind the protocol is, is that the clients are always 1 frame 
 |-
 |PACKET_SERVER_JOIN || Server || ClientX || Playername || Player joins the game
 |-
-|PACKET_SERVER_SYNC || Server || ClientX || RandomSeed || The server sends the random-seeds to the client for a certain frame
+|PACKET_SERVER_NO_OP || Server || ClientX || RandomSeed1, frame || There was no command on this frame, RandomSeed to verify the sync of the game
 |-
 |PACKET_CLIENT_COMMAND || Client1 || Server || Command, p1, p2 || The clients sends a DoCommand to the server
 |-
-|PACKET_SERVER_COMMAND || Server || ClientX || Command, p1, p2, player, frame || The server says when to execute a certain DoCommand
+|PACKET_SERVER_COMMAND || Server || ClientX || Command, p1, p2, player, RandomSeed1, frame || There was a command on a frame, the server says which frame and how the RandomSeed was before the StateGameLoop.
+|-
+|PACKET_CLIENT_ACK || Client1 || Server || frame || The client is done executing this frame and is in sync
 |-
 |PACKET_CLIENT_CHAT || Client1 || Server || String, Type, Player || Chat message (type: 0=broadcast, 1=team, 2=client) -- A team is all clients connected to 1 game-player.
 |-
