@@ -9,6 +9,7 @@ Some comments need to be reworked (especially sizewise), and there are some mino
 #define MAPSIZEX 1024
 #define MAPSIZEY 1024
 
+typedef signed char int8;
 typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned long uint32;
@@ -16,10 +17,11 @@ typedef unsigned long uint32;
 #define PACK // uncomment at will
 
 typedef struct signal_t {
-  uint8 present:2;      // what signals are found (1 left, 1 right, 2, none)
-  uint8 type:3;         // type of signals/presignals, maybe advanced later on
-  uint8 semaphore:1;    // semaphore
-  uint8 status:2;       // status of the signal (red, green, orange?)
+  uint8 type:3;      // type of signals/presignals, maybe advanced later on
+  uint8 semaphore:1; // semaphore
+  uint8 status1:2;   // status of the signal (red, green, orange, double orange?)
+  uint8 status2:2;   // status of the signal (red, green, orange, double orange?)
+  /* 0 unused bits */
 } signal_t; /* 8 bits */
 
 typedef struct lift_t {
@@ -34,6 +36,7 @@ typedef struct hedge_t {
   uint8 hedge_SE:4;     // hedge-type on SE border
   uint8 hedge_NE:4;     // hedge-type on NE border
   uint8 hedge_NW:4;     // hedge-type on NW border
+  /* 0 unused bits */
 } hedge_t; /* 16 bits */
 
 #ifdef PACK
@@ -42,10 +45,14 @@ typedef struct hedge_t {
 
 typedef struct Tile {
   struct Tile *next;      // 32 or 64 bits depending on architecture
-  uint8 altitude_N:5;     // height of North corner of tile (ti.z)
-  uint8 height_S:3;       // height-offset of South from North corner (-2, -1, 0, +1, +2)
-  uint8 height_W:3;       // height-offset of West  from North corner (-2, -1, 0, +1, +2)
-  uint8 height_E:3;       // height-offset of East  from North corner (-2, -1, 0, +1, +2)
+  struct height_t {         // height of a tile and all four corners
+    int8 altitude_N:5;     // height of North corner of tile (ti.z)
+    int8 height_S:3;       // height-offset of South from North corner (-2, -1, 0, +1, +2)
+    int8 height_W:3;       // height-offset of West  from North corner (-2, -1, 0, +1, +2)
+    int8 height_E:3;       // height-offset of East  from North corner (-2, -1, 0, +1, +2)
+    /* 2 unused bits */
+  } height; /* 32 bits */
+
   uint8 owner;            // owner of a tile, 255 no-owner ??
   uint8 surface_class:3;  // class of a surface  on a tile. Directs to surface_t union
   uint8 build_class:5;    // class of a building on a tile. Directs to build_t union
@@ -58,7 +65,14 @@ typedef struct Tile {
       uint8 type:4;       // bare band, grass, snow, desert, rocks, etc.
       uint8 amount:2;     // amount of snow, grass
       uint8 counter:2;    // update counter
+      /* 0 unused bits */
     } ground_t; /* 8 bits */
+
+    /* underground for roads as grass, paved street, etc. Also for trams, crossings */
+    struct {
+      uint8 ground:3;     // uses 3 bits now, could be more in the future
+      /* 5 unused bits */
+    } street_t; /* 8 bits */
 
     struct {
       uint8 type:3;       // water/coast/canal
@@ -79,6 +93,7 @@ typedef struct Tile {
       uint8 dir:2;        // direction, we want to allow more than just two in the future
       uint8 section:1;    // is it a middle part, or a "endcap"? endcaps will not be needed for cliffs maybe
       uint8 ending:1;     // northern/southern end of bridge
+      /* 0 unused bits */
     } bridge_t; /* 8 bits */
 
     struct { // Blathijs needs to detail this
@@ -107,10 +122,11 @@ typedef struct Tile {
     } station_t; /* 48 bits */
 
     struct {
+      uint16 index;       // index of the checkpoint (allowing checkpoints to spawn across tiles)
       uint8 track_type:4; // rail, electric rail, monorail, trams, maglev ...
       uint8 dir:1;        // direction
       uint8 type:1;       // road or rail if we want road checkpoints later on
-      /* 42 unused bits */
+      /* 26 unused bits */
     } checkpoint_t; /* 48 bits */
 
     struct {
@@ -140,14 +156,28 @@ typedef struct Tile {
       uint16 tracks;        // which tracks are present
       uint8 track_type:4;   // what type of track (should be 4?)
      uint8 ground_fences:4;// fences for tracks (full-detail)
-      signal_t signal[2];   // signals on the tile (2x 8 bits)
-      /* 8 unused bits */
-    } track_t; /* 48 bits */
+      uint8 signal_configuration;
+      struct signal_t signal_stat[2];   // signals on the tile (2x 8 bits)
+      /* 0 unused bits */
+    } railway_t; /* 48 bits */
+
+    struct roadnrail_t { // this is for diagonal roads, if we wanna have road and rail side-by-side
+      // needs finalizing of course
+      uint8 trackbits;      // 0 - horizontal, 1 - vertical
+      uint8 roadpieces;     //
+      struct signal_t signal;     // only one signal can be here (8 bits)
+      uint8 road_owner;     //
+      /* 16 unused bits */
+    } roadnrail_t; /* 48 bits */
+
+    struct tram_t { //void currently
+      uint8 nothing;
+      /* 48 unused bits */
+    } tram_t; /* 48 bits */
 
     struct {
       uint8 pieces;         // roads which are present on a tile
-      uint8 type:3;         // type of the road-underground grass, snow, paved, streetlight
-      /* 37 unused bits */
+      /* 40 unused bits */
     } road_t; /* 48 bits */
 
     struct {
@@ -160,7 +190,7 @@ typedef struct Tile {
     } crossing_t; /* 48 bits */
 
     struct {
-      lift_t lift;          // lift (16 bits)
+      struct lift_t lift;   // lift (16 bits)
       uint16 index:11;      // index to which town a building belongs to
       uint16 stage:2;       // stage of construction
       uint16 counter:3;     // construction counter
@@ -173,13 +203,13 @@ typedef struct Tile {
       uint8 counter:4;      // update counter
       uint8 count:2;        // number of trees
       /* 2 unused bits */
-      hedge_t hedge;        // 16 bits
+      struct hedge_t hedge; // 16 bits
       uint8 growth:3;       // growth status
       /* 13 unused bits */
     } trees_t; /* 48 bits */
 
     struct {
-      hedge_t hedge;        // 16 bits
+      struct hedge_t hedge; // 16 bits
      uint8 type:4;         // type of farm-fields
      uint8 counter:2;      // update counter for fields
      /* 26 unused bits */
@@ -201,11 +231,7 @@ Tile _map[MAPSIZEX][MAPSIZEY];
 int main ( void ) {
   printf("Tile\n");
   printf("|-- *next:          %3d\n", sizeof(_map[0][0].next)*8);
-  printf("|-- height:          16\n");
-  //printf("altitude_N:         %3d\n", sizeof(_map[0][0].altitude_N)*8);
-  //printf("height_S:           %3d\n", sizeof(_map[0][0].height_S)*8);
-  //printf("height_E:           %3d\n", sizeof(_map[0][0].height_E)*8);
-  //printf("height_W:           %3d\n", sizeof(_map[0][0].height_W)*8);
+  printf("|-- height:         %3d\n", sizeof(_map[0][0].height)*8);
   printf("|-- owner:          %3d\n", sizeof(_map[0][0].owner)*8);
   printf("|-- class:            8\n");
   printf("|-- surface:        %3d\n",sizeof(_map[0][0].surface)*8);
@@ -220,8 +246,11 @@ int main ( void ) {
   printf("    |-- depot            %3d\n",sizeof(_map[0][0].build.depot_t)*8);
   printf("    |-- tunnel           %3d\n",sizeof(_map[0][0].build.tunnel_t)*8);
   printf("    |-- canal:           %3d\n",sizeof(_map[0][0].build.canal_t)*8);
-  printf("    |-- tracks           %3d\n",sizeof(_map[0][0].build.track_t)*8);
-  printf("        |-- signal          %3d\n",sizeof(_map[0][0].build.track_t.signal)*8);
+  printf("    |-- railway          %3d\n",sizeof(_map[0][0].build.railway_t)*8);
+//  printf("        |-- signal          %3d\n",sizeof(_map[0][0].build.railway_t.signal_status)*8);
+  printf("    |-- roadnrail        %3d\n",sizeof(_map[0][0].build.roadnrail_t)*8);
+  printf("        |-- signal          %3d\n",sizeof(_map[0][0].build.roadnrail_t.signal)*8);
+  printf("    |-- tram             %3d\n",sizeof(_map[0][0].build.tram_t)*8);
   printf("    |-- road:            %3d\n",sizeof(_map[0][0].build.road_t)*8);
   printf("    |-- crossing:        %3d\n",sizeof(_map[0][0].build.crossing_t)*8);
   printf("    |-- town:            %3d\n",sizeof(_map[0][0].build.town_t)*8);
@@ -238,7 +267,6 @@ int main ( void ) {
   printf("Old-Tile (total):   %3.0f (Mapsize %dx%d %.0fKB)\n", 6.25*8, MAPSIZEX, MAPSIZEY, (6.25*MAPSIZEX*MAPSIZEY)/1024);
   return 0;
 }
-
 </pre>
 
 ==Considerations==
