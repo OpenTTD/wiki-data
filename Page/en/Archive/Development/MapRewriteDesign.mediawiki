@@ -37,3 +37,9 @@ The second reason, or actually the second problem with dumbly converting, is tha
 Notice that you can always translate a TileRef to a Tile* or a TileXY, but not the other way around!
 
 So, what functions should you use then? Not everyone have been defined yet, but you should definately take a look at map.h for the functions that acces tiles of the map, and at tile.h for functions that query individual tiles. There should be functions for a lot of common things, such as looking up the track type of a tile, etc. Check these files often, new functions will be introduced!
+
+When working with these tile things, try to use consistent variable namings: "t" for a Tile*, "tr" for a TileRef*, "txy" for a TileXY*.
+
+==Miscelaneous other changes==
+* We changed the INLINE macro to inline on non C99 compatible platforms. So, if you define an inline function, just write "inline" instead of "INLINE". If you see INLINE anywhere, replace it by inline.
+* We added an index into the _depots array for depot tiles. Currently the translation from a tile to a depot index is made by looping all depots until the right one is found. This is of course braindead. You should instead use DEREF_DEPOT(t->b.depot.index).
