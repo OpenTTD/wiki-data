@@ -54,21 +54,30 @@ So, what functions should you use then? Not everyone have been defined yet, but 
 When working with these tile things, try to use consistent variable namings: "t" for a Tile*, "tr" for a TileRef*, "txy" for a TileXY*.
 
 ==Variables, Variables, Variables==
-The World is split up in three different layers:
-<pre>
-1) The map. This is the collection of all tiles. The map is divided into squares using a grid. Each square has a x and y cooridnate.
-2) The stack. The stack is the collection of tiles that occupy one square.
-3) The tiles. a tile is a basically two dimensional object that make up the world.
-</pre>
+It's nice to know how to store tiles, but it is even nicer to know how to store references to parts of the map.
 
-How to refer to these using what variable types:
-<pre>
-Tile t;         //this refers to a single tile on the map.
-TileStack ts;   //this refers to the entire stack in the map.
-TileXY txy;        //this is the index of the stack in the map
-TileRef tr;     //a pointer to a tile
-TileXYN txyn    //a network-compatible version of TileRef.
-</pre>
+Within our openttd world, we can define three different concepts.
+<table>
+<th>
+  <td>Description
+  <td colspan="2">Referencable by
+<tr>
+  <td>The map
+  <td>This is the collection of all tiles.
+  <td colspan="2">Not referencable, since we only have one map for now.
+<tr>
+  <td>Tile Stacks
+  <td>The map is divided into squares using a grid. Each square has a x and y cooridnate. All the tiles in one square, that have the same x and y coordinates, are called a tile stack. In other words, all tiles that are stacked on top of each other are a stack.
+  <td>TileStack - This is a pointer to an entire stack (cannot be converted to a TileXY)
+  <td>TileXY - This is the (x,y) location of a tile stack (can be easily converted to a TileStack)
+<tr>
+  <td>Tiles
+  <td>A tile is a essentially an element of the tile stack. It is a square on a given x and y coordinate (iow, in a given tile stack) with a given height and slope.
+  <td>Tile* - This is a pointer to a single tile (cannot be converted to a TileRef)
+  <td>TileRef - This is essentially the location of a single tile. It stores the (x,y) and height information of a tile (can be easily converted to a Tile*)
+</table>
+
+Besides these referencing methods, there is also TileXYN, which is the network compatible variant of TileRef. You should not use it outside the network code.
 
 ==Miscelaneous other changes==
 * We changed the INLINE macro to inline on non C99 compatible platforms. So, if you define an inline function, just write "inline" instead of "INLINE". If you see INLINE anywhere, replace it by inline.
