@@ -63,3 +63,34 @@ most of the variable types have the ability to perform different actions:
 |}
 
 if you want to know how to add variables to the console read [[en/Archive/Source/OpenTTDDevBlackBook/IConsole/AddVariables|HOWTO - Add Variables to the Console]]
+
+=Functions [Commands with return values]=
+in some cases it is neccessary to
+* copy the value a command returned
+* passing an variable pointer to a command [implemented in console rev 3]
+* copy the value of one variable to another [implemented in console rev 3]
+
+==copy the value a command returned==
+<pre>
+]*temp_uint16 << random
+*temp_uint16 = 41
+</pre>
+but:
+<pre>
+]*temp_uint32 << random
+ERROR: variable type missmatch
+</pre>
+you ll get this error if the returned value of the command does not have the same type the variable has. A well coded function [random is no example for this :D] could do a trick to detect what type of variable it has to return. [token shifting] read [[en/Archive/Source/OpenTTDDevBlackBook/IConsole/AddFunctions|HOWTO - Add Functions/Commands to the Console]]
+
+==passing an variable pointer to a command==
+<warning>will be implented in console rev 3</warning>
+<pre>
+]zeromem @*temp_uint16
+</pre>
+by the way: command isnt there yet.
+==copy the value of one variable to another==
+<warning>will be implented in console rev 3</warning>
+<pre>
+*temp_uint16 << *temp_uint16_2
+</pre>
+by the way: there is no *temp_uint16_2
