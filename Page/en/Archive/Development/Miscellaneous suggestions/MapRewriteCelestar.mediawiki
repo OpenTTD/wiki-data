@@ -1,3 +1,22 @@
+==The general idea==
+Currently there is one tile on every (x,y) on the map. Wherever things are stacked (tunnels, bridges), every stacked item is packed into that one tile.
+The new array will take a different approach. Instead of one tile for every (x,y) we can have multiple. Whenever things are stacked, we just store multiple tiles. Take a bridge for example. The original ground tile will store all the info about what is underneath the bridge and a second tile is created that stores info about the bridge and everything on it.
+In a way, we could have one tile for every (x,y,z) on the map. But since most tiles would be unused (underground or in the air), this would increase the memory usage by a large factor, while most of the tiles would remain unused. We instead store at least one tile for every (x,y), which contains information about the ground tile. Any additional tiles (both below and above the ground) are stored in a linked-list kind of manner.
+
+''Maybe we should always store the lowest tile, instead of the ground tile? ie, if you build a tile below the ground tile, the new tile will be in the map array and the ground tile will be linked to by the bottom tile. We should probably also store the tiles sorted?''
+
+''Thinking of this, finding the tile above a tile would be trivial, but how about finding the tile below a given tile? You would need to iterate the entire linked list until you would find the given tile to see what is below. For this you need to store the (x,y) in every tile. Might it be more efficient to make the tiles a doubly linked list, so not only store the next tile in the stack, but also the tile below? Would we need to store the (x,y) in a tile for something else? Coming to think of it, we probably should. But still it will probably have quite some speed advantages to make the tiles doubly linked...
+
+--Matthijs''
+
+A simple solution would be use a pointer to the next tile. This is the easiest to follow, but has one big disadvantage: it is generally 32, and in the future even 64 bits. There will never be that much tiles, so it will be sufficient to just store the index of the next tile, which is then used as an index into an array.
+This way, all the ground tiles can be statically allocated in an array. The non-ground tiles will be needed when people start building things. When a new tile is needed, we use one from a second array that has been allocated for this.
+
+''We have a few options here. The simplest options would be allocating and deleting every tile when needed (malloc/free) but that would be too much overhead. We could also statically allocate an array of tiles and use tiles from that array when we need new tiles (this is how the code below works, this is the _mapextra array). The main disadvantage of this is that there is a hard maximum. An alternative would be mallocing tiles in large blocks, or reallocing the array.''
+
+A different thing used here, is indirection from the tile to the info about it. Every tile stores two indices, LandscapeInfo and BuildInfo, which are indices into the LI and BI arrays, resp. These LandscapeInfo and BuildInfo structs store information about the tile, and about what is (built) on it. The reason that these are not just embedded into the MapInfo struct, is that a lot of tiles will have identical info, so we only have to store the info once, and tiles can share the info. This means that whenever the info of a tile changes, the indices will have to be changed to point to the correct info (which might be added to LI or BI if it isn't there yet).
+'''We will need to keep a hashmap that will allow us to easily find a given info in the LI and BI arrays.'''
+
 <pre>
 struct {
  uint8 altitude:5;
