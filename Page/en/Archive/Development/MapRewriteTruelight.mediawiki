@@ -5,9 +5,13 @@ What I changed is this:
 We create a magic big pool of tiles, in this form:
 
 <pre>
+#define POOL_SIZE 1024
 Tile *_tile_pool;
-_tile_pool = realloc(_tile_pool, sizeof(Tile) * 1024);
-_map[0][0] = _tile_pool[0];
+// Reserve 2x POOL_SIZE
+_tile_pool = realloc(_tile_pool, sizeof(void *) * 2);
+_tile_pool[0] = realloc(_tile_pool[0], sizeof(Tile) * POOL_SIZE);
+_tile_pool[1] = realloc(_tile_pool[1], sizeof(Tile) * POOL_SIZE);
+_map[0][0] = _tile_pool[0][0];
 </pre>
 
 And the above in a nice function like: AllocTile or something, which returns the pointer which can be used, and blablabla. In _map[0][0].next there can be a next tile, that is in the same x/y, but on a different h. The highest h is always on top, and the lowest h, always on the bottom. This way, the memory usage is as low as it can get, TileLoop can easily be called (just looping through all the _tile_pool items), and we have a nice multi-level system.
