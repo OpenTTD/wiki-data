@@ -19,7 +19,14 @@ This struct should then be included in the station_t struct.
 
 === pv2b's comments ===
 ==== Signals ====
-It's unclear what the intent of signal_t.status is. I can either think of it as A: 2 bits -> red/green for each direction on a bidirectional signal, or B: 2 bits->4 states (green, orange, double orange, and red). If A, the comment about orange doesn't make sense, since the bitfield would have to be enlarged to fit the extra state. If B, how are bi-directional signals handled?
+It's unclear what the intent of signal_t.status is. I can either think of it as:
+
+*A: 2 bits -> red/green for each direction on a bidirectional signal
+*B: 2 bits->4 states (green, orange, double orange, and red).
+
+If A, the comment about orange doesn't make sense, since the bitfield would have to be enlarged to fit the extra state. Also, I thought, manual bit-packing should be avoided in order to get more clear code.
+
+If B, how are bi-directional signals handled?
 
 An alternative for fitting 3 states (green, yellow, and red) and still not exceed 8 bits would be to get rid of the "present" field, and encode the same information in the status1 and status2 bitfields.
 
