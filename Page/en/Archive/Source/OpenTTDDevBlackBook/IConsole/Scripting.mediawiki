@@ -1,0 +1,65 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/IConsole/Scripting]]
+=Using Console Scripting=
+
+If you want to test the scriptings below you must have compiled with DEBUG=1.
+
+==Commands==
+Commands [also called Functions] were used to give the scripter the ability to access some specific aspect of the OpenTTD SourceCode. Currently there were only some basic commands implented. Therefor we currently only have some access to OpenTTD Functions.
+
+<pre>
+]screenshot
+</pre>
+This command causes OpenTTD to make a screenshot of the current screen. It is directly executed and does not have any result.
+
+<pre>
+]random
+result = 41
+</pre>
+
+This command causes the system to create a random number. It is directly executed and has a result. If the result isn't redirected into a variable, it gets dumped to the console. If you want to add some commands to the console read [[en/Archive/Source/OpenTTDDevBlackBook/IConsole/AddFunctions|HOWTO - Add Functions/Commands to the Console]]
+
+==Variables==
+Variables were used to
+* Access OpenTTD defined C++ Variables
+* Store some information which is used by your script
+
+The ScriptLanguage can handle the following types of Variables:
+* BOOLEAN [direct memory access]
+* BYTE [direct memory access]
+* UINT16 [direct memory access]
+* INT16 [direct memory access]
+* UINT32 [direct memory access]
+* INT32 [direct memory access]
+* POINTER [direct memory access]
+* STRING [instance based]
+
+direct memory access? instance based? uhm? <br>
+direct memory access means that the variable memory position is fixed. this gives you the ability to change OpenTTD owned variables directly from the console.
+instance based means that if the variable gets changed from the console it gets a new memory address which is pointing to newly allocated memory space. the old memory space is free`ed only if the variable is only used by the console. so if you add an OpenTTD byte * variable to the console and you try to change its content.. you won't change the string used by OpenTTD but you will change the variable in the console.
+
+variable names where indicated by a "*" 
+
+<pre>
+]*temp_uint16
+*temp_uint16 = 0
+]*temp_uint16 ++
+*temp_uint16 = 1
+]*temp_uint16 --
+*temp_uint16 = 0
+]*temp_uint16 = 32
+*temp_uint16 = 32
+</pre>
+
+most of the variable types have the ability to perform different actions:
+
+{|
+| function || description
+|-
+|&nbsp;++ || increments the value
+|-
+|&nbsp;-- || decrements the value
+|-
+|&nbsp;= || assignes another value [dont try to use this to copy the value of one variable to another variable]
+|}
+
+if you want to know how to add variables to the console read [[en/Archive/Source/OpenTTDDevBlackBook/IConsole/AddVariables|HOWTO - Add Variables to the Console]]
