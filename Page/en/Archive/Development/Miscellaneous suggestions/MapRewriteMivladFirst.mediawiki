@@ -1,0 +1,41 @@
+==Alternate approach to map storage==
+
+===Wazzup?===
+The problem with the current map structure is that it is static. There are ''n'' tiles and each one has ''x'' bits of storage space with very strict rules about what can be put there.
+
+===Possible solution===
+Ok, so we want to be able to put lots of stuff on every tile, and do that fast. "Fast" means that the tiles array should be left somewhat static so we won't have to shift megabytes of terrain around just to put a signal. We will have to add objects somewhere else and make tiles just point there. So we end up with the following:
+
+*Array of tiles. Each tile has a pointer into the array of objects.
+*Array of objects. To find something here we follow a pointer from the tiles array and then to find something else on the same tile every object should have a pointer to another object in the same tile. Yeah, that is a linked list.
+
+This solution is very generic and very flexible, but
+
+===Your "solution" suck!!1===
+Yes, I know. Remember that was just a draft draft. In particular, it will require lots and lots of storage space. So it should be
+
+===Refined===
+The obvious cause for mentioned memory problems is that every tile stores every little piece of stuff separately. For example, if we have the simplest case of a straight rail line then every tile will store its segment separately -- which means not just the pointer to possible another object but at least the track direction information. It would be nice to store that rail line all at once and have tiles it crosses just reference that same object. No problem. Let's store the following in the rail line object:
+*line start coords (x, y, z)
+*line direction (incl. vertical!)
+*line length
+
+Hmm, is something wrong here? Of course! Remember that we had tile objects reference each other. Now that is not possible because we have one object spanning many tiles. So we will have to change the structure into following:
+*Array of tiles. Every tile stores at least the number of its objects and a pointer into the...
+*Array of object references. It is just an array of pointers to objects.
+*Array of objects.
+
+===Hey, and how do I add something into this spaghetti?===
+There are two most obvious problems about this layout.
+
+The first one is how to add entries into the second array when we are building something. This task looks very similar to finding empty clusters in a filesystem.
+
+The second one is about joining objects when, say, we are continuing a rail line. It can just get quite tedious to code.
+
+===But what is an object, after all?===
+Just about anything. Some examples:
+*Rail lines as shown above. Rail line below the ground level means we have a tunnel.
+*All the structures such as stations, depots, airports, etc.
+*Trees and forests. Yes, we probably can store entire forest by keeping its generation seed.
+*The ground itself can even be made an object! We can probably store entire valley or an area with a constant slope as just one object.
+*The water should be stored separately so we can have ground/tunnels below the water level.
