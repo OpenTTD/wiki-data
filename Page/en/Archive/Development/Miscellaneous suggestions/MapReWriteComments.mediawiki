@@ -40,6 +40,7 @@ typedef struct signal_t {
 </pre>
 
 Anyway, if in the future, OpenTTD implements orange signals, it would be great. It will really have potential for smoother-flowing and more efficient rail networks.
+<warning>done and fixed</warning>
 
 ==== More signals and parallell tracks ====
 
@@ -86,6 +87,7 @@ struct {
 
 ==== Buoys and checkpoints ====
 For now, Bouys are handled by the station code. But wouldn't it be nicer and more consistent for them to be handled by the checkpoint code? Also, there should be provisions for checkpoints that cover more than one track, IMHO.
+<warning>bouys moved to checkpoints. Maybe checkpoints needs a type too, to show custom graphics?</warning>
 
 ==== Trees ====
 This is less important -- but shouldnt trees_t.growth be an array, so different trees can have different growth levels? :-) There certainly is room to spare in the union for this luxury.
@@ -100,13 +102,17 @@ An idea for a user-friendly interface for this is still needed through
 *bridge_t should have a part field which describes the part of the bridge (since not every tile in the bridge is the same)
 *bridge_t should have 3 bits for dir, since having 4 directions is not enough for diagonal bridges (there are 2 diagonal bridges in each direction)
 *bridge_t shouldn't have a section field. Bridge ramps should be stored as a different tiletype IMO
+<warning>it was implemented the same was as it was in the old days. Space left to spare, so you can experiment if you want</warning>
 
 *Maybe we could move built, stage and counter from industry_t to the Industry struct? Or on second thought that would never allow one tile of industry to be unfinished when the rest is finished (ie when an industry would physically expand). (btw, isn't built unneeded? We can see if something is built by looking at stage, right?)
 *In a lot of places (station_t, checkpoint_t), type is used. We should name this one transport_type instead, and fill it with the TransportType enum. Also, everywhere where we see (transport_)type, we also see track_type. Maybe we can add all subtypes of railway as types to transport_type?
 *We should rename section in depot_t to part, for consistency
 *tunnel_t should really, really, be a surface, not a build
 *I don't like roadnrail and paralleltracks
+<warning>just 'ballonnetjes'</warning>
 *For crossing_t, how do we want to be flexible in the future? Diagonal crossings? That really won't work, since diagonal tracks never cross on one tile...
 *How exactly is the lift_t filled? How high is a building?
+<warning>look in the docs/landscape.html file</warning>
 *We should add an index field to town_t, with an index to the Town struct.
+<warning>done and fixed</warning>
 *Maybe the stage and counter in industry_t and town_t could be moved to a seperate struct?
