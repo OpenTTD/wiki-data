@@ -1,42 +1,32 @@
 <pre> 
 //This defines the points of the grid
-struct {
+/*struct {
      uint8 altitude:5;
      uint8 cliff_height_of_northern_tile:3;  
 } grid[MAPSIZEX+1][MAPSIZEY+1],
+*/
 
 struct {
      uint32 LandscapeInfo:12;
-     uint32 BuildInfo:20;   
+     uint32 BuildInfo:20;
+     uint8  altitude:5;
+     uint8  cliff_height:3;
+     uint8  generic_counter;
+     uint8  generic_status;
+     uint8  owner;
 } MapInfo;
 
 MapInfo _map[MAPSIZEX][MAPSIZEY];
 MapInfo _more[1000];
 
 struct {
-     uint8 owner;
      uint16 ref_count;
+     uint8  type;
      union {
           struct {
                uint8 hedge_SW:3;
                uint8 hedge_SE:3;
-               uint8 grass_status:2;
           } barren;
-          struct {
-               uint8 type:3;
-               uint8 counter:3;
-               uint8 amount:2;
-          } field;
-          struct {
-               uint8 type;
-               uint8 ground:2;
-               uint8 ground_amount:2;  
-               uint8 counter:4;
-               uint8 count:2;
-               uint8 growth:3;
-               uint8 hedge_sw:3;
-               uint8 hedge_se:3;
-          } trees;
           struct {
                uint8 some_water_info;
           } water;
@@ -49,10 +39,7 @@ struct {
                /* ask blathijs for details */
                /* this takes the tunnels */
           } support;
-          struct {
-               uint8 type:7;
-               uint8 part:4;
-          } unmovable;
+
      }
 } LandscapeInfo;
 
@@ -60,12 +47,16 @@ LandscapeInfo LI[2^12]
 
 struct {
       uint8 ref_count;
+      uint8 type;
       union {
            struct {} industry;
            struct {} station;
            struct {} rail;
            struct {} road;
            struct {} town;
+           struct {} trees;
+           struct {} field;
+           struct {} unmovable;
       }
 } BuildInfo;
 
