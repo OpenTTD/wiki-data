@@ -41,6 +41,47 @@ typedef struct signal_t {
 
 Anyway, if in the future, OpenTTD implements orange signals, it would be great. It will really have potential for smoother-flowing and more efficient rail networks.
 
+==== More signals and parallell tracks ====
+
+<pre>
+typedef struct signal_s {
+  uint8 exists:2;      // Signal A or B exists or not?
+  uint8 statusA:2;     // Signal A green, orange, double orange, red
+  uint8 statusB:2;     // Signal B same as above
+  uint8 semaphore:1;   // Semaphors or traffic lights
+  uint8 presignal:1;   // Is this a presignal?
+  uint8 entrance:1;    // Is this an entrance signal?
+  uint8 reserved:1;    // Reserved for future expansion
+} signal_t; /* 10 bits packed. */
+
+union {
+/* . . . */
+struct {
+  /* For squares owned only by one owner */
+  uint8 tracks;               // Tracks laid
+  uint8 track_type:4;         // Ordinary, electric(?), monorail, maglev
+  signal_t signals;           // Signals. 10 bits
+  uint8 ground_fences:2;      // Ground fences
+  /* Total: 24 bits */
+} track;
+struct {
+  /* For squares containing tracks owned by two different owners */
+  /* Only 1 bit is required for representing which tracks are laid, since there
+     are only two possible cases where this can occur. Bit is set if both tracks
+     are North-South and is clear is both tracks are West-East. */
+  uint8 tracks:1;
+  /* In the arrays below, element 0 refers to either the northern rail, or the
+     western rail. */
+  uint8 track_type:4[2];      // Ordinary, electric(?), monorail, maglev
+  signal_t signal[2];         // Signals. 2*10 = 20 bits.
+  uint8 ground_fences:3;      // Ground fences. (Only 3 fences are needed.)
+  uint8 second_owner;         // Owner of the track described in elements 1
+  /* Total: 40 bits. */
+} parallelltracks;
+/* . . . */
+} build;
+</pre>
+
 ==== Buoys and checkpoints ====
 For now, Bouys are handled by the station code. But wouldn't it be nicer and more consistent for them to be handled by the checkpoint code? Also, there should be provisions for checkpoints that cover more than one track, IMHO.
 
