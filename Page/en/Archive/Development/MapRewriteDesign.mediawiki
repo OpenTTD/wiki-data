@@ -26,3 +26,14 @@ There is also some stuff that isn't stored on a tile:
 
 ==How do we store heights and slopes then?==
 ==What should I use to manipulate tiles?==
+Most people will be inclined to start using the _map array, with the various tile variables that are used everywhere as index. You shouldn't. 
+
+This is because of 2 reasons. If everyone is just using the _map array, we can't change shit about how things are stored internally, without changing all the code again. Because of this, we will define functions to access the map. These functions can then be changed internally later on if that would be more efficient or better. This means that when using these functions, pay close attention to the comments above the function declaration and don't assume things.
+
+For example, it is most likely that the _map array will contain the ground tile and that all the tiles above and below the ground tile are stored in the linked list formed by Tile.next. But, you still need to use the GetGroundTile function to get to the ground tile, and GetTileAbove and GetTileBelow to get to the other tiles, for the exact order might change in the future.
+
+The second reason, or actually the second problem with dumbly converting, is that you can't just use the tile variable anymore. Because of the multilayer approach, you can't just address a tile by an index anymore. So, for addressing tiles, you will generally just use a Tile*. The biggest problem is that you can't determine an (x,y) from a Tile*, so if needed, you will pass a TileRef around. A TileRef just wraps a Tile* together with the TileXY. A tileXY is a reference to an entire stack of tiles on a given (x,y) coordinate. Lastly there is a TileXYN, but that is only used for sending tiles over the network.
+
+Notice that you can always translate a TileRef to a Tile* or a TileXY, but not the other way around!
+
+So, what functions should you use then? Not everyone have been defined yet, but you should definately take a look at map.h for the functions that acces tiles of the map, and at tile.h for functions that query individual tiles. There should be functions for a lot of common things, such as looking up the track type of a tile, etc. Check these files often, new functions will be introduced!
