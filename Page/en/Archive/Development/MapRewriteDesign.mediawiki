@@ -8,6 +8,7 @@ Okay, so I'll list here the main changes, point by point. Some of these are alre
 * Added internal support for highway-style supports (not a feature yet)
 
 ==What is this multilayer stuff?==
+
 ==What does a tile look like now?==
 Instead of having a lot of seperate unlabeled arrays which contain miscellaneous data, we will now store information about a tile in a struct appropriately named "Tile". The exact contents are to be found in the code (where?), but we will discuss the main lines here.
 
@@ -25,6 +26,18 @@ There is also some stuff that isn't stored on a tile:
 * Information about what can be built on, above and under a tile. Some people have thought about storing this explicitely in the tile, but this information can always be implicetely determined from the tile. Because different tile and surface and build types allow for different things, we will define several type-dependent functions for that. (see below).
 
 ==How do we store heights and slopes then?==
+In short, we will store one altitude for each tile, and 4 heights, one for each corner. To get the actual altitude of a corner, you take the tile altitude, multiply it by 4, and add the corner height to that. Simple as that :-)
+
+Some people will notice that altitude is 4 bits, so we could multiply it by 16 (or 8) before adding. The big problem with that is that then we can't have tile that has corner altitudes of (15, 15, 17, 17) for example. I can't really explain why, just draw out the example and I hope you'll see.
+
+Of course you should NEVER perform this calculation (or acces these values) directly, use the various helper functions (tile.h) for that.
+
+===Definitions about a tile heights===
+* Two tiles in the same tile stack will never intersect. This means that two tiles will never have identical corners. This means that for two givens tiles, some corner in one tile is higher than the corresponding corner in the other tile. To prevent intersection, all other corners in the first tile will be higher must be higher than the corresponding corners on the second tile.
+* If tiles don't intersect, we can easily see which tile is higher than the other. Formally, we can say that a tile is higher than another tile, if any of it's corners is higher than the corresponding corner on the other tile.
+* Now we have defined a unique ordering between two tiles, we can see that this ordering will work for more than two tiles. In other words, if A > B, and B > C, then A > C, which is also an important property.
+* If anyone likes, I (Matthijs) could write up formal proof for all of this, but I don't think that's necessary?
+
 ==What should I use to manipulate tiles?==
 Most people will be inclined to start using the _map array, with the various tile variables that are used everywhere as index. You shouldn't. 
 
