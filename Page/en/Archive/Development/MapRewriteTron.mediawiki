@@ -1,0 +1,34 @@
+variant 1:
+
+uint map[256][256]; // array of references into the tile_info array;
+
+struct {
+  byte ref_count; // multiple tiles can point to the same tile_info
+  uint next_info; // same tile, other height level, 0 for last one on this tile
+  byte height; // height where the stuff is
+  byte type; // what is on the field, used to access the union
+  union {
+    struct {} road;
+    struct {} rail;
+    struct {} station;
+    struct {} bridge;
+    struct {} barren;
+  }
+} tile_info[1048576]; // just a big number
+
+variant 2:
+typedef struct {
+  uint next_info; // same tile, other height level, 0 for last one on this tile
+  byte height; // height where the stuff is
+  byte type; // what is on the field, used to access the union
+  union {
+    struct {} road;
+    struct {} rail;
+    struct {} station;
+    struct {} bridge;
+    struct {} barren;
+  }
+} TileInfo;
+
+TileInfo map[256][256];
+TileInfo extra[1048576];
