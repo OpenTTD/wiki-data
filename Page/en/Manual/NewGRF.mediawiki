@@ -1,0 +1,83 @@
+[[Translation:en/Manual/NewGRF]]
+To use the newgrf sets you have to:
+
+:1. Open the openttd.cfg file.
+:2. Go to the end of the file and enter the following:
+
+{| cellspacing="0" border="0"
+|[newgrf]
+|-
+|0 = firstset.grf
+|-
+|1 = secondset.grf
+|-
+|2 = thirdset.grf
+|}
+
+
+Where firstset, secondset etc.. are the names of the .grf files of the set. The files are loaded from the 0 to the 2... so if the second set has some features that are also in the firstset, the features of the firstset would be overwritten. 
+
+
+If you want to have more than one combination of sets you can do this:
+
+{| cellspacing="0" border="0"
+|[newgrf]
+|-
+|#COMBINATION 1
+|-
+|0 = firstset.grf
+|-
+|1 = secondset.grf
+|-
+|- 
+|#COMBINATION 2
+|-
+|#0 = another_firstset.grf
+|-
+|#1 = another_secondset.grf
+|}
+
+Now you can switch between the combinations by removing the "#" from before one combination number and add it to the other combination, don't try to activate both combinations because some errors can happen.
+ 
+
+Another thing to remember is to not make gaps between numbers, such as:
+
+{| cellspacing="0" border="0"
+|[newgrf]
+|-
+|0 = firstset.grf
+|-
+|1 = secondset.grf
+|-
+|#2 = thirdset.grf
+|-
+|3 = fourthset.grf
+|-
+|4 = fifthset.grf
+|}
+ 
+
+The game loads only 0 and 1, the 2 is deactivated and the game think that there aren't other sets to load.
+
+
+I'm testing some combinations like "DBset + Arcticset", "Temperateset + Tropicset" and so on... for the moment the only combination that works well is "Temperateset + Arcticset" 
+
+
+:3. Here is the default combination: 
+
+
+{| cellspacing="0" border="0"
+|[newgrf]
+|-
+|#DEFAULT
+|-
+|0 = tempsetw.grf
+|-
+|1 = arcticsetw.grf
+|-
+|2 = newshipsw.grf
+|-
+|#3 = cargosetw.grf
+|} 
+
+If you have some problems post them [http://www.tt-forums.net/viewtopic.php?t=9376 here]:
