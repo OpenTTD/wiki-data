@@ -1,6 +1,28 @@
 ==Summary of the biggest changes==
+Okay, so I'll list here the main changes, point by point. Some of these are already coded, some are still in progress.
+* Removed the unlabeled _map arrays and replaced them by a single, well defined and named struct.
+* Removed all the integer literals used everywhere for the map by enums.
+* Added an additional height level between every current height level (not a feature yet)
+* Separated the surface of the tile from the stuff that is build upon it, in the struct they are stored in seperate elements.
+* Added support for layered tiles. Apart from the normal ground tiles, additional tiles can be stacked above (or under) existing tiles. This way, bridges are for example seperate tiles from the ground underneath, for maximum flexibility.
+* Added internal support for highway-style supports (not a feature yet)
 
 ==What is this multilayer stuff?==
 ==What does a tile look like now?==
+Instead of having a lot of seperate unlabeled arrays which contain miscellaneous data, we will now store information about a tile in a struct appropriately named "Tile". The exact contents are to be found in the code (where?), but we will discuss the main lines here.
+
+A Tile will contain the following data:
+* The owner of the tile. Players are indexed from 0 upwards, other special owners have constants defined.
+* The height and slope of the tile. See below for what these values mean.
+* A pointer to the next tile in the stack. The exact ordering of these tiles is as of yet undefined, has anybody got some ideas about this? Maybe these pointers should be in order of height? Maybe the should loop?
+* The surface type of the tile. Think of things like "bridge", "ground", "support", "tunnel entrance", etc. This is basically anything that is the surface of the tile and/or below.
+* The build type of the tile. Think of things like "tracks", "road", "buildings", "stations", "fields", "trees", etc. This is basically anything that is built on the surface of the tile.
+* Information about the surface of the tile. This is stored as a union, with one element for each surface type. Which element is used in the tile is determined by the surface type of the tile.
+* Information about the build on the tile. This a union, just like the information about the surface.
+
+There is also some stuff that isn't stored on a tile:
+* The x and y coordinates of a tile. With the old map, when you wanted to pass a tile to a function, you just passed the index, which was essentially a condensed form of the x and y coordinates. With the index, information about the tile could be accessed. With the new map this won't work, since we must also pass the height of the tile. Unfortuanetely we can't just pass around x, y and z coordinates, since there can be multiple tiles at every z coordinate. So we will just pass around Tile pointers, right? Well, another problem is that if you just pass a pointer, you can't really determine the neighbouring tiles, since we don't store (x,y) in a Tile. So, we will have to pass around those (x,y) everywhere. So we will just build a struct TileRef than, which replaces the old TileIndex. (Note: this struct has not yet been defined anywhere).
+* Information about what can be built on, above and under a tile. Some people have thought about storing this explicitely in the tile, but this information can always be implicetely determined from the tile. Because different tile and surface and build types allow for different things, we will define several type-dependent functions for that. (see below).
+
 ==How do we store heights and slopes then?==
 ==What should I use to manipulate tiles?==
