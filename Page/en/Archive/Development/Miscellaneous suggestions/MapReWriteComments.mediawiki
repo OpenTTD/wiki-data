@@ -1,1 +1,16 @@
 ==Comments==
+
+For the multiple roadstop patch (MRP) it'd be helpful if we could store stop-based data in the map.
+
+For this I suggest a struct:
+
+typedef struct stop_t {
+        //blathijs and I will think about how to optimize this: but a likely layout looks like this:
+        uint8 status;    //whatever is currently in bus_stop_status and truck_stop_status
+        uint8 slotA:4;   //a number > 0 indicates that the slots has been reserved. 
+        uint8 slotB:4;   //the number itself contains the Time To live of the slot
+} stop_t;
+
+This struct should then be included in the station_t struct.
+
+Celestar
