@@ -1,6 +1,13 @@
-This guide will show you how to add new town names to OpenTTD. It requires the game to be recompiled so if you are not sure of how to do that check out [[en/Development/Main Page#coding-tools|this page]]. Most of the town names are generated randomly, but some of them are just a big list. This guide will show you how to add a new set of random town names, based upon the English townames method.
+This guide will show you how to add new town names to OpenTTD.
 
-==Find the file to edit==
+This requires a code change and therefore needs recompilation in order to work. Check out [[en/Development/Main Page#coding-tools|this page]] if you are not sure how to do this.
+
+It is highly unlikely that new town names which cannot be generated (i.e. a static list of names) will be accepted into the code base. There are severe issues regarding this because the game requires that each town has a unique name. If the list of possible names is exhausted, then the game will hang (as of r1863).
+
+This is a generic guide intended to encourage and help people who wish to know more about this feature. General points of contact are lucaspiller (author of the guide), Jango (guy who rewrote the code into the new format), truelight (who committed Jango's changes), tron (who corrected all Jango's changes :P) and Darkvater (who knows a lot about this area).
+
+
+==Files to Edit==
 
 There are 4 files you need to edit:
 :#ttd.h
@@ -10,12 +17,110 @@ There are 4 files you need to edit:
 
 Be aware that before r1307, the namegen code was quite different, so make sure you are using the new style.
 
-==How the name generator works==
-In order to understand how to add new town names first it is advisable to understand how they work. The English town names generator decides whether or not to have a first segment (from the \\name_original_english_1\\ array), for example: "Great". It chooses the mandatory middle sections (from \\name_original_english_[2 to 5]\\), for example: "Pl", "on", "fing", "borough". Lastly it chooses whether or not to have a final segment (from \\name_original_english_6\\), for example: "Bridge". It then puts it together and you get a random town such as "Great Plonfingborough Bridge". There is also a bit of filtering to make sure no offensive names are generated.
 
-==Creating your new town names==
-As you have seen in the previous section you need a first section, a few middle sections and a final section. If you feel up the the task you can change the name generator code so it needs different bits - that is another guide though.
+==How the Town Name Generator Works==
+==="table/namegen.h"===
+All data concerned with town name generation is stored in the header file "table/namegen.h". This file contains all the character arrays which are used to form the resulting names. The length of these strings and the length of the array are all compiled at compile time and we no longer need the #DEFINE numbers which used to be used in the determination of which strings were available to the generation code. Another change is the intended separation of types of word. In the old system, words were sometimes placed in the same array, even if they were not interchangeable. Recommended behaviour now is to ALWAYS aim to use arrays which contain strings that are interchangeable. This may mean that some arrays only have 1 element.
 
-Once you have though of some good new names you need to create a new array for them and put them in it. Have a look at the example below:
+==="namegen.c"===
+The actual generation is performed within "namegen.c". For any given language, we need a function like this:
+<pre>
+static byte MakeFinnishTownName(char *buf, uint32 seed)
+{
+	//null terminates the string for strcat
+	strcpy(buf, "");
 
---[ Not finished, I have decided to create new town names for my local area and it is taking a while ]--
+	// Select randomly if town name should consists of one or two parts.
+	if (SeedChance(0, 15, seed) >= 10) {
+		strcat(buf, name_finnish_1[SeedChance( 2, lengthof(name_finnish_1), seed)]);
+	} else {
+		strcat(buf, name_finnish_2a[SeedChance( 2, lengthof(name_finnish_2a), seed)]);
+		strcat(buf, name_finnish_2b[SeedChance(10, lengthof(name_finnish_2b), seed)]);
+	}
+
+	return 0;
+}
+</pre>
+Exactly how to write this function is explained below. We do, however, need to call this method somehow. It's no good just adding this and then expecting OpenTTD to automagically know that it must give the user the option of your additional names. Find the array towards the end of "namegen.c" which looks somewhat like this:
+<pre>
+TownNameGenerator * const _town_name_generators[] =
+{
+	MakeEnglishOriginalTownName,
+	MakeFrenchTownName,
+	MakeGermanTownName,
+	MakeEnglishAdditionalTownName,
+	MakeSpanishTownName,
+	MakeSillyTownName,
+	MakeSwedishTownName,
+	MakeDutchTownName,
+	MakeFinnishTownName,
+	MakePolishTownName,
+	MakeSlovakTownName,
+	MakeNorwegianTownName,
+	MakeHungarianTownName,
+	MakeAustrianTownName,
+	MakeRomanianTownName,
+	MakeCzechTownName,
+	MakeSwissTownName,
+};
+</pre>
+The function call must be placed at the bottom of this list. The reason for this is so that save game compatibility is not broken. Suppose you were to have a save game where you were using Dutch names. If you added a function call in this list before Dutch names, then your save game would suddenly have either your new names, or Swedish!
+
+==="lang/english.txt"===
+Find the townname section (i.e. do a find on "STR_TOWNNAME"). Add a line which follows the form STR_TOWNNAME_YOUR_LANGUAGE : Language. This will become evident as you look at the file. Ensure that you add this line underneath the others.
+
+==="ttd.h"===
+The next change you need to make is in "ttd.h". Find the enum "SpecialStrings" and specifically the assignment "SPECSTR_TOWNNAME_LAST".  This points to the last town name string, and needs to be adjusted so that it points to the string name that you set within "english.txt" with "SPEC" prefixed. You also need to add a line immediately above which defines your string within the enum. Follow the convention: "SPECSTR_TOWNNAME_YOUR_LANGUAGE".
+
+
+==An Example==
+English town names are generated by having an optional first segment, four mandatory middle segments and an optional final segment:
+<pre>
+# optional
+name_original_english_1 - "Great "
+
+# mandatory
+name_original_english_2 - "Wr"
+name_original_english_3 - "ar"
+name_original_english_4 - "ning"
+name_original_english_5 - "ville"
+
+#optional
+name_original_english_6 - " Market"
+</pre>
+Combining these gives: "Great Wrarningville Market".
+
+In fact, the English town names then contain a filter so that certain unlikely or offensive are generated. "Wrar" is deemed awkward and is filtered to become "Inve". Therefore, the final generated name is "Great Inveningville Market". Perhaps even more unlikely! 
+
+
+==Creating Your New Town Names==
+Essentially, it is important to invent some likely segments which can be used to piece together a word. I warn you that this is much more difficult than it sounds if you want realistic names to be generated (you may wish to consult an Atlas). 
+
+:#Add your segments to separate arrays within "table/namegen.h". Don't get this file mixed up with the "namegen.h" that exists in the root directory of the project. This is a separate file altogether. Copy the definition of the existing arrays, and add as many new arrays as you feel is right. If you end up with less than 3 arrays, perhaps your generation is too simple, and conversely, more than 8 is probably too complex. As described above, the english names use 6, and additional english uses 8.
+:#Write the generation function. 
+
+
+==The Generation Function==
+This is the core of the system. There are several functions available to assist in generation.
+
+The first thing you need to do is null-terminate the "buf" character array. This is easily done by:
+<pre>
+strcpy(buf, "");
+</pre>
+If this step is omitted, openttd will hang/crash on the strcat function as this relies on being able to find the end of the string by searching for a "\0" which it will never find.
+
+===The SeedChance Function===
+This function takes 3 arguments. The first determines how many bits the "seed" integer should be shifted by. This seed is unique to a town and functions as a random number in this context. The bit-shifting allows for different parts of the seed to be used. The second argument determines what the maximum number generated should be. If this argument is 15 for example, then the number generated will be between 0 and 15 (inclusive). The third argument is the seed itself.
+
+Suppose you wanted a 1 in 6 chance that a prefix was to be added to the string, you'd perhaps call this function like:
+<pre>
+if (SeedChance(0,5,seed) == 0) { ... }
+</pre>
+
+If you wanted to add any string in the array name_finnish_1[] then:
+<pre>
+strcat(buf, name_finnish_1[SeedChance( 2, lengthof(name_finnish_1), seed)]);
+</pre>
+This concatenates any string with the index 0 - lengthof(name_finnish_1) to the buffer.
+
+At this point, I suggest any readers should go read namegen.c and have a go at hacking it themselves!
