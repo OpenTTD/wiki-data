@@ -2,18 +2,18 @@
 struct {
  uint8 altitude:5;
  uint8 cliff_height_of_northern_tile:3;  //give that thing a sane name
-} grid;
+} grid [MAPSIZEX+1][MAPSIZEY+1];
 
-struct {
+typedef struct MapInfo {
  uint16 BuildInfo;
  uint16 index;
  uint8 generic_counter;    //tick counter for a number of options
  uint8 generic_status;     //status byte
  uint8 LandscapeInfo;
  uint8 owner;
-} MapInfo;
+};
 
-struct {
+typedef struct LandscapeInfo{
  uint16 ref_count;
  uint8 type; //for landscape info and building info
  union {
@@ -23,82 +23,82 @@ struct {
    uint8 hedge_SE:3;
    uint8 amount:2; //amount of snow and desert.
    //counter in main map info
-		} barren;
-		struct {
-			uint8 type:3;
-			uint8 part:4;	//for the canal locks
-		} water;
-		struct {
-			uint8 type:4;
-			uint8 dir:2;
-			uint8 section:1; //End part or middle part, do we need this?
-			uint8 height:5;
-		} bridge;
-		struct {
-			/* ask blathijs for details */
-			/* this takes the tunnels or subground structures later on*/
-			// suggestion
-			uint8 height:5;
-			uint8 type:3; 	//8 different types of supports, depending on year-in-game
-		} support;
-	};
-} LandscapeInfo;
+  } barren;
+  struct {
+   uint8 type:3;
+   uint8 part:4; //for the canal locks
+  } water;
+  struct {
+   uint8 type:4;
+   uint8 dir:2;
+   uint8 section:1; //End part or middle part, do we need this?
+   uint8 height:5;
+  } bridge;
+  struct {
+   /* ask blathijs for details */
+   /* this takes the tunnels or subground structures later on*/
+   // suggestion
+   uint8 height:5;
+   uint8 type:3;  //8 different types of supports, depending on year-in-game
+  } support;
+ };
+};
 
-struct {
-	uint8 ref_count;
-	uint8 type;	//for landscape info and building info
-	union {
-			struct {
-				uint8 type;
-			//construction status in the main status byte
-			} industry;
-			struct {
-				uint16 part:7;
-				uint16 type:4;
-				uint16 track_type:3;
-		} station;
-		struct {
-			uint8 dir:1;
-			uint8 track_type:3;
-		} checkpoint;
-		struct {
-			uint8 dir:2;
-			uint8 track_type:3;
-			//what about hangars and ship depots here?
-		} depot;
-		struct {
-				uint8 transport:2;
-				uint8 dir:2;
-				uint8 track_type:2;
-		} tunnel;
-		struct {
-			uint8 dir:1;
-		} canal;
-		struct {
-			uint8 tracks:6;
-			uint8 track_type:2;
-			struct {
-				uint8 presentA:2;
-				uint8 presentB:2;
-				uint8 typeA:2;
-				uint8 typeB:2; //for the second signal in the tile
-				uint8 semaphoreA:1;
-				uint8 semaphoreB:1; //second signal in the tile
-			} signal;
-		} rail;
-		struct {
-			uint8 type:2;
-			uint8 snow_or_desert:1;
-			union {
-				struct {
-					uint8 pieces; //8 bits if we want to have diagonal stuff some day
-				} road;
+typedef struct BuildInfo {
+ uint8 ref_count;
+ uint8 type; //for landscape info and building info
+ union {
+   struct {
+    uint8 type;
+   //construction status in the main status byte
+   } industry;
+   struct {
+    uint16 part:7;
+    uint16 type:4;
+    uint16 track_type:3;
+  } station;
+  struct {
+   uint8 dir:1;
+   uint8 track_type:3;
+  } checkpoint;
+  struct {
+   uint8 dir:2;
+   uint8 track_type:3;
+   //what about hangars and ship depots here?
+  } depot;
+  struct {
+    uint8 transport:2;
+    uint8 dir:2;
+    uint8 track_type:2;
+  } tunnel;
+  struct {
+   uint8 dir:1;
+  } canal;
+  struct {
+   uint8 tracks:6;
+   uint8 track_type:2;
+   struct {
+    uint8 presentA:2;
+    uint8 presentB:2;
+    uint8 typeA:2;
+    uint8 typeB:2; //for the second signal in the tile
+    uint8 semaphoreA:1;
+    uint8 semaphoreB:1; //second signal in the tile
+   } signal;
+  } rail;
+  struct {
+   uint8 type:2;
+   uint8 snow_or_desert:1;
+   union {
+    struct {
+     uint8 pieces; //8 bits if we want to have diagonal stuff some day
+    } road;
 
-				struct {
-					uint8 road_owner;
-					uint8 dir:1;   //we may need more bits if we have diagonal roads
-					uint8 track_type:2;
-				} crossing;
+    struct {
+     uint8 road_owner;
+     uint8 dir:1;   //we may need more bits if we have diagonal roads
+     uint8 track_type:2;
+    } crossing;
 
    };
   } road;
@@ -125,4 +125,9 @@ struct {
   } unmovable;
  };
 } BuildInfo;
+
+MapInfo _map[MAPSIZEX][MAPSIZEY];
+MapInfo _extra[MAPSIZEX * 10];
+LandscapeInfo[255];
+BuildInfo[65536];
 </pre>
