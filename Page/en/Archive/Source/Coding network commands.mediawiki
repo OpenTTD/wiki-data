@@ -1,0 +1,37 @@
+When coding stuff, that needs to be syncronised on all clients, there are some stuff you sould be aware of:
+
+Whenever something is transmitted to the server, it needs to be done with the command DoCommandP(TileIndex tile, uint32 p1, uint32 p2, CommandCallback *callback, uint32 cmd);
+the arguments are:
+
+Tile: this is the tile you are doing something on. If you do an action, that is not related to a tile (like change name) use tile 0
+
+p1 and p2 are arguments you can pass to the command. Since their meaning change for each function you need to read the command in question to use the properly
+
+callback: TODO I never used this one and always set it to NULL. Somebody write what it actually do
+
+cmd: this is the command you do
+
+
+The commands are listed in the very beginning of command.h. After the enum is there a list of flags to use. It will work like (cmd | flag1 | flag2 ...)
+Don't use CMD_NETWORK_COMMAND as it will break networking
+
+Adding a new command: You need to add it in 3 different places. There is the list in command.h, then there is DEF_COMMAND() and _command_proc_table[] in command.c. You need to be aware that the order is important. Adding a command as # in one of them will need that you have it as # in the others.
+
+Coding the command:
+In order to avoid desyncs, it's important to know how the commands are called.
+int32 CmdNameExample(int x, int y, uint32 flags, uint32 p1, uint32 p2)
+
+x and y are made from the tile you  gave
+
+flags: the important one is DC_EXEC. Read below for usage
+
+p1 and p2: these are the p1 and p2 that you gave as arguments. They can contain whatever you want
+
+
+Whenever DoCommandP is called, the command is called a few times. First it do NOT set the DC_EXEC flag. If the command do not return CMD_ERROR, it is transmitted to the server. On the server it is called again without DC_EXEC. If it still do not return CMD_ERROR, it is transmitted to all clients and is called WITH DC_EXEC
+
+Because it works like this, a command should not change anything at all unless DC_EXEC is set. If you change anything without setting this flag, you could say stop a vehicle locally and the server do not do it and you are desynced right away.
+
+The checks you should do is to make sure that it's valid data the command got, like if you sell a vehicle, it shoud be a vehicle you own, that is stopped inside a depot you own. If you do not check for every single possibility, cheaters can hack their client to transmit data so they can cheat (like giving a negative amount of money to another player) or even worse, crash the server.
+
+Always remember that while coding, you have full control over what you transmit to your command, but once the patch is committed, you can get all possible combo of data in x,y,p1 and p2. Do not presume that any of it is valid before testing it inside the command itself since that is the only place the server test it.
