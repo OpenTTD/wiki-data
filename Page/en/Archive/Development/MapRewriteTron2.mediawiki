@@ -1,0 +1,145 @@
+An interesting idea by Tron, where he states that only a GroundTile needs the groundstuff. This way only the ground-tiles use 128 bits, all others 96. The only downside is that the union-structs are restricted to 6 bytes max, and there can be only 16 of them. We already had trouble stuffing 'this junk' into 7 bytes, but 6 will just pretty much kill off any future expansion ideas. (Darkvater)
+
+<pre>
+#include <stdio.h>
+
+typedef unsigned char  uint8;
+typedef unsigned short uint16;
+typedef unsigned int   uint32;
+
+typedef struct Ground {
+	uint16 height:4;
+	uint16 N:3; // height_N = (height << 3) + N
+	uint16 W:3; // height_W = (height << 3) + W
+	uint16 S:3; // height_S = (height << 3) + S
+	uint16 E:3; // height_E = (height << 3) + E
+	uint16 ground:12; // type of ground: grass (1/3, 2/3, 3/3), desert (1/4, ...), snowt (1/4, ...), water (for every possible slope combination), fields
+	uint16 counter:4;
+} Ground;
+
+typedef struct Tile {
+	struct Tile* next;
+	union { // 6 bytes per type maximum
+
+		struct {
+			uint16 index; // index into industries array
+			uint8 type; // type of the industry (graphics)
+			uint8 animation; // animation states of industry
+			uint8 sound:1; // sound-effect generated
+			uint8 built:1; // under construction
+			uint8 counter:3; // counstruction counter
+			uint8 stage:2; // stage of construction
+		} industry;
+
+		struct {
+			uint16 index; // index of the station
+			uint16 part:12; // type of station, increase from :7 to accomodate more graphics
+			uint16 track_type:3; // rail, electric rail, monorail, trams, maglev ...
+		} station;
+
+		struct { // perhaps eleminate this and handle in orders (go to tileindex)
+			uint8 track_type:4; // rail, electric rail, monorail, trams, maglev ...
+			uint8 dir:1;        // direction
+			uint8 type:1;       // road or rail if we want road checkpoints later on (should this be in track_type?)
+		} checkpoint; /* 48 bits */
+
+		struct {
+			uint8 track_type:3; // rail, electric rail, monorail, trams, maglev ...
+			uint8 type:4;       // road, rail, water
+			uint8 section:4;    // part of the depot (ship depots)
+			uint8 dir:2;        // direction
+		} depot;
+
+		struct {
+			uint16 tracks:10; // which tracks are present
+			uint16 fences:4; // fences for tracks (full-detail)
+			uint16 slope_direction:2; // direction the track inclines
+			uint8 steepness:2; // steepness of the slope
+			uint8 track_type:3; // what type of track
+			uint8 height_lower:3; // height = (height_upper << 3) + height_lower
+			uint8 basis; // 0 = nothing (see ground), diverse bridges, tunnel entrance, ...
+			struct {
+				uint8 present:2; // what signals are found (1 left, 1 right, 2, none)
+				uint8 type:3; // type of signals/presignals, maybe advanced later on
+				uint8 semaphore:1; // ???
+				uint8 status:2; // status of the signal (red, green, orange?)
+			} signal[2];
+		} rail;
+
+		struct {
+			uint8 basis; // 0 = nothing (see ground), diverse bridges, tunnel entrance, ...
+			uint8 slope_direction:2; // direction the track inclines
+			uint8 steepness:2; // steepness of the slope
+			uint8 N:1; // availible directions
+			uint8 W:1;
+			uint8 S:1;
+			uint8 E:1;
+			uint8 height_lower:3; // height = (height_upper << 3) + height_lower
+		} road;
+
+		struct {
+			uint8 road_owner; // owner of the road (track owner is in Tile)
+			uint8 track_type:4; // rail-types
+			uint8 direction:2;
+			uint8 closed:1;
+		} crossing;
+
+		struct {
+			uint16 index;
+			uint16 pos:7; // position of the lift
+			uint16 dest:7; // final positions of lift
+			uint16 type:11; // building building type
+			uint16 stage:2; // counstruction counter
+			uint16 counter:3; // stage of construction
+		} town;
+
+		struct {
+			uint8 type[4];
+			uint8 growth0:4;
+			uint8 growth1:4;
+			uint8 growth2:4;
+			uint8 growth3:4;
+		} trees;
+
+		struct {
+			uint16 hedge_NE:4;
+			uint16 hedge_NW:4;
+			uint16 hedge_SW:4;
+			uint16 hedge_SE:4;
+		} field;
+
+		struct {
+			uint8 type; // unmoveables like transmitter, lighthouse, HQ
+		} unmovable;
+	};
+	uint8 owner;
+	uint8 type:4;
+	uint8 height_upper:4;
+} Tile;
+
+Ground _ground[256][256];
+Tile _map[256][256];
+Tile _pool[1024]; // just random numbers
+
+Ground ground;
+Tile tile;
+
+int main(void)
+{
+	printf("ground       %d\n", sizeof(ground));
+	printf("tile         %d\n", sizeof(tile));
+	printf("+-industry   %d\n", sizeof(tile.industry));
+	printf("+-station    %d\n", sizeof(tile.station));
+	printf("+-checkpoint %d\n", sizeof(tile.checkpoint));
+	printf("+-depot      %d\n", sizeof(tile.depot));
+	printf("+-rail       %d\n", sizeof(tile.rail));
+	printf("+-road       %d\n", sizeof(tile.road));
+	printf("+-crossing   %d\n", sizeof(tile.crossing));
+	printf("+-town       %d\n", sizeof(tile.town));
+	printf("+-trees      %d\n", sizeof(tile.trees));
+	printf("+-field      %d\n", sizeof(tile.field));
+	printf("+-unmovable  %d\n", sizeof(tile.unmovable));
+	return 0;
+}
+
+</pre>
