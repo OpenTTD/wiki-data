@@ -3,9 +3,14 @@ To achieve a coherent whole, here are some guidelines for the coding style used 
 
 * FunctionsLookLikeThis()
 * Variable names/structure members are all lowercase, and may also contain _
-* Variables are declared at the beginning of a block { }, as specified in ANSI-C
+* Variables are declared at the beginning of a block { }, as specified in ANSI-C89
 * Local variable names should be short
-* StructsLookLikeThis
+* StructsLookLikeThis and get typedefed:
+<pre>
+ typedef struct foo {
+   // stuff
+ } foo;
+</pre>
 * Global variables start with a _
 * Use 'const' and 'static' when possible
 * ENUMS_LOOK_LIKE_THIS
@@ -13,7 +18,7 @@ To achieve a coherent whole, here are some guidelines for the coding style used 
 * Tab size is 2 spaces. Never use spaces as indentation.
 * Style for if:
 <pre>
- if (a==b) {
+ if (a == b) {
    foo();
  } else {
    bar();
@@ -21,9 +26,15 @@ To achieve a coherent whole, here are some guidelines for the coding style used 
 </pre>
 : Alternatively:
 <pre>
- if (a==b)
+ if (a == b)
    foo();
 </pre>
+
+* don't treat non-flags as flags: if (char_pointer != NULL && *char_pointer != '\0') instead of if (char_pointer && *char_pointer)
+
+* put a space before and after binary operators: a + b, a == b, a & b, a <<= b, etc.. Exceptions are ".", "->" and "[]" (no spaces) and "," (just space after it)
+
+* space after "for", "if", "switch" and "while"
 
 * { for a function starts at the second line.
 <pre>
@@ -34,7 +45,7 @@ To achieve a coherent whole, here are some guidelines for the coding style used 
 </pre>
 * Don't use "char" very much since its signedness is implementation-defined.
 
-* Never declare variables halfway a function or other block. This is especially for linux coders, since gcc won't complain, but MSVC does. Up till now, I have not found an option in MSVC to allow it, nor an option in gcc to forbid/warn for it.
+* Never declare variables halfway a function or other block. This is especially for coders using gcc, since gcc won't complain, but MSVC does. Up till now, I have not found an option in MSVC to allow it, nor an option in gcc to forbid/warn for it.
 
 ==Proposed amendment(s)==
 * Each externally accessible function in a file should be documented in code by a comment which describes, at the minimum, the purpose, and any assumptions of the function. If it's not clear, the inputs and outputs of the function should also be documented.
