@@ -1,0 +1,48 @@
+[[Translation:en/Manual/Game Mechanics/Main Page]]
+Here you can find insides of OpenTTD.
+
+You always wanted to know how the station-rating was built up? How goods-distribution works? Here you can find it!
+
+==Station-rating==
+How is the rating of goods in a station is built up?
+
+First of all, you need to transport that certain cargo. After that, the rating is defined like in the table below (you start with 0%):
+
+{| border="1"
+|+ Station rating
+|-
+! Action !! Condition !! Rating-points
+|-
+| Max-speed of last vehicle entering station || Above 85 km/h || (min(Speed (km/h), 255) - 85) / 4 points (max 17 %)
+|-
+| Age of last vehicle entering station || 3 years || 10 points (4 %)
+|-
+| || 2 years || 20 points (8 %)
+|-
+| || <= 1 years || 33 points (13 %)
+|-
+| Statue in town of station || Built || 26 points (10 %)
+|-
+| Days since last cargo pickup || > 12 days, <= 21 days || 25 points (10 %)
+|-
+| || > 6 days, <= 12 days || 50 points (20 %)
+|-
+| || > 3 days, <= 6 days || 95 points (37 %)
+|-
+| || <= 3 days || 130 points (51 %)
+|-
+| Cargo waiting at station || > 1500 unints || -90 points (-35 %)
+|-
+| || > 1000 units, <= 1500 units || -35 points (-14 %)
+|-
+| || > 600 units, <= 1000 units || 0 points (0 %)
+|-
+| || > 300 units, <= 600 units || 10 points (4 %)
+|-
+| || > 100 units, <= 300 units || 30 points (12 %)
+|-
+| || <= 100 units || 40 points (16 %)
+|}
+
+Now divide the number by 255, and you have your new rating. Remember that is can only increase/decrease with 2% at the time.
+The maximum possible rating-points is (17 + 13 + 10 + 51 + 16 = ) 107 %, but of course the maximum value is 100%.
