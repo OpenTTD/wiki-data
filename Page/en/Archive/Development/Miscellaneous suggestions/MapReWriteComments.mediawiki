@@ -19,7 +19,20 @@ Celestar
 
 ----
 
-Signals: In order to allow for future orange and double orange signals, the signal_t.status field is 2 bits wide. This is great, I think orange and double-orange signals really have potential for smoother-flowing and more efficient rail networks. But I don't see any provisions in the code for bi-directional signals. Shouldn't status be an array with two elements to accomodate bi-directional signals? 
+Signals: It's unclear what the intent of signal_t.status is. I can either think of it as A: 2 bits -> red/green for each direction on a bidirectional signal, or B: 2 bits->4 states (green, orange, double orange, and red). If A, the comment about orange doesn't make sense, since the bitfield would have to be enlarged to fit the extra state. If B, how are bi-directional signals handled?
+
+An alternative for fitting 3 states (green, yellow, and red) and still not exceed 8 bits would be to get rid of the "present" field, and encode the same information in the status1 and status2 bitfields.
+
+<pre>
+typedef struct signal_t {
+  uint8 type:3;      // type of signals/presignals, maybe advanced later on
+  uint8 semaphore:1; // semaphore
+  uint8 status1:2;   // status of signal 1 (not present, red, orange, green)
+  uint8 status2:2;   // status of signal 2 (not present, red, orange, green)
+} signal_t;          // 8 bits
+</pre>
+
+Anyway, if in the future, OpenTTD implements orange signals, it would be great. It will really have potential for smoother-flowing and more efficient rail networks.
 
 Buoys and checkpoints: For now, Bouys are handled by the station code. But wouldn't it be nicer and more consistent for them to be handled by the checkpoint code? Also, there should be provisions for checkpoints that cover more than one track, IMHO.
 
