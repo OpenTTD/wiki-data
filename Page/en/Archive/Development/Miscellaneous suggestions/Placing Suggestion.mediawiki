@@ -1,0 +1,103 @@
+=== Mouse placing ===
+
+This section describes placing. This is when the mouse cursor and the behaviour of mouse clicks are changed. This is mainly used when placing, building and changing things on the map, but also for things like drag'n'drop in vehicle lists etc.
+
+==== Basics ====
+
+Placing is initiated by the function:
+ 
+ void SetObjectToPlace(CursorSprite icon, PlaceMode place_mode, byte window_class,uint16 window_num),
+
+or the convenience function:
+
+ void SetObjectToPlaceWnd(CursorSprite icon, PlaceMode place_mode, Window *w)
+
+This will:
+
+# Reset the TileHiglightData (thd), and send the WindowEvent WE_ABORT_PLACE_OBJ to the old window if another place command was running.
+# Change the mouse cursor into icon (if icon is <0, the animated _animcursors[~icon] is selected)
+
+Except for when place_mode == PM_DRAGDROP, the SetObjectToPlace function is normally called by:
+
+ bool HandlePlacePushButton(Window *w, int widget, CursorSprite cursor, PlaceMode mode, PlaceProc *placeproc)
+
+placeproc is a callback: void PlaceProc(const TileSelection *), that gets called once the mouse button has been pressed over a map tile (via the windowevent WE_PLACE_OBJ). The TileSelection contains a TileRef and possibly some additional information, like the closest corner, depending on the current placemode.
+
+'''Changes:''' 
+* TileSelection* as argument to PlaceProc instead of TileRef*
+
+
+==== Dragging ====
+
+Selecting an area by dragging is initiated in the same way as above. Once the mouse button has been pressed, the PlaceProc callback is called and it is here that dragging is initiated by calling:
+
+ void VpStartPlaceSizing(const TileSelection *ts, SelectionMode selmode, int user)
+
+During dragging, the WE_PLACE_DRAG window event will be called continuously. In most cases, it just need to do VpSelectTilesWithMethod(ts)
+
+The WE_PLACE_MOUSEUP window event gets called once the mouse button is released.
+
+Both events get the data event.place that contains two TileSelection*:
+ TileSelection* event.place.tile;        //current
+ TileSelection* event.place.starttile    //where the dragging started
+
+'''Changes:'''
+* TileSelection * instead of TileRef * to VpStartPlaceSizing
+* SelectionMode parameter to VpStartPlaceSizing instead of bitsqueezing it into user together with other data
+* VpSelectTilesWithMethod no longer takes a SelectionMode as argument
+* SelectionMode becomes a named enum     
+
+
+==== Presizing ====
+
+Presizing is used by things like tunnels and docks, where the selected area only depends on the start tile. Presizing is initiated by the PM_PRESIZE placemode. When the mouse moves over the viewport, the window event WE_PLACE_PRESIZE gets called continously. In the event handler, the tile selection is updated by calling:
+
+ void VpSetPresizeRange(TileSelection *ts_start, TileSelection *ts_end)
+
+'''Changes:'''
+* TileSelection * instead of TileRef *
+* PM_PRESIZE is new. Previously PM_DRAG was used as a magic number.
+
+
+==== Fixed size rectangular areas ====
+
+Use the placemode PM_RECT followed by a call to:
+
+ void SetTileSelectSize(int w, int h);
+
+
+==== Displaying catchment area ====
+
+  void SetTileSelectBigSize(int ox, int oy, int sx, int sy);
+
+==== The different place modes ====
+
+Following are the currently implemented placemodes:
+{|
+|PM_NONE||No tile is selected and no marking is printed
+|-
+|PM_RECT||The most common one. Used for ordinary rectangular selection. Only the selected tile is computed. Not more detailed positions.
+|-
+|PM_CORNER||Used mainly by terraforming. Selects a tile and one of the four corners of that tile.
+|-
+|PM_DRAG||Should never be used directly. Internally used when dragging... ??? REMOVE ???
+|-
+|PM_DRAGDROP||Used when initiating a Drag'N'Drop
+|-
+|PM_PRESIZE||Used for presized selection.
+|-
+|PM_EDGE||Selects a tile and one of its edges.
+|-
+|PM_8_POINT||Selects a tile and one of its 8 control points (one on each corner and one in the middle of each edge)
+|-
+|PM_NE_SW||Selects a tile and one of its NE or SW halves
+|-
+|PM_NW_SE||Selects a tile and one of its NW or SE halves
+|-
+|}
+
+'''Changes:'''
+* changed PM_POINT into PM_CORNER
+* added PM_DRAGDROP (previously undefined value 4 was used)
+* added PM_PRESIZE (previously PM_DRAG was used)
+* added PM_EDGE, PM_8_POINT, PM_NE_SW, PM_NW_SE
