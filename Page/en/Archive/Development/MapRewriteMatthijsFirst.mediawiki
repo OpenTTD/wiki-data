@@ -71,6 +71,20 @@ With this information we can quickly determine whether something can be built or
 ==Solution, third part - Building multilayer==
 The central part of this third part would be morphing and determining how to store information so that it can be used to morph tiles. Unfortuanetely I have not yet written this part (though I have given extensive thought to it).
 
+==The ramp problem==
+Thinking about this, there was one problem that kept bugging me. I named it "The ramp problem". A ramp in this case is a track that is not horizontal, but has on end of the track lifted.
+You will see natural ramps, where the ground is just slanted upwards. These are no problem, we will just record the slope of the tile and record that a track was built on top. 
+Another type is a semi-natural ramp, where the ground is sloped, but not really fitting. In this case, just putting a handfull of bricks will make the ramp fit and the track can be built. Currently this is all handled in the graphics renderer and the getSlope (or something like that) functions, which is kinda ugly. There is no explicit way of building these slopes in the map array. We should store this explicitely in the new map array.
+For most brick slopes this is easy, they just fill up the ground until it is flat. For this we just add another tile above the ground on which we will build the tracks.
+Ramps, on the other hand are tricky because the ramp and the ground underneath are on the same Z coordinate. We can't just modify the tileh (or new map array equivalent) of the tile, because then we won't be able to remove the slope (or even distinguish between a natural slope and a brick-enhanced one).
+All this also applies to non-natural ramps, like the ones at the end of bridges.
+===Solutions to the ramp problem===
+*Allow for more tiles per z coordinate. The original tile and the (brick) are in reality stacked, so this would make some sense. It might get tricky when you are trying to find the tile at (x,y,z), though...
+*Implicitely store stuff, ie just build on an imperfect slope and let the graphics renderer sort it out. This is how it works now and I don't like it. It makes the code harder to read and is plain ugly.
+*Define a ramp as a tiletype. The ramp is just another tiletype. This is used right now for bridge ramps, but is also quite limited. This way there is no easy way of supporting signals on ramps, except for making special exceptions.
+*Storing the original tileh of the tile somewhere externally and restore it when the ramp is demolished. Damn, can't believe I considered this, since it won't work anyways. There would be no easy way of determining whether a tile is a natural ramp or a brick ramp. It is also _really_ _really_ ugly.
+
+I think we can conclude that there is not really a perfect solution for this problem, so I am open to suggestions.
 
 ==Comments==
 Put your comments here, if you have them. I will do so soon.
