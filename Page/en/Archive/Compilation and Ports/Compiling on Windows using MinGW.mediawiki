@@ -2,8 +2,8 @@
 ==Introduction==
 This page will contains guideline of compiling Open Transport Tycoon in Win32 with MinGW.
 ==Informations==
-* Source: OTTD r1199
-* Packages used here
+* Source: OTTD r1213.
+* Packages used here:
 ** MSYS-1.0.10
 ** MinGW-3.1.0-1
 ** binutils-2.15.91-20040904-1
@@ -16,7 +16,7 @@ This page will contains guideline of compiling Open Transport Tycoon in Win32 wi
 ** SVN will not be used here, however it is recommended to have it.
 
 ==Setting up MinGW==
-# Download the following files from http://sourceforge.net/projects/mingw/ in Package '''Current'''
+# Download the following files from http://sourceforge.net/projects/mingw/ in Package '''Current''':
 #* MSYS-(ver).exe
 #* MinGW-(ver).exe
 #* binutils-(ver).tar.gz
@@ -41,9 +41,41 @@ Where is your MinGW installation?</nowiki></pre>
 # Put all *.tar.gz in MinGW folder, run the following line for each files:
 #: <pre><nowiki>tar -xzvf (file)</nowiki></pre>
 # The setup is completed.
-
 ==Testing the MinGW installation==
 * Run the following commands.
 *: <pre><nowiki>make -v
 gcc -v</nowiki></pre>
 * They should output something.  Check if something goes wrong.
+==Compiling OTTD==
+'''If you cannot compile, DON'T PANIC.  Sometimes it may deal to coding errors.'''
+# Run the following line to create Makefile.config:
+#: <pre><nowiki>make Makefile.config</nowiki></pre>
+#: That should be OK if some error about "ls", "/bin/sh.exe" and "svnversion" is shown.  It should say
+#: <pre><nowiki>make: Makefile.config is up to date.</nowiki></pre>
+# Modify the Makefile.config.  Check the following parameters:
+#: <pre><nowiki>WITH_ZLIB:=
+WITH_SDL:=
+WIN32:=1
+UNIX:=
+OSX:=
+FREEBSD:=
+MORPHOS:=
+BEOS:=
+SUNOS:=
+CYGWIN:=1
+MINGW:=1</nowiki></pre>
+#: Some slots are made empty to disable.
+#: Don't change the Makefile.config into Win32 txt format.  Otherwise all changes will be lost.
+# Run "make".  Some warnings will be shown, but doesn't matter.
+# The compiling is completed when openttd is shown.
+==Testing OTTD==
+# Copy the following files from (TTD)\data\ to (OTTD)\data\:
+#: <pre><nowiki>sample.cat
+trg1r.grf
+trgcr.grf
+trghr.grf
+trgir.grf
+trgtr.grf</nowiki></pre>
+# Run openttd.exe.
+# A warning about missing zlib will be shown. Ignore.
+# Enjoy!
