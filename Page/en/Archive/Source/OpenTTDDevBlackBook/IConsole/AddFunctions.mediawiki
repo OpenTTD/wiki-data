@@ -1,0 +1,67 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/IConsole/AddFunctions]]
+=HOWTO - Add Functions/Commands to the Console=
+==the first step==
+the first thing you ll need if you want to do anything within the console is
+<pre>
+include "console.h"
+</pre>
+this gives you the ability to access all IConsole functions and structures you will have to use if you are intending to add Commands/Functions/Variables to the Console.
+
+==creating the commands c++ function==
+<pre>
+static _iconsole_var * MyLittleConsoleFunction(byte argc, byte* argv[], byte argt[]) {
+	if (argc<2) return NULL;
+	// i am a dummy :D
+	return NULL;
+}
+</pre>
+{|
+| parameter || meaning
+|-
+| argc || the count of parameters the parser overloaded to the function
+|-
+| argv || the parameters itself
+|-
+| argt || the parameters types (ICONSOLE_VAR_UNKNOWN, ICONSOLE_VAR_BYTE, ICONSOLE_VAR_STRING, ...)
+|-
+|}
+parameters passed directly from out of the console have the type ICONSOLE_VAR_UNKNOWN by default. ICONSOLE_VAR_UNKNOWN is an string but it could contain an integer or something like that. it depends on what way the c++ function is handling it. if someone has used something like this:
+<pre>
+]printf "%i" *temp_uint_16
+31291
+</pre>
+the first parameter is passed as ICONSOLE_VAR_UNKNOWN and the second one is passed as ICONSOLE_VAR_UINT16. only variables which were passed to the commands have the ability to be in an other type as ICONSOLE_VAR_UNKNOWN.
+if someone has passed a variable by its reference:
+<pre>
+]dosomething @*temp_uint_16
+did something with temp_uint_16
+</pre>
+the type of this first parameter will be ICONSOLE_VAR_REFERENCE.
+example how to write dosomething command:
+<pre>
+static _iconsole_var * IConsoleStdLibRandom(byte argc, byte* argv[], byte argt[]) {
+if (argt[1]==ICONSOLE_VAR_REFERENCE) {
+    _iconsole_var * item;
+    item = (_iconsole_var *) argv[i];
+    IConsolePrintF("did something with %s",item->name);
+    }
+return NULL;
+}
+</pre>
+<warning>the described feature [ICONSOLE_VAR_REFERENCE] is added in revision 3 of the console language</warning>
+
+==returning a value within your function==
+<pre>
+static _iconsole_var * IConsoleStdLibRandom(byte argc, byte* argv[], byte argt[]) {
+_iconsole_var * result;
+result = IConsoleVarAlloc(ICONSOLE_VAR_UINT16);
+IConsoleVarSetValue(result,rand());
+return result;
+}
+</pre>
+<pre>_iconsole_var * IConsoleVarAlloc(byte type);</pre>
+used to allocate some memory for an _iconsole_var structure.
+<pre>void IConsoleVarSetValue(_iconsole_var * var, int value);</pre>
+used to easyly set a value of an _iconsole_var structure
+<pre>void IConsoleVarSetString(_iconsole_var * var, byte * string)</pre>
+IConsoleVarSetString is used to assign a string to the value;
