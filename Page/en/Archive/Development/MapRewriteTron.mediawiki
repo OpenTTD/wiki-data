@@ -1,5 +1,5 @@
 <pre>
-variant 1:
+variant 1: (VT1)
 
 uint map[256][256]; // array of references into the tile_info array;
 
@@ -16,9 +16,11 @@ struct {
     struct {} barren;
   }
 } tile_info[1048576]; // just a big number
+</pre>
 
 
-variant 2:
+<pre>
+variant 2: (VTD)
 
 typedef struct {
   uint next_info; // same tile, other height level, 0 for last one on this tile
@@ -35,4 +37,36 @@ typedef struct {
 
 TileInfo map[256][256];
 TileInfo extra[1048576];
+</pre>
+
+
+<pre>
+variant 3:
+
+typedef struct {
+  bit extra; // there is more above
+  byte height; // height where the stuff is
+  byte type; // what is on the field, used to access the union
+  union {
+    struct {} road;
+    struct {} rail;
+    struct {} station;
+    struct {} barren;
+  }
+} GroundInfo;
+
+typedef struct {
+  uint next_info; // same hash index, not necessarily same TileIndex;
+  TileIndex Pos;
+  byte height;
+  byte type;
+  union {
+    struct {} bridge;
+    // ???
+  };
+} ExtraInfo;
+
+GroundInfo map[256][256];
+ExtraInfo* extra_hash[10001]; // Hash
+ExtraInfo extra[1048576];
 </pre>
