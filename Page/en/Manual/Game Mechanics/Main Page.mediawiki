@@ -84,8 +84,7 @@ Local authority rating ranges from -1000 (worst) to 1000 (best).
 {| border="1"
 |+Ratings (defined in town.h)
 |-
-!Rating!!Upper bound for rating
-(included in rating)
+!Rating!!Upper bound for rating (inclusive)
 |-
 |Appalling||-400
 |-
@@ -102,4 +101,48 @@ Local authority rating ranges from -1000 (worst) to 1000 (best).
 |Excellent||800
 |-
 |Outstanding||1000
+|}
+
+{| border="1"
+|+Actions that affect town ratings
+|-
+!Action!!Effect on ratings
+|-
+|Destroy tree||Ratings go down by 35 points
+|-
+|Plant tree||Ratings go up by 7 points.
+No effect if ratings are above 220 
+|-
+|Destroy tunnel or bridge||Ratings go down by 250 points
+No effect if ratings are below 0
+|-
+|Destroy an industry||Currently no effect?
+Constant of -1500 defined, but not used.
+|-
+|Destroy a road||Ratings go down by 50 points
+No effect if ratings are below -100
+|-
+|Successful bribe||Ratings go up by 200 points
+No effect if ratings are above 800
+|-
+|Unsucessful bribe||Ratings go to -50
+|-
+|Destroy building||Ratings go down by between 40 and 300 points
+|}
+
+{| border="1"
+|+Actions that require certain town ratings
+!Action!!Required rating
+|-
+|Build train station
+
+Build bus station
+
+Build truck station
+
+Build airport
+
+(Harcoded in CheckIfAuthorityAllows in town_cmd.c)
+
+||-200
 |}
