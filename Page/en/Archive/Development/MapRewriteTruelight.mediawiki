@@ -11,7 +11,7 @@ Tile *_tile_pool;
 _tile_pool = realloc(_tile_pool, sizeof(void *) * 2);
 _tile_pool[0] = realloc(_tile_pool[0], sizeof(Tile) * POOL_SIZE);
 _tile_pool[1] = realloc(_tile_pool[1], sizeof(Tile) * POOL_SIZE);
-_map[0][0] = _tile_pool[0][0];
+_map[0][0].next = _tile_pool[0][0];
 </pre>
 
 And the above in a nice function like: AllocTile or something, which returns the pointer which can be used, and blablabla. In _map[0][0].next there can be a next tile, that is in the same x/y, but on a different h. The highest h is always on top, and the lowest h, always on the bottom. This way, the memory usage is as low as it can get, TileLoop can easily be called (just looping through all the _tile_pool items), and we have a nice multi-level system.
@@ -200,8 +200,48 @@ typedef struct {
 	} build;
 } Tile;
 
-// Pointer links to the tile at this point
-//  NULL if there is no tile at that point (not really possible ;))
-Tile *_map[MAP_SIZE_X][MAP_SIZE_Y];
+// A nice map of x/y
+Tile _map[MAP_SIZE_X][MAP_SIZE_Y];
 
+</pre>
+
+And, to get started without that dynamic stuff, we can do for now:
+
+<pre>
+typedef struct {
+	uint8 altitude_N;	//NO BITPACKING
+	uint8 altitude_S;	//NO BITPACKING
+	uint8 altitude_E;	//NO BITPACKING
+	uint8 altitude_W;	//NO BITPACKING
+	//uint8 slope;
+	uint8 owner;
+	uint8 groundtype:3;
+	uint8 buildtype:5;
+	Tile next; // next Tile
+	union {
+		ground_t ground;
+		water_t water;
+		bridge_t bridge;
+		support_t support;
+	} base;
+	union {
+		industry_t industry;
+		station_t station;
+		checkpoint_t checkpoint;
+		depot_t depot;
+		tunnel_t tunnel;
+		canal_t canal;
+		track_t track;
+		tram_t tram;
+		roadnrail_t road_n_rail;
+		road_t road;
+		crossing_t crossing;
+		town_t town;
+		trees_t trees;
+		fields_t fields;
+		unmovable_t unmovable;
+	} build;
+} Tile;
+
+Tile _map[MAP_SIZE_X][MAP_SIZE_Y];
 </pre>
