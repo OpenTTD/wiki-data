@@ -1,87 +1,94 @@
-<pre> 
+<pre>
 struct {
 //This defines the points of the grid
      uint8 altitude:5;
      uint8 cliff_height_of_northern_tile:3;  //give that thing a sane name
-} grid[MAPSIZEX+1][MAPSIZEY+1],
+} grid;
 
 struct {
-     uint32 LandscapeInfo:12;
-     uint32 BuildInfo:20;
-     uint8  generic_counter;    //tick counter for a number of options
-     uint8  generic_status;     //status byte
-     uint8  owner;
+     uint16 BuildInfo;
+     uint16 index;
+     uint8 generic_counter;    //tick counter for a number of options
+     uint8 generic_status;     //status byte
+     uint8 LandscapeInfo;
+     uint8 owner;
 } MapInfo;
-
-MapInfo _map[MAPSIZEX][MAPSIZEY];
-MapInfo _more[1000];
 
 struct {
      uint16 ref_count;
-     uint8  type;
+     uint8 type; //for landscape info and building info
      union {
           struct {
+        uint8 type:4;    //bareland grass, snow, desert rocks and stuff
                uint8 hedge_SW:3;
                uint8 hedge_SE:3;
+        uint8 amount:2; //amount of snow and desert.
+        //counter in main map info
           } barren;
           struct {
-                        uint8 type:3;
-                        uint8 part:4;
+  uint8 type:3;
+         uint8 part:4; //for the canal locks
           } water;
           struct {
                uint8 type:4;
                uint8 dir:2;
                uint8 section:1; //End part or middle part, do we need this?
+        uint8 height:5;
           } bridge;
           struct {
                /* ask blathijs for details */
                /* this takes the tunnels or subground structures later on*/
+        // suggestion
+        uint8 height:5;
+        uint8 type:3;  //8 different types of supports, depending on year-in-game
           } support;
 
      }
 } LandscapeInfo;
 
-LandscapeInfo LI[2^12]
-
 struct {
-      uint8 ref_count;
-      uint8 type;
-      union {
-           struct {
-                uint8 type;
-                uint8 index;
-           } industry;
-           struct {
-                uint16 index;
-                uint16 part:7;
-                uint16 type:4;
-                uint16 track_type:2;
-           } station;
-           struct {
-                        uint8 type:2;
+ uint8 ref_count;
+       uint8 type; //for landscape info and building info
+ union {
+            struct {
+                 uint8 type;
+   //construction status in the main status byte
+            } industry;
+            struct {
+                 uint16 part:7;
+                 uint16 type:4;
+                 uint16 track_type:3;
+  } station;
+  struct {
+          uint8 dir:1;
+   uint8 track_type:3;
+  } checkpoint;
+  struct {
+          uint8 dir:2;
+   uint8 track_type:3;
+   //what about hangars and ship depots here?
+  } depot;
+                struct {
+                        uint8 transport:2;
+                        uint8 dir:2;
                         uint8 track_type:2;
-                        union {
-                                struct {
-                                        uint8 tracks:6;
-                                        struct {
-                                                uint8 present:4;
-                                                uint8 typeA:2;
-                                                uint8 typeB:2; //for the second signal in the tile
-                                                uint8 semaphoreA:1;
-                                                uint8 semaphoreB:1; //second signal in the tile
-                                        } signal;
-                                } track;
-
-                                struct {
-                                        uint8 dir:2;
-                                } depot;
-
-                                struct {
-                                        uint8 dir:1;
-                                } checkpoint;
-                        };                
-           } rail;
-           struct {
+                } tunnel;
+  struct {
+   uint8 dir:1;
+  } canal;
+  struct {
+   uint8 tracks:6;
+   uint8 track_type:2;
+   struct {
+    uint8 presentA:2;
+    uint8 presentB:2;
+    uint8 typeA:2;
+    uint8 typeB:2; //for the second signal in the tile
+    uint8 semaphoreA:1;
+    uint8 semaphoreB:1; //second signal in the tile
+   } signal;
+            } rail;
+            struct {
                         uint8 type:2;
                         uint8 snow_or_desert:1;
                         union {
@@ -95,12 +102,9 @@ struct {
                                         uint8 track_type:2;
                                 } crossing;
 
-                                struct {
-                                        uint8 dir:2;
-                                } depot;
                         };
-           } road;
-           struct {
+            } road;
+            struct {
                         uint8 type;
                         struct {
                                 uint8 pos:7;
@@ -108,23 +112,20 @@ struct {
                                 uint8 dest:6;
                                 /* 2 unused bits */
                         } lift;
-           } town;
-           struct {
+            } town;
+            struct {
                         uint8 type;
                         uint8 ground:2;     //what the fuck is in here?
-                        uint8 ground_amount:2;
                         uint8 count:2;
                         uint8 growth:3;
-           } trees;
-           struct {
-                uint8 type;
-           } field;
-           struct {
-                uint8 type:7;
-                uint8 part:4;
-           } unmovable;
-      }
+            } trees;
+            struct {
+                 uint8 type;
+         } field;
+  struct {
+                 uint8 type:7;
+                 uint8 part:4;
+  } unmovable;
+      };
 } BuildInfo;
-
-BuildInfo BI[2^20]
 </pre>
