@@ -24,6 +24,17 @@ typedef struct signal_t {
   /* 0 unused bits */
 } signal_t; /* 8 bits */
 
+typedef struct track_t {
+  uint8 track_type:4;
+  uint8 ground_fences:2;// fences for tracks (full-detail)
+  uint8 signals_status1:2;
+  uint8 signals_status2:2;
+  uint8 signals_present:2;
+  uint8 signals_type:3;
+  uint8 signals_semaphore:1;
+  /* 0 unused bits */
+} track_t; /* 16 bits */
+
 typedef struct lift_t {
   uint8 pos:7;          // position of the lift
   uint8 moving:1;       // is it moving?
@@ -152,12 +163,19 @@ typedef struct Tile {
       /* 33 unused bits */
     } canal_t; /* 48 bits */
 
+    //struct {
+    //  uint16 tracks;        // which tracks are present
+    //  uint8 track_type:4;   // what type of track (should be 4?)
+   //  uint8 ground_fences:4;// fences for tracks (full-detail)
+    //  uint8 signal_configuration;
+    //  struct signal_t signal_stat[2];   // signals on the tile (2x 8 bits)
+    //  /* 0 unused bits */
+    //} railway_t; /* 48 bits */
+
     struct {
-      uint16 tracks;        // which tracks are present
-      uint8 track_type:4;   // what type of track (should be 4?)
-     uint8 ground_fences:4;// fences for tracks (full-detail)
-      uint8 signal_configuration;
-      struct signal_t signal_stat[2];   // signals on the tile (2x 8 bits)
+      uint8 tracks;           // which tracks are present
+      uint8 second_owner;
+      struct track_t track_info[2]; // (2x 16 bits)
       /* 0 unused bits */
     } railway_t; /* 48 bits */
 
@@ -247,7 +265,8 @@ int main ( void ) {
   printf("    |-- tunnel           %3d\n",sizeof(_map[0][0].build.tunnel_t)*8);
   printf("    |-- canal:           %3d\n",sizeof(_map[0][0].build.canal_t)*8);
   printf("    |-- railway          %3d\n",sizeof(_map[0][0].build.railway_t)*8);
-//  printf("        |-- signal          %3d\n",sizeof(_map[0][0].build.railway_t.signal_status)*8);
+  printf("        |-- track          %3d\n",sizeof(_map[0][0].build.railway_t.track_info)*8);
+  printf("        |-- track          %3d\n",sizeof(_map[0][0].build.railway_t.track_info)*8);
   printf("    |-- roadnrail        %3d\n",sizeof(_map[0][0].build.roadnrail_t)*8);
   printf("        |-- signal          %3d\n",sizeof(_map[0][0].build.roadnrail_t.signal)*8);
   printf("    |-- tram             %3d\n",sizeof(_map[0][0].build.tram_t)*8);
@@ -267,6 +286,7 @@ int main ( void ) {
   printf("Old-Tile (total):   %3.0f (Mapsize %dx%d %.0fKB)\n", 6.25*8, MAPSIZEX, MAPSIZEY, (6.25*MAPSIZEX*MAPSIZEY)/1024);
   return 0;
 }
+
 </pre>
 
 ==Considerations==
