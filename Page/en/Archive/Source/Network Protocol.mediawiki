@@ -5,6 +5,51 @@ It defines the protocol in great detail. What packages are sent when and by whom
 
 
 
+
+
+== Some structs ==
+
+
+Below are two structs used for network info. Comments are very welcome!
+
+<pre>
+// This is the struct used by both client and server
+//  some fields will be empty on the client (like game_password) by default
+//  and only filled with data a player enters.
+typedef struct NetworkGameInfo {
+	char server_name[40];		// Server name
+	uint16 server_revision;		// The SVN version number the server is using (e.g.: '304')
+								//  It even shows a SVN version in release-version, so
+								//  it is easy to compare if a server is of the correct version
+	byte server_lang;			// Language of the server (we should make a nice table for this)
+	byte clients_max;			// Max clients allowed on server
+	byte clients_on;			// Current count of clients on server
+	byte specators_on;			// How many spectators do we have?
+	uint16 game_date;			// Current date
+	char game_password[20];		// Password for the game
+	char map_name[40];			// Map which is played ["random" for a randomized map]
+	uint16 map_width;			// Map width
+	uint16 map_height;			// Map height
+	byte map_set;				// Graphical set
+	char player_password[MAX_PLAYERS][20];	// A client can protect his game-player with a
+											//   password.. here we save that password
+} NetworkGameInfo;
+
+// client_ip is only used on the server-end. Clients never get the IP of other
+//  clients.
+typedef struct NetworkPlayerInfo {
+	char client_name[40];		// Name of the client
+	uint64 player_money;		// How much money the client has
+	byte client_lang;			// The language of the client
+	byte client_playas;			// As which player is this client playing
+	char client_ip[12];			// IP-address of the client (so he can be banned)
+	char company_name[80];		// Name of the company (80 enough?)
+	uint64 company_value;		// The current value of the company
+	uint16 join_date;			// Gamedate the player has joined
+} NetworkPlayerInfo;
+</pre>
+
+
 == Protocol ==
 
 
