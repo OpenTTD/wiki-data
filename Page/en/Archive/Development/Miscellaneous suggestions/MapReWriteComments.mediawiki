@@ -95,3 +95,18 @@ This is less important -- but shouldnt trees_t.growth be an array, so different 
 ==== Another signal idea ====
 Adding 3 bits to presignals so you get type A, B and C. A entrances would only look for A exits and so on. Since it is 3 bits, you can make a AC signal that looks for both A and C exits if needed
 An idea for a user-friendly interface for this is still needed through
+
+=== Mathijs' comments ===
+*bridge_t should have a part field which describes the part of the bridge (since not every tile in the bridge is the same)
+*bridge_t should have 3 bits for dir, since having 4 directions is not enough for diagonal bridges (there are 2 diagonal bridges in each direction)
+*bridge_t shouldn't have a section field. Bridge ramps should be stored as a different tiletype IMO
+
+*Maybe we could move built, stage and counter from industry_t to the Industry struct? Or on second thought that would never allow one tile of industry to be unfinished when the rest is finished (ie when an industry would physically expand). (btw, isn't built unneeded? We can see if something is built by looking at stage, right?)
+*In a lot of places (station_t, checkpoint_t), type is used. We should name this one transport_type instead, and fill it with the TransportType enum. Also, everywhere where we see (transport_)type, we also see track_type. Maybe we can add all subtypes of railway as types to transport_type?
+*We should rename section in depot_t to part, for consistency
+*tunnel_t should really, really, be a surface, not a build
+*I don't like roadnrail and paralleltracks
+*For crossing_t, how do we want to be flexible in the future? Diagonal crossings? That really won't work, since diagonal tracks never cross on one tile...
+*How exactly is the lift_t filled? How high is a building?
+*We should add an index field to town_t, with an index to the Town struct.
+*Maybe the stage and counter in industry_t and town_t could be moved to a seperate struct?
