@@ -154,29 +154,33 @@ BuildInfo BI[65536];
 </pre>
 
 <pre>
+#include <stdio.h>
+#define MAPSIZEX 1024
+#define MAPSIZEY 1024
+
 typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned long uint32;
 
 typedef struct barren_t {
-	uint8 type:4;	//Bare Land, grass, snow, desert, rocks and and
-	uint8 amount:2;	//amount of snow 
-	uint8 counter:2; //is this large enough? how often will it be incremented?
-	//put the hedge somewhere else maybe?
-	uint8 hedge_SW:3;
-	uint8 hedge_SE:3;
+ uint8 type:4; //Bare Land, grass, snow, desert, rocks and and
+ uint8 amount:2; //amount of snow 
+ uint8 counter:2; //is this large enough? how often will it be incremented?
+ //put the hedge somewhere else maybe?
+ uint8 hedge_SW:3;
+ uint8 hedge_SE:3;
 } barren_t;
 
 typedef struct water_t {
-	//FIXME - compare to canal_t
-	uint8 type:3;
-	uint8 part:4;	//for the canal locks
+ //FIXME - compare to canal_t
+ uint8 type:3;
+ uint8 part:4; //for the canal locks
 } water_t;
 
 typedef struct bridge_t {
-	uint8 type:4;	//type of the bridge, e.g. wooden, concrete, tubular
-	uint8 dir:2;	//direction, we want to allow more than just two in the future
-	uint8 section:1;	//is it a middle part, or a "endcap"? endcaps will not be needed for cliffs maybe
+ uint8 type:4; //type of the bridge, e.g. wooden, concrete, tubular
+ uint8 dir:2; //direction, we want to allow more than just two in the future
+ uint8 section:1; //is it a middle part, or a "endcap"? endcaps will not be needed for cliffs maybe
 } bridge_t;
 
 typedef struct support_t {
