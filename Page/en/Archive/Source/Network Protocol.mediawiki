@@ -1,25 +1,67 @@
 [[Translation:en/Archive/Source/Network Protocol]]
-Here below is a draft by me (TrueLight), how the network is going to be done.
+Here below is described how the network-protocol works. 
 
-It defines the protocol in great detail. What packages are sent when and by whom. Via this page we will remake network.c, and hopefully make it more stable and endian-compatible.
+The protocol has been designed to be stable, little to no desyncs, and still fast and playable with a dialup modem. We believe we succeeded in this.
 
-OpenTTD uses TCP as the transport for the network protocol. The networking could be done with UDP, but since OpenTTD depends on all packets arriving correctly and in order, any layer that could be made on top of UDP wouldn't present any significant benifits over TCP.
+OpenTTD mostly uses TCP. It also makes use of UDP, but below you can read more about that.
 
+== OpenTTD - TCP ==
+
+All main communication goes via TCP. Why not UDP, you can ask. Very simple: TCP is a packet-protocol. One packet depends on the other. We are completely sure in TCP that a client or server receives a certain packet. With UDP we are not. Of course you can build a layer on top of the UDP that does this, but then you just remade TCP.
+
+So why do we need a packet-protocol. Let me try to explain:
+
+== Packet-protocol ==
+
+Everything you build in OpenTTD, or change, is handled internally via a so called DoCommand. Instead of sending diffs of the memory every 10 ms or something to make clients and servers sync, we make use of this DoCommand. At the moment a client does a DoCommand, it does not execute it yet, but the command is send to the server. The server picks a frame-of-execute for the DoCommand, and sends that information to all clients. When the clients hit that frame, it executes the DoCommand. This way all clients and server keeps in sync. But as you can understand, it is needed that all packets are received, in order, by both server and clients. That is why we make use of a Packet-protocol.
+
+== How does it work? ==
+
+As you have read above, we send DoCommands. No in normal conditions, the server sends out a FRAME-packet every frame. In this frame it says to what frame the client can 'walk'. Just before that, the server has send all DoCommands for the max-frame in the FRAME-packet. This way, all clients 'walk' to the max-frame, and then execute all DoCommands. Because a client can never be behond the max-frame, neither can the server, all DoCommands are executed on the same frame. This is very much needed, else we get massive desyncs. Sometimes it is needed to increase the freq. of this FRAME-packet (e.g. many slow connections). Then what happens is this: the server sends out a FRAME-packet every X seconds, with in it a max-frame of X+freq. Also, all DoCommands have the frame-of-execute set on X+freq. Again, this way we are sure all DoCommands are handled at the same moment (even the same order). What does this mean? Very simple: when you build a rail for example, it can take 'freq' frames before it shows up. So as you understand, this 'freq' can not be too high. Some statistics:
+
+{| border="1"
+|+ Network Speed per Client <warning> NEEDS UPDATING! </warning>
+|-
+! net_frame_freq !! Upstream !! Downstream
+|-
+| 1 || 1.2 kbyte/sec || 1.2 kbyte/sec
+|-
+| 2 || 0.8 kbyte/sec || 0.8 kbyte/sec
+|}
+
+As you can see, your connection has to be really slow to adjust the frame_freq. You can change the frame_freq in the console with: '*net_frame_freq = <number>'. Remember the * in front.
+
+== What is this desync? ==
+
+Desync happens when a client is out of sync with the server. How do we detect that? Pretty simple: a game can only be different of content, when or DoCommands are not handled, but even worse: when the Random is not the same. OpenTTD has a home-build Randomizer, which means that on every machine it gives the same random numbers from a certain seed. So when seed = 1, and we do a random, we get on every machine, for example, 534523 back. This is very useful. We check once in the sync_freq if the seeds on both clients and server is the same. If this is not the same, it means that or the server or one of the clients did a random too much or too little. Because we can not check whichone made an error, in this case the client is kicked out of the server and can rejoin to resync.
+
+In the old protocol this happened a lot, mostly because of a bad network-protocol. Packets were not always send in order, and clients could walk 100 frames in front of the server and received, on random frames, DoCommands. This was in 99% of the time the cause of the desync. This is fixed now. I can't remember someone complaining about a desync in this new protocol, simply, because it is almost impossible to have a different random-seed.
+
+By default, the seeds are checked once in the 100 frames. You can alter this with '*net_sync_freq = <number>'. Do not make this number too low, because it increases bandwidth by a lot.
+
+== LAN-detection ==
+
+OpenTTD has a function which can detect LAN-servers. This is done via UDP. At the moment you select LAN-mode on the server, the server also starts an UDP-listener. When a client on the same LAN presses Find Server in LAN-mode, it sends an UDP-broadcast. This is one of the best things UDP has: broadcast. The server receives it, and sends his game_info back to the client. This way the client can discover a server on the local LAN. This is the only place where UDP is used.
+
+== Joining ==
+
+When a client joins, it first fetches some data from the server (game-info). Then it verifies itself, gives his name and, if needed, passwords. Then it asks for a copy of the current map. We do this, because we need a start. In the map is also saved the random-seeds, and we send extra the frame of which the map is. So the server makes the copy of the map, starts sending it to the server. At that moment, the server queues all new DoCommands for this client. When the client is done receiving and tells the server that it is also done loading the map, the servers dequeues all the DoCommands, and the client is given some time to get back to the frame the server is currently on (of course time passed between starting receiving and done loading. Even more on slow connections). When the client indicates it is done with the dequeue, the client is in sync and can enjoy playing.
 
 == TODO ==
 
-What needs to be done?
- - MOTD support
+As always, not everything is done. Some things that needs to be done:
  - Ban players
- - Show what you have send to someone with ClientSpeak and PlayerSpeak
+ - MOTD
+ - When you speak to a client or player, you can't see you said something
 
-== Protocol ==
+== The protocol ==
+
+Below is described which packets are send (first packets is type 0, and the type increases with every packet) to or from the server. Also is added which data is expected to be in there.
+
+The client can get the server info without authorization. But before it gets the map, it needs authorization. After it received the map, it starts playing, and also the player is announced to the other clients.
 
 
-The idea: a clients logs in, verify hisself, and when it sends out a PACKET_MAP_OK, the server assumes that the client is ready and announce the user to the other players. Then the game starts. First, the joined client receives the missing frames/seed/commands between the map-frame and the current frame, so it get's in sync.
-After that, all clients receive every frame (1 frame = 27ms in normal speed) a NO-OP packet when there was no command or a SERVER_COMMAND when there was a command on that frame. A client is not allowed to proceed behond the frame given in the package. When a client is done with the frame, it sends an ACK. When a server does not receive an ACK for like 5 frames, it slows down and waits for the clients.
-
-
+<warning> OLD version of the protocol. Will be updated soon </warning>
 
 * Client1 = one client
 * ClientX = all clients connected
