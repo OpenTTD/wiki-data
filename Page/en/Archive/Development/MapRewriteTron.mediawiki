@@ -1,5 +1,5 @@
 <pre>
-variant 1: (VT1)
+variant 1a: (VT1)
 
 uint map[256][256]; // array of references into the tile_info array;
 
@@ -14,13 +14,13 @@ struct {
     struct {} station;
     struct {} bridge;
     struct {} barren;
-  }
+  };
 } tile_info[1048576]; // just a big number
 </pre>
 
 
 <pre>
-variant 2: (VTD)
+variant 1b: (VTD)
 
 typedef struct {
   uint next_info; // same tile, other height level, 0 for last one on this tile
@@ -32,7 +32,7 @@ typedef struct {
     struct {} station;
     struct {} bridge;
     struct {} barren;
-  }
+  };
 } TileInfo;
 
 TileInfo map[256][256];
@@ -41,7 +41,7 @@ TileInfo extra[1048576];
 
 
 <pre>
-variant 3:
+variant 2:
 
 typedef struct {
   bit extra; // there is more above
@@ -52,7 +52,7 @@ typedef struct {
     struct {} rail;
     struct {} station;
     struct {} barren;
-  }
+  };
 } GroundInfo;
 
 typedef struct {
@@ -69,4 +69,40 @@ typedef struct {
 GroundInfo map[256][256];
 ExtraInfo* extra_hash[10001]; // Hash
 ExtraInfo extra[1048576];
+</pre>
+
+<pre>
+variant 3a:
+uint map[256][256];
+
+struct {
+  byte ref_count; // multiple tiles can point to the same tile_info
+  uint next_info; // same tile, other height level, 0 for last one on this tile
+  byte height; // height where the stuff is
+  byte type; // what is on the field, used to access the union
+  byte ground_type; // barren land, bridge, pillar, ...
+  union {
+    struct {} road;
+    struct {} rail;
+    struct {} station;
+  };
+} tile_info[1048576]; // just a big number
+</pre>
+
+<pre>
+variant 3b:
+struct {
+  uint next_info; // same tile, other height level, 0 for last one on this tile
+  byte height; // height where the stuff is
+  byte type; // what is on the field, used to access the union
+  byte ground_type; // barren land, bridge, pillar, ...
+  union {
+    struct {} road;
+    struct {} rail;
+    struct {} station;
+  };
+} TileInfo; // just a big number
+
+TileInfo map[256][256];
+TileInfo extra[1048576];
 </pre>
