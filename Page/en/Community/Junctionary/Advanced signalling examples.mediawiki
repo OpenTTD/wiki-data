@@ -1,0 +1,72 @@
+[[Translation:en/Community/Junctionary/Advanced signalling examples]]
+In-depth information about pre-signals and useful setups
+
+Usually, making an efficient station where all trains can go to all platforms is very difficult, because if all platforms are in use, the trains randomly choose one and wait till the train occupying it leaves. If that train is set to "full load" this may take a long time, the station will be blocked until that train leaves. One workaround is to have "overflow" tracks, where the train goes if everything is full. While this works, it makes the train run all the time while waiting for a platform. This is very inefficient, and it takes up a lot of space which might be an issue especially for a city station.
+
+These new pre-signals on the other hand work similar to what is also often called "home signals" or "entrance signals". The regular TTD signals are called "block signals", because they always indicate whether the block protected by them is occupied, no matter where the train actually wants to go.
+
+
+==How Pre-Signals Work==
+Detailed information about the principles behind pre-signals 
+ 
+Pre-signals state whether a train can enter a station by looking if there is a free platform, not just by looking if the entrance is clear. 
+ 
+The basic principle is very simple: a pre-signal shows a green light if, and only if, there is a green exit from the block behind it (or if there are no exits at all). In the context of a station entrance, for example, this means that trains will enter the entrance only when there is at least one platform it can go to. If there isn't, it will wait in front of the pre-signal, and not block the station entrance (Fig 1). 
+
+
+<center>[[File:en/Presig1.png|center|frame|Fig 1. - How pre-signals work.]]</center>
+
+
+This simple principle allows you to build very efficient yet simple stations, but first you have to understand how. The next few sections attempt to explain in more detail what the different types of signals are. 
+ 
+With these signals, is quite easy to have a small and yet very efficient station without the usual problems you get with busy stations, because now trains will be able to queue in front of a station, and get to the platforms in the order that they've arrived in. 
+ 
+Note that pre-signals do not change where a train goes, only when. You cannot use them to tell trains where to go, instead you should use [[en/Manual/Waypoints|checkpoints]] for that. 
+ 
+==Types of signals==
+ 
+In the context of pre-signals, there are four different types of signals: plain signals, pre-signals, pre-signal exits, and combo signals. 
+ 
+
+{|
+|Type
+|Appearance
+|Function
+|-
+|Plain signals
+|Single green light, no bar
+|Normal
+|-
+|Pre-signals
+|Double green light, horizontal yellow bar
+|Entrance to a pre-signal block
+|-
+|Exits
+|Double green light, vertical gray bar
+|Exit from a pre-signal block
+|-
+|Combo
+|Double green light, vertical yellow bar
+|Between two pre-signal blocks
+|}
+
+ 
+Pre-signals and combo signals are the only signals that really behave differently, the exits only affect how the other signals behave. 
+
+
+<center>[[File:en/Presig2.png|center|frame|Fig 2. - Types of signals.]]</center>
+
+
+Pre-signals will show a green light if any of the exits or combo signals behind it show green. They prevent a train from entering a block unless it can leave it quickly. A pre-signal with no exit signals will behave as a normal signal, to allow the use of two-way pre-signals (where the other direction would usually lead to a route serviced by one train only). The pre-signal only considers actual exit signals when deciding whether to go green or remain red, even if there are other, non-exit signals that would allow a train to leave the block. Pre-signals can be either one-way or two-way signals, but will usually be one-ways. 
+ 
+Pre-signal exits are signals leading away from the pre-signal block, and should normally be two-way signals, so as to give the train a choice. If they were one-way signals, the trains would all attempt to go to what they consider the "best" choice, even if there are other green signals they could go to as well. Therefore, an exit will in almost all cases have to be a two-way signal. 
+ 
+Combo signals are a combination of both pre-signals and exits. They serve as an exit to a prior pre-signal, but are a pre-signal themselves. As such, they are to be placed between two pre-signal blocks, so that trains can go to the additional exits behind a combo signal if they need to, but the blocks are still separate and allow a train in each block. Please see below for a specific example. Note that combo signals are not as useful as they should be, because they currently have some limitations. In the case where all exits are blocked, and trains are waiting at both pre-signal blocks, both trains will start moving when one exit becomes available, but of course there is only one platform, so one train ends up waiting in the pre-signal block. 
+ 
+Unlike pre-signals, combo signals with no exit signals always show red. 
+ 
+
+<center>[[File:en/Community/Junctionary/Presig3.png|center|frame|Fig 3. - Pre-signals used to their full potential.]]</center>
+ 
+
+Adapted from [http://wiki.ttdpatch.net/tiki-index.php?page=HowPresignalsWork TTDPatch's Wiki].
