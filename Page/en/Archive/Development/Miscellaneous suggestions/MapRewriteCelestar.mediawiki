@@ -152,3 +152,199 @@ MapInfo _extra[MAPSIZEX * 10];
 LandscapeInfo LI[255];
 BuildInfo BI[65536];
 </pre>
+
+<pre>
+typedef unsigned char uint8;
+typedef unsigned short uint16;
+typedef unsigned long uint32;
+
+typedef struct barren_t {
+	uint8 type:4;	//Bare Land, grass, snow, desert, rocks and and
+	uint8 amount:2;	//amount of snow 
+	uint8 counter:2; //is this large enough? how often will it be incremented?
+	//put the hedge somewhere else maybe?
+	uint8 hedge_SW:3;
+	uint8 hedge_SE:3;
+} barren_t;
+
+typedef struct water_t {
+	//FIXME - compare to canal_t
+	uint8 type:3;
+	uint8 part:4;	//for the canal locks
+} water_t;
+
+typedef struct bridge_t {
+	uint8 type:4;	//type of the bridge, e.g. wooden, concrete, tubular
+	uint8 dir:2;	//direction, we want to allow more than just two in the future
+	uint8 section:1;	//is it a middle part, or a "endcap"? endcaps will not be needed for cliffs maybe
+} bridge_t;
+
+typedef struct support_t {
+	//Blathis needs to detail this
+	uint8 type:4;		//different types of support, also depending on year
+} support_t;
+
+typedef struct industry_t {
+	uint8 type;	//type of the industry
+	uint8 index;
+	uint8 built:1;
+	uint8 stage:2;
+	uint8 counter:3;
+} industry_t;
+
+typedef struct station_t {
+	uint16 index;	//index of the station
+	uint16 part:7;	//FIXME - dunno .. airport stuff maybe??
+	uint16 type:4;	//FIXME - dunno this either, possibly type of vehicles served
+	uint16 track_type:3;
+} station_t;
+
+typedef struct checkpoint_t {
+	uint8 dir:1;	//direction
+	uint8 type:1;	//road or rail if we want road checkpoints later on
+	uint8 track_type:3;	//rail, electric rail, monorail, trams, maglev ...
+} checkpoint_t;
+
+typedef struct depot_t {
+	uint8 dir:2;	//direction
+	uint8 type:1;	//road or rail?
+	uint8 track_type:3;	//rail, maglev ....
+} depot_t;
+
+typedef struct tunnel_t {	//This might end up in the support_t stuff one day
+	uint8 type:2;	//road or rail 
+	uint8 dir:2;	//direction
+	uint8 track_type:3;	// well .. you got the point
+} tunnel_t;
+
+typedef struct canal_t {
+	uint8 dir:1;
+	uint8 type:1;	//canal or lock
+	uint8 part:3;	//part of the lock
+	uint8 status;	//if we want to have REAL locks sometime, we need 
+			// astatus of the doors/lift
+} canal_t;
+
+typedef struct signal_t {
+	uint8 present:2;	//what signals are found
+	uint8 type:3;		//type of signals/presignals, maybe Advance later on
+	uint8 semaphore:1;	//is it a semaphore?
+	uint8 status:2;		//status of the signal
+} signal_t;
+
+typedef struct track_t {
+	uint8 tracks;	//which tracks are present
+	uint8 track_type;	//what type of track
+	signal_t signal[2];	//signals on the tile
+} track_t;
+
+typedef struct tram_t {
+	//void currently
+} tram_t;
+
+typedef struct road_t {
+	uint8 type:2;	//type of the road (when is it used)?
+	uint8 pieces;	//roads which are present in the tile
+} road_t;
+
+typedef struct crossing_t {
+	uint8 road_owner;	
+	uint8 dir:1;	//do we want to be more flexible in the future
+	uint8 track_type:3; 
+} crossing_t;
+
+typedef struct lift_t {
+	uint8 pos:7;	//position
+	uint8 moving:1;	//is it moving?
+	uint8 dest:6;	//where is it going to?
+} lift_t;
+
+typedef struct town_t {
+	uint8 type;
+	uint8 stage:2;
+	uint8 counter:3;
+	lift_t lift;
+} town_t;
+	
+typedef struct trees_t {
+	uint8 type;
+	uint8 counter:4;
+	uint8 count:2;
+	uint8 growth:3;
+} trees_t;
+
+typedef struct fields_t {
+	uint8 type;
+	uint8 counter:5;
+	uint8 state:3;		//do we need this stuff here 
+} fields_t;
+
+typedef struct unmovable_t {
+	uint8 type;
+	uint8 part;
+} unmovable_t;
+
+typedef struct {
+	uint8 altitude_N;	//NO BITPACKING
+	uint8 altitude_S;	//NO BITPACKING
+	uint8 altitude_E;	//NO BITPACKING
+	uint8 altitude_W;	//NO BITPACKING
+	uint8 owner;
+	uint8 groundtype:4;
+	uint8 buildtype:4;
+	uint16 next;
+	union {
+		barren_t barren;
+		water_t water;
+		bridge_t bridge;
+		support_t support;
+	} ground;
+	union {
+		industry_t industry;
+		station_t station;
+		checkpoint_t checkpoint;
+		depot_t depot;
+		tunnel_t tunnel;
+		canal_t canal;
+		track_t track;
+		tram_t tram;
+		road_t road;
+		crossing_t crossing;
+		town_t town;
+		trees_t trees;
+		fields_t fields;
+		unmovable_t unmovable;
+	} build;
+} Tile;
+
+Tile _map[MAPSIZEX][MAPSIZEY];
+
+int main ( void ) 
+{
+ printf("Tile:  %d\n",sizeof(_map[0][0]));
+ printf("|-- ground:     %d\n",sizeof(_map[0][0].ground));
+ printf("|-- build: %d\n",sizeof(_map[0][0].build));
+ printf("-----------------------------------\n");
+ printf("Barren:  %d\n",sizeof(barren_t));
+ printf("Water:  %d\n",sizeof(water_t));
+ printf("Bridge:  %d\n",sizeof(bridge_t));
+ printf("Support: %d\n",sizeof(support_t));
+ printf("-----------------------------------\n");
+ printf("Industry %d\n",sizeof(industry_t));
+ printf("Station  %d\n",sizeof(station_t));
+ printf("Checkpoint %d\n",sizeof(checkpoint_t));
+ printf("Depot  %d\n",sizeof(depot_t));
+ printf("Tunnel  %d\n",sizeof(tunnel_t));
+ printf("Canal:  %d\n",sizeof(canal_t));
+ printf("Tracks  %d\n",sizeof(track_t));
+ printf("Trams  %d\n",sizeof(tram_t));
+ printf("Road:  %d\n",sizeof(road_t));
+ printf("Crossing: %d\n",sizeof(crossing_t));
+ printf("Town:  %d\n",sizeof(town_t));
+ printf("Trees:  %d\n",sizeof(trees_t));
+ printf("Fields:  %d\n",sizeof(fields_t));
+ printf("Unmovable: %d\n",sizeof(unmovable_t));
+ return 0;
+
+}
+</pre>
