@@ -16,176 +16,181 @@ typedef unsigned long uint32;
 #define PACK // uncomment at will
 
 typedef struct signal_t {
-  uint8 present:2;  // what signals are found (1 left, 1 right, 2, none)
-  uint8 type:3;     // type of signals/presignals, maybe advanced later on
-  uint8 semaphore:1;// semaphore
-  uint8 status:2;   // status of the signal (red, green, orange?)
-} signal_t;         // 8 bits
+  uint8 present:2;      // what signals are found (1 left, 1 right, 2, none)
+  uint8 type:3;         // type of signals/presignals, maybe advanced later on
+  uint8 semaphore:1;    // semaphore
+  uint8 status:2;       // status of the signal (red, green, orange?)
+} signal_t; /* 8 bits */
 
 typedef struct lift_t {
   uint8 pos:7;          // position of the lift
   uint8 moving:1;       // is it moving?
   uint8 dest:6;         // final positions of lift divided by 6
-  /* 2 bits free */
-} lift_t;               // 16 bits
+  /* 2 unused bits */
+} lift_t; /* 16 bits */
 
 typedef struct hedge_t {
-  uint8 hedge_SW:4;
-  uint8 hedge_SE:4;
-  uint8 hedge_NE:4;
-  uint8 hedge_NW:4;
-} hedge_t;
+  uint8 hedge_SW:4;     // hedge-type on SW border
+  uint8 hedge_SE:4;     // hedge-type on SE border
+  uint8 hedge_NE:4;     // hedge-type on NE border
+  uint8 hedge_NW:4;     // hedge-type on NW border
+} hedge_t; /* 16 bits */
 
 #ifdef PACK
 #pragma pack(push, 1)
 #endif
+
 typedef struct Tile {
-  struct Tile *next;          // 32
-  uint8 altitude_N:5;
-  uint8 height_S:3;
-  uint8 height_W:3;
-  uint8 height_E:3;
-  uint8 owner;                //  8
-  uint8 type;                 //  8
+  struct Tile *next;      // 32 or 64 bits depending on architecture
+  uint8 altitude_N:5;     // height of North corner of tile (ti.z)
+  uint8 height_S:3;       // height-offset of South from North corner (-2, -1, 0, +1, +2)
+  uint8 height_W:3;       // height-offset of West  from North corner (-2, -1, 0, +1, +2)
+  uint8 height_E:3;       // height-offset of East  from North corner (-2, -1, 0, +1, +2)
+  uint8 owner;            // owner of a tile, 255 no-owner ??
+  uint8 surface_class:3;  // class of a surface  on a tile. Directs to surface_t union
+  uint8 build_class:5;    // class of a building on a tile. Directs to build_t union
   union {
     /* splitting original uint8 type:5 into type and amount will need a rewrite of the tile
       processing for ground structs. Either that, or we use the original layout:
       uint8 type:5;
       uint8 counter:2; */
     struct {
-      uint8 type:4;     // bare band, grass, snow, desert, rocks, etc.
-      uint8 amount:2;   // amount of snow, grass
-      uint8 counter:2;  // update counter
-    } ground_t;         // 8 bits
+      uint8 type:4;       // bare band, grass, snow, desert, rocks, etc.
+      uint8 amount:2;     // amount of snow, grass
+      uint8 counter:2;    // update counter
+    } ground_t; /* 8 bits */
 
     struct {
-      uint8 type:3;   // water/coast/canal
+      uint8 type:3;       // water/coast/canal
     /* I think part:4 was here because of ship docks, but that is moved to
       depots_t now. So it is not needed. I can however see future in another
       struct like: uint8 special:2; which would put ice onto the graphic water
       etc. for higher situated water (eg. lakes)
-      uint8 part:4;   // for the canal locks */
-      /* 3/5 bits free */
-    } water_t;        // 8 bits
+      uint8 part:4;       // for the canal locks */
+      /* 3/5 unused bits */
+    } water_t; /* 8 bits */
 
     struct {
     /* Tron suggested a uint8 index; that indexes into an array, which based
       on this index gets the right image needed. This would replace the, below,
       4 different packed variables and code with one and a static const array.
       road/rail-type is not needed, it is stored on the tile above */
-      uint8 type:4;   // type of bridge, e.g. wooden, concrete, tubular
-      uint8 dir:2;    // direction, we want to allow more than just two in the future
-      uint8 section:1;// is it a middle part, or a "endcap"? endcaps will not be needed for cliffs maybe
-      uint8 ending:1; // northern/southern end of bridge
-    } bridge_t;       // 8 bits
+      uint8 type:4;       // type of bridge, e.g. wooden, concrete, tubular
+      uint8 dir:2;        // direction, we want to allow more than just two in the future
+      uint8 section:1;    // is it a middle part, or a "endcap"? endcaps will not be needed for cliffs maybe
+      uint8 ending:1;     // northern/southern end of bridge
+    } bridge_t; /* 8 bits */
 
-    struct {
-      // Blathijs needs to detail this
-      uint8 type:4;   // different types of support, also depending on year
-      /* 4 bits free */
-    } support_t;      // 8 bits
-  } surface;                  //  8
-
+    struct { // Blathijs needs to detail this
+      uint8 type:4;       // different types of support, also depending on year
+      /* 4 unused bits */
+    } support_t; /* 8 bits */
+  } surface;  /* 8 bits */
 
   union {
     struct {
-      uint16 index;   // index into industries array
-      uint8 type;   // type of the industry (graphics)
-      uint8 sound:1;  // sound-effect generated
-      uint8 built:1;  // under construction
-      uint8 counter:3;// counstruction counter
-      uint8 stage:2;  // stage of construction
-      uint8 animation;// animation states of industry (6 bits, some toyland 8 bits)
-      /* 9 bits free */
-    } industry_t;     // 48 bits
+      uint16 index;       // index into industries array
+      uint8 type;         // type of the industry (graphics)
+      uint8 animation;    // animation states of industry (6 bits, some toyland 8 bits)
+      uint8 sound:1;      // sound-effect generated
+      uint8 built:1;      // under construction
+      uint8 counter:3;    // counstruction counter
+      uint8 stage:2;      // stage of construction
+      /* 9 unused bits */
+    } industry_t; /* 48 bits */
 
     struct {
       uint16 index;       // index of the station
       uint16 part:12;     // type of station, increase from :7 to accomodate more graphics
       uint16 track_type:4;// rail, electric rail, monorail, trams, maglev ...
-    } station_t;          // 32 bits
+      /* 16 unused bits */
+    } station_t; /* 48 bits */
 
     struct {
-      uint16 dir:1;         // direction
-      uint16 type:1;        // road or rail if we want road checkpoints later on
-      uint16 track_type:4;  // rail, electric rail, monorail, trams, maglev ...
-      /* 10 bits free */
-    } checkpoint_t;         // 16 bits
+      uint8 track_type:4; // rail, electric rail, monorail, trams, maglev ...
+      uint8 dir:1;        // direction
+      uint8 type:1;       // road or rail if we want road checkpoints later on
+      /* 42 unused bits */
+    } checkpoint_t; /* 48 bits */
 
     struct {
-      uint8 dir:2;        // direction
+      uint8 track_type:4; // rail, electric rail, monorail, trams, maglev ...
       uint8 type:4;       // road, rail, water
       uint8 section:4;    // part of the depot (ship depots)
-      uint8 track_type:4; // rail, electric rail, monorail, trams, maglev ...
-      /* 2 bits free */
-    } depot_t;            // 16 bits
+      uint8 dir:2;        // direction
+      /* 34 unused bits */
+    } depot_t; /* 48 bits */
 
-    //This might end up in the support_t stuff one day
-    struct {
+    struct { //This might end up in the support_t stuff one day
       uint8 type:2;       // road or rail
       uint8 dir:2;        // direction
       uint8 track_type:4; // well .. you got the point
-    } tunnel_t;           // 8 bits
+      /* 40 unused bits */
+    } tunnel_t; /* 48 bits */
 
     struct {
-      uint8 dir:1;    // direction of locks
-      uint8 type:3;   // canal or lock or water
-      uint8 part:3;   // part of the lock
-      uint8 status;   // REAL locks sometime, we need status of the doors/lift
-      /* 1 bit free */
-    } canal_t;        // 16 bits
+      uint8 status;       // REAL locks sometime, we need status of the doors/lift
+      uint8 dir:1;        // direction of locks
+      uint8 type:3;       // canal or lock or water
+      uint8 part:3;       // part of the lock
+      /* 33 unused bits */
+    } canal_t; /* 48 bits */
 
     struct {
-      uint16 tracks;      // which tracks are present
-      uint8 track_type:4; // what type of track (should be 4?)
-     uint8 ground_fences:4;
+      uint16 tracks;        // which tracks are present
+      uint8 track_type:4;   // what type of track (should be 4?)
+     uint8 ground_fences:4;// fences for tracks (full-detail)
       signal_t signal[2];   // signals on the tile (2x 8 bits)
-    } track_t;              // 32 bits
+      /* 8 unused bits */
+    } track_t; /* 48 bits */
 
     struct {
-      uint8 type:3;         // type of the road-underground grass, snow, paved, streetlight
       uint8 pieces;         // roads which are present on a tile
-      /* 5 bits free */
-    } road_t;               // 16 bits
+      uint8 type:3;         // type of the road-underground grass, snow, paved, streetlight
+      /* 37 unused bits */
+    } road_t; /* 48 bits */
 
     struct {
       uint8 road_owner;     // owner of the road (track owner is in Tile)
-      uint8 dir:2;          // do we want to be more flexible in the future
+      uint8 track_type:4;   // rail-types
       uint8 lights:1;       // crossing lights on/off
       uint8 type:3;         // type of crossing, grass, snow, paved, streetlights
-      uint8 track_type:4;   // rail-types
-      /* 6 bits free */
-    } crossing_t;           // 24 bits
+      uint8 dir:2;          // do we want to be more flexible in the future
+      /* 30 unused bits */
+    } crossing_t; /* 48 bits */
 
     struct {
-      uint8 type;           // town building type
+      lift_t lift;          // lift (16 bits)
+      uint16 index:11;      // index to which town a building belongs to
       uint16 stage:2;       // stage of construction
       uint16 counter:3;     // construction counter
-      uint16 index:11;
-      lift_t lift;          // lift
-      /* 3 bits free */
-    } town_t;               // 32 bits
+      uint8 type;           // town building type
+      /* 8 unused bits */
+    } town_t; /* 48 bits */
 
     struct {
       uint8 type;           // type of trees
       uint8 counter:4;      // update counter
       uint8 count:2;        // number of trees
-      uint8 growth:3;       // growth status
+      /* 2 unused bits */
       hedge_t hedge;        // 16 bits
-      /* 1 bit free */
-    } trees_t;              // 24 bits
+      uint8 growth:3;       // growth status
+      /* 13 unused bits */
+    } trees_t; /* 48 bits */
 
     struct {
-      uint8 type:4;         // type of farm-fields
+      hedge_t hedge;        // 16 bits
+     uint8 type:4;         // type of farm-fields
      uint8 counter:2;      // update counter for fields
-     hedge_t hedge;        // 16 bits
-     /* 4 bits free */
-    } fields_t;             // 16 bits
+     /* 26 unused bits */
+    } fields_t; /* 48 bits */
 
     struct {
       uint8 type;           // unmoveables like transmitter, lighthouse, HQ
-    } unmovable_t;          // 8 bits
-  } build;                    // 32
+      /* 40 unused bits */
+    } unmovable_t; /* 48 bits */
+  } build; /* 48 bits */
+  /* 8 unused bits */
 } Tile;
 #ifdef PACK
 #pragma pack(pop)
@@ -202,7 +207,7 @@ int main ( void ) {
   //printf("height_E:           %3d\n", sizeof(_map[0][0].height_E)*8);
   //printf("height_W:           %3d\n", sizeof(_map[0][0].height_W)*8);
   printf("|-- owner:          %3d\n", sizeof(_map[0][0].owner)*8);
-  printf("|-- type:           %3d\n", sizeof(_map[0][0].type)*8);
+  printf("|-- class:            8\n");
   printf("|-- surface:        %3d\n",sizeof(_map[0][0].surface)*8);
   printf("    |-- ground:          %3d\n",sizeof(_map[0][0].surface.ground_t)*8);
   printf("    |-- water:           %3d\n",sizeof(_map[0][0].surface.water_t)*8);
@@ -233,4 +238,5 @@ int main ( void ) {
   printf("Old-Tile (total):   %3.0f (Mapsize %dx%d %.0fKB)\n", 6.25*8, MAPSIZEX, MAPSIZEY, (6.25*MAPSIZEX*MAPSIZEY)/1024);
   return 0;
 }
+
 </pre>
