@@ -1,5 +1,7 @@
 ==Comments==
 
+=== Celestar's comments ===
+
 For the multiple roadstop patch (MRP) it'd be helpful if we could store stop-based data in the map.
 
 For this I suggest a struct:
@@ -15,11 +17,9 @@ typedef struct stop_t {
 
 This struct should then be included in the station_t struct.
 
-Celestar
-
-----
-
-Signals: It's unclear what the intent of signal_t.status is. I can either think of it as A: 2 bits -> red/green for each direction on a bidirectional signal, or B: 2 bits->4 states (green, orange, double orange, and red). If A, the comment about orange doesn't make sense, since the bitfield would have to be enlarged to fit the extra state. If B, how are bi-directional signals handled?
+=== pv2b's comments ===
+==== Signals ====
+It's unclear what the intent of signal_t.status is. I can either think of it as A: 2 bits -> red/green for each direction on a bidirectional signal, or B: 2 bits->4 states (green, orange, double orange, and red). If A, the comment about orange doesn't make sense, since the bitfield would have to be enlarged to fit the extra state. If B, how are bi-directional signals handled?
 
 An alternative for fitting 3 states (green, yellow, and red) and still not exceed 8 bits would be to get rid of the "present" field, and encode the same information in the status1 and status2 bitfields.
 
@@ -34,8 +34,8 @@ typedef struct signal_t {
 
 Anyway, if in the future, OpenTTD implements orange signals, it would be great. It will really have potential for smoother-flowing and more efficient rail networks.
 
-Buoys and checkpoints: For now, Bouys are handled by the station code. But wouldn't it be nicer and more consistent for them to be handled by the checkpoint code? Also, there should be provisions for checkpoints that cover more than one track, IMHO.
+==== Buoys and checkpoints ====
+For now, Bouys are handled by the station code. But wouldn't it be nicer and more consistent for them to be handled by the checkpoint code? Also, there should be provisions for checkpoints that cover more than one track, IMHO.
 
-Trees: This is less important -- but shouldnt trees_t.growth be an array, so different trees can have different growth levels? :-) There certainly is room to spare in the union for this luxury.
-
-// pv2b
+==== Trees ====
+This is less important -- but shouldnt trees_t.growth be an array, so different trees can have different growth levels? :-) There certainly is room to spare in the union for this luxury.
