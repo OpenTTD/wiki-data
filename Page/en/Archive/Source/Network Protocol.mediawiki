@@ -6,60 +6,11 @@ It defines the protocol in great detail. What packages are sent when and by whom
 OpenTTD uses TCP as the transport for the network protocol. The networking could be done with UDP, but since OpenTTD depends on all packets arriving correctly and in order, any layer that could be made on top of UDP wouldn't present any significant benifits over TCP.
 
 
+== TODO ==
 
+What needs to be done?
+ - Client_max needs to be done correctly (in progress by TrueLight)
 
-
-== Some structs ==
-
-
-Below are two structs used for network info. Comments are very welcome!
-
-<pre>
-// How many clients can we have? Like.. MAX_PLAYERS - 1 is the amount of
-//  players that can really play.. so.. a max of 4 spectators.. gives us..
-//  MAX_PLAYERS + 3
-#define MAX_CLIENTS (MAX_PLAYERS + 3)
-
-// This is the struct used by both client and server
-//  some fields will be empty on the client (like game_password) by default
-//  and only filled with data a player enters.
-typedef struct NetworkGameInfo {
-	char server_name[40];		// Server name
-	uint16 server_revision;		// The SVN version number the server is using (e.g.: '304')
-								//  It even shows a SVN version in release-version, so
-								//  it is easy to compare if a server is of the correct version
-	byte server_lang;			// Language of the server (we should make a nice table for this)
-	byte clients_max;			// Max clients allowed on server
-	byte clients_on;			// Current count of clients on server
-	byte specators_on;			// How many spectators do we have?
-	uint16 game_date;			// Current date
-	char map_name[40];			// Map which is played ["random" for a randomized map]
-	uint16 map_width;			// Map width
-	uint16 map_height;			// Map height
-	byte map_set;				// Graphical set
-} NetworkGameInfo;
-
-typedef struct NetworkPlayerInfo {
-	uint64 player_money;		// How much money the client has
-	char company_name[32];		// Name of the company
-	uint64 company_value;		// The current value of the company
-	char password[20];			// The password for the player
-} NetworkPlayerInfo;
-
-typedef struct NetworkClientInfo {
-	char client_name[40];		// Name of the client
-	byte client_lang;			// The language of the client
-	byte client_playas;			// As which player is this client playing
-	char client_ip[15];			// IP-address of the client (so he can be banned)
-	uint16 join_date;			// Gamedate the player has joined
-} NetworkClientInfo;
-
-NetworkGameInfo _network_game_info;
-NetworkPlayerInfo _network_player_info[MAX_PLAYERS];
-NetworkClientInfo _network_client_info[MAX_CLIENTS];
-
-char _network_game_password[20]; // The gamepassword
-</pre>
 
 == Protocol ==
 
