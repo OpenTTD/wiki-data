@@ -1,0 +1,41 @@
+Okay, lets see some code.
+
+  struct tile {
+    uint type; // Bridge, ground, support, tunnel, etc.
+    uint blocks_below; // Bitmask of which pillars are present below and therefore block below
+    uint blocks_depth; // How deep does the tile block stuff?
+    uint supports; // Bitmask for which tracks it supports, and if it supports buildings
+    uint slope;
+    union {
+      struct bridge {
+        uint bridgetype; // not sure this is needed
+      };
+      struct ground {
+        uint grass_state;
+      };
+      struct support {
+        // What should go here?
+      };
+      struct tunnel {
+      };
+    };
+  };
+  
+  struct content {
+    uint type; // station, industry, rail, road, etc.
+    union {
+      struct station {
+      };
+      struct industry {
+      };
+      struct rail {
+      };
+      // etc
+    }
+  }
+    
+  struct {
+    uint height; // z coordinate
+    struct tile tile;
+    struct content content;
+  } _map[];
