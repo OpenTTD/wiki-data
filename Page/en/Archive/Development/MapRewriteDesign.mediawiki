@@ -8,6 +8,25 @@ Okay, so I'll list here the main changes, point by point. Some of these are alre
 * Added internal support for highway-style supports (not a feature yet)
 
 ==What is this multilayer stuff?==
+==Frames of reference==
+
+In order not to cause any more confusion, I'll sum up the reference systems we should be using:
+
+===Screen Reference System (SRS)===
+Pixels on the map. X runs across, Y down, defined in the struct "ScreenCoord"
+
+===Map Reference System (MRS)===
+Counts in units from the origin of the map and stores only X and Y coordinates. X runs from upper right to lower left.
+This is defined in PointXY.
+
+===Full Reference System (FRS)===
+Like the Map Reference System, but it stores a Z coordinate as well. The matching struct is a "Point"
+
+===Map Tile System (MTS)===
+Stores the X and Y position of of a Tile, in units of one Tile; this should be stored in TStackXY. Again X runs from upper right to lower left.
+
+===Tile Reference System (TRS)===
+Counts in units from the nothern corner of the Tile. X from upper right to lower left, Y perpendicular, Z in the vertical axis. Stored as TileCoords.
 
 ==What does a tile look like now?==
 Instead of having a lot of seperate unlabeled arrays which contain miscellaneous data, we will now store information about a tile in a struct appropriately named "Tile". The exact contents are to be found in the code (where?), but we will discuss the main lines here.
