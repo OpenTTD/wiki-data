@@ -1,14 +1,12 @@
-<pre>
+<pre> 
 //This defines the points of the grid
 struct {
      uint8 altitude:5;
-     uint8 free_bits:3;    //what can we put here, maybe it is usable
+     uint8 cliff_height_of_northern_tile:3;  
 } grid[MAPSIZEX+1][MAPSIZEY+1],
 
 struct {
-     uint8 owner;
-     uint32 cliff_height:2;   //build-on-slopes, but with flexible height
-     uint32 LandscapeInfo:10;
+     uint32 LandscapeInfo:12;
      uint32 BuildInfo:20;   
 } MapInfo;
 
@@ -16,6 +14,7 @@ MapInfo _map[MAPSIZEX][MAPSIZEY];
 MapInfo _more[1000];
 
 struct {
+     uint8 owner;
      uint16 ref_count;
      union {
           struct {
@@ -31,7 +30,7 @@ struct {
           struct {
                uint8 type;
                uint8 ground:2;
-               uint8 ground_amount:2;
+               uint8 ground_amount:2;  
                uint8 counter:4;
                uint8 count:2;
                uint8 growth:3;
@@ -57,6 +56,8 @@ struct {
      }
 } LandscapeInfo;
 
+LandscapeInfo LI[2^12]
+
 struct {
       uint8 ref_count;
       union {
@@ -67,4 +68,6 @@ struct {
            struct {} town;
       }
 } BuildInfo;
+
+BuildInfo BI[2^20]
 </pre>
