@@ -8,30 +8,48 @@ It defines the protocol in great detail. What packages are sent when and by who.
 == Protocol ==
 
 
-The general idea behind the protocol is, is that the clients are always 1 frame behind the server, so commands can be handled correctly.
+The general idea behind the protocol is, is that the clients are always 1 frame behind the server, so commands can be handled correctly. When the server received PACKET_MAP_OK from the client, it assumes that the client is ready and is shown as joined to everyone. Then the client receives the commands done by other clients between the time of the savegame and the time of PACKET_MAP_OK for the right frame and the client is supposed to quick run through all the frames and handle the commands at the given time, till it reached the frame of the server - 1. From that point on, the client is in sync and continues normally (only receiving PACKET_COMMAND, PACKET_SYNC and PACKET_CHAT)
+
+
+
+* Client1 = one client
+* ClientX = all clients connected
+* Server = server
 
 {| border="1"
 |+ Network Protocol
 |-
-! Packet name !! Server/Client !! Params !! Information
+! Packet name !! From who !! To who !! Params !! Information
 |-
-|PACKET_GAME_INFO || Client || <none> || Requests info about the server (current game/players/password protected)
+|PACKET_CLIENT_GAME_INFO || Client1 || Server || <none> || Requests info about the server (current game/players/password protected)
 |-
-|PACKET_GAME_INFO || Server || GameInfo || Sends the info of the server
+|PACKET_SERVER_GAME_INFO || Server || Client1 || GameInfo || Sends the info of the server
 |-
-|PACKET_JOIN || Client || UserName / GamePassword || Request to join the server (with a username and a gamepassword if needed)
+|PACKET_CLIENT_JOIN || Client1 || Server || UserName / GamePassword || Request to join the server (with a username and a gamepassword if needed)
 |-
-|PACKET_ERROR || Server || ErrorCode || ErrorCode (login denied, kicked, stuff like that)
+|PACKET_SERVER_ERROR || Server || Client1 || ErrorCode || ErrorCode (login denied, kicked, stuff like that)
 |-
-|PACKET_WELCOME || Server || Other player info || Info about other players, MOTD
+|PACKET_SERVER_WELCOME || Server || Client1 || Other player info || Info about other players, MOTD
 |-
-|PACKET_MAP || Server || Savegame || The savegame of the current map (multiple packages)
+|PACKET_SERVER_MAP || Server || Client1 || Savegame || The savegame of the current map (multiple packages)
 |-
-|PACKET_MAP_OK || Client || <none> || The client received the map correctly and is ready to join
+|PACKET_CLIENT_MAP_OK || Client1 || Server || <none> || The client received the map correctly and is ready to join
 |-
-|PACKET_SYNC || Server || RandomSeed || The server sends the random-seeds to the client for a certain frame
+|PACKET_SERVER_JOIN || Server || ClientX || Playername || Player joins the game
 |-
-|PACKET_COMMAND || Client || Command, p1, p2 || The clients sends a DoCommand to the server
+|PACKET_SERVER_SYNC || Server || ClientX || RandomSeed || The server sends the random-seeds to the client for a certain frame
 |-
-|PACKET_COMMAND || Server || Command, p1, p2, player, frame || The server says when to execute a certain DoCommand
+|PACKET_CLIENT_COMMAND || Client1 || Server || Command, p1, p2 || The clients sends a DoCommand to the server
+|-
+|PACKET_SERVER_COMMAND || Server || ClientX || Command, p1, p2, player, frame || The server says when to execute a certain DoCommand
+|-
+|PACKET_CLIENT_CHAT || Client1 || Server || String, Player || Chat message (player == 255 means all clients)
+|-
+|PACKET_SERVER_CHAT || Server || ClientX || FromPlayer, string || Chat message
+|-
+|PACKET_CLIENT_QUIT || Client1 || Server || Reason || The client wants to quit the server
+|-
+|PACKET_CLIENT_ERROR || Client1 || Server || ErrorNo || The client made an error and is going to be disconnected. Inform the server about it (OpenTTD crash / DeSync)
+|-
+|PACKET_SERVER_QUIT || Server || ClientX || Player, reason || A player left the game (also sent to the quiting player)
 |}
