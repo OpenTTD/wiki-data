@@ -1,0 +1,78 @@
+[[Translation:en/Archive/Source/Strings]]
+If you want to add new strings to the game, you will sooner or later have to deal with the string system currently in use. Here's a short description on its use.
+
+You add a new string by adding a line to '''"english.txt"'''. This should happen at the place where it belongs with the other strings around. Keep in mind that sometimes OpenTTD uses special code for the numbering of strings. For example you SHOULD not put anything else inbetween the dates: ''"1st"'', ''"2nd"''... ''"31st"''. These strings are not called by their name, but iterated through from within the code with a counter. <warning>Keep this in mind!</warning>
+
+==Adding Strings==
+You add a string by giving it an identifier, something starting with ''"STR_"'' then a number of tabs later (see [[en/Development/Coding style]] on how to set up your tab) a colon ":" and then the string itself. For example:
+<pre>STR_01A1_IS_GETTING_VERY_OLD			:{WHITE}{STRING} {COMMA16} is getting very old</pre>
+The strings enclosed in "{}"'s are special characterstrings that are interpreted by the game. As you might have guessed, "{WHITE}" gives the string a white colour.
+
+==What special strings are there?==
+In the table below you will find most of them
+{|
+|align=center | '''MODIFIERS''' ||align=center | '''COMMANDSTRINGS'''
+|-
+| '''Position''' || Update the position of the text. Used for example to scroll text<pre>{SETX} {SETXY}</pre>
+|-
+| '''Font size''' || Change the size of the font. The default is medium.<pre>{TINYFONT} {BIGFONT}</pre>
+|-
+| '''Newline''' || Add a newline to your text.<pre>{}</pre>
+|-
+| '''Colour''' || Change the colour of the string, or the part of string until overridden by another colour to this colour.<pre>{BLUE}    {SILVER} {GOLD}  {RED}   {PURPLE} {LTBROWN} {ORANGE} {GREEN} {YELLOW}
+{DKGREEN} {CREAM}  {BROWN} {WHITE} {LTBLUE} {GRAY}    {DKBLUE} {BLACK}</pre>
+|-
+| '''Numbers''' || Show numbers.
+<pre>
+{COMMA32}        - show a (u)int32 number
+{COMMA16}        - show a (u)int16 number
+{COMMA8}         - show a (u)int8  number
+{NUMU16}         - show an uint16  number
+
+{CURRENCY}       - number as a currency, eg € 230,000
+
+{CURRCOMPACT}    - short version of currency (used in graphs)
+{INT32}          - show an int32   number
+{REV}            - openttd revision string
+{SHORTCARGO}     - short cargo description, only ### tons, or ### litres
+
+{STRINL}         - ??
+{DATE_LONG}      - long date version, eg 25th February 2004
+{DATE_SHORT}     - short date version, eg February 2004
+{VELOCITY}       - speed of vessel, eg 120km/h or 195mph
+{SKIP16}         - skip a parameter
+{SKIP}           - skip a parameter
+{VOLUME}         - show number as a volume, eg 1,000 litres
+{STRING}         - get the string pointed to by this index
+{CARGO}          - show number as cargo, eg 950 tonnes
+{STATION}        - get the station-name pointed to by this index
+{TOWN}           - get the town-name pointed to by this index
+{CURRENCY64}     - show the uint64 amount of money (no overflow)
+{CHECKPOINT}     - get the checkpoint-name pointed to by this index
+</pre>
+|-
+| '''Special characters''' || Show special characters, icons.
+<pre>
+{UPARROW}        - ↑
+{POUNDSIGN}      - ₤
+{YENSIGN}        - ¥
+{COPYRIGHT}      - ©
+{DOWNARROW}      - ↓
+{CHECKMARK}      - a checkmark
+{CROSS}          - a X (used for closing windows)
+{RIGHTARROW}     - →
+{SMALLUPARROW}   - small ↑
+{SMALLDOWNARROW} - small ↓
+{THREE_FOURTH}   - ¾
+</pre>
+|}
+
+==How to Use these?==
+As you have seen before, you have to put these special modifiers into the string itself. Let us revisit the above example:
+<pre>STR_01A1_IS_GETTING_VERY_OLD			:{WHITE}{STRING} {COMMA16} is getting very old</pre>
+Both "STRING" and "COMMA16" are variables. You set them up by calling the appropiate '''"SET_DPARAM.."''' function. So for this one you would do:
+<pre>SET_DPARAM16(0, v->name);
+SET_DPARAM16(1, v->index);</pre>
+Only after this do you call the appropiate draw function, for example:
+<pre>DrawStringRightAligned(x, y, STR_01A1_IS_GETTING_VERY_OLD, colour);</pre>
+Both parameters of "STR_01.." have been setup, and you will get the info nicely on your screen. Good luck!
