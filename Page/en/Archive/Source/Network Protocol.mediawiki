@@ -241,25 +241,29 @@ Below first the packets the client can send to the server. After that, the packe
 | PACKET_SERVER_CHAT
 | Sends a chat-packet to the client
 |
-  - Uint8:  ActionID (see network_data.h, NetworkAction)
-  - Uint8:  ClientID
+  - Uint8: ActionID (see network_data.h, NetworkAction)
+  - Uint8: ClientID
   - String[MAX_TEXT_MSG_LEN]: Message
 |-
 | PACKET_SERVER_ERROR_QUIT
 | One of the clients made an error and is quiting the game. This packet informs the other clients of that.
 |
-  - Uint8:  ClientID
-  - Uint8:  ErrorID (see network_data.h, NetworkErrorCode)
+  - Uint8: ClientID
+  - Uint8: ErrorID (see network_data.h, NetworkErrorCode)
 |-
 | PACKET_SERVER_QUIT
+| A client left the game, and this packets informs the other clients of that.
 |
-|
+  - Uint8: ClientID
+  - String: Leave message
 |-
 | PACKET_SERVER_SHUTDOWN
+| Let the clients know that the server is closing
 |
-|
+  <none>
 |-
 | PACKET_SERVER_NEWGAME
+| Let the clients know that the server is loading a new map
 |
-|
+  <none>
 |}
