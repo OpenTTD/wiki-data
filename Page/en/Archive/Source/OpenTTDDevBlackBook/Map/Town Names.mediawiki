@@ -1,0 +1,15 @@
+This guide will show you how to add new town names to OpenTTD. It requires the game to be recompiled so if you are not sure of how to do that check out [[en/Development/Main Page#coding-tools|this page]]. Most of the town names are generated randomly, but some of them are just a big list. This guide will show you how to add a new set of random town names, based upon the English townames method.
+
+==Find the file to edit==
+#First you need to get a copy of the source code for whatever version of OpenTTD you want to add town names to. If you want to create new town names to be included within the game it is suggested that you use the latest SVN version. If you are not sure how to get the source code have a look at the [[en/Development/FAQ development]] page.
+#Once you have got the source code go into the base directory. Among the forest of files and directories there should be a directory called \\table\\, go into this. If you have a fairly recent version of OpenTTD that supports other town names there will be a file called \\namegen.h\\ - this is what you need to edit.
+
+==How the name generator works==
+In order to understand how to add new town names first it is advisable to understand how they work. The English town names generator decides whether or not to have a first segment (from the \\name_original_english_1\\ array), for example: "Great". It chooses the mandatory middle sections (from \\name_original_english_[2 to 5]\\), for example: "Pl", "on", "fing", "borough". Lastly it chooses whether or not to have a final segment (from \\name_original_english_6\\), for example: "Bridge". It then puts it together and you get a random town such as "Great Plonfingborough Bridge". There is also a bit of filtering to make sure no offensive names are generated.
+
+==Creating your new town names==
+As you have seen in the previous section you need a first section, a few middle sections and a final section. If you feel up the the task you can change the name generator code so it needs different bits - that is another guide though.
+
+Once you have though of some good new names you need to create a new array for them and put them in it. Have a look at the example below:
+
+--[ Not finished, I have decided to create new town names for my local area and it is taking a while ]--
