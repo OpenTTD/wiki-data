@@ -1,0 +1,45 @@
+= Centralised Authentication =
+
+A proposal by MarkR.
+
+== Why we need it ==
+
+* To run leagues we need persistent authentication
+* To prevent abuse by repeat offenders
+* To prevent server admins from being able to get passwords
+
+== How authentication works now ==
+
+We just have two passwords, one server password for creating a new company, and one for connecting to an existing company. Passwords are stored in memory on the server and sent in plaintext, in the clear.
+
+The list server does not do any authentication on servers - the server name is not checked against IP.
+
+== Proposal == 
+
+Client decides it wants to connect to server X
+
+* Client connects to the OTTD server, and asks to be authenticated
+* Server creates a random number R1 and sends it to client, also keeping a copy. R1 is associated with a given client only, and will be different each time.
+* Client sends its username, password and R1 to the auth server
+* Client gets back a session ID which is only valid in conjunction with that R1 value for some short period of time ( a few minutes or something)
+* Client sends its username + session ID to the OTTD server
+* OTTD server sends username + session ID + R1 to auth server saying "Is this valid"?
+* Auth Server replies, saying "Yes" or "No" and OTTD server allows or denies client respectively
+
+== NOTES ==
+
+#. Client never sends username / password to OTTD server (as currently)
+#. R1 value means that sniffing the session ID is useless, as another server will use a different R1 value
+	(and indeed the same server will use a different R1 value if you connect again)
+#. Man-in-the-middle attack is still possible unfortunately, by using a modified server which also behaves as a client and "passes through" the authentication. Once it's authenticated, this modified client can do a session-hijack.
+
+----
+
+Issues:
+* We're going to need a UI to set the username/password before connecting to any server
+* We're going to need (ideally), in-game registration on the main menu.
+
+Questions:
+* How to play co-op? Some sort of invite system? Currently co-op is frequently abused.
+* Can server admins allow unauthenticated clients? If so, do we indicate them somehow to other players?
+* Should the client store the default username/password locally? If so, where?
