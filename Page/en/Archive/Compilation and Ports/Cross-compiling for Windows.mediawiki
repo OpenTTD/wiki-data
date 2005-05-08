@@ -4,15 +4,73 @@ This guide will show you how to cross compile OpenTTD on Linux to be run under W
 [http://forums.gentoo.org/viewtopic-t-66125.html Building a cross compiler (compile on Linux, run on Windows)] guide on the Gentoo Forums.
 
 == What you will need ==
-The first things you need to get are the sources for GCC and Binutils, and the binaries for the Win32 API and MinGW runtime. You need the binaries for the Win32 API and MinGW runtime, because you need a compiler to build those in the first place; but you need those to build the compiler; and so on....
+The first things you need to get are the sources for GCC and Binutils, and the binaries for the Win32 API and MinGW runtime. You need the binaries for the Win32 API and MinGW runtime, because you need a compiler to build those in the first place; but you need those to build the compiler; and so on....<br/><br/>
 
 You can get the latest version of these packages from the [http://mingw.org/download.shtml MinGW website].<br/><br/>
 
 *[http://sources.redhat.com/binutils/ GNU Binutils] - a collection of binary tools<br/>
-binutils-*-src.tar.gz ([http://prdownloads.sf.net/mingw/binutils-2.15.91-20040904-1-src.tar.gz?download binutils-2.15.91-20040904-1-src.tar.gz])
-*[http://gcc.gnu.org/ GCC] - the GNU Compiler Collection<br/>
-gcc-core-*-src.tar.gz ([http://prdownloads.sf.net/mingw/gcc-core-3.4.2-20040916-1-src.tar.gz?download gcc-core-3.4.2-20040916-1-src.tar.gz])
+binutils-*-src.tar.gz ([http://prdownloads.sf.net/mingw/binutils-2.15.91-20040904-1-src.tar.gz?download binutils-2.15.91-20040904-1-src.tar.gz] 14mb)
 *Windows API - headers and import libraries to support the Win32 API<br/>
 w32api-*.tar.gz ([http://prdownloads.sf.net/mingw/w32api-3.2.tar.gz?download w32api-3.2.tar.gz])
 *MinGW runtime - Run time headers to build a compiler system to build code to be run on Windows<br/>
 runtime-*.tar.gz ([http://prdownloads.sf.net/mingw/mingw-runtime-3.7.tar.gz?download mingw-runtime-3.7.tar.gz])<br/><br/>
+
+I could not get the version of GCC from MinGW to compile, so I had to obtain a clean version from GCC. Choose a mirror near to you from [http://gcc.gnu.org/mirrors.html the mirror list] and then download ./releases/gcc-3.4.3/gcc-3.4.3.tar.gz. For example:<br/>ftp://ftp.mirrorservice.org/sites/sources.redhat.com/pub/gcc/releases/gcc-3.4.3/gcc-3.4.3.tar.gz.
+*[http://gcc.gnu.org/ GCC] - the GNU Compiler Collection<br/>
+gcc-*.tar.gz
+
+== Setting up the directories ==
+
+First you need to decide where everything will go, you need a temporary directory to build stuff in, and a permanent one to store all the tools in. You do not need system wide access, so they will both fit nicely into your home dir, for example:
+<pre>/home/luca/build - temporary directory for building (build dir)
+/home/luca/cross-tools - permanent directory for all the tools (dest dir)</pre>
+So make those directories, cd into them, download the files, and decompress them. GCC and Binutils need to be decompressed in the build dir while MinGW and the Win32 API need to be decompressed into the dest dir:
+<pre>
+mkdir -p /home/luca/cross-tools/i386-mingw32msvc
+mkdir -p /home/luca/build/source
+cd /home/luca/build/source
+-- download --
+cd /home/luca/cross-tools/i386-mingw32msvc
+gzip -dc "/home/luca/build/source/mingw-runtime-3.7.tar.gz" | tar xf -
+gzip -dc "/home/luca/build/source/w32api-3.2.tar.gz" | tar xf -
+cd /home/luca/build
+gzip -dc "/home/luca/build/source/binutils-2.15.91-20040904-1-src.tar.gz" | tar xf -
+gzip -dc "/home/luca/build/source/gcc-3.4.3.tar.gz" | tar xf -</pre>
+Configuring and building GCC and Binutils takes fooorrreeeevver so it is a good idea to keep your source directories clean in case something goes wrong.
+<pre>mkdir /home/luca/build/binutils-i386-mingw32msvc
+mkdir /home/luca/build/gcc-i386-mingw32msvc</pre>
+
+== Building Binutils and GCC ==
+Configure, build and install Binutils. This will take a rather long time, so you may want to go and play your favourite game.
+<pre>cd /home/luca/build/binutils-i386-mingw32msvc
+/home/luca/build/binutils-2.15.91-20040904-1/configure --prefix=/home/luca/cross-tools --target=i386-mingw32msvc
+make
+make install
+</pre>
+Next you need to add the path of your newly compiled tools to your PATH variable:
+<pre>export PATH=/home/luca/cross-tools/bin:$PATH</pre>
+Make sure you add your current PATH after the new stuff, otherwise you will have problems later on. Now more compiling, GCC this time.
+<pre>cd /home/luca/build/gcc-i386-mingw32msvc
+/home/luca/build/gcc-3.4.3/configure -v --prefix=/home/luca/cross-tools --target=i386-mingw32msvc --with-headers=/home/luca/cross-tools/i386-mingw32msvc/include --with-gnu-as --with-gnu-ld --without-newlib --disable-multilib
+make
+make install</pre>
+If all went well, you should have got no errors and should now have a compiler that can compile on Linux for Windows. If you want to free up some space you should clean out the sys-includes directory, it is needed during the gcc compile, but not by anything else.
+<pre>rm -rf /home/luca/cross-tools/i386-mingw32msvc/sys-include</pre>
+
+== Testing ==
+Here is a little test to make sure your compiler is working - it is no use trying anything else unless it is.</br></br>
+Create the file hello.c:
+<pre>#include <stdio.h>
+int main(void)
+{
+  printf("Hello World!\n");
+  exit(0);
+}</pre>
+And to compile:
+<pre>i386-mingw32msvc-gcc hello.c -o hello.exe</pre>
+To test it either run it (in a DOS prompt) under Windows:
+<pre>hello.exe
+Hello World!</pre>
+Or under WINE on Linux:
+<pre>wine hello.exe
+Hello World!</pre>
