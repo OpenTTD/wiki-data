@@ -1,5 +1,6 @@
 [[Category:en/Development/Compiling OpenTTD]]
-(Under development - don't touch)<br/>
+== THIS IS STILL A WORK IN PROGRESS, IT WILL NOT WORK ==
+== (Wait until Tuesday night :P) ==
 This guide will show you how to cross compile OpenTTD on Linux to be run under Windows, using the freely available GNU and MinGW tools. It is based upon the
 [http://forums.gentoo.org/viewtopic-t-66125.html Building a cross compiler (compile on Linux, run on Windows)] guide on the Gentoo Forums.
 
@@ -17,7 +18,13 @@ runtime-*.tar.gz ([http://prdownloads.sf.net/mingw/mingw-runtime-3.7.tar.gz?down
 
 I could not get the version of GCC from MinGW to compile, so I had to obtain a clean version from GCC. Choose a mirror near to you from [http://gcc.gnu.org/mirrors.html the mirror list] and then download ./releases/gcc-3.4.3/gcc-3.4.3.tar.gz. For example:<br/>ftp://ftp.mirrorservice.org/sites/sources.redhat.com/pub/gcc/releases/gcc-3.4.3/gcc-3.4.3.tar.gz.
 *[http://gcc.gnu.org/ GCC] - the GNU Compiler Collection<br/>
-gcc-*.tar.gz
+gcc-*.tar.gz<br/><br/>
+
+You optionally need zlib and libpng, if you want to be able to have compressed save games, and png screenshots.
+*[http://www.gzip.org/zlib/ zlib]
+zlib-*.tar.gz ([http://prdownloads.sourceforge.net/libpng/zlib-1.2.2.tar.gz?download zlib-1.2.2.tar.gz])
+*[http://www.libpng.org/pub/png/libpng.html libpng]
+libpng-*-config.tar.gz ([http://prdownloads.sourceforge.net/libpng/libpng-1.2.8-config.tar.gz?download libpng-1.2.8-config.tar.gz])
 
 == Setting up the directories ==
 
@@ -74,3 +81,26 @@ Hello World!</pre>
 Or under WINE on Linux:
 <pre>wine hello.exe
 Hello World!</pre>
+
+== Zlib and libpng ==
+
+Next you need to compile zlib...
+<pre>cd /home/luca/build
+gzip -dc "/home/luca/build/source/zlib-1.2.2.tar.gz" | tar xf -
+cd zlib-1.2.2/
+./configure --target=i386-mingw32msvc --host=i386-mingw32msvc --build=i386-linux --prefix=/home/luca/cross-tools/tools/
+make
+make install</pre>
+...and libpng...
+<pre>cd /home/luca/build
+gzip -dc "/home/luca/build/source/libpng-1.2.8-config.tar.gz" | tar xf -
+cd libpng-1.2.8-config
+cp scripts/makefile.linux Makefile
+make target=i386-mingw32msvc host=i386-mingw32msvc build=i386-linux prefix=/home/luca/cross-tools/tools/
+make install prefix=/home/luca/cross-tools/tools/</pre>
+...and voila! You should now be able to compile OpenTTD.
+
+== Compiling OpenTTD ==
+Nothing out of the ordinary needs to be done for OpenTTD, just a few options need to be set in Makefile.config:
+<pre>
+</pre>
