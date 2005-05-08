@@ -45,50 +45,187 @@ To achieve a coherent whole, here are some guidelines for the coding style used 
       }
 </pre>
 
-==Proposed amendment(s)==
-* Each externally accessible function in a file should be documented in code by a comment which describes, at the minimum, the purpose, and any assumptions of the function. If it's not clear, the inputs and outputs of the function should also be documented.
+== Code documentation ==
 
-* Use comments in your code. Comments should follow the javadoc style. A typical function comment sould  look like this:
-<box><font color="#008800">/** <br>
-&nbsp;* A short sentence explaining the basic utility of the function. (full stop terminated).<br>
-&nbsp;* A more detailed explanation of the function, which can span multiple lines and can contain HTML code.<br>
-&nbsp;* <br>
-&nbsp;* @param foo Explanation of the parameter<br>
-&nbsp;* @param bar Explanation of another parameter<br>
-&nbsp;* @return The sum of foo and bar (This tag shouldn't be present if the function return type is void)<br>
-&nbsp;* @see FooBar2(int,int) does substraction. (link to something else that might of interest)(optional)<br>
-&nbsp;*/</font><br><font color="#0000FF"> static int</font> FooBar(<font color="#0000FF">int</font> foo, <font color="#0000FF">int</font> bar)<br>
-{<br>
-&nbsp;&nbsp;<font color="#0000FF">return</font> foo + bar;<br>
-}
-</box>
+=== Overview ===
+We use [http://doxygen.org/ Doxygen] to automatically generate documentation from comments inside the source code. It scans the source files for comments with certain patterns and uses the information contained within those to generate documentation that will help understanding how things work. With that we have to follow some rules about how comments are being written, and that's what this section is for.
 
-* You should also comment your global variables. There are two possible style (doxygen comment style):
-<box><font color="#008800">/// Use this comment style if you whish to place the comment on top of the variable</font><br>
-<font color="#0000FF">int</font> _foo;</box>or<br>
-<box><font color="#0000FF">int</font> _foo;<font color="#008800">///< Use this Comment style if you whish to place the comment at the right of the variable</font></box>
 
-* A typical struct comment should look like this:
-<box><font color="#008800">/** A short description of the struct. (full stop terminated)<br>
-&nbsp;* A more detailed description of usage.<br>
-&nbsp;* @see link to anything of interest. (optional)<br>
-&nbsp;*/</font><br>
-<font color="#0000FF">typedef struct</font> foo{<br>
-&nbsp;&nbsp;<font color="#0000FF">int</font> var1 <font color="#008800">///< a short description of var1</font><br>
-&nbsp;&nbsp;<font color="#0000FF">int</font> var2 <font color="#008800">///< a short description of var2</font><br>
-} foo;</box>
+First off, Doxygen knows two different kinds of comments:
+*''Brief descriptions'': one-liners that describe the function roughly ([http://docs.openttd.org/annotated.html example])
+*''Detailed descriptions'': as the name suggests, these contain the detailed function/purpose of the entity they describe ([http://docs.openttd.org/structBridge__t.html example])
+You can omit either one or put them into different places but there's only one brief and one detailed description allowed for the same entity.
 
-* Areas of interest or suggestions for improving the code should be marked as follows:
-<box>
-<font color="#0000FF">int</font> i = 6; <font color="#008800">// XXX - wtf is this magic number and what does it do? (single line)</font> 
-</box>
-or<br>
-<box>
-<font color="#008800">/** XXX - Awfull piece of code, must be <br>
-&nbsp;* rewritten as soon as possible. Magic numbers should be <br>
-&nbsp;* removed. What does it actually do?<br>
-&nbsp;*/</font><br>
-i = (_map5[tile] & 0x1F) - 4;<br>
-<font color="#0000FF">if</font> (i >= 0) i = (i >> 2);<br>
-bits = _vegetation_clear_bits[i + 4];
-</box>
+
+Furthermore, Doxygen knows three modes for documenting an entity:
+*Before the entity
+*After the entity
+*In a different file
+The latter is a little harder to maintain since the prototype of the entity it describes then is stored in several places (e.g. the .h file and the file with the descriptions). Also while it makes the code easier to read it also makes it easier to omit the important step of updating the description of an entity if it was changed - and we all know why that shouldn't happen ;)<br>
+Because of those reasons, we will only use the first two documentation schemes.
+
+
+On top of that Doxygen also caters to the needs of those who are used to the Qt and JavaDoc comment styles because it supports both:
+*Qt style example: '''int i; //!< The counter for the main loop'''
+*JavaDoc style example: '''int i; /**< The counter for the main loop */'''
+It also supports more comment styles but those two are the ones which are standardized. For OTTD we'll be using the JavaDoc style. One of the reasons is that it has a feature that the Qt style doesn't offer: JavaDoc style comment blocks will automatically start a brief description which ends at the first dot followed by a space or new line. Everything after that will also be part of the detailed description. The guideline in the next section will explain what this means for you.
+
+=== General JavaDoc style comments ===
+
+The general structure of a JavaDoc style comment is
+ /**
+  * This is the brief description. And this sentence contains some further explanations that will appear in the detailed description only.
+  */
+and the resulting descriptions of that block would be:
+*''Brief description'': This is the brief description.
+*''Detailed description'': This is the brief description. And this sentence contains some further explanations that will appear in the detailed description only.
+The distinction between the brief and detailed descriptions is made by the dot followed by a space/newline, so if you want to use that inside the brief description you need to escape the space/newline: 
+ /**
+  * This is a brief description (e.g.\ using only a few words). Details go here.
+  */
+
+
+If you're doing a one-line comment it could look like that:
+ int i; /**< This is the description. */
+However since that might be a little hard to read we can also use
+ int i; ///< This is the description.
+instead.
+
+
+Also in the comment block you can include so-called structural commands which tell Doxygen what follows. In general, their area of effect begins after the command word and ends when a blank line or some other command is encountered. Also, multiple occurences of the same structural command within a comment block or the referring entity will be joined in the documentation output usually.<br>
+The full list of supported structural commands can be found [http://www.stack.nl/~dimitri/doxygen/commands.html here] while this table shows the ones you should know about:
+
+
+{|
+|'''This structural command...'''||'''...does the following'''||'''Usage example(s)'''
+|-
+| ||<small>'''Additional information about an entity'''</small>||
+|-
+|'''@attention'''||Starts a paragraph where a message that needs attention may be entered. The paragraph will be indented.||'''@attention Whales crossing!'''
+|-
+|'''@author'''||Starts a paragraph where one or more author names may be entered. The paragraph will be indented. Multiple adjacent @author commands will be joined into a single paragraph and separated by commas. Alternatively, one @author command may mention several authors.||'''@author Bjarni'''
+|-
+|'''@brief'''||Starts a paragraph that serves as a brief description. For classes and files the brief description will be used in lists and at the start of the documentation page. For class and file members, the brief description will be placed at the declaration of the member and prepended to the detailed description. A brief description may span several lines (although it is advised to keep it brief!).||'''@brief This is the brief description.'''
+|-
+|'''@bug'''||Starts a paragraph where one or more bugs may be reported. The paragraph will be indented. Multiple adjacent @bug commands will be joined into a single paragraph. Each bug description will start on a new line. Alternatively, one @bug command may mention several bugs.||'''@bug Memory leak in here?'''
+|-
+|'''@note'''||Starts a paragraph where a note can be entered. The paragraph will be indented.||'''@note Might be slow'''
+|-
+|'''@todo'''||Starts a paragraph where a TODO item is described. The description will also add an item to a separate TODO list. The two instances of the description will be cross-referenced. Each item in the TODO list will be preceded by a header that indicates the origin of the item.||'''@todo Better error checking'''
+|-
+|'''@warning'''||Starts a paragraph where one or more warning messages may be entered. The paragraph will be indented.||'''@warning Not thread safe!'''
+|-
+| ||<small>'''Function related commands'''</small>||
+|-
+|'''@return'''||Starts a return value description for a function.||'''@return a character pointer'''
+|-
+|'''@param'''||Starts a parameter description for a function parameter with name <parameter-name>. Followed by a description of the parameter. The existence of the parameter is checked and a warning is given if the documentation of this (or any other) parameter is missing or not present in the function declaration or definition.<br><br>The @param command has an optional attribute specifying the direction of the attribute. Possible values are "in" and "out".||'''@param[out] dest The memory area to copy to.<br>@param[in]  src  The memory area to copy from.<br>@param  n    The number of bytes to copy'''
+|-
+|'''@see'''||Starts a paragraph where one or more cross-references to classes, functions, methods, variables, files or URL may be specified. Two names joined by either :: or # are understood as referring to a class and one of its members. One of several overloaded methods or constructors may be selected by including a parenthesized list of argument types after the method name. [http://www.stack.nl/~dimitri/doxygen/autolink.html Here] you can find detailed information about this feature.||'''@see OtherFunc()'''
+|-
+| ||<small>'''Commands for character formatting'''</small>||
+|-
+|'''@b'''||Displays the following word using a bold font. Equivalent to &lt;b&gt;word&lt;/b&gt;. To put multiple words in bold use &lt;b&gt;multiple words&lt;/b&gt;.||'''...@b this and @b that...'''
+|-
+|'''@c / @p'''||Displays the parameter <word> using a typewriter font. You can use this command to refer to member function parameters in the running text. To have multiple words in typewriter font use &lt;tt&gt;multiple words&lt;/tt&gt;.||'''... the @p x and @p y coordinates are used to...'''
+|-
+|'''@arg / @li'''||This command has one argument that continues until the first blank line or until another @arg / @li is encountered. The command can be used to generate a simple, not nested list of arguments. Each argument should start with an @arg / @li command.||'''@arg @c AlignLeft left alignment.<br>@arg @c AlignCenter center alignment.<br>@arg @c AlignRight right alignment'''
+|-
+|'''@n'''||Forces a new line. Equivalent to and inspired by the printf function.||'''You kidding? :p'''
+|}
+
+=== The art of proper commenting ===
+==== Files ====
+
+The first step towards getting everything documented properly is to give the files themselves a description. We achieve that by putting a @file command inside a JavaDoc style comment which has been placed at the beginning of the file:
+ /** @file
+  * This is the brief description.
+  * And then follow further explanations here that will appear in the detailed description only.
+  */
+<warning>Note: if a file lacks this comment block then NO entities in that file will be documented!</warning>
+
+==== Functions ====
+
+Functions are commented/documented in the .c file while inlines get commented on in the .h files they reside in. While small inlines might be able to get away with a 3 or 4 line comment, bigger inlines and functions should follow this scheme:
+ /**
+  * A brief explanation of what the function does and/or what purpose it serves.
+  * Then follows a more detailed explanation of the function that can span multiple lines.
+  *
+  * @param foo Explanation of the foo parameter
+  * @param bar Explanation of the bar parameter
+  * @return The sum of foo and bar (@return can be omitted if the return type is void)
+  *
+  * @see SomeOtherFunc()
+  * @see SOME_ENUM
+  * 
+  * @author Bjarni, Darkvater
+  * @bug Some bug description
+  * @bug Another bug description which continues in the next line
+  *           and ends with the following blank line
+  *
+  * @todo Some to-do entry
+  * /
+ static int FooBar(int foo, int bar)
+ {
+   return foo + bar;
+ }
+
+The @see, @author, @bug, @todo, @warning, etc. fields are optional but obviously nice to have, come in handy and are quick to update, too.
+''Note'': when passing function names to @see you don't have to specify the parameter list - it simply stays empty.
+Also, don't assume that the parameter and return values are so obvious that there's no need to document them! Any coder who has to work on the code will for sure appreciate every hint he/she can get from the person who worked on it before.
+You can add @bug and @todo fields to the main description comment of the function or add them where the stuff actually is that those fields would refer to. To see how that should be done, look at [[#random-code-notices|Random code notices]] below. It doesn't really matter where they appear, since Doxygen automatically builds a [http://docs.openttd.org/todo.html global to-do list] with all entities listed that have a to-do field, for example.
+
+==== Enums / defines / global variables ====
+
+You should also comment your enums, defines and global variables. There are four possible styles:
+# '''/** Use this comment style if you wish to place the comment above the entity (JavaDoc style) */<br>int i;'''<br>
+# '''int i; /**< Use this comment style if you wish to place the comment on the same line as the entity (JavaDoc style) */'''<br>
+# '''/// Use this comment style if you wish to place the comment above the entity<br>int i;'''<br>
+# '''int i; ///< Use this comment style if you wish to place the comment on the same line as the entity'''
+
+While 1 and 2 should be prefered in order to stay in sync with the commenting standard it also should be easy to see that 3 and 4 are quicker to type and have a better readablity. With that it's up to you which one you use.
+
+Also note that styles 2 and 4 have the same structure and meaning as the regular comment blocks numbered 1 and 3 - only the < indicates that the entity it refers to is located in front of the block instead of after the block.
+
+==== Structs ====
+
+A typical struct comment should look like this:
+ /**
+  * A short description of the struct.
+  * More detailed description of the its usage.
+  *
+  * @see [link to anything of interest]
+  */
+ typedef struct foo {
+  int16 x;  ///< x does this
+  int16 y;  ///< y does that
+ }
+
+As before, @see & Co are optional but should be added if it could be helpful.
+
+==== Random code notices ====
+
+Areas of interest or suggestions for improving the code should be marked as follows:
+ int i = 6; ///< What is this magic number and what does it do?
+or, for comments that require more than a simple one-liner (JavaDoc):
+ /** don't bother calling the callback when we have regular tracks only.
+  * it's usually not needed anyway. that will speed up things.
+  */
+ direction = _new_dir[FIND_FIRST_BIT(bits)][direction];
+ assert(direction != 0xFF);
+ if (tile == tile_org) goto popnext; // detect infinite loop..
+or for the lazy:
+ /// don't bother calling the callback when we have regular tracks only.
+ /// it's usually not needed anyway. that will speed up things.
+ direction = _new_dir[FIND_FIRST_BIT(bits)][direction];
+ assert(direction != 0xFF);
+ if (tile == tile_org) goto popnext; // detect infinite loop..
+But please: in order to maintain proper style, use the JavaDoc style when comments span more than 2~3 lines.
+
+Note: By default, Doxygen doesn't mark such comments in a special way, it merely copies the comment as-is into the description of the entity it belongs to. If that isn't what you want you might want to use
+ /// @note don't bother calling the callback when we have regular tracks only.
+ /// @note it's usually not needed anyway. that will speed up things.
+ direction = _new_dir[FIND_FIRST_BIT(bits)][direction];
+ assert(direction != 0xFF);
+ if (tile == tile_org) goto popnext; // detect infinite loop..
+instead. That way you can also integrate @todo, @bug, @warning, etc. fields and Doxygen will put them into the [http://docs.openttd.org/bug.html global bug list], for example.
