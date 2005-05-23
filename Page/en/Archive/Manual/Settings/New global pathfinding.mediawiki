@@ -2,4 +2,30 @@
 [[Category:en/Patch Settings]]
 [[Category:en/Manual/Vehicles]]
 
+A [[en/Community/Patches/Patches|patch]] that slightly updates the pathfinding algorithm for all [[en/Manual/Vehicles|vehicles]].
+
+== Description ==
 New global PathFinder (NPF) global pathfinder which works for all vehicles. Uses an A* algorithm to find its route. It's fast, it's good and will always return the best results. However if your network setup is really crappy it can be a bit CPU-consuming, so on older machines (and bigmaps with lots of trains), it might lower performance and thus can be disabled.  If this is the case, then you should probably at least enable [[en/Archive/Manual/Settings/New train pathfinding|New Train Pathfinding (NTP)]].
+
+== Use ==
+This feature is enabled by default. You can disable this patch through the [[en/Archive/Manual/Settings/Configuring patches/Vehicles|configure patches -> vehicles]] window or use the following syntax in [[en/Archive/Manual/Settings/Openttd.cfg]]:
+<pre>
+[patches]
+new_pathfinding_all = false
+</pre>
+
+This feature also has the following configuration options that can only be changed in [[en/Archive/Manual/Settings/Openttd.cfg]]:
+
+<pre>
+[patches]
+npf_max_search_nodes = 10000
+npf_rail_firstred_penalty = 1000
+npf_rail_firstred_exit_penalty = 10000
+npf_rail_lastred_penalty = 1000
+npf_rail_station_penalty = 100
+npf_rail_slope_penalty = 100
+npf_rail_curve_penalty = 1
+npf_rail_depot_reverse_penalty = 5000
+npf_buoy_penalty = 200
+npf_water_curve_penalty = 25
+</pre>
