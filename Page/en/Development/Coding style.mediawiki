@@ -6,7 +6,7 @@ To achieve a coherent whole, here are some guidelines for the coding style used 
 * FunctionsLookLikeThis()
 * Variable names/structure members are all lowercase, and may also contain _
 * Variables are declared at the beginning of a block { }, as specified in ANSI-C89
-** Never declare variables halfway a function or other block. This is especially for coders using gcc, since gcc won't complain, but MSVC does. Up till now, I have not found an option in MSVC to allow it, nor an option in gcc to forbid/warn for it.  [Note from a random reader: gcc -ansi -pedantic gives a warning]
+** Never declare variables halfway a function or other block. This is especially for coders using gcc, since gcc won't complain, but MSVC does. Up till now, I have not found an option in MSVC to allow it, nor an option in gcc to forbid/warn for it. Starting from gcc >= 3.4, it does give a warning (automatically enabled by the Makefile).
 * Local variable names should be short
 * StructsLookLikeThis and get typedefed:
 <pre>
@@ -16,7 +16,38 @@ To achieve a coherent whole, here are some guidelines for the coding style used 
 </pre>
 * Global variables start with a _
 * Use 'const' and 'static' when possible
-* ENUMS_LOOK_LIKE_THIS
+* ENUMS_LOOK_LIKE_THIS 
+* Use simple enums for holding weakely related constants like this:
+<pre>
+enum {
+  NUMBER_OF_BIRDCAGES    = 10,
+  MAX_BIRDS_PER_BIRDCAGE = 3,
+}
+</pre>
+** Notice the , at the end of the last entry. We add it, so that we can easily add more values if needed.
+** Align the initialisers with spaces.
+* Stricter enums should be used for more closely related sequences and should be typedeffed if they are used as the contents of an array, return value, parameter type or variable type:
+<pre>
+  typedef enum Birds {
+    BIRD_HAWK    = 0,
+    BIRD_DUCK    = 1,
+    BIRD_GOOSE   = 2,
+    BIRD_END,
+    INVALID_BIRD = 0xFF
+  } Bird;
+</pre>
+Some things to notice. 
+**We say "enum Birds" and typedef it as "Bird". Rationale: We list a number of "Birds", but when I have a variable of this type, the type is "Bird" (I'll put just one bird in the variable). <font style="color:red">Do not forget the name of the enum ("Birds"). Even though gcc will happily compile and run (as it should), MSVC won't properly initialize arrays that have this enum as their type. No error, no warning, just broken (but running) code.</font>
+**Furthermore, inital values are optional, avoid them if possible. If you do need them for backward compatibility mostly, indent them nicely.
+**We add a BIRD_END without initialiser, so that it will automatically store the largest bird + 1. We can declare an array like this:
+<pre>
+const uint WingSpan[BIRD_END] = {
+  20, /* BIRD_HAWK */
+  15, /* BIRD_DUCK */
+  30  /* BIRD_GOOSE */
+};
+</pre>
+**Only add an INVALID_BIRD if appriopriate
 * Use enums instead of #define
 * Tab size is 2 spaces. Never use spaces as indentation.
 * Style for if:
