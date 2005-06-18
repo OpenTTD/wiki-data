@@ -2,3 +2,39 @@
 Nightly builds are versions of the game that are compiled and packaged every night (19:00 +0000 UTC) based upon the latest [[en/Development/FAQ development]] version. Currently there are nightly builds for Windows, Linux and Macintosh which you can get from [http://nightly.openttd.com/ nightly.openttd.com]. If you think you have found a bug download a copy of the latest nightly build (or compile a version yourself) and check if the bug still exists.
 
 If you think you have found a bug, you can report it [http://sourceforge.net/tracker/?group_id=103924&atid=636365 here] on [http://sourceforge.net/projects/openttd/ OpenTTD's sourceforge site.]
+
+==Nightly build guidelines==
+Since currently nightlies naming and their contents are a bit of a mess, below you will find the official guidelines for them.
+
+===Name===
+The name should uniformly identify the system type and for which revision the nightly was made.
+:*OpenTTD: '''"OTTD-<system>-nightly-r<revision>.<extension>"'''. Eg ''OTTD-win32-nightly-r3794.zip''.
+:*Strgen: '''"strgen-<system>.<extension>"'''. Eg ''strgen-win32.zip''.
+
+===OpenTTD Changes===
+OpenTTD itself should be changed so that it correctly reflects the nature of the nightly. This means adding the nightly tag as its identifier (already done on systems that use the makefile for compilation)
+:*Revision: the current revision the nightly was made for, eg "r3794"
+:*Title Bar: includes the name and revision of the program in the format '''OpenTTD (YYYY-MM-DD) - r<revision>'''
+:*Executable properties (if applicable): if your system supports executable properties as on windows please change the following as close to the below guidelines:
+:*FileVersion: current openttd version, eg 0.4.0.1
+:*ProductVersion: current openttd version plus revision; eg '''"0.4.0.1 r<rev>"'''
+:*SpecialBuild: show that this is a nightly: ''''"Nightly Build of YYYY-MM-DD"''''
+
+===Compiling===
+Compiling should be done without any DEBUG information (eg release mode) but with ASSERTIONS enabled. PNG and ZLIB have to be enabled as well.
+
+===File Contents of OpenTTD===
+:*OpenTTD executable
+:*COPYING
+:*readme.txt
+:*docs\console.txt
+:*docs\multiplayer.txt
+:*data folder (data\*.grf, data\opntitle.dat)
+:*lang folder (lang\*.lng)
+
+===File Contents of Strgen===
+:*strgen executable
+:*COPYING
+:*readme.txt
+:*lang\english.txt
+:*docs\Howto_compile_lng_files_from_CLI.txt
