@@ -1,0 +1,44 @@
+==Blarg==
+The meeting started at around 18:15 GMT and finished around 21:00 GMT. Present devs / patch makers included: Celestar, Darkvater, Ludde, Asterix, Blathijs, HackyKid, Luca, Peter1138, Tron. Issues discussed were conversion of map arrays into structs, save/load stuff, 32bpp graphics, the next release, the patches / suggestions on SourceForge, and Celestar detonating.
+
+==Issues discussed==
+===Conversion of map arrays into a Tile structure===
+Current system:
+<pre><nowiki>extern byte   *_map_type_and_height;
+extern byte   *_map_owner;
+extern uint16 *_map2;
+extern byte   *_map3_lo;
+extern byte   *_map3_hi;
+extern byte   *_map5;
+extern byte   *_map_extra_bits;</nowiki></pre>
+Proposed system:
+<pre><nowiki>typedef struct Tile {
+       byte type_height;
+       byte owner;
+       uint16 m2;
+       byte lo3;
+       byte hi3;
+       byte m5;
+       byte extra;
+} Tile;</nowiki></pre>
+So instead of "t = _map2[tile_cur];" you can do "t = _m[tile_cur].m2;". Later the structure may be converted into two uint32s, and bits will be shuffled around to use the available space better. This will be implemented when a way to save/load it has been figured out. Also don't forget endiness people, a big endian and little endian bitfield is required.
+
+===Save/Load Stuff===
+A lot of save/load stuff is to be changed soon, so the revision number is going to be frozen until that stuff is committed. To be done is checking if the code allows removing of chunks, and enabling chunks bigger than 16mb. The save/load revision was also discussed because at the moment it is limitted to 255. Suggestions involved merging the major and minor revision, and also revisions per chunk. This was thrown out as too confusing for people, so the major and minor revisions are to be merged. As well as this saving the new map array as structs (see above) is to be done before the save revision in unfrozen. Later there was discussion about the gamma limit, which was then increased by Ludde, and the 16mb chunk limit which was also removed by Ludde.
+
+===32bpp Graphics===
+Only Tron was available for 32bpp stuff, but there was still quite a lot of discussion. A few people had a bit too much to drink, and there speech was starting to get slurred, so not all that much made sense. Currently the only stuff that needs to be finalised is company colours and pallette animations. For the company colours splitting the sprite into seperate files was suggested, one to hold parts which do not get recoloured, and another to hold the parts that do. The overlay uses a different set of colours which are then replaced with the company colours in various shades. 
+
+Next was discussed how to store these new graphics. GRFs are out of the question so something new is needed. In the end it was decided to have loads of seperate PNG files in either a zip file, or a directory for easy editing when creating new graphics. [http://icculus.org/physfs/ PhysicsFS] was suggested, but may be a bit OTT for what we need. 
+
+There isn't really a clear answer on what will be done about animations, but nothing will be committed until they are supported. There was a bit of discussion on whether to use SDL_UpdateRect() or SDL_UpdateRects() to update the pixels on screen. Both are not very efficient, so a chat with the people in #sdl will probably be needed. Dropping 8bpp is not going to be done yet, as with everything else 32bpp will be an option for the user to choose. NewGRF stuff was also discussed quite a bit, with 32bpp it will be almost impossible to support it without some kind of converter. 
+
+The problem is, what to convert to? Our own format was sort of discussed, but nothing has yet to be done, because we need to first find the requirements of the 32bpp system before we can start designing our own format. This new file format will need to be highly extensible, and support most, if not all, of the NewGRF features. It has to be easy to use as well, so something like XML will most likely be used. A new file format will also cause problems, the converter will have to be highly advanced to convert NewGRFs into this format with just a few mouse clicks, so an old GRF loader will probably be a better option. People were fairly divided on what to do about this, so expect further discussion in the next meeting.
+
+===Next Release===
+We have not had a release for nearly two months, so something will need to be done soon to keep the n00bs happy. It seems unlikely that anything else will be added other than what is in the nightlies, the main hold up is a few PBS issues to be fixed before the release. Another release stopper is saving relevant patches in the save game, this is going to be looked into over the next few days so something should turn up soon. There are still a few issues with autoreplace (ok a lot), and don't forget those nasty warnings! Cargo packets was also discussed quite a bit, so expect to see something done here in the next few weeks. This probably won't be in the next release, but you never know.... There is also a problem with desyncs, it is believed something is not saved that should be in the save.
+
+===SF Patches===
+There are around a billion patches on SF, some as old as the dinosaurs. Most are good patches, but haven't even had a comment from the devs. It would be useful if somebody could have a looky at them all, and give a report about what they do. To make this even easier, please could all people who have submitted patches please make them work with the latest SVN revision! Suggestions were also discussed a bit, but the devs have more than enough to do as it is, so these probably won't be done for a while.
+
+The meeting sort of came to an abrupt end, so that is it for this one.
