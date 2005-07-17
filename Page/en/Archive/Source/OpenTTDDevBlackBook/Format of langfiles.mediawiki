@@ -1,0 +1,108 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/Format of langfiles]]
+== General Layout ==
+
+Each entry of the langfile consits of exactly one line.
+
+The encoding is iso8859-1.
+
+If you use the web translator tool, you only see translations.
+
+== Taranslations ==
+
+Translations consits of a a key and a translation. They are separated by a colon (:).
+
+=== Keys ===
+
+The key can only contain uppercase letters, numbers and the underscore (_). Each key starts with "STR_", followed by an optional 4-digit hex number and one or more well decribing words.
+
+<pre>
+STR_MAPSIZE
+STR_000F_PASSENGERS
+STR_SORT_BY_DATE
+STR_0196_SHOW_LAND_OWNERS_ON_MAP
+</pre>
+
+TODO: Cases
+
+=== Translations ===
+
+Translations can contain any (CHECK!) iso8859-1 characters.
+
+Using curly braces {}, special commands can be inserted into the translations, which are substituted either by strgen or while the string is drawn on the screen.
+
+{| border=1
+|+ '''Character Replacements'''
+|-
+!Command !!Replaced by
+|-
+|{} || Linebreak
+|-
+|{UPARROW} || &uarr;
+|}
+
+TODO: Complete this
+
+{| border=1
+|+ '''Visual attribution'''
+|-
+!Command !! Replaced by
+|-
+|{TINYFONT} || text is drwan in smaller font
+|-
+|{BIGFONT} || text is drawn in bigger font
+|-
+|{SETX ''nn''} || text starts at position ''nn''
+|-
+|{BLUE} || text is drawn in blue
+|-
+|{SILVER} || text is drawn in silver
+|}
+
+TODO: Complete this
+
+{| border=1
+|+ '''Param Replacement'''
+|-
+!Command !! Replaced by
+|-
+|{COMMA} || number with comma
+|-
+|}
+
+TODO: Complete this
+
+== Pragmas ==
+
+Pragmas start with two hash signs (#).
+
+{| border=1
+|+ '''Pragmas'''
+|-
+!Name !! Function
+|-
+|name ''name''|| Name of the language in English
+|-
+|ownname ''name''|| Name of the language in the language itself
+|-
+|isocode ''code''|| ISO code for the '''language''' (eg. ''de'')
+|-
+|plural ''number''|| Type of the plural forms
+|-
+|gender ''up to 8 gender names''|| defines genders
+|-
+|case ''up to 50 case names''|| define cases
+|-
+|id ''hexnumber'' || Next string id starts at ''hexnumber''
+|-
+|}
+
+TODO: List of plural-types
+
+== Comments ==
+
+Comments start either with more than two hash signs (#) or with a semicolon (;). Empty lines are ignored too.
+
+<pre>
+#### Ignore this command
+;and this too
+</pre>
