@@ -33,16 +33,16 @@ This page will contain guidelines for compiling OpenTTD in Win32 with MinGW.
 #* w32api-(ver).tar.gz
 # Run MinGW-(ver).exe to install MinGW.
 # Run MSYS-(ver).exe to install MSYS.
-#* You will see the following messages after GUI:<box><code>This is a post install process that will try to normalize between<br>your MinGW install if any as well as your previous MSYS installs<br>if any.  I don't have any traps as aborts will not hurt anything.<br>Do you wish to continue with the post install? [yn ]</code></box>
-#* Input "y".<box><code>Do you have MinGW installed? [yn ]</code></box>
-#* Input "y".<box><code>Please answer the following in the form of c:/foo/bar.<br>Where is your MinGW installation?</code></box>
-#* Input your MinGW installation path.  If you mistyped it, the best solution for newbies is to re-install MSYS.
+#* You will see the following messages after GUI:
+#* {{en/Box|This is a post install process that will try to normalize between<br>your MinGW install if any as well as your previous MSYS installs<br>if any.  I don't have any traps as aborts will not hurt anything.<br>Do you wish to continue with the post install? [yn ]}} Input "y". 
+#* {{en/Box|Do you have MinGW installed? [yn ]}} Input "y".
+#* {{en/Box|Please answer the following in the form of c:/foo/bar.<br>Where is your MinGW installation?}} Input your MinGW installation path.  If you mistyped it, the best solution for newbies is to re-install MSYS.
 # Set PATH to the bin folder in MinGW and MSYS, to enable *nix commands in your shell.
-# Put all *.tar.gz in MinGW folder, run the following line for each files:<box><code>tar -xzvf (file)</code></box>
+# Put all *.tar.gz in MinGW folder, run the following line for each files:{{en/Box|tar -xzvf (file)}}
 # The setup is complete.
 
 ==Testing the MinGW installation==
-* Run the following commands.<box><code>make -v<br>gcc -v</code></box>
+* Run the following commands.{{en/Box|make -v<br>gcc -v}}
 * They should output something.  Check if something goes wrong.
 * Run MSYS.
 
@@ -50,8 +50,8 @@ This page will contain guidelines for compiling OpenTTD in Win32 with MinGW.
 # Obtain the source code of zlib from http://www.gzip.org/zlib/
 # Extract the source code to a folder.
 # Run MSYS, change the working directory to the source folder.
-# Run: <box><code>./configure<br>make<br>make test</code></box> You should see: <box><code>*** zlib test OK ***</code></box>
-# Run: <box><code>make install prefix=/mingw</code></box>
+# Run: {{en/Box|./configure<br>make<br>make test}} You should see: {{en/Box|*** zlib test OK ***}}
+# Run: {{en/Box|1=make install prefix=/mingw}}
 # Compiling completed.
 
 ==Compiling OTTD==
@@ -61,18 +61,18 @@ This page will contain guidelines for compiling OpenTTD in Win32 with MinGW.
 # Obtain OTTD source.  Please refer to [[en/Development/FAQ development#how-can-i-obtain-the-source-code|How can I obtain the source code?]]
 # Change the working directory to the OTTD source folder.
 # Create <code>Makefile.config</code>:
-#: Run: <box><code>make Makefile.config</code></box>
-#: That should be OK if some error about <code>ls</code>, <code>/bin/sh.exe</code> and <code>svnversion</code> is shown.  It should say: <box><code>make: Makefile.config is up to date.</code></box>
+#: Run: {{en/Box|make Makefile.config}}
+#: That should be OK if some error about <code>ls</code>, <code>/bin/sh.exe</code> and <code>svnversion</code> is shown.  It should say: {{en/Box|make: Makefile.config is up to date.}}
 #: Then the file will be created in the folder.
 # Modify the <code>Makefile.config</code>:
-#: Change the following parameters: <box><code>STATIC:=<br>WITH_ZLIB:=1<br>WITH_SDL:=<br>STATIC_ZLIB_PATH:=/mingw/lib/libz.a<br>WIN32:=1<br>UNIX:=<br>OSX:=<br>FREEBSD:=<br>MORPHOS:=<br>BEOS:=<br>SUNOS:=<br>CYGWIN:=<br>MINGW:=1</code></box>
+#: Change the following parameters: {{en/Box|1=STATIC:=<br>WITH_ZLIB:=1<br>WITH_SDL:=<br>STATIC_ZLIB_PATH:=&#x2f;mingw&#x2f;lib/libz.a<br>WIN32:=1<br>UNIX:=<br>OSX:=<br>FREEBSD:=<br>MORPHOS:=<br>BEOS:=<br>SUNOS:=<br>CYGWIN:=<br>MINGW:=1}}
 #: Some slots are made empty to disable.
 #: Don't change the <code>Makefile.config</code> into Win32 txt format.  Otherwise all changes will be lost.
-# Run <box><code>make</code></box> Some warnings will be shown, but they do not matter.
-# Note from DaffyDuck, I had to use the command mingw32-make rather than just make.
+# Run {{en/Box|make}} Some warnings will be shown, but they do not matter.
+# Note from DaffyDuck: I had to use the command <code>mingw32-make</code> rather than just make.
 # The compiling is complete when the <code>openttd.exe</code> file is made.
 
 ==Testing OTTD==
-# Copy the following files from <code>(TTD)\data\</code> to <code>(OTTD)\data\</code>: <box><code>sample.cat<br>trg1r.grf<br>trgcr.grf<br>trghr.grf<br>trgir.grf<br>trgtr.grf</code></box>
+# Copy the following files from <code>(TTD)\data\</code> to <code>(OTTD)\data\</code>:{{en/Box|sample.cat<br>trg1r.grf<br>trgcr.grf<br>trghr.grf<br>trgir.grf<br>trgtr.grf}}
 # Run <code>openttd.exe</code>.
 # Enjoy!
