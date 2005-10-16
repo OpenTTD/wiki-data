@@ -1,1 +1,61 @@
 [[Translation:en/Manual/NewGRF]]
+[[Category:en/Manual/Settings & Preferences]]
+
+<warning>Note: newgrf syntax has changed in revision 1157. This document refers to the most recent syntax</warning>
+
+== Usage ==
+To use the newgrf sets you have to:
+
+:1. Copy the new .grf file to the \data directory.
+:2. Open the openttd.cfg file in the \ directory.
+:3. Go to the end of the file and enter the following:
+
+<code>[newgrf]<br>
+firstset.grf<br>
+secondset.grf<br>
+thirdset.grf</code>
+
+Where firstset, secondset etc.. are the names of the .grf files of the set. The files are loaded in the specified order... so if the second set has some features that are also in the firstset, the features of the firstset would be overwritten.
+
+Note that it is a good practice to put all the newgrf files to a directory such as \data\custom or \data\newgrf. It especially makes upgrading OpenTTD easier, as well as managing a large number of newgrf files.
+
+== Multiple combinations ==
+If you want to configure more than one combination of sets you can do this:
+
+<code>[newgrf]</code><br>
+<code>#COMBINATION 1</code><br>
+<code>firstset.grf</code><br>
+<code>secondset.grf</code><br>
+<code>#COMBINATION 2</code><br>
+<code>#another_firstset.grf</code><br>
+<code>#another_secondset.grf</code>
+
+Now you can switch between the combinations by removing the "#" from before one combination number and add it to the other combination, don't try to activate both combinations because some errors can happen.
+
+Another thing to remember is to not put gaps between numbers, such as:
+
+<code>[newgrf]</code><br>
+<code>firstset.grf</code><br>
+<code>secondset.grf</code><br>
+<code>#thirdset.grf</code><br>
+<code>fourthset.grf</code><br>
+<code>fifthset.grf</code>
+
+In this case, the game loads only "firstset.grf" and "secondset.grf", "thirdset.grf" is deactivated and the game think that there aren't other sets to load.
+
+I'm testing some combinations like "DBset + Arcticset", "Temperateset + Tropicset" and so on... for the moment the only combination that works well is "Temperateset + Arcticset" (note that this information can be obsolete and may not reflect the current state of things; please refer to the Forums for the current status).
+
+== Default configuration ==
+
+<code>[newgrf]</code><br>
+<code>#DEFAULT</code><br>
+<code>tempsetw.grf</code><br>
+<code>arcticsetw.grf</code><br>
+<code>newshipsw.grf</code><br>
+<code>#3cargosetw.grf</code>
+
+If you have any problems, post them [http://www.tt-forums.net/viewtopic.php?t=9376 here].
+
+== Work in progress ==
+
+What has to be done/is done next can be found in the [[en/NewGRF TODO]]. What has been done is in the [[en/NewGRF Features]] list..
