@@ -1,0 +1,59 @@
+Today, 14 November 2005, we had a small brainstorm session on IRC how Shared Tracks should look like. This was the outcome:
+
+
+===Trains===
+
+We have Player 1, Player 2 and Player 3.
+Player 1 builds a nice network. Player 2 wants to use part of that network. Now Player 1 can build a Toll-Port, which allows Player 2 to access his network. At this port he defines the restrictions he want to add to the trains of Player 2:
+* One-Time Fee (which slows down the train for a moment, to pay the fee)
+* Fee per tile moving
+* % of income on entering station
+* Allow entering station for unload
+* Allow entering station for load
+* Allow entering station for load with full-load on
+* Fee on entering station
+* Fee on entering depot
+* Allow stopping
+* Allow ignoring red
+* On crash, quilty part has to pay X times the yearly income + new-value for destroyed property
+
+
+There was also some overthinking about what would happen if someone stopped his train on the track (if allowed, or via break-down). Normally, nothing happens. There only happens something when an other train is behind you and now has to wait for a red light. You pay every X ticks for his loose of cargo value. Now who pays if 4 trains behind eachother stand still? The first one, causing the red light. The X ticks are needed, in case everyone starts accelerating.
+
+Now what happens if player 3 is allowed on the network of player 2, can it access the network of player 1? In general: no. Player 1 has to allow player 3 via the toll-ports of player 2. Here he can ask other amounts of money if he wishes. This means that if player 2 is a good friend, you can allow him for free, while asking money to player 3.
+
+What we want, is that the info about the agreement between player 1 and player 2 is hidden for player 3, but code-wise this can be hard, so for now it is public-information.
+
+To make this really to work, we need Celestar his patch for pay track upkeep!
+
+You can build a toll-port at any place, not allowing any other player, to make sure he can't enter that part of your track.
+If you don't protect your stations, and allow them via the toll-port, they are allowed to enter ALL stations.
+
+
+===How do the toll-ports look like===
+
+They can only be horizontal or vertical tracks. They use a whole tile. A custom sprite will tell it is a toll-port
+
+
+===Thinks to keep in mind===
+
+Q: What happens when a company goes bankrupt?
+
+A: [TrueLight] I think, if no-one buys the company, all track should be sold. I mean.. too bad :p
+
+
+Q: Is a shared junction an option?
+
+A: No! 1 tile, 1 owner!
+
+
+===How to do this code-wise?===
+
+I, TrueLight, have some (many?) ideas on this subject. First of all, no we do not have to wait for the new map-array. This is what we need:
+
+* A new type, like a depot, together with a pool, for Toll-Ports. Together with sprites and everything. Should be too hard..
+* Alter the PF to see Toll-Ports as options, and to see track behind that as options.
+* A pointer in the vehicle, pointing to the last toll-port, if any, he passed (so we know the penalties and stuff)
+* An event-handler on the train-entering-next-track, to calculate fees
+* More event-handlers to handle other fees
+* SaveLoad code to save the new Toll-Ports correctly.
