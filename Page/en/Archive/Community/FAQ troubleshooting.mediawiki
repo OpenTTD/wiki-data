@@ -1,27 +1,29 @@
 [[Translation:en/Archive/Community/FAQ troubleshooting]]
-[[Category:en/FAQs]]
+This article covers troubleshooting errors of [[en/Manual/Main Page]]. It is recommended that you try the latest [[en/Archive/Community/Nightly build|nightly build]], which is the very latest version of OpenTTD, before reporting a problem publically. Often, the problem has been corrected already.
 
-<-- [[en/Archive/Community/FAQ]]s<br/>
-This FAQ covers troubleshooting errors of [[en/Manual/Main Page]].
+If you are experiencing errors even with the most recent build, you can run the game in debug mode. Run the game with the ''"-d1"'' flag in that case. Read more in the [[en/Development/Debugging]] section.
 
-__FORCETOC__
-=====I cannot start the game, it complains about missing files?=====
-:* *Nix style OS's (Linux, OSX, Morhops, etc.)<br/>If you get an error like ''Error: Cannot open file '/usr/share/games/openttd/data/sample.cat' '', that means that you are missing files. Since currently OpenTTD is using the original TTDLX data files, you will need to copy those to your OpenTTD ''data/'' directory. This means all '''"*.grf"''' files (trg1r.grf, trgcr.grf, trghr.grf, trgir.grf and trgtr.grf from the Windows version or trg1.grf, trgc.grf, trgh.grf, trgi.grf and trgt.grf from the DOS version) and '''"sample.cat"'''.
-:* Windows OS (Win98, Win2k, WinXP, etc.)<br/>An error message window pops up informing you ''Cannot open file '<OpenTTD Install Directory>\data\sample.cat' '', that means that you are missing some files. Installing OpenTTD with the attached installer will ask you for your TTDLX data files directory (usually the CD), and copy those files appropiately. If you are not using the installer, you need to do the same as for *nix systems.
+== The game will not start because... ==
 
-=====Debugging your errors=====
-:* In the case of errors you might try to run the game in debug mode. Run the game with the ''"-d1"'' flag in that case. Read more in the [[en/Development/Debugging]] wiki.
-=====The game crashes on Win98(SE)=====
+=== ...It complains about missing files ===
+OpenTTD requires the graphics sets from Transport Tycoon Deluxe in order to function. Refer to the [[en/Archive/Manual/Installation FAQ|installation FAQ]] article and ensure you have followed the appropriate steps for your Operating System.
+
+If you have not completed these steps sucessfully, you may see one of the following errors:
+* ''' 'Nix style OS ''' (Linux, OSX, Morhops, etc.): Error: Cannot open file '/usr/share/games/openttd/data/sample.cat'
+* '''Windows OS''' (Win98, Win2k, WinXP, etc.): Cannot open file '<OpenTTD Install Directory>\data\sample.cat'
+
+=== ...It crashes on Win98(SE) ===
 :* Windows98/98SE has problems with DirectX and DirectMusic. Try to start the game with: <pre>openttd.exe -m win32</pre>
-=====When I start game in fullscreen mode, the refreshrate is changed to 60Hz! (Windows)=====
-:*It's because you haven't configured DirectX properly. Try to download "DirectX Control Panel" from microsoft.com, copy it into /windows/system32, open the dialog in the Control Panel, go to DirectDraw tab, and set the "Forced Refresh Rate" to the maximum what your monitor can show.
-:*You can set '''display_hz''' to have correct refreshrate. This item is in '''[win32]''' group of [[en/Archive/Manual/Settings/Openttd.cfg]].
 
-=====I'm getting an error that MD5 of <filename> is ****INCORRECT**** - File Corrupt.=====
+=== ...It outputs an error '''MD5 of <filename> is ****INCORRECT**** - File Corrupt ===
 :*This error comes about if you have a corrupt or changed GRF file. OpenTTD only checks the ones for the original TTD game, either DOS or Windows version, and if it finds that the file is corrupted, it presents this message. You should copy the file from your original TTD disk again.
 :*This message will also appear if you are using modified GRF files (but only if they modify the original TTD files).  Other GRF's are not checked for corruption. The message was incorporated to make sure that any problems within the game are caused by the error you report rather than corrupt files on the disk.
 
-=====When loading an older game my airports are screwed=====
+== When I start game in fullscreen mode, the refreshrate is changed to 60Hz! (Windows) ==
+:*It's because you haven't configured DirectX properly. Try to download "DirectX Control Panel" from microsoft.com, copy it into /windows/system32, open the dialog in the Control Panel, go to DirectDraw tab, and set the "Forced Refresh Rate" to the maximum what your monitor can show.
+:*You can set '''display_hz''' to have correct refreshrate. This item is in '''[win32]''' group of [[en/Archive/Manual/Settings/Openttd.cfg]].
+
+== When loading an older game my airports are screwed ==
 :* If you have used some [[en/Archive/Community/Nightly build]] in the early era of development of larger airports, some of the indexes could be messed up. Again, this only applies if you have used nightly builds. Official releases cannot have this problem. Copy the code below somewhere to your OpenTTD source and call the function once. Most problems should be fixed. It could be that you only have a subproblem, eg. not all are faulty, then you need to filter on ''st->index'' (easiest to get by going to station_gui.c line 396 (''"ScrollMainWindowToTile(DEREF_STATION(w->window_number)->xy);"''), setting a breakpoint there. ''"w->window_number"'' is the index of the station.
 
 ::<pre><nowiki>void FixSVNVersion() 
@@ -54,9 +56,7 @@ __FORCETOC__
  } 
 }</nowiki></pre>
 
-=====Cursor is lost in fullscreen modes under Linux=====
+== Cursor is lost in fullscreen modes under Linux ==
 :*Cursor is hidden and probably not functional in fullscreen modes under Linux. Distrib: Debian Sarge stable release. VGA: ATI RadeOn 9550 with ATI's proprietary driver. OpenTTD is playable in window mode. Install the latest ATi propetiary drivers correctly, as described on [http://xoomer.virgilio.it/flavio.stanchina/debian/fglrx-installer.html ATi HOWTO]. Also look at the SourceForge [https://sourceforge.net/tracker/?func=detail&atid=636365&aid=1332767&group_id=103924 page] for more information.
 
-=====Is it possible to use the operating system cursor instead of the sluggish OpenTTD cursor?=====
-
-:*It is possible, with a few minor changes to the code, but at the moment there is no option for it.
+[[Category:en/FAQs]]
