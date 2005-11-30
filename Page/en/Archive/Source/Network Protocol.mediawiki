@@ -20,7 +20,7 @@ Everything you build in OpenTTD, or change, is handled internally via a so calle
 As you have read above, we send DoCommands. Now in normal conditions, the server sends out a FRAME-packet every frame. In this frame it says to what frame the client can 'walk'. Just before that, the server has sent all DoCommands for the max-frame in the FRAME-packet. This way, all clients 'walk' to the max-frame, and then execute all DoCommands. Because a client can never be beyond the max-frame, neither can the server, all DoCommands are executed on the same frame. This is very much needed, else we get massive desyncs. Sometimes it is necessary to increase the freq. of this FRAME-packet (e.g. many slow connections). Then what happens is this: the server sends out a FRAME-packet every X seconds, containing a max-frame of X+freq. Also, all DoCommands have the frame-of-execute set on X+freq. Again, this way we are sure all DoCommands are handled at the same moment (even the same order). What does this mean? Very simple: when you build a rail for example, it can take 'freq' frames before it shows up. So as you understand, this 'freq' can not be too high. Some statistics:
 
 {| border="1"
-|+ Network Speed per Client <warning> NEEDS UPDATING! </warning>
+|+ Network Speed per Client {{en/Warning|NEEDS UPDATING!}}
 |-
 ! net_frame_freq !! Upstream !! Downstream
 |-
