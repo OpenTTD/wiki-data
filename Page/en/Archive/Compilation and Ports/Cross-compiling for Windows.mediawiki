@@ -30,23 +30,29 @@ libpng-*-config.tar.gz ([http://prdownloads.sourceforge.net/libpng/libpng-1.2.8-
 == Setting up the directories ==
 
 First you need to decide where everything will go, you need a temporary directory to build stuff in, and a permanent one to store all the tools in. You do not need system wide access, so they will both fit nicely into your home dir, for example:
-<pre>/home/luca/build - temporary directory for building (build dir)
-/home/luca/cross-tools - permanent directory for all the tools (dest dir)</pre>
+<pre>
+~/build - temporary directory for building (build dir)
+~/cross-tools - permanent directory for all the tools (dest dir)</pre>
 So make those directories, cd into them, download the files, and decompress them. GCC and Binutils need to be decompressed in the build dir while MinGW and the Win32 API need to be decompressed into the dest dir:
 <pre>
-mkdir -p /home/luca/cross-tools/i386-mingw32msvc
-mkdir -p /home/luca/build/source
-cd /home/luca/build/source
--- download --
-cd /home/luca/cross-tools/i386-mingw32msvc
-gzip -dc "/home/luca/build/source/mingw-runtime-3.7.tar.gz" | tar xf -
-gzip -dc "/home/luca/build/source/w32api-3.2.tar.gz" | tar xf -
-cd /home/luca/build
-gzip -dc "/home/luca/build/source/binutils-2.15.91-20040904-1-src.tar.gz" | tar xf -
-gzip -dc "/home/luca/build/source/gcc-3.4.3.tar.gz" | tar xf -</pre>
+cd ~
+mkdir -p cross-tools/i386-mingw32msvc
+mkdir -p build/source
+cd ~/build/source
+echo "downloading ottd, please correct the VERSION NUMBER!"
+wget http://nightly.openttd.org/latest/OTTD-source-nightly-r3535.tar.gz
+cd ~/cross-tools/i386-mingw32msvc
+tar xvfz mingw-runtime-3.7.tar.g
+tar xvfz w32api-3.2.tar.gz
+cd ~/build
+tar xvfz source/binutils-2.15.91-20040904-1-src.tar.gz
+tar xvfz source/gcc-3.4.3.tar.gz
+</pre>
 Configuring and building GCC and Binutils takes fooorrreeeevver so it is a good idea to keep your source directories clean in case something goes wrong.
-<pre>mkdir /home/luca/build/binutils-i386-mingw32msvc
-mkdir /home/luca/build/gcc-i386-mingw32msvc</pre>
+<pre>
+mkdir ~/build/binutils-i386-mingw32msvc
+mkdir ~/build/gcc-i386-mingw32msvc
+</pre>
 
 == Building Binutils and GCC ==
 Configure, build and install Binutils. This will take a rather long time, so you may want to go and play your favourite game.
