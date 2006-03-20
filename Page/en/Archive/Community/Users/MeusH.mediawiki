@@ -17,3 +17,45 @@ rankdir = "LR"
 "cool" -> "da cool man"
 }
 </graphviz>
+
+===Ideas for faster map transmission based on seed maps/scenarios and diffs===
+<graphviz>
+digraph "connection" {
+	graph [truecolor bgcolor="#ffffffff"]
+	node [style=filled fillcolor="#44ff44ff" shape = "box" fontname "Arial"]
+
+"Server" -> "generate seed map"
+"generate seed map" -> "run the game and wait for connections"
+"Client" -> "connect to the server"
+"connect to the server" -> "generate map with the same seed"
+"connect to the server" -> "run the game and wait for connections"
+"run the game and wait for connections" -> "make a diff"
+"make a diff" -> "send the diff to the client"
+"send the diff to the client" -> "receive the diff"
+"generate map with the same seed" ->  "receive the diff"
+"receive the diff" -> "update client's map"
+"update client's map" -> "play the game"
+}
+</graphviz>
+
+<graphviz>
+digraph "disconnection" {
+	graph [truecolor bgcolor="#ffffffff"]
+	node [style=filled fillcolor="#ff4444ff" shape = "box" fontname "Arial"]
+
+"Server" -> "notice client disconnected"
+"Client" -> "disconnect"
+"disconnect" -> "notice client disconnected"
+"notice client disconnected" -> "make a diff for the client"
+"disconnect" -> "save the map"
+"make a diff for the client" -> "wait for client to reconnect"
+"save the map" -> "reconnect"
+"reconnect" -> "wait for client to reconnect"
+"reconnect" -> "receive the diff file"
+"wait for client to reconnect" -> "make a diff from the older diff and send it to the client"
+"make a diff from the older diff and send it to the client" -> "receive the diff file"
+"receive the diff file" -> "generate a map and play the game"
+"generate a map and play the game" -> "remove both diffs"
+"make a diff from the older diff and send it to the client" -> "remove both diffs"
+}
+</graphviz>
