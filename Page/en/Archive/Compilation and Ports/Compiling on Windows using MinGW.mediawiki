@@ -54,23 +54,25 @@ This page will contain guidelines for compiling OpenTTD in Win32 with MinGW.
 # Run: {{en/Box|mkdir /usr/src<br>cd /home/libpng-1.2.8/mingwPORT<br>./mingwPORT.sh}} Answer the questions by just pressing enter.
 # It will download pnglib sources, compile and install them for you.
 
+==Setup DirectX==
+# Rename the devpak to directx90c.tar.bz2 and extract it.
+# Copy the folders <i>include</i> and <i>lib</i> to where you installed MinGW (ex: c:\msys\mingw).
+# Copy the contents of the DLL folder to the <i>bin</i> folder of MinGW (ex: c:\msys\mingw\bin).
+
 ==Compiling OTTD==
 '''If you cannot compile, DON'T PANIC.  Sometimes it may be due to coding errors.'''
 
-: The followings can be done in MSYS mode or Win32 command mode.
-# Obtain OTTD source.  Please refer to [[en/Development/FAQ development#how-can-i-obtain-the-source-code|How can I obtain the source code?]]
-# Change the working directory to the OTTD source folder.
-# Create <code>Makefile.config</code>:
-#: Run: {{en/Box|make Makefile.config}}
-#: That should be OK if some error about <code>ls</code>, <code>/bin/sh.exe</code> and <code>svnversion</code> is shown.  It should say: {{en/Box|make: Makefile.config is up to date.}}
-#: Then the file will be created in the folder.
-# Modify the <code>Makefile.config</code>:
-#: Change the following parameters: {{en/Box|1=STATIC:=<br>WITH_ZLIB:=1<br>WITH_SDL:=<br>STATIC_ZLIB_PATH:=&#x2f;mingw&#x2f;lib/libz.a<br>WIN32:=1<br>UNIX:=<br>OSX:=<br>FREEBSD:=<br>MORPHOS:=<br>BEOS:=<br>SUNOS:=<br>CYGWIN:=<br>MINGW:=1}}
+# Start MSYS.
+# Run the <u>get_latest_openttd.sh</u> script to obtain latest OTTD source. [[en/Development/FAQ development#how-can-i-obtain-the-source-code|How can I obtain the source code?]]
+# Change the working directory to the OTTD source folder ( /home/OpenTTD/trunk ).
+#: Run: {{en/Box|./configure --with-png --with-directmusic}}
+# Modify the <code>Makefile.config</code> file:
+#: Change the following parameters: {{en/Box|1=INSTALL:=1<br>PREFIX:=home/OpenTTD<br>BINARY_DIR:=build<br>DATA_DIR:=build<br>ICON_DIR:=build<br>USE_HOMEDIR:=<br>PERSONAL_DIR:=/home/OpenTTD/build<br>SECOND_DATA_PATH:=data<br>CUSTOM_LANG_PATH:=lang}}
 #: Some slots are made empty to disable.
 #: Don't change the <code>Makefile.config</code> into Win32 txt format.  Otherwise all changes will be lost.
-# Run {{en/Box|make}} Some warnings will be shown, but they do not matter.
-# Note from DaffyDuck: I had to use the command <code>mingw32-make</code> rather than just make.
-# The compiling is complete when the <code>openttd.exe</code> file is made.
+# Run {{en/Box|make && make install && make clean}} Some warnings may be shown, but they usually do not matter.
+#: Note from DaffyDuck: I had to use the command <code>mingw32-make</code> rather than just make.
+# The compiling is complete when the <code>openttd.exe</code> file is made. It will be copied to the /home/OpenTTD/build folder.
 
 ==Testing OTTD==
 # Copy the following files from <code>(TTD)\data\</code> to <code>(OTTD)\data\</code>:{{en/Box|sample.cat<br>trg1r.grf<br>trgcr.grf<br>trghr.grf<br>trgir.grf<br>trgtr.grf}}
