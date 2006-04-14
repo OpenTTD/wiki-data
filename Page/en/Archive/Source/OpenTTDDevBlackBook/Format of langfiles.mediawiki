@@ -25,23 +25,6 @@ The key can only contain uppercase letters, numbers and the underscore (_). Each
  STR_SORT_BY_DATE
  STR_0196_SHOW_LAND_OWNERS_ON_MAP
 
-==== Cases ====
-
-After each key, there can be a custom suffix case separated by the period (.). The case must be defined first at the beginning of the file by ##case pragma.
-
-Examples:
- ##case 2 upper
-
- STR_0011_MAIL        :posta
- STR_0011_MAIL.2      :posty
- STR_0011_MAIL.upper  :Posta
-
-Usage:
- {STRING.2}
-Use the cases to make pseudo-keys. It's a big enhancement for languages containing declension, where words are different depending on context.
-
-{{en/Todo}} Look at it and correct where it's wrong
-
 === Translations ===
 
 Translations can contain any (CHECK!) ISO-8859-15 characters.
@@ -213,11 +196,62 @@ As an example : STR_INDUSTRY_PROD_GOUP.<BR>
 In english, the string reads as "{BLACK}{BIGFONT}'''{STRING}''' production at '''{INDUSTRY}''' increases {COMMA}%!"<BR>
 In finnish, same string is now "{BLACK}{BIGFONT}'''{1:INDUSTRY}''' tuottaa '''{0:STRING}''' {2:COMMA}{NBSP}% entistä enemmän!"<BR>
 
-
 {{en/Todo}} Finish and correct this<BR>
-{{en/Todo}} Plural and Gender<BR>
-{{en/Todo}} Cases
 
+== Cases ==
+
+After each key, there can be a custom suffix case separated by the period (.). The case must be defined first at the beginning of the file by ##case pragma.
+
+{{en/Todo}} What language is that? Add more examples of real life usage (like "This is STR_0011_MAIL", but "I need STR_0011_MAIL.2")
+ 
+Examples:
+ ##case 2 upper
+
+ STR_0011_MAIL        :posta
+ STR_0011_MAIL.2      :posty
+ STR_0011_MAIL.upper  :Posta
+
+Usage:
+ {STRING.2}
+Use the cases to make pseudo-keys. It's a big enhancement for languages containing declension, where words are different depending on context.
+
+{{en/Todo}} Look at it and correct where it's wrong
+
+== Prular form ==
+==== Introduction ====
+In most languages singular and prular forms are a bit different.
+Every word may be divided into two parts - one part does not change in both singular and prular form, but the second part differs in singular and prular. Let's call them '''core''' and '''suffix'''.
+
+Let's take basic example in English language, which is basic because it has two forms: singular and prular.<br>
+There is "'''1 train'''", but there are "'''2 trains'''".<br><br>
+Now, let's divide this word into part that does not change and part that changes:<br>
+*Core: "'''train'''"
+*Suffix for singular: ""
+*Suffix for prular: "'''s'''"
+==== Writing the string ====
+As I said before, there are two forms in English language.<br>
+The basic structure for prular form in English is <pre>core{P suffix1 suffix2}</pre>where suffix1 is suffix for signular and suffix2 is suffox for prular.<br>
+Keep in mind, that prular forms work only if there is proper param in the string.<br>
+{COMMA} and {NUM}, along with other numberic params work well in determining prular form.<br>
+Let's make a string that displays number of lamps in the room. Form of "lamp" would depend on supplied amount via {NUM} param.
+==== Example ====
+<pre>STR_SENTENCE : I have {NUM} lamp{P "" s}</pre>
+Do you see the core? Yes, it is the word '''lamp'''.<br>
+Later you see '''{P'''. This is the indicator that suffixes will come next.<br>
+'''""''' means there is no suffix. OpenTTD needs to know that - If there is no suffix, just write two quotation marks. So this is the first suffix, which will be used when {NUM} is equal to 1<br>
+'''s''' is the second suffix. This one will be displayed when {NUM} is bigger than 1.<br>
+<br>
+Let's proceed to more advanced prular forms. Let's take '''mouse'''. It's prular form is '''mice'''.<br>
+First of all, imagine the sentence with different params.
+*1 - Mum, there is 1 mouse in the room!
+*3 - Mum, there are 3 mouses in the room!
+*23 - Mum, there are 23 mouses in the room!
+When you are ready, you can write the string.
+<pre>STR_SENTENCE : Mum, there {P is are} {NUM} m{P ouse ice} in the room!</pre>
+Nice one, isn't it?
+
+== Genders ==
+{{en/Todo}} MeusH will write it soon.
 == Pragmas ==
 
 Pragmas start with two hash signs (#).
