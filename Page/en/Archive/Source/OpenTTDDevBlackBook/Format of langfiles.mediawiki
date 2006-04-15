@@ -217,22 +217,22 @@ Use the cases to make pseudo-keys. It's a big enhancement for languages containi
 
 {{en/Todo}} Look at it and correct where it's wrong
 
-== Prular form ==
+== plural form ==
 ==== Introduction ====
-In most languages singular and prular forms are a bit different.
-Every word may be divided into two parts - one part does not change in both singular and prular form, but the second part differs in singular and prular. Let's call them '''core''' and '''suffix'''.
+In most languages singular and plural forms are a bit different.
+Every word may be divided into two parts - one part does not change in both singular and plural form, but the second part differs in singular and plural. Let's call them '''core''' and '''suffix'''.
 
-Let's take basic example in English language, which is basic because it has two forms: singular and prular.<br>
+Let's take basic example in English language, which is basic because it has two forms: singular and plural.<br>
 There is "'''1 train'''", but there are "'''2 trains'''".<br><br>
 Now, let's divide this word into part that does not change and part that changes:<br>
 *Core: "'''train'''"
 *Suffix for singular: ""
-*Suffix for prular: "'''s'''"
+*Suffix for plural: "'''s'''"
 ==== Writing the string ====
 As I said before, there are two forms in English language.<br>
-The basic structure for prular form in English is <pre>core{P suffix1 suffix2}</pre>where suffix1 is suffix for signular and suffix2 is suffox for prular.<br>
-Keep in mind, that prular forms work only if there is proper param in the string.<br>
-{COMMA} and {NUM}, along with other numberic params work well in determining prular form.<br>
+The basic structure for plural form in English is <pre>core{P suffix1 suffix2}</pre>where suffix1 is suffix for signular and suffix2 is suffox for plural.<br>
+Keep in mind, that plural forms work only if there is proper param in the string.<br>
+{COMMA} and {NUM}, along with other numberic params work well in determining plural form.<br>
 Let's make a string that displays number of lamps in the room. Form of "lamp" would depend on supplied amount via {NUM} param.
 ==== Example ====
 <pre>STR_SENTENCE : I have {NUM} lamp{P "" s}</pre>
@@ -241,7 +241,7 @@ Later you see '''{P'''. This is the indicator that suffixes will come next.<br>
 '''""''' means there is no suffix. OpenTTD needs to know that - If there is no suffix, just write two quotation marks. So this is the first suffix, which will be used when {NUM} is equal to 1<br>
 '''s''' is the second suffix. This one will be displayed when {NUM} is bigger than 1.<br>
 <br>
-Let's proceed to more advanced prular forms. Let's take '''mouse'''. It's prular form is '''mice'''.<br>
+Let's proceed to more advanced plural forms. Let's take '''mouse'''. It's plural form is '''mice'''.<br>
 First of all, imagine the sentence with different params.
 *1 - Mum, there is 1 mouse in the room!
 *3 - Mum, there are 3 mouses in the room!
@@ -250,7 +250,7 @@ When you are ready, you can write the string.
 <pre>STR_SENTENCE : Mum, there {P is are} {NUM} m{P ouse ice} in the room!</pre>
 Nice one, isn't it?
 ==== OpenTTD usage ====
-Now you understand basics of prular forms. Let's take some example from english translation.
+Now you understand basics of plural forms. Let's take some example from english translation.
 <pre>STR_QUANTITY_LIVESTOCK : {COMMA} item{P "" s} of livestock</pre>This text is being displayed at stations when there is livestock cargo awaiting.<br>
 As you can see, {COMMA} param is given. Thanks to that param, we can change form of '''item'''.
 Let's see how would the string change when we change supplied param
@@ -258,10 +258,10 @@ Let's see how would the string change when we change supplied param
 *4 - 4 items of livestock
 *56 - 56 items of livestock
 <br>
-Now let's take a look at string without given param.<pre>STR_WAGONS : Wagons</pre>No prular form may be applied here. Wagon{P "" s} will not work here.<br>
+Now let's take a look at string without given param.<pre>STR_WAGONS : Wagons</pre>No plural form may be applied here. Wagon{P "" s} will not work here.<br>
 Why? Because there is no param given.<br>
 You can just leave this string as it is.
-==== Other prular types ====
+==== Other plural types ====
 Find your language on '''List of plural-types''' table below. Languages are being groupped depending on behaviour of words with different amounts<br>
 Suffixes are being ordered ascending, with ''any other number'' at end:<br><br>
 *First suffix is always singular.
