@@ -1,0 +1,38 @@
+{{en/Note|These might be not optimal solutions, but I haven't yet seen better ones.}}
+==Prelude==
+One day I thought - we have logical ''OR'', why don't make logical ''NOT'' and ''AND''? It's... challenging.
+
+''(Here and afterwards I assume green color as ''TRUE'' and red as ''FALSE'')''
+==OR==
+The basic ''OR'' is simply created by a one [[en/Manual/Signals|pre-entry signals]] and two pre-exit signals.
+
+==NOT==
+[[File:en/Community/Play Style/Logic.not true.png|left|frame|Argument set to ''TRUE'']]
+This looked easy at first, but it took a long time to create this structure.
+
+Here '''n1''' and '''n2''' are the stations for maglev to run between. (Orders set to "[[en/Archive/Manual/Non-stop]]", TTDPatch compatible non-stop handling set to "on"). Notice, that '''n1''' has two platforms. This is why we can't use [[en/Manual/Waypoints]], and this is why we need TTDPatch compatible non-stop handling.
+
+'''a''' and '''b''' are [[en/Manual/Signals]], they stop the train, if argument is ''FALSE'' and move him out of the track.
+
+'''x''' and '''y''' collect the position of the train and close the result signal.
+Unfortunately, I've found out a little bug in this scheme. At some times, it [[:File:en/Logic.not bug.png|jams]].
+[[File:en/Community/Play Style/Logic.not false.png|128px|thumb|left|Argument set to ''FALSE'']]
+
+<br style="clear:both" />
+==AND==
+[[File:en/Community/Play Style/Logic.and true true.png|left|frame|Arguments are ''TRUE''/''TRUE'']]
+One solution was to make ''A AND B'' as ''NOT((NOT A) OR (NOT B))'', but that would be messy, so I have found out another solution.
+
+Here '''a1''' and '''a2''' are the stations for maglev to run between. (Orders set to "[[en/Archive/Manual/Non-stop]]", TTDPatch compatible non-stop handling set to "on"). Notice, that both stations have two platforms. This is why we can't use [[en/Manual/Waypoints]], and this is why we need TTDPatch compatible non-stop handling.
+
+'''a''' and '''b''' are [[en/Manual/Signals]] (so are '''aa''' and '''bb'''), they stop the train, if argument is ''FALSE'' and move him out of the track.
+
+'''x''' and '''y''' collect the position of the train and close the result signal.
+
+Unfortunately, I've found out a little bug in this scheme, too. At some times, it [[:File:en/Logic.and bug.png|jams]].
+
+Other possible situations:
+[[File:en/Community/Play Style/Logic.and true false.png|128px|thumb|left|''TRUE''/''FALSE'']]
+[[File:en/Community/Play Style/Logic.and false true.png|128px|thumb|left|''FALSE''/''TRUE'']]
+[[File:en/Community/Play Style/Logic.and false false.png|128px|thumb|left|''FALSE''/''FALSE'']]
+<br style="clear: left"/>
