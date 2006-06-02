@@ -1,0 +1,98 @@
+[[Category:en/Development/Compiling OpenTTD]]
+[[Category:en/Archive/Program Descriptions]]
+
+==Compiling OpenTTD using Microsoft Visual C++ 2005 Express==
+
+
+===Step 1: Ingredients===
+Download the following files:
+
+*[http://msdn.microsoft.com/vstudio/express/visualC/default.aspx MVCE 2005] (From Microsoft, free)
+*[http://www.microsoft.com/downloads/details.aspx?FamilyId=A55B6B43-E24F-4EA3-A93E-40C0EC4F68E5&displaylang=en Microsoft Platform SDK] (This version certainly works. If you would like to try a more recent version follow the link to related downloads and report on succes here)
+*[http://sourceforge.net/project/showfiles.php?group_id=103924&package_id=114307&release_id=228633 Openttd-useful.zip]
+*[http://neuron.tuke.sk/~mizanin/eng/Dx81sdk-include-lib.rar DirectX 8.1 SDK]
+*[http://www-d0.fnal.gov/d0dist/dist/packages/d0ve/devel/windows/AFXRES.H afxres.h]
+
+
+...and of course the newest source from svn://svn.openttd.org/trunk
+
+You have to have a SVN-client to download the source:
+*[http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=91 Command line version (Subversion 1.2.3 Win32 binaries)]
+*[http://tortoisesvn.tigris.org/download.html GUI TortoiseSVN]
+
+===Step 2: Installing===
+* Install MVCE 2005
+* Install the Microsoft Platform SDK
+* Follow step 3 and 4 of the [http://msdn.microsoft.com/vstudio/express/visualc/usingpsdk/ installation instructions for the SDK] (If you have questions on instruction 3, take a look further down this page at step 5.)
+
+===Step 3: Includes and Libraries===
+Put the newly downloaded files in the VC lib and include directories
+(Where "C:\Program Files\Microsoft Visual Studio 8\VC" is your local location of VC)
+
+
+* zconf.h		[useful.zip]
+* zlib.h		[useful.zip]
+* png.h			[useful.zip]
+* pngconf.h		[useful.zip]
+* afxres.h
+
+in
+
+  <code>C:\Program Files\Microsoft Visual Studio 8\VC\include</code>
+
+and
+
+* zlibstat.lib		[useful.zip]
+* libpng.lib		[useful.zip]
+
+in
+
+  <code>C:\Program Files\Microsoft Visual Studio 8\VC\lib</code>
+
+
+===Step 4: DirectX SDK===
+(This should work with the latest DirectX SDK as well.)
+
+You can make custom directories, which is '''recommended''' so you don't overwrite VS6 files, for example a directory DirectX in the directories C:\Program Files\Microsoft Visual Studio 8\VC\include and C:\Program Files\Microsoft Visual Studio 8\VC\lib.
+
+===Step 5: Tell your MVCE where to find the includes and libraries===
+Go to Tools -> Options, then to Projects and Solutions -> VC++ Directories.
+(This is the same window you needed for the Platform SDK in step 2 of this installation guide)
+
+In the right upper corner, select libraries, then add the directory of your DirectX libraries
+Do the same for includes.
+
+'''NOTE: make sure that the directory for the DirectX SDK is the first one in the list, above all others, otherwise compilation will most likely fail!!''' (however, it should be the topmost by default)
+
+===Step 6: TTD Graphics files===
+Copy the following files from Transport Tycoon Deluxe to the data folder
+
+*sample.cat
+*trg1r.grf
+*trgcr.grf
+*trghr.grf
+*trgir.grf
+*trgtr.grf
+
+===Step 7: Compiling===
+*Open trunk/openttd_vs80.sln
+
+This will open your IDE with the project loaded. If you want to compile a debug version straight ahead, press F7 and enjoy. Otherwise, follow the following instructions to get a non-debug version.
+
+*Go to Build -> Configuration Manager and select Release for OpenTTD.
+*Press F7
+
+Based on the installation guide for MSVC 6.0.
+Initially created by Sebastiaan
+
+===Troubleshoot===
+* OpenTTD appears in the directory Release/Debug (depending on settings) where I cannot run execute it at once.
+
+Answer: 
+Possibility 1: Move the exececutable after compiling.
+Possiblity 2: Copy the necessary directories (lang & data to the debug/release directory)
+Possiblity 3:
+in the Solution browser on the left, right-click on openttd and select properties
+Select the version you want to appear in the top directory (from where it is executable without further ado) in the drop-down box at 'configuration'
+Go to Configuration properties -> General.
+Change Output Directory from '..\Debug' or '..\Release' to '.'
