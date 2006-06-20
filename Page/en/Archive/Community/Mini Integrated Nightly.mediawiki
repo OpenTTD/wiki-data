@@ -1,29 +1,32 @@
 [[Translation:en/Archive/Community/Mini Integrated Nightly]]
-The Mini Integrated Nightly is a special build of [[en/Manual/Main Page]], which incorperates patches which have yet to be approved for the main code.  This is the only way to <i>truely</i> get on the bleeding edge of development.  It is currently maintained by [[en/Richk67]].
+[[
+The Mini Integrated Nightly is a special build of [[en/Manual/Main Page]], which incorporates patches which have yet to be approved for the main code.  This is the only way to <i>truely</i> get on the bleeding edge of development.  It is currently maintained by [[en/Richk67]].
 
-{{en/Warning|The Mini Integrated Nightly is not in anyway supported by the developers and there is no guarentee that it will work with your save games.  In face it may well destroy your savegames, so always make a backup copy of everything!}}
+{{en/Warning|The Mini Integrated Nightly is not in anyway supported by the developers and there is no guarantee that it will work with your save games.  In face it may well destroy your save games, so always make a backup copy of everything!}}
 
 ==Description (non-technical)==
-While there are a core set of programmer's who work on the major improovements and administer the project, anybody is allowed to code their own improovement for OpenTTD.  However, until that improovement gets aproval from the core administers, it will not be integrated into the main game.  Until that time, the improovement generally sits in the development forum in the form of a [[en/Community/Patches/Patches]].
+While there are a core set of programmer's who work on the major improvements and administer the project, anybody is allowed to code their own improvement for OpenTTD.  However, until that improvement gets approval from the core administers, it will not be integrated into the main game.  Until that time, the improovement generally sits in the development forum in the form of a [[en/Community/Patches/Patches]].
 
 Anybody with a compiler can take a patch or any number of patches and create their own version.  But not all OpenTTD users know how to compile code.  The other problem of course is that patches often conflict with each other.
 
 The answer: The Mini Integrated Nightly (or MiniIN for short)
 The requirements are much less strict for a patch to be included into the MiniIN, so quite a few patches are included as quickly as possible.
 
+The term "nightly" refers to the [[en/Nightly Builds]], which contain the latest changes made by the core programmers.  "Integrated" refers to all the patches being integrated into the nightly build.  "Mini" refers to the fact that this is the second generation of Integrated Nightly's, and there are a few requirements before a patch will be included.
+
 ==Downloading the Mini Integrated Nightly==
 The latest build of the MiniIN can be found at the following address:
 [http://nightly.openttd.org/MiniIN/files/] 
 Be sure to download the version for your Operating System.
 
-WARNING: data.zip also needs to be downloaded and unziped into the /data directory for the MiniIN to work.  See the first forum post for details:
+WARNING: data.zip also needs to be downloaded and unzipped into the /data directory for the MiniIN to work.  See the first forum post for details:
 [http://www.tt-forums.net/viewtopic.php?t=24423&postdays=0&postorder=asc&start=0]
 
 ==Patches Included==
 A few lists of patches included in or up for review for the Mini Integrated Nightly as of r5311(?). See [http://www.tt-forums.net/viewtopic.php?p=426901#426901 the forum] for a possible more up to date list.
 
 {| boarder=2
-!style="background:#999999;" | Currently in MiniIN or main trunk: 
+!style="background:pink;" | Currently in MiniIN or main trunk: 
 |-
 !style="background:#999999;" | Patch Name
 !style="background:#999999;" | MiniIN Status
@@ -70,7 +73,7 @@ A few lists of patches included in or up for review for the Mini Integrated Nigh
 |Realistic Acceleration v2.0    
 |in MiniIN
 |-
-|Signal Autocomplete            
+|Signal Auto-complete            
 |in MiniIN
 |-
 |Planeset MiniIN specials       
@@ -102,9 +105,19 @@ A few lists of patches included in or up for review for the Mini Integrated Nigh
 |-
 |Toolbar fix                    
 |in MiniIN
-
+|- 
+|Window Refit Info
+|in MiniIN
 |-
-!style="background:#999999;" | Will be added soon:
+|Copy & Paste
+|in MiniIN
+|-
+|Loading Indicators
+|in MiniIN
+|}
+
+{|
+!style="background:pink;" | Will be added soon:
 |-
 !style="background:#999999;" | Patch Name
 !style="background:#999999;" | MiniIN Status
@@ -135,9 +148,10 @@ A few lists of patches included in or up for review for the Mini Integrated Nigh
 |-
 |Past 2090                      
 |pending
+|}
 
-|-
-!style="background:#999999;" | Likely to be added if updated by author:
+{|
+!style="background:pink;" | Likely to be added if updated by author:
 |-
 !style="background:#999999;" | Patch Name
 !style="background:#999999;" | MiniIN Status
@@ -150,9 +164,10 @@ A few lists of patches included in or up for review for the Mini Integrated Nigh
 |-
 |Yellow signal state            
 |awaiting confirmation it is current
+|}
 
-|-
-!style="background:#999999;" | Unknown:
+{|
+!style="background:pink;" | Unknown:
 |-
 !style="background:#999999;" | Patch Name
 !style="background:#999999;" | MiniIN Status
@@ -174,9 +189,10 @@ A few lists of patches included in or up for review for the Mini Integrated Nigh
 |-
 |Smallmap zoom                  
 |unknown. updated feature being added to trunk
+|}
 
-|-
-!style="background:#999999;" | Unlikely to be added:
+{|
+!style="background:pink;" | Unlikely to be added:
 |-
 !style="background:#999999;" | Patch Name
 !style="background:#999999;" | MiniIN Status
@@ -194,26 +210,35 @@ A few lists of patches included in or up for review for the Mini Integrated Nigh
 |will not be added
 |}
 
-==Getting my own patch in the MiniIN==
+==Developement==
+This section contains the technical details for obtaining the code and creating special patches for the MiniIN
+
+====Downloading the MiniIN code====
+Using a [[en/Subversion]] program, you may download any revision of the code from svn://svn.openttd.org/branch/MiniIN 
+
+====Create a patch for the MiniIN====
 Ok, so you've created your very cool patch and want users to try it out?  Several people will look at it if you build your own executable, but even more will look at it if you include it into the MiniIN.  Here's how:
 
-====Inclusion Requirements====
+First, make sure that you meet the requirements for having your patch included:
 :*Wait a month and test your patch before requesting inclusion in the MiniIN
-:*No debuging code
+:*No debugging code
 :*"Idle" commented-out dev code removed
 :*Any trailing spaces removed; regexp: /s/[\t ]+$//
 :*Applies to MiniIN branch (resolve conflicts as best you can)
 :*Compiles without any errors or warnings (other than non-fatal language warnings)
-:*If you have an update, or a bugfix, please say *what* has changed, or what the current version number is.
+:*If you have an update, or a bug fix, please say *what* has changed or what the current version number is in the forum topic.
 
-====Create a patch for the MiniIN====
-:#Check out trunk at either pre-branch (4977), or current last sync (5137??).
+Next, creat an actual patch against the MiniIN
+:#Check out trunk at either pre-branch (4977), or current last sync (check the branch for details).
 :#Apply patch
 :#Use the Tortoise "Switch" option to point to /branch/MiniIN. It will run a merge, and you may get conflicts.
 :#Resolve conflicts.
 :#Create patch.
 
 ==External Links==
-Forum topic [http://www.tt-forums.net/viewtopic.php?t=24423&postdays=0&postorder=asc&start=0]
-SVN Branch [http://svn.openttd.org/cgi-bin/trac.cgi/log/branch/MiniIN]
-MiniIN Nightly Build [http://nightly.openttd.org/MiniIN/]
+:Forum topic [http://www.tt-forums.net/viewtopic.php?t=24423&postdays=0&postorder=asc&start=0]
+:SVN Branch [http://svn.openttd.org/cgi-bin/trac.cgi/log/branch/MiniIN]
+:MiniIN Nightly Build [http://nightly.openttd.org/MiniIN/]
+:Old Integrated Nightly forum topic [http://www.tt-forums.net/viewtopic.php?t=14849]
+
+[[Category:en/Development]][[Category:en/Development/Compiling OpenTTD]]
