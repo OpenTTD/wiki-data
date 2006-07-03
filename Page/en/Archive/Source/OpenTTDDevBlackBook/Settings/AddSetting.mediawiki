@@ -1,0 +1,156 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/Settings/AddSetting]]
+Patch Settings wiki page:
+
+This is a guide on creating patch settings that the user can manipulate and saving them into the config file.  This article does '''not''' cover creating a new window.
+
+
+==About save games==
+The savegame holds the map and the data needed to continue a game. Which variables are saved are controlled by data CHUNKs, usually defined at the end of the appropriate file. EG. for vehicles, see the end of vehicles.c.
+
+The game settings are saved in chunks defined in settings.c. These themselves are split into categories of data - _music_settings, _win32_settings, _network_settings, _misc_settings, _gameopt_settings, and the one most useful to patch writers: _patch_settings.
+
+
+==About Patch Settings==
+The patch settings are themselves grouped into areas - but this is just for clarity of reading. Generally minor single line settings get squeezed into their appropriate position in the list. Larger groups of settings are added at the end of the list (somewhere after YAPF options).
+
+Patch settings can be saved in up to three different locations (currently); a single player game, a network game, and the config.cfg file. This is controlled by one of the values given for each of the patch settings.
+
+====Current Patch Categories====
+These patch categories can be seen from the patch settings windows, so their easily recognizable.
+
+*[[en/Archive/Manual/Settings/Configuring patches/Interface|Interface]] - General interface options such as toolbar options and main window options.
+*[[en/Archive/Manual/Settings/Configuring patches/Construction|Construction]] - Options dealing with what and how you can construct things.
+*[[en/Archive/Manual/Settings/Configuring patches/Vehicles|Vehicles]] - Options dealing with vehicle behavior.
+*[[en/Archive/Manual/Settings/Configuring patches/Stations]] - Options dealing with station behavior.
+*[[en/Archive/Manual/Settings/Configuring patches/Economy]] - Options dealing with the economy.
+*[[en/Archive/Manual/Settings/Configuring patches/Competitors]] - Options dealing with AI competitors.
+*[http://www.tt-forums.net/viewtopic.php?t=23434 Terrain]([[en/Archive/Community/Mini Integrated Nightly]] or patch only) - Options dealing with terrain generation.
+*[http://www.tt-forums.net/viewtopic.php?t=11942 Cooperation]([[en/Archive/Community/Mini Integrated Nightly]] or patch only) - Options dealing with human cooperation (or friendly competition).
+
+NOTE: This document does not cover how to create a new category.
+
+==Adding a Patch Setting==
+There are several files that you need to edit in order to add a patch setting.  This section lists those files and tells you what you need to do to each.  For the most part, you have to look at the surrounding code to figure out where the most appropriate place for your new patch variable to go, but unless you have a radically new idea, there will probably be a place for you.
+
+====english.txt ( and language files)====
+First and foremost, you must add text entries into [http://svn.openttd.org/cgi-bin/trac.cgi/browser/trunk/lang/english.txt english.txt].  If you speak another language, you may also add your entries into that file.  For any other languages, just leave them and somebody will eventually translate it for you.
+
+Take a look at the link above to get a feel for the text file.  Note that there are no tabs in this file, only spaces.  Any patch option strings should begin with the STR_CONFIG_PATCHES_ extension.  
+
+<pre>
+STR_CONFIG_PATCHES_MY_VAR_OPT         :{LTBLUE}My variable option: {ORANGE}{STRING1} 
+STR_CONFIG_PATCHES_MY_BOOL_OPT        :{LTBLUE}My boolean option {ORANGE}{STRING1}
+</pre>
+
+====variables.h====
+The patches structure keeps track of the current configuration.  It is located in [http://svn.openttd.org/cgi-bin/trac.cgi/browser/trunk/variables.h variables.h], and is defined as:
+
+<pre>
+typedef struct Patches {
+</pre>
+
+Find an appropriate place for your patch setting in the structure and add a line similar to that shown here:
+
+<pre>
+uint8 my_var_opt;	// *Describe what my_var_opt is about*
+bool my_bool_opt;	// *Describe what my_bool_opt is about*
+</pre>
+
+====settings_gui.c====
+You must also define a string that contains your variable name for the purposes of saving and loading from the [[en/Archive/Manual/Settings/Openttd.cfg]] file.  These are defined in [http://svn.openttd.org/cgi-bin/trac.cgi/browser/trunk/settings_gui.c settings_gui.c].
+
+There is one array of strings defined for each category (described above) for organization purposes:
+
+*_patches_ui[]
+*_patches_construction[]
+*_patches_stations[]		
+*_patches_economy[]
+*_patches_ai[]
+*_patches_vehicles[]
+*_patches_terrain[]
+*_patches_cooperation[]
+
+You must define your string in the most appropriate one:
+
+<pre>
+	"my_var_opt"
+	"my_bool_opt"
+</pre>
+
+====settings.c====
+The last change you have to make determines the behavior of the Configure Patches window and exactly how your setting will be saved to [[en/Archive/Manual/Settings/Openttd.cfg]].  This is set with a line in [http://svn.openttd.org/cgi-bin/trac.cgi/browser/trunk/settings.c settings.c].
+
+While you only add a single line per setting that you make, it is fairly complicated.  To give you an idea here is an example:
+
+<pre>
+ SDT_VAR(Patches, my_var_opt,SLE_UINT8,S, 0,  4, 1,20, STR_CONFIG_PATCHES_MY_VAR_OPT,NULL),
+SDT_BOOL(Patches, my_bool_opt,          0, 0, false,    STR_CONFIG_PATCHES_MY_BOOL_OPT,      NULL),
+</pre>
+
+Of course you will have to place it in the appropriate order in _patch_settings[] array (hopefully this will be fairly obvious).
+
+Following is a detailed explanation of what it all means:
+
+======Patch Setting Types======
+The format of the patch setting can be a bit hard to follow, but is quite straightforward.  These are the two standard types of settings
+
+<pre>
+SDT_BOOL( <settings group>, <varname>, <savewhereflags>, <gui flags>, <initial value>, <display string>, <onchange callback proc>),
+
+--or--
+
+SDT_VAR( <settings group>, <varname>, <vardef>, <savewhereflags>, <gui flags>, <initial value>, <min value>, <max value>, <display string>, <onchange callback proc>),
+</pre>
+
+where:
+*<settings group> = Patches
+*<varname> = name_of_your_variable
+*<vardef> = data size for the variable - not required for BOOL, but can be a variety of sizes; SLE_UINT8, SLE_INT16, SLE_UINT32, etc. etc... pick what you need
+*<savewhereflags> - this is the most awkward to understand, and is quite cryptic. It can take the following values:
+**0 (zero) = Default behavior: Save in save game and openttd.cfg.  Sync with Network (Only the server can set the option)
+**N = Do '''not''' sync with network. (Each player can set their own)
+**S = Do '''not''' save in save game (but save in openttd.cfg).  '''Also''' does '''not''' sync with network.  (Each player can set their own)
+**NS = Do '''not''' save in save game (but save in openttd.cfg) but '''do''' sync with network (Only the server can set the option).
+**C = Do not save in openttd.cfg, but save in save game.
+*<gui flags> - Affects how the option is displayed
+**D0 = Disable option.  Grey out for now but leave in for future use?  Maybe for internal use only.
+**NC = No Commas.  Display numbers without any thousands separators.
+**MS = Multi-string.  Option displays various strings instead of numbers for settings.
+**NO = Network Only.  Setting only applies to network games
+**CR = Currency.  Number in string will be converted to proper currency.
+*<initial value>, <min>, <max> = obvious (either bool, or int32)
+*<display string> = the string used in the language file for the patch setting when displayed in the Patch Settings control panel. If you don't need to display it, just leave it as NULL.
+*<callback proc> = the procedure to call when the value is changed. Just leave this as NULL - safer that way.
+
+
+======SAVEGAME VERSION & CONDVARs======
+
+You have your saved patch variable, but if you add it straight, OTTD will expect to find it in every savegame. So there is an extra pair of entries available for CONDitional variables; ones only available for a range of savegame versions. The savegame version number is found near line 33 of saveload.c.
+
+The format for conditional patch settings is:
+<pre>
+SDT_CONDBOOL( <settings group>, <varname>, <valid from>, <valid to>, <savewhereflags>, <gui flags>, <initial value>, <display string>, <onchange callback proc>),
+
+--or--
+
+SDT_CONDVAR( <settings group>, <varname>, <vardef>, <valid from>, <valid to>, <savewhereflags>, <gui flags>, <initial value>, <min value>, <max value>, <display string>, <onchange callback proc>),
+</pre>
+
+
+When OTTD loads a data chunk, it compares the savegame version it was compiled with, with the savegame version in the savegame. By checking the <valid from> and <valid to> version numbers in the patch settings, it can see whether it supports the feature, and how to handle it.
+
+This way, you can control whether your feature is saved, and if it is, whether that save is compatible with previous versions.
+
+Note: by just defining your saved variable in the patch settings, you automatically make saves with your OTTD incompatible with everybody else's. Also, unless you follow the procedure below, you will not be able to *load* normal OTTD games with your version either!
+
+This is where the savegame version, and COND vars save your bacon.
+
+If the current trunk is at version 29, but you have a new feature that needs its settings vars saving, then ALWAYS increase the savegame version. This is known as a Savegame BUMP.
+
+When a normal OTTD tries to load a savegame from your system, it will see the savegame bump, and gracefully say "sorry, i cant load that - its too new for me".
+
+However, to do the reverse - you loading older OTTD games - you need to identify your patch settings as "new in version XX" by using the <valid from> and <valid to> entries.
+
+So for our example; we BUMP the savegame to 30, and set our vars as CONDVAR or CONDBOOL, with a <valid from> of 30, and a <valid to> of SL_MAX_VERSION, which as you can guess means "from now on". 
+
+[[Category:en/Archive/Source/OpenTTDDevBlackBook]][[Category:en/Development]]
