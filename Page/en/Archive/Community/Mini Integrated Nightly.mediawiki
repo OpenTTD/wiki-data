@@ -260,6 +260,21 @@ Next, creat an actual patch against the MiniIN (The steps below apply to users o
 :#Resolve conflicts.
 :#Create patch.
 
+====Maintaining your patch in the MiniIN====
+If you make a new version of your patch and need to update it in the MiniIN, pretty much you follow the same method as when you first put it in.  Your new code will most likely conflict with your old code, so always compile and run your patch to make sure you haven't left any ophened lines of code in.
+
+'''BIG NOTE:''' When your patch is first added, richk67 will change any settings you added in settings.c:
+
+<pre>
+Before:
+SDT_VAR(Patches, day_length, SLE_UINT8, NS, 0, 1, 1, 32, STR_CONFIG_PATCHES_DAY_LENGTH, NULL), 
+
+After:
+SDT_CONDVAR(Patches, day_length,  SLE_UINT8, 34, SL_MAX_VERSION, NS, 0, 1, 1,   32, STR_CONFIG_PATCHES_DAY_LENGTH, NULL),
+</pre>
+
+This is to keep savegames backwards compatible.  Do not revert these, and do not change the 3rd and 4th parameters.  More info at [[en/Archive/Source/OpenTTDDevBlackBook/Settings/AddSetting]]
+
 ==External Links==
 :Forum topic [http://www.tt-forums.net/viewtopic.php?t=24423&postdays=0&postorder=asc&start=0]
 :SVN Branch [http://svn.openttd.org/cgi-bin/trac.cgi/log/branches/MiniIN]
