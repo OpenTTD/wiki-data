@@ -1,0 +1,299 @@
+This page will explain how to set up openttd as a screensaver for your xserver.  <tt>xscreensaver</tt> and <tt>gnome-screensaver</tt> invoke screensavers in similar ways.  A candidate screensaver needs to be able to target its video output at the correct 'X11 window'.  Detecting which x11 window to use is simple for the preview mode (embedded in the <tt>xscreensaver</tt>/<tt>gnome-screensaver</tt> window), but to correctly embed in the ''virtual'' root window (when testing the screensaver in full-screen mode, or running it properly) requires a [[#patched-xdpyinfo|patch to <tt>xdpyinfo</tt>]], which is provided.  To detect the dimensions of the window in which to embed requires <tt>xwininfo</tt>.  A [[#gnome-screensaver-config-file|<tt>gnome-screensaver</tt> configuration file]] is also provided.
+
+==using an SDL application as a screensaver==
+SDL supports an environment variable, <tt>SDL_WINDOWID</tt>, which allows you to direct the SDL application's video output to the chosen X11 window ID.  The shell utility [[#patched-xdpyinfo|<tt>xdpyinfo</tt> (patched)]] allows you to detect the virtual root window and <tt>xwininfo</tt> allows you to detect its dimensions (for passing as arguments or environment variables to your SDL app.).  The SDL screensaver wrapper-script prototype follows.
+<pre>
+#!/bin/bash
+
+# copyright (C) 2006 Eugene St Leger (GrimRC)
+# Distributed under the terms of the GNU General Public License v2
+
+# SDL screensaver wrapper-script prototype version 1
+
+# these tests allow you to pass these options as environment variables to this script
+if test -z $SDLPROG_BINDIR; then SDLPROG_BINDIR="/usr/games/bin/"; fi
+if test -z $SDLPROG_FILENAME; then SDLPROG_FILENAME="sdlgame"; fi
+if test -z $SDLPROG_OPTS; then SDLPROG_OPTS=""; fi
+
+# check if xscreen-saver has passed a window id to use
+if test $1 && test $1 = '-window-id' && test $2 && test -z $SDL_WINDOWID;
+        then {
+                # use the window id given
+                export SDL_WINDOWID=$2;
+        } elif test -z $SDL_WINDOWID;
+        then {
+                # get the *virtual* root window id from xdpyinfo
+                # this requires a patched (by GrimRC) xdpyinfo (>1.0.1)
+                export SDL_WINDOWID=`xdpyinfo | grep -i "virtual root window id:" | sed 's/ //g' | cut -f2 -d':'`;
+        }
+fi
+
+#these variables can be passed as arguments to the SDL application so it may set its resolution appropriately
+WIDTH=`xwininfo -id $SDL_WINDOWID | grep "Width:" | sed 's/ //g' | cut -f2 -d':'`
+HEIGHT=`xwininfo -id $SDL_WINDOWID | grep "Height:" | sed 's/ //g' | cut -f2 -d':'`
+
+$OPENTTD_BINDIR$OPENTTD_FILENAME $OPENTTD_OPTS;
+</pre>
+
+==using openttd as a screensaver==
+The openttd screensaver wrapper-script follows.  It passes the detected width and height of the window to openttd with <tt>-r</tt>.  This script needs to be called by a screensaver-manager; for example, <tt>xscreensaver</tt> or [[#gnome-screensaver-config-file|<tt>gnome-screensaver</tt>]].
+<pre>
+#!/bin/bash
+
+# copyright (C) 2006 Eugene St Leger (GrimRC)
+# Distributed under the terms of the GNU General Public License v2
+
+# Openttd screensaver wrapper-script version 1
+
+# these tests allow you to pass these options as environment variables to this script
+if test -z $OPENTTD_BINDIR; then OPENTTD_BINDIR="/usr/games/bin/"; fi
+if test -z $OPENTTD_FILENAME; then OPENTTD_FILENAME="openttd"; fi
+# don't put a -r option (resolution option) in this variable as it's set later automagically
+if test -z $OPENTTD_OPTS; then OPENTTD_OPTS="-s null"; fi
+
+# check if xscreen-saver has passed a window id to use
+if test $1 && test $1 = '-window-id' && test $2 && test -z $SDL_WINDOWID;
+        then {
+                # use the window id given
+                export SDL_WINDOWID=$2;
+        } elif test -z $SDL_WINDOWID;
+        then {
+                # get the *virtual* root window id from xdpyinfo
+                # this requires a patched (by GrimRC) xdpyinfo (>1.0.1)
+                export SDL_WINDOWID=`xdpyinfo | grep -i "virtual root window id:" | sed 's/ //g' | cut -f2 -d':'`;
+        }
+fi
+
+export WIDTH=`xwininfo -id $SDL_WINDOWID | grep "Width:" | sed 's/ //g' | cut -f2 -d':'`
+export HEIGHT=`xwininfo -id $SDL_WINDOWID | grep "Height:" | sed 's/ //g' | cut -f2 -d':'`
+echo $WIDTH $HEIGHT
+OPENTTD_OPTS="$OPENTTD_OPTS -r $WIDTH\x$HEIGHT"
+$OPENTTD_BINDIR$OPENTTD_FILENAME $OPENTTD_OPTS;
+</pre>
+
+==patched <tt>xdpyinfo</tt>==
+<tt>xdpyinfo</tt> needs to be patched to display the ''virtual'' root window ID.  This has been done and the patch (against 1.0.1) follows.  You need to pass <tt>-p1</tt> to patch to strip the first directory (<tt>man patch</tt>).
+<pre>
+diff -urN xdpyinfo-1.0.1/AUTHORS xdpyinfo-1.0.2/AUTHORS
+--- xdpyinfo-1.0.1/AUTHORS	2005-07-06 20:56:47.000000000 +0100
++++ xdpyinfo-1.0.2/AUTHORS	2006-08-21 12:47:31.000000000 +0100
+@@ -0,0 +1 @@
++Author:  Jim Fulton, MIT X Consortium
+diff -urN xdpyinfo-1.0.1/NEWS xdpyinfo-1.0.2/NEWS
+--- xdpyinfo-1.0.1/NEWS	2005-07-06 20:56:47.000000000 +0100
++++ xdpyinfo-1.0.2/NEWS	2006-08-21 12:49:41.000000000 +0100
+@@ -0,0 +1 @@
++patch on 21/8/2006 by Eugene St Leger (GrimRC) to report virtual root window id, using vroot.h from xscreensaver 5.00
+diff -urN xdpyinfo-1.0.1/vroot.h xdpyinfo-1.0.2/vroot.h
+--- xdpyinfo-1.0.1/vroot.h	1970-01-01 01:00:00.000000000 +0100
++++ xdpyinfo-1.0.2/vroot.h	2006-08-20 19:35:24.000000000 +0100
+@@ -0,0 +1,157 @@
++/* -*- Mode: C; tab-width: 2 -*-                                             */
++/*****************************************************************************/
++/**                   Copyright 1991 by Andreas Stolcke                     **/
++/**               Copyright 1990 by Solbourne Computer Inc.                 **/
++/**                          Longmont, Colorado                             **/
++/**                                                                         **/
++/**                           All Rights Reserved                           **/
++/**                                                                         **/
++/**    Permission to use, copy, modify, and distribute this software and    **/
++/**    its documentation  for  any  purpose  and  without  fee is hereby    **/
++/**    granted, provided that the above copyright notice appear  in  all    **/
++/**    copies and that both  that  copyright  notice  and  this  permis-    **/
++/**    sion  notice appear in supporting  documentation,  and  that  the    **/
++/**    name of Solbourne not be used in advertising                         **/
++/**    in publicity pertaining to distribution of the  software  without    **/
++/**    specific, written prior permission.                                  **/
++/**                                                                         **/
++/**    ANDREAS STOLCKE AND SOLBOURNE COMPUTER INC. DISCLAIMS ALL WARRANTIES **/
++/**    WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF    **/
++/**    MERCHANTABILITY  AND  FITNESS,  IN  NO  EVENT SHALL ANDREAS STOLCKE  **/
++/**    OR SOLBOURNE BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL    **/
++/**    DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA   **/
++/**    OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER    **/
++/**    TORTIOUS ACTION, ARISING OUT OF OR IN  CONNECTION  WITH  THE  USE    **/
++/**    OR PERFORMANCE OF THIS SOFTWARE.                                     **/
++/*****************************************************************************/
++/*
++ * vroot.h -- Virtual Root Window handling header file
++ *
++ * This header file redefines the X11 macros RootWindow and DefaultRootWindow,
++ * making them look for a virtual root window as provided by certain `virtual'
++ * window managers like swm and tvtwm. If none is found, the ordinary root
++ * window is returned, thus retaining backward compatibility with standard
++ * window managers.
++ * The function implementing the virtual root lookup remembers the result of
++ * its last invocation to avoid overhead in the case of repeated calls
++ * on the same display and screen arguments. 
++ * The lookup code itself is taken from Tom LaStrange's ssetroot program.
++ *
++ * Most simple root window changing X programs can be converted to using
++ * virtual roots by just including
++ *
++ * #include <X11/vroot.h>
++ *
++ * after all the X11 header files.  It has been tested on such popular
++ * X clients as xphoon, xfroot, xloadimage, and xaqua.
++ * It also works with the core clients xprop, xwininfo, xwd, and editres
++ * (and is necessary to get those clients working under tvtwm).
++ * It does NOT work with xsetroot; get the xsetroot replacement included in
++ * the tvtwm distribution instead.
++ *
++ * Andreas Stolcke <stolcke@ICSI.Berkeley.EDU>, 9/7/90
++ * - replaced all NULL's with properly cast 0's, 5/6/91
++ * - free children list (suggested by Mark Martin <mmm@cetia.fr>), 5/16/91
++ * - include X11/Xlib.h and support RootWindowOfScreen, too 9/17/91
++ *
++ * Jamie Zawinski <jwz@jwz.org>, 28-Apr-1997
++ * - use ANSI C
++ *
++ * Jamie Zawinski <jwz@jwz.org>, 3-Sep-2003
++ * - if the environment variable "XSCREENSAVER_WINDOW" is set, use that
++ *   as the root window instead of searching for __SWM_VROOT.
++ *
++ * Jamie Zawinski <jwz@jwz.org>, 14-Aug-2004
++ * - changes to get gcc to stop whining about "type punning".
++ *
++ * Jamie Zawinski <jwz@jwz.org>, 16-Dec-2004
++ * - fixed that last fix.
++ */
++
++#ifndef _VROOT_H_
++#define _VROOT_H_
++#define _XSCREENSAVER_VROOT_H_
++
++#if !defined(lint) && !defined(SABER)
++static const char vroot_rcsid[] =
++ "#Id: vroot.h,v 1.8 2004/12/16 05:33:54 jwz Exp #" "\n"
++ "#Id: vroot.h,v 1.4 1991/09/30 19:23:16 stolcke Exp stolcke #";
++#endif
++
++#include <X11/X.h>
++#include <X11/Xatom.h>
++#include <X11/Xlib.h>
++
++static Window
++#ifdef __STDC__ /* ANSIfication added by jwz, to avoid superfluous warnings. */
++VirtualRootWindowOfScreen(Screen *screen)
++#else /* !__STDC__ */
++VirtualRootWindowOfScreen(screen) Screen *screen;
++#endif /* !__STDC__ */
++{
++	static Screen *save_screen = (Screen *)0;
++	static Window root = (Window)0;
++
++	if (screen != save_screen) {
++		Display *dpy = DisplayOfScreen(screen);
++		Atom __SWM_VROOT = None;
++		int i;
++		Window rootReturn, parentReturn, *children;
++		unsigned int numChildren;
++
++    /* first check for a hex or decimal window ID in the environment */
++    const char *xss_id = getenv("XSCREENSAVER_WINDOW");
++    if (xss_id && *xss_id) {
++      unsigned long id = 0;
++      char c;
++      if (1 == sscanf (xss_id, " 0x%lx %c", &id, &c) ||
++          1 == sscanf (xss_id, " %lu %c",   &id, &c)) {
++        root = (Window) id;
++        save_screen = screen;
++        return root;
++      }
++    }
++
++		root = RootWindowOfScreen(screen);
++
++		/* go look for a virtual root */
++		__SWM_VROOT = XInternAtom(dpy, "__SWM_VROOT", False);
++		if (XQueryTree(dpy, root, &rootReturn, &parentReturn,
++				 &children, &numChildren)) {
++			for (i = 0; i < numChildren; i++) {
++				Atom actual_type;
++				int actual_format;
++				unsigned long nitems, bytesafter;
++				unsigned char *newRoot = 0;
++
++				if (XGetWindowProperty(dpy, children[i],
++					__SWM_VROOT, 0, 1, False, XA_WINDOW,
++					&actual_type, &actual_format,
++					&nitems, &bytesafter,
++					&newRoot) == Success
++				    && newRoot) {
++				    root = *((Window *) newRoot);
++				    break;
++				}
++			}
++			if (children)
++				XFree((char *)children);
++		}
++
++		save_screen = screen;
++	}
++
++	return root;
++}
++
++/*
++#undef RootWindowOfScreen
++#define RootWindowOfScreen(s) VirtualRootWindowOfScreen(s)
++
++#undef RootWindow
++#define RootWindow(dpy,screen) VirtualRootWindowOfScreen(ScreenOfDisplay(dpy,screen))
++
++#undef DefaultRootWindow
++#define DefaultRootWindow(dpy) VirtualRootWindowOfScreen(DefaultScreenOfDisplay(dpy))
++*/
++#endif /* _VROOT_H_ */
+diff -urN xdpyinfo-1.0.1/xdpyinfo.c xdpyinfo-1.0.2/xdpyinfo.c
+--- xdpyinfo-1.0.1/xdpyinfo.c	2005-07-08 05:54:09.000000000 +0100
++++ xdpyinfo-1.0.2/xdpyinfo.c	2006-08-20 19:51:33.000000000 +0100
+@@ -128,6 +128,7 @@
+ #include <X11/Xos.h>
+ #include <stdio.h>
+ #include <stdlib.h>
++#include "vroot.h"
+ 
+ /* Turn a NULL pointer string into an empty string */
+ #define NULLSTR(x) (((x)!=NULL)?(x):(""))
+@@ -497,6 +498,7 @@
+     putchar ('\n');
+     if (depths) XFree ((char *) depths);
+     printf ("  root window id:    0x%lx\n", RootWindow (dpy, scr));
++    printf ("  virtual root window id:    0x%lx\n", VirtualRootWindowOfScreen(ScreenOfDisplay(dpy, scr)));
+     printf ("  depth of root window:    %d plane%s\n",
+ 	    DisplayPlanes (dpy, scr),
+ 	    DisplayPlanes (dpy, scr) == 1 ? "" : "s");
+</pre>
+
+==gnome-screensaver config file==
+You need to place the [[#using-openttd-as-a-screensaver|openttd screensaver wrapper-script]], or a symbolic link to it, in <tt>/usr/libexec/gnome-screensaver/</tt> (for Gentoo).  Call it something like <tt>openttd_screensaver</tt>, but remember the name used.  The config-file which follows needs to be called something like <tt>openttd.desktop</tt> and placed in <tt>/usr/share/gnome-screensaver/themes/</tt> (on Gentoo).  Change the appearance of <tt>openttd_screensaver</tt> in the script, if you did not use the same name.
+
+<pre>
+[Desktop Entry]
+Encoding=UTF-8
+Name=openttd game
+Name[en_CA]=openttd game
+Name[en_GB]=openttd game
+Name[de]=openttd spiel
+Comment=openttd game
+Comment[de]=openttd spiel
+Comment[en_CA]=openttd game
+Exec=openttd_screensaver
+TryExec=openttd_screensaver
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=GNOME;Screensaver;
+</pre>
+
+==TODO==
+*include xscreensaver configuration
+*get the [[#using-openttd-as-a-screensaver|openttd screensaver wrapper-script]] included in Gentoo openttd ebuild or openttd distribution itself
+*mention that you can use -g to load a savegame
+*hack openttd so it doesn't display the menu when running as a screensaver
+*add more openttd console commands so a script can run and do things like load games, pan the camera around, etc. (maybe even join a network game as a spectator)?
+*cleanup xdpyinfo and add a --version command?
+*
+*
+*
