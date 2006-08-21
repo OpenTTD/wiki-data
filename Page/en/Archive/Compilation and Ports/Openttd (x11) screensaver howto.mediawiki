@@ -43,13 +43,13 @@ The openttd screensaver wrapper-script follows.  It passes the detected width an
 # copyright (C) 2006 Eugene St Leger (GrimRC)
 # Distributed under the terms of the GNU General Public License v2
 
-# Openttd screensaver wrapper-script version 1
+# Openttd screensaver wrapper-script version 2
 
 # these tests allow you to pass these options as environment variables to this script
 if test -z $OPENTTD_BINDIR; then OPENTTD_BINDIR="/usr/games/bin/"; fi
 if test -z $OPENTTD_FILENAME; then OPENTTD_FILENAME="openttd"; fi
 # don't put a -r option (resolution option) in this variable as it's set later automagically
-if test -z $OPENTTD_OPTS; then OPENTTD_OPTS="-s null"; fi
+if test -z $OPENTTD_OPTS; then OPENTTD_OPTS="-s null -c /tmp/openttd.cfg"; fi
 
 # check if xscreen-saver has passed a window id to use
 if test $1 && test $1 = '-window-id' && test $2 && test -z $SDL_WINDOWID;
@@ -64,11 +64,21 @@ if test $1 && test $1 = '-window-id' && test $2 && test -z $SDL_WINDOWID;
         }
 fi
 
-export WIDTH=`xwininfo -id $SDL_WINDOWID | grep "Width:" | sed 's/ //g' | cut -f2 -d':'`
-export HEIGHT=`xwininfo -id $SDL_WINDOWID | grep "Height:" | sed 's/ //g' | cut -f2 -d':'`
-OPENTTD_OPTS="$OPENTTD_OPTS -r $WIDTH\x$HEIGHT"
-$OPENTTD_BINDIR$OPENTTD_FILENAME $OPENTTD_OPTS;
+if cp ~/.openttd/openttd.cfg /tmp; then {
+        export WIDTH=`xwininfo -id $SDL_WINDOWID | grep "Width:" | sed 's/ //g' | cut -f2 -d':'`
+        export HEIGHT=`xwininfo -id $SDL_WINDOWID | grep "Height:" | sed 's/ //g' | cut -f2 -d':'`
+        OPENTTD_OPTS="$OPENTTD_OPTS -r $WIDTH\x$HEIGHT"
+        $OPENTTD_BINDIR$OPENTTD_FILENAME $OPENTTD_OPTS;
+} else echo error - copying openttd.cfg failed >&2;
+fi
+
+# unfortunately, this is not usually called because gnome-screensaver terminates the script while it's stuck running openttd
+rm /tmp/openttd.cfg
 </pre>
+
+===known bugs===
+*gnome-screensaver seems to start more and more instances of openttd, after shortish intervals, eventually making the screen a flickering mess
+*the script is usually terminated while openttd is still running, and can not do its cleanup (rm /tmp/openttd.cfg)
 
 ==patching <tt>xdpyinfo</tt>==
 <tt>xdpyinfo</tt> needs to be patched to display the ''virtual'' root window ID.  This has been done and the patch (against 1.0.1) follows.  You need to pass <tt>-p1</tt> to patch to strip the first directory (<tt>man patch</tt>).
