@@ -1,7 +1,7 @@
-This page will explain how to set up openttd as a screensaver for your xserver.  <tt>xscreensaver</tt> and <tt>gnome-screensaver</tt> invoke screensavers in similar ways.  A candidate screensaver needs to be able to target its video output at the correct 'X11 window'.  Detecting which x11 window to use is simple for the preview mode (embedded in the <tt>xscreensaver</tt>/<tt>gnome-screensaver</tt> window), but to correctly embed in the ''virtual'' root window (when testing the screensaver in full-screen mode, or running it properly) requires a [[#patched-xdpyinfo|patch to <tt>xdpyinfo</tt>]], which is provided.  To detect the dimensions of the window in which to embed requires <tt>xwininfo</tt>.  A [[#gnome-screensaver-config-file|<tt>gnome-screensaver</tt> configuration file]] is also provided.
+This page will explain how to set up openttd as a screensaver for your xserver.  <tt>xscreensaver</tt> and <tt>gnome-screensaver</tt> invoke screensavers in similar ways.  A candidate screensaver needs to be able to target its video output at the correct 'X11 window'.  Detecting which x11 window to use is simple for the preview mode (embedded in the <tt>xscreensaver</tt>/<tt>gnome-screensaver</tt> window), but to correctly embed in the ''virtual'' root window (when testing the screensaver in full-screen mode, or running it properly) requires a [[#patching-xdpyinfo|patch to <tt>xdpyinfo</tt>]], which is provided.  To detect the dimensions of the window in which to embed requires <tt>xwininfo</tt>.  A [[#gnome-screensaver-config-file|<tt>gnome-screensaver</tt> configuration file]] is also provided.
 
 ==using an SDL application as a screensaver==
-SDL supports an environment variable, <tt>SDL_WINDOWID</tt>, which allows you to direct the SDL application's video output to the chosen X11 window ID.  The shell utility [[#patched-xdpyinfo|<tt>xdpyinfo</tt> (patched)]] allows you to detect the virtual root window and <tt>xwininfo</tt> allows you to detect its dimensions (for passing as arguments or environment variables to your SDL app.).  The SDL screensaver wrapper-script prototype follows.
+SDL supports an environment variable, <tt>SDL_WINDOWID</tt>, which allows you to direct the SDL application's video output to the chosen X11 window ID.  The shell utility [[#patching-xdpyinfo|<tt>xdpyinfo</tt> (patched)]] allows you to detect the virtual root window and <tt>xwininfo</tt> allows you to detect its dimensions (for passing as arguments or environment variables to your SDL app.).  The SDL screensaver wrapper-script prototype follows.
 <pre>
 #!/bin/bash
 
@@ -66,12 +66,11 @@ fi
 
 export WIDTH=`xwininfo -id $SDL_WINDOWID | grep "Width:" | sed 's/ //g' | cut -f2 -d':'`
 export HEIGHT=`xwininfo -id $SDL_WINDOWID | grep "Height:" | sed 's/ //g' | cut -f2 -d':'`
-echo $WIDTH $HEIGHT
 OPENTTD_OPTS="$OPENTTD_OPTS -r $WIDTH\x$HEIGHT"
 $OPENTTD_BINDIR$OPENTTD_FILENAME $OPENTTD_OPTS;
 </pre>
 
-==patched <tt>xdpyinfo</tt>==
+==patching <tt>xdpyinfo</tt>==
 <tt>xdpyinfo</tt> needs to be patched to display the ''virtual'' root window ID.  This has been done and the patch (against 1.0.1) follows.  You need to pass <tt>-p1</tt> to patch to strip the first directory (<tt>man patch</tt>).
 <pre>
 diff -urN xdpyinfo-1.0.1/AUTHORS xdpyinfo-1.0.2/AUTHORS
@@ -267,7 +266,7 @@ diff -urN xdpyinfo-1.0.1/xdpyinfo.c xdpyinfo-1.0.2/xdpyinfo.c
 </pre>
 
 ==gnome-screensaver config file==
-You need to place the [[#using-openttd-as-a-screensaver|openttd screensaver wrapper-script]], or a symbolic link to it, in <tt>/usr/libexec/gnome-screensaver/</tt> (for Gentoo).  Call it something like <tt>openttd_screensaver</tt>, but remember the name used.  The config-file which follows needs to be called something like <tt>openttd.desktop</tt> and placed in <tt>/usr/share/gnome-screensaver/themes/</tt> (on Gentoo).  Change the appearance of <tt>openttd_screensaver</tt> in the script, if you did not use the same name.
+You need to place the [[#using-openttd-as-a-screensaver|openttd screensaver wrapper-script]], or a symbolic link to it, in <tt>/usr/libexec/gnome-screensaver/</tt> (for Gentoo).  Call it something like <tt>openttd_screensaver</tt>, but remember the name used.  The config-file which follows needs to be called something like <tt>openttd.desktop</tt> and placed in <tt>/usr/share/gnome-screensaver/themes/</tt> (on Gentoo).  Change the appearances of <tt>openttd_screensaver</tt> in the script, if you did not use the same name.
 
 <pre>
 [Desktop Entry]
