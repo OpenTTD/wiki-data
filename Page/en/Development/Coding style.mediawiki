@@ -51,57 +51,66 @@ const uint WingSpan[BIRD_END] = {
 </pre>
 **Only add an INVALID_BIRD if appriopriate
 * Use enums instead of #define
-* Tab size is 2 spaces. Never use spaces as indentation at the beginning of the line. Never use tabs as indentation as the end of a line (to align comments)
+* Tab size is 2 spaces. Never use spaces as indentation at the beginning of the line. Never use tabs as indentation as the end of a line (to align comments). In next example, left are tabs, rest are spaces.
+<pre>
+  typedef enum Birds {
+    BIRD_HAWK                 // The pretty hawk
+    BIRD_DUCK                 // The ugly duck
+    BIRD_GOOSE                // The white goose
+    BIRD_END,                 // End of times
+    INVALID_BIRD = 0xFF       // There was no bird
+  } Bird;
+</pre>
 * Style for if, both in the case of single or multiple line if/else statements:
 <pre>
- if (a == b) {
-   foo();
- } else {
-   bar();
- }
+  if (a == b) {
+    foo();
+  } else {
+    bar();
+  }
 </pre>
 : Alternatively, only a single statement following if without an else case:
 <pre>
- if (a == b) foo();
+  if (a == b) foo();
 </pre>
 
-* don't treat non-flags as flags: if (char_pointer != NULL && *char_pointer != '\0') instead of if (char_pointer && *char_pointer)
+* Don't treat non-flags as flags: if (char_pointer != NULL && *char_pointer != '\0') instead of if (char_pointer && *char_pointer)
 
-* put a space before and after binary operators: a + b, a == b, a & b, a <<= b, etc.. Exceptions are ".", "->" and "[]" (no spaces) and "," (just space after it)
+* Put a space before and after binary operators: a + b, a == b, a & b, a <<= b, etc.. Exceptions are ".", "->" and "[]" (no spaces) and "," (just space after it)
 
-* put brackets where it improves readability: *(b++) instead of *b++.
+* Put brackets where it improves readability: *(b++) instead of *b++.
 
-* space after "for", "if", "switch" and "while"
+* Space after "for", "if", "switch" and "while"
 
-* style for switches:
+* Style for switches:
 <pre>
-switch (a) {
-  case 0: dosomethingshort; break;
-  case 1:
-    domore();
-    b = a;
-    break;
-  case 2: {
-    int q = 345;
-    doit();
-  } break;
-}
+  switch (a) {
+    case 0: dosomethingshort; break;
+    case 1:
+      domore();
+      b = a;
+      break;
+    case 2: {
+      int q = 345;
+      doit();
+    } break;
+  }
 </pre>
 
-* style for loops:
+* Style for loops:
 <pre>
-for (i = 0; i != 10; i++) {
-  bla;
-  bla;
-}
+  for (i = 0; i != 10; i++) {
+    bla;
+    bla;
+  }
 </pre>
 
 * { for a function starts at the second line.
 <pre>
-      FunctionsLookLikeThis(int i_am_a_variable)
-      {
-        code...
-      }
+FunctionsLookLikeThis(int i_am_a_variable)
+{
+  code...
+}
 </pre>
 * Avoid trailing whitespace. That is, tabs or space on the end of line should never occur. The svn server will not allow patches with traling whitespace applied. To find out if/where you have trailing whitespace, you could use the following (unix/bash) command:
 <pre>grep -n -R --include "*.[ch]" '[ 	]$' * | grep --invert-match ".diff" | grep --invert-match ".patch"</pre>
