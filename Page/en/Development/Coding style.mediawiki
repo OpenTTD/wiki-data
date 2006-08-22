@@ -7,13 +7,13 @@ To achieve a coherent whole, here are some guidelines for the coding style used 
 * FunctionsLookLikeThis()
 * Variable names/structure members are all lowercase, and may also contain _
 * Variables are declared at the beginning of a block { }, as specified in ANSI-C89
-** Never declare variables halfway a function or other block. This is especially for coders using gcc, since gcc won't complain, but MSVC does. Up till now, I have not found an option in MSVC to allow it, nor an option in gcc to forbid/warn for it. Starting from gcc >= 3.4, it does give a warning (automatically enabled by the Makefile).
+** Never declare variables halfway a function or other block. This is especially for coders using gcc, since gcc only gives a warning, but MSVC gives an error.
 * Local variable names should be short
 * StructsLookLikeThis and get typedefed:
 <pre>
- typedef struct foo {
+ typedef struct FooBar {
    // stuff
- } foo;
+ } FooBar;
 </pre>
 * Global variables start with a _
 * Use 'const' and 'static' when possible
@@ -31,9 +31,9 @@ enum {
 * Stricter enums should be used for more closely related sequences and should be typedeffed if they are used as the contents of an array, return value, parameter type or variable type:
 <pre>
   typedef enum Birds {
-    BIRD_HAWK    = 0,
-    BIRD_DUCK    = 1,
-    BIRD_GOOSE   = 2,
+    BIRD_HAWK
+    BIRD_DUCK
+    BIRD_GOOSE
     BIRD_END,
     INVALID_BIRD = 0xFF
   } Bird;
@@ -51,7 +51,7 @@ const uint WingSpan[BIRD_END] = {
 </pre>
 **Only add an INVALID_BIRD if appriopriate
 * Use enums instead of #define
-* Tab size is 2 spaces. Never use spaces as indentation.
+* Tab size is 2 spaces. Never use spaces as indentation at the beginning of the line. Never use tabs as indentation as the end of a line (to align comments)
 * Style for if, both in the case of single or multiple line if/else statements:
 <pre>
  if (a == b) {
@@ -69,7 +69,32 @@ const uint WingSpan[BIRD_END] = {
 
 * put a space before and after binary operators: a + b, a == b, a & b, a <<= b, etc.. Exceptions are ".", "->" and "[]" (no spaces) and "," (just space after it)
 
+* put brackets where it improves readability: *(b++) instead of *b++.
+
 * space after "for", "if", "switch" and "while"
+
+* style for switches:
+<pre>
+switch (a) {
+  case 0: dosomethingshort; break;
+  case 1:
+    domore();
+    b = a;
+    break;
+  case 2: {
+    int q = 345;
+    doit();
+  } break;
+}
+</pre>
+
+* style for loops:
+<pre>
+for (i = 0; i != 10; i++) {
+  bla;
+  bla;
+}
+</pre>
 
 * { for a function starts at the second line.
 <pre>
