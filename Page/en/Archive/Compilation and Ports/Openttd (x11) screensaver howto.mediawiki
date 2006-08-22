@@ -53,9 +53,9 @@ The openttd screensaver wrapper-script follows.  It passes the detected width an
 # copyright (C) 2006 Eugene St Leger (GrimRC)
 # Distributed under the terms of the GNU General Public License v2
 
-# Openttd screensaver wrapper-script version 7
+# Openttd screensaver wrapper-script version 8
 
-# known bug: gnome-screensaver 2.14.2 loads multiple instances of openttd; xscreensaver seems fine in this regard
+# known bug: gnome-screensaver's (2.14.2) preview mode shows openttd properly but then fails to show other screensavers properly (not serious)
 
 # these tests allow you to pass these options as environment variables to this script
 if test -z $OPENTTD_BINDIR; then OPENTTD_BINDIR="/usr/games/bin/"; fi
@@ -97,7 +97,7 @@ fi
 </pre>
 
 ===known bugs===
-*<tt>gnome-screensaver</tt> (2.14.2) seems to start more and more instances of openttd, after shortish intervals, eventually making the screensaver a flickering mess; <tt>xscreensaver</tt> seems fine in this regard, though
+*<tt>gnome-screensaver</tt> (2.14.2) has a minor problem in preview mode, where if openttd has been previewed (which works) then it can't preview any other screensavers until it's restarted; possibly a minor bug in <tt>gnome-screensaver</tt> itself
 
 ==patching <tt>xdpyinfo</tt>==
 <tt>xdpyinfo</tt> needs to be patched to display the ''virtual'' root window ID.  This has been done and the patch (against 1.0.1) follows.  You need to pass <tt>-p1</tt> to patch to strip the first directory (<tt>man patch</tt>).
@@ -311,7 +311,7 @@ openttd game
 </pre>
 
 ==<tt>gnome-screensaver</tt> config file==
-[[#known-bugs|See known bugs]].  You need to place the [[#using-openttd-as-a-screensaver|openttd screensaver wrapper-script]], or a symbolic link to it, in <tt>/usr/libexec/gnome-screensaver/</tt> (for Gentoo).  Call it something like <tt>openttd_screensaver</tt>, but remember the name used.  The config-file which follows needs to be called something like <tt>openttd.desktop</tt> and placed in <tt>/usr/share/gnome-screensaver/themes/</tt> (on Gentoo).  Change the appearances of <tt>openttd_screensaver</tt> in the script, if you did not use the same name.
+[[#known-bugs|See known bug]].  You need to place the [[#using-openttd-as-a-screensaver|openttd screensaver wrapper-script]], or a symbolic link to it, in <tt>/usr/libexec/gnome-screensaver/</tt> (for Gentoo).  Call it something like <tt>openttd_screensaver</tt>, but remember the name used.  The config-file which follows needs to be called something like <tt>openttd.desktop</tt> and placed in <tt>/usr/share/gnome-screensaver/themes/</tt> (on Gentoo).  Change the appearances of <tt>openttd_screensaver</tt> in the script, if you did not use the same name.
 
 <pre>
 [Desktop Entry]
@@ -332,7 +332,7 @@ Categories=GNOME;Screensaver;
 </pre>
 
 ==ToDo==
-*fix [[#known-bugs|bugs]]
+*fix [[#known-bugs|bug]]
 *get the [[#using-openttd-as-a-screensaver|openttd screensaver wrapper-script]] included in Gentoo openttd ebuild or openttd distribution itself
 *hack openttd so it doesn't display the menu when running as a screensaver
 *add more openttd console commands so a script can run and do things like load games, pan the camera around, etc. (maybe even join a network game as a spectator)?
