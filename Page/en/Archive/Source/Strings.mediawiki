@@ -25,16 +25,12 @@ In the table below you will find most of them
 |-
 | '''Numbers''' || Show numbers.
 <pre>
-{COMMA32}        - show an int32 number (with comma as thousands separator)                      
-{COMMA16}        - show an int16 number (with comma as thousands separator)
-{COMMA8}         - show an int8  number (with comma as thousands separator)
-{NUMU16}         - show an int16 number (without separator)
-                                       //only {COMMA} works correctly at the moment for numbers//
+{COMMA}          - show a 32bit signed integer number with commata as thousands separator
+{NUM}            - show a 32bit signed integer number without thousands separator
+
 {CURRENCY}       - number as a currency, eg € 230,000
-{NUM}            - show an int number
 
 {CURRCOMPACT}    - short version of currency (used in graphs)
-{INT32}          - show an int32   number
 {REV}            - openttd revision string
 {SHORTCARGO}     - short cargo description, only ### tons, or ### litres
 
@@ -42,20 +38,20 @@ In the table below you will find most of them
 {DATE_LONG}      - long date version, eg 25th February 2004
 {DATE_SHORT}     - short date version, eg February 2004
 {VELOCITY}       - speed of vessel, eg 120km/h or 195mph
-{SKIP16}         - skip a parameter
 {SKIP}           - skip a parameter
 {VOLUME}         - show number as a volume, eg 1,000 litres
 {STRING}         - get the string pointed to by this index
 {CARGO}          - show number as cargo, eg 950 tonnes
 {STATION}        - get the station-name pointed to by this index
 {TOWN}           - get the town-name pointed to by this index
-{CURRENCY64}     - show the uint64 amount of money (no overflow)
+{CURRENCY64}     - show a 64bit signed integer amount of money (no overflow)
 {WAYPOINT}       - get the waypoint-name pointed to by this index
 </pre>
 |-
 | '''Special characters''' || Show special characters, icons.
 <pre>
 {UPARROW}        - ↑
+{NBSP}           - non-breaking space
 {POUNDSIGN}      - £
 {YENSIGN}        - ¥
 {COPYRIGHT}      - ©
@@ -65,13 +61,12 @@ In the table below you will find most of them
 {RIGHTARROW}     - →
 {SMALLUPARROW}   - small ↑
 {SMALLDOWNARROW} - small ↓
-{THREE_FOURTH}   - ¾
 </pre>
 |}
 
 ==How to use these?==
 As you have seen before, you have to put these special modifiers into the string itself. Let us revisit the above example:
-<pre>STR_01A1_IS_GETTING_VERY_OLD			:{WHITE}{STRING} {COMMA16} is getting very old</pre>
+<pre>STR_01A1_IS_GETTING_VERY_OLD			:{WHITE}{STRING} {COMMA} is getting very old</pre>
 Both "STRING" and "COMMA" are variables. You set them up by calling the appropiate '''"SetDParam(uint n, uint32 v)"''' function. So for this one you would do:
 <pre>SetDParam(0, _vehicle_type_names[v->type - 0x10]);
 SetDParam(1, v->unitnumber);</pre>
