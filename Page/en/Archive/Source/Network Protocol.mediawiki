@@ -163,7 +163,15 @@ Some information:
 | PACKET_SERVER_GAME_INFO
 | Sends info about the server
 |
-  - Uint8: Version of this GAME_INFO packet (current version is 1)
+  - Uint8: Version of this GAME_INFO packet (current version is 3)
+    From version 3:
+  - Uint32: Current game date
+  - Uint32: Start date
+    From version 2:
+  - Uint8: Maximum number of companies
+  - Uint8: Current number of companies
+  - Uint8: Maximum number of spectators
+    From version 1:
   - String: The servername
   - String: The revision of the server (norev000 if not supported)
   - Uint8: The LangaugeID of the server
@@ -171,11 +179,13 @@ Some information:
   - Uint8: Max allowed clients on the server
   - Uint8: Current clients
   - Uint8: Current spectators
-  - Uint16: Current game-date of the server
+  - Uint16: Current game-date of the server (pre-version 3 only)
+  - Uint16: Start date of the game (pre-version 3 only)
   - String: Name of the current map (Random is random)
   - Uint16: Width of the map
   - Uint16: Height of the map
   - Uint8: Set of the map (0..3)
+  - Uint8: Set if the server is dedicated
 |-
 | PACKET_SERVER_ERROR
 | The client, who receives this message, made an error
