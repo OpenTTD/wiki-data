@@ -1,7 +1,7 @@
-This page will explain how to set up openttd as a screensaver for your xserver.  <tt>xscreensaver</tt> and <tt>gnome-screensaver</tt> invoke screensavers in (fairly) similar ways.  A candidate screensaver needs to be able to target its video output at the correct 'X11 window'.  Detecting which x11 window to use is simple for the preview mode (when embedding in the <tt>xscreensaver</tt>/<tt>gnome-screensaver</tt> preview window) but to correctly embed in the ''virtual'' root window (when testing the screensaver in full-screen mode, or running it properly) requires a [[#patching-xdpyinfo|patch to <tt>xdpyinfo</tt>]].  To detect the dimensions of the window in which to embed requires <tt>xwininfo</tt>.  [[#gnome-screensaver-config-file|<tt>gnome-screensaver</tt>]] and [[#xscreensaver-config-file|<tt>xscreensaver</tt>]] config files are also provided.  A [http://bugs.openttd.org/task/306 patch for openttd (against version R6159)] allows GUI elements to be hidden, but is not strictly necessary.
+This page will explain how to set up openttd as a screensaver for your xserver.  <tt>xscreensaver</tt> and <tt>gnome-screensaver</tt> invoke screensavers in (fairly) similar ways.  A candidate screensaver needs to be able to target its video output at the correct '<tt>x11</tt> window'.  Detecting which <tt>x11</tt> window to use is simple for the preview mode (when embedding in the <tt>xscreensaver</tt>/<tt>gnome-screensaver</tt> preview window) but to correctly embed in the ''virtual'' root window (when testing the screensaver in full-screen mode, or running it properly) requires a [[#patching-xdpyinfo|patch to <tt>xdpyinfo</tt>]].  To detect the dimensions of the window in which to embed requires <tt>xwininfo</tt>.  [[#gnome-screensaver-config-file|<tt>gnome-screensaver</tt>]] and [[#xscreensaver-config-file|<tt>xscreensaver</tt>]] config files are also provided.  A [http://bugs.openttd.org/task/306 patch for openttd (against version R6159)] allows GUI elements to be hidden, but is not strictly necessary.
 
 ==using an SDL application as a screensaver==
-[[#known-bugs|See known bugs for the openttd screensaver wrapper-script]] as they probably apply to the following script.  SDL supports an environment variable, <tt>SDL_WINDOWID</tt>, which allows you to direct the SDL application's video output to the chosen X11 window ID.  The shell utility [[#patching-xdpyinfo|<tt>xdpyinfo</tt> (patched)]] allows you to detect the virtual root window and <tt>xwininfo</tt> allows you to detect its dimensions (for passing as arguments or environment variables to your SDL app.).  The SDL screensaver wrapper-script ''prototype'' follows.
+SDL supports an environment variable, <tt>SDL_WINDOWID</tt>, which allows you to direct the SDL application's video output to the chosen x11 window ID.  The shell utility [[#patching-xdpyinfo|<tt>xdpyinfo</tt> (patched)]] allows you to detect the virtual root window and <tt>xwininfo</tt> allows you to detect its dimensions (for passing as arguments or environment variables to your SDL app.).  The SDL screensaver wrapper-script ''prototype'' follows.
 
 <pre>
 #!/bin/bash
@@ -45,7 +45,7 @@ wait $SDLPROG_PID;
 </pre>
 
 ==using openttd as a screensaver==
-The openttd screensaver wrapper-script follows.  It passes the detected width and height of the window to openttd with <tt>-r</tt>.  This script needs to be called by a screensaver-manager; for example, [[#xscreensaver-config-file|<tt>xscreensaver</tt>]] or [[#gnome-screensaver-config-file|<tt>gnome-screensaver</tt>]].  The sound and music are muted by the script by passing options to openttd.  You can add the -g option to make openttd immediately load a savegame (such as the intro 'savegame', in data/opntitle.dat).  To hide the GUI elements properly, you'll need a [http://bugs.openttd.org/task/306 recent, patched, version of openttd].
+The openttd screensaver wrapper-script follows.  It passes the detected width and height of the window to openttd with <tt>-r</tt>.  This script needs to be called by a screensaver-manager; for example, [[#xscreensaver-config-file|<tt>xscreensaver</tt>]] or [[#gnome-screensaver-config-file|<tt>gnome-screensaver</tt>]].  The sound and music are muted by the script by passing options to openttd.  You can add the -g option to make openttd immediately load a savegame (such as the intro 'savegame', in data/opntitle.dat).  To hide the GUI elements properly, you'll need a [http://bugs.openttd.org/task/306 patched version of openttd].
 
 <pre>
 #!/bin/bash
@@ -53,9 +53,7 @@ The openttd screensaver wrapper-script follows.  It passes the detected width an
 # copyright (C) 2006 Eugene St Leger (GrimRC)
 # Distributed under the terms of the GNU General Public License v2
 
-# Openttd screensaver wrapper-script version 8
-
-# known bug: gnome-screensaver's (2.14.2) preview mode shows openttd properly but then fails to show other screensavers properly (not serious)
+# Openttd screensaver wrapper-script version 9
 
 # these tests allow you to pass these options as environment variables to this script
 if test -z $OPENTTD_BINDIR; then OPENTTD_BINDIR="/usr/games/bin/"; fi
@@ -97,7 +95,7 @@ fi
 </pre>
 
 ===known bugs===
-*<tt>gnome-screensaver</tt> (2.14.2) has a minor problem in preview mode, where if openttd has been previewed (which works) then it can't preview any other screensavers until it's restarted; possibly a minor bug in <tt>gnome-screensaver</tt> itself
+*none
 
 ==patching <tt>xdpyinfo</tt>==
 <tt>xdpyinfo</tt> needs to be [http://bugs.freedesktop.org/show_bug.cgi?id=7968 patched] to display the ''virtual'' root window ID.  You need to pass <tt>-p1</tt> to <tt>patch</tt> to strip the first directory (<tt>man patch</tt>).
@@ -119,7 +117,7 @@ openttd game
 </pre>
 
 ==<tt>gnome-screensaver</tt> config file==
-[[#known-bugs|See known bug]].  You need to place the [[#using-openttd-as-a-screensaver|openttd screensaver wrapper-script]], or a symbolic link to it, in <tt>/usr/libexec/gnome-screensaver/</tt> (for Gentoo).  Call it something like <tt>openttd_screensaver</tt>, but remember the name used.  The config-file which follows needs to be called something like <tt>openttd.desktop</tt> and placed in <tt>/usr/share/gnome-screensaver/themes/</tt> (on Gentoo).  Change the appearances of <tt>openttd_screensaver</tt> in the script, if you did not use the same name.
+You need to place the [[#using-openttd-as-a-screensaver|openttd screensaver wrapper-script]], or a symbolic link to it, in <tt>/usr/libexec/gnome-screensaver/</tt> (for Gentoo).  Call it something like <tt>openttd_screensaver</tt>, but remember the name used.  The config-file which follows needs to be called something like <tt>openttd.desktop</tt> and placed in <tt>/usr/share/gnome-screensaver/themes/</tt> (on Gentoo).  Change the appearances of <tt>openttd_screensaver</tt> in the script, if you did not use the same name.
 
 <pre>
 [Desktop Entry]
@@ -140,7 +138,7 @@ Categories=GNOME;Screensaver;
 </pre>
 
 ==ToDo==
-*fix [[#known-bugs|bug]]
+*rewrite openttd patch to better fit game engine and extend functionality to screensaver/screenshot/demo mode
 *get the [[#using-openttd-as-a-screensaver|openttd screensaver wrapper-script]] included in Gentoo openttd ebuild or openttd distribution itself
 *create an screensaver.scr script to make openttd load games, pan the camera, and maybe even join network games
 *create a decent [[#xscreensaver-config-file|<tt>.xml</tt> file for <tt>xscreensaver</tt>]] and improve the [[#using-openttd-as-a-screensaver|openttd screensaver wrapper-script]] so that <tt>xscreensaver-demo</tt> can be used to pass parameters to openttd
