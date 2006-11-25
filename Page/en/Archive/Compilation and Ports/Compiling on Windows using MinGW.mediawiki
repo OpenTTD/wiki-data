@@ -13,21 +13,22 @@ LKRaider has made a package that automates some steps of this tutorial. Check it
 * Source tested: OTTD SVN.
 * Packages used here:
 ** [http://prdownloads.sf.net/mingw/MSYS-1.0.11-2004.04.30-1.exe?download MSYS-1.0.11]
-** [http://prdownloads.sf.net/mingw/MinGW-5.0.2.exe?download MinGW-5.0.2] (get this updated [http://www.tt-forums.net/download.php?id=46800 mingw.ini] file)
+** [http://prdownloads.sf.net/mingw/MinGW-5.1.0.exe?download MinGW-5.1.0] (get this updated [http://www.tt-forums.net/download.php?id=46800 mingw.ini] file)
 *** binutils-2.16.91-20060119-1
 *** gcc-core-3.4.5-20060117-1
 *** gcc-g++-3.4.5-20060117-1
-*** mingw-runtime-3.9
-*** w32api-3.6
+*** mingw-runtime-3.11
+*** w32api-3.8
+** wget-1.9.1 (from [http://prdownloads.sf.net/mingw/wget-1.9.1-mingwPORT.tar.bz2?download mingwPORT] or [ftp://ftp.gnu.org/gnu/wget/wget-1.9.1.tar.gz sources]) -> Needed to install mingwPORTs
 ** zlib-1.2.3 (from [http://prdownloads.sf.net/mingw/zlib-1.2.3-mingwPORT-1.tar.bz2?download mingwPORT] or [http://prdownloads.sourceforge.net/libpng/zlib-1.2.3.tar.gz?download sources])
 ** libpng-1.2.8 (from [http://prdownloads.sf.net/mingw/libpng-1.2.8-mingwPORT.tar.bz2?download mingwPORT] or [http://prdownloads.sourceforge.net/libpng/libpng-1.2.8.tar.bz2?download sources])
 ** Directx 9.0c DevPak ( from http://www.g-productions.net/ ) -> Optional: only if you want DirectX music support
 * Others
-** [http://subversion.tigris.org/files/documents/15/32473/svn-win32-1.3.2.zip SVN], to retrieve latest OTTD code.
+** [http://subversion.tigris.org/downloads/svn-win32-1.4.2.zip SVN], to retrieve latest OTTD code.
 ** SDL will not be used here.
 
 ==Setting up MinGW==
-# Copy the updated mingw.ini to the folder you downloaded the MinGW 5.0.2 install and un it.
+# Unzip the updated mingw.ini to the folder you downloaded the MinGW 5.1.0 install.
 # On the install, select <i>Candidate</i>, then select the <i>Minimal install</i> plus the <i>g++ compiler</i>.
 # Run the MSYS install.
 #* You will see the following messages after GUI:
@@ -39,21 +40,31 @@ LKRaider has made a package that automates some steps of this tutorial. Check it
 ==Setting up MSYS==
 # Copy these files to your user folder: <u>.inputrc</u> , <u>.profile</u> and <u>get latest openttd.sh</u>. All three are included in this [http://www.tt-forums.net/download.php?id=47131 zip package].
 
+==Install SVN==
+# Unzip the folders <i>bin</i>, <i>iconv</i>, <i>licenses</i>, <i>share</i> from the SVN zip file and place into /usr/local
+
 ==Testing the MinGW installation==
 * Run MSYS.
 * Run the following commands.{{en/Box|make -v<br>gcc -v<br>svn help}}
 * They should output something.  Check if something goes wrong.
 
-==Compiling zlib==
-# Extract the mingwPORT code to a folder (ex: /home ), it will create a zlib-1.2.3 folder.
+==Compiling wget==
+# Place <b>wget-1.9.1-mingwPORT.tar.bz2</b> in a folder (ex: /home )
 # Start MSYS.
-# Run: {{en/Box|mkdir /usr/src<br>cd /home/zlib-1.2.3/mingwPORT<br>./mingwPORT.sh}} Answer the questions by just pressing enter.
+# Make sure you are in the same directory where you placed the file and Run: {{en/Box|tar -xvjf wget-1.9.1-mingwPORT.tar.bz2<br>mkdir -p /usr/local/bin<br>cd wget-1.9.1/mingwPORT<br>cp wget.exe /usr/local/bin<br>mkdir /usr/src<br>./mingwPORT.sh}} Answer the questions by pressing enter.
+# It will download wget sources, compile and install them for you.
+# Remove the temporary wget: {{en/Box|rm /usr/local/bin/wget.exe}}
+
+==Compiling zlib==
+# Place <b>zlib-1.2.3-mingwPORT-1.tar.bz2</b> in a folder (ex: /home )
+# Start MSYS.
+# Make sure you are in the same directory where you placed the file and Run: {{en/Box|tar -xvjf zlib-1.2.3-mingwPORT-1.tar.bz2<br>mkdir /usr/src<br>cd zlib-1.2.3/mingwPORT<br>./mingwPORT.sh}} Answer the questions by just pressing enter.
 # It will download zlib sources, compile and install them for you.
 
 ==Compiling pnglib==
-# Extract the mingwPORT code to a folder (ex: /home ), it will create a libpng-1.2.8 folder.
+# Place <b>libpng-1.2.8-mingwPORT.tar.bz2</b> in a folder (ex: /home )
 # Start MSYS.
-# Run: {{en/Box|mkdir /usr/src<br>cd /home/libpng-1.2.8/mingwPORT<br>./mingwPORT.sh}} Answer the questions by just pressing enter.
+# Make sure you are in the same directory where you placed the file and Run: {{en/Box|tar -xvjf libpng-1.2.8-mingwPORT.tar.bz2<br>mkdir /usr/src<br>cd /home/libpng-1.2.8/mingwPORT<br>./mingwPORT.sh}} Answer the questions by just pressing enter.
 # It will download pnglib sources, compile and install them for you.
 
 ==Setup DirectX==
