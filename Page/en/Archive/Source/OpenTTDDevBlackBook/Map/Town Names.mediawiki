@@ -144,9 +144,9 @@ This is the core of the system. There are several functions available to assist 
 
 The first thing you need to do is null-terminate the "buf" character array. This is easily done by:
 <pre>
-strcpy(buf, "");
+strecpy(buf, "", last);
 </pre>
-If this step is omitted, openttd will hang/crash on the strcat function as this relies on being able to find the end of the string by searching for a "\0" which it will never find.
+If this step is omitted, openttd will hang/crash on the strecat function as this relies on being able to find the end of the string by searching for a "\0" which it will never find.
 
 ===The SeedChance Function===
 This function takes 3 arguments. The first determines how many bits the "seed" integer should be shifted by. This seed is unique to a town and functions as a random number in this context. The bit-shifting allows for different parts of the seed to be used. The second argument determines what the maximum number generated should be. If this argument is 15 for example, then the number generated will be between 0 and 15. The third argument is the seed itself.
@@ -158,7 +158,7 @@ if (SeedChance(0,6,seed) == 0) { ... }
 
 If you wanted to add any string in the array name_finnish_1[] then:
 <pre>
-strcat(buf, name_finnish_1[SeedChance( 2, lengthof(name_finnish_1), seed)]);
+strecat(buf, name_finnish_1[SeedChance( 2, lengthof(name_finnish_1), seed)], last);
 </pre>
 This concatenates any string with the index 0 - lengthof(name_finnish_1) to the buffer.
 
