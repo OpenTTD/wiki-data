@@ -23,17 +23,17 @@ All data concerned with town name generation is stored in the header file "table
 ==="namegen.c"===
 The actual generation is performed within "namegen.c". For any given language, we need a function like this:
 <pre>
-static byte MakeFinnishTownName(char *buf, uint32 seed)
+static byte MakeFinnishTownName(char *buf, uint32 seed, const char *last)
 {
 	//null terminates the string for strcat
-	strcpy(buf, "");
+	strecpy(buf, "", last);
 
 	// Select randomly if town name should consists of one or two parts.
 	if (SeedChance(0, 15, seed) >= 10) {
-		strcat(buf, name_finnish_1[SeedChance( 2, lengthof(name_finnish_1), seed)]);
+		strecat(buf, name_finnish_1[SeedChance( 2, lengthof(name_finnish_1), seed)], last);
 	} else {
-		strcat(buf, name_finnish_2a[SeedChance( 2, lengthof(name_finnish_2a), seed)]);
-		strcat(buf, name_finnish_2b[SeedChance(10, lengthof(name_finnish_2b), seed)]);
+		strecat(buf, name_finnish_2a[SeedChance( 2, lengthof(name_finnish_2a), seed)], last);
+		strecat(buf, name_finnish_2b[SeedChance(10, lengthof(name_finnish_2b), seed)], last);
 	}
 
 	return 0;
