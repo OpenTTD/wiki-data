@@ -1,67 +1,62 @@
-[[Category:en/Development/Compiling OpenTTD]]
-[[Category:en/Archive/Program Descriptions]]
-
 This article gets you started on compiling OpenTTD using Microsoft Visual C++ 2005 Express Edition.
 
+==Step 1: Required software==
 
-===Step 1: Ingredients===
-Download the following files:
+Download the following packages:
 
-*[http://msdn.microsoft.com/vstudio/express/visualC/default.aspx MVCE 2005] (From Microsoft, free)
-*[http://www.microsoft.com/downloads/details.aspx?FamilyId=A55B6B43-E24F-4EA3-A93E-40C0EC4F68E5&displaylang=en Microsoft Platform SDK] (This version certainly works. If you would like to try a more recent version follow the link to related downloads and report on succes here)
-*[http://sourceforge.net/project/showfiles.php?group_id=103924&package_id=114307 Openttd-useful.zip]
-*[http://neuron.tuke.sk/~mizanin/eng/Dx81sdk-include-lib.rar DirectX 8.1 SDK]
-*[http://www-d0.fnal.gov/d0dist/dist/packages/d0ve/devel/windows/AFXRES.H afxres.h]
+* [http://msdn.microsoft.com/vstudio/express/visualC/default.aspx MVCE 2005] (From Microsoft, free)
+* [http://www.microsoft.com/downloads/details.aspx?FamilyId=A55B6B43-E24F-4EA3-A93E-40C0EC4F68E5&displaylang=en Microsoft Platform SDK]
+** This version certainly works. If you would like to try a more recent version follow the link to related downloads and report on succes here.
+* [http://sourceforge.net/project/showfiles.php?group_id=103924&package_id=114307 Openttd-useful.zip]
+* [http://neuron.tuke.sk/~mizanin/eng/Dx81sdk-include-lib.rar DirectX 8.1 SDK]
+* [http://www-d0.fnal.gov/d0dist/dist/packages/d0ve/devel/windows/AFXRES.H afxres.h]
 
+...and of course the newest source from [svn://svn.openttd.org/trunk the trunk]. You have to have a SVN-client to download the source. Pick either of the following two. For SVN novices TortoiseSVN is highly recommended:
 
-...and of course the newest source from svn://svn.openttd.org/trunk
+* [http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=91 Command line version (Subversion 1.3.2 Win32 binaries)]
+* [http://tortoisesvn.tigris.org/download.html GUI TortoiseSVN]
 
-You have to have a SVN-client to download the source. Pick either of the following two. For SVN novices TortoiseSVN is highly recommended:
-*[http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=91 Command line version (Subversion 1.3.2 Win32 binaries)]
-*[http://tortoisesvn.tigris.org/download.html GUI TortoiseSVN]
+==Step 2: Installing==
 
-===Step 2: Installing===
-* Install MVCE 2005
-* Install the Microsoft Platform SDK
+* Install Microsoft Visual C++ 2005 Express Edition
+* Install Microsoft Platform SDK
 * Follow step 3 and 4 of the [http://msdn.microsoft.com/vstudio/express/visualc/usingpsdk/ installation instructions for the SDK] (If you have questions on instruction 3, take a look further down this page at step 5.)
 
-===Step 3: Includes and Libraries===
-Put the newly downloaded files in the VC lib and include directories
-(Where "C:\Program Files\Microsoft Visual Studio 8\VC" is your local location of VC)
+==Step 3: Setting up includes and libraries==
 
-* ft2build.h            [useful.zip]
-* freetype/*            [useful.zip] - be sure this is ends up in "freetype" subdir of the include directory
-* zconf.h		[useful.zip]
-* zlib.h		[useful.zip]
-* png.h			[useful.zip]
-* pngconf.h		[useful.zip]
-* afxres.h
+Place the files you downloaded in the lib and include directories of MS Visual C++ 2005 Express Edition. 
 
-in
+PATH is your local location of MS Visual C++ 2005 Express Edition, for example, <code>C:\Program Files\Microsoft Visual Studio 8\VC</code>.
 
-  <code>C:\Program Files\Microsoft Visual Studio 8\VC\include</code>
+Move the contents of <code>useful.zip</code>
 
-and
+* <code>ft2build.h</code>
+* <code>freetype/*</code> &mdash; be sure this is ends up in "freetype" subdir of the include directory
+* <code>zconf.h</code>
+* <code>zlib.h</code>
+* <code>png.h</code>
+* <code>pngconf.h</code>
+* <code>afxres.h</code>
 
-* libfreetype2.lib      [useful.zip]
-* zlibstat.lib		[useful.zip]
-* libpng.lib		[useful.zip]
+in <code>PATH\include</code> and
 
-in
+* <code>libfreetype2.lib</code>
+* <code>zlibstat.lib</code>
+* <code>libpng.lib</code>
 
-  <code>C:\Program Files\Microsoft Visual Studio 8\VC\lib</code>
+in <code>PATH\lib</code>.
 
-===Step 4: DirectX SDK===
+==Step 4: Setting up the DirectX SDK==
+
 (This should work with the latest DirectX SDK as well.)
 
-You can make custom directories, which is '''recommended''' so you don't overwrite VS2005 files, for example a directory DirectX in the directories C:\Program Files\Microsoft Visual Studio 8\VC\include and C:\Program Files\Microsoft Visual Studio 8\VC\lib.
+You can make custom directories, which is '''recommended''' so you don't overwrite MS Visual C++ 2005 Express Edition files, for example a directory DirectX in the directories <code>C:\Program Files\Microsoft Visual Studio 8\VC\include</code> and <code>C:\Program Files\Microsoft Visual Studio 8\VC\lib</code>.
 
-===Step 5: Tell your MVCE where to find the includes and libraries===
-Go to Tools -> Options, then to Projects and Solutions -> VC++ Directories.
-(This is the same window you needed for the Platform SDK in step 2 of this installation guide)
+==Step 5: Telling your MS Visual C++ 2005 Express Edition where to find the includes and libraries==
 
-In the right upper corner, select libraries, then add the directory of your DirectX libraries
-Do the same for includes.
+Go to <code>Tools -> Options</code>, then to <code>Projects and Solutions -> VC++ Directories</code>. This is the same window you needed for the Platform SDK in step 2 of this installation guide.
+
+In the right upper corner, select libraries, then add the directory of your DirectX libraries. Do the same for includes.
 
 '''NOTE:''' It was believed that DirectX files should be on top of the list. It appears (see screenshot) that it doesn't matter very much. It is reported to work even with DirectX at the bottom. Please note that the name of the DirectX directory is completely arbitrary, but should just point to the directory where you extracted the files!
 
@@ -71,39 +66,29 @@ Your screen should look about like this in the end:
 [[File:en/Include.png]]
 [[File:en/Lib.png]]
 
-Update the corewin_express.vsprops file.
+One more step is needed to make the Win32 template work in MS Visual C++ 2005 Express Edition. You need to edit the <code>corewin_express.vsprops</code> file (found in <code>PATH\VCProjectDefaults</code>) and change the string that reads <code>AdditionalDependencies="kernel32.lib"</code> to <code>AdditionalDependencies="kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib"</code>.
 
-One more step is needed to make the Win32 template work in Visual C++ Express. You need to edit the corewin_express.vsprops file (found in C:\Program Files\Microsoft Visual Studio 8\VC\VCProjectDefaults) and
+==Step 6: Copy TTD Graphics files==
 
-Change the string that reads:
-
-AdditionalDependencies="kernel32.lib" to
-
-AdditionalDependencies="kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib"
-
-===Step 6: TTD Graphics files===
 Copy the following files from Transport Tycoon Deluxe to the data folder
 
-*sample.cat
-*trg1r.grf
-*trgcr.grf
-*trghr.grf
-*trgir.grf
-*trgtr.grf
+* <code>sample.cat</code>
+* <code>trg1r.grf</code>
+* <code>trgcr.grf</code>
+* <code>trghr.grf</code>
+* <code>trgir.grf</code>
+* <code>trgtr.grf</code>
 
-===Step 7: Compiling===
-*Open trunk/openttd_vs80.sln
+==Step 7: Compiling==
 
-This will open your IDE with the project loaded. If you want to compile a debug version straight ahead, press F7 and enjoy. Otherwise, follow the following instructions to get a non-debug version.
+Open <code>trunk/openttd_vs80.sln</code>. This will open your IDE with the project loaded. If you want to compile a debug version straight ahead, press <code>F7</code> and enjoy. To compile a non-debug version, go to <code>Build -> Configuration Manager</code> and select <code>Release for OpenTTD</code>. Press F7.
 
-*Go to Build -> Configuration Manager and select Release for OpenTTD.
-*Press F7
-
-
+==Afterwords==
 
 This Guide is based on the installation guide for [[en/MSVC6|MSVC 6.0]]. Page initially created by Sebastiaan.
 
-===Troubleshoot===
+==Troubleshoot==
+
 '''Problem:''' OpenTTD appears in the directory Release/Debug (depending on settings) where I cannot run/execute it at once.
 
 '''Answer:''' 
@@ -114,3 +99,6 @@ This Guide is based on the installation guide for [[en/MSVC6|MSVC 6.0]]. Page in
 **Select the version you want to appear in the top directory (from where it is executable without further ado) in the drop-down box at 'configuration'
 **Go to Configuration properties -> Linker -> General.
 **Change Output File from <code>'.\$(ConfigurationName)\openttd.exe'</code> to <code>'.\openttd.exe'</code>
+
+[[Category:en/Development/Compiling OpenTTD]]
+[[Category:en/Archive/Program Descriptions]]
