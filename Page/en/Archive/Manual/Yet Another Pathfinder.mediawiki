@@ -9,6 +9,30 @@ Yet Another Pathfinder (YAPF) is the third attempt at creating a pathfinder algo
 
 The goal of YAPF is to provide the power and flexibility of NPF while at the same time being very optimized, relieving the CPU load.  
 
+== Tunning ==
+Several options of YAPF can be tuned up. I will not describe all of them because they are clear what they do.<br>
+There 4 options (3 actualy) that are quite mysterious:<br>
+rail_look_ahead_max_signals = 10<br>
+rail_look_ahead_signal_p0 = 500<br>
+rail_look_ahead_signal_p1 = -100<br>
+rail_look_ahead_signal_p2 = 5<br>
+<br>
+First one checks how many signals YAPF have look ahead of our train. The next options are used to calculate penalty array using following formula:<br>
+p=p0 + p1*i + p2*i*i<br>
+So, we have following array as result:<br>
+p[]={500,405,320,245,180,125,80,45,20,5}
+<br>
+Now some examples:<br>
+Red,Red,Red: cost=500+405+320 -> 1225<br>
+Red,Green,Red,Green: cost=500+320 -> 820<br>
+<br>
+The final cost will be added to path cost. This can help to reduce traffic jams when we have some trains blocking a way (4 semaphores ahead) and we have alternate way.<br>
+<br>
+This is internal YAPF stuff and is not supposed to be tuned really. Developer put a lot of effort to calculate right values into p0,p1,p2.<br>
+The only tunable value is p1 penalty. Fine value range is from -100 to -90. If you go outside that range, penalty array will have weird values and trains would start to go not as you expect.<br>
+If you want more agresive load balancing go for p1=-90 and you will get following array:<br>
+p[]={500,415,340,275,220,175,140,115,100,95}
+
 == Beta Test ==
 To help out in the beta testing and to get a sneak preview, download the executable from the [[en/Archive/Community/Nightly build]].
 
