@@ -1,5 +1,135 @@
 [[Translation:en/Development/Coding style]]
 [[Category:en/Development]]
+== Coding style v2 ==
+=== Identifiers ===
+* Fuctions use Upper Camel Case or Pascal Case without underscores as Identifier.
+Example:
+<pre>
+void ThisIsAFunction();
+</pre>
+==== Variables ====
+* Variable names are all lowercase, and use "_" as separator if needed.
+Example:
+<pre>
+int number;
+int station_type;
+</pre>
+* Global variables are preceded by an underscore. ("_") Use descriptive names because leading underscores are often used for system / compiler variables.
+* private and protected members are preceded by "m_"
+* Variables are declared upon first usage. Note: This is a change from the previous rule used for C.
+* There are set names for many variables. Those are (but not limited to):
+<pre>
+Vehicle u, v, w;
+Station st;
+Town t;
+Window w;
+Engine e;
+</pre>
+and others. Note: the typical variable names should be added to the documentation of the type.
+* Iterators are declared in the loop. Example:
+<pre>
+for (int i = 0;;);
+</pre>
+* Pointers and references should have their reference symbol next to the name (compatibility with current code).
+* Variables that are declared below one another should have their
+** type
+** name or reference operator
+** assignment operator
+aligned by spaces.
+==== Enumerations / static consts ====
+Enumerations are used to store integers that belong logically together (like railtypes, string IDs and such). The enumerator is
+all caps with "_" between the words. The Enumeration uses the same rules as the Function. Enums are not used to store single numbers, use static consts instead.
+Enums may have special enumerator, which are named like the Enumeration, but in all caps, plus a tag like (_BEGIN, _END); and invalid value is named "INVALID_" plus the name in uppercase. The invalid always has 0xFF, 0xFFFF, 0xFFFFFFFF as a value, any other special values start from there with decreasing numbers. Other than that enums have consecutive numbers or consecutive powers of two. Powers of two are written in Hex or with the shift operator.
+Examples:
+<pre>
+enum SomeFlagsForMe {
+     SFFM_NONE     = 0,
+     SSFM_FOO       = (1 << 0),
+     SSFM_BAR       = (1 << 2)
+};
+
+enum SomethingType {
+     SOMETHINGTYPE_BEGIN = 0,
+     SOMETHINGTYPE_FOO    = 0,
+     SOMETHINGTYPE_BAR,
+     SOMETHINGTYPE_QUX,
+     SOMETHINGTYPE_END,
+
+     SOMETHINGTYPE_SPECIAL1 = 0xFD,
+     SOMETHINGTYPE_SPECIAL2 = 0xFE,
+     INVALID_SOMETHINGTYPE    = 0xFF
+};
+</pre>
+Variables that hold enumerators should have the type of the enumeration.
+Numbers that store single or uncorrelated data are static consts. Those may use the naming conventions of enums.
+Example:
+<pre>
+static const int MAXIMUM_STATIONS = 42;
+</pre>
+
+=== Classes ===
+* Classes should have a minimum number of "public" "protected" and "private" sections, preferably only one.
+* Within these section the order is:
+** types
+** static const members
+** static members
+** members
+** Ctors / Dtors
+** static methods
+** methods.
+* Deviations from above order are allowed when the code dictates it (for example a static const is needed for a typedef)
+* Methods and members ought to be grouped logically.
+* The method implementation should indicate if it is virtual or similar by using a comment.
+Example
+<pre>
+/* virtual */ void Class::method()
+{
+}
+</pre>
+=== Templates ===
+Templates are a very powerful C++ tool, but they can easily confuse beginngers. Thus:
+* Templates are to be documented in a very clear and verbose manner. Never assume anything in the documentation.
+* the template keyword and the template layout get a separate line. typenames are either "T" or preceded by a "T", integers get a single capital letter or a descriptive name preceded by "T". Example.
+<pre>
+template <typename T, typename Tsomething, int N, byte Tnumber_of_something>
+int Func();
+</pre>
+=== Basic Rules ===
+* Do not put external declaration in implementation (i.e. cpp) files.
+* Use const where possible.
+* Added and modified functions, classes enums are to be documented using doxygen comment blocks. Members, methods and enumerators ought to be doxygenned as well. Functions should have parameters and return values described, those descriptions should be aligned. Individual return values need not be described if the return value is logically a number. Use @pre, @todo, @warning and similar flags extensively.
+Examples:
+<pre>
+/**
+ * a struct to do something
+ */
+struct foo {
+    int a; ///< stores the number of moons around the planet
+    int b; ///< diameter of the planet
+};
+
+
+/**
+ * A function that returns the number of vehicles currently at the station
+ * @param type The type of the vehicle we wish to count.
+ * @returns       The number of vehicles at the given station
+ * @todo           Rewrite the function to improve performance
+ * @bug            Function fails when there is full moon
+ */
+int Station::GetVehicleOfType(VehicleType type)
+{
+}
+
+/**
+ * A function that returns the status of a vehicle
+ * @returns      The status of the vehicle
+ * @retval  0     Vehicle is driving around
+ * @retval 23    Vehicle is waiting at a station
+ * @retval 42    Vehicle is flying to the moon
+ */
+</pre>
+
+
 == Coding style ==
 
 To achieve a coherent whole, here are some guidelines for the coding style used in OTTD.
