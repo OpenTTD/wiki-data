@@ -8,7 +8,7 @@ Example:
 void ThisIsAFunction();
 </pre>
 ==== Variables ====
-* Variable names are all lowercase, and use "_" as separator if needed.
+* Variable names are all lowercase, and use "_" as separator.
 Example:
 <pre>
 int number;
@@ -45,20 +45,20 @@ Examples:
 <pre>
 enum SomeFlagsForMe {
      SFFM_NONE     = 0,
-     SFFM_FOO       = (1 << 0),
-     SFFM_BAR       = (1 << 1)
+     SFFM_FOO      = (1 << 0),
+     SFFM_BAR      = (1 << 1)
 };
 
 enum SomethingType {
      SOMETHINGTYPE_BEGIN = 0,
-     SOMETHINGTYPE_FOO    = 0,
+     SOMETHINGTYPE_FOO   = 0,
      SOMETHINGTYPE_BAR,
      SOMETHINGTYPE_QUX,
      SOMETHINGTYPE_END,
 
      SOMETHINGTYPE_SPECIAL1 = 0xFD,
      SOMETHINGTYPE_SPECIAL2 = 0xFE,
-     INVALID_SOMETHINGTYPE    = 0xFF
+     INVALID_SOMETHINGTYPE  = 0xFF
 };
 </pre>
 Variables that hold enumerators should have the type of the enumeration.
@@ -75,7 +75,7 @@ static const int MAXIMUM_STATIONS = 42;
 ** static const members
 ** static members
 ** members
-** Ctors / Dtors
+** constructors / destructors
 ** static methods
 ** methods.
 * Deviations from above order are allowed when the code dictates it (for example a static const is needed for a typedef)
@@ -102,7 +102,7 @@ int Func();
 Examples:
 <pre>
 /**
- * a struct to do something
+ * A struct to do something
  */
 struct foo {
     int a; ///< stores the number of moons around the planet
@@ -113,9 +113,10 @@ struct foo {
 /**
  * A function that returns the number of vehicles currently at the station
  * @param type The type of the vehicle we wish to count.
- * @returns       The number of vehicles at the given station
- * @todo           Rewrite the function to improve performance
- * @bug            Function fails when there is full moon
+ * @pre IsValidVehicleType(type)
+ * @return        The number of vehicles at the given station
+ * @todo          Rewrite the function to improve performance
+ * @bug           Function fails when there is full moon
  */
 int Station::GetVehicleOfType(VehicleType type) const
 {
@@ -123,8 +124,8 @@ int Station::GetVehicleOfType(VehicleType type) const
 
 /**
  * A function that returns the status of a vehicle
- * @returns      The status of the vehicle
- * @retval  0     Vehicle is driving around
+ * @return       The status of the vehicle
+ * @retval  0    Vehicle is driving around
  * @retval 23    Vehicle is waiting at a station
  * @retval 42    Vehicle is flying to the moon
  */
