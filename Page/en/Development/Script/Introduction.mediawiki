@@ -1,0 +1,67 @@
+[[Translation:en/Development/Script/Introduction]]
+To start, there are two ways to make your AI. Either do it in C++, for which you need to be able to compile OpenTTD, or do it in Squirrel, a very simple and C++ alike script-language. For an introduction into C++ we advise you to buy a good book in any book-store, for an introduction in Squirrel check the [[en/Development/Script/Squirrel|Squirrel Introduction]] page. We advise you to use Squirrel, as you can reload your script runtime, which means you don't have to close, compile and start OpenTTD for every tiny change you make. The reason we picked Squirrel, is that it looks very similar to C++. Therefor the rest of this documentation will not assume any of the two, or rather: both of them. Where examples are given, we will use Squirrel.
+
+In this introduction we take you through the process of creating a basic AI. While doing so, we will explain to you the very basics you need to create an AI and an AI in OpenTTD. For advanced AI handling we suggest you to buy a good book. The end-result of this tutorial can be find back in the 'example' directories.
+
+==Creating your own AI==
+
+You of course want to start with your own AI. The process is slightly different for C++ then for Squirrel, so we handle them one by one.
+First, C++: create a new directory in src/ai. Let's call it: MyNewAI. In it, create a file called MyNewAI.cpp, or what ever you like. You can create any amount of files in that dir that you like. We suggest to split up any advanced AI and document it really good. Now you need to add the files your added to source.list. We suggest to do this around the place where now NoAI files are located. Now open up MyNewAI.cpp, and continue reading in the next block.
+For Squirrel it is almost the same. Just you need to make your new directory in bin/ai. Let's also call it MyNewAI. In it, create a file called main.nut. This is very important. The loader checks for this file. Also for Squirrel the rule is that you can make any amount of files in this directory that you like, even sub-dirs. We uggest to split up any advanced AI and document it really good. Open up main.nut, and continue reading.
+
+==Register==
+
+Of course you want to let OpenTTD know you have an AI that wants to take over a company. For this, you need to add a class that extends AIFactory:
+
+ class FMyNewAI extends AIFactory {
+   function GetAuthor()      { return "Newbie AI Writer"; }
+   function GetName()        { return "MyNewAI"; }
+   function GetDescription() { return "An example AI by following the tutorial at http://wiki.openttd.org/"; }
+   function GetVersion()     { return 1; }
+   function GetDate()        { return "2007-03-17"; }
+   function CreateInstance() { return "MyNewAI"; }
+ }
+
+What this does is tell OpenTTD how your AI is called, what version it is, and more of those general things. For C++ it is important that you return MyNewAI() in the CreateInstance. After this you need to create an instance of the class:
+ 
+ /* Tell the core we are an AI */
+ iFMyNewAI <- FMyNewAI();
+
+Or for C++:
+
+ /* Tell the core we are an AI */
+ static FMyNewAI iFMyNewAI;
+
+This is enough to initialize your AI. But, we are not quiet there you to give it a first run. We don't have a real AI yet, only a piece of code that tells what your AI is, and who wrote it. So, let's make a class that will be our AI.
+
+==Your First AI==
+
+To do this, you need to extend AIController.
+
+ class MyNewAI extends AIController {
+   stop = false;
+
+   function Start();
+   function Stop();
+ }
+
+ function MyNewAI::Start()
+ {
+   while (!this.stop) {
+     print("I am a very new AI with a ticker called MyNewAI and I am at tick " + this.GetTick());
+     this.Sleep(50);
+   }
+ }
+
+ function MyNewAI::Stop()
+ {
+   this.stop = true;
+ }
+
+The first block makes the class extending AIController. We initialize the value stop to 'false'. The second blocks creates a Start() functions, which is called once when your AI is started. If you exit from this function, your AI dies. Period. Therefor we create a while() which only stops when the Stop() function sets the stop to 'true'. So far the logic part. To avoid your AI eating up all the CPU of your computer, it is wise to put something in the loop to delay the AI. You do this with the Sleep() command. You will see when we start this AI in a moment, that you get a print line in your console every 50 ticks.
+
+So, let's start your AI. As AIs are currently picked random from all AIs that are registered, it can be a bit hard to get your AI started. Soon there will be added a GUI that can control this. For now you have to start OpenTTD, start a new game, and hope for the best. Make sure to change your settings that AIs start immediatly, and add 1 or more AIs. Soon you will see a new company starting, with hopefully your AI attached. In your console you will see a nice line printing we are active.
+
+In case of C++, any errors you will see on compile-time. In case of Squirrel, you will see the compile-errors at startup, and run-errors when your AI is started. We suggest that you pay good attention to your console, as it can report useful information. Soon we will add a GUI where Squirrel errors are printen, so it is easier for you to read.
+
+So, there you have your first AI. Cool aint it? Of course now we need to add functions. For this we advise you to continue reading in the next chapter.
