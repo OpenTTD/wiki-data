@@ -1,7 +1,6 @@
 [[Translation:en/Manual/Console]]
 [[File:en/Manual/Console.png|right|frame|The OpenTTD Console]]
-The '''console''' allows you to see [[en/Manual/Multiplayer]] chat history and to execute [https://www.wikipedia.org/wiki/DOS DOS]-style commands in OpenTDD. Most of the commands are used to configure multiplayer [[en/Manual/Server|servers]].
-
+The '''console''' allows you to see [[en/Manual/Multiplayer]] chat history and to execute [https://www.wikipedia.org/wiki/DOS DOS]-style commands in [[en/Manual/Main Page]]. Most of the commands are used to configure multiplayer [[en/Manual/Server|servers]].
 
 ==Using the Console==
 Open the console with the tilde key (~), located to the left of '1' on the main keyboard. On some international keyboards the symbol may differ.  There is also a "Toggle Console" option in the help menu. Type in your command, such as "help", and press Enter.  
@@ -12,10 +11,197 @@ Tips:
 * Make the console bigger with Ctrl+Enter
 * Paste text from the clipboard with the normal Ctrl+V (Windows only)
 
-==See Also==
-* [[en/Manual/Console Commands|Commands]] -- A list of all commands available via the console.
-* [[en/Archive/Manual/Settings/Console Variables|Variables]] -- A list of all variables that can be used in the console.
-* [[en/Manual/Console Aliases|Aliases]] -- Guide for customizable commands that make the console easier to use.
+==Console commands==
+Here is a list of all the console commands available in OpenTTD. Brackets [] mean "optional". A vertical line | means "or".  The list is organized with the most useful commands at the top.  This list is also available [[en/Manual/Console Commands|alphabetically]].
+
+===Help commands===
+{| border=1 width=100%
+!width="225"|Command
+!Description
+|-
+|help [<item>]
+|Display basic console help, specify <item> for help on that specific command or variable.
+|-
+|list_cmds [<filter>]
+|List all available commands, optionally only commands starting with <filter>.
+|-
+|list_vars [<filter>]
+|List all registered variables, optionally only commands starting with <filter>.
+|-
+|list_aliases
+|List all available [[en/Manual/Console Aliases|aliases]].
+|-
+|list_patches
+|List all [[en/Community/Patches/Patches|patch]] options.
+|}
+
+===Game control commands===
+These commands work for both for single player and server games.
+
+{| border=1 width=100%
+!width="225"|Command
+!Description
+|-
+|newgame
+|Start a new game.
+|-
+|restart
+|Restart the same game.
+|-
+|connect <host>
+|Connect to a network game running on <host>. Not availiable for the server.
+|-
+|part
+|Quit a running game and go back to the intro menu
+|-
+|exit / quit
+|Quit the game.
+|-
+|save <nowiki><number | file></nowiki>
+|Saves the current game.
+|-
+|load <nowiki><number | file></nowiki>
+|Load the savegame <number> or <file>.
+|}
+
+===Server control===
+These commands are used to configure a server.  Some commands are also work for multiplayer (MP) clients.
+{| border=1 width=100%
+!width="225"|Command
+!Description
+!MP?
+|-
+|kick <nowiki><ip | client-id></nowiki>
+|Kick the client with IP <ip> or id <client-id>.
+|-
+|ban <nowiki><ip | client-id></nowiki>
+|Ban the client with IP <ip> or id <client-id>.
+|-
+|unban <ip>
+|Remove a ban on <ip>.
+|-
+|banlist
+|List banned clients.
+|-
+|reset_company <company-id>
+|Delete the company identified by <company-id>.
+|-
+|pause
+|Pause a network game.
+|-
+|unpause
+|unpause a network game.
+|-
+|clients
+|Lists client id, name, company id, and IP address of each client.
+|Yes
+|-
+|players
+|Show a list of players and their attributes, e.g. company name, loan value, number of vehicles etc.
+|-
+|status
+|Get the status information on all currently connected clients.
+|-
+|server_info
+|List current and maximum client/player limits.
+|-
+|say "<msg>"
+|Send a chat message containing <text> to all players.
+|Yes
+|-
+|say_client <client-id> "<msg>"
+|Send a chat message containing <msg> to the client identified by <client-id>.
+|Yes
+|-
+|say_player <player>
+|Send a chat message containing <msg> to the player identified by <player>.
+|Yes
+|-
+|rcon <password> "<command>"
+|Execute <command> on the server authenticated by <password> while connected as a client. The password must be set in advance locally on the server with by "rcon_pw <password>".
+|Yes
+|}
+
+===File handling commands===
+{| border=1  width=100%
+!width="225"|Command
+!Description
+|-
+|cd <nowiki><directory | number></nowiki>
+|Change the working directory to <directory> or <number>.
+|-
+|ls / dir
+|List files of current directory.
+|-
+|pwd
+|Print out the current working directory.
+|-
+|rm <nowiki><number | file></nowiki>
+|Remove a savegame by name or index.
+|}
+
+===Scripting commands===
+{| border=1  width=100%
+!width="225"|Command
+!Description
+|-
+|script <file>
+|Record a script to the file named <file>.
+|-
+|exec <script> <?>
+|Executes a local script file.
+|-
+|return
+|Stop executing a running script.
+|}
+
+===Other commands===
+{| border=1 width=100%
+!width="225"|Command
+!Description
+|-
+|screenshot <nowiki>[big | nocon]</nowiki>
+|Takes a screenshot. 'big' makes a screenshot of the whole map. 'nocon' hides the console for a normal screenshot.
+|-
+|alias <name> <command> 
+|Create an [[en/Manual/Console Aliases|alias]] named <name> bound to <command>.
+|-
+|patch <patchname> [<newvalue>]
+|Get and set the patch settings from the console. If <newvalue> is ommitted 
+the current value is printed. See [[en/Archive/Manual/Settings/Console Settings|Console Settings]] for a listing of all available settings.
+|-
+|dump_vars
+|Print all known variables and their values.
+|-
+|getseed
+|Returns the seed used to create the game, for randomly generated games.  The seed can be used to reproduce the same starting map.
+|-
+|scrollto <tile>
+|Scroll to the tile numbered <tile>; accepts hexadecimal (prexifed with 0x) and decimal values. Use the land area information tool to get the number of a specific tile.
+|-
+|clear
+|Clears the console screen.
+|-
+|echo <text>
+|Print out <text> on the console.
+|-
+|echoc <color> <text>
+|Print out <text> in color <color>. <color> is a number between 0 and 255.
+|-
+|info_cmd <command>
+|Show technical information on the command <commmand>.
+|-
+|info_var <variable>
+|Show technical information on the variable <variable>.
+|-
+|debug_level [<level>]
+|Get / set the debugging levels of different parts of the game.
+|-
+|resetengines
+|Resets all use-age and availability of engines.
+|}
+
+==Variables==
 
 [[Category:en/Manual/Console]]
 [[Category:en/Manual/Multiplayer]]
