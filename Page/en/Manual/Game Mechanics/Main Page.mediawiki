@@ -79,104 +79,58 @@ Now divide the number by 255, and you have your new rating. Remember that it can
 The maximum possible rating-points is (17 + 13 + 10 + 51 + 16 = ) 107 %, but of course the maximum value is 100%.
 
 ==Local Authority Ratings==
+Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
 
-Local authority rating ranges from -1000 (worst) to 1000 (best).
-
-{| border="1"
-|+'''Ratings''' (defined in town.h)
+{| border="1" cellpadding="5"
 |-
-!Rating!!Upper bound for rating (inclusive)
+!Rating points!!Rating
 |-
-|Appalling||-400
+| -1000 to -400 || Appalling
 |-
-|Very Poor||-200
+| -399 to -200 || Very Poor
 |-
-|Poor||0
+| -199 to 0 || Poor
 |-
-|Mediocre||200
+| 0 to 200 || Mediocre
 |-
-|Good||400
+| 201 to 400 || Good
 |-
-|Very Good||600
+| 401 to 600 || Very Good
 |-
-|Excellent||800
+| 601 to 800 || Excellent
 |-
-|Outstanding||1000
+| 801 to 1000 || Outstanding
 |}
 
-{| border="1"
-|+'''Actions that affect town ratings'''
+
+Each month players' ratings automatically change:
+* Rating goes up by 5 if it is less than 200.
+* Rating goes up by 12 for each station that has transferred cargo in the last 20 days.
+* Rating goes down by 15 for each station that has not transferred cargo in the last 20 days.
+
+
+Ratings limit some player actions, and can also change based on some actions.  Required rating is listed as Permissive / Neutral / Hostile.
+{| border="1" cellpadding="5"
 |-
-!Action!!Effect on ratings
+!Player action!!Required rating!!Effect on rating
 |-
-|Destroy tree||Ratings go down by 35 points
+|Build a station|| 200 ||
 |-
-|Plant tree||Ratings go up by 7 points.
-
-No effect if ratings are above 220 
-
-No effect after the first tree planted on a square
+|Destroy an 'edge' piece of road|| 0 / 48 / 96 ||-18
 |-
-|Destroy tunnel or bridge||Ratings go down by 250 points
-
-No effect if ratings are below 0
+|Destroy a 'centre' piece of road|| 0 / 48 / 96 ||-50
 |-
-|Destroy an industry||Ratings go down by 1500 points
-
+|Destroy a city tunnel or bridge|| 128 / 192 / 384 ||-250
 |-
-|Destroy a 'centre' piece of road||Ratings go down by 50 points
-
-No effect if ratings are below -100
-
+|Destroy building|| 40 to 300 ||-40 to -300
 |-
-|Destroy an 'edge' piece of road||Ratings go down by 18 points
-
-No effect if ratings are below -100
-
-(road_cmd.c:CmdRemoveRoad)
+|Plant tree on clear square|| ||+7, up to 220.
 |-
-|Successful bribe||Ratings go up by 200 points
-No effect if ratings are above 800
+|Clear a tile with trees|| ||-35
 |-
-|Unsucessful bribe||Ratings go to -50
+|Successful bribe|| ||+200
 |-
-|Destroy building||Ratings go down by between 40 and 300 points
-|}
-
-{| border="1"
-|+'''Actions that require certain town ratings'''
-!Action!!Minimum required rating
-|-
-|Build train station
-
-Build bus station
-
-Build truck station
-
-Build airport
-
-||-200
-(town_cmd.c:CheckIfAuthorityAllows)
-|-
-|Destroy building||Ranging from 40 to 300, depend on housetype
-(town_land.h:_housetype_remove_ratingmod)
-|-
-|Destroy road||Permissive: 0
-
-Neutral: 48
-
-Hostile: 96
-
-(town_cmd.c:_default_rating_settings)??? 
-|-
-|Destroy tunnel/bridge||Permissive: 128
-
-Neutral: 192
-
-Hostile: 384
-
-(town_cmd.c:_default_rating_settings)???
-|-
+|Unsucessful bribe|| ||Set to -50
 |}
 
 [[Category:en/Manual/Playing]]
