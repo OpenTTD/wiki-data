@@ -3,6 +3,10 @@ Here you can find information about how OpenTTD calculates in-game figures.
 
 You always wanted to know how the station-rating was built up? How goods-distribution works? Here you can find it!
 
+
+[[Category:en/Manual/Playing]]
+[[Category:en/Development]]
+
 ==Player rating==
 
 Each part of the player rating is a linear function, ie. earning 50% of the target for a component will give 50% of the points allocated for that component. Where components involve monetary amounts, these are converted to the currency of the current game; internally these amounts are stored as the pound amount.
@@ -133,5 +137,61 @@ Ratings limit some player actions, and can also change based on some actions.  R
 |Unsucessful bribe|| ||Set to -50
 |}
 
-[[Category:en/Manual/Playing]]
-[[Category:en/Development]]
+==Industry Production==
+Here is how the game determines how much cargo an industry produces per month.  This section lists production governed by the default [[en/Archive/Manual/Settings/Configuring patches/Economy#enable-smooth-economy|smooth economy]] patch.  Production is always a multiple of 8.
+
+{| border="1" cellpadding="4"
+!Raw Material Industry!!Produced Cargo!!Initial production range
+|-
+|Coal Mine||Coal||56 to 176
+|-
+|Forest||Wood||48 to 152
+|-
+|Oil Rig||Oil||56 to 176
+|-
+|Farm||Grain and Livestock||40 to 112
+|-
+|Copper Mine||Copper Ore||56 to 112
+|-
+|Oil Well||Oil||48 to 152
+|-
+|Iron Mine||Iron Ore||40 to 112
+|-
+|Bank||Valuables||24 to 64
+|-
+|Gold Mine||Gold||24 to 80
+|-
+|Diamond Mine||Diamonds||24 to 80
+|-
+|Fruit Plantation||Fruit||40 to 112
+|-
+|Rubber Plantation||Rubber||40 to 112
+|-
+|Water Supply||Water||48 to 152
+|-
+|Farm||Maize||40 to 128
+|-
+|Lumber Mill||Wood||0
+|-
+|Cotton Candy Forest||Cotton Candy||48 to 152
+|-
+|Battery Farm||Batteries||40 to 128
+|-
+|Cola Wells||Cola||48 to 136
+|-
+|Plastic Fountain||Plastic||56 to 160
+|-
+|Bubble Generator||Bubbles||48 to 152
+|-
+|Toffee Quarry||Toffee||40 to 112
+|-
+|Sugar Mine||Sugar||40 to 128
+|}
+
+
+Each month the game randomly changes some industry productions:
+*There is a 2% chance that the production will go down by 4% to 23% (random).  
+*There is a 2% to 4% (not random) chance that the production will go up by 4% to 23% (random).
+*The more cargo that is transferred from the industry, the better the chance that production will go up.  100% cargo transfer results in a 4% chance.
+*Both changes can occur in the same month, and maybe cancel each other out.
+*Maximum production is 2040 units.
