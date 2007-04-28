@@ -34,50 +34,47 @@ Each part of the player rating is a linear function, ie. earning 50% of the targ
 ! Totals !!!! 0 points !! 1000 points
 |}
 
-==Station-rating==
-
-How is the rating of goods in a station is built up?
-
-First of all, you need to transport that certain cargo. After that, the rating is defined like in the table below (you start with 0%):
+==Station rating==
+This section shows the factors that affect how much of an industry's product is delivered to to a station.
 
 {| border="1"
-|+ '''Station rating'''
+!Factor!!Condition!!Rating points!!Rating %
 |-
-! Action !! Condition !! Rating-points
+|Statue in town of station||Built||26|| 10%
 |-
-| Max-speed of last vehicle entering station || Above 85 km/h (approx. 52 mph)|| (Speed (km/h) - 85) / 4 points (with a of max 17 %)
+| Max speed of last vehicle entering station || Above 85 km/h (52 mph)|| (Speed (km/h) - 85) / 4 || 0% to 17%
 |-
-| Age of last vehicle entering station || 3 years || 10 points (4 %)
+|rowspan="3"|Age in years of last vehicle entering station || 2 || 10|| 4%
 |-
-| || 2 years || 20 points (8 %)
+| 1 || 20 || 8%
 |-
-| || <= 1 years || 33 points (13 %)
+| 0 || 33 || 13%
 |-
-| Statue in town of station || Built || 26 points (10 %)
+|rowspan="4"|Days since last cargo pickup<br> Multiply days by 4 if last vehicle was a ship.|| 13 to 21 || 25 || 10%
 |-
-| Days since last cargo pickup || > 12 days, <= 21 days || 25 points (10 %)
+| 7 to 12 || 50 || 20%
 |-
-| || > 6 days, <= 12 days || 50 points (20 %)
+| 4 to 6  || 95 || 37%
 |-
-| || > 3 days, <= 6 days || 95 points (37 %)
+| less than 4 || 130 || 51%
 |-
-| || <= 3 days || 130 points (51 %)
+|rowspan="6"|Units of cargo waiting at station || More than 1500 || -90 || -35%
 |-
-| Cargo waiting at station || > 1500 units || -90 points (-35 %)
+| 1001 to 1500 || -35 || -14%
 |-
-| || > 1000 units, <= 1500 units || -35 points (-14 %)
+| 601 to 1000 || 0 || 0%
 |-
-| || > 600 units, <= 1000 units || 0 points (0 %)
+| 301 to 600 || 10 || 4%
 |-
-| || > 300 units, <= 600 units || 10 points (4 %)
+| 101 to 300 || 30 || 12%
 |-
-| || > 100 units, <= 300 units || 30 points (12 %)
-|-
-| || <= 100 units || 40 points (16 %)
+| less than 100 || 40 || 16%
 |}
 
-Now divide the number by 255, and you have your new rating. Remember that it can only increase/decrease by 2% at the time.
-The maximum possible rating-points is (17 + 13 + 10 + 51 + 16 = ) 107 %, but of course the maximum value is 100%.
+Divide the total rating points by 255 to get the percent rating.  The maximum possible rating is 107%, but the game limits it to 100%.  
+
+
+Every 2.5 days station ratings are computed; ratings can't change by more than 2% per cycle.
 
 ==Local Authority Ratings==
 Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
