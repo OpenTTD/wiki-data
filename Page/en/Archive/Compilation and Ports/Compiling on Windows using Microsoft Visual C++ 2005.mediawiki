@@ -3,13 +3,6 @@ This article gets you started on compiling OpenTTD using Microsoft Visual C++ 20
 ==Required software==
 
 You will need:
-
-<!--* [http://msdn.microsoft.com/vstudio/express/visualC/default.aspx MVCE 2005] (From Microsoft, free)
-* [http://www.microsoft.com/downloads/details.aspx?FamilyId=A55B6B43-E24F-4EA3-A93E-40C0EC4F68E5&displaylang=en Microsoft Platform SDK]
-* [http://sourceforge.net/project/showfiles.php?group_id=103924&package_id=114307 Openttd-useful.zip]
-* [http://www.microsoft.com/downloads/details.aspx?FamilyID=86cf7fa2-e953-475c-abde-f016e4f7b61a&DisplayLang=en DirectX 8.1 SDK]
-* [http://www-d0.fnal.gov/d0dist/dist/packages/d0ve/devel/windows/AFXRES.H afxres.h]-->
-
 * [http://msdn.microsoft.com/vstudio/express/visualc/download/ Microsoft Visual C++ 2005 Express Edition]
 * [http://www.microsoft.com/downloads/details.aspx?familyid=0BAF2B35-C656-4969-ACE8-E4C0C0716ADB&displaylang=en Microsoft Platform SDK]
 * [http://www.microsoft.com/downloads/details.aspx?FamilyId=05DA7623-F2F9-4F57-91AA-6DB27FB8305F&displaylang=en Microsoft DirectX SDK]
@@ -27,7 +20,7 @@ You will need:
 
 ==Installing==
 
-* Install Microsoft Visual C++ 2005 Express Edition. This should be fairly easy. Download, run and drink a beer. It automatically downloads all it needs, so you just need to worry about what to do while waiting ;)
+* Install Microsoft Visual C++ 2005 Express Edition. This should be fairly easy. Download it, run it and drink a beer while waiting ;)
 * Install Microsoft Platform SDK. I recommend to install the same options way I did, so it won't use a lot of unnecessary space (see the images below).
 * Follow step 3 and 4 of the [http://msdn.microsoft.com/vstudio/express/visualc/usingpsdk/ installation instructions for the SDK].
 
@@ -52,14 +45,14 @@ Well, from the components screen remove the documentation and sample source code
 
 Go to <code>Tools -> Options</code>, then to <code>Projects and Solutions -> VC++ Directories</code>. Add the following lines:
 
-Executable files
+Executable files:
 * C:\Program Files\Microsoft Platform SDK\Bin
 
-Include files
+Include files:
 * C:\Program Files\Microsoft Platform SDK\Include
 * C:\Program Files\Microsoft DirectX SDK\Include
 
-Library files
+Library files:
 * C:\Program Files\Microsoft DirectX SDK\Lib\x86
 
 
@@ -75,42 +68,16 @@ Library files
 
 One more step is needed to make the Win32 template work in Visual C++ Express. You need to edit the <code>corewin_express.vsprops</code> file (found in <code>C:\Program Files\Microsoft Visual Studio 8\VC\VCProjectDefaults</code>) and change the string that reads: <code>AdditionalDependencies="kernel32.lib"</code> to <code>AdditionalDependencies="kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib"</code>. That's it!
 
-==Copy TTD Graphics files==
-
-Copy the following files from Transport Tycoon Deluxe to the data folder
-
-* <code>sample.cat</code>
-* <code>trg1r.grf</code>
-* <code>trgcr.grf</code>
-* <code>trghr.grf</code>
-* <code>trgir.grf</code>
-* <code>trgtr.grf</code>
-
 ==Compiling==
 
 Open <code>projects/openttd_vs80.sln</code>. This will open your IDE with the project loaded. If you want to compile a debug version straight ahead, press <code>F7</code> and enjoy. To compile a non-debug version, go to <code>Build -> Configuration Manager</code> and select <code>Release for OpenTTD</code>. Press <code>F7</code>.
 
-==Afterwords==
+==Credits==
 
-This Guide is based on the installation guide for [[en/MSVC6|MSVC 6.0]]. Page initially created by Sebastiaan.
-
-==Troubleshoot==
-
-'''Problem:''' OpenTTD appears in the directory Release/Debug (depending on settings) where I cannot run/execute it at once (VS2003).
-
-'''Answer:''' 
-
-* Workaround 1: (preferred) Point the working directory to the correct path, this should already be correct in MSVC2005, now you can simply debug with F5/CTRL+F5
-** In MSVC in the Solution browser, right-click on openttd and select Properties
-** Go to Configuration Properties > Debugging > WorkingDirectory
-** Change WorkingDirectory to "..\bin"
-* Workaround 2: Move <code>openttd.exe</code> to the <code>bin/</code> directory after compiling.
-* Workaround 3: Copy the lang & data directories to the debug/release directory.
-* Workaround 4: (not recommended)
-** In MS Visual C++ 2005 Express Edition, in the Solution browser on the left, right-click on openttd and select Properties
-** Select the version you want to appear in the top directory (from where it is executable without further ado) in the drop-down box at 'configuration'
-** Go to Configuration properties -> Linker -> General.
-** Change Output File from <code>'.\$(ConfigurationName)\openttd.exe'</code> to <code>'.\openttd.exe'</code>
+* Sebastian for creating the initial guide.
+* Desolator (aka Mircea Chirea) for updating the guide.
+* OpenTTD Developers for the great game.
+* Microsoft for the the SDKs and Visual C++ 2005 Express Edition.
 
 [[Category:en/Development/Compiling OpenTTD]]
 [[Category:en/Archive/Program Descriptions]]
