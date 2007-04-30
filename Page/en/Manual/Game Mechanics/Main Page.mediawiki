@@ -315,12 +315,12 @@ Deliver 100 bags of mail 100 squares in 100 days:<br>
 * Distance is measured between the stations, not from the industries or by vehicle distance traveled.  It is computed by adding the differences in x and y tiles, not straight-line distance.
 
 ==Vehicle Speeds==
-A tile is about 662km on a side.  An hour in the game is about 1/10 of a second.  66kph is equivalent to 1 tile per second.
+The game has many rules to make vehicles move fairly realistically.  For reference, a tile is about 662km on a side. 66kph is equivalent to 1 tile per second.
 
 
 '''Aircraft:'''
 *Aircraft fly at 8% their listed speed.
-*Aircraft accelerate at 37kph/day.
+*Aircraft accelerate at about 200kph/day.
 *Broken down planes fly at 27kph.
 *Airport taxi speed is 12kph.
 
@@ -330,11 +330,12 @@ A tile is about 662km on a side.  An hour in the game is about 1/10 of a second.
 *Road vehicles accelerate an additional 74kph/day downhill.
 *Road vehicles slow down 10% of their speed per game tick uphill.  This balances out with acceleration at 34kph for all road vehicles.
 *Road vehicles go around corners at half their max speed
+*A "stopped" road vehicle resumes it's last speed instantly.
 
 
 '''Ships:'''
 *Ships accelerate at 37kph/day.
-
+*A "stopped" ship resumes it's last speed instantly.
 
 '''Trains:'''<br>
 This data is for the [[en/Archive/Manual/Settings/Realistic acceleration|realistic train acceleration patch]].
@@ -375,5 +376,8 @@ This data is for the [[en/Archive/Manual/Settings/Realistic acceleration|realist
 |}
 *Train acceleration and max speed is affected by engine power, current speed, total train mass, and track incline.
 *Non-Maglev train acceleration = 37 *(0.55 * Power / Speed - 1.3 * Mass + 60 * #cars + 0.0035 * Mass * Speed + 0.24 * Speed^2 - 60 * Mass of cars on slope) / Mass (kph/day)
-*Maglev train Acceleration = 37 * (0.022 * Power - 0.24 * Speed^2) / Mass (kph/day)
+*Maglev train Acceleration = 37 * (0.022 * Power - 0.24 * Speed^2 - 60 * Mass of cars on slope) / Mass (kph/day)
 *Braking is twice acceleration.
+
+
+See aircraft_cmd.c, roadveh_cmd.c, ship_cmd.c, train_cmd.c, vechicle.c for code.
