@@ -48,24 +48,32 @@ Now extract the <code>openttd-useful.zip</code> file and copy:
 
 Well, from the components screen remove the documentation and sample source code you'll save a lot of space (800+ MB). They're pretty useless if you just need to compile OpenTTD.
 
-==Setting up the includes and libraries in MVCE==
+==Setting up the VC++ Directories==
 
-'''NOTE 1:''' You may not need to edit any option on MS VC++ if you install everything in this order: MS-VC++ --> MS-P-SDK --> MS-DX-SDK.
+Go to <code>Tools -> Options</code>, then to <code>Projects and Solutions -> VC++ Directories</code>. Add the following lines:
 
-Go to <code>Tools -> Options</code>, then to <code>Projects and Solutions -> VC++ Directories</code>. This is the same window you needed for the Platform SDK in step 2 of this installation guide.
+Executable files
+* C:\Program Files\Microsoft Platform SDK\Bin
 
-In the right upper corner, select libraries, then add the directory of your DirectX libraries. Do the same for includes.
+Include files
+* C:\Program Files\Microsoft Platform SDK\Include
+* C:\Program Files\Microsoft DirectX SDK\Include
 
-'''NOTE 2:''' It was believed that DirectX files should be on top of the list. It appears (see screenshot) that it doesn't matter very much. It is reported to work even with DirectX at the bottom. Please note that the name of the DirectX directory is completely arbitrary, but should just point to the directory where you extracted the files!
-Your screen should look about like this in the end:
+Library files
+* C:\Program Files\Microsoft DirectX SDK\Lib\x86
 
-[[File:en/Exe.png]]
 
-[[File:en/Include.png]]
+[[File:en/Archive/Compilation and Ports/Msvc exe screen.png]]
 
-[[File:en/Lib.png]]
+[[File:en/Archive/Compilation and Ports/Msvc include screen.png]]
 
-One more step is needed to make the Win32 template work in MS Visual C++ 2005 Express Edition. You need to edit the <code>corewin_express.vsprops</code> file (found in <code>PATH\VCProjectDefaults</code>) and change the string that reads <code>AdditionalDependencies="kernel32.lib"</code> to <code>AdditionalDependencies="kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib"</code>.
+[[File:en/Archive/Compilation and Ports/Msvc lib screen.png]]
+
+
+'''NOTE:''' It was believed that DirectX SDK & Platform SDK folders should be on top of the list. It appears that it doesn't matter very much. It is reported to work even with DirectX SDK & Platform SDK folders at the bottom. However, it's better not to take the risk and put them at the bottom.
+
+
+One more step is needed to make the Win32 template work in Visual C++ Express. You need to edit the <code>corewin_express.vsprops</code> file (found in <code>C:\Program Files\Microsoft Visual Studio 8\VC\VCProjectDefaults</code>) and change the string that reads: <code>AdditionalDependencies="kernel32.lib"</code> to <code>AdditionalDependencies="kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib"</code>. That's it!
 
 ==Copy TTD Graphics files==
 
