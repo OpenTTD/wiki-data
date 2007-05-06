@@ -1,0 +1,38 @@
+It is possible to get OpenTTD to play music using the wavetable feature of a SB Live card (aka Awe32/64 or Emu10k1).  This method does not use timidity and therefore does not hammer the CPU.
+
+These instructions are written for Ubuntu Feisty (7.04), so adjust as necessary for your distribution.
+
+First install the awesfx package. This supplies the <tt>asfxload</tt> utility which is used to load soundfonts onto the soundcard.
+
+Then find the files <tt>8mbgmsfx.sf2</tt>, <tt>4gmgsmt.sf2</tt> and <tt>2gmgsmt.sf2</tt> from the SB Live installation CD (or somewhere on your windows partition) and put them into <tt>/usr/share/sounds/sf2</tt>.
+
+Then run<br>
+<tt>asfxload 8mbgmsfx</tt><br>
+to load the soundfont onto the sound card.
+
+Next run <tt>aplaymidi -l</tt>
+
+You should see output something like this:
+<pre>
+ Port    Client name                      Port name
+ 14:0    Midi Through                     Midi Through Port-0
+ 16:0    SBLive 5.1 [SB0060]              EMU10K1 MPU-401 (UART)
+ 17:0    Emu10k1 WaveTable                Emu10k1 Port 0
+ 17:1    Emu10k1 WaveTable                Emu10k1 Port 1
+ 17:2    Emu10k1 WaveTable                Emu10k1 Port 2
+ 17:3    Emu10k1 WaveTable                Emu10k1 Port 3
+</pre>
+
+Note the port for Emu10k1 Port 0 (17:0 in this example)
+
+run the following substituting the port above.<br>
+<tt>export ALSA_OUTPUT_PORTS="17:0"</tt>
+
+you should now be able to use aplaymidi to play one of the gm files from the gm directory.
+
+Assuming That worked correctly, the last step is to edit <tt>~/.openttd/openttd.cfg</tt>
+
+In the [music] section set the extmidi line to:<br>
+<tt>extmidi = /usr/bin/aplaymidi</tt>
+
+You should now have midi sound working in OpenTTD without it eating up all your CPU time.
