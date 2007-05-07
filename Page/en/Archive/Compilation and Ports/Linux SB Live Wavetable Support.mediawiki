@@ -8,13 +8,13 @@ First install the awesfx package. This supplies the <tt>asfxload</tt> utility wh
 
 Then find the files <tt>8mbgmsfx.sf2</tt>, <tt>4gmgsmt.sf2</tt> and <tt>2gmgsmt.sf2</tt> from the SB Live installation CD (or somewhere on your windows partition) and put them into <tt>/usr/share/sounds/sf2</tt>.
 
-Then run<br>
-<tt>asfxload 8mbgmsfx</tt><br>
+Then run
+<pre>asfxload 8mbgmsfx</pre>
 to load the soundfont onto the sound card.
 
-Next run <tt>aplaymidi -l</tt>
-
-You should see output something like this:
+Next run 
+<pre>aplaymidi -l</pre>
+You should see output similar to this:
 <pre>
  Port    Client name                      Port name
  14:0    Midi Through                     Midi Through Port-0
@@ -27,14 +27,31 @@ You should see output something like this:
 
 Note the port for Emu10k1 Port 0 (17:0 in this example)
 
-run the following substituting the port above.<br>
-<tt>export ALSA_OUTPUT_PORTS="17:0"</tt>
+run the following substituting the port above.
+<pre>export ALSA_OUTPUT_PORTS="17:0"</pre>
 
 you should now be able to use aplaymidi to play one of the gm files from the gm directory.
 
 Assuming That worked correctly, the last step is to edit <tt>~/.openttd/openttd.cfg</tt>
 
-In the [music] section set the extmidi line to:<br>
-<tt>extmidi = /usr/bin/aplaymidi</tt>
+In the [music] section set the extmidi line to:
+<pre>extmidi = /usr/bin/aplaymidi</pre>
 
 You should now have midi sound working in OpenTTD without it eating up all your CPU time.
+
+To automate setting the port, create a shell script somewhere (e.g. <tt>/usr/games/openttd.sh</tt>) with the following:
+<pre>
+#!/bin/bash
+
+APLAYMIDI='/usr/bin/aplaymidi'
+
+if [ ! -x $APLAYMIDI ]; then
+        echo "Error: Cannot execute $APLAYMIDI"
+        exit 1
+fi
+
+export ALSA_OUTPUT_PORTS=`$APLAYMIDI -l | grep "Emu10k1 Port 0" | awk '{print $1}'`
+
+exec /usr/games/openttd
+</pre>
+Now use this to launch OpenTTD.
