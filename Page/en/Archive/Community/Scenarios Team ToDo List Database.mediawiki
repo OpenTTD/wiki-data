@@ -9,7 +9,7 @@ This page is used to gather ideas for a PHP/MySQL version for the Scenarios Data
 ** Login
 ** OpenTTD.org
 
-Screenie: [[File:en/Archive/Community/Openttd scenarios frontpage.png]] - I know, it looks like donkeys excrement... I'm a programmer, not a designer. Good news is it runs on Smarty, so it should be relatively easy and painless to integrate the templates used for the main openTTD site.
+Screenie: [[File:en/Archive/Community/Openttd scenarios frontpage.png]] - I know, it looks like donkeys excrement, and the buttons don't match what I wrote above. I'm a programmer, not a designer (lame excuse, but true unfortunately). Good news is it runs on Smarty, so it should be relatively easy and painless to integrate the templates used for the main openTTD site.
 
 ===Search===
 The Search screen provides access to the primary method of finding a specific scenario in the database. On the first pageload it shall show a form with all fields we store concerning scenario's (author, map size, setting, etc). On fields that are an ordered listing, a dropdown for specifying 'less then', 'exactly' or 'more then' will be present.
@@ -24,9 +24,10 @@ The browse 'button' will show the possible categories on-hover. These categories
 Clicking a category will bring up the search results view for that category. It may be a bit superfluous, but essentially offers direct access to predefined searches. Still need to refine this, and add more value over normal search, IMHO.
 
 ===Upload===
-Upload allows people to upload scenarios to the database. This form will allow the uploader to specify information regarding the scenario that can be searched for. Three pieces of information and mandatory: Author, Scenario Name and 'Cleared for distribution'.
+Upload allows people to upload scenarios to the database. This form will allow the uploader to specify information regarding the scenario that can be searched for. Three pieces of information and mandatory: Author, Scenario Name and a 'Cleared for distribution' checkbox (because of liability and all that).
 
 Uploading can be done anonymously, but an anonymous upload first needs to be cleared for public use by an authenticated user before it becomes visible.
+''Alternative: Have the file marked in a lower-visibility way, so that it can still be accessed, but is clearly marked as unchecked.''
 
 ===Login===
 Registering and logging in allows additional privileges in the database - one is the above-mentioned clearing of anonymous uploads. Other possible privileges: mark scenario for deletion, add comments to scenarios. The basic idea is that the system should be as open as possible, only abuse-sensitive features will be locked down.
@@ -39,8 +40,12 @@ The system will run as a set of PHP scripts acting on a MySQL database. Subsyste
 
 Question: Will the files be hosted on the server itself, or will there simply be URLs to external downloads?
 
-==Comments==
+===Security Concerns===
+1. Should we check the contents of files to ensure they are actual .scn files?
+2. It should go without saying that all PHP/SQL should be hardened against injection, xss and other common web-app vulnerability.
+3. User information - if we do choose to allow people to register, their password should not be stored plain text in the base.
 
+==Comments==
 First off, thanks for the effort. :) Now, a couple of thoughts:
 : You're welcome. I'll respond to these point by point below.. while I may seem to be opposing your position - please realize that this is just for the sake of discussion. You do have some very valid arguments. I'd like to gather input from some more of the people involved as well, though. Kander
 
