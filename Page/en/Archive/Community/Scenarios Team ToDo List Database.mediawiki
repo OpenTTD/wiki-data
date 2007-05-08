@@ -48,17 +48,23 @@ Question: Will the files be hosted on the server itself, or will there simply be
 ==Comments==
 First off, thanks for the effort. :) Now, a couple of thoughts:
 : You're welcome. I'll respond to these point by point below.. while I may seem to be opposing your position - please realize that this is just for the sake of discussion. You do have some very valid arguments. I'd like to gather input from some more of the people involved as well, though. Kander
+::In response to the latter I have added my thoughts as well, see below ;) Sleepie 02:34, 8 May 2007 (CEST)
 
 * I don't think we need an elaborate browse feature. A basic filelist should suffice. (All the browsing should be done at the wiki.)
 :: Hmm.. that would still make it a (relatively) lot of work to maintain the scenarios. I can understand where you're coming from though - effort has been spent on getting something on the Wiki that definitely seems to be working well, so why change a winning team? See also my reply to the third point.Kander
+:::: I think Kander has made some valid points here. A good search feature would become very handy when the database gets bigger. And I guess a search that will be processed by a parametrized sql statement will be much faster than a fulltext search on the wiki that might also bring a lot of 'wrong' hits. Maybe the search could be split in 'quick' (search on mandatory info's) and 'advanced', but that are details that could be discussed later imho. Sleepie 02:34, 8 May 2007 (CEST)
 
 * The script should be as open as possible. Uploading files should be totally open. (Perhaps we need an alert system of some sort, or a button for voting for the deletion of a .scn from public view, which I think you already mentioned above.)
 :: Sounds like a plan... I'm in favour of openness, and really like for visitors being able to change as much as possible.. however, I've seen quite a few systems buckle under the load of abuse an open system is bound to attract, hence the idea of validation-by-member. From what I can read you are willing to take the risk of abuse, reacting to it when needed. I prefer an approach from the other side, where the system tries to prevent abuse, but does so in a way that remains as open to non-abusers as possible. Which way is best? I think we can have long debates over this, and still not find a definitive answer. Let's go for a middle-of-the-road solution by allowing anonymous edits, but having them marked by the system as being 'unvalidated' - that is, they do show up in the results but are in a lighter shade, or have a special logo next to them.. or something.Kander
+:::: The proposed upload-mechanism sounds like a good compromise. Such an upload form with less mandatory options should be even easier to use as uploading scenarios to the wiki atm. So everyone who can post his/her map on the forums should be able to use it. Sleepie 02:34, 8 May 2007 (CEST)
 
 * This script is supposed to be an .scn file repo, not a scenario database per se. That means the only function of this system is to receive .scn uploads and place them on the same server the script runs on, which I doubt will ever be the openttd.org server itself (I'm thinking this system will probably remain external). This should answer your question above. The reason the script is to be so simple is that we already have a well functioning database here at the wiki, and its minutiae can be tweaked by anyone, not just the folks with access to the code. Having two separate databases would confuse the hell out of newbies and beginning scenario authors. That's why this system only needs to provide open web hosting for .scn's.
 :: Heh, funny how you know what it is supposed to be when I'm not very sure about its exact purpose yet - not saying I know better.. in fact, I decided to take this public to gather exactly this kind of feeddback :) Going with your definition of what the system should be, my feeling would be that a lot of potential would be wasted. While they're uploading the .scn file, why not allow people to tack on some information to it? And when you have information available, why not make that searchable? As said in the basic outline above, most information will not be mandatory, so it will still be easy to upload a scenario.. people who are interested in classifying them can then update the information stored regarding that scenario. We definitely need good integration with the information currently available on the Wiki, though.. this is a point worth pondering on.Kander
+:::: On how to probably integrate it see my comments below. I think one of the most important reasons to give this project a try is that it would give us exactly the possibilities that are (imho) not possible with the wiki (at least not in a convenient way), like implementing a feedback system, voting and commenting maps and so on. If there is an interest for, I could make a database model as a base for discussion on how to structure the database. Sleepie 02:34, 8 May 2007 (CEST)
 
 :: Also, would there be a way to keep the Wiki and the .SCN repository 'in sync' - that is, ensure information about a scenario found on the repository can be found on the Wiki?Kander
+:::: I was already considering to write a bot to ease maintaining the wiki (only the scenario database). The bot would just automate the categorizing of the new maps and do cleanups if map information has changed. To be honest, I have no experience in writing bots so far, but there was some kind of tutorial on wikipedia or wikimedia so I would give it a try or we found someone who could donate such a bot. Having such a bot would ease maintaining a lot as the only manual editing have to be done on the single pages than. Well the problem with the search capabilities and other missing features will still remain. Now back to the external repository. Maybe we could enhance this bot (idea) to sync the map pages with the external repo than, even in both directions maybe.
+:::: To summarize it, the external repo would act as data store and its basic functionalities are uploading/editing the maps and providing advanced search features and also a voting/commenting system. On the other hand the scenario database at the wiki is used to provide pre-categorized overview pages of all scenarios at the database and is synchronized (automatically) with external repo. Sleepie 02:34, 8 May 2007 (CEST)
 
 Jupix 15:59, 7 May 2007 (CEST)
 
@@ -66,3 +72,35 @@ Well done on this it sounds really good. Seeing as this will be an advancement o
 --T-Unit 17:07, 7 May 2007 (CEST)
 
 :Screenshots would of course be part of the system. For now, I feel this would be the way to go.. having all information integrated in one system.. Jupix' arguments make sense as well though, so perhaps we need to spend time looking for a way to integrate this into the Wiki in a nice way. Kander
+::All binary data as screenshots and the scn's could be stored on the webservers filesystem, only the links and the other information should be stored in the database, just like wiki systems do it. Again how to integrate it see my comments above, but keep in mind that this is just an idea. I haven't made any research so far, what is possible and how much work it may involve to get this working. Sleepie 02:34, 8 May 2007 (CEST)
+
+== Summary - Pro & Contra ==
+
+Maybe we should make a list like the one below to make decisions on certains things. I have added a few points as an example so far.
+
+{|
+|colspan="2"|'''pro'''
+|-
+||Wiki||External repo
+|-
+|| 
+* hey, it just works :)
+* it's known and accepted by the community
+* could be edited by everyone
+* has (in theory) already a lot of maintainers (most wiki editors), imho especially useful to fix spelling/grammar/link errors etc.
+* (relatively) easy to change layout for the scenario pages (based on templates). I did a quick read on Smarty, but couldn't actually say how easy/complicated the Smarty templates could be adjusted.
+||
+* possibility for new features like a voting system, comment maps, etc.
+* better search capabilities (could be adjusted as needed)
+* all at one point (all information/data is stored at one place) -> independent from other (external) systems
+* could be (easily) enhanced/adapted if the need arise
+|-
+|colspan="2"|'''contra'''
+|-
+||Wiki||External repo
+|-
+||
+* less search capabilities (compared to the external repo)
+||
+* 
+|}
