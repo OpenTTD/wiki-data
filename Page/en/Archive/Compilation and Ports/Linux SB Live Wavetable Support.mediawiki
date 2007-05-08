@@ -4,22 +4,30 @@ It is possible to get OpenTTD to play music using the wavetable feature of a SB 
 
 These instructions are written for Ubuntu Feisty (7.04), so adjust as necessary for your distribution.
 
-First install the awesfx package. This supplies the <tt>asfxload</tt> utility which is used to load soundfonts onto the soundcard.
+===Requirements===
 
-Then find the files <tt>8mbgmsfx.sf2</tt>, <tt>4gmgsmt.sf2</tt> and <tt>2gmgsmt.sf2</tt> from the SB Live installation CD (or somewhere on your windows partition) and put them into <tt>/usr/share/sounds/sf2</tt>.
+You will need the following:
 
-Then run
+;<tt>asfxload</tt>:Provided by the <tt>awesfx</tt> package.
+;<tt>aplaymidi</tt>:Provided by the <tt>alsa-utils</tt> package.
+;A Sound Font:These can be found on the CD that came with your soundcard, or somewhere on your Windows partition if you have one.  This example uses the file <tt>8mbgmsfx.sf2</tt>.
+
+===Load the Soundfont onto the card===
+
+Put the soundfont into <tt>/usr/share/sounds/sf2/</tt>, then run
 <pre>asfxload 8mbgmsfx</pre>
 to load the soundfont onto the sound card.
 
-You can make this load on bootup by adding the following to an appropriate file in <tt>/etc/modprobe.d/</tt> (e.g. <tt>/etc/modprobe.d/local</tt>)
+You can make this load automatically at bootup by adding the following to an appropriate file in <tt>/etc/modprobe.d/</tt> (e.g. <tt>/etc/modprobe.d/local</tt>)
 <pre>
 # Load soundfont when module is loaded.
 install snd-emu10k1-synth /sbin/modprobe --ignore-install snd-emu10k1-synth $CMDLINE_OPTS ; \
         sleep 1 ; /usr/bin/asfxload 8mbgmsfx ;
 </pre>
 
-Next run 
+===Configure aplaymidi===
+
+Run
 <pre>aplaymidi -l</pre>
 You should see output similar to this:
 <pre>
@@ -34,12 +42,14 @@ You should see output similar to this:
 
 Note the port for Emu10k1 Port 0 (17:0 in this example)
 
-run the following substituting the port above.
+Run the following substituting the port above.
 <pre>export ALSA_OUTPUT_PORTS="17:0"</pre>
 
-you should now be able to use aplaymidi to play one of the gm files from the gm directory.
+You should now be able to use aplaymidi to play one of the gm files from the gm directory.
 
-Assuming That worked correctly, the last step is to edit <tt>~/.openttd/openttd.cfg</tt>
+===Configure OpenTTD===
+
+Assuming that worked correctly, the last step is to edit <tt>~/.openttd/openttd.cfg</tt> to make OpenTTD use aplaymidi instead of timidity.
 
 In the [music] section set the extmidi line to:
 <pre>extmidi = /usr/bin/aplaymidi</pre>
