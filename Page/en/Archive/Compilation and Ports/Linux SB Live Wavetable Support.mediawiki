@@ -12,6 +12,13 @@ Then run
 <pre>asfxload 8mbgmsfx</pre>
 to load the soundfont onto the sound card.
 
+You can make this load on bootup by adding the following to an appropriate file in <tt>/etc/modprobe.d/</tt> (e.g. <tt>/etc/modprobe.d/local</tt>)
+<pre>
+# Load soundfont when module is loaded.
+install snd-emu10k1-synth /sbin/modprobe --ignore-install snd-emu10k1-synth $CMDLINE_OPTS ; \
+        sleep 1 ; /usr/bin/asfxload 8mbgmsfx ;
+</pre>
+
 Next run 
 <pre>aplaymidi -l</pre>
 You should see output similar to this:
