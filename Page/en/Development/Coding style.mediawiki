@@ -1,133 +1,90 @@
 [[Translation:en/Development/Coding style]]
 [[Category:en/Development]]
 == Coding style for OpenTTD ==
-=== Identifiers ===
-* Functions use Upper Camel Case or Pascal Case without underscores as Identifier.
-Example:
+=== Functions ===
+* Function names use [https://www.wikipedia.org/wiki/CamelCase CamelCase] without underscores.
+* Opening curly bracket ( '''{''' ) for a function starts on the next line.
+* Use Foo() instead of Foo(void).
 <pre>
-void ThisIsAFunction();
+void ThisIsAFunction()
+{
+}
 </pre>
-==== Variables ====
+=== Variables ===
 * Variable names are all lowercase, and use "_" as separator.
-Example:
-<pre>
-int number;
-int station_type;
-</pre>
 * Global variables are preceded by an underscore. ("_") Use descriptive names because leading underscores are often used for system / compiler variables.
 * private and protected members are preceded by "m_"
-* Variables are declared upon first usage. Note: This is a change from the previous rule used for C.
-* There are set names for many variables. Those are (but not limited to):
+* Pointers and references should have their reference symbol next to the name (compatibility with current code).
+* Variables that are declared below one another should have their type, name or reference operator, and assignment operator aligned by spaces.
+* There are set names for many variables. Those are (but not limited to): Vehicle *u, *v, *w; Station *st; Town *t; Window *w; Engine *e.
+*For multiple instances, use numbers "*t1, *t2" or postfixes "*st_from, *st_to".
+*Declare variables upon first usage.
+*Declare iterators in their loop.
 <pre>
-Vehicle *u, *v, *w;
-Station *st;
-Town *t;
-Window *w;
-Engine *e;
-</pre>
-and others. Note: the typical variable names should be added to the documentation of the type. For multiple instances, use numbers (Town *t1, *t2) or postfixes (*st_from, *st_to)
-* Iterators are declared in the loop. Example:
-<pre>
+int     number         = 10;
+Vehicle *u_first_wagon = v->next;
+int     value          = v->value;
+
+uint32 _global_variable = 3750;
+
+protected:
+    char m_private_array[10];
+
 for (int i = 0;;);
 </pre>
-* Pointers and references should have their reference symbol next to the name (compatibility with current code).
-* Variables that are declared below one another should have their
-** type
-** name or reference operator
-** assignment operator
-aligned by spaces.
 
-==== Enumerations / static consts ====
-Enumerations are used to store integers that belong logically together (like railtypes, string IDs and such). The enumerator is
-all caps with "_" between the words. The Enumeration uses the same rules as the Function. Enums are not used to store single numbers, use static consts instead.
-Enums may have special enumerator, which are named like the Enumeration, but in all caps, plus a tag like (_BEGIN, _END); and invalid value is named "INVALID_" plus the name in uppercase. The invalid always has 0xFF, 0xFFFF, 0xFFFFFFFF as a value, any other special values start from there with decreasing numbers. Other than that enums have consecutive numbers or consecutive powers of two. Powers of two are written in Hex or with the shift operator.
-Examples:
+=== Enumerations / static consts ===
+*Enumerations store integers that belong logically together (railtypes, string IDs, etc.). 
+*Enumeration names also use CamelCase.
+*Enumerators are all caps with "_" between the words. 
+*Enums are not used to store single numbers.
+*Enums have consecutive numbers OR
+*Enums have consecutive powers of two. Powers of two (bits) are written in hex or with the shift operator.
+*Enums may have special enumerators: "_BEGIN", "_END", and "INVALID_").  See example.
+*The invalid always has 0xFF, 0xFFFF, 0xFFFFFFFF as a value.
+*Other special values are consecutively less than the invalid.  
+*Variables that hold enumerators should have the type of the enumeration.
 <pre>
-enum SomeFlagsForMe {
-     SFFM_NONE     = 0,
-     SFFM_FOO      = (1 << 0),
-     SFFM_BAR      = (1 << 1)
+enum DiagDirection {
+	DIAGDIR_BEGIN = 0,
+	DIAGDIR_NE  = 0,
+	DIAGDIR_SE  = 1,
+	DIAGDIR_SW  = 2,
+	DIAGDIR_NW  = 3,
+	DIAGDIR_END,
+	INVALID_DIAGDIR = 0xFF,
+	BROKEN_DIAGDIR = 0xFE,
 };
 
-enum SomethingType {
-     SOMETHINGTYPE_BEGIN = 0,
-     SOMETHINGTYPE_FOO   = 0,
-     SOMETHINGTYPE_BAR,
-     SOMETHINGTYPE_QUX,
-     SOMETHINGTYPE_END,
-
-     SOMETHINGTYPE_SPECIAL1 = 0xFD,
-     SOMETHINGTYPE_SPECIAL2 = 0xFE,
-     INVALID_SOMETHINGTYPE  = 0xFF
+enum {
+	DEPOT_SERVICE       = (1 << 0),
+	DEPOT_MASS_SEND     = (1 << 1),
+	DEPOT_DONT_CANCEL   = (1 << 2),
+	DEPOT_LOCATE_HANGAR = (1 << 3),
 };
+
+DiagDirection enterdir = DIAGDIR_NE;
 </pre>
-Variables that hold enumerators should have the type of the enumeration.
 Numbers that store single or uncorrelated data are static consts. Those may use the naming conventions of enums.
 Example:
 <pre>
 static const int MAXIMUM_STATIONS = 42;
 </pre>
 
-=== Classes ===
-* Classes should have a minimum number of "public" "protected" and "private" sections.
-* Within these section the order is:
-** types
-** static const members
-** static members
-** members
-** constructors / destructors
-** static methods
-** methods.
-* Deviations from above order are allowed when the code dictates it (for example a static const is needed for a typedef)
-* Methods and members ought to be grouped logically.
-* All those sorting rules sometimes conflict which one another. Please use common sense what increases legibility of the code in such a case
-* The method implementation should indicate if it is virtual or similar by using a comment.
-Example
-<pre>
-/*virtual*/ void Class::Method()
-{
-}
-</pre>
-
-=== Templates ===
-Templates are a very powerful C++ tool, but they can easily confuse beginners. Thus:
-* Templates are to be documented in a very clear and verbose manner. Never assume anything in the documentation.
-* the template keyword and the template layout get a separate line. typenames are either "T" or preceded by a "T", integers get a single capital letter or a descriptive name preceded by "T". Example.
-<pre>
-template <typename T, typename Tsomething, int N, byte Tnumber_of_something>
-int Func();
-</pre>
-
-If you are writing one or more template class in the dedicated header file, use file.hpp for its name instead of file.h. This will let others know that it is template library (includes also implementation), not just header with declarations.
-
-=== Basic Rules ===
-* Do not put external declarations in implementation (i.e. cpp) files.
-* Use const where possible.
-* Do not typedef enums and structs.
-* Do not use the C Foo(void) but use Foo()
-* Style for if, both in the case of single or multiple line if/else statements:
+=== Control flow ===
+* Put a space before the parentheses in "if", "switch", "for", and "while" statements.
+* In if/else, switch, and loop statements, following statements should be inside brackets on a different line.
+* Opening curly bracket ( '''{''' ) stays on the first line.
+* In if without an else statements, a single statement may follow on the same line.
 <pre>
   if (a == b) {
     foo();
   } else {
     bar();
   }
-</pre>
-: Alternatively, only a single statement following if without an else case:
-<pre>
+
   if (a == b) foo();
-</pre>
 
-* Don't treat non-flags as flags: if (char_pointer != NULL && *char_pointer != '\0') instead of if (char_pointer && *char_pointer). Otherwise MSVC will complain about using non-booleans as booleans and fail to compile.
-
-* Put a space before and after binary operators: a + b, a == b, a & b, a <<= b, etc.. Exceptions are ".", "->" and "[]" (no spaces) and "," (just space after it)
-
-* Put brackets where it improves readability: *(b++) instead of *b++.
-
-* Space after "for", "if", "switch" and "while"
-
-* Style for switches:
-<pre>
   switch (a) {
     case 0: dosomethingshort; break;
 
@@ -143,130 +100,152 @@ If you are writing one or more template class in the dedicated header file, use 
       break;
     }
   }
-</pre>
 
-* Style for loops:
-<pre>
   for (int i = 0; i < 10; i++) {
     foo();
     bar()
   }
 </pre>
 
-* { for a function starts at the second line.
+=== Classes===
+* Classes names also use CamelCase. 
+* Classes should have "public", "protected", and "private" sections.
+* Within these section the order is: types, static const members, static members, members, constructors / destructors, static methods, methods.
+* Deviations from above order are allowed when the code dictates it (e.g. a static const is needed for a typedef)
+* Methods and members ought to be grouped logically.
+* All those sorting rules sometimes conflict which one another. Please use common sense what increases legibility of the code in such a case.
+* The method implementation should indicate if it is virtual or similar by using a comment.
 <pre>
-FunctionsLookLikeThis(int i_am_a_variable)
-{
-  code...
-}
-</pre>
+class ThisIsAClass {
+public:
+    typedef Titem_   *ItemPtr;
+private:
+    static const int m_max_size = 500;
+    int              m_size;
+    ItemPtr*         m_items;
 
-* Use free(p) instead of if (p != NULL) free(p). free(NULL) doesn't hurt anyone.
+public:
+    explicit ThisIsAClass();
+   ~ThisIsAClass();
 
-* Comments at the end of a line should start with //
-
-* Comments that take a whole line (no code on the line) should be in the /* */ style. One big exception is #endif (or any preprocessor): #endif /* COMMENT */ is the style to use (some preprocessors give warnings on // comments behind preprocessor blocks)
-
-* Added and modified functions, classes enums are to be documented using doxygen comment blocks. Members, methods and enumerators ought to be doxygenned as well. Functions should have parameters and return values described, those descriptions should be aligned. Individual return values need not be described if the return value is logically a number. Use @pre, @todo, @warning and similar flags extensively.
-Examples:
-<pre>
-/**
- * A struct to do something
- */
-struct foo {
-    int a; ///< stores the number of moons around the planet
-    int b; ///< diameter of the planet
+    virtual void Method();
 };
 
-
-/**
- * A function that returns the number of vehicles currently at the station
- * @param type The type of the vehicle we wish to count.
- * @pre IsValidVehicleType(type)
- * @return        The number of vehicles at the given station
- * @todo          Rewrite the function to improve performance
- * @bug           Function fails when there is full moon
- */
-int Station::GetVehicleOfType(VehicleType type) const
+/*virtual*/ void Class::Method()
 {
 }
-
-/**
- * A function that returns the status of a vehicle
- * @return       The status of the vehicle
- * @retval  0    Vehicle is driving around
- * @retval 23    Vehicle is waiting at a station
- * @retval 42    Vehicle is flying to the moon
- */
 </pre>
 
-* Avoid trailing whitespace. That is, tabs or space on the end of line should never occur. The svn server will not allow patches with traling whitespace applied. To find out if/where you have trailing whitespace, you could use the following (unix/bash) command:
-<pre>grep -n -R --include "*.[ch]" '[ 	]$' * | grep --invert-match ".diff" | grep --invert-match ".patch"</pre>
-Automatically removing whitespace is also possible with the following shell script (Note that it only checks .c and .h files):
+=== Templates ===
+Templates are a very powerful C++ tool, but they can easily confuse beginners. Thus:
+* Templates are to be documented in a very clear and verbose manner. Never assume anything in the documentation.
+* the template keyword and the template layout get a separate line. typenames are either "T" or preceded by a "T", integers get a single capital letter or a descriptive name preceded by "T".
 <pre>
-#!/bin/sh
-IFS='
-'
-for i in Makefile `find . -name \*.c``find . -name \*.cpp` `find . -name \*.h` `find . -name \*.mm`
-do
-  (
-    echo '%s/[ 	]\{1,\}$/'
-    echo w
-    echo q
-  ) | ed $i 2> /dev/null > /dev/null
-done
+template <typename T, typename Tsomething, int N, byte Tnumber_of_something>
+int Func();
 </pre>
 
-== Code documentation ==
+* If you are writing one or more template class in the dedicated header file, use file.hpp for its name instead of file.h. This will let others know that it is template library (includes also implementation), not just header with declarations.
 
-=== Overview ===
-We use [http://doxygen.org/ Doxygen] to automatically generate documentation from comments inside the source code. It scans the source files for comments with certain patterns and uses the information contained within those to generate documentation that will help understanding how things work. With that we have to follow some rules about how comments are being written, and that's what this section is for.
+=== Other (important!) rules ===
+* Put a space before and after binary operators: a + b, a == b, a & b, a <<= b, etc.. Exceptions are ".", "->" and "[]" (no spaces) and "," (just space after it).
+* Put brackets where it improves readability: *(b++) instead of *b++.
+* Do not put external declarations in implementation (i.e. cpp) files.
+* Use const where possible.
+* Do not typedef enums and structs.
+* Don't treat non-flags as flags: use "if (char_pointer != NULL && *char_pointer != '\0')", not "if (char_pointer && *char_pointer)".
+* Use free(p) instead of if (p != NULL) free(p). free(NULL) doesn't hurt anyone.
+* No trailing whitespace. The svn server will not allow tabs or space on the end of lines. 
+* Only use tabs to indent from the start of the line.
 
+== Documentation ==
+We use [http://doxygen.org/ Doxygen] to automatically generate documentation from the source code. It scans the source files for ''recognizable'' comments. 
+*'''Make your comments recognizable.'''
 
-First off, Doxygen knows two different kinds of comments:
-*''Brief descriptions'': one-liners that describe the function roughly ([http://docs.openttd.org/annotated.html example])
-*''Detailed descriptions'': as the name suggests, these contain the detailed function/purpose of the entity they describe ([http://docs.openttd.org/structBridge.html example])
-You can omit either one or put them into different places but there's only one brief and one detailed description allowed for the same entity.
-
-
-Furthermore, Doxygen knows three modes for documenting an entity:
-*Before the entity
-*After the entity
-*In a different file
-The latter is a little harder to maintain since the prototype of the entity it describes then is stored in several places (e.g. the .h file and the file with the descriptions). Also while it makes the code easier to read it also makes it easier to omit the important step of updating the description of an entity if it was changed - and we all know why that shouldn't happen ;)<br>
-Because of those reasons, we will only use the first two documentation schemes.
-
-
-On top of that Doxygen also caters to the needs of those who are used to the Qt and JavaDoc comment styles because it supports both:
-*Qt style example: '''int i; //!< The counter for the main loop'''
-*JavaDoc style example: '''int i; /**< The counter for the main loop */'''
-It also supports more comment styles but those two are the ones which are standardized. For OTTD we'll be using the JavaDoc style. One of the reasons is that it has a feature that the Qt style doesn't offer: JavaDoc style comment blocks will automatically start a brief description which ends at the first dot followed by a space or new line. Everything after that will also be part of the detailed description. The guideline in the next section will explain what this means for you.
-
-=== General JavaDoc style comments ===
-
-The general structure of a JavaDoc style comment is
- /**
-  * This is the brief description. And this sentence contains some further explanations that will appear in the detailed description only.
+=== Files ===
+*Put a @file command in a JavaDoc style comment at the start of the file, followed by a description.
+<pre>
+ /** @file
+  * This is the brief description.
+  * This is the detailed description here and on the following lines.
   */
-and the resulting descriptions of that block would be:
-*''Brief description'': This is the brief description.
-*''Detailed description'': This is the brief description. And this sentence contains some further explanations that will appear in the detailed description only.
-The distinction between the brief and detailed descriptions is made by the dot followed by a space/newline, so if you want to use that inside the brief description you need to escape the space/newline: 
- /**
-  * This is a brief description (e.g.\ using only a few words). Details go here.
-  */
+</pre>
+{{en/Warning|If a file lacks a '''file comment block''' then NO entities in that file will be documented by Doxygen!}}
 
+=== Functions ===
+*Comments for functions go in the .c file.
+*Comments for inlines go in the .h file.
+*Small inlines can have a short 3 or 4 line JavaDoc style comment.
+*Big inlines and functions should follow this scheme:
+<pre>
+/**
+ * A brief explanation of what the function does and/or what purpose it serves.
+ * Then follows a more detailed explanation of the function that can span multiple lines.
+ *
+ * @param foo Explanation of the foo parameter
+ * @param bar Explanation of the bar parameter
+ * @return The sum of foo and bar (@return can be omitted if the return type is void)
+ *
+ * @see SomeOtherFunc()
+ * @see SOME_ENUM
+ * 
+ * @author Bjarni, Darkvater
+ * @bug Some bug description
+ * @bug Another bug description which continues in the next line
+ *           and ends with the following blank line
+ *
+ * @todo Some to-do entry
+ */
+static int FooBar(int foo, int bar)
+{
+  return foo + bar;
+}
+</pre>
+*Document obvious parameters and return values too!
 
-If you're doing a one-line comment it could look like that:
- int i; /**< This is the description. */
-However since that might be a little hard to read we can also use
- int i; ///< This is the description.
-instead.
+=== Classes ===
+*Document structs similarly to functions:
+<pre>
+/**
+ * A short description of the struct.
+ * More detailed description of the its usage.
+ *
+ * @see [link to anything of interest]
+ */
+typedef struct foo {
+ }
+</pre>
 
+=== Statements ===
+*Describe all variables.
+*Mark areas of interest or suggestions for improving the code.
+*You have a few options when documenting other entities.
+<pre>
+/** Use this comment style above the entity (JavaDoc style) */
+/// Use this comment style above the entity
+int i; ///< Use this comment style on the same line as the entity
 
-Also in the comment block you can include so-called structural commands which tell Doxygen what follows. In general, their area of effect begins after the command word and ends when a blank line or some other command is encountered. Also, multiple occurences of the same structural command within a comment block or the referring entity will be joined in the documentation output usually.<br>
-The full list of supported structural commands can be found [http://www.stack.nl/~dimitri/doxygen/commands.html here] while this table shows the ones you should know about:
+int i = 6; ///< What is this magic number and what does it do?
 
+/** don't bother calling the callback when we have regular tracks only.
+ * it's usually not needed anyway. that will speed up things.
+ */
+direction = _new_dir[FIND_FIRST_BIT(bits)][direction];
+assert(direction != 0xFF);
+if (tile == tile_org) goto popnext;
+</pre>
+*Note the less-than sign ('''<''') on the same line comments.
+
+*Doxygen merely copies the comment as-is into the description of its entity. If that isn't what you want, use @note.
+<pre>
+ /// @note don't bother calling the callback when we have regular tracks only.
+ /// @note it's usually not needed anyway. that will speed up things.
+</pre>
+This way you can integrate @todo, @bug, @warning, etc. fields, for Doxygen to put into the [http://docs.openttd.org/bug.html global bug list].
+
+=== JavaDoc structural commands ===
+
+This table shows the commands you should use with OpenTTD.  The full list is [http://www.stack.nl/~dimitri/doxygen/commands.html here].
 
 {|
 |'''This structural command...'''||'''...does the following'''||'''Usage example(s)'''
@@ -306,98 +285,59 @@ The full list of supported structural commands can be found [http://www.stack.nl
 |'''@n'''||Forces a new line. Equivalent to and inspired by the printf function.||'''You kidding? :p'''
 |}
 
-=== The art of proper commenting ===
-==== Files ====
+=== More on Doxygen and JavaDoc ===
 
-The first step towards getting everything documented properly is to give the files themselves a description. We achieve that by putting a @file command inside a JavaDoc style comment which has been placed at the beginning of the file:
- /** @file
-  * This is the brief description.
-  * And then follow further explanations here that will appear in the detailed description only.
-  */
-{{en/Warning|Note that if a file lacks this comment block then NO entities in that file will be documented!}}
+Doxygen knows two different kinds of comments:
+*''Brief descriptions'': one-liners that describe the function roughly ([http://docs.openttd.org/annotated.html example])
+*''Detailed descriptions'': as the name suggests, these contain the detailed function/purpose of the entity they describe ([http://docs.openttd.org/structBridge.html example])
+You can omit either one or put them into different places but there's only one brief and one detailed description allowed for the same entity.
 
-==== Functions ====
+Doxygen knows three modes for documenting an entity:
+*Before the entity
+*After the entity
+*In a different file
+The latter is a little harder to maintain since the prototype of the entity it describes then is stored in several places (e.g. the .h file and the file with the descriptions). Also while it makes the code easier to read it also makes it easier to omit the important step of updating the description of an entity if it was changed - and we all know why that shouldn't happen ;)<br>
+Because of those reasons, we will only use the first two documentation schemes.
 
-Functions are commented/documented in the .c file while inlines get commented on in the .h files they reside in. While small inlines might be able to get away with a 3 or 4 line comment, bigger inlines and functions should follow this scheme:
+
+Doxygen supports both Qt and JavaDoc comment styles:
+*Qt style example: '''int i; //!< The counter for the main loop'''
+*JavaDoc style example: '''int i; /**< The counter for the main loop */'''
+It also supports more comment styles but those two are the ones which are standardized. For OTTD we'll be using the JavaDoc style. One of the reasons is that it has a feature that the Qt style doesn't offer: JavaDoc style comment blocks will automatically start a brief description which ends at the first dot followed by a space or new line. Everything after that will also be part of the detailed description. 
+
+
+The general structure of a JavaDoc style comment is
  /**
-  * A brief explanation of what the function does and/or what purpose it serves.
-  * Then follows a more detailed explanation of the function that can span multiple lines.
-  *
-  * @param foo Explanation of the foo parameter
-  * @param bar Explanation of the bar parameter
-  * @return The sum of foo and bar (@return can be omitted if the return type is void)
-  *
-  * @see SomeOtherFunc()
-  * @see SOME_ENUM
-  * 
-  * @author Bjarni, Darkvater
-  * @bug Some bug description
-  * @bug Another bug description which continues in the next line
-  *           and ends with the following blank line
-  *
-  * @todo Some to-do entry
+  * This is the brief description. And this sentence contains some further explanations that will appear in the detailed description only.
   */
- static int FooBar(int foo, int bar)
- {
-   return foo + bar;
- }
-
-The @see, @author, @bug, @todo, @warning, etc. fields are optional but obviously nice to have, come in handy and are quick to update, too.
-''Note'': when passing function names to @see you don't have to specify the parameter list - it simply stays empty.
-Also, don't assume that the parameter and return values are so obvious that there's no need to document them! Any coder who has to work on the code will for sure appreciate every hint he/she can get from the person who worked on it before.
-You can add @bug and @todo fields to the main description comment of the function or add them where the stuff actually is that those fields would refer to. To see how that should be done, look at [[#random-code-notices|Random code notices]] below. It doesn't really matter where they appear, since Doxygen automatically builds a [http://docs.openttd.org/todo.html global to-do list] with all entities listed that have a to-do field, for example.
-
-==== Enums / defines / global variables ====
-
-You should also comment your enums, defines and global variables. There are four possible styles:
-# '''/** Use this comment style if you wish to place the comment above the entity (JavaDoc style) */<br>int i;'''<br>
-# '''int i; /**< Use this comment style if you wish to place the comment on the same line as the entity (JavaDoc style) */'''<br>
-# '''/// Use this comment style if you wish to place the comment above the entity<br>int i;'''<br>
-# '''int i; ///< Use this comment style if you wish to place the comment on the same line as the entity'''
-
-While 1 and 2 should be prefered in order to stay in sync with the commenting standard it also should be easy to see that 3 and 4 are quicker to type and have a better readablity. With that it's up to you which one you use.
-
-Also note that styles 2 and 4 have the same structure and meaning as the regular comment blocks numbered 1 and 3 - only the < indicates that the entity it refers to is located in front of the block instead of after the block.
-
-==== Structs ====
-
-A typical struct comment should look like this:
+and the resulting descriptions of that block would be:
+*''Brief description'': This is the brief description.
+*''Detailed description'': This is the brief description. And this sentence contains some further explanations that will appear in the detailed description only.
+The distinction between the brief and detailed descriptions is made by the dot followed by a space/newline, so if you want to use that inside the brief description you need to escape the space/newline: 
  /**
-  * A short description of the struct.
-  * More detailed description of the its usage.
-  *
-  * @see [link to anything of interest]
+  * This is a brief description (e.g.\ using only a few words). Details go here.
   */
- typedef struct foo {
-  int16 x;  ///< x does this
-  int16 y;  ///< y does that
- }
 
-As before, @see & Co are optional but should be added if it could be helpful.
+If you're doing a one-line comment, use:
+ int i; ///< This is the description.
 
-==== Random code notices ====
+Also in the comment block you can include so-called structural commands which tell Doxygen what follows. In general, their area of effect begins after the command word and ends when a blank line or some other command is encountered. Also, multiple occurences of the same structural command within a comment block or the referring entity will be joined in the documentation output usually.
 
-Areas of interest or suggestions for improving the code should be marked as follows:
- int i = 6; ///< What is this magic number and what does it do?
-or, for comments that require more than a simple one-liner (JavaDoc):
- /** don't bother calling the callback when we have regular tracks only.
-  * it's usually not needed anyway. that will speed up things.
-  */
- direction = _new_dir[FIND_FIRST_BIT(bits)][direction];
- assert(direction != 0xFF);
- if (tile == tile_org) goto popnext; // detect infinite loop..
-or for the lazy:
- /// don't bother calling the callback when we have regular tracks only.
- /// it's usually not needed anyway. that will speed up things.
- direction = _new_dir[FIND_FIRST_BIT(bits)][direction];
- assert(direction != 0xFF);
- if (tile == tile_org) goto popnext; // detect infinite loop..
-But please: in order to maintain proper style, use the JavaDoc style when comments span more than 2~3 lines.
-
-Note: By default, Doxygen doesn't mark such comments in a special way, it merely copies the comment as-is into the description of the entity it belongs to. If that isn't what you want you might want to use
- /// @note don't bother calling the callback when we have regular tracks only.
- /// @note it's usually not needed anyway. that will speed up things.
- direction = _new_dir[FIND_FIRST_BIT(bits)][direction];
- assert(direction != 0xFF);
- if (tile == tile_org) goto popnext; // detect infinite loop..
-instead. That way you can also integrate @todo, @bug, @warning, etc. fields and Doxygen will put them into the [http://docs.openttd.org/bug.html global bug list], for example.
+==Other tips==
+===Remove trailing whitespace===
+To find out if/where you have trailing whitespace, you can use the following (unix/bash) command:
+<pre>grep -n -R --include "*.[ch]" '[ 	]$' * | grep --invert-match ".diff" | grep --invert-match ".patch"</pre>
+Automatically removing whitespace is also possible with the following shell script (Note that it only checks .c and .h files):
+<pre>
+#!/bin/sh
+IFS='
+'
+for i in Makefile `find . -name \*.c``find . -name \*.cpp` `find . -name \*.h` `find . -name \*.mm`
+do
+  (
+    echo '%s/[ 	]\{1,\}$/'
+    echo w
+    echo q
+  ) | ed $i 2> /dev/null > /dev/null
+done
+</pre>
