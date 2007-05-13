@@ -29,7 +29,16 @@ The final cost will be added to path cost. This can help to reduce traffic jams 
 This is internal YAPF stuff and is not supposed to be tuned really. Developer put a lot of effort to calculate right values into p0,p1,p2.<br>
 The only tunable value is p1 penalty. Fine value range is from -100 to -90. If you go outside that range, penalty array will have weird values and trains would start to go not as you expect.<br>
 If you want more agresive load balancing go for p1=-90 and you will get following array:<br>
-p[]={500,415,340,275,220,175,140,115,100,95}
+p[]={500,415,340,275,220,175,140,115,100,95}<br>
+<br>
+You can also try following setting. These were successful in load balancing my entrances to
+very busy stations:
+rail_look_ahead_max_signals = 10<br>
+rail_look_ahead_signal_p0 = 1000<br>
+rail_look_ahead_signal_p1 = -200<br>
+rail_look_ahead_signal_p2 = 10<br>
+Yoy get following table:
+p[]={1000,810,640,490,360,250,160,90,40,10}<br>
 
 == Dependant Projects ==
 You can't change one part of the code without some effect on the other parts, and pathfinding is a huge part.
