@@ -1,62 +1,74 @@
 [[Translation:en/Manual/Command line]]
-[[Category:en/Manual/Settings & Preferences]]
-
-== What is a command line? ==
-
-The command line is the command that is used to run the game.  This can include many switches, as indicated below, to adjust options within the game and how the game runs.  All version of OpenTTD support command line options although in graphical operating systems (e.g. Windows), you may need to find where to put them.
-
-== How do I use it? ==
-
-In windows, there is the shortcut way and the DOS prompt way. 
-
-'''The shortcut way:'''
-Make a shortcut of the program you want to do commandline on, in this case openttd.exe, and right click it and select properties. Then, you look in the first box. It should say something like this:
- ''C:\Games\Openttd.exe''  
-
-
-
-Now, put double or single quotes around the text. 
- ''"C:\Games\Openttd.exe"''  
-
-
-
-Then put the parameters afterwards, outside the quotes. 
- ''"C:\Games\Openttd.exe" -m''  
-
-
-If you want modifyers, insert them one space after the parameter:
- ''"C:\Games\Openttd.exe" -m 127.12.13.1'' 
-
-
-
-If you want multiple parameters, separate them with spaces
- ''"C:\Games\Openttd.exe" -m -s null 
-
-
-Now, when you run the game using the shortcut (Remember to click OK, not Cancel), things should happen.
-
-
-
-'''The DOS way.'''
-It is the same, only to access it, start the MS-DOS prompt, go to the games adress, and do like above, only without the quotes. This requires basic DOS knowledge. If you don't have that, use the one above.
+The '''command line''' is the operating system command used to launch the game.  This can include parameters to adjust how the game runs.  All version of [[en/Manual/Main Page]] support command line options.
 
 == Command prompt options ==
+{{en/C|openttd [-h] [-v] [-s] [-m] [-r <xres>x<yres>] [-t <year>] [-d <level>] [-l <lang>] [-e] [-g [game]] [-G]|}}
 
-  openttd [-h] [-v] [-s] [-m] [-r <xres>x<yres>] [-t <year>] [-d <level>] [-l <lang>] [-e] [-g [game]] [-G]
+{| border=1 width=100%
+!width="225"|Parameter
+!Description
+|-
+|{{en/C|-h|}}|| Lists OpenTTD command options.
+|-
+|{{en/C|-v <driver>|}}|| Sets OpenTTD video driver. Depending on your build, valid drivers may include:<br />
+{{en/C|null|}} for no video (crash)<br />
+{{en/C|sdl|}} for SDL video<br />
+{{en/C|win32|}} for Windows video
+|-
+|{{en/C|-s <driver>|}}|| Sets OpenTTD sound driver. Depending on your build, valid drivers may include<br />
+{{en/C|null|}} for no sound<br />
+{{en/C|sdl|}} for SDL sound<br />
+{{en/C|win32|}} for Windows sound
+|-
+|{{en/C|-m <driver>|}}|| Sets OpenTTD music driver. Depending on your build, valid drivers may include<br />
+{{en/C|null|}} for no music<br />
+{{en/C|dmusic|}} for DirectMusic<br />
+{{en/C|win32|}} for Windows MIDI<br />
+{{en/C|extmidi|}} for external MIDI<br />
+{{en/C|bemidi|}} for BeOS MIDI
+|-
+|{{en/C|-r <xres>x<yres>|}}|| Sets OpenTTD resolution.
+|-
+|{{en/C|-t <year>|}}|| Sets the starting date.
+|-
+|{{en/C|-d <level>|}}  
+:{{en/C|1=-d ai=<level>|2=}}
+:{{en/C|1=-d grf=<level>|2=}}
+:{{en/C|1=-d misc=<level>|2=}}
+:{{en/C|1=-d net=<level>|2=}}
+:{{en/C|1=-d spritecache=<level>|2=}}
+|Sets debug level. Use any number between 0 and 9, where 9 is most sensitive.
+:for AI debuging info only
+:for newgrf debugging info only
+:for miscellaneous debugging info
+:for network debugging info only
+:for spritecache debugging info only
+|-
+|{{en/C|-l <lang>|}}|| Sets language.
+|-
+|{{en/C|-e|}}|| Starts the scenario editor.
+|-
+|{{en/C|-g [game]|}}|| If no game is specified, starts a new game immediately. If a game is specified, loads that game immediately. Note: -g can load both savegames and scenarios.
+|-
+|{{en/C|-G <seed>|}}|| Sets the random seed.
+|}
 
-* <code>-h</code> lists OpenTTD command options
-* <code>-v</code> Sets OpenTTD video driver<br />Depending on your build, valid drivers may include<br /><code>null</code> for no video (crash)<br /><code>sdl</code> for SDL video<br /><code>win32</code> for Windows video
-* <code>-s</code> Sets OpenTTD sound driver.<br />Depending on your build, valid drivers may include<br /><code>null</code> for no sound<br /><code>sdl</code> for SDL sound<br /><code>win32</code> for Windows sound
-* <code>-m</code> Sets OpenTTD music driver<br />Depending on your build, valid drivers may include<br /><code>null</code> for no music<br /><code>dmusic</code> for DirectMusic<br /><code>win32</code> for Windows MIDI<br /><code>extmidi</code> for external MIDI<br /><code>bemidi</code> for BeOS MIDI
-* <code>-r <xres>x<yres></code> Sets OpenTTD resolution
-* <code>-t <year></code> Sets the starting date
-* <code>-d <level></code> Sets debug level. Use any number between 0 and 9, where 9 is most sensitive. 
-** <code>-d ai=<level></code> for AI debuging info only
-** <code>-d grf=<level></code> for newgrf debugging info only
-** <code>-d misc=<level></code> for miscellaneous debugging info
-** <code>-d net=<level></code> for network debugging info only
-** <code>-d spritecache=<level></code> for spritecache debugging info only
-* <code>-l <lang></code> sets language
-* <code>-e</code> starts the scenario editor
-* <code>-g [game]</code> If no game is specified, starts a new game immediately. If a game is specified, loads that game immediately. Note: -g loads both savegames and scenarios.
-* <code>-G <seed></code> Sets the random seed
+==Help for Windows users==
+There are two ways to add command line parameters:
+
+===The shortcut method===
+*Make a shortcut to {{en/C|openttd.exe|}}
+*Right click the shortcut and select properties. The first box should say something like this: {{en/C|C:\Games\openttd.exe|}}
+*Put double quotes around the text: {{en/C|"C:\Games\openttd.exe"|}}
+*Add parameters afterwards, outside the quotes: {{en/C|"C:\Games\openttd.exe" -m|}}
+*To add modifiers, insert them one space after the parameter: {{en/C|"C:\Games\openttd.exe" -m 127.12.13.1|}}
+*Separate multiple parameters with spaces: {{en/C|"C:\Games\Openttd.exe" -m -s null|}}
+*When you are done, run the game using the shortcut.
+
+===The DOS method===
+This requires basic [https://www.wikipedia.org/wiki/List_of_DOS_commands DOS] knowledge. If you don't have that, use the shortcut method.
+*Start the MS-DOS prompt.
+*Go to the openttd.exe location.
+*Do the same as above, only without the quotes.
+
+[[Category:en/Manual/Settings & Preferences]]
