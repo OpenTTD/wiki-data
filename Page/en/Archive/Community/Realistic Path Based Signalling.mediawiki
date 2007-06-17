@@ -1,9 +1,7 @@
 [[Translation:en/Archive/Community/Realistic Path Based Signalling]]
-{{en/Note|This article is a first draft. It will be expanded in the next 24 hours.}}
-
 ==Introduction==
 
-This page describes an alternative to the [[en/Archive/Manual/Yet Another PBS Patch|old path based signalling (PBS) system of OpenTTD]]. This proposed new PBS system is based on realistic signal behavior. The primary intent of this new system is to allow bi-directional double track and bi-directional stations, which are not supported by the current OpenTTD signalling system (at least not without frequent deadlocks). This new signalling system was first proposed in detail by the forum user "Tekky" in his [http://www.tt-forums.net/viewtopic.php?t=31172 post] in March 2007. Currently, this new PBS system is merely a proposal and no implementations of it exist.
+This page describes an alternative to the [[en/Archive/Manual/Yet Another PBS Patch|old path based signalling (PBS) system of OpenTTD]]. This proposed new PBS system is based on realistic signal behavior. The primary intent of this new system is to allow bi-directional double track and bi-directional stations, which are not supported by the current OpenTTD signalling system (at least not without frequent deadlocks). This new signalling system was first proposed in detail by the forum user "Tekky" in his [http://www.tt-forums.net/viewtopic.php?t=31172 post] in March 2007. Currently, this new PBS system is in its design phase and no code has been written yet.
 
 ==Bi-directional double track in reality==
 In reality, bi-directional double track is used to allow faster (passenger) trains to overtake slower (freight) trains and also to allow one track to be closed for maintenance working while still allowing traffic to flow in both directions on the other track. In Germany, for example, all newly built double track is bi-directional and also existing double track is now being upgraded to become bi-directional.
@@ -126,11 +124,11 @@ However, the main advantage of the proposed new PBS system would be that bi-dire
 <center>[[File:en/Archive/Community/Rpbs img14.png|center|frame|Figure 4.2]]</center>
 
 
-This layout will not work currently in OpenTTD, because - even when using presignals - there would be a deadlock if two trains try to enter the same platform at the same time from two different sides. With the new PBS system, however, all trains will have to reserve a route into the station platform before they leave their waiting signal. Therefore, only one train will attempt to enter a platform at once and there is no danger of a deadlock.
+A bi-directional station layout will currently not work in OpenTTD(even when using pre- and exit-signals), because there would be a deadlock if two trains try to enter the same platform at the same time from two different sides. With the new PBS system, however, all trains will have to reserve a route into the station platform before they leave their waiting signal. Therefore, only one train will attempt to enter a platform at once and there is no danger of a deadlock.
 
 ==Required changes to OpenTTD==
 
-For the features decribed in the previous sections to work, the following modifications would have to be made to OpenTTD:
+For the features described in the previous sections to work, the following modifications would have to be made to OpenTTD:
 
 First, OpenTTD should not automatically consider track with single signals as one-way track. It must be permitted to put single signals also on bi-directional track. One-way track must be marked in a different way.
 
@@ -138,6 +136,6 @@ Furthermore, all signals in OpenTTD are to be PBS signals. With a proper PBS imp
 
 Also, all signals should show red by default, as in reality. Only after a train reserves a route through a signal, should a signal show green (until the train passes by). This is also how modern signals behave in reality. 
 
-A train's pathfinder must always reserve a route to the next signal. This reservation must be "strong", i.e. the path to the next signal must be completely clear. In the case of the next signal being an orange signal instead of a normal signal, the train must also make a "weak" reservation from the orange signal to the next normal signal, in order to not risk getting stuck in front of an orange signal (which could cause a deadlock). If these path reservations are not possible or conflict with another train with a higher priority, the train does not proceed and waits in front of its current signal (which shows red). The basics of such a system have already been implemented with the current miniIN PBS sytem, although this current system only supports strong reservations and not weak ones and also does not support train priorities.
+A train's pathfinder must always reserve a route to the next signal. This reservation must be "strong", i.e. the path to the next signal must be completely clear. In the case of the next signal being an orange signal instead of a normal signal (which means the signal is an unsafe waiting location), the train must also make a "weak" reservation from the orange signal to the next normal signal, in order to not risk getting stuck in front of an orange signal (which could cause a deadlock). The difference between these two types of path reservations are explained in section 4. If these path reservations are not possible or conflict with another train with a higher priority, the train does not proceed and waits in front of its current signal (which shows red). The basics of such a system have already been implemented with the current miniIN PBS sytem, although this current system only supports strong reservations and not weak ones and also does not support train priorities.
 
-As long as normal signals are only placed in safe waiting locations for trains and all unsafe waiting locations are marked with orange signals, there will be no danger of a deadlock.
+As long as normal signals are only placed in safe waiting locations for trains and all unsafe waiting locations are marked with orange signals, there will never be a danger of a deadlock.
