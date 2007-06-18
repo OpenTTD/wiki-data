@@ -4,7 +4,7 @@
 This page describes an alternative to the [[en/Archive/Manual/Yet Another PBS Patch|old path based signalling (PBS) system of OpenTTD]]. This proposed new PBS system is based on realistic signal behavior. The primary intent of this new system is to allow bi-directional double track and bi-directional stations, which are not supported by the current OpenTTD signalling system (at least not without frequent deadlocks). This new signalling system was first proposed in detail by the forum user "Tekky" in his [http://www.tt-forums.net/viewtopic.php?t=31172 post] in March 2007. Currently, this new PBS system is in its design phase and no code has been written yet.
 
 ==Bi-directional double track in reality==
-In reality, bi-directional double track is used to allow faster (passenger) trains to overtake slower (freight) trains and also to allow one track to be closed for maintenance working while still allowing traffic to flow in both directions on the other track. In Germany, for example, all newly built double track is bi-directional and also existing double track is now being upgraded to become bi-directional.
+In reality, bi-directional double track is used to allow faster (passenger) trains to overtake slower (generally freight) trains and also to allow one track to be closed for maintenance working while still allowing traffic to flow in both directions on the other track. In Germany, for example, all newly built double track is bi-directional and also existing double track is now being upgraded to become bi-directional.
 
 Bi-directional double track has the following layout in reality (assuming right-hand traffic):
 
@@ -32,7 +32,7 @@ The closest solution available in OpenTTD to these 3 problems would be the follo
 <center>[[File:en/Archive/Community/Rpbs img3.png|center|frame|Figure 2.1]]</center>
 
 
-This track layout works, in principal. However, there is the danger of a deadlock, using the current miniIN PBS implementation:
+This track layout works, in principle. However, there is the danger of a deadlock, using the current miniIN PBS implementation:
 
 
 <center>[[File:en/Archive/Community/Rpbs img4.png|center|frame|Figure 2.2]]</center>
@@ -86,7 +86,7 @@ When there are two trains travelling next to each other in the same direction on
 
 In this picture, the red path is the "strong" reservation and the yellow path is the "weak" reservation.
 
-Since the train on the opposite track is unable to switch back to the normal track without interfering with the other train, the train on the opposite track will shift ist weak reservation to the next junction, as soon as the pathfinder detects a path conflict, so that both trains can continue unhindered:
+Since the train on the opposite track is unable to switch back to the normal track without interfering with the other train, the train on the opposite track will shift its weak reservation to the next junction, as soon as the pathfinder detects a path conflict, so that both trains can continue unhindered:
 
 
 <center>[[File:en/Archive/Community/Rpbs img12.png|center|frame|Figure 3.6]]</center>
@@ -124,7 +124,7 @@ However, the main advantage of the proposed new PBS system would be that bi-dire
 <center>[[File:en/Archive/Community/Rpbs img14.png|center|frame|Figure 4.2]]</center>
 
 
-A bi-directional station layout will currently not work in OpenTTD(even when using pre- and exit-signals), because there would be a deadlock if two trains try to enter the same platform at the same time from two different sides. With the new PBS system, however, all trains will have to reserve a route into the station platform before they leave their waiting signal. Therefore, only one train will attempt to enter a platform at once and there is no danger of a deadlock.
+A bi-directional station layout will currently not work in OpenTTD (even when using pre- and exit-signals), because there would be a deadlock if two trains try to enter the same platform at the same time from two different sides. With the new PBS system, however, all trains will have to reserve a route into the station platform before they leave their waiting signal. Therefore, only one train will attempt to enter a platform at once and there is no danger of a deadlock.
 
 ==Required changes to OpenTTD==
 
