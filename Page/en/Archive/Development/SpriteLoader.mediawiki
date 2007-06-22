@@ -1,0 +1,12 @@
+[[Translation:en/Archive/Development/SpriteLoader]]
+There are current two sprite loaders. After the sprite is loaded it is passed to the [[en/Archive/Source/Blitter]]'s encoder function.
+
+== GRF ==
+
+The GRF sprite loader reads the sprite into memory and decodes it. The colour index data is then copied into the M part of the common RGBAM pixel format. No conversion to RGBA happens, but the alpha value is set to correspond to transparent parts of the sprite.
+
+== PNG ==
+
+Firstly the sprite is loaded. This can be 32pp, 16bpp, or 8bpp paletted. Most PNG formats should be fine. This data is copied into the RGBA parts of the RGBAM format. Additionally two text (tEXt) data fields are read containing the X and Y sprite offsets. These must be present.
+
+Secondly a mask sprite (with a filename suffix of 'm'), if available, is loaded. This is used for colour remapping, and must be an 8bpp image with TTD's palette. If any pixels in this image are not transparent (colour index 0) then the existing RGB data at that pixel is cleared and the M part is filled. The alpha value is left from the original RGBA image, to allow for translucent remapped parts.
