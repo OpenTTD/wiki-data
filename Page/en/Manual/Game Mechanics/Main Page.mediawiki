@@ -128,9 +128,9 @@ Divide the total rating points by 256 to get the percent rating.  The maximum po
 Every 2.5 days station ratings are computed; ratings can't change by more than 2% per cycle.
 
 ==Local Authority Ratings==
-Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
-
 Ratings limit some player actions, and can also change based on some actions.  
+
+Currently you can exploit the game by clearing ~200 trees and then replanting them.  This sets the rating to -1000 (the minimum), and then raises it to 220.
 
 <table width="100%">
 <tr><td style="background:none; border:0px">
@@ -189,7 +189,9 @@ Each month players' ratings automatically change:
 '''Example:'''<br>
 A player has a rating of -300, (Very Poor), 2 active stations and 1 unactive station at a town.<br>
 5pts + 2 * 12pts - 15pts = 14pts points gain per month.<br>
-500pts / 14pts/mo = 36 months before the town will let him build another station.
+(-300 - -200)pts / 14pts/mo = 8 months before the town will let him build another station.
+
+Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
 
 ==Industry Production==
 Here is how the game determines how much cargo an industry produces per month.  This section lists production governed by the default [[en/Archive/Manual/Settings/Configuring patches/Economy#enable-smooth-economy|smooth economy]] patch.  Production is always a multiple of 8.
