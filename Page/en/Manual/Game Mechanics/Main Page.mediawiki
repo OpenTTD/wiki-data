@@ -128,7 +128,7 @@ Divide the total rating points by 256 to get the percent rating.  The maximum po
 Every 2.5 days station ratings are computed; ratings can't change by more than 2% per cycle.
 
 ==Local Authority Ratings==
-Ratings limit some player actions, and can also change based on some actions.  
+Ratings limit some player actions; they start at +500 and can change based on some actions.
 
 Currently you can exploit the game by clearing ~200 trees and then replanting them.  This sets the rating to -1000 (the minimum), and then raises it to 220.
 
@@ -159,23 +159,25 @@ Currently you can exploit the game by clearing ~200 trees and then replanting th
 |-
 !Player action!!Required rating!!Effect on rating
 |-
-|Build a station|| -200 ||
+|Build a station|| -200 || n/a
 |-
 |Destroy an 'edge' piece of road|| 0 / 48 / 96 ||-18
 |-
 |Destroy a 'centre' piece of road|| 0 / 48 / 96 ||-50
 |-
-|Destroy a city tunnel or bridge|| 128 / 192 / 384 ||-250
+|Destroy a city tunnel or bridge|| 128 / 192 / 384 ||-250, down to 0
+|-
+|Destroy industry|| 384 / 460 / 768 ||-1500
 |-
 |Destroy building|| 40 to 300 ||-40 to -300
 |-
-|Plant tree on clear square|| ||+7, up to 220.
+|Plant tree on clear square|| n/a ||+7, up to 220.
 |-
-|Clear a tile with trees|| ||-35
+|Clear a tile with trees|| n/a ||-35
 |-
-|Successful bribe|| ||+200
+|Successful bribe|| n/a ||+200, up to 800.
 |-
-|Unsucessful bribe|| ||Set to -50
+|Unsucessful bribe|| n/a ||Set to -50
 |}
 Required rating is listed as Permissive / Neutral / Hostile.
 </td></tr></table>
@@ -189,7 +191,7 @@ Each month players' ratings automatically change:
 '''Example:'''<br>
 A player has a rating of -300, (Very Poor), 2 active stations and 1 unactive station at a town.<br>
 5pts + 2 * 12pts - 15pts = 14pts points gain per month.<br>
-(-300 - -200)pts / 14pts/mo = 8 months before the town will let him build another station.
+(-200 - -300)pts / 14pts/mo = 8 months before the town will let him build another station.
 
 Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
 
