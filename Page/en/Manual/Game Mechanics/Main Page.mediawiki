@@ -196,7 +196,7 @@ A player has a rating of -300, (Very Poor), 2 active stations and 1 unactive sta
 Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
 
 ==Industry production==
-Here is how the game determines how much cargo an industry produces per month.  This section lists production governed by the default [[en/Archive/Manual/Settings/Configuring patches/Economy#enable-smooth-economy|smooth economy]] patch.  Production is always a multiple of 8.
+Here is how the game determines how much cargo an industry produces per month.  This section lists production governed by the default [[en/Archive/Manual/Settings/Configuring patches/Economy#enable-smooth-economy|smooth economy]] patch.  Production is a multiple of 8 or 9 (sometimes 10 with forests).
 
 {| border="1" cellpadding="4"
 !Raw Material Industry!!Produced Cargo!!Initial production range
@@ -254,21 +254,21 @@ Here is how the game determines how much cargo an industry produces per month.  
 
 
 Each month the game randomly changes some industry productions:
-*There is a 2% chance that the production will go down by 4% to 23% (random).  
-*There is a 2% to 4% (not random) chance that the production will go up by 4% to 23% (random).
-*The more cargo that is transferred from the industry, the better the chance that production will go up.  100% cargo transfer results in a 4% chance.
-*Both changes can occur in the same month, and maybe cancel each other out.
-*Maximum production is 2040 units.
+*There is a 1.95% chance that the production will go down by 4% to 23% (random).  
+*There is a 1.95% to 3.8% (not random) chance that the production will go up by 4% to 23% (random).
+*The more cargo that is transferred from the industry, the better the chance that production will go up.  100% cargo transfer results in a 3.8% chance.
+*Both changes can occur in the same month, and maybe cancel each other out (very slight chance).
+*Maximum production is 2040 or 2195 units of cargo per month (= 8x or 9x 255).
 
 
 '''Example:'''<br>
 An coal mine has 70% of its output delivered:<br>
-Automatic 2% chance production will go down ~13% this month.<br>
-2% + 2% * 70% = 3.4% chance production will go up ~13% this month.<br>
-(1+ 1.4% * 113%) ^ 12 = 121%, the coal mine will grow an average of 21% per year.
+Automatic 1.95% chance production will go down ~13% this month.<br>
+1.95% + 1.95% * 70% ~ 3.4% chance production will go up ~13% this month.<br>
+(1+ 1.4% * 113%) ^ 12 ~ 121%, the coal mine will grow an average of 21% per year.
 
 
-'''Note:'''  The exact formula is more complicated.  See industry.c.
+'''Note:'''  The exact formula can be seen under "ExtChangeIndustryProduction" in industry_cmd.c .
 
 ==Delivery payment rates==
 The amount you get paid for delivering cargo is based on 4 factors: the amount of cargo you deliver, the value of the cargo, the distance you deliver it, and how on-time you deliver it.
