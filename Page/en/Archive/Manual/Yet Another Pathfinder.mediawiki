@@ -7,6 +7,16 @@ YAPF is the third attempt at creating a pathfinder algorithm for OpenTTD. The fi
 
 The remainder of this article is meant for developers.
 
+== Improvements over NPF ==
+
+According to a [http://www.tt-forums.net/viewtopic.php?t=32774 forum post by KUDr], there are 3 major improvements in YAPF compared to NPF:
+
+*NPF creates a node for each tile while YAPF extends node by following the tile/trackdir until something important (station, waypoint, choice, etc.) is seen. This node extension is called segment.
+*YAPF caches its segments - begin/end tile/trackdir, cost, last signal tile/trackdir, etc.
+*YAPF has much more complex structure - it is template based to allow compiler to optimize calls between YAPF modules by inlining.
+
+These improvements increase the performance of YAPF over NPF but also make the code more complex and harder to understand.
+
 == Tuning ==
 Several options of YAPF can be tuned up. I will not describe all of them because they are clear what they do.<br>
 There 4 options (3 actualy) that are quite mysterious:<br>
