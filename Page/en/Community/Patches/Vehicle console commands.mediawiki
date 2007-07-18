@@ -1,6 +1,6 @@
 Help for vehicle console commands.
 
-There are five commands that can be used to control vehicles. They all have same syntax, they just differ in which types of vehicles they affect and some subcommands work only on some vehicle types (for example selling train wagons work only with trains)
+There are five commands that can be used to control vehicles. They all have same syntax, they just differ in which types of vehicles they affect and some subcommands work only on some vehicle types (for example selling train wagons work only with trains).
 
 {|
 |Command||Function
@@ -15,29 +15,54 @@ There are five commands that can be used to control vehicles. They all have same
 |-
 |'''vehicle'''||Control all types of vehicles
 |}
+=== Synopsis ===
 
-== Synopsis ==
+Invoke command on specified vehicle(s).
 
-Invoke command on specified vehicle(s). Usage: 'vehicle <identifier> <command> [<optional command parameters...>]'
+Usage:
+
+ vehicle <identifier> <command> [<optional command parameters...>]
+
 Command can be:
- center          Center main view on vehicle's location (Aliases: centre)
- clone           Clone vehicle, if it is in depot
- clone_shared    Same as clone, but with shared orders
- count           Count vehicles matching given criteria
- depot           Send to depot
- ignore          Ignore signals
- info            Show vehicle info on console
- interval        Set servicing interval. Parametr specifies new interval in days/percent
- leave           Leave station by skipping to next order
- open            Open vehicle window (Aliases: show)
- sell            Sell vehicle, if it is stopped in depot
- service         Send for servicing
- skip            Skip to next order. Optional parameter specifies how many orders to skip ('r' = skip to random order, default is 1)
- start           Start vehicle (Aliases: go)
- stop            Stop vehicle
- turn            Turn around (Aliases: reverse)
- winfo           Show info about train wagons on console
- wsell           Sell train wagons(s). If one parameter is given, single wagon will be sold. If two parameters are given, they will specify range of wagons to sell.
+{|
+|  center        ||  Center main view on vehicle's location (Aliases: centre)
+|-
+|  clone         ||  Clone vehicle, if it is in depot. Have no effect on vehicles outside depots.
+|-
+|  clone_shared  ||  Same as clone, but with shared orders.
+|-
+|  count         ||  Count vehicles matching given criteria. This command will do nothing, but you'll see how many vehicles are matched by the identifier
+|-
+|  depot         ||  Send vehicle to depot, unless it is in one already.
+|-
+|  ignore        ||  Ignore signals. Valid only for trains.
+|-
+|  info          ||  Show vehicle info on console. Some basic statistics like maximum speed, etc ... are printed to console for each matched vehicle.
+|-
+|  interval      ||  Set servicing interval. Parameter specifies new interval in days or in percent, according to what is set in patches configuration.
+|-
+|  leave         ||  Leave station by skipping to next order. Does not affect vehicles that are not stopped in station.
+|-
+|  open          ||  Open vehicle window (Aliases: show)
+|-
+|  sell          ||  Sell vehicle, if it is stopped in depot.
+|-
+|  service       ||  Send for servicing, unless the vehicle is already in a depot
+|-
+|  skip          ||  Skip to next order. Optional parameter specifies how many orders to skip ('r' = skip to random order in the list, default is 1 - skip to next order). Specifying negative values can be used to skip to previous orders. Skipping to random order may be useful to randomize group of buses in city if you bought many of them at once.
+|-
+|  start         ||  Start vehicle (Aliases: go)
+|-
+|  stop          ||  Stop vehicle
+|-
+|  turn          ||  Turn around (Aliases: reverse)
+|-
+|  winfo         ||  Show info about train wagons on console
+|-
+|  wsell         ||  Sell train wagons(s). If one parameter is given, single wagon will be sold. If two parameters are given, they will specify range of wagons to sell. Wagons are numbered from 1 (wagon number 0 is the first engine). Example: "wsell 3" will sell third wagon. "wsell 4 6" will sell wagons from 4th to 6th.
+|}
+
+Identifier is used to specify on which vehicles the command will be applied.
 Identifier can be:
  'all' or '*' for all vehicles
  'crashed' for all crashed vehicles
