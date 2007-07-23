@@ -1,0 +1,55 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/Simulation/Vehicles]]
+{{en/Development/Navigation}}
+
+A vehicle is one of the fundamental entities in the game.
+
+==Types==
+There are 6 recognised vehicle types in the VehicleType enum:
+* VEH_TRAIN: A train or carriage. Makes use of a linked list for the carriages.
+* VEH_ROAD: A bus or truck. Will probably use the same linked list for articulated vehicles.
+* VEH_SHIP
+* VEH_AIRCRAFT
+* VEH_SPECIAL
+* VEH_DISASTER
+
+==Vehicle==
+The Vehicle struct has many variables and methods. Some of the important ones are:
+{|
+| colspan=2 | '''Variables'''
+|-
+| VehicleTypeByte type
+| The vehicle type
+|-
+| PlayerByte owner
+| owner of the vehicle
+|-
+| TileIndex tile<br>int32 x_pos<br>int32 y_pos<br>byte z_pos
+| Its current location
+|-
+| byte spritenum<br>uint16 cur_image<br>byte sprite_width<br>byte sprite_height
+| Sprite infomation
+|-
+| TextEffectID fill_percent_te_id
+| a text-effect id to a loading indicator object
+|-
+| uint16 max_speed<br>byte subspeed
+| Speed of the train
+|-
+| byte acceleration<br>uint16 max_speed
+| Acceleration and max speed
+|-
+| byte vehstatus
+| Status
+|-
+| CargoID cargo_type<br>uint16 cargo_cap
+| Type and amount of cargo
+|-
+| Order *orders
+| Linked list of orders
+|-
+| colspan=2 | '''Methods'''
+|-
+| BeginLoading()<br>LeaveStation()
+| Entering and leaving a station
+|}
+There are many more methods and variables than this. For more info, see vehicle.h and vehicle.cpp. Vehicles are all subclassed, so there are other more specific methods and variables for trains, etc.
