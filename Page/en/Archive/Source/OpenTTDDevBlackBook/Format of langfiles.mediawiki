@@ -346,6 +346,29 @@ Do you imagine how will the result look like? Here is the answer:
 *Forum magnum est
 Again, as with plural form, if there is no suffix, write "". Use always as many suffixes as there are genders.
 
+==== Advanced use ====
+{G...} tag bases on gender of {STRING} after the tag.
+However, if you need to change suffix of a word which is after {STRING} (before tag), you have to write ID of string you want to retrieve gender from.
+This may sound clumsy, so let's take a look at example:
+
+<pre>{BLACK}{BIGFONT}Now{G y a e} {STRING} został{G "" a o} posadzon{G y a e} blisko {TOWN}!</pre>
+Second and third {G...} will not work, because there is no {STRING} after them to get gender from.
+
+We want to retrieve gender from first (and the only one) {STRING} tag. First tag has ID=0, second tag has ID=1 and so on. Here is how to do that:
+
+<pre>{BLACK}{BIGFONT}Now{G y a e} {STRING} został{G 0 "" a o} posadzon{G 0 y a e} blisko {TOWN}!</pre>
+
+
+What if there are more {STRING}s? ({{en/Todo|I'm not sure, please verify this}})
+In the following example we use two genders: male and female
+
+<pre>Mis{G ter s} {STRING} is shocked by h{G 0 is er} grand{G 2 son daughter} who flamed mis{G ter s} {STRING} yesterday. The bad {G boy girl}'s name is {STRING}</pre>
+Now I'll explain why some {G...}'s have numbers and other do not:
+*First, fourth and fifth does '''not''' have number, because it fetches gender of next string (default behaviour)
+*Second and third does have number, because it fetches gender of a string that is not after the tag. We need to tell game engine which {STRING}'s gender we want to take. The number is zero, because it's ID of first {STRING}. The next number is two, because it's ID of third {STRING}
+
+{{en/Todo|this section may be clumsy, feel free to improve it}}
+
 ==== OpenTTD usage ====
 Yeah, {{en/Todo}} write it soon.
 
