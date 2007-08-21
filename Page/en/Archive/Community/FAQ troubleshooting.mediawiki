@@ -34,19 +34,19 @@ If you have not completed these steps sucessfully, you may see one of the follow
  static bool only_once = true; 
  if (only_once) { 
    FOR_ALL_STATIONS(st) { 
- // if you have not built any new types of airports since first release of SVN: 
- // AT_HELIPORT 4 --> 2 
- // if (st->airport_type == 4) {st->airport_type = 2;} 
+ /* if you have not built any new types of airports since first release of SVN:	*
+  * AT_HELIPORT 4 --> 2								*
+  * if (st->airport_type == 4) {st->airport_type = 2;}				*/
 
- // if you have not build any new types of airports since first release of SVN AND 
- // oilrigs are screwed 
- // AT_OILRIG 3 --> 5 
- // if (st->airport_type == 3) {st->airport_type = 5;} 
+ /* if you have not built any new types of airports since first release of SVN AND	*
+  * oilrigs are screwed									*
+  * AT_OILRIG 3 --> 5									*
+  * if (st->airport_type == 3) {st->airport_type = 5;} 					*/
 
- // if you have built new types of airports since first release: 
- // AT_METROPOLITAN 2 --> 3 
- // AT_INTERNATIONAL 3 --> 4 
- // AT_HELIPORT 4 --> 2 
+ /* if you have built new types of airports since first release:	*
+  * AT_METROPOLITAN 2 --> 3						*
+  * AT_INTERNATIONAL 3 --> 4						*
+  * AT_HELIPORT 4 --> 2							*/
     switch (st->airport_type) { 
       case 2: st->airport_type = 3; break; 
       case 3: st->airport_type = 4; break; 
@@ -78,11 +78,10 @@ Try setting all the file permissions to read/write:
 * OS X; goto 'gm' directory, select all files [cmd]+[a], select file->'get info' (or [cmd]+[i]), under 'owner permissions' select 'read and write'.
 * Windows; goto 'gm' directory, select all files [ctrl]+[a], select file->properties, uncheck 'read only'.
 
-
 == There is no sound or no music on Linux ==
 This is a known issue for some systems. Only one application can send to the sound driver.
 Try running the Timidity media player with commands <pre>timidity -iAD -Os</pre> or <pre>timidity -iA -Os</pre> The -iAD is daemonized, while -iA is not-daemonized.
-<br>
+
 If you tried all the above and still didn't get sound you can try running "aoss openttd". It made the sound work for me.
 If that doesn't work. It's posible that your soundcard doesn't support multiple sound sources at once. Then try using ALSA compactibility mode (http://gentoo-wiki.com/HOWTO_ALSA_simple)
 
