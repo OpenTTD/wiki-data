@@ -5,4 +5,358 @@ A window is drawn on the game screen at every <code>WE_PAINT</code> [[en/OpenTTD
 
 ==Opening a window==
 
-The function <nowiki>AllocateWindowDesc</nowiki> opens a window. It should be provided with a description (<code>AllocateWindowDesc(
+The function <nowiki>AllocateWindowDesc</nowiki> opens a window. It should be provided with a description (<code>AllocateWindowDesc(&_mywindow_desc);</code>). It returns the window pointer of the newly created window.
+
+;<nowiki>Example:</nowiki>
+
+<pre>
+void ShowMyNewWindow(void)
+{
+	AllocateWindowDesc(&_mywindow_desc);
+}
+</pre>
+
+==Describing a window==
+
+Set up a <code>WindowDesc</code> with the name you gave <code>AllocateWindowDesc</code>.
+
+;<nowiki>Syntax:</nowiki>
+
+<pre>
+static const WindowDesc _mywindow_desc = {
+	X-coordinate of window top-left corner, 
+	Y-coordinate of window top-left corner, 
+	window width, window height,
+	window class,
+	window parent class, 
+	window flags, 
+	widget definition, 
+	window procedure name
+};
+</pre>
+
+;<nowiki>Example:</nowiki>
+
+<pre>
+static const WindowDesc _mywindow_desc = {
+	100, 100, 150, 200,
+	WC_ERRMSG,
+	0,
+	WDF_STD_TOOLTIPS | WDF_STD_BTN | WDF_DEF_WIDGET,
+	_mywindow_widgets,
+	MyWindowProc
+};
+</pre>
+
+===Coordinate variables===
+
+These variables can be used to replace static coordinate numbers.
+
+;<code>WDP_AUTO</code>
+:Finds a location automatically
+
+;<code>WDP_CENTER</code>
+:Centers the window (left/right or top/bottom)
+
+;<code>WDP_ALIGN_TBR</code>
+:Aligns the right side of the window with the right side of the main toolbar
+
+;<code>WDP_ALIGN_TBL</code>
+:Aligns the left side of the window with the left side of the main toolbar
+
+===Window classes===
+
+{{en/Todo}}
+
+<pre>
+	WC_MAIN_WINDOW,
+	WC_MAIN_TOOLBAR,
+	WC_STATUS_BAR,
+	WC_BUILD_TOOLBAR,
+	WC_NEWS_WINDOW,
+	WC_TOWN_DIRECTORY,
+	WC_STATION_LIST,
+	WC_TOWN_VIEW,
+	WC_SMALLMAP,
+	WC_TRAINS_LIST,
+	WC_ROADVEH_LIST,
+	WC_SHIPS_LIST,
+	WC_AIRCRAFT_LIST,
+	WC_VEHICLE_VIEW,
+	WC_VEHICLE_DETAILS,
+	WC_VEHICLE_REFIT,
+	WC_VEHICLE_ORDERS,
+	WC_STATION_VIEW,
+	WC_VEHICLE_DEPOT,
+	WC_BUILD_VEHICLE,
+	WC_BUILD_BRIDGE,
+	WC_ERRMSG,
+	WC_BUILD_STATION,
+	WC_BUS_STATION,
+	WC_TRUCK_STATION,
+	WC_BUILD_DEPOT,
+	WC_COMPANY,
+	WC_FINANCES,
+	WC_PLAYER_COLOR,
+	WC_QUERY_STRING,
+	WC_SAVELOAD,
+	WC_SELECT_GAME,
+	WC_TOOLBAR_MENU,
+	WC_INCOME_GRAPH,
+	WC_OPERATING_PROFIT,
+	WC_TOOLTIPS,
+	WC_INDUSTRY_VIEW,
+	WC_PLAYER_FACE,
+	WC_LAND_INFO,
+	WC_TOWN_AUTHORITY,
+	WC_SUBSIDIES_LIST,
+	WC_GRAPH_LEGEND,
+	WC_DELIVERED_CARGO,
+	WC_PERFORMANCE_HISTORY,
+	WC_COMPANY_VALUE,
+	WC_COMPANY_LEAGUE,
+	WC_BUY_COMPANY,
+	WC_PAYMENT_RATES,
+	WC_ENGINE_PREVIEW,
+	WC_MUSIC_WINDOW,
+	WC_MUSIC_TRACK_SELECTION,
+	WC_SCEN_LAND_GEN,
+	WC_SCEN_TOWN_GEN,
+	WC_SCEN_INDUSTRY,
+	WC_SCEN_BUILD_ROAD,
+	WC_BUILD_TREES,
+	WC_SEND_NETWORK_MSG,
+	WC_DROPDOWN_MENU,
+	WC_BUILD_INDUSTRY,
+	WC_GAME_OPTIONS,
+	WC_NETWORK_WINDOW,
+	WC_INDUSTRY_DIRECTORY,
+	WC_MESSAGE_HISTORY,
+	WC_CHEATS,
+	WC_PERFORMANCE_DETAIL,
+	WC_CONSOLE,
+	WC_EXTRA_VIEW_PORT,
+	WC_CLIENT_LIST,
+	WC_NETWORK_STATUS_WINDOW,
+	WC_CUSTOM_CURRENCY,
+	WC_REPLACE_VEHICLE,
+	WC_HIGHSCORE,
+	WC_ENDSCREEN,
+	WC_SIGN_LIST,
+	WC_GENERATE_LANDSCAPE,
+	WC_GENERATE_PROGRESS_WINDOW,
+	WC_CONFIRM_POPUP_QUERY,
+</pre>
+
+===Flags===
+
+;<code>WDF_STD_TOOLTIPS</code>
+:Use standard routine when displaying tooltips
+
+;<code>WDF_DEF_WIDGET</code>
+:Default widget control for some widgets in the onClick event
+
+;<code>WDF_STD_BTN</code>
+:Default handling for close and drag widgets (widget n:o 0 and 1)
+
+;<code>WDF_UNCLICK_BUTTONS</code>
+:Unclick buttons when the window event times out
+
+;<code>WDF_STICKY_BUTTON</code>
+:Set window to sticky mode; they are not closed unless closed with 'X' (widget 2)
+
+;<code>WDF_RESIZABLE</code>
+:A window can be resized
+
+;<code>WDF_MODAL</code>
+:The window is a modal child of some other window, meaning the parent is 'inactive'
+
+==Setting up widgets==
+
+:;<nowiki>Syntax:</nowiki>
+
+<pre>
+static const Widget _mywindow_widgets[] = {
+{   Widget type, flags, color, position-left, position-right, position-top, position-bottom, string/image identifier, tooltip string identifier},
+};
+</pre>
+
+:;<nowiki>Example:</nowiki>
+
+<pre>
+static const Widget _mywindow_widgets[] = {
+{   WWT_CLOSEBOX,   RESIZE_NONE,    14,     0,    10,     0,    13, STR_00C5,         STR_018B_CLOSE_WINDOW},
+{    WWT_CAPTION,   RESIZE_NONE,    14,    11,   419,     0,    13, STR_015B_OPENTTD, STR_NULL},
+{      WWT_PANEL,   RESIZE_NONE,    14,     0,   419,    14,   271, 0x0,              STR_NULL},
+{      WWT_FRAME,   RESIZE_NONE,    14,     5,   414,    40,   245, STR_NULL,         STR_NULL},
+{    WIDGETS_END},
+};
+</pre>
+
+===Widget types===
+
+;<code>WWT_EMPTY</code>
+:{{en/Todo}}
+
+;<code>WWT_PANEL</code>
+:A simple depressed panel.
+
+;<code>WWT_INSET</code>
+:A depressed panel, most commonly used as a combo box text area.
+
+;<code>WWT_IMGBTN</code>
+:Image button.
+
+;<code>WWT_IMGBTN_2</code>
+:Image button. Image changes when button is pressed.
+
+;<code>WWT_TEXTBTN</code>
+:Text button.
+
+;<code>WWT_TEXTBTN_2</code>
+:Text button. Text changes when button is pressed.
+
+;<code>WWT_LABEL</code>
+:A centered label.
+
+;<code>WWT_MATRIX</code>
+:{{en/Todo}}
+
+;<code>WWT_SCROLLBAR</code>
+:{{en/Todo}}
+
+;<code>WWT_FRAME</code>
+:{{en/Todo}}
+
+;<code>WWT_CAPTION</code>
+:{{en/Todo}}
+
+;<code>WWT_HSCROLLBAR</code>
+:{{en/Todo}}
+
+;<code>WWT_STICKYBOX</code>
+:The button for stickying a window.
+
+;<code>WWT_SCROLL2BAR</code>
+:{{en/Todo}}
+
+;<code>WWT_RESIZEBOX</code>
+:The button for resizing a window.
+
+;<code>WWT_CLOSEBOX</code>
+:The button for closing a window.
+
+;<code>WWT_LAST</code>
+:{{en/Todo}}
+
+;<code>WWT_MASK</code>
+:0x1F {{en/Todo}}
+
+;<code>WWT_PUSHBTN</code>
+:{{en/Todo}}
+
+;<code>WWT_PUSHTXTBTN</code>
+:{{en/Todo}}
+
+;<code>WWT_PUSHIMGBTN</code>
+:{{en/Todo}}
+
+===Flags===
+
+Quote from <code>window.h</code> lines 16 onwards:
+
+<pre>
+/* How the resize system works:
+    First, you need to add a WWT_RESIZEBOX to the widgets, and you need
+     to add the flag WDF_RESIZABLE to the window. Now the window is ready
+     to resize itself.
+    As you may have noticed, all widgets have a RESIZE_XXX in their line.
+     This lines controls how the widgets behave on resize. RESIZE_NONE means
+     it doesn't do anything. Any other option let's one of the borders
+     move with the changed width/height. So if a widget has
+     RESIZE_RIGHT, and the window is made 5 pixels wider by the user,
+     the right of the window will also be made 5 pixels wider.
+    Now, what if you want to clamp a widget to the bottom? Give it the flag
+     RESIZE_TB. This is RESIZE_TOP + RESIZE_BOTTOM. Now if the window gets
+     5 pixels bigger, both the top and bottom gets 5 bigger, so the whole
+     widgets moves downwards without resizing, and appears to be clamped
+     to the bottom. Nice aint it?
+   You should know one more thing about this system. Most windows can't
+    handle an increase of 1 pixel. So there is a step function, which
+    let the windowsize only be changed by X pixels. You configure this
+    after making the window, like this:
+      w->resize.step_height = 10;
+    Now the window will only change in height in steps of 10.
+   You can also give a minimum width and height. The default value is
+    the default height/width of the window itself. You can change this
+    AFTER window-creation, with:
+     w->resize.width or w->resize.height.
+   That was all.. good luck, and enjoy :) -- TrueLight */
+</pre>
+
+:;<code>RESIZE_NONE</code>
+:{{en/Todo}}
+
+:;<code>RESIZE_LEFT</code>
+:{{en/Todo}}
+
+:;<code>RESIZE_RIGHT</code>
+:{{en/Todo}}
+
+:;<code>RESIZE_TOP</code>
+:{{en/Todo}}
+
+:;<code>RESIZE_BOTTOM</code>
+:{{en/Todo}}
+
+:;<code>RESIZE_LR</code>
+:{{en/Todo}}
+
+:;<code>RESIZE_RB</code>
+:{{en/Todo}}
+
+:;<code>RESIZE_TB</code>
+:{{en/Todo}}
+
+:;<code>RESIZE_LRB</code>
+:{{en/Todo}}
+
+:;<code>RESIZE_LRTB</code>
+:{{en/Todo}}
+
+:;<code>RESIZE_RTB</code>
+:{{en/Todo}}
+
+:;<code>WIDG_DISABLED</code>
+:Widget is disabled (greyed out)
+
+:;<code>WIDG_HIDDEN</code>
+:Widget is invisible
+
+:;<code>WIDG_LOWERED</code>
+:Widget pressed
+
+===Colors===
+
+''For a list of available colors, see [[en/Archive/Source/OpenTTDDevBlackBook/Window/Colours]].''
+
+==Maintaining the window==
+
+Set up a window procedure to be run each time <code>WE_PAINT</code> is called.
+
+:;<nowiki>Example:</nowiki>
+
+<pre>
+static void MyWindowProc(Window *w, WindowEvent *e)
+{
+	switch (e->event) {
+		case WE_PAINT: {
+			DrawWindowWidgets(w);
+		}	break;
+	}
+}
+</pre>
+
+[[Category:en/Development]]
+[[Category:en/Archive/Source/OpenTTDDevBlackBook|W]]
+[[Category:en/Window system|U]]
