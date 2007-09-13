@@ -2,6 +2,7 @@
 This page is about how to install the universal libraries which are needed to compile universal binaries for MacOS X.
 
 MacOS X 10.4 or newer is needed to compile universal binaries (Apple's tools for universal compilation will not work on earlier versions)
+Xcode 2.1 or newer is needed (newer recommended)
 
 ==What is a universal binary==
 First of all understanding what a universal binary is will help to understand how to do this and why it's needed. Basically a binary on OSX consists of a header with some info on the binary and the actual machine code. The header contains an offset to the code so it can be found quickly. A universal binary is designed the same way, except that a piece of machine code is added after the machine code. The header will then contain two offsets (one for each piece of machine code). The header will then tell what each machine code is designed for so the system can pick the right one. Because the machine codes are so loosely related, they are compiled one by one and then merged into one file. The OpenTTD makefile will do this for you, but you will need to do this manually for 3rd party libraries.
