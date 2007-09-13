@@ -40,7 +40,27 @@ svn checkout svn://svn.openttd.org/trunk folder_name
 folder_name will be the folder you place the source into. Note you might have to open a new terminal window after you installed svn to be able to do this.
 
 = Compiling the source =
-==Compiling OpenTTD 0.5.x or earlier==
+Because the makefile system is rewritten, this section is divided into two parts. Pick the one fitting for the source you have
+==Compiling the trunk/nightly builds==
+===Configure===
+There is a configure script. This is used to figure out what your system is like and generate a makefile to compile a binary designed for your system. To activate it, just write "./configure" and it will figure everything out on it's own.
+
+If you have a special request for your compilation, then you need to give arguments to configure. To see a full list of available settings, use the help system (./configure --help)
+
+Example: if you want to make a static build (the binary will contain the needed parts of the libraries so they do not have to be installed on the computer playing the game), you will have to type "./configure --enable-static". Multiple arguments can be added like "./configure --enable-static --enable-dedicated"
+
+===Compiling===
+When configure has made a makefile for you, all you need to do to compile is to type "make". The binary is then placed in the "bin" subdirectory.
+
+If needed, make can accept arguments as well. Commonly used arguments will be (all of them will start by compiling the game if needed):
+make run: will start the game
+make bundle: this will create a bundle inside the bundle directory (created if needed). This means that the game will be executable from finder and not only terminal
+make help: lists all "targets" available (like make run and make bundle)
+
+Make also accepts standard make arguments. The most interesting is the -j option. By default GCC compiles one file at a time and it can only use one CPU/core to compile a single file. If you want to compile as fast as possible, you can tell it to compile more files at once with the -j option. Example: "make bundle -j 4". This will compile 4 files at once, making good use of a dualcore computer. Usually having two files compiling on each core is the fastest as one compile while the other one waits for read/write to the disk.
+Note: the makefile dependencies has to be set up correctly for this to work. While they are for OpenTTD, don't assume this for other projects or nasty stuff can happen, like weird compilation errors.
+
+==Compiling OpenTTD 0.5.x or earlier (or revisions before 7759)==
 To compile the source, you should use the terminal to go into your working copy and write
 
 '''make'''
