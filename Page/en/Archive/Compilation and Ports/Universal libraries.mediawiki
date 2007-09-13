@@ -1,0 +1,14 @@
+[[Translation:en/Archive/Compilation and Ports/Universal libraries]]
+This page is about how to install the universal libraries which are needed to compile universal binaries for MacOS X.
+
+MacOS X 10.4 or newer is needed to compile universal binaries (Apple's tools for universal compilation will not work on earlier versions)
+
+First of all understanding what a universal binary is will help to understand how to do this and why it's needed. Basically a binary on OSX consists of a header with some info on the binary and the actual machine code. The header contains an offset to the code so it can be found quickly. A universal binary is designed the same way, except that a piece of machine code is added after the machine code. The header will then contain two offsets (one for each piece of machine code). The header will then tell what each machine code is designed for so the system can pick the right one. Because the machine codes are so loosely related, they are compiled one by one and then merged into one file. The OpenTTD makefile will do this for you, but you will need to do this manually for 3rd party libraries.
+
+==Installing the tools from Apple==
+First of all, you will need to install the crosscompiler tools from Apple. If you didn't get them when installing Xcode, you can always add them later with a custom install. What you need is the 10.3.9 and 10.4 (universal) SDKs under Cross Development and gcc 4 (you will likely already have this one). This is enough if you disable the need for all 3rd party libraries (which are libpng and freetype at the time of writing)
+
+
+{{en/Warning|fink can't install universal libraries. You will have to do this manually}}
+
+{{en/Todo|tell how to compile universal libpng and freetype}}
