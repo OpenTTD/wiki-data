@@ -60,6 +60,12 @@ make help: lists all "targets" available (like make run and make bundle)
 Make also accepts standard make arguments. The most interesting is the -j option. By default GCC compiles one file at a time and it can only use one CPU/core to compile a single file. If you want to compile as fast as possible, you can tell it to compile more files at once with the -j option. Example: "make bundle -j 4". This will compile 4 files at once, making good use of a dualcore computer. Usually having two files compiling on each core is the fastest as one compile while the other one waits for read/write to the disk.
 Note: the makefile dependencies has to be set up correctly for this to work. While they are for OpenTTD, don't assume this for other projects or nasty stuff can happen, like weird compilation errors.
 
+===Compiling universal binaries===
+Compiling a universal binary is done by adding "--enable-universal" to configure. This is all if your system is set up correctly.
+Make will then compile for intel, PPC and PPC970 (optimized for this particular CPU. Apple renamed it to G5), so setting G5 flags and such shouldn't be needed. Static is also enabled by default as it's assumed that the binary is to be moved to another computer.
+
+For this to work, you will need universal libraries. For more info, read [[en/Archive/Compilation and Ports/Universal libraries]]
+
 ==Compiling OpenTTD 0.5.x or earlier (or revisions before 7759)==
 To compile the source, you should use the terminal to go into your working copy and write
 
