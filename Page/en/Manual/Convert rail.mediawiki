@@ -12,5 +12,15 @@ With the introduction of electrified railways in r4152, the convert rail tool of
 
 For this conversion, updating trains is not immediately necessary as steam and diesel trains run perfectly on electrified rails.  Electrified trains, however, will not pass over non-electrified tiles.
 
+== Easier converting of trains ==
+For this method you have to compile from source, because a line of code must be commented out.
+You have to find the file rail_cmd.c and open it in an editor. Find the function
+ static int32 DoConvertRail(TileIndex tile, RailType totype, bool exec)
+and change the third line of code from
+ if (!EnsureNoVehicleOnGround(tile) && (!IsCompatibleRail(GetRailType(tile), totype) || IsPlainRailTile(tile))) return CMD_ERROR;
+to
+ //if (!EnsureNoVehicleOnGround(tile) && (!IsCompatibleRail(GetRailType(tile), totype) || IsPlainRailTile(tile))) return CMD_ERROR;
+Now it's possible to convert depods, even if there are trains in it. You have to remove the old one and build the new, it will have the orders from the old. But be warned, it's possible to convert rails with trains on it and these trains won't be able to drive on.
+
 [[Category:en/Manual/Construction]]
 [[Category:en/Manual/Railways]]
