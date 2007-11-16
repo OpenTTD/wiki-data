@@ -48,9 +48,25 @@ This article gets you started on compiling OpenTTD using Microsoft Visual C++ 20
 :[[File:en/Microsoft DirectX SDK.png]]
 
 =Copying from OpenTTD needed includes and libraries=
+===openttd_useful.zip===
 :Now extract the [http://sourceforge.net/project/showfiles.php?group_id=103924&package_id=114307 Openttd-useful.zip] file and copy:
 :* The contents of the <code>include</code> folder and [http://www-d0.fnal.gov/d0dist/dist/packages/d0ve/devel/windows/AFXRES.H afxres.h] to <code>C:\Program Files\Microsoft Visual Studio 9.0\VC\include\</code>.
 :* The contents of the <code>library</code> folder to <code>C:\Program Files\Microsoft Visual Studio 9.0\VC\lib\</code>.
+
+===Microsoft® DirectX SDK - August 2007===
+: '''Information''': The DirectX SDK from November 2007 is the first one who supports Microsoft® Visual Studio 2008. But it's also the first version which doesn't support DirectMusic which is needed to compile OpenTTD. That is why we must copy the missing files from an older version, prefered the final one for DirectMusic: 'August 2007'.
+:* Extract ('''no double-click, do not install''') <code>dxsdk_aug2007.exe</code> in an extra directory and you get a file called <code>dxsdk_aug2007.exe</code> (yes that's right, both files have the same name).
+:* Extract the second <code>dxsdk_aug2007.exe</code> in an extra directory.
+:* Now copy following 9 files from <code>.\dxsdk_aug2007\dxsdk_aug2007\Include\</code> to <code>C:\Program Files\Microsoft DirectX SDK (November 2007)\Include</code> ('''note''': Please update the paths as necessary):
+:** dls1.h
+:** dmdls.h
+:** dmerror.h
+:** dmksctrl.h
+:** dmplugin.h
+:** dmusbuff.h
+:** dmusicc.h
+:** dmusicf.h
+:** dmusici.h
 
 =Setting up the VC++ Directories=
 :Start the Microsoft® Visual C++ IDE and go to <code>Tools -> Options</code>, then to <code>Projects and Solutions -> VC++ Directories</code>. Add the following lines ('''note''': Please update the paths as necessary):
@@ -74,9 +90,10 @@ This article gets you started on compiling OpenTTD using Microsoft Visual C++ 20
 
 =Compiling=
 :* Open <code>projects/openttd_vs80.sln</code>. This will open your IDE with the project loaded.
-:* You will ask to convert the old project file to the new version, do it. ''(This is still OpenTTD have an own project file for Visual C++ 2008)''
+:* You will ask to convert the old project file to the new version, do it. ''(This is as long as OpenTTD haven't an own project file for Visual C++ 2008)''
 :* To compile a non-debug version, go to <code>Build -> Configuration Manager</code> and select <code>Release for OpenTTD</code>.
 :* Press <code>F7</code>, or go to <code>Build -> Build Solution</code>.
+:* You will get a warning: <code>LINK : warning LNK4224: /OPT:NOWIN98 is no longer supported;  ignored</code> ignore it, it will be fixed if OpenTTD have an own project file for Visual C++ 2008.
 
 =Credits=
 
