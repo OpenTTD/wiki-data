@@ -1,139 +1,79 @@
 [[Translation:en/Archive/Old 32bpp/32bit Graphics Development Documentation]]
 ''« Back to [[en/Development/NewGRF/Main Page]]''
-== User Info ==
 
-{{en/Nightly}}
-'''How to use the 32 bpp graphics'''
+{| width="100%"
+|-
+|colspan="2" style="background-color: #f1f2fe; border: 1px solid #c7c8fe; margin: 0; padding: 1em 1em 1em 1em; text-align:center"|<font size="3">'''32bit Graphics Documentation: Standards and Suggestions for Artists'''</font>
+|-
+|width="50%" style="background-color: #E7EBFF; border: 1px solid #c7c8fe; margin: 0; padding: 1em 1em 0em 1em;"|
 
-*Have OpenTTD SVN revision 11119 or higher installed (make sure you know which folder it is in). You can download it from [http://www.openttd.org/nightly.php nightlies]
-*Grab a 32bpp graphics tar file, e.g. from this [[en/Archive/Old 32bpp/List of downloadable 32 bpp tars | list]].
-*Go to the folder where OpenTTD is installed.
-*Go to the data folder (this is the one where you put your NewGRFs by default).
-*Put the 32bpp graphics tar file in this folder.  
+<div style="margin:1em;padding:1em;border:1px solid #c7c8fe;background:#f1f2fe;">
+<font size="3">'''Camera position, Lighting and More'''</font>
 
-Now you have 32bpp sprites installed, but you have to tell the OpenTTD to use the 32bpp blitter (sprite drawing engine) in order to be able to use them. 
-    
-The easiest way to do this:
-*Go to the folder where OpenTTD is installed.
-*Open the file openttd.cfg with a text editor.
-*Search for the [misc] section.
-*Add one of the following lines in this section: 
+We have custom template files with among other things camera position and lighting specs preset available for Blender, 3D Studio Max and Lightwave. Ben Robbins has made a [http://www.tt-forums.net/download.php?id=81166 '''3DSMax template'''] and Aracirion a '''Lightwave''' template. You can pm them for details on each. For '''Blender''', download [http://www.tt-forums.net/download.php?id=53231 version F, the new contrast version]. Before using them, '''please read through the short blurbs below.'''
 
+The template files contains correct lighting, camera position, resolution etc. 1 Blender Unit equals 1 metre. There are templates for different sizes of buildings. If you need more sizes, or if anything is not clear or you want to comment on anything, please join the discussion in the [http://tt-forums.net/viewtopic.php?t=24857 "new lighting for buildings" thread on tt-forums].
+</div>
 
-**blitter = 32bpp-simple        (slower but reliable)  
-Details: the simple blitter does no optimization at all on the sprite data, it just converts it from 8bpp palettized to 32bpp rgb    
+<div style="margin:1em;padding:1em;border:1px solid #c7c8fe;background:#f1f2fe;">
+<font size="3">'''Sizes'''</font>
 
-**blitter = 32bpp-optimized  (faster)   
-Details: the optimized blitter will run-length encode the sprites transparent regions to make drawing faster since almost every sprite is surrounded by at least some transparent reas and with animation turned off
+[[File:en/Archive/Old 32bpp/Model square.png|128px|left]]
 
-**blitter = 32bpp-anim       (with animation)   
-Details: the optimized blitter will run-length encode the sprites transparent regions to make drawing faster since almost every sprite is surrounded by at least some transparent reas and with animation turned on
+In maximum zoom level '''one square equals 12,5 m x 12,5 m equals 64px across'''. This is the basic unit for railway tracks and roads. As the buildings in the original Transport Tycoon look as if they are about 25 m x 25 m per square, many new buildings will occupy 2 x 2 new 12,5 m squares. For scale comparison Ben Robbins modelled [http://tt-forums.net/download.php?id=48953 Ottis, a real-size human].
 
+[[File:en/Archive/Old 32bpp/3dsmeasurements.jpeg|thumb|200px|right|The sizes for a single square building.]]
 
-*Save the file.
-*Start OpenTTD the way you're used to.
+If you work with 3D Studio Max, you have a semi-transparent square grid on the ground in the Perspective viewport. It is 140x140 units big on its default settings. Using these measurements, if we assume this ground raster to represent one Transport Tycoon square, we can assume that a human being of two meters tall would take up 22,4 units. Use this to scale your building, prop or vehicle. If you create a 2x2 building, just divide the appropriate figures by 2. This way, when all buildings will come together, one large building will not look like a miniature when compared to a supposedly small building. If you want the home grid to have a different size, go to <code>Customize</code>, and in the <code>Grid and Snap</code> Settings dialogue, go to <code>Home Grid</code> tab.
+</div>
 
-Alternatively you can start OpenTTD with <code>-b 32bpp-simple</code> or <code>-b 32bpp-anim</code> or <code>-b 32bpp-optimized</code> parameter.
-Available blitters can be found by starting OpenTTD with the -h option.
+|width="50%" style="background-color: #E7EBFF; border: 1px solid #c7c8fe; margin: 0; padding: 1em 1em 0em 1em;"|
 
-To specify the blitter in Windows XP you can use the commandline, or: 
+<div style="margin:1em;padding:1em;border:1px solid #c7c8fe;background:#f1f2fe;">
+<font size="3">'''Materials'''</font>
 
-*Find a shortcut which you are using to start OpenTTD and make a copy of it OR go to OpenTTD directory and create a shortcut to the file '''openttd.exe'''.
-*Right click on newly created shortcut and choose 'Properties' menu item (should be the bottommost item in the menu).
-*Go to middle tab ('Shortcut') and look for a field called 'Destination' (or something similar, it will be the first editable field in this tab).
-*Add <code>-b 32bpp-anim</code> to the end of the field.
+[[File:en/Archive/Old 32bpp/Ref-&-amb.png|400px|center]]
 
-Example: In case this field's content was:
+For '''every''' material you create, in the <code>shaders</code> tab, you are advised to change the <code>Amb</code> parameter ('''0.5''' by default) to match the <code>Ref</code> parameter ('''1''' by default). You always have to modify <code>Ref</code> and <code>Amb</code> together. It has been decided that <code>Amb</code> should always have the same value as <code>Ref</code>, because a material should reflect light from the sun or other light sources the same way it reflects light from the environment (ambient light). Hence, for maximum realism, the values should be the same. Naturally this is not a strict rule, you do have artistic freedom to deviate from this.
 
- "C:\Documents and Settings\Mchl\My Documents\prv\openttd\openttd.exe"
+[[File:en/Archive/Old 32bpp/Official materials.png|150px|right]]
 
-Change it to:
- "C:\Documents and Settings\Mchl\My Documents\prv\openttd\openttd.exe" -b 32bpp-anim
+The template file archive contains a file named '''official_materials.blend'''. It contains some materials which you will need often, and which should look the same in different objects, like pavement for example. Put this file in a location where it can stay. When you have built a model and want to use an official material, '''link the material rather than just append it'''. For additional instructions, see [[en/Using Official Materials]].
+</div>
 
-*Accept the changes and basically you're done. You can now rename your shortcut to something like OpenTTD32bpp or whatever. And of course double click it to play in 32bpp.
+<div style="margin:1em;padding:1em;border:1px solid #c7c8fe;background:#f1f2fe;">
+<font size="3">'''Minimize render time'''</font>
 
-In Linux and other UNIXes:
+[[File:en/Archive/Old 32bpp/AO-samples.png|400px|center]]
 
- ./openttd -b 32bpp-anim
+Rendering can be quite slow. To reduce time it takes to render for previews, reduce the <code>Samples</code> value under <code>Ambient Occlusion</code>.
+</div>
+|-
+|colspan="2" style="background-color: #f1f2fe; border: 1px solid #c7c8fe; margin: 0; padding: 0.5em 1em 0.5em 1em;"|
+<div style="margin:1em;padding:1em;border:1px solid #c7c8fe;background:#E7EBFF;">
+<font size="3">'''Resources'''</font>
 
-==Joining New Graphics Development==
-
-We are in need of '''artists''', '''administrators''' (to do manual tasks such as keep the documentation organised), '''coders''' (to help us code features to enable new GFX options)...
-
-For helping with the '''New GFX development''', you will need to learn how to model in 3D (unless you are helping with some of the 2D tasks), we suggest the Open Source 3d package ''Blender'' available from http://blender.org.
-
-You can contact Ben if you want to help, alternatively you can go to the OTTD GFX forum at http://tt-forums.net and can talk to people there. The GFX forum is [http://tt-forums.net/viewforum.php?f=36].
-
-[[en/Archive/Old 32bpp/Wiki colours (New graphics)|Wiki colours]] - Easy reference for people editing the documentation.
-
-==Template File and Specifications==
-* '''Blender''': Download [http://www.tt-forums.net/download.php?id=53231 Version F] (new contrast version)  '''Please read through at least the warning sections below.'''
-* Ben made a '''3d Studio Max''' Template [http://www.tt-forums.net/download.php?id=81166|1] and  Aracirion made a '''Lightwave''' Template. You can pm them for details.
-
-This file contains correct lighting, camera position, resolution etc. 1 Blender Unit equals 1 metre. There are templates for different sizes of buildings. If you need more sizes, or if anything is not clear or you want to say something else please join the discussion in this thread: [[http://tt-forums.net/viewtopic.php?t=24857&postdays=0&postorder=asc&start=100 forum thread]].
-
-===Sizes===
-
-{{en/Note|This section is under discussion, due to the latest developments for 32bpp graphics}}
-
-In maximum zoom level one square of 12,5 x 12,5 m will be 64px across:
-[[File:en/Archive/Old 32bpp/Model square.png|center|frame|One square at maximum zoom level]]
-This will also be the basic unit for railway tracks and roads. As the buildings in the original ttd look as if they are about 25x25m per square, many new buildings will occupy 2x2 new 12,5m squares. For Scale comparison Ben Robbins modelled Ottis, a real-size human: [http://tt-forums.net/download.php?id=48953].
-[[File:en/Archive/Old 32bpp/3dsmeasurements.jpeg|thumb|200px|left|The sizes for a single square building.]]
-
-If you work with 3D Studio Max, you have a semi-transparent square grid on the ground in the Perspective viewport. It is 140x140 units big on its default settings. Using these measurements, if we assume this ground raster to represent one Transport Tycoon square, we can assume that a human being of two meters tall would take up 22,4 units. Use this to scale your building, prop or vehicle.
-If you create a 2x2 building, just divide the appropriate figures by 2.
-This way, when all buildings will come together, one large building will not look like a miniature when compared to a supposedly small building.
-If you want the home grid to have a different size, go to Customize, and in the Grid and Snap Settings dialogue, go to Home Grid tab.
-{{en/-}}
-
-===Materials===
-
-For EVERY material you create, in the 'shaders' tab (see image), you are advised to change the 'Amb' parameter (it's 0.5 by default) to match the 'Ref' parameter (it's 1 by default). Then you always have to modify 'Ref' and 'Amb' together. 'Amb' should always have the same value as 'Ref'. The  explanation for this advise: material does reflect the light from the sun or other light-sources the same way it reflects light from the environment (ambient). So for maximum realism, the values should be the same. This is not a strict rule, of course you do have your 'artistic freedom' to deviate from this. {{en/-}}
-[[File:en/Archive/Old 32bpp/Ref-&-amb.png|600px]]
-
-====Official Materials====
-[[File:en/Archive/Old 32bpp/Official materials.png|center|frame|The official materials]]
-The template file archive contains a file named ''official_materials.blend''. It contains some materials which you will need often, and which should look the same in different objects, like for example pavement. Put this file in a location where it can stay. Then, when you have built a model and want to use an official material, link it rather than just appending. For instructions how, see [[en/Using Official Materials]].
-{{en/Warning|Make sure you link to the official materials rather than just appending them. The advantage will be that once we change how the pavement looks, for example, you just have to replace the ''official_materials.blend'', and the material will be updated in all your files automatically.
-}}
-
-====Custom Materials and Props====
-
-[[en/Archive/Old 32bpp/Standardised materials (New Graphics)|Textures]] - For now, this page contains some image maps. Eventually, it should contain "blender" materials.
-
-[[en/Archive/Old 32bpp/Props (New Graphics)|Props]] - This page contains props like trees and cars.
-
-====External Free Image Libraries====
-[http://www.cgtextures.com/] CgTextures.com
-
-[http://www.sxc.hu/index.phtml] stock.xchng: huge library of photos (including useful textures)
-
-[http://www.chrissawyer.com/feature1a.htm] ''"Transport Tycoon graphics and their real counterparts"'' by Chris Sawyer (heavily copyrighted, for reference only)
-
-===Render Time===
-Rendering can be quite slow. To reduce time it takes to render for previews, reduce the Ambient Occlusion 'Samples' value:
-[[File:en/Archive/Old 32bpp/AO-samples.png|center|frame|Location of 'Samples' parameter.]]
-
-===Sprites===
-{{en/Outdated}}
-'''Most things in this section were intended for the 32bpp branch (which has died), or do not exist anymore'''
-
-
-[[en/Archive/Old 32bpp/Ground Sprites Automated (New Graphics)|Ground Sprites Automated]] - A tutorial showing GFX artists how to create a set of 85+ ground sprites in about 30 mins.  includes many automated files.
-
-[[en/Archive/Old 32bpp/Ground sprites conversions list (New Graphics)|Ground Sprite conversion list]] - This list will be helpful for those wishing to use the automated sprites in the old or new GFX format.
-
-[[en/Archive/Old 32bpp/Tile version table (New graphics)|Tile version table]] A table showing the required/desired versions of each object
-
-[[en/Archive/Old 32bpp/Rendered Angles table (New graphics)|Rendered Angles table]] - This page has tables containing the angles of renders in relation to their render number, useful for coders.
-
-[[en/Archive/Old 32bpp/Tile Test Tool]] - A useful tool for testing out new tiles.
-
-==Help with Blender==
-* [http://mediawiki.blender.org/index.php/Manual/Manual Blender Manual]
-* [[en/Using Official Materials]]
-
-
+;:[[en/Archive/Old 32bpp/Standardised materials (New Graphics)]]
+:::For now, this page contains some image maps. Eventually, it should contain blender materials.
+;:[[en/Archive/Old 32bpp/Props (New Graphics)]]
+:::This page contains small props like trees and cars.
+;:[[en/Archive/Old 32bpp/Ground Sprites Automated (New Graphics)]]
+:::A tutorial showing artists how to create a set of 85+ ground sprites in about 30 mins. Includes many automated files.
+;:[[en/Archive/Old 32bpp/Ground sprites conversions list (New Graphics)]]
+:::This list is helpful for those wishing to use the automated sprites in the old or new graphics format.
+;:[[en/Archive/Old 32bpp/Tile version table (New graphics)]]
+:::A table showing the required/desired versions of each object.
+;:[[en/Archive/Old 32bpp/Rendered Angles table (New graphics)]]
+:::This page has tables containing the angles of renders in relation to their render number, useful for coders.
+;:[[en/Archive/Old 32bpp/Tile Test Tool]]
+:::A useful tool for testing out new tiles.
+;:[http://www.cgtextures.com/ CgTextures.com]
+:::An external texture library
+;:[http://www.sxc.hu stock.xchng]
+:::Huge photo library (including useful textures)
+;:[http://www.chrissawyer.com/feature1a.htm ''"Transport Tycoon graphics and their real counterparts"'' by Chris Sawyer (heavily copyrighted, for reference only)]
+</div>
+|-
+|}
 
 [[Category:en/Archive/Community/New Graphics]]
