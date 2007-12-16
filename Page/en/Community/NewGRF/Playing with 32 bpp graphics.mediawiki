@@ -1,0 +1,35 @@
+[[Translation:en/Community/NewGRF/Playing with 32 bpp graphics]]
+{{en/Nightly}}
+
+In order to play with [[en/Archive/Old 32bpp/List of downloadable 32 bpp tars|32bpp graphics]], follow the guide below.
+
+# Have OpenTTD 0.6.0 rc1 or [[en/Archive/Community/Nightly build]] r11119 or later installed. (Make sure you know which folder it is in.)
+# Go to the folder where OpenTTD is installed.
+# Put the 32bpp graphics tar file(s) in the <code>data</code> directory. This is the same directory where you put your [[en/Manual/NewGRF]]s.
+# Open your openttd.cfg with the text editor of your choice.
+# Add <code>blitter = 32bpp-simple</code> under the <code>[misc]</code> section and save the file. This is a foolproof way to get 32bit graphics working - if you want more choice, familiarize yourself with the section below.
+
+==Advanced blitter options==
+
+Even though you have 32bpp sprites set up in your <code>data</code> directory, OpenTTD does not display them by default. The game has to be told to use a 32bpp compatible blitter, also known as a sprite drawing engine. For this we usually use the <code>blitter =</code> line in <code>openttd.cfg</code>.
+    
+There are several blitters to choose from. They differ slightly in how they draw the sprites. Below is a list of available blitters and their properties.
+
+;32bpp-simple
+:Slower, but reliable. The <code>simple</code> blitter does no optimization at all on the sprite data, it just converts it from palettized 8bpp to 32bpp RGB.
+;32bpp-optimized
+:Faster. The <code>optimized</code> blitter will run-length encode the sprites' transparent regions to make drawing faster since almost every sprite is surrounded by at least some transparent areas. The optimized blitter also has animation disabled.
+;32bpp-anim
+:This is the same as the optimized blitter, except animation is enabled.
+
+Sometimes for whatever reason the <code>blitter</code> setting in <code>openttd.org</code> cannot be used. As a fallback the blitter can be given to the OpenTTD binary as a parameter with <code>-b 32bpp-simple</code>, <code>-b 32bpp-anim</code> or <code>-b 32bpp-optimized</code>. The <code>-h</code> parameter lists all available blitters.
+
+==Joining New Graphics Development==
+
+Do you enjoy playing with 32bpp graphics? Would you like to contribute, in order to get full 32bpp graphics out sooner? We are in need of '''artists''', '''administrators''' (to do manual tasks such as keep the documentation organised) and '''coders''' (to help us code features to enable new graphics options)...
+
+To draw 32bpp graphics for OpenTTD you need to know how to model in 3D (unless you are helping with some of the 2D tasks). For modeling software we suggest the open source 3D software '''blender''' available from [http://blender.org].
+
+For further information on 32bpp development you can browse the [http://www.tt-forums.net/viewforum.php?f=36 OpenTTD Graphics forum on tt-forums]. Alternatively you can contact Ben Robbins, one of the leading members of the OpenTTD graphics community.
+
+[[Category:en/Archive/Community/New Graphics]]
