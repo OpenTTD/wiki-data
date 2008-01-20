@@ -1,0 +1,35 @@
+==Introduction==
+This is a design document for a feature for [http://openttd.org OpenTTD]. The feature 
+is to allow seemingly realistic rivers that are nontrivial to abuse. The feature is
+not to be confused with deepwater. Rivers do nothing of that.
+
+The design is to be finalized before implementation (e.g. the coding of the patch) 
+can begin. During implementation further suggestions will not be received.
+Only a minimal, necessary set of features will be included.
+
+==Ideas==
+
+*Rivers start at water sources, which produce a certain amount of water per tile loop. Sources can be placed in scenario editor, later on also by random map generator.
+*Each tile with water is represented as wet. This is more visual and frees up precious bits. Water sub-levels (-4..4) are also represented visually.
+*River tiles want to contain at most X flow units. 
+**If it receives more than that, the river will try to expand in width, starting from the source lake. If something (e.g. a canyon, a building, rail..) blocks the expansion, the river tries to expand to the other side, if not that, it gives up: the tile has a strong current.
+**If there are less than X/2 flow units of water in a wide river, it shrinks in width, starting from the source lake. 
+*A river tile can be in two states: Flowing and flooding. 
+*Flowing tiles are always full, and are turned into flooding tiles when the tile in the flow direction disappears. Flowing tiles have no logic, and cannot decide to turn into flooding tiles randomly.
+*Flow means "take x water levels from tile, and put x water levels on the next tile"
+*Only full tiles can flood to adjacent tiles. Nearby non-full tiles are filled before flooding a nearby tile.
+*The newly flooded tile's flow direction can change from the original. Mostly though straight ahead (using the flow direction of the original): chances can be like 2/4 straight, 1/4 to left and right each.
+*The next tile is the tile to the direction of flow direction.
+*Flooding tiles dry up if their water level dips below -4.
+*Flow units determine how many levels of water is transferred each tile loop.
+*Upon ending up in a large hole in the landscape, the water floods the hole, forming a lake. Lakes that become large enough without a way out become sinks for incoming water. If such a lake is allowed to drain, it becomes a normal lake, with as much water coming out as the inbound river inputs.
+*Ships on water that is decreasing in level (the lake is draining) may be destroyed when the tile the ship is on dries up.
+*Deep lakes become more shallow (sediments) until they are at most one level in depth. If water level grows above 4 in a tile, the tile is raised one level.
+*Rivers do not terraform, only lakes do (by raising the floor as water level rises).
+
+
+*Will need an implementation order of sub-features.
+
+==Credits==
+
+yorick, gonozal_viii, eddi, peter1138, hylje, prof_frink, bjarni
