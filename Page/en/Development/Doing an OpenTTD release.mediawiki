@@ -17,9 +17,10 @@ Those things have to be done for each release:
 
 ==Release==
 * checkout /tags and kill this after a few seconds. This gives a working /tags checkout without all the files
-* create the tag: svn cp svn://svn.openttd.org/branches/<major> <version>
-* merge standard release changes: svn merge -c 9383 svn://svn.openttd.org/tags/0.5.1-RC1 - Don't forget to properly fix ottdres.rc, cause the RC1 doesn't update the version number. (for first 0.6 release change revision="0.6.0-X" and enable_assert="0" in config.lib)
-* replace all instances of 0.5.1-RC1 with the new version
+* create the tag: svn cp svn://svn.openttd.org/branches/<major> <version> (or trunk in case of betas)
+* merge standard release changes: svn merge -c 11869 svn://svn.openttd.org/tags/0.6.0-beta3
+* replace all instances of 0.6.0-beta3 with the new version and 11869 with the revision that the tag will have (yes a revision in the 'future'); svn diff should not show 0.6.0-beta3 nor 11869 anymore.
+** for non-beta/non-RC releases assertions need to be disabled in config.lib and the MSVC project files. Furthermore the 'release' bit needs to be set in rev.cpp.in.
 * svn commit -m "-Release <version>"
 
 ==Post release==
