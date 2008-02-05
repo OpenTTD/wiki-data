@@ -1,58 +1,74 @@
 [[Translation:en/Archive/Community/Nightly build]]
-[[Category:en/Development]]
-[[Category:en/Manual/Installation]]
+This article describes a special version of the game called 'Nightly'. It introduces you to the phenomenon, tells you where to get it, how get it up and running and includes some related information.
 
-Nightly builds allow you to play the latest (bleeding edge) version of the game that the developers are working on. They are already compiled into binary files (executables) so you don't need any knowledge of coding and compiling to play them.
+== That Nightly thingy, what's that all about? ==
+The OpenTTD developer Rubidium would describe a nightly as: "a snapshot of the development leading towards the next major stable release".
 
+In more plain language, the ''current nightly'' is the very latest version of OpenTTD available for download from the [http://www.openttd.org/nightly.php|OpenTTD Web Page]. It includes the latest new features, but might also include the latest bugs.
 
-==Description==
-Nightly builds are versions of the game that are compiled and packaged every night (19:00 GMT) based upon the latest [[en/Development/FAQ development]] version. You may download them from http://nightly.openttd.org/.
+=== But why do you call it 'nightly'? ===
+A 'nightly' is called a 'nightly' because a new version is generated and made available for download ''every night'' (around 19:00 GMT, that's 7 pm GMT for the ones using the twelve-hour clock system).
 
-Currently there are nightly builds for: 
-*Windows (Win32)
-*Linux (AMD64 / i386 / i686)
-*MacOS (normal (Universal), Intel, PowerPC)
-*MorphOS
+=== What are the (dis)advantages? ===
+One major advantage is that you can use all the new stuff which is not available in the latest stable release. A minor disadvantage is that a nightly might contain a serious bug affecting gameplay. But that's not too much of a problem, is it? You can get another nightly the next day (or is that night?), which most likely does work just fine!
 
-You may also get previous nightly builds by following the links under the heading of '''Archive Builds''' on the same nightly web page.
+On the other hand, a nightly usually also includes the latest bugfixes. From this point of view, a nightly is usually more stable than the latest stable release!
+
+=== Installation of a nightly, isn't that difficult? ===
+No, not at all. Although a nightly doesn't include an installer, installation of it is not really that difficult. Please read on, and I'll take you through the process right away!
+
+== Where to get it ==
+You can get yourself a copy of the latest nightly from the [http://www.openttd.org/nightly.php|Nightly Download Page]. Please read the information at the top of the page, as that might be useful to you. After that, select the nightly for your operating system and save the compressed archive in a location where you can find it later on.
+
+== Extracting the archive ==
+Because you just downloaded a compressed archive, you need to get the contents out of it. You remember where you put the archive, right? The exact process depends on your operating system and is described below for the major operating systems.
+
+==== Windows ====
+Windows XP or higher can extract a zip file by default. For older versions you need an additional tool like the free [http://www.7-zip.org/|7-Zip]. Programs like WinZIP or WinRAR will also do just fine.
+
+In all cases, you first need to find a location where to put the extracted contents. It's useful to create a new folder to put these new game files in.
+
+Now, the easiest way to extract the archive is using the drag and drop method. Doubleclick the file you downloaded earlier on to see what's in there. You also have to open the folder you just created. Make sure both windows are in view. Now select all contents in the zip-archive and drag it into you newly made folder. That's it. Please read on in the next section; the game isn't working yet!
+
+{{en/Note|Windows is used by the masses, but luckily it isn't the only operating system around! I know diddly squat about other operating systems, so please add instructions for the others!}}
+
+== Copying TTD game files ==
+You might remember that OpenTTD requires some of the original game files from your Transport Tycoon Deluxe installation CD. The following files are mandatory. You need to copy them to the /data/ directory in the folder you just extracted the new game files in. These files contain the grapics and the sound effects:
+* trg1r.grf
+* trgcr.grf
+* trghr.grf
+* trgir.grf
+* trgtr.grf
+* sample.cat
+
+Additionally, you may want to copy the original game music. To accomplish that, you need to copy the /gm/ folder from the TTD CD to the folder you just extracted the new game files in (don't put it in the /data/ dir!).
+
+Now you're almost set to go. It wasn't that hard, was it?
+
+== openttd.cfg ==
+OpenTTD has the habit of putting the configuration file (openttd.cfg) somewhere in your computer account's home directory (that's My documents in Windows). You probably have one there already.
+
+Remember, that nightly version may contain bugs, so you probably want to keep that stable version you have installed already. So would it be wise to let that new nightly overwrite the good old openttd.cfg? Personally, I don't think so. Some people have many different nightly versions sitting on their hard drives, each with their own openttd.cfg.
+
+How to do that? Well, that's fairly easy too. Two options.
+
+One. Create a new empty file in the folder you extracted the new game files in, and name it ''openttd.cfg''.
+Two. Copy the openttd.cfg from your home directory into your new nightly directory.
+In both cases, OpenTTD will update the file to match all new options available in the new nightly.
 
 ==Bugs in the Nightly==
 If you think you have found a bug download a copy of the latest nightly build (or compile a version yourself) and check if the bug still exists.
 
 If the bug is still there, please '''first''' check the [http://www.tt-forums.net/index.php?c=20 forums] and [http://bugs.openttd.org/ OpenTTD's Flyspray web site (http://bugs.openttd.org/)] to make sure that the bug has yet to be reported.  If you cannot find a report, please make one on either or both the forum and the Flyspray site.
 
-==Nightly build guidelines==
-Since currently nightlies naming and their contents are a bit of a mess, below you will find the official guidelines for them.
+== New features in the nightlies ==
+As written earlier on, the nightlies contain new features which are not available in the latest stable or beta versions. So what's new in the latest nightly? A small list with major features (new since OpenTTD 0.6.0 beta3).
+* Allow building bridge heads on more slopes. (since r11937)
+* Rivers. Graphics must be provided by NewGRF else rivers are drawn as canals. Rivers can currently only be placed with-in the scenario editor. (since r11926)
 
-===Name===
-The name should uniformly identify the system type and for which revision the nightly was made.
-:*OpenTTD: '''"OTTD-<system>-nightly-r<revision>.<extension>"'''. Eg ''OTTD-win32-nightly-r3794.zip''.
-:*Strgen: '''"strgen-<system>.<extension>"'''. Eg ''strgen-win32.zip''.
 
-===OpenTTD Changes===
-OpenTTD itself should be changed so that it correctly reflects the nature of the nightly. This means adding the nightly tag as its identifier (already done on systems that use the makefile for compilation)
-:*Revision: the current revision the nightly was made for, eg "r3794"
-:*Title Bar: includes the name and revision of the program in the format '''OpenTTD (YYYY-MM-DD) - r<revision>'''
-:*Executable properties (if applicable): if your system supports executable properties as on windows please change the following as close to the below guidelines:
-:*FileVersion: current openttd version, eg 0.4.0.1
-:*ProductVersion: current openttd version plus revision; eg '''"0.4.0.1 r<rev>"'''
-:*SpecialBuild: show that this is a nightly: ''''"Nightly Build of YYYY-MM-DD"''''
+== See Also ==
+* [[en/Nightly build guidelines]]
 
-===Compiling===
-Compiling should be done without any DEBUG information (eg release mode) but with ASSERTIONS enabled. PNG and ZLIB have to be enabled as well.
-
-===File Contents of OpenTTD===
-:*OpenTTD executable
-:*COPYING
-:*readme.txt
-:*docs\console.txt
-:*docs\multiplayer.txt
-:*data folder (data\*.grf, data\opntitle.dat)
-:*lang folder (lang\*.lng)
-
-===File Contents of Strgen===
-:*strgen executable
-:*COPYING
-:*readme.txt
-:*lang\english.txt
-:*docs\Howto_compile_lng_files_from_CLI.txt
+[[Category:en/Development]]
+[[Category:en/Manual/Installation]]
