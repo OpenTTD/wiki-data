@@ -54,7 +54,7 @@ uint8 my_var_opt;	// *Describe what my_var_opt is about*
 bool my_bool_opt;	// *Describe what my_bool_opt is about*
 </pre>
 
-====settings_gui.c====
+====settings_gui.cpp====
 You must also define a string that contains your variable name for the purposes of saving and loading from the [[en/Archive/Manual/Settings/Openttd.cfg]] file.  These are defined in [http://svn.openttd.org/cgi-bin/trac.cgi/browser/trunk/settings_gui.c settings_gui.c].
 
 There is one array of strings defined for each category (described above) for organization purposes:
@@ -75,7 +75,7 @@ You must define your string in the most appropriate one:
 	"my_bool_opt",
 </pre>
 
-====settings.c====
+====settings.cpp====
 The last change you have to make determines the behavior of the Configure Patches window and exactly how your setting will be saved to [[en/Archive/Manual/Settings/Openttd.cfg]].  This is set with a line in [http://svn.openttd.org/cgi-bin/trac.cgi/browser/trunk/settings.c settings.c].
 
 While you only add a single line per setting that you make, it is fairly complicated.  To give you an idea here is an example:
@@ -121,7 +121,7 @@ where:
 
 =====SAVEGAME VERSION & CONDVARs=====
 
-You have your saved patch variable, but if you add it straight, OTTD will expect to find it in every savegame. So there is an extra pair of entries available for CONDitional variables; ones only available for a range of savegame versions. The savegame version number is found near line 33 of saveload.c.
+You have your saved patch variable, but if you add it straight, OTTD will expect to find it in every savegame. So there is an extra pair of entries available for CONDitional variables; ones only available for a range of savegame versions. The savegame version number is found near line 37 of saveload.cpp.
 
 The format for conditional patch settings is:
 <pre>
@@ -141,13 +141,13 @@ This way, you can control whether your feature is saved, and if it is, whether t
 
 This is where the savegame version, and COND vars save your bacon.
 
-If the current trunk is at version 29, but you have a new feature that needs its settings vars saving, then ALWAYS increase the savegame version. This is known as a Savegame BUMP.
+If the current trunk is at version 86, but you have a new feature that needs its settings vars saving, then ALWAYS increase the savegame version. This is known as a Savegame BUMP.
 
 When a normal OTTD tries to load a savegame from your system, it will see the savegame bump, and gracefully say "sorry, i cant load that - its too new for me".
 
 However, to do the reverse - you loading older OTTD games - you need to identify your patch settings as "new in version XX" by using the <valid from> and <valid to> entries.
 
-So for our example; we BUMP the savegame to 30, and set our vars as CONDVAR or CONDBOOL, with a <valid from> of 30, and a <valid to> of SL_MAX_VERSION, which as you can guess means "from now on". 
+So for our example; we BUMP the savegame to 87, and set our vars as CONDVAR or CONDBOOL, with a <valid from> of 30, and a <valid to> of SL_MAX_VERSION, which as you can guess means "from now on". 
 
 [[Category:en/Archive/Source/OpenTTDDevBlackBook|P]]
 [[Category:en/Development]]
