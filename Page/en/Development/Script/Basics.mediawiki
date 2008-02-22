@@ -5,36 +5,15 @@ We assume that you read the [[en/Development/Script/Introduction|Introduction]],
 
 Of course the first thing you want to do, is name your company. You want to promote yourself, won't you? To change your company name, you need to load up the AICompany class. This is located, for the C++ users, in src/ai/api/ai_company.hpp. Squirrel users are in luck, all classes are already loaded for you.
 
-To load up the AICompany class, we need to assign an instance to it. We do this inside our AI class.
-
- class MyNewAI extends AIController {
-   company = null;
-   stop = false;
- 
-   constructor() {
-     this.company = AICompany();
-   }
- 
-   function Start();
-   function Stop();
- }
-
-For C++ it is okay to do it like this:
-
- class MyNewAI : public AIController {
- private:
-   AICompany company;
- (..)
-
-At the moment, this is not possible in Squirrel for a variety of reasons; though this may change in the future. Now we have the AICompany loaded, let's change our company name. The function to do this, as the API tells us, is SetCompanyName. The parameter is a string. So we get:
+Now let's change our company name. The function to do this, as the API tells us, is SetCompanyName. The parameter is a string. So we get:
  
  function MyNewAI::Start()
  {
    this.Sleep(1);
-   this.company.SetCompanyName("MyNewAI");
+   AICompany.SetCompanyName("MyNewAI");
  }
  
-Now if you payed a bit of attention, you immediately notice that this goes against a rule you learn in the Introduction: the Start() returns, therefor your AI dies. But, this is just for illustration, so it will do fine for now. You might wonder why we need that Sleep(1). You need to know that it is not allowed to do any changes in the first tick (where GetTick() return 0). You can only use this to initialize things and read stuff from the map. So we sleep for 1 tick, and now we can change the name.
+Now if you payed a bit of attention, you immediately notice that this goes against a rule you learn in the Introduction: the Start() returns, therefor your AI dies. But, this is just for illustration, so it will do fine for now. You might wonder why we need that Sleep(1). You need to know that it is not allowed to do any changes in the first tick (where GetTick() returns 0). You can only use this to initialize things and read stuff from the map. So we sleep for 1 tick, and now we can change the name.
 
 Start OpenTTD, start a new map, and see how your AI now makes the company name change of the new player to MyNewAI.
 
@@ -45,9 +24,9 @@ But now what happens if your AI starts two times. You can't have two AIs with th
  function MyNewAI::Start()
  {
    this.Sleep(1);
-   if (!this.company.SetCompanyName("MyNewAI")) {
+   if (!AICompany.SetCompanyName("MyNewAI")) {
      local i = 2;
-     while (!this.company.SetCompanyName("MyNewAI #" + i)) {
+     while (!AICompany.SetCompanyName("MyNewAI #" + i)) {
        i = i + 1;
      }
    }
