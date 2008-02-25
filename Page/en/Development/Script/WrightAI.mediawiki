@@ -1,0 +1,37 @@
+[[Translation:en/Development/Script/WrightAI]]
+At revision 10581, a new AI was added, and SQNoAI removed.
+The new AI, named WrightAI, is the first NoAI that actually builds something useful and that is where the name came from (wright is archaic English for craftsman or builder).
+
+==Working Description
+The first thing it does after starting is sleeping one tick, this is because creating an AI company is seen as a DoCommand, so you can not execute any other DoCommands on that tick, if you do, OpenTTD throws an assertion failure and crashes.
+
+After that, it names itself to WrightAI #x (where x is a free number) and prints out a welcome message:
+
+    
+   /* Give the boy a name */
+   if (!AICompany.SetCompanyName("WrightAI")) {
+      local i = 2;
+      while (!AICompany.SetCompanyName("WrightAI #" + i)) {
+         i++;
+      }
+   }
+   this.name = AICompany.GetCompanyName(AICompany.MY_COMPANY);
+   
+   /* Say hello to the user */
+   print(this.name + ": Welcome to WrightAI. I will be building airports all day long.");
+
+It then takes a loan, makes a ticker system and calculates the time it may sleep every time and makes the loop:
+   while(true) {
+      /* Loop is executed here */
+      Sleep(sleepingtime);
+      ticker += sleepingtime;
+   }
+
+The loop contains the following things:
+* On the first tick, and after that every 1000 ticks, it tries to build a route if it has enough money.
+* It checks all airports and their vehicles every 2000 ticks.
+* It tries to repay the loan every 5000 ticks.
+* It checks for new events(crashed planes) every 100 ticks.
+* After that, it sleeps by default 100 ticks and then wakes up to repeat these things.
+
+To check where an airport can be build, it constructs a grid over the best 10 towns with over 500 population, and checks if it can build an airport on any of that grid tiles.
