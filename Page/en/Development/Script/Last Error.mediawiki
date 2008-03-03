@@ -1,0 +1,26 @@
+[[Translation:en/Development/Script/Last Error]]
+OpenTTD is a realtime game, so no program can predict whether a certain planned action will fail or succeed until it has been executed. When letting AIs build bridges, vehicles, reroute aircraft chances are some of these commands will fail due to some reason or another. Aircraft can crash, more money may be required and other opponents might interfere with its plans. As of now NoAI can report whether a command has been executed successfully, but if a command has failed it can't report why it has failed. This page is as of now a WIP (Work In Progress), I'm writing a patch to enable AIs to retrieve the last error given by the last failed command.
+
+== Code ==
+Every error code in OpenTTD has its own ID (StringID) and is used to translate the error into one of the various languages to notify the user through a message on the GUI. In order to translate these errors we have to translate the StringIDs into error messages and expose them through the NoAI API. In the current patch the last error message can be acquired by calling AIObject::GetLastError, and error messages can be checked by:
+
+ if (!AIAirport::BuildAirport(...)) {
+   switch(AIObject::GetLastError()) {
+     case AIObject::NOT_ENOUGH_CASH: // Get some more change
+       ...
+       break;
+     case AIObject::LOCAL_AUTHORITY_REFUSES: // Bribe!
+       ...
+       break;
+     case AIAirport::LAND_SLOPES_IN_WRONG_DIRECTION: // Do some terraforming
+       ...
+       break;
+     case ...
+   }
+ }
+
+This is the idea for the moment. However, it might be wiser not to copy all the strings on a one-to-one basis but rather let every API class (where needed) inherit and redefine the GetLastError method and use it to preprocess the latest error message. Messages like STR_CAN_T_SELL_DESTROYED_VEHICLE and STR_CAN_T_REFIT_DESTROYED_VEHICLE can both be translated to VEHICLE_DESTROYED; So while it makes sense to define different messages to communicate to the user the AI doesn't really care for user friendly error messages, it wants to have hard facts. An other point why this might be a good idea, there are a LOT of messages in OpenTTD and placing them in enumerations and managing them might be simpler if we're able to cut the number of messages we really need.
+     
+== Patch ==
+The patch is located here: http://devs.openttd.org/~noai/morloth/patches/wip/last_error.patch
+Disclaimer: This is a WIP! It's long from finished and only intended to show my intend. Will post again once the final version is in the branch and this is actually working :).
