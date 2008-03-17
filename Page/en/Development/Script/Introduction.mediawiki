@@ -1,23 +1,17 @@
 [[Translation:en/Development/Script/Introduction]]
-To start, there are two ways to make your AI. Either do it in C++, for which you need to be able to compile OpenTTD, or do it in Squirrel, a very simple and C++ like scripting-language. For an introduction into C++ we advise you to buy a good book in any book-store, for an introduction in Squirrel check the [[en/Development/Script/Squirrel|Squirrel Introduction]] page. '''We advise you to use Squirrel''', as you can reload your script runtime, which means you don't have to close, compile and start OpenTTD for every tiny change you make. The reason we picked Squirrel, is that it looks very similar to C++. Therefore, the rest of this documentation will not assume one, but both of them. Where examples are given, we will use Squirrel.
+To start, the language to write your AI in, is Squirrel. Squirrel is a very simple and C++ like scripting-language. For an introduction in Squirrel check the [[en/Development/Script/Squirrel|Squirrel Introduction]] page. The reason we picked Squirrel, is that it looks very similar to C++.
 
 In this introduction we take you through the process of creating a basic AI. While doing so, we will explain to you the very basics you need to create an AI and an AI in OpenTTD. For advanced AI handling we suggest you to buy a good book. The end-result of this tutorial can be found back in the 'example' directories.
 
 ==Creating your own AI==
 
-Of course you want to start with your own AI. The process is slightly different for C++ than Squirrel, so we'll handle them separately.
+Of course you want to start with your own AI.
 
 A general rule of the thumb is to write extensive documentation for your AI, so after a few days you can easily remember what the functions are supposed to do. Another way to help with this is to split the AI into smaller, logical files.
 
-===C++===
-* Create a new directory in src/ai (for example MyNewAI).
-* Create a file called for example MyNewAI.cpp in the new directory. The extension of the file must be ".cpp".
-* Add the files of your AI to source.list (for MSVC you have to run projects/generate or add the files manually).
-* Open MyNewAI.cpp and continue reading the next section.
-
 ===Squirrel===
-* Create a new directory in bin/ai (for example MyNewAI) (Windows: this is the /ai directory).
-* Create a file called main.nut. This is important as the Squirrel loader looks for main.nut in all subdirectories.
+* Create a new directory in 'bin/ai/' (source-builds) or 'ai/' (binary-builds). For example 'MyNewAI'.
+* Create a file called main.nut. This is important as the Squirrel loader looks for main.nut in all subdirectories. If it doesn't find main.nut, the directory is considered to be something else, and your AI won't be loaded.
 * Open main.nut and then continue reading the next section.
 
 ==Register==
@@ -33,18 +27,13 @@ You want to let OpenTTD know you have an AI that wants to take over a company. F
    function CreateInstance() { return "MyNewAI"; }
  }
 
-What this does is tell OpenTTD how your AI is called, its version, and other general information. For C++ it is important that you return MyNewAI() in the CreateInstance. After this you need to create an instance of the class.
+What this does is tell OpenTTD how your AI is called, its version, and other general information. After this you need to create an instance of the class.
 Squirrel:
 
  /* Tell the core we are an AI */
  iFMyNewAI <- FMyNewAI();
 
-Or for C++:
-
- /* Tell the core we are an AI */
- static FMyNewAI iFMyNewAI;
-
-This is enough to initialise your AI. But, we are not quite there you to give it a first run. We don't have a real AI yet, only a piece of code that tells what your AI is, and who wrote it. So, let's make a class that will be our AI.
+This is enough to initialise your AI. But, we are not quite there yet to give it a first run. We don't have a real AI yet, only a piece of code that tells what your AI is, and who wrote it. So, let's make a class that will be our AI.
 
 ==Your First AI==
 
@@ -81,11 +70,9 @@ Linux etc
 Windows
  openttd.exe -a "MyNewAI"
 
-Either that, or ensure there is only one AI in the ai directory.
-
 Make sure to change your difficulty settings so that AIs start immediately, and add 1 or more AIs. Soon you will see a new company starting, hopefully with your AI attached. If you open the console ( '''`''' key) you will see a nice line printing we are active.
 
-In case of C++, any errors you will see on compile-time. In case of Squirrel, you will see the compile-errors at startup, and run-errors when your AI is started. We suggest that you pay close attention to your console, as it can report useful information. Soon there will be a GUI for Squirrel errors, so it is easier for you to read.
+You will see the compile-errors at startup, and run-errors when your AI is started. We suggest that you pay close attention to your console, as it can report useful information. Soon there will be a GUI for Squirrel errors, so it is easier for you to read.
 
 So, there you have your first AI. Of course now we need to add functions. For this we advise you continue to the next chapter [[en/Development/Script/Basics|Basics]]. You only have to know that all your code should go in Start(). One more thing you should know: never create global variable. Keep everything in your class instance. But this is just a house-rule and if you don't know what it means, it doesn't really matter at this point.
 
