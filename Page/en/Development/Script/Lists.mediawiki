@@ -4,13 +4,11 @@ Lists are a basic part of the NoAI API. They allow fast and easy manipulation of
 ===Valuators===
 To filter, you can apply valuators on the list using <list>.Valuate(<valuator>), they change the value of the list entry accordingly.
 After you have applied a valuator, you can modify (remove items, sort, etc.) the list using the functions found in the [http://devs.openttd.org/~noai/aidocs/classAIAbstractList.html API docs].
-A complete list of valuators can also be found there, at [http://devs.openttd.org/~noai/aidocs/classAIAbstractList_1_1Valuator.html this page]. A list of lists and their valuators can be found at the [http://devs.openttd.org/~noai/aidocs/modules.html Modules page].
-Since r12236, all valuators are using this notation: AI<type>List_v<Valuator>.
 
 ==Examples of lists==
 ===AIList()===
 
-To start, AIList() is the most primary list we have. It doesn't depend in any way on the OpenTTD core. It is a simple list you can fill with items and make valuators for them (C++ only). As AITownList() is a good example of a bit more complex AIList(), we will discuss that one rather then AIList().
+To start, AIList() is the most primary list we have. It doesn't depend in any way on the OpenTTD core. It is a simple list you can fill with items and make valuators for them. As AITownList() is a good example of a bit more complex AIList(), we will discuss that one rather then AIList().
 
 ===AITownList()===
 
@@ -20,12 +18,12 @@ Of course you want to know which towns are in the map, and most likely: which to
 
 This walks all the towns inside the list. Of course knowing the towns is only part of AITownList(), you can also make it find data for you. For example, we want to know all towns with population higher than 500. First we call a valuator that gets the population per town for us, and then we filter all the towns with a lower population than 500 out of the list. What is left, is a list of towns that have more than 500 people in them.
 
- townlist.Valuate(AITownList_vPopulation());
+ townlist.Valuate(AITown.GetPopulation);
  townlist.KeepAboveValue(500);
 
 If you now would print the list, you will see only towns with population higher than 500. Of course you can now get the position of those towns by doing:
 
- townlist.Valuate(AITownList_vLocation());
+ townlist.Valuate(AITown.GetLocation);
 
 The only thing this means, is that the population per town is lost, and replaced by the location.
 
@@ -33,7 +31,7 @@ AIList()s are automatically sorted. Normally this is down by value, descending (
 
 ===AITileList()===
 
-Besides townlist, industrylist, and more of that, we also have a AITileList(). This is in fact the same as AITownList(), but it keeps track of tiles. You can add tiles to the list, and then, for example, see what the acceptance is for a certain cargo. Or filter away the non-buildable tiles. This means you can quickly find a good spot for a station of which you know will get a good amount of goods. Also you can ensure it connects to the town-road for example, with the AITileList_vNeighbourRoadCount() valuator.
+Besides townlist, industrylist, and more of that, we also have a AITileList(). This is in fact the same as AITownList(), but it keeps track of tiles. You can add tiles to the list, and then, for example, see what the acceptance is for a certain cargo. Or filter away the non-buildable tiles. This means you can quickly find a good spot for a station of which you know will get a good amount of goods. Also you can ensure it connects to the town-road for example, with the AIRoad.GetNeighbourRoadCount() valuator.
 
 [[Category:en/Development]]
 [[Category:en/Development/Script/NoAI]]
