@@ -25,7 +25,7 @@ Every error code in OpenTTD has its own ID (StringID) and is used to translate t
 Internally error messages are mapped to both enum constants (like AIError::Not_ENOUGH_CASH) and a string representation. The string representation can be acquired by calling AIError::GetLastErrorString and will match with the name of the enum constant, note that this is meant to be used for debug purposes only! The API documentation will be updated such that each method will list all errors that can occur by invoking it.
 
 == Development ==
-We're currently done with writing the back-end for this solution, see http://dev.openttd.org/~noai/morloth/patches/done/last_error.patch for the actual patch. The errors codes are directly loaded into SQ (thx for the suggestion TrueLight :)) so they don't clog the API. Work is now concentrated on writing and mapping all internal error messages to the error constants which will be published in the API.
+We're currently done with writing the back-end for this solution, see http://dev.openttd.org/~noai/morloth/patches/done/last_error.patch for the actual patch. The errors codes are directly loaded into SQ (thx for the suggestion TrueBrain :)) so they don't clog the API. Work is now concentrated on writing and mapping all internal error messages to the error constants which will be published in the API.
 
 For those who want to help out (plz do!) here are some guidelines.
 
@@ -45,7 +45,7 @@ For those who want to help out (plz do!) here are some guidelines.
     ERR_CAT_BIT_SIZE = 8,
  };
 
-* The maximal number of messages per category is determined by the ERRR_CAT_BIT_SIZE (in this case 2^8 = 256).
+* The maximal number of messages per category is determined by the ERRR_CAT_BIT_SIZE (in this case 2^^8 = 256).
 * Each category constant must be named 'ERR_CAT_$NAME', where $NAME stands for the name of the AI class minus the AI prefix. So valid names are ERR_CAT_VEHICLE, ERR_CAT_ROAD, etc.
 * When writing your own ErrorMessages enumeration this is how you should do this:
 
@@ -62,7 +62,7 @@ For those who want to help out (plz do!) here are some guidelines.
     ...
  }
 
-* Look at the code of AIError.hpp to get a better impression. Look especially at the syntax of each enum constant definition. After each line you must include a comment section with has brackets, in these brackets you add a list off all StringIDs which you can find in table/strings.h (look in the bin directory under lang/) which should map to your ERR_ constant. The rest is handled by code generation script, squirrel_export.sh (under src/ai/api).
+* Look at the code of ai_error.hpp to get a better impression. Look especially at the syntax of each enum constant definition. After each line you must include a comment section with has brackets, in these brackets you add a list off all StringIDs which you can find in table/strings.h (look in the bin directory under lang/) which should map to your ERR_ constant. The rest is handled by code generation script, squirrel_export.sh (under src/ai/api).
 
 * Last (but not least!) don't forget to update the documentation, add all error messages a method can throw in the comment section with @exception tags.
 
