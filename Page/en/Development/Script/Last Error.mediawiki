@@ -64,6 +64,28 @@ For those who want to help out (plz do!) here are some guidelines.
 
 * Look at the code of AIError.hpp to get a better impression. Look especially at the syntax of each enum constant definition. After each line you must include a comment section with has brackets, in these brackets you add a list off all StringIDs which you can find in table/strings.h (look in the bin directory under lang/) which should map to your ERR_ constant. The rest is handled by code generation script, squirrel_export.sh (under src/ai/api).
 
+* Last (but not least!) don't forget to update the documentation, add all error messages a method can throw in the comment section with @exception tags.
+
+ /**
+  * Builds a vehicle with the given engine at the given depot.
+  * @param depot The depot where the vehicle will be build.
+  * @param engine_id The engine to use for this vehicle.
+  * @pre The tile at depot has a depot that can build the engine and
+  *   is owned by you.           
+  * @pre IsValidEngine(engine_id).
+  * @exception AIError::ERR_NOT_ENOUGH_CASH
+  * @exception AIVehicle::ERR_SOME_ERROR
+  * ... etc
+  *
+  * @return The VehicleID of the new vehicle, or an invalid VehicleID when
+  *   it failed. Check the return value using IsValidVehicle. In test-mode
+  *   0 is returned if it was successful; any other value indicates failure.
+  * @note In Test Mode it means you can't assign orders yet to this vehicle,
+  *   as the vehicle isn't really built yet. Build it for real first before
+  *   assigning orders.
+  */
+  static VehicleID BuildVehicle(TileIndex depot, EngineID engine_id);
+
 == Progress ==
 {|
 | Class name
