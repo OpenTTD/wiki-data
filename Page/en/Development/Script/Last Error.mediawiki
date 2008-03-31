@@ -1,5 +1,5 @@
 [[Translation:en/Development/Script/Last Error]]
-OpenTTD is a realtime game, so no program can predict whether a certain planned action will fail or succeed until it has been executed. When letting AIs build bridges, vehicles, reroute aircraft chances are some of these commands will fail due to some reason or another. Aircraft can crash, more money may be required and other opponents might interfere with its plans. As of now NoAI can report whether a command has been executed successfully, but if a command has failed it can't report why it has failed. This page is as of now a WIP (Work In Progress), I'm writing a patch to enable AIs to retrieve the last error given by the last failed command.
+OpenTTD is a realtime game, so no program can predict whether a certain planned action will fail or succeed until it has been executed. When letting AIs build bridges, vehicles, reroute aircraft chances are some of these commands will fail due to some reason or another. Aircraft can crash, more money may be required and other opponents might interfere with its plans. As of now NoAI can report whether a command has been executed successfully, however, if a command has failed it can't report why it has failed. This page is both a manual for AI writers as it provides coding guidelines for developers who want to help finishing this patch; The base code is in place to detect and report errors, but not all errors have been included and mapped at this point (see below).
 
 == Code ==
 Every error code in OpenTTD has its own ID (StringID) and is used to translate the error into one of the various languages to notify the user through a message on the GUI. In order to translate these errors we have to translate these StringIDs into error messages and expose them through the NoAI API. In the current patch the last error message can be acquired by calling AIError::GetLastError(), and error messages can be checked by:
@@ -24,10 +24,107 @@ Every error code in OpenTTD has its own ID (StringID) and is used to translate t
 
 Internally error messages are mapped to both enum constants (like AIError::Not_ENOUGH_CASH) and a string representation. The string representation can be acquired by calling AIError::GetLastErrorString and will match with the name of the enum constant, note that this is meant to be used for debug purposes only! The API documentation will be updated such that each method will list all errors that can occur by invoking it.
 
-== Patch ==
-We're currently done with writing the back-end for this solution, see http://devs.openttd.org/~noai/morloth/patches/wip/awk.patch for the actual patch. The errors codes are directly loaded into SQ (thx for the suggestion TrueLight :)) so they don't clog the API. Work is now concentrated on writing and mapping all internal error messages to the error constants which will be published in the API. Current patch for the latter can be found here: http://devs.openttd.org/~noai/morloth/patches/wip/last_error.patch.
+== Development ==
+We're currently done with writing the back-end for this solution, see http://dev.openttd.org/~noai/morloth/patches/done/last_error.patch for the actual patch. The errors codes are directly loaded into SQ (thx for the suggestion TrueLight :)) so they don't clog the API. Work is now concentrated on writing and mapping all internal error messages to the error constants which will be published in the API.
 
-Disclaimer: This is still WIP (Work in progress), this page will be updated after the patches land on the branch.
+For those who want to help out (plz do!) here are some guidelines.
 
+* All classes which contains function members which can throw errors must contain an enumeration which lists all these possible errors. This enumeration must be called 'Error_Messages' for the SQ generation process to pick it up (see below for an example).
+* Because the error constants in the enum must be unique through out the whole API the enum must have a unique setoff point. AIError holds an enum list with all possible sets (categories) of errors, each with its unique number.
+
+ enum ErrorCategories {
+    ERR_CAT_NONE = 0, //!< Error messages not related to any category.
+    ERR_CAT_GENERAL,  //!< Error messages related to general things.
+    ERR_CAT_VEHICLE,  //!< Error messages related to building / maintaining vehicles.
+    ... (more categories)
+ 
+    /**
+     * DO NOT USE! The error bitsize determines how many errors can be stored in
+     *  a category and what the offsets are of all categories.
+     */
+    ERR_CAT_BIT_SIZE = 8,
+ };
+
+* The maximal number of messages per category is determined by the ERRR_CAT_BIT_SIZE (in this case 2^8 = 256).
+* Each category constant must be named 'ERR_CAT_$NAME', where $NAME stands for the name of the AI class minus the AI prefix. So valid names are ERR_CAT_VEHICLE, ERR_CAT_ROAD, etc.
+* When writing your own ErrorMessages enumeration this is how you should do this:
+
+ /**
+ * Vehicle error messages.
+ */
+ enum ErrorMessages {
+    /** Base for vehicle errors */
+    ERR_VEHICLE_BASE = AIError::ERR_CAT_VEHICLE << AIError::ERR_CAT_BIT_SIZE,
+ 
+    /** Comment about the cause of this error and its meaning */
+    ERR_VEHICLE_SOME_ERROR,                          // [STR_1337_SOME_FOUND_ERROR]
+ 
+    ...
+ }
+
+* Look at the code of AIError.hpp to get a better impression. Look especially at the syntax of each enum constant definition. After each line you must include a comment section with has brackets, in these brackets you add a list off all StringIDs which you can find in table/strings.h (look in the bin directory under lang/) which should map to your ERR_ constant. The rest is handled by code generation script, squirrel_export.sh (under src/ai/api).
+
+== Progress ==
+{|
+| Class name
+| Status
+|-
+| AIAcounting 
+| style="background:#ff0000;" | Unassigned
+|-
+| AIAirport 
+| style="background:#ff0000;" | Unassigned
+|-
+| AIBridge 
+| style="background:#ff0000;" | Unassigned
+|-
+| AICompany
+| style="background:#ff0000;" | Unassigned
+|-
+| AIEngine
+| style="background:#ff0000;" | Unassigned
+|-
+| AIError
+| style="background:#00ff00;" | Done
+|-
+| AIEvent
+| style="background:#ff0000;" | Unassigned
+|-
+| AIIndustry
+| style="background:#ff0000;" | Unassigned
+|-
+| AIMap
+| style="background:#ff0000;" | Unassigned
+|-
+| AIMarine
+| style="background:#ff0000;" | Unassigned
+|-
+| AIOrder
+| style="background:#ff0000;" | Unassigned
+|-
+| AIRoad
+| style="background:#ff0000;" | Unassigned
+|-
+| AISettings
+| style="background:#ff0000;" | Unassigned
+|-
+| AISign
+| style="background:#ff0000;" | Unassigned
+|-
+| AIStation
+| style="background:#ff0000;" | Unassigned
+|-
+| AITile
+| style="background:#ff0000;" | Unassigned
+|-
+| AITown
+| style="background:#ff0000;" | Unassigned
+|-
+| AITunnel
+| style="background:#ff0000;" | Unassigned
+|-
+| AIVehicle
+| style="background:#ff7f00;" | Morloth
+|}
 [[Category:en/Development]]
 [[Category:en/Development/Script/NoAI]]
