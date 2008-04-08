@@ -1,8 +1,8 @@
 [[Translation:en/Development/Script/Last Error]]
-OpenTTD is a realtime game, so no program can predict whether a certain planned action will fail or succeed until it has been executed. When letting AIs build bridges, vehicles, reroute aircraft chances are some of these commands will fail due to some reason or another. Aircraft can crash, more money may be required and other opponents might interfere with its plans. As of now NoAI can report whether a command has been executed successfully, however, if a command has failed it can't report why it has failed. This page is both a manual for AI writers as it provides coding guidelines for developers who want to help finishing this patch; The base code is in place to detect and report errors, but not all errors have been included and mapped at this point (see below).
+OpenTTD is a realtime game, so no program can predict whether a certain planned action will fail or succeed until it has been executed. When letting AIs build bridges, vehicles, reroute aircraft chances are some of these commands will fail due to some reason or another. Aircraft can crash, more money may be required and other opponents might interfere with its plans. As of now NoAI can report whether a command has been executed successfully, however, if a command has failed it can't report why it has failed. This page is both a manual for AI writers as it provides coding guidelines for developers who want to help updating this feature and fixing bugs.
 
 == Code ==
-Every error code in OpenTTD has its own ID (StringID) and is used to translate the error into one of the various languages to notify the user through a message on the GUI. In order to translate these errors we have to translate these StringIDs into error messages and expose them through the NoAI API. In the current patch the last error message can be acquired by calling AIError::GetLastError(), and error messages can be checked by:
+Every error code in OpenTTD has its own ID (StringID) and is used to translate the error into one of the various languages to notify the user through a message on the GUI. In order to translate these errors we have to translate these StringIDs into error messages and expose them through the NoAI API. The last error message can be acquired by calling AIError::GetLastError(), and error messages can be checked by:
 
  if (!AIAirport::BuildAirport(...)) {
    switch(AIError::GetLastError()) {
@@ -22,12 +22,17 @@ Every error code in OpenTTD has its own ID (StringID) and is used to translate t
    }
  }
 
-Internally error messages are mapped to both enum constants (like AIError::Not_ENOUGH_CASH) and a string representation. The string representation can be acquired by calling AIError::GetLastErrorString and will match with the name of the enum constant, note that this is meant to be used for debug purposes only! The API documentation will be updated such that each method will list all errors that can occur by invoking it.
+Internally error messages are mapped to both enum constants (like AIError::Not_ENOUGH_CASH) and a string representation. The string representation can be acquired by calling AIError::GetLastErrorString and will match with the name of the enum constant, note that this is meant to be used for debug purposes only! The API documentation lists all errors per method that can occur by invoking it. There are however some exceptions, the following errors will not be listed as they apply to (nearly) all methods:
+
+* AIError::UNKNOWN_ERROR: There has been an error which hasn't been mapped to NoAI. This can either mean 2 things, there is no StringID for this error or we forgot to map it. In the latter case please file a bug report and tell us about it so we can fix it.
+* AIError::ERR_PRECONDITION_FAILED: You violated one of the preconditions of the method, no call to the underlaying system has been made.
+* AIError::ERR_NEWGRF_SUPPLIED_ERROR: This error is NewGRF specific and we're unable to trace it down and map it.
+* AIError::ERR_NOT_ENOUGH_CASH: You don't have enough money for the given action.
+
+The meaning of the other error messages can be looked up in the [http://dev.openttd.org/~noai/aidocs/ API].
 
 == Development ==
-We're currently done with writing the back-end for this solution, see http://dev.openttd.org/~noai/morloth/patches/done/last_error.patch for the actual patch. The errors codes are directly loaded into SQ (thx for the suggestion TrueBrain :)) so they don't clog the API. Work is now concentrated on writing and mapping all internal error messages to the error constants which will be published in the API.
-
-For those who want to help out (plz do!) here are some guidelines.
+We're currently done with writing all code for this feature. The errors codes are directly loaded into SQ (thx for the suggestion TrueBrain :)) so they don't clog the API. If, however, bugs are found or new error messages need to be added, please follow the following guidelines:
 
 * All classes which contains function members which can throw errors must contain an enumeration which lists all these possible errors. This enumeration must be called 'ErrorMessages' for the SQ generation process to pick it up (see below for an example).
 * Because the error constants in the enum must be unique through out the whole API the enum must have a unique setoff point. AIError holds an enum list with all possible sets (categories) of errors, each with its unique number.
@@ -63,6 +68,17 @@ For those who want to help out (plz do!) here are some guidelines.
  }
 
 * Look at the code of ai_error.hpp to get a better impression. Look especially at the syntax of each enum constant definition. After each line you must include a comment section with has brackets, in these brackets you add a list off all StringIDs which you can find in table/strings.h (look in the bin directory under lang/) which should map to your ERR_ constant. The rest is handled by code generation script, squirrel_export.sh (under src/ai/api).
+
+* Violation of preconditions need to be handled in a special way to ensure a ERR_PRECONDITION_FAILED error is thrown in those cases. A special macro EnforcePrecondition is defined in AIError.hpp for this purpose, its use can be extracted from the following example:
+
+ /** Old code */
+ if (!IsValidVehicle(vehicle_id) || !IsValidTile(start)) return false;
+ 
+ /** New code */
+ EnforcePrecondition(false, IsValidVehicle(vehicle_id));
+ EnforcePrecondition(false, IsValidTile(start));
+
+Try to split the preconditions into separate calls to improve readability.
 
 * Last (but not least!) don't forget to update the documentation, add all error messages a method can throw in the comment section with @exception tags.
 
