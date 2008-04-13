@@ -70,9 +70,17 @@ Linux etc
 Windows
  openttd.exe -a "MyNewAI"
 
-Make sure to change your difficulty settings so that AIs start immediately, and add 1 or more AIs. Soon you will see a new company starting, hopefully with your AI attached. If you open the console ( '''`''' key) you will see a nice line printing we are active.
+Make sure to change your difficulty settings so that AIs start immediately, and add 1 or more AIs. Soon you will see a new company starting, hopefully with your AI attached. If you open the console ( '''`''' key) you will see a nice line printing we are active. You can also manually start your newly created AI with the command
+ start_ai MyNewAI
 
 You will see the compile-errors at startup, and run-errors when your AI is started. We suggest that you pay close attention to your console, as it can report useful information. Soon there will be a GUI for Squirrel errors, so it is easier for you to read.
+
+Unfortunately the output to stdout/stderr in Windows appears to be broken at the moment. You can redirect the output to the in-game console by opening this console and typing
+ developer 2
+Enable output of <code>print</code> statements from your AI by typing
+ debug_level ai=3
+If you can't see compile errors (but keep getting errors like 'The AI named "MyNewAI" is unknown or not suitable' when using <code>start_ai</code>), then you can also get a copy of the command line Squirrel interpreter <tt>sq.exe</tt> yourself and run
+ sq.exe -c /path/to/openttd/ai/mynewai/main.nut
 
 So, there you have your first AI. Of course now we need to add functions. For this we advise you continue to the next chapter [[en/Development/Script/Basics|Basics]]. You only have to know that all your code should go in Start(). One more thing you should know: never create global variable. Keep everything in your class instance. But this is just a house-rule and if you don't know what it means, it doesn't really matter at this point.
 
