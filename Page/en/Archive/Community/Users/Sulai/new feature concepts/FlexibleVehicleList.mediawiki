@@ -1,19 +1,22 @@
-So there are groups now where you can put your vehicles in.
+Since Version 0.6.0 there are vehicle groups where you can put your vehicles in. This is a great improvement to the game, since you can now handle huge amounts of vehicles. You can apply mass commands like "replace" or "send to depot" on all vehicles in a group.
 
-What about computer-generated groups that contain vehicles that match the same properties, like
+Conclusion: The better you can define groups, the better and more convenient you can mange a huge amount of vehicles. 
+
+What about computer-generated groups (lets call them '''auto-groups''') that contain vehicles that match the same properties, like
 * use the same station
-* are in the same shared orders *group*
-* did negative profit / less than 20k profit / more than 20k profit last year (red, yellow, green dot)
-* same model
-* same network
+* have the same shared orders
+* are on the same network
+* match the same property (age, profit, reliability, ...)
 
-Groups are powerful because you can happily apply "mass commands" like "send to depot" or "replace" on all vehicles in a group.
+Three ideas what this could look like.
 
-Lets see what this could look like.
+This first and minimalistic (and most realistic) idea only features two new group types: '''same station''' and '''shared orders'''.
+
+Idea two extends this to '''networks'''. This idea needs way more effort to be implemented, but it enables really nice features "like sell/request network" or "evaluate network".
+
+The third idea is about user defined auto-groups. You can't drag and drop vehicles into these groups. Rather you define property based conditions, vehicles have to match to be in this group.
 
 = Idea 1: auto-groups covering shared orders and same stations =
-
-This first and minimalistic (and most realistic) idea only features two new group "categories": "same station" and "shared orders". On Ideas how to implement a more general group management concept have a look at idea 2 below.
 
 == Detailed Feature Concept ==
 
@@ -67,17 +70,15 @@ Note3: you can easily drag and drop the vehicles to put them into shared orders 
 
 == protect from global auto replace ==
 
-Needs a slight different behavior: it (un-)flags the single trains in the group. This means there are groups where some trains are protected and some are not.
+Needs a slight different behavior: it (un-)flags the single trains in the group. This means there can be groups where some trains are protected and some are not.
 
-
-
-= Idea 1: auto-groups covering shared orders, same stations, (partial) networks and user defined auto-groups =
+= Idea 2: auto-groups covering shared orders, same stations, (partial) networks =
 
 This idea includes the simple idea 1 but makes the group principle much more general (and much more powerful).
 
 Here is a group hierarchy that supports network related grouping of trains as well as user defined groups.
 
-Don't be afraid, the player won't see the complete list any ever.
+Don't be afraid, the player won't see the complete list any ever. ;)
 
 '''Bold''' are main entries that exist all the time; all other entries are game dependent.
 
@@ -130,21 +131,13 @@ Don't be afraid, the player won't see the complete list any ever.
      partial road vehicle network004 (same content like above)
    network002
      partial rail network003
- '''user defined auto-groups''' (define your own criteria in some input box)
-   old trains                 (train age>15)
-   old vehicles making loss   (age>15 profit<0)
-   alte Klapperkisten         (reliability<50 max_speed<100)
-   long trains on net2        (train group=network002 wagons>10)
-   worthless ships            (ship value<2000)
-   red                        (profit<0)
-   yellow                     (profit>0 profit<20k)
-   green                      (profit>20k)
+ '''user defined auto-groups''' (see "Idea 3")
 
 '''tagged trains''' and '''untagged trains''' is what we have right now. Each trains can be in ''only one'' of the subgroups at most. They get a group tag visible in the minimized vehicle window.
 
 '''grouped trains''' is something similar. These are also user defined groups, but vehicles are allowed to be placed in several groups at a time.
 
-'''networks''' are independent networks which may contain mixed stations and mixed vehicle types. If you sold a network, you can just "change color" and no vehicle will ever complain about being lost or not finding a station. Thats why partial networks are defined like this: 
+'''networks''' are independent networks which may contain mixed stations and mixed vehicle types. If you sold a network, all contained stuff just "changes color" and no vehicle will ever complain about being lost or not finding a station. Thats why partial networks are defined like this: 
 
 '''partial networks''' are coherent networks of one and the same vehicle type. Note the difference to ''networks'', which include all connected partial networks of other vehicle types. Examples for partial networks:
 * All tracks, depots, stations a train could possibly reach traveling on the tracks belong to one partial network.
@@ -152,11 +145,22 @@ Don't be afraid, the player won't see the complete list any ever.
 :* Roads (and canals) have a special status because every player can use them. The company owned roads connecting partial road networks belong to that network at players choice. This affects the possible "sell network" or the "estimate (partial) network value" features.
 :* partial aircraft / ship networks are defined similar to the partial road networks: all vehicles (of the same type (road, air, water) using the same station and all stations that are in the vehicle's orders list are traversed recursively.
 
-To have the powerful group commands at hand for a variety of vehicle groups, it makes sense to have groups for many vehicle properties. '''user defined auto-groups''' allows the player to define own criterias to auto-group vehicles. All properties can be used including something like "belongs to group...".
+= Idea 3: user defined auto-groups (vehicles matching the same properties) =
 
-= conclusion =
+To have the powerful group commands at hand for a variety of vehicle groups, it makes sense to have groups for many vehicle properties. '''user defined auto-groups''' allows the player to define own criterias to auto-group vehicles.
 
-The better the group handling, the better and more convenient you can mange a huge amount of vehicles.
+ '''user defined auto-groups''' (define your own criteria in some input box)
+   old trains                 (train age>15)
+   old vehicles making loss   (age>15 profit<0)
+   alte Klapperkisten         (reliability<50 max_speed<100)
+   long trains on net2        (train group=network002 wagons>10)
+   worthless ships            (ship value<2000)
+   old vehicles in Rome bs    (group="Rome bus stop" age>20)
+   red                        (profit<0)
+   yellow                     (profit>0 profit<20k)
+   green                      (profit>20k)
+
+= game ressources =
 
 Of course first priority is to keep the game as efficient as possible regarding cpu usage and network/internet bandwidth. Especially for the vehicle network features there are deeper examinations necessary.
 
