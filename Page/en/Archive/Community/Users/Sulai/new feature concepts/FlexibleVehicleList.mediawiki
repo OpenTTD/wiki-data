@@ -97,9 +97,15 @@ What could such a general vehicle list look like?
          Line002
        same station
          London West
-         New York Main Station
-     partial network002
+         New York
+     partial network002 (for example, trains here don't have any shared orders)
+       same station
+         Berlin
+         Rome
      partial network003
+       same station
+         Berlin
+         Rome
  all road vehicles
  all ships
  all aircraft
@@ -108,26 +114,34 @@ What could such a general vehicle list look like?
      stations (all stations of this network)
        London West
        New York Main Station
-     partial network001
-       shared orders
-         Line001
-         Line002
-       same station (stations of this partial network)
-         London West
-         New York Main Station
-     partial network002
+       Berlin
+       Rome
+     partial network001 (same content like above)
+     partial network002 (same content like above)
      partial network003
+ user defined auto-groups (define your own criteria in some input box)
+   old trains                 (train age>15)
+   old vehicles making loss   (age>15 profit<0)
+   long trains on net2        (train group=network002 wagons>10)
+   red                        (profit<0)
+   yellow                     (profit>0 profit<20k)
+   green                      (profit>20k)
 
 '''tagged trains''' and '''untagged trains''' is what we have right now. Each trains can be in ''only one'' of the subgroups at most. They get a group tag visible in the minimized vehicle window.
 
 '''grouped trains''' is something similar. These are also user defined groups, but vehicles are allowed to be placed in several groups at a time.
 
+'''networks''' are independent networks which may contain mixed stations and mixed vehicle types. If you sold a network, you can just "change color" and no vehicle will ever complain about being lost or not finding a station. Thats why partial networks are defined like this: 
+
 '''partial networks''' are coherent networks of one and the same vehicle type. Note the difference to ''networks'', which include all connected partial networks of other vehicle types. Examples for partial networks:
 * All tracks, depots, stations a train could possibly reach traveling on the tracks belong to one partial network.
 * all depots, road stations a bus/truck has in its orders list, and recursively all other road vehicles/stations of the road vehicles visiting the same stations.
-:* the company owned roads connecting the 
+:* Roads (and canals) have a special status because every player can use them. The company owned roads connecting partial road networks belong to that network at players choice. This affects the possible "sell network" or the "estimate (partial) network value" features.
+:* partial aircraft / ship networks are defined similar to the partial road networks: all vehicles (of the same type (road, air, water) using the same station and all stations that are in the vehicle's orders list are traversed recursively.
 
-Off course first priority is to keep the game as efficient as possible regarding cpu usage and network bandwidth. This has to be examined.
+'''user defined auto-groups''' allows the player to define own criterias to auto-group vehicles.
+
+Of course first priority is to keep the game as efficient as possible regarding cpu usage and network/internet bandwidth. This has to be examined.
 
 
 
