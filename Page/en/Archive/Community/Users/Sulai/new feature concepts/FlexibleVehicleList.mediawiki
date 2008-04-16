@@ -71,15 +71,11 @@ Needs a slight different behavior: it (un-)flags the single trains in the group.
 
 
 
-= (UNDER CONSTRUCTION) Idea 2: global vehicles list and nested groups =
+= even more general vehicle group management with auto-groups =
 
 This idea includes the simple idea 1 but makes the group principle much more general (and much more powerful).
 
-Imagine you have nested groups
-Imagine there are auto-generated groups tagged as "network".
-Imagine to have a "sell" button to network-groups, which happens to be a request button at the opponents vehicle list.
-
-What could such a general vehicle list look like?
+Here is a group hierarchy that supports network related grouping of trains as well as user defined groups.
 
 Don't be afraid, the player won't see the complete list any ever.
 
@@ -110,18 +106,18 @@ Don't be afraid, the player won't see the complete list any ever.
        stations
          Berlin
          Rome
- all road vehicles
-   tagged road vehicles
-   untagged road vehicles
-   grouped road vehicles
-   partial road vehicles networks
+ '''all road vehicles'''
+   '''tagged road vehicles'''
+   '''untagged road vehicles'''
+   '''grouped road vehicles'''
+   '''partial road vehicles networks'''
      partial road vehicle network004
         stations
           Rome
           Rome bus stop
- all ships    (content not shown)
- all aircraft (content not shown)
- networks
+ '''all ships'''    (content not shown)
+ '''all aircraft''' (content not shown)
+ '''networks'''
    network001      (shows all vehicles these got a "sell" or a "request" button)
      stations      (all stations of this network)
        London West (shows all vehicles using this station even if they are of different types)
@@ -134,10 +130,12 @@ Don't be afraid, the player won't see the complete list any ever.
      partial road vehicle network004 (same content like above)
    network002
      partial rail network003
- user defined auto-groups (define your own criteria in some input box)
+ '''user defined auto-groups''' (define your own criteria in some input box)
    old trains                 (train age>15)
    old vehicles making loss   (age>15 profit<0)
+   alte Klapperkisten         (reliability<50 max_speed<100)
    long trains on net2        (train group=network002 wagons>10)
+   worthless ships            (ship value<2000)
    red                        (profit<0)
    yellow                     (profit>0 profit<20k)
    green                      (profit>20k)
@@ -154,34 +152,13 @@ Don't be afraid, the player won't see the complete list any ever.
 :* Roads (and canals) have a special status because every player can use them. The company owned roads connecting partial road networks belong to that network at players choice. This affects the possible "sell network" or the "estimate (partial) network value" features.
 :* partial aircraft / ship networks are defined similar to the partial road networks: all vehicles (of the same type (road, air, water) using the same station and all stations that are in the vehicle's orders list are traversed recursively.
 
-'''user defined auto-groups''' allows the player to define own criterias to auto-group vehicles.
-
-Of course first priority is to keep the game as efficient as possible regarding cpu usage and network/internet bandwidth. This has to be examined.
-
-
-
-== vehicle property related groups ==
-
-Vehicle Properties are those properties you can use for sorting:
-
-:*age newer than 2 years, out dated -- ungrouped gives all others
-:*profit this / last year (red, yellow, green)
-:*reliability
-:*max speed
-:*model
-:*value
-
-There are different ways how to form groups of vehicles matching various properties:
-
-* To have the powerful group commands at hand for a variety of vehicle groups, it makes sense to have groups for many vehicle properties. The star marked groups are also covered by the "sorting feature" of the vehicle list.
-
-* These additional groups are obsolete, if there was a way to select multiple list entries and do drag and drop in the vehicle list. Then a simple "sorting - marking - drag to group" would do the same thing.
-
-* Another possible method would be a filter thing, eg: train profit:<10000 max_speed:
+To have the powerful group commands at hand for a variety of vehicle groups, it makes sense to have groups for many vehicle properties. '''user defined auto-groups''' allows the player to define own criterias to auto-group vehicles. All properties can be used including something like "belongs to group...".
 
 = conclusion =
 
 The better the group handling, the better and more convenient you can mange a huge amount of vehicles.
+
+Of course first priority is to keep the game as efficient as possible regarding cpu usage and network/internet bandwidth. Especially for the vehicle network features there are deeper examinations necessary.
 
 = web links =
 
