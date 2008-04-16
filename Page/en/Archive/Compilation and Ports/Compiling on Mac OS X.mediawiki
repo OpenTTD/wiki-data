@@ -7,11 +7,19 @@
 A quick guide to get started with OpenTTD development on OSX.
 Note: if you have not installed any of this, it will take a while and there will be a lot to download, but you will get access to a lot more software than just OpenTTD.
 
+Compiling OpenTTD requires use of the command line, so before you start, you should make yourself familiar with the Terminal.app if you aren't already.
+{{en/Todo|Find a terminal tutorial}}
+
 ==Installing Developer Tools/Xcode==
 First you need to install a compiler. You should do this by installing Developer Tools (10.2) or Xcode (10.3+)
 They should be on a CD when you got your OS. You can also download it from the Apple Developer Connection web site (free registration required), although it is over 500MB in size. This includes (amongst many other things) gcc, which is the compiler that are used by most opensource projects, including OpenTTD.
 
-==Installing fink==
+==Installing Extra Apps/Libraries==
+In order to get the very latest source, you will need the svn client. OS X 10.5 comes with svn pre-installed, so Leopard users don't need to worry about getting it. Users of older versions of OS X can either install it through fink (see below), or alternatively there are a number of binary packages linked from the [http://subversion.tigris.org/project_packages.html#osx official subversion website].
+
+Compiling OpenTTD will also require the use of libpng. Again, this may be obtained through fink. Alternatively, you may compile and install it from source for yourself (get it from [http://www.libpng.org/pub/png/libpng.html libpng.org]). There is also a link to a binary package on the page if you wish to do that instead.
+
+===Using fink===
 '''Note: fink is only used for installing svn and libpng. Even though it's recommended, it's not mandatory anymore.'''
 '''Also: fink is not yet available for OSX 10.5 Leopard and the older version will not install.'''
 
@@ -20,21 +28,19 @@ Fink is a nice tool to install opensource software with simple commands. You can
 Before installing anything with fink, you should update fink (even if you just installed it). This is because fink have some local files, where it looks up what version of the software it should install. If a new version is out, it's stupid to install an already outdated version. You can update fink with the command
 fink selfupdate
 
-==Installing libraries with fink==
-{{en/Todo|Find a terminal tutorial}}
+====Installing the svn client with fink====
+Like you installed the libs, you can now install the svn client with the command:
+fink install svn-client
+
+====Installing libraries with fink====
+
 You need some libraries to link to when compiling. You can use fink to install them with the following commands in terminal:
 fink install libpng3 (needed for making screenshots in png. Not really needed now, but there are future plans, which makes it really needed, so you might as well get it now)
 in each case, fink will tell that you that you need to install a lot of other stuff too, just hit enter (answering yes) and fink will download and install all of it
 The docs telling about how to compile OpenTTD tells about zlib. Zlib is needed by OSX itself, so you already have it and there are no need to install it.
 
 
-You should now be able to compile OpenTTD. You can download the source from Sourceforge and compile it, but the real reason to be able to compile yourself is to be able to download and compile the newest source from the svn server.
-
-==Installing the svn client with fink==
-Like you installed the libs, you can now install the svn client with the command:
-fink install svn-client
-
-You will now have all the needed software to compile, now you need the source itself form the svn server
+With libpng installed, you should now be able to compile OpenTTD. You can download the source from Sourceforge and compile it, but the real reason to be able to compile yourself is to be able to download and compile the newest source, so now you need the source itself form the svn server.
 
 ==Getting the newest source from the svn server==
 Now you need to make a "working copy" of the source with your new svn client. To do this, use your terminal and write
@@ -44,6 +50,15 @@ folder_name will be the folder you place the source into. Note you might have to
 = Compiling the source =
 Because the makefile system is rewritten, this section is divided into two parts. Pick the one fitting for the source you have
 ==Compiling the trunk/nightly builds==
+For those just wanting a working copy for themselves, enter the following into a terminal window:
+* First go to the directory containing the source you just downloaded using the cd command
+* Type "./configure"
+* Type "make"
+* Type "make bundle"
+After the compiler is done doing all it's stuff, you should find yourself a working OpenTTD.app in the bundles folder :)
+
+
+For more detailed instructions, and options, read on...
 
 ===Applying a patch===
 If you want to use a patch/diff file then you have to apply it before using configure.
