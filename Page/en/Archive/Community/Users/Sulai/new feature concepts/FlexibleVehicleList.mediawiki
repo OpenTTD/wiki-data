@@ -5,21 +5,19 @@ Based on groups, I worked out some concepts on how to extend the capabilities of
 So, what about computer-generated groups (lets call them '''auto-groups''') that contain vehicles that match the same properties, like
 * use the same station
 * have the same shared orders
-* are on the same network
 * match the same vehicle property (age, profit, reliability, ...)
+* are on the same network
 
-We can divide different '''group types''', which are independent to each other and can be implemented to the game separately.
+We can divide different '''categories''', which are independent to each other and can be implemented to the game separately.
 
-* This is the minimalistic (and most realistic) idea only features two new group types: '''same station''' and '''shared orders'''.
+* The two new categories: '''same station''' and '''shared orders'''.
 * about '''tagged vehicles''' and ordinary '''groups'''
-* The third idea is about '''property based groups'''. You can define '''vehicle property based conditions''' to form these groups.
+* '''property based groups''', where you can define ''vehicle property based conditions'' to form these groups.
 * [[en//NetworkGroupManagement|NetworkGroupManagement]] is about groups reflecting adjacent transportation networks. It needs way more effort to be implemented, but it enables really nice features like "evaluate network" or "sell/request network".
 
-Of course these concepts can change if necessary ;)
+Let's discuss these categories a little closer.
 
-= group types "shared orders" and "same stations" =
-
-== Detailed Feature Concept ==
+= the categories "shared orders" and "same stations" =
 
 Imagine playing OTTD. You want to have a look at all your trains. You press "list trains" buttons from the upper menu. In older versions of OTTD a window similar to this appears:
 
@@ -33,7 +31,9 @@ This window works like the window we know from ottd060. But again, note the litt
 
 [[File:en/Archive/Community/Users/FVL with groups and dropdown clicked.png]]
 
-You can choose two more entries, lets name them "categories" as they are different from groups:
+This dropdown element lists all available '''categories'''.
+
+You can choose two more categories:
 * '''same station''', which allows you to get groups of vehicles that ''use the same station''
 * '''shared orders''', which allows you to get groups of vehicles that ''have the same orders''
 
@@ -69,27 +69,27 @@ Note2: Also creating new (empty) shared orders and giving them a appropriate nam
 
 Note3: you can easily drag and drop the vehicles to put them into shared orders groups. (also if these are on other railway networks... =()
 
-= group types: "tagged groups" and just "groups" =
+= the categories: "tagged groups" and just "groups" =
 
-Let's name the group type we have in Version 0.6.0 "tagged vehicles". The vehicles contained in those groups get little tags on the vehicle list window, reflecting the group they belong to. This automatically means, that ''one'' vehicle can only belong to ''one'' of the groups in the "tagged vehicles" section.
+Lets say the category "tagged vehicles" lists that sort of groups we know from Version 0.6.0. The vehicles contained in those groups get little tags on the vehicle list window, reflecting the group they belong to. This automatically means, that ''one'' vehicle can only belong to ''one'' of the groups in the "tagged vehicles" section.
 
-Let's define yet another group type: just call them "groups". They are different from "tagged vehicles", since ''one'' vehicle can be placed in ''many'' groups. This makes sense if you want to sort your trains into groups called "long trains" and "old trains". One train could be both long and old.
+Let's define yet another category: just call them "groups". They are different from "tagged vehicles", since ''one'' vehicle can be placed in ''many'' groups. This makes sense if you want to sort your trains into groups called "long trains" and "old trains". One train could be both long and old.
 
 If there is one vehicle in many groups, the "auto replace" feature must be adapted to the new group definition. See the end of this page.
 
-= group type: "property based groups" =
+= the group type: "property based groups" =
 
 To have the powerful group commands at hand for a variety of vehicle groups, it makes sense to have groups for many vehicle properties. '''user defined auto-groups''' allows the player to define own criterias to auto-group vehicles.
 
-Through the vehicle list you can access the "user defined groups":
+Through the vehicle list you can access the category "property based groups". Let's assume we do that in the train list window.
 
- '''user defined auto-groups''' (define your own criteria in some input box)
-   old trains                 (train age>15)
-   old vehicles making loss   (age>15 profit<0)
+ '''user defined auto-groups''' (define your own criteria maybe in some input box)
+   old trains                 (age>15)
+   old trains making loss     (age>15 profit<0)
    alte Klapperkisten         (reliability<50 max_speed<100)
    long trains on net2        (train group=network002 wagons>10)
-   worthless ships            (ship value<2000)
-   old vehicles in Rome bs    (group="Rome bus stop" age>20)
+   worthless trains           (value<2000)
+   old trains in Rome         (group="Rome" age>20)  -- the group "Rome" is one of the "same station" category
    red                        (profit<0)
    yellow                     (profit>0 profit<20k)
    green                      (profit>20k)
