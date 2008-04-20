@@ -1,0 +1,95 @@
+= Network group management =
+
+This is about vehicle groups reflecting the transportation network topology. It's hard to implement, but sets up for very interesting features like:
+
+* estimate network profit
+* sell / request networks to/from other players
+
+If there was some sort of "nested groups" a group hierarchy could look like this. It supports network related grouping of trains as well as user defined groups.
+
+Don't be afraid, the player won't see the complete list any ever. ;) This list should be integrated into the GUI in a consistent way. Players new to OTTD won't see this list at once. Advanced OTTD Players will love it ;-)
+
+ all trains
+   tagged trains
+   untagged trains
+   grouped trains
+   partial rail networks
+ all road vehicles
+   tagged road vehicles
+   untagged road vehicles
+   grouped road vehicles
+   partial road vehicles networks
+ all ships
+   ...
+ all aircraft
+   ...
+ networks
+ user defined groups
+
+Again, imagine you playing OTTD and you click on the '''company trains''' button in the game:
+
+ '''all trains'''
+   '''tagged trains''' 
+     user defined name 
+     all my longest trains 
+   '''untagged trains'''
+   '''grouped trains'''
+     my best trains
+     these often cause traffic jams
+     old trains to be refitted
+   '''partial rail networks'''
+     partial rail network001 (shows all trains on this partial network)
+       Lines                 (what is now called "shared orders")
+         Line001             (renaming lines would be nice)
+         Line002
+       stations
+         London West         (shows all trains using this station)
+         New York
+     partial rail network002 (for example, trains here don't have any shared orders)
+       stations
+         Berlin
+         Rome
+     partial rail network003 (renaming networks would be nice)
+       stations
+         Berlin
+         Rome
+
+This is what the maximized "road vehicles" window shows.
+
+ '''all road vehicles'''
+   '''tagged road vehicles'''
+   '''untagged road vehicles'''
+   '''grouped road vehicles'''
+   '''partial road vehicles networks'''
+     partial road vehicle network004     (maybe these buses don't have shared orders...)
+        stations
+          Rome
+          Rome bus stop
+
+Somewhere in the vehicle list window (maybe in the dropdown thing), there is a "network" button:
+
+ '''networks'''
+   network001      (shows all vehicles these got a "sell" or a "request" button)
+     stations      (all stations of this network)
+       London West (shows all vehicles using this station even if they are of different types)
+       New York Main Station
+       Berlin
+       Rome
+       Rome bus stop
+     partial rail network001         (same content like above)
+     partial rail network002         (same content like above)
+     partial road vehicle network004 (same content like above)
+   network002
+     partial rail network003
+
+'''tagged trains''' and '''untagged trains''' is what we have right now. Each trains can be in ''only one'' of the subgroups at most. They get a group tag visible in the minimized vehicle window.
+
+'''grouped trains''' is something similar. These are also user defined groups, but vehicles are allowed to be placed in several groups at a time.
+
+'''networks''' are independent networks which may contain mixed stations and mixed vehicle types. If you sold a network, all contained stuff just "changes color" and no vehicle will ever complain about being lost or not finding a station. Thats why partial networks are defined like this: 
+
+'''partial networks''' are coherent networks of one and the same vehicle type. Note the difference to ''networks'', which include all connected partial networks of other vehicle types. Examples for partial networks:
+* All tracks, depots, stations a train could possibly reach traveling on the tracks belong to one partial network.
+* all depots, road stations a bus/truck has in its orders list, and recursively all other road vehicles/stations of the road vehicles visiting the same stations.
+:* Roads (and canals) have a special status because every player can use them. The company owned roads connecting partial road networks belong to that network at players choice. This affects the possible "sell network" or the "estimate (partial) network value" features.
+:* partial aircraft / ship networks are defined similar to the partial road networks: all vehicles (of the same type (road, air, water) using the same station and all stations that are in the vehicle's orders list are traversed recursively.
