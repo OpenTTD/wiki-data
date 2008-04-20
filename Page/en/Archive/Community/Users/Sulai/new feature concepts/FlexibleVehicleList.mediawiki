@@ -8,15 +8,16 @@ So, what about computer-generated groups (lets call them '''auto-groups''') that
 * are on the same network
 * match the same vehicle property (age, profit, reliability, ...)
 
-''Three Ideas'' what this could look like.
+We can divide different '''group types''', which are independent to each other and can be implemented to the game separately.
 
-# This is the minimalistic (and most realistic) idea only features two new group types: '''same station''' and '''shared orders'''.
-# This Idea extends Idea 1 to '''networks'''. It needs way more effort to be implemented, but it enables really nice features like "evaluate network" or "sell/request network".
-# The third idea is about '''user defined auto-groups'''. You can define '''vehicle property based conditions''' to form these groups.
+* This is the minimalistic (and most realistic) idea only features two new group types: '''same station''' and '''shared orders'''.
+* about '''tagged vehicles''' and ordinary '''groups'''
+* The third idea is about '''property based groups'''. You can define '''vehicle property based conditions''' to form these groups.
+* [[en//NetworkGroupManagement|NetworkGroupManagement]] is about groups reflecting adjacent transportation networks. It needs way more effort to be implemented, but it enables really nice features like "evaluate network" or "sell/request network".
 
 Of course these concepts can change if necessary ;)
 
-= Idea 1: auto-groups covering shared orders and same stations =
+= group types "shared orders" and "same stations" =
 
 == Detailed Feature Concept ==
 
@@ -68,106 +69,15 @@ Note2: Also creating new (empty) shared orders and giving them a appropriate nam
 
 Note3: you can easily drag and drop the vehicles to put them into shared orders groups. (also if these are on other railway networks... =()
 
-== (protect from global) auto replace ==
+= group types: "tagged groups" and just "groups" =
 
-Different ways how to handle the "auto replace" feature.
-#allow this button only to the category "groups"
-#Slightly change the autoreplace behavior: first, there is no global auto replace. If you want to replace all trains you choose the ''group'' "all trains". Second, all vehicles in a group are "assigned" to be replaced by a certain machine when using the "replace" command. This means: giving the replace command to vehicles in a group overwrites their current replace-assignment. Because of this you can replace the same vehicle type (eg "Kirby Paul Tank") by different machines types just because they are in different groups.
+Let's name the group type we have in Version 0.6.0 "tagged vehicles". The vehicles contained in those groups get little tags on the vehicle list window, reflecting the group they belong to. This automatically means, that ''one'' vehicle can only belong to ''one'' of the groups in the "tagged vehicles" section.
 
-= Idea 2: auto-groups covering shared orders, same stations, (partial) networks =
+Let's define yet another group type: just call them "groups". They are different from "tagged vehicles", since ''one'' vehicle can be placed in ''many'' groups. This makes sense if you want to sort your trains into groups called "long trains" and "old trains". One train could be both long and old.
 
-This idea includes the simple idea 1 but makes the group principle much more general (and much more powerful).
+If there is one vehicle in many groups, the "auto replace" feature must be adapted to the new group definition. See the end of this page.
 
-Here is a group hierarchy that supports network related grouping of trains as well as user defined groups.
-
-Don't be afraid, the player won't see the complete list any ever. ;) This list should be integrated into the GUI in a consistent way. Players new to OTTD won't see this list (minimized vehicle window, see idea 1). Advanced OTTD Players will love it ;-)
-
- all trains
-   tagged trains
-   untagged trains
-   grouped trains
-   partial rail networks
- all road vehicles
-   tagged road vehicles
-   untagged road vehicles
-   grouped road vehicles
-   partial road vehicles networks
- all ships
-   ...
- all aircraft
-   ...
- networks
- user defined groups
-
-Again, imagine you playing OTTD and you click on the '''company trains''' button in the game:
-
- '''all trains'''
-   '''tagged trains''' 
-     user defined name 
-     all my longest trains 
-   '''untagged trains'''
-   '''grouped trains'''
-     my best trains
-     these often cause traffic jams
-     old trains to be refitted
-   '''partial rail networks'''
-     partial rail network001 (shows all trains on this partial network)
-       Lines                 (what is now called "shared orders")
-         Line001             (renaming lines would be nice)
-         Line002
-       stations
-         London West         (shows all trains using this station)
-         New York
-     partial rail network002 (for example, trains here don't have any shared orders)
-       stations
-         Berlin
-         Rome
-     partial rail network003 (renaming networks would be nice)
-       stations
-         Berlin
-         Rome
-
-This is what the maximized "road vehicles" window shows.
-
- '''all road vehicles'''
-   '''tagged road vehicles'''
-   '''untagged road vehicles'''
-   '''grouped road vehicles'''
-   '''partial road vehicles networks'''
-     partial road vehicle network004     (maybe these buses don't have shared orders...)
-        stations
-          Rome
-          Rome bus stop
-
-Somewhere in the vehicle list window (maybe in the dropdown thing), there is a "network" button:
-
- '''networks'''
-   network001      (shows all vehicles these got a "sell" or a "request" button)
-     stations      (all stations of this network)
-       London West (shows all vehicles using this station even if they are of different types)
-       New York Main Station
-       Berlin
-       Rome
-       Rome bus stop
-     partial rail network001         (same content like above)
-     partial rail network002         (same content like above)
-     partial road vehicle network004 (same content like above)
-   network002
-     partial rail network003
-
-'''tagged trains''' and '''untagged trains''' is what we have right now. Each trains can be in ''only one'' of the subgroups at most. They get a group tag visible in the minimized vehicle window.
-
-'''grouped trains''' is something similar. These are also user defined groups, but vehicles are allowed to be placed in several groups at a time.
-
-'''networks''' are independent networks which may contain mixed stations and mixed vehicle types. If you sold a network, all contained stuff just "changes color" and no vehicle will ever complain about being lost or not finding a station. Thats why partial networks are defined like this: 
-
-'''partial networks''' are coherent networks of one and the same vehicle type. Note the difference to ''networks'', which include all connected partial networks of other vehicle types. Examples for partial networks:
-* All tracks, depots, stations a train could possibly reach traveling on the tracks belong to one partial network.
-* all depots, road stations a bus/truck has in its orders list, and recursively all other road vehicles/stations of the road vehicles visiting the same stations.
-:* Roads (and canals) have a special status because every player can use them. The company owned roads connecting partial road networks belong to that network at players choice. This affects the possible "sell network" or the "estimate (partial) network value" features.
-:* partial aircraft / ship networks are defined similar to the partial road networks: all vehicles (of the same type (road, air, water) using the same station and all stations that are in the vehicle's orders list are traversed recursively.
-
-= Idea 3: user defined auto-groups (vehicles matching the same properties) =
+= group type: "property based groups" =
 
 To have the powerful group commands at hand for a variety of vehicle groups, it makes sense to have groups for many vehicle properties. '''user defined auto-groups''' allows the player to define own criterias to auto-group vehicles.
 
@@ -184,9 +94,17 @@ Through the vehicle list you can access the "user defined groups":
    yellow                     (profit>0 profit<20k)
    green                      (profit>20k)
 
-= game ressources =
+= details on implementation =
 
-Of course first priority is to keep the game as efficient as possible regarding cpu usage and network/internet bandwidth. Especially for the vehicle network features there are deeper examinations necessary.
+== game ressources ==
+
+Of course first priority is to keep the game as efficient as possible regarding cpu usage and network/internet bandwidth. Especially for the [[en//NetworkGroupManagement|NetworkGroupManagement]] there are deeper examinations necessary.
+
+== (protect from global) auto replace ==
+
+Different ways how to handle the "auto replace" feature.
+#allow this button only to the category "groups"
+#Slightly change the autoreplace behavior: first, there is no global auto replace. If you want to replace all trains you choose the ''group'' "all trains". Second, all vehicles in a group are "assigned" to be replaced by a certain machine when using the "replace" command. This means: giving the replace command to vehicles in a group overwrites their current replace-assignment. Because of this you can replace the same vehicle type (eg "Kirby Paul Tank") by different machines types just because they are in different groups.
 
 = web links =
 
