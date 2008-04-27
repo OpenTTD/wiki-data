@@ -1,2 +1,68 @@
 [[Translation:en/Manual/Timetable]]
-#REDIRECT [[en/Manual/Orders#timetable]]
+== Interface ==
+Timetables were introduced in [[en/Archive/OpenTTD/OpenTTD 0.6.0]] (since beta 2). The timetable button is located on the right top of the orders window. All orders for the selected vehicle are displayed inside the Timetable window. You can choose how much time a vehicle should spend in a station (in days or cycles - configure via patches) and if you wish, how much time it should take the vehicle to travel between points of its route. There is a counter stating whether a vehicle is on time or whether a delay has occurred.
+
+[[File:en/Manual/Orders-timetable.png|center|frame|The timetable interface, accessible from the orders window.]]
+
+{|
+| '''Change Time'''
+|Changes time period assigned to line in timetable.
+|Will pop up window to prompt for the new duration.
+|-
+| '''Clear Time'''
+|Removes time period.
+|Allows the vehicle to take as long as it pleases with the selected journey.
+|-
+| '''Autofill'''
+|Fill automatically based on next journey.
+|Fills data for you, so you can tune them later.
+|-
+| '''Reset late counter'''
+|Sets late counter to zero.
+|Declares that the vehicle as travelling on time, so it will stop trying to catch up or slow down.
+|}
+{{en/Warning|Enabling autofill clears any previous timetable.}}
+
+== Using timetables ==
+Timetables are useful for preventing vehicles from "bunching up". Spreading out your vehicles helps to keep a more even flow of cargo from station to station, but breakdowns, traffic, and such delays will normally cause them to gather together into a single queue.
+
+To demonstrate, we shall show a simple case with three buses travelling a circuit between three towns. We'll start off with the buses and route already set up, using [[en/Manual/Orders#shared-orders-2|shared orders]]. Sharing orders is ''very'' helpful here, as they will also share timetables.
+
+To start with, bring up the first buses' timetable, and enable '''Autofill'''. Then set them on their travels. As the first bus completes each part of its route, the timetable window will populate with the time it took.
+[[File:en/Manual/Timetable-autofill.png|center|frame|'Autofill' will measure how long your vehicle takes to travel each leg of the journey, and how long it spends in stations.]]
+
+As the convoy of new buses travel, stop the last bus after each station, so that they are nicely spread out. (If you have a different number of vehicles to stations, just try to estimate equal spacing. If any of them say that they're late once in place, reset their late counter with the button.) Once the first bus has made one complete route, the timetable will be populated, and you can disable autofill. Stop the bus for now.
+[[File:en/Manual/Timetable-autofilled.png|center|frame|Our example bus route, once automatically measured.]]
+
+Unless you were unlucky, the time measured will have been that of a perfect run: no breakdowns, no traffic, just the bus hurtling along at top speed the whole way. It also probably didn't have much or any cargo to load or unload if the stations are new too.
+
+This means that the timetable is hopelessly optimistic, as it represents the ''best possible case'', rather than the common case. To correct this, select each leg of the timetable in turn, click '''Change Time''', and type in a new duration to add a little slack to the timetable.
+[[File:en/Manual/Timetable-slack.png|center|frame|Change the timetable durations to add slack time.]]
+
+Now, start the buses! You might want to do this while paused to make sure that they all move off at once, else your careful efforts to spread them out will be in vain.
+
+Chances are, at least at first, you got the slack time wrong. Timetabling is still a bit of a learned craft, and far from a magical "automatically spread out vehicles with same orders" option. Let the buses run for a while (it needs to be long enough for a few breakdowns---a year should do), and see what their timetable windows say.
+[[File:en/Manual/Timetable-runninglate.png|center|frame|Without enough slack, breakdowns and other delays will lead to accumulating lateness.]]
+Oh dear. Although eight days isn't much, the differences in lateness mean that our buses aren't so nicely spread out any more. Add a little more slack to the timetable. '''Don't''' click the '''Reset Late Counter''' button---that will make the buses forget how far they are from their evenly-spaced objective, and make them instead try to match how they are currently bunched.
+{{en/Note|If your buses are never late, and seem to be spending a lot of time waiting about at stations without transferring passengers, you probably added too much slack instead.}}
+
+Your buses should now be pretty happily set up, and safe to be left to their own devices while you go work on some other route. Here's how our example looks after five years on fast-forward:
+[[File:en/Manual/Timetable-fiveyears.png|center|frame|With enough slack, the buses are still nicely spread out after five years.]]
+
+Despite repeated breakdowns, they are still evenly spaced around the loop. But what happens when a new bus type is released, and they [[en/Manual/Replace vehicles|get upgraded]]?
+[[File:en/Manual/Timetable-newbus.png|center|frame|New, faster vehicles will limit themselves to the unmodified timetable by waiting around at stations.]]
+The good news is that the timetable will continue to work, and your stations will still see regular buses, rather than hours of waiting and then three at once. The bad news is that your new, faster buses will be sitting around waiting for time to pass so that they've synchronised with a timetable set up for old, slow buses. Because this isn't ''wrong'', as such (the buses still keep their spacing, deliver cargo, and make money), you won't get any warnings about it, either.
+
+So that's the downside of timetables---''you need to update your timetables when you get new vehicles''. How much work this is will depend on how much you use multiple vehicles which are not already rate-controlled by some other mechanism, such as [[en/Manual/Orders#full-load|full load]], and how skilled you get at estimating required slack. I suggest you keep it to just buses, and possibly mail trucks.
+
+The upside is that one of the big, big factors when calculating your [[en/Manual/Game Mechanics/Main Page#station-rating|station ratings]] is how long it has been since the last vehicle showed up. People do not like to be kept waiting for the bus, even if the bus is actually a road train of five large, fast buses which will whisk away all nine-hundred passengers without strain. After about ten years (and a little cheating to skip forward to new bus designs for the above), here are the station ratings for our trivial route:
+[[File:en/Manual/Timetable-ratings.png|center|frame|Regular buses keeps ratings higher than an infrequent hairball, even if they can't keep up with production.]]
+Three buses is nowhere near enough to service Overnfield city station, but we avoid a terrible rating (and subsequent local authority obstruction of anything we do nearby) by at least offering a frequent service.
+
+=== Summary ===
+* Timetabling is tuned to a particular route and vehicle speed. Use it for things like buses; trains are better served by being instructed to wait for a full load. Use shared orders.
+* Use '''Autofill''' to get an initial measurement to base your timetable upon.
+* Manually spread out your vehicles. Reset any late time once in position.
+* Add and tune a little slack time to allow them to catch up after delays.
+* Set all the vehicles going at once.
+* Repeat the tuning when upgrading to faster vehicles.
