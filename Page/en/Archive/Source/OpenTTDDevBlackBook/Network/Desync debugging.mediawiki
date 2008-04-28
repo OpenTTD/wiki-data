@@ -1,0 +1,25 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/Network/Desync debugging]]
+===Step 1===
+Make the desync reproducable.
+If the client desyncs immediatelly (few seconds) after joining, then something is not correctly loaded (or rather saved) from the savegame or caches differ between the clients. Go to step 3.
+
+Compile the server with ./configure --enable-desync-debug=1 and let one client try to desync.
+
+===Step 2===
+This step is optional, but it will save time later.
+Step 1 produced a load of savegames in save/autosave/ and a file called 'commands.log'. These can be used to reproduce the issue. You need to find the last savegame before the desync that can reproduce the desync. You need to remove the commands from commands.log from before the 'load' line of the savegame you loaded.
+
+To test whether a desync happens one should start the server, load the savegame, pause the server immediatelly and then let one client join. If the desync doesn't happen anymore at the date it previously did, you have loaded a too late savegame and you need an earlier one, if it did desync you should try a later one until you know what is the savegame closest to the desync. This savegame is needed for the next step.
+
+===Step 3===
+Compile the server *and* client with ./configure --enable-desync-debug=2. This will cause the client and server to output *all* random calls.
+
+===Step 4===
+Start the server and pipe the output to a file, load the savegame and pause it. Then start the client and pipe the output also to a file. Unpause the server and let it run till the client desyncs.
+
+Now diff both output files. This diff will tell you the first random call where the different occured. Open the source and try to find out what could've gone wrong. The best way to do this is by adding code to dump parameters and/or other parameters that can affect the random call that went 'wrong' to the console.
+
+Now rerun step 4 till you found out where the difference originally came from. This usually takes up more than 10 cycles and in bad luck the desync happened so enormously long before the first random changes started to occur that it takes over 30 cycles.
+
+===Step 5===
+Desync found, and likely a whole day further.
