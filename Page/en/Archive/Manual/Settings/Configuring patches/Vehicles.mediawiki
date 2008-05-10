@@ -1,15 +1,14 @@
 {{en/Archive/Manual/Settings/Patch Config}}
 
-This window of the [[en/Manual/Main Page]] patches section enables you to set various settings that affect vehicles and their behaviour.
-
-=Configure Patches Window: Vehicles Section=
-<center>[[File:en/Patches-vehicles.png|centre|none|frame|1. - The Configure patches window; Vehicles (0.5.1)]]</center>
+==Configure Patches Window: Vehicles Section==
+This window of the [[en/Manual/Main Page]] patches section enables you to set various settings that affect vehicles and their behaviour. The image below shows the default settings in OpenTTD 0.6.0.
+<center>[[File:en/Archive/Manual/Settings/0.6.0 configurepatches vehicles.png|centre|none|frame|Configure Patches -> Vehices (0.6.0)]]</center>
 
 ====Enable realistic acceleration for trains====
-(realistic_acceleration) Enables a more [[en/Archive/Manual/Settings/Realistic acceleration]] calculation for trains.
+(realistic_acceleration) Enables a more [[en/Archive/Manual/Settings/Realistic acceleration]] calculation for trains. With this setting enabled, trains will travel faster up hill, but slower through tight corners.
 
 ====Forbid trains and ships to take 90 deg turns====
-(forbid_90_deg) Disallows trains from making sharp 90 degree turns.
+(forbid_90_deg) Disallows trains from making sharp 90 degree turns. The NPF or YAPF pathfinder needs to be enabled for this option.
 
 ====Enable building very long trains====
 (mammoth_trains) You can build extremely long trains, aka [[en/Archive/Manual/Settings/Mammoth trains]].
@@ -20,18 +19,20 @@ This window of the [[en/Manual/Main Page]] patches section enables you to set va
 ====Road vehicle queueing (with quantum effects)====
 (roadveh_queue) Trucks [[en/Archive/Manual/Settings/Road vehicle queueing|queue up]] at a busy station rather than turning around.
 
-====New global pathfinding (NPF)====
-(new_pathfinding_all) Enables the [[en/Archive/Manual/Settings/New global pathfinding|New global PathFinding]] algorithm.
+====Pathfinder for trains====
+Select the pathfinding algorithm for trains. [[en/Archive/Manual/Yet Another Pathfinder]] is the default and recommended setting, but you can still select the older pathfinders.
 
-====Use YAPF for ships / road vehicles / trains====
-(ship_use_yapf, road_use_yapf, rail_use_yapf) Specifies whether [[en/Archive/Manual/Yet Another Pathfinder]] will be used for ships / road vehicles / trains.
+====Pathfinder for road vehicles====
+Select the pathfinding algorithm for road vehicles. [[en/Archive/Manual/Yet Another Pathfinder]] is the default and recommended setting, but you can still select the older pathfinders.
+
+====Pathfinder for ships====
+Select the pathfinding algorithm for ships. The original is the default and recommended setting, but you can select newer pathfinder. YAPF for ships has the advantage of not having to use buoys for long distances, but has serious performance issues when using a large number of ships (i.e. more than ten).
 
 ====Warn if a train's income is negative====
-(train_income_warn) If a train's [[en/Archive/Manual/Settings/Train income warning|income is negative]] it will be reported in a news message. At the moment there is no option for all vehicles to get revenue in a [[en/Manual/Feeder service]] so you may want to turn this off.
+(train_income_warn) If a train's [[en/Archive/Manual/Settings/Train income warning|income is negative]] it will be reported in a news message. Use the [[en/Manual/Orders]] option in the vehicles order window if you want to set up a [[en/Manual/Feeder service]].
 
 ====Review vehicles' orders====
 (order_review_system) Enable the option to [[en/Archive/Manual/Settings/Order review system|review the orders]] of vehicles periodically for invalid orders and other oddities.
-
 This option may be enabled for all vehicles, disabled for stopped vehicles, or disabled altogether.
 
 ====Vehicles never expire====
@@ -40,24 +41,31 @@ This option may be enabled for all vehicles, disabled for stopped vehicles, or d
 ====Warn if train is lost====
 (lost_train_warn) A train will be [[en/Archive/Manual/Settings/Train is lost warning|reported lost]] if it cannot find a route to the station it is currently heading to.
 
-This is a replacement for: ''A train is lost if no progress is made for (x days)'' (lost_train_days), which is no longer available.
+====Autorenew vehicle when it gets old====
+(autorenew) Vehicles are [[en/Archive/Manual/Settings/Advanced Settings/Vehicles|automatically replaced]] when they get old, provided that the same vehicle type is still available for purchase.
 
-====Auto renew vehicle when it gets old====
-(autorenew) Vehicles are [[en/Archive/Manual/Settings/Advanced Settings/Vehicles|automatically replaced]] when they get old.
-
-=====Auto renew when vechicle is N months before/after max age=====
+====Autorenew when vechicle is N months before/after max age====
 (autorenew_months) [[en/Archive/Manual/Settings/Advanced Settings/Vehicles|Autorenew months]] defines when the renew will be done.
 
-=====Auto renew minimum needed money for renew=====
+====Autorenew minimum needed money for renew====
 (autorenew_money) [[en/Archive/Manual/Settings/Advanced Settings/Vehicles|Autorenew money]] defines the minimum amount of money needed before autorenew is done.
 
-====Max trains / road vehicles / aircraft / ships per player====
-(max_trains/max_roadveh/max_aircraft/max_ships) Set the amount of vehicles that a player can have ([[en/Archive/Manual/Settings/Max trains|trains]], [[en/Archive/Manual/Settings/Max road vehicles|road vehicles]], [[en/Archive/Manual/Settings/Max aircraft|aircraft]], [[en/Archive/Manual/Settings/Max ships|ships]]).
+====Max trains per player====
+(max_trains) Set the amount of [[en/Archive/Manual/Settings/Max trains|trains]] that a player can have.
+
+====Max road vehicles per player====
+(max_roadveh) Set the amount of [[en/Archive/Manual/Settings/Max road vehicles|road vehicles]] that a player can have.
+
+====Max aircraft per player====
+(max_aircraft) Set the amount of [[en/Archive/Manual/Settings/Max aircraft|aircraft]] that a player can have.
+
+====Max ships per player====
+(max_ships) Set the amount of [[en/Archive/Manual/Settings/Max ships|ships]] that a player can have.
 
 ====Service intervals are in percents====
 (servint_ispercent) When this switch is on the service intervals are considered to be in percents of the max. reliability rather than days. For example, if an engine has the max reliability of 80% and you set the service interval to 10% then it will go to depot at 72%.
 
-{{en/Note|You can hold the Ctrl key while changing service intervals to change them in increments of 5 rather than 10.}}
+You can hold the Ctrl key while changing service intervals to change them in increments of 5 rather than 10.
 
 ====Default service interval for trains / road vehicles / aircraft / ships====
 (servint_trains/servint_roadveh/servint_aircraft/servint_ships). 
@@ -67,14 +75,20 @@ The default service interval for each vehicle type when a new one is built ([[en
 (no_servicing_if_no_breakdowns) If you have breakdowns set to none and have this switch is on, your vehicles will never go to the depot for a service.
 Even if this patch is enabled, vehicles will still go to depot for auto-renewal and/or replacement if those patches are activated.
 
-====Enable railroad car speed limits====
+====Enable wagon speed limits====
 (wagon_speed_limits) Some newgrf's have wagon speed limits to make them more realistic, this option will enable/disable them.
 
 ====Disable electric rails====
-(disable_elrails) Disables electrified railways. The electric trains will run on normal tracks when this patch is active.
+(disable_elrails) Disables electrified railways. The electric trains will run on normal tracks when this patch is active and electrified railways are not available for purchase.
 
 ====Weight multiplier for freight to simulate heavy trains====
 (freight_trains) The weight of freight trains is multiplied by a multiplier to simulate very heavy trains for more realism.
+
+====Plane speed factor====
+(plane_speed = <num_val>) Set the speed of aircraft in relation to rail, road and water vehicles. In plain TTD, the aircraft traveled at 1/4th of ground speed.
+
+====Enable timetabling for vehicles====
+(timetabling = [true|false]) Allows you to use [[en/Manual/Timetable]] for vehicles.
 
 [[Category:en/Patch Settings]]
 [[Category:en/Manual/Vehicles]]
