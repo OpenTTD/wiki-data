@@ -25,5 +25,52 @@ And only yourAI will be active. To see which AIs OpenTTD can find, run:
 
 At the bottom it shows all the AIs it can find and detect as runable.
 
+=== Map coordinates ===
+
+Map (X, Y) coordinates are done from the top to the bottom - the top most tile is (0,0), the bottom most tile is (Max_X, Max_Y). Any time a more then one tile dimension object is returned, it'll be the most top coordinate, tending towards the top right:
+
+[[File:en/Development/Script/Ai-placed-coordinate-of-airport.png|frame|none|The AI placed this airport, using the top right most coordinate, which is also it's returned location]]
+
+[[en/Development/Script/Lists|Lists]] when validating a set area via. AITile.IsBuildableRectangle (eg; a space for an airport) will return the top most square where it is minimum X and Y to fit the object in.
+
+=== Loading and restarting AI's ===
+
+The AI is loaded from any instance of a new game. There is no need to restart the game, abandoning the current level and starting again is usually the easiest method to restart the AI from a scratch map, or loading a scenario setup to be the same each time. The AI debug panel also can restart the individual AI's as noted below.
+
+=== Logging and Debug Panel ===
+
+AI Debug panel is accessible from the Land Area Information (red question mark) labelled "AI Debug Console". At the moment it doesn't have a scroll functionality. All outputs of AILog.XXX() go to here, and can be selected per AI. The AI can also be restarted (resulting in a new Start() initialisation and nothing physically removed from the map) too.
+
+[[File:en/Development/Script/Ai-debug-panel.png|frame|none|AI Debug Panel]]
+
+==== Developer Console Usage ====
+
+The console is accessed using the ` key (next to "1") on the keyboard, and appears in the top part of the screen. This can be scrolled by using the Shift + Page Up/Down.
+
+===== Compiling Errors =====
+
+To see compilation errors of squirrel, the developer level of the game must be set to a minimum of 2. Do this in the console by using the command:
+
+ developer 2
+
+Which can be done in the main menu before AI's have loaded. To have this automated, use a script autoexec.scr in the scripts folder, containing the same line.
+
+===== Logging =====
+
+print() statements and AILog.XXX() commands can be output to the developer console directly by:
+
+ ./openttd -d ai5
+ openttd.exe -d ai5
+
+Or by inputting debug_level ai=5 in the console. This is more useful since the AI Debug panel doesn't scroll yet.
+
+===== Starting an AI =====
+
+To create an AI instance, use the command:
+
+ start_ai nameofai
+
+This will error if the AI cannot be loaded or the maximum (7) AI's are currently loaded, although will still add AI players if the difficulty settings are set to a lower maximum, or even zero. The nameofai part is case insensitive.
+
 [[Category:en/Development]]
 [[Category:en/Development/Script/NoAI]]
