@@ -53,7 +53,7 @@ To load a specific scenario immediately, use:
 
 === Logging and Debug Panel ===
 
-AI Debug panel is accessible from the Land Area Information (red question mark) labelled "AI Debug Console". At the moment it doesn't have a scroll functionality. All outputs of AILog.XXX() go to here, and can be selected per AI. The AI can also be restarted (resulting in a new Start() initialisation and nothing physically removed from the map) too.
+AI Debug panel is accessible from the Land Area Information (red question mark) labelled "AI Debug Console". All outputs of AILog.XXX() go to here, and can be selected per AI. The AI can also be restarted here. When restarting, the company of that AI is removed (with all his property), and a new AI controlled by the same script (which is reloaded from disk) is started. So when changing the AI, it is enough to just hit the Reload button to get your new AI to work.
 
 [[File:en/Development/Script/Ai-debug-panel.png|frame|none|AI Debug Panel]]
 
@@ -61,38 +61,24 @@ AI Debug panel is accessible from the Land Area Information (red question mark) 
 
 The console is accessed using the ` key (next to "1") on the keyboard, and appears in the top part of the screen. This can be scrolled by using the Shift + Page Up/Down.
 
-To get a separate window (which cannot have inputs) use the -d parameter by itself (if you use the -d ai5 then two must be used) on a shortcut:
+To get a separate window (Windows Only) use the -d parameter by itself (use -d ai=5 to get only AI information) on a shortcut:
 
- openttd.exe -d
+ ./openttd -d
 
-This provides this output:
+This provides this output (Windows Only):
 
 [[File:en/Development/Script/Openttd -d.png|frame|none|Zuu's example of the developer console -d version outputting AI errors.]]
 
-===== Compiling Errors =====
-
-To see compilation errors of squirrel, the developer level of the game must be set to a minimum of 2. Do this in the console by using the command:
-
- developer 2
-
-Which can be done in the main menu before AI's have loaded. To have this automated, use a script autoexec.scr in the scripts folder, containing the same line. Example output of this is given above, which allows errors to be found at run time.
+For linux, using -d ai=5 will send all information to the stdout.
 
 ===== Logging =====
 
-print() statements and AILog.XXX() commands can be output to the developer console directly by:
+AILog.XXX() commands can be output to the developer console directly by:
 
- ./openttd -d ai5
- openttd.exe -d ai5
+ ./openttd -d ai=5
+ openttd.exe -d ai=5
 
-Or by inputting debug_level ai=5 in the console. This is more useful since the AI Debug panel doesn't scroll yet.
-
-===== Starting an AI =====
-
-To create an AI instance, use the command:
-
- start_ai nameofai
-
-This will error if the AI cannot be loaded or the maximum (7) AI's are currently loaded, although will still add AI players if the difficulty settings are set to a lower maximum, or even zero. The nameofai part is case insensitive.
+Or by inputting debug_level ai=5 in the console.
 
 === Cargos ===
 
