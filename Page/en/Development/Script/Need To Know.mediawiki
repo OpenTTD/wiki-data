@@ -82,7 +82,42 @@ Or by inputting debug_level ai=5 in the console.
 
 === Cargos ===
 
-Never EVER believe a certain CargoID stands for a certain Cargo, as it won't (NewGRFs and stuff). Always query with the in-game functions what kind of cargo you are looking for (profit-rate, freight, ...).
+CargoID, like any ID, is an index (for people who didn't figure that out yet). An index on its own means nothing, it is just a pointer to a value in an array, and in this case, a cargo-array. The main problem with Cargo, is that you can't trust a value to mean something in all cases. NewGRFs are very powerful, and allows changing of cargos in all kinds of way. Normally, CargoID 0 represents Passengers, but with a single NewGRF, this can be changed to, say, Coal. Now here is the tricky part of it all: no longer you can transport this cargo from and to towns. So, how to make sure your AI is compatible enough that it works in all cases?
+
+Well, say you want to transport stuff from one town to the other town. Than you most likely don't care if it is passengers or mail, just the one which is giving you the most profit, right? Well, that is mail in this case, but how to find out?
+
+First, make a cargo list:
+
+ local list = AICargoList();
+ 
+Now filter what we want.. we want non-freight (short: mail, passengers, ... everything that doesn't go or goes to industry (find a dictionary to lookup the meaning in your language!)).
+
+ list.Valuate(AICargo.IsFreight);
+ list.KeepValue(0);
+
+Next, we want the one that is most profitable for a given length (10 tiles in 2 days is what we use here, but use what ever value you want):
+
+ list.Valuate(AICargo.GetCargoIncome, 10, 2);
+
+Now the best cargo to transport is the first entry of the list:
+
+ local cargo = list.Begin();
+
+And it is that simple! And you will see, when using this method, you can get other types of cargo when loading certain NewGRFs. Nevertheless, it is always a cargo you can transport from and to towns, and it is always the one that is most profitable. So you shouldn't care if it is passengers or not, although some people claim you should. Your AI shouldn't matter what it transports, just as long as it makes profit!
+
+
+Of course there is always the situation where you want to make a passengers only AI. Although it is advisable to avoid such limitations on your AI, this of course is possible. NewGRF specification specifies that Passangers cargo should always be marked with a CargoLabel PASS. This doesn't include tourist, and who knows what more in the future. You can of course scan the array for this label, and use that value. Again, to be very explicit: don't believe that the value you get on your computer, works on all other computers. It might differ over time, mostly because of NewGRFs. The code to find the label:
+
+ local list = AICargoList();
+ local pass_cargo = -1;
+ for (local cargo = list.Begin(); list.HasNext(); cargo = list.Next()) {
+   if (AICargo.GetCargoLabel(cargo) == "PASS") {
+     pass_cargo = cargo;
+   }
+ }
+ if (pass_cargo == -1) AILog.Error("Your game doesn't have any passengers cargo, and as we are a passenger only AI, we can't do anything");
+
+And that is all there is to.
 
 [[Category:en/Development]]
 [[Category:en/Development/Script/NoAI]]
