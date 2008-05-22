@@ -16,7 +16,7 @@ The list server does not do any authentication on servers - the server name is n
 
 == Proposal == 
 
-Client decides it wants to connect to server X
+Client decides it wants to connect to server X:
 
 * Client connects to the OTTD server, and asks to be authenticated
 * Server creates a random number R1 and sends it to client, also keeping a copy. R1 is associated with a given client only, and will be different each time.
@@ -31,6 +31,8 @@ Client decides it wants to connect to server X
 #. Client never sends username / password to OTTD server (as currently)
 #. R1 value means that sniffing the session ID is useless, as another server will use a different R1 value<BR>(and indeed the same server will use a different R1 value if you connect again)
 #. Man-in-the-middle attack is still possible unfortunately, by using a modified server which also behaves as a client and "passes through" the authentication. Once it's authenticated, this modified client can do a session-hijack.
+#. In the interim, if we're super-worried about the security of passwords being sent in the clear/to server owners, it should be a relatively trivial issue to implement a quick salting & hashing system. For a game server this is probably overkill.
+#. Also, wouldn't it be neat using OpenID? I totally fail to see how this would work, but it's an interesting thought.
 
 ----
 
