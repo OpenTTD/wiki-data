@@ -106,18 +106,28 @@ Now the best cargo to transport is the first entry of the list:
 And it is that simple! And you will see, when using this method, you can get other types of cargo when loading certain NewGRFs. Nevertheless, it is always a cargo you can transport from and to towns, and it is always the one that is most profitable. So you shouldn't care if it is passengers or not, although some people claim you should. Your AI shouldn't matter what it transports, just as long as it makes profit!
 
 
-Of course there is always the situation where you want to make a passengers only AI. Although it is advisable to avoid such limitations on your AI, this of course is possible. NewGRF specification specifies that Passangers cargo should always be marked with a CargoLabel PASS. This doesn't include tourist, and who knows what more in the future. You can of course scan the array for this label, and use that value. Again, to be very explicit: don't believe that the value you get on your computer, works on all other computers. It might differ over time, mostly because of NewGRFs. The code to find the label:
+Of course it is also possible to find a cargo based on the class of the cargo. Don't just use value '0' for passengers, it might not hold for all NewGRFs. What is safe to do, is find the cargo that belongs to AICargo.CC_PASSENGERS. To give a simple code snippet which illustrates this:
 
  local list = AICargoList();
  local pass_cargo = -1;
  for (local cargo = list.Begin(); list.HasNext(); cargo = list.Next()) {
-   if (AICargo.GetCargoLabel(cargo) == "PASS") {
+   if (AICargo.HasCargoClass(cargo, AICargo.CC_PASSENGERS)) {
      pass_cargo = cargo;
+     break;
    }
  }
  if (pass_cargo == -1) AILog.Error("Your game doesn't have any passengers cargo, and as we are a passenger only AI, we can't do anything");
 
-And that is all there is to.
+At the end, either it gave an error, or pass_cargo is the value of the first cargo belonging to the CC_PASSENGERS class.
+
+
+===Bus station or Truck station===
+
+There is one simple way to find out if the cargo you want to transport should go to a bus station or a truck station. And it is the most obvious: if the cargo belongs to the CC_PASSENGERS class, it needs a bus station. All other cases needs a truck station. So:
+
+ local truck_station = !AICargo.HasCargoClass(cargo, AICargo.CC_PASSENGERS);
+
+It could not be more simple!
 
 [[Category:en/Development]]
 [[Category:en/Development/Script/NoAI]]
