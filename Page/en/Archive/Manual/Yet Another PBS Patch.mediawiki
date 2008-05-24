@@ -1,5 +1,5 @@
 [[Translation:en/Archive/Manual/Yet Another PBS Patch]]
-Yet Another PBS Patch (or just YAPP) is a PBS patch developed by [[en/Michi cc]]. YAPP implements a realistic signalling system, similar to [[en/Archive/Manual/Yet Another PBS Patch|the one]] described by [[en/Tekky]] (although the YAPP implementation does not feature real bi-directional tracks). Currently, YAPP isn't available in any official version of OpenTTD and can only be aquired by compiling the game yourself or downloading one of the many ''patch packs'' available at [http://www.tt-forums.net/viewforum.php?f=33 tt-forums.net].
+Yet Another PBS Patch (or just YAPP) is a PBS patch developed by Michi_cc. YAPP implements a realistic signalling system, similar to [[en/Archive/Manual/Yet Another PBS Patch|the one]] described by Tekky (although the YAPP implementation does not feature real bi-directional tracks). Currently, YAPP isn't available in any official version of OpenTTD and can only be aquired by compiling the game yourself or downloading one of the many ''patch packs'' available at [http://www.tt-forums.net/viewforum.php?f=33 tt-forums.net].
 
 {{en/Note|This article describes a feature which is not available in any official version of OpenTTD.}}
 
@@ -7,10 +7,9 @@ Yet Another PBS Patch (or just YAPP) is a PBS patch developed by [[en/Michi cc]]
 * Works with NPF and YAPF.
 * Implements a signal system similar to the one Tekky described (without real bi-di tracks).
 * Is fully backwards compatible, normal and PBS signals can be used in parallel.
-* Can colour the reserved paths.
+* Can highlight the reserved paths.
 
 =Tutorial=
-
 ==The basics==
 This paragraph covers the basic features of YAPP, and should get you going on using it.
 
@@ -39,16 +38,19 @@ Because in front of every signal, there is a safe waiting position, in most case
 [[File:en/Manual/Yapp unsafewaitinglocation.png|frame|center|The signal indicated by the arrow is an unsafe waiting location, as the train in the junction now blocks the otherwise free path of the train coming from the top. There's a second unsafe waiting location in this picture. Can you find it?]]
 
 ===Patch Options===
-[[File:en/Manual/Yapp patch-options.png|frame|right|YAPP Patch options]]YAPP adds two patch options to the game.
+[[File:en/Manual/Yapp patch-options.png|frame|right|YAPP Patch options]]YAPP adds three patch options to the game.
 
 
 One option is to highlight reserved PBS tracks. This option is useful to troubleshoot your PBS junctions, as you can see what paths trains have reserved through a PBS block.
 
 
-The other option is how ctrl+click on a signal should behave. This option enables you to set what signal types should be cycled through.
+The other two options control how the build signal tool should behave. You can set the signal type which should be built
+by default when building a new signal with the signal tool and change which signal types should be cycled through on ctrl-clicking
+an already existing signal.
 
 
-There are a few more patch options which are not available through the Configure Patches windows. What these options are, and how to edit them is covered in [[#advanced-patch-options]].
+There are a few more patch options which are not available through the Configure Patches windows. What these options are, and how to edit them is covered below
+under [[#advanced-patch-options|Advanced patch options]].
 
 ==Basic Examples==
 Below are some example track layouts which use the YAPP-PBS signals.
@@ -66,15 +68,18 @@ Extremely useful when you have breakdowns enabled. If a train breaks down, other
 [[File:en/Community/Junctionary/Yapp dualtrack.png|frame|center|Double two-way track. All signals are safe waiting locations.]]
 
 ==Advanced patch options==
-These patch options are located in your [[en/Archive/Manual/Settings/Openttd.cfg]] file. This file is located in either you home directory (My documents on Windows) or your OpenTTD installation directory. Open this file using your favourite plain text editor. The following options are added by YAPP. Just adapt the values to your needs.
+YAPP has several options not accessible through the patch settings window. These are saved in your [[en/Archive/Manual/Settings/Openttd.cfg]] and
+can be changed either with a text editor or through the in-game [[en/Manual/Console]]. Changes made in openttd.cfg '''will not''' affect
+already started savegames, you have to use the console to change the values of a running game.
 * wait_for_pbs_path (set this value to 255 if you don't want trains to ''ever'' turn around at a pbs signal)
 * reserve_paths
-* path_backoff_interval
+* path_backoff_interval (you can increase this value if you have a slow computer)
 * npf_rail_pbs_cross_penalty
 * npf_rail_pbs_signal_back_penalty
-* rail_pbs_cross_penalty
-* rail_pbs_station_penalty
-* rail_pbs_signal_back_penalty
+* yapf.rail_pbs_cross_penalty
+* yapf.rail_pbs_station_penalty
+* yapf.rail_pbs_signal_back_penalty
+* yapf.rail_doubleslip_penalty
 
 ==Advanced examples==
 Below are some example advanced track layouts which use the YAPP-PBS signals.
