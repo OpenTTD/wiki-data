@@ -53,13 +53,13 @@ In order for OpenTTD to implement bi-directional double track without the danger
 <center>[[File:en/Archive/Community/Rpbs img6.png|center|frame|Figure 3.1]]</center>
 
 
-Assuming right-hand traffic, trains should normally use the right track and only use the left track when the right track is being blocked by another train travelling in the same direction. Since many OpenTTD players also create rail networks with left-hand traffic, this article will use the terms "normal track" and "opposite track" instead of "right track" and "left track", respectively.
+Assuming right-hand traffic, trains should normally use the right track and only use the left track when the right track is being blocked by another train travelling in the same direction. Since many OpenTTD players also create rail networks with left-hand traffic, this article will use the terms "regular track" and "opposite track" instead of "right track" and "left track", respectively.
 
-In the above picture, the signals are placed in such a way so that trains will always encounter normal signals when travelling on the normal track and orange signals when travelling on the opposite track. These different signal types tell the pathfinder to use the normal track and not the opposite track, if possible. This could be accomplished by adding an additional "weight" for orange signals to the pathfinder.
+In the above picture, the signals are placed in such a way so that trains will always encounter regular signals when travelling on the regular track and orange signals when travelling on the opposite track. These different signal types tell the pathfinder to use the regular track and not the opposite track, if possible. This could be accomplished by adding an additional "weight" for orange signals to the pathfinder.
 
 Of course, the above track layout would only work if OpenTTD were reprogrammed to not consider track with single signals as one-way track. This can be changed easily. Also, all of the signals in the above picture are pre-signals. OpenTTD (more specifically, the PBS-system) would have to be modified to act as if implicit exit-signals were behind the [https://www.wikipedia.org/wiki/en:Railroad switch switches]. It is important not to have real signals which can show red/green as exit signals, because trains should not be allowed to wait in front of exit signals, since they would be blocking the intersection. Instead, they should reserve the route up to the next non-exit-signal.
 
-As a rule of thumb, trains should try to wait in front of signals on the normal track (=normal signals). As long as there are only trains waiting on the normal track, there is no danger of a deadlock. Trains should only be allowed to wait in front of signals on the opposite track (=orange signals) if they can be absolutely sure to soon be able to swap back to the normal track. Otherwise, there is a danger of a deadlock:
+As a rule of thumb, trains should try to wait in front of signals on the regular track (=regular signals). As long as there are only trains waiting on the regular track, there is no danger of a deadlock. Trains should only be allowed to wait in front of signals on the opposite track (=orange signals) if they can be absolutely sure to soon be able to swap back to the regular track. Otherwise, there is a danger of a deadlock:
 
 
 <center>[[File:en/Archive/Community/Rpbs img7.png|center|frame|Figure 3.2]]</center>
@@ -71,7 +71,7 @@ This picture may not look like a deadlock, but if there is a full station immedi
 <center>[[File:en/Archive/Community/Rpbs img8.png|center|frame|Figure 3.3]]</center>
 
 
-In order to prevent such deadlocks, trains should only be allowed to wait in front of signals on the opposite track (=orange signals) if they can be absolutely sure to be able to swap back to the normal track without a deadlock occuring beforehand. Therefore, a train whose pathfinder decides to wait in front of an orange signal will also have to have reserved a route to the next normal signal. This reservation of the path to the next normal signal, however, does not mean the path to the next normal signal must be completely free. Such a requirement would make all orange signals redundant, since they would always show green and never red. Instead, it is enough to reserve a route to the next normal signal that is safe from a deadlock (a "weak reservation"), such as in the following picture:
+In order to prevent such deadlocks, trains should only be allowed to wait in front of signals on the opposite track (=orange signals) if they can be absolutely sure to be able to swap back to the regular track without a deadlock occuring beforehand. Therefore, a train whose pathfinder decides to wait in front of an orange signal will also have to have reserved a route to the next regular signal. This reservation of the path to the next regular signal, however, does not mean the path to the next regular signal must be completely free. Such a requirement would make all orange signals redundant, since they would always show green and never red. Instead, it is enough to reserve a route to the next regular signal that is safe from a deadlock (a "weak reservation"), such as in the following picture:
 
 
 <center>[[File:en/Archive/Community/Rpbs img9.png|center|frame|Figure 3.4]]</center>
@@ -87,7 +87,7 @@ When there are two trains travelling next to each other in the same direction on
 
 In this picture, the red path is the "strong" reservation and the yellow path is the "weak" reservation.
 
-Since the train on the opposite track is unable to switch back to the normal track without interfering with the other train, the train on the opposite track will shift its weak reservation to the next junction, as soon as the pathfinder detects a path conflict, so that both trains can continue unhindered:
+Since the train on the opposite track is unable to switch back to the regular track without interfering with the other train, the train on the opposite track will shift its weak reservation to the next junction, as soon as the pathfinder detects a path conflict, so that both trains can continue unhindered:
 
 
 <center>[[File:en/Archive/Community/Rpbs img12.png|center|frame|Figure 3.6]]</center>
@@ -95,17 +95,17 @@ Since the train on the opposite track is unable to switch back to the normal tra
 
 This would of course only work if there is no traffic coming the other way. If it is not possible to reserve the path to next junction due to traffic coming the other way, then there are two possible solutions:
 
-1. The path reservations in figure 3.5 are left unchanged. This means that the train on the opposite track switches back to the normal track and the train already on the normal track must stop.
+1. The path reservations in figure 3.5 are left unchanged. This means that the train on the opposite track switches back to the regular track and the train already on the regular track must stop.
 
-2. The path reservations are changed to that displayed in the picture below. In this case, the train on the opposite track stops and waits for the train on the normal track to clear the area of the weak reservation. The train on the normal track must make a strong reservation out of the area of the other train's weak reservation(i.e. to the next signal), otherwise it would risk deadlocking the other train, thus violating the other train's weak reservation.
+2. The path reservations are changed to that displayed in the picture below. In this case, the train on the opposite track stops and waits for the train on the regular track to clear the area of the weak reservation. The train on the regular track must make a strong reservation out of the area of the other train's weak reservation(i.e. to the next signal), otherwise it would risk deadlocking the other train, thus violating the other train's weak reservation.
 
 
 <center>[[File:en/Archive/Community/Rpbs img13.png|center|frame|Figure 3.7]]</center>
 
 
-Whenever there is a path conflict, OpenTTD should determine which solution is best, depending on how much time every train would lose and possibly also taking train priority into account. In order to detect path conflicts in time to take all of these considerations into account, it may be necessary that also trains on the normal track have some kind of additional "lookahead", possibly in the form of a weak reservation. 
+Whenever there is a path conflict, OpenTTD should determine which solution is best, depending on how much time every train would lose and possibly also taking train priority into account. In order to detect path conflicts in time to take all of these considerations into account, it may be necessary that also trains on the regular track have some kind of additional "lookahead", possibly in the form of a weak reservation. 
 
-Conclusion: It is always safe for a train to wait in front of a signal on the normal track (=normal signal). It is also always safe for a train to use the opposite track, as long as it has a "weak" reservation of a path to a normal signal. A "weak" reservation of a path means the path is guaranteed to soon be cleared. This is the case, for example, if all trains currently blocking the path have an exclusive ("strong") reservation of a path leading to a point outside the area of the weak reservation and no further trains are allowed into the area of the "weak" reservation.
+Conclusion: It is always safe for a train to wait in front of a signal on the regular track (=regular signal). It is also always safe for a train to use the opposite track, as long as it has a "weak" reservation of a path to a regular signal. A "weak" reservation of a path means the path is guaranteed to soon be cleared. This is the case, for example, if all trains currently blocking the path have an exclusive ("strong") reservation of a path leading to a point outside the area of the weak reservation and no further trains are allowed into the area of the "weak" reservation.
 
 This system could also be used to allow bi-directional triple track, where the outer two tracks are one-way and the middle track is bi-directional, or even make all 3 tracks bi-directional.
 
@@ -137,9 +137,9 @@ Furthermore, all signals in OpenTTD are to be PBS signals. With a proper PBS imp
 
 Also, all signals should show red by default, as in reality. Only after a train reserves a route through a signal, should a signal show green (until the train passes by). This is also how modern signals behave in reality. 
 
-A train's pathfinder must always reserve a route to the next signal. This reservation must be "strong", i.e. the path to the next signal must be completely clear. In the case of the next signal being an orange signal instead of a normal signal (which means the signal is an unsafe waiting location), the train must also make a "weak" reservation from the orange signal to the next normal signal, in order to not risk getting stuck in front of an orange signal (which could cause a deadlock). The difference between these two types of path reservations are explained in the section titled [[#bi-directional-double-track-in-the-proposed-new-pbs-system|"Bi-directional double track in the proposed new PBS system"]]. If these path reservations are not possible or conflict with another train with a higher priority, the train does not proceed and waits in front of its current signal (which shows red). The basics of such a system have already been implemented with the current miniIN PBS sytem, although this current system only supports strong reservations and not weak ones and also does not support train priorities.
+A train's pathfinder must always reserve a route to the next signal. This reservation must be "strong", i.e. the path to the next signal must be completely clear. In the case of the next signal being an orange signal instead of a regular signal (which means the signal is an unsafe waiting location), the train must also make a "weak" reservation from the orange signal to the next regular signal, in order to not risk getting stuck in front of an orange signal (which could cause a deadlock). The difference between these two types of path reservations are explained in the section titled [[#bi-directional-double-track-in-the-proposed-new-pbs-system|"Bi-directional double track in the proposed new PBS system"]]. If these path reservations are not possible or conflict with another train with a higher priority, the train does not proceed and waits in front of its current signal (which shows red). The basics of such a system have already been implemented with the current miniIN PBS sytem, although this current system only supports strong reservations and not weak ones and also does not support train priorities.
 
-As long as normal signals are only placed in safe waiting locations for trains and all unsafe waiting locations are marked with orange signals, there will never be a danger of a deadlock.
+As long as regular signals are only placed in safe waiting locations for trains and all unsafe waiting locations are marked with orange signals, there will never be a danger of a deadlock.
 
 [[Category:en/Manual/Construction]]
 [[Category:en/Manual/Railways]]
