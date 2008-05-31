@@ -252,21 +252,28 @@ Here is how the game determines how much cargo an industry produces per month.  
 |Sugar Mine||Sugar||40 to 128
 |}
 
-
-Each month the game randomly changes some industry productions:
+===Production change===
+Each month the game randomly changes some industry productions.
+====Rules====
 *There is a 4.5% chance for a production change each month.  
-*Out of those 4.5% if industries are not connected (lack of any service or poor service - <60%) chance of increase is 33% - industries are gradually (mainly) decreasing production because they cannot sustain their operation (no or not enough revenue - to pay the workers etc.) - till their closure.
-*When there is interest for the industry/good transport service (>60%) there is a 67% (out of those 4.5%) chance for increase of production due to good service.
+**Out of those 4.5% if industries are not connected (lack of any service or poor service - <60%) chance of increase is 33% - industries are gradually (mainly) decreasing production because they cannot sustain their operation (no or not enough revenue - to pay the workers etc.) - till their closure.
+**When there is interest for the industry/good transport service (>60%) there is a 67% (out of those 4.5%) chance for increase of production due to good service.
+**If the service achieves excellent or outstanding ratings (>80%), industry tries to fill the increased demand for cargo.
 *Production changes per month with smooth economy are random, between 3 and 23%, more for very low productions of 12-40 tonnes per month.
-*If the service achieves excellent or outstanding ratings, industry tries to fill the increased demand for cargo.
 *Maximum production is 2040 or 2195 units of cargo per month (= 8x or 9x 255).
 
+====Examples====
+A coal mine has 70% of its output transported: Percent of transported cargo is over '''60%''' (very good service), so there's 3% chance for 3-23% (random) increase. Of course due to unforseen circumstances, the production can also go down (1.5% chance) for 3-23% (13% on average).
 
-'''Example:'''<br>
-A coal mine has 70% of its output transported:<br>
-Percent of transported cargo is over 60% (very good service), so there's 3% chance for 3-23% (random) increase.<br>
-Of course due to unforseen circumstances, the production can also go down (1.5% chance) for 3-23%.<br>
-(1+ 1.5% * 13%(average change)) ^ 12 ~ 102%, the coal mine will grow an average of 2% per year.
+((1 + (3.0% - 1.5%) * 13%) ^ 12) - 1 ~ 2.36%, the coal mine will grow an average of 2.37% after the '''first year'''.<br>
+1.0236 ^ 20 - 1 ~ 59.6% after '''twenty years'''.<br>
+1.0236 ^ 50 - 1 ~ 321.8% after '''fifty years''' (x4.21 times).<br>
+1.0236 ^ 100 - 1 ~ 1035% after one '''hundred years''' (x11.3 times).
+
+Industry with rating of more than '''80%''':<br>
+((1 + (3.75% - 0.75%) * 13%) ^ 12) - 1 ~ 4.78%, will grow approximately 4.78% after '''first year''', 2.54 times after '''twenty years''', 10.3 times after '''50 years''' and 106.8 times after '''100 years''' (note: over maximum).
+
+It takes about '''65 years''' to go from 100 to 2100 with bigger than 80% industry rating and about '''130 years''' with a rating of 60-80%.
 
 
 '''Note:'''  The exact formula can be seen under "ExtChangeIndustryProduction" in industry_cmd.c .
