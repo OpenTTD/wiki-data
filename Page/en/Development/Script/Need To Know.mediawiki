@@ -1,19 +1,7 @@
 [[Translation:en/Development/Script/Need To Know]]
 {{en/Development/Script/Navigation}}
 
-===GetTick()===
-
-When your Start() is called for the first time, GetTick() always returns 0. You can not do any action in that tick. Tick 0 is meant to initialize things, not to build things. After that, GetTick() isn't really important for you, or rather: shouldn't be important. It is just meant to give an indication of time, as we always find it useful to know when an AI spit out a message (was it ages ago, or was it recent). This said, you of course want to know when it's value changes.
-
-Of course it changes when you do Sleep(), and with the exact value you specified in the Sleep(). But it also changes when you execute a command. This has to do that in networking it takes time to do something, and as you want to know if something really build, we have to wait till we get a signal back from the server. Now to make your life easier, we made singleplayer and multiplayer simular: they both delay. In singleplayer this is always 1 tick, unless you configured it with SetDelay(). In multiplayer it is at least 1 tick, but depends on the server-configuration. If you set SetDelay() lower than the server-configuration, the server-configuration wins, and else SetDelay() does.
-
-So what does this mean:
-
- GetTick() -> 3
- SetCompanyName()
- GetTick() -> 4 (or higher)
-
-As you might notice, you can't use GetTick() for anything else but debugging. It isn't a good indicator of time, it isn't usable to do something every 10 ticks or something, nothing of that. You will need to make such a system yourself.
+==Testing an AI==
 
 ===How to start only my AI?===
 
@@ -36,14 +24,6 @@ You can force the use of your AI when letting the game start an AI like it alway
  ./openttd -a <the name of your AI>
 
 Every AI started after that, will be the AI you specified, unless you used 'start_ai' (after which a Random next-one is picked).
-
-=== Map coordinates ===
-
-Map (X, Y) coordinates are done from the top to the bottom - the top most tile is (0,0), the bottom most tile is (Max_X, Max_Y). X is increased by going SW, and Y increased by going SE. Any time a more than one tile dimension object is returned, it'll be the most top coordinate, tending towards the top right:
-
-[[File:en/Development/Script/Ai-placed-coordinate-of-airport.png|frame|none|The AI placed this airport, using the top right most coordinate, which is also it's returned location. The airport size is X=4, Y=3]]
-
-When for example using AITile.IsBuildableRectangle with [[en/Development/Script/Lists|Lists]], the list will contain those tiles where you can build an object of the size specified, where the returned tile is the one with the lowest X and Y value of the rectangle (or rather: the tile most North).
 
 === Loading and restarting AI's ===
 
@@ -73,7 +53,7 @@ This provides this output (Windows Only):
 
 For linux, using -d ai=5 will send all information to the stdout.
 
-===== Logging =====
+==== Logging ====
 
 AILog.XXX() commands can be output to the developer console directly by:
 
@@ -81,6 +61,59 @@ AILog.XXX() commands can be output to the developer console directly by:
  openttd.exe -d ai=5
 
 Or by inputting debug_level ai=5 in the console.
+
+==AI Fundamentals==
+
+===GetTick()===
+
+When your Start() is called for the first time, GetTick() always returns 0. You can not do any action in that tick. Tick 0 is meant to initialize things, not to build things. After that, GetTick() isn't really important for you, or rather: shouldn't be important. It is just meant to give an indication of time, as we always find it useful to know when an AI spit out a message (was it ages ago, or was it recent). This said, you of course want to know when it's value changes.
+
+Of course it changes when you do Sleep(), and with the exact value you specified in the Sleep(). But it also changes when you execute a command. This has to do that in networking it takes time to do something, and as you want to know if something really build, we have to wait till we get a signal back from the server. Now to make your life easier, we made singleplayer and multiplayer simular: they both delay. In singleplayer this is always 1 tick, unless you configured it with SetDelay(). In multiplayer it is at least 1 tick, but depends on the server-configuration. If you set SetDelay() lower than the server-configuration, the server-configuration wins, and else SetDelay() does.
+
+So what does this mean:
+
+ GetTick() -> 3
+ SetCompanyName()
+ GetTick() -> 4 (or higher)
+
+As you might notice, you can't use GetTick() for anything else but debugging. It isn't a good indicator of time, it isn't usable to do something every 10 ticks or something, nothing of that. You will need to make such a system yourself.
+
+==Game Mechanics==
+
+===Map Coordinates===
+
+[[File:en/Development/Script/Ai-placed-coordinate-of-airport.png|frame|right|The AI placed this airport, using the top right most coordinate, which is also it's returned location. The airport size is X=4, Y=3]]
+
+Map (X, Y) coordinates are done from the top to the bottom - the top most tile is (0,0), the bottom most tile is (Max_X, Max_Y). X is increased by going SW, and Y increased by going SE. Any time a more than one tile dimension object is returned, it'll be the most top coordinate, tending towards the top right.
+
+When for example using AITile.IsBuildableRectangle with [[en/Development/Script/Lists|Lists]], the list will contain those tiles where you can build an object of the size specified, where the returned tile is the one with the lowest X and Y value of the rectangle (or rather: the tile most North).
+
+====Tile Arithmetic====
+
+As part of various applications (e.g. pathfinding), an AI will need the ability to move around the map. Because of the way tile indeces are represented, you can perform simple arithmetic on a tile index to find a new tile relative to its position. Adding or subtracting the result of AIMap.GetTileIndex(x, y) to a tile will yield the index of the tile ''x'' and ''y'' tiles from the original position.
+
+For instance, the following code snippet will create a list of tiles directly adjacent to ''tile''...
+
+ local adjacent = AITileList();
+ adjacent.AddTile(tile - AIMap.GetTileIndex(1,0));
+ adjacent.AddTile(tile - AIMap.GetTileIndex(0,1));
+ adjacent.AddTile(tile - AIMap.GetTileIndex(-1,0));
+ adjacent.AddTile(tile - AIMap.GetTileIndex(0,-1));
+
+This snippet creates a list containing all tiles within an 11x11 square area centred around ''tile''...
+
+ local area = AITileList();
+ area.AddRectangle(tile - AIMap.GetTileIndex(5, 5), tile + AIMap.GetTileIndex(5, 5));
+
+To avoid falling off the edge of the map, you should ensure that tiles are checked with AIMap.IsValidTile().
+
+====Coastal Tiles====
+
+All coast tiles are of the 'water' class by design, i.e. calling AITile.IsWater() will return true on a land tile next to water. Knowing that any coast tile must logically be sloped, you can use these two to quickly find coast tiles.
+
+ local is_coast = AITile.IsWater(tile) && AITile.GetSlope(tile) > AITile.SLOPE_FLAT;
+
+This could help an AI find possible locations for bridge heads in order to span lakes and rivers, or to avoid costly coastal construction. Note that building on coast tiles is considerably more expensive on inland tiles.
 
 === Cargos ===
 
@@ -122,13 +155,18 @@ Of course it is also possible to find a cargo based on the class of the cargo. D
 
 At the end, either it gave an error, or pass_cargo is the value of the first cargo belonging to the CC_PASSENGERS class. More complex solutions are possible by using the Valuator and find that cargo belonging to the CC_PASSENGERS class that gives the most profit. Of course, without any NewGRFs this is always Passengers.
 
-===Bus station or Truck station===
+====Bus station or Truck station====
 
 There is one simple way to find out if the cargo you want to transport should go to a bus station or a truck station. And it is the most obvious: if the cargo belongs to the CC_PASSENGERS class, it needs a bus station. All other cases needs a truck station. So:
 
  local truck_station = !AICargo.HasCargoClass(cargo, AICargo.CC_PASSENGERS);
 
 It could not be more simple!
+
+===Towns===
+
+If a town seed tile hasn't been destroyed (a very rare occurrence) the tile returned by AITown.GetLocation() is '''always''' a road tile. Note that not all road tiles in a town are guaranteed to be connected to the seed tile. You can use AIRoad.AreRoadTilesConnected() to ensure drivable connections between road sections.
+
 
 [[Category:en/Development]]
 [[Category:en/Development/Script/NoAI]]
