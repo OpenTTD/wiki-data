@@ -31,6 +31,34 @@ Includes a snippet of code from an other file. The path is relative, and will lo
 
  require("test.nut");
 
+=== _cmp ===
+
+_cmp is a meta-method that allows comparison operations (<, >, <=, >=) on an object to be overridden.
+
+ class Node {
+   cost = 0;
+ 
+   constructor(cost) {
+     this.cost = cost;
+   }
+ }
+ 
+ function Node::_cmp(node) {
+   if(this.cost < node.cost) return -1;
+   if(this.cost > node.cost) return 1;
+   return 0;
+ }
+ 
+ local a = Node(7);
+ local b = Node(3);
+ local cheapest = (a < b) ? a : b;
+ 
+ AILog.Info(cheapest.cost) // Will print "3"
+
+Counter-intuitively, _cmp is NOT used for the equality operator (==). The _cmp method can be used to test for equality however, by using the following trick...
+
+ local equal = nodeA <= nodeB && nodeA >= nodeB;
+
 == Development Tools ==
 
 Squirrel is a scripting language so you will not need to compile an AI, however there are some tools that will help make development easier, including functions such as syntax highlighting and error checking.
