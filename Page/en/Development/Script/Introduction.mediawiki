@@ -42,15 +42,13 @@ This is enough to initialise your AI. But, we are not quite there yet to give it
 To do this, create a file main.nut in the same dir, and make a class that extends AIController.
 
  class MyNewAI extends AIController {
-   stop = false;
- 
    function Start();
    function Stop();
  }
  
  function MyNewAI::Start()
  {
-   while (!this.stop) {
+   while (true) {
      AILog.Info("I am a very new AI with a ticker called MyNewAI and I am at tick " + this.GetTick());
      this.Sleep(50);
    }
@@ -58,10 +56,9 @@ To do this, create a file main.nut in the same dir, and make a class that extend
  
  function MyNewAI::Stop()
  {
-   this.stop = true;
  }
 
-The first block creates the class extending AIController. We initialise the value stop to 'false'. The second blocks creates a Start() functions, which is called once when your AI is started. If you exit from this function, your AI dies. Therefore we create a while() which only stops when the Stop() function sets the stop to 'true'. 
+The first block creates the class extending AIController.The second blocks creates a Start() functions, which is called once when your AI is started. If you exit from this function, your AI dies. Therefore we create a while() which never stops. 
 To avoid your AI eating up all the CPU of your computer (and thus stopping the game itself from running), it is wise to put something in the loop to delay the AI. You do this with the Sleep() command. You will see when we start this AI in a moment, that you get a print line in your console every 50 ticks.
 
 So, let's start our AI. As AIs are currently picked randomly from all AIs that are registered, it can be a bit hard to get your AI started if you're just relying on chance. Later there will be added a GUI that can control this, but for now you have to start OTTD with the following arguments:
