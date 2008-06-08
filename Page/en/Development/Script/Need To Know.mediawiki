@@ -66,7 +66,7 @@ Or by inputting debug_level ai=5 in the console.
 
 ===GetTick()===
 
-When your Start() is called for the first time, GetTick() always returns 0. You can not do any action in that tick. Tick 0 is meant to initialize things, not to build things. After that, GetTick() isn't really important for you, or rather: shouldn't be important. It is just meant to give an indication of time, as we always find it useful to know when an AI spit out a message (was it ages ago, or was it recent). This said, you of course want to know when it's value changes.
+When your Start() is called for the first time, GetTick() always returns 1. It is not an important value. It is just meant to give an indication of time, as we always find it useful to know when an AI spit out a message (was it ages ago, or was it recent). This said, you of course want to know when it's value is changed by the game:
 
 Of course it changes when you do Sleep(), and with the exact value you specified in the Sleep(). But it also changes when you execute a command. This has to do that in networking it takes time to do something, and as you want to know if something really build, we have to wait till we get a signal back from the server. Now to make your life easier, we made singleplayer and multiplayer simular: they both delay. In singleplayer this is always 1 tick, unless you configured it with SetDelay(). In multiplayer it is at least 1 tick, but depends on the server-configuration. If you set SetDelay() lower than the server-configuration, the server-configuration wins, and else SetDelay() does.
 
