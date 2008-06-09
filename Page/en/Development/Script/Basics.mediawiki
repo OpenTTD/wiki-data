@@ -34,6 +34,12 @@ But now what happens if your AI starts two times. You can't have two AIs with th
 
 What happens here, is that if naming the AI to 'MyNewAI' fails, it tries 'MyNewAI #2'. If that fails, it tries 'MyNewAI #3', etc etc. At some point it should work, or rather, that is the idea. So there you have it, your first AI that does something ingame.
 
+==Printing debug output==
+
+To print output to the [[en/Development/Script/Need To Know#logging-and-debug-panel|AI Debug Panel]], you can use [http://devs.openttd.org/~noai/aidocs/classAIELog.html|AILog]. These message are also written to the console (AILog.Info with ai debug level 4 or higher, AILog.Warning with level 3 or higher and AILog.Error with level 1 or higher). Note that these functions only accept a string as parameter. If you want to print anything else, convert it to a string first. The easiest way to do that is appending an empty string, for example:
+
+ AILog.Info(some_integer + "");
+
 ==Message System==
 
 The message system is a simple event-poll system. You will need to poll the event-controller once in a while to see if there are any relevant messages for you on the stack. Doing this is relative easy:
