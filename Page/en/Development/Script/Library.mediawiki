@@ -1,10 +1,60 @@
 [[Translation:en/Development/Script/Library]]
 {{en/Development/Script/Navigation}}
 
-PLEASE NOTE: THIS IS A WORK IN PROGRESS! Please check later for updates.
+= Libraries =
 
-Here is a list of code snippets, example implentations and libraries to help AI developers create AIs more quickly by re-using common components. 
+To avoid code-duplication, and every AI creator doing the same work over and over, there is the library system. There are, of course, two sides on this: creating a library, and using a library.
 
+== Using Existing Libraries ==
+
+To use an existing library, you just have to load it into your AI. Doing this is very simple. They layout of the library directory (bin/ai/library/):
+
+ category1/
+   some_implementation/
+ category2/
+   some_other_implementation/
+ sets/
+   priority_queue/
+
+Say you want to use the Priority Queue, you simply do:
+
+ import("sets.priority_queue", "PriorityQueue", 1);
+
+The first parameter is the category and the implementation, divided with a dot ('.'). The next parameter is the name the library you import will have, in this case PriorityQueue. It can be anything you like, as long as it doesn't exist yet. The last parameter is the version you expect the library to be.
+
+The version check is very important. If you expect version 1, but on some users computer the library is in version 2, your AI will refuse to load. This is a good thing, as a new version means something changed with the existing functions, and your AI will most likely act up if you would use it. This early problem detection system should avoid many conflicts in the future.
+
+Now how to use the library? Simple:
+
+ local pq = PriorityQueue(2);
+ pq.Insert(2);
+
+Of course it depends on the library which parameters should be given to the constructor, and which functions exist.
+
+== Creating a library ==
+
+Creating a library is like creating an AI. You create a directory in a category in bin/ai/library, and you put in it a file called 'library.nut'. Now this is almost identical with 'info.nut', as you put in your AI directory, but instead of extending AIInfo, it extends AILibrary, and instead of calling RegisterAI, you need to call RegisterLibrary. All makes sense, not? An example:
+
+ class PriorityQueue extends AILibrary {
+        function GetAuthor()      { return "OpenTTD NoAI Developers Team"; }
+        function GetName()        { return "Priority Queue"; }
+        function GetDescription() { return "An implementation of a Priority Queue"; }
+        function GetVersion()     { return 1; }
+        function GetDate()        { return "2008-06-10"; }
+        function CreateInstance() { return "PriorityQueue"; }
+ }
+
+ RegisterLibrary(PriorityQueue());
+
+Now what you need to do is to create a file called 'main.nut'. It should contain a class you named at CreateInstance(), like in your AI. Then the same rules apply as an AI. require() works as you expect, and you can define your class how ever you like.
+
+There are some things you can not do:
+
+* Register 2 libraries in one library.nut
+* Define more than 1 class in the main.nut (or any required file)
+
+
+= User contributions of libraries =
 == Data Structures ==
 === Binary Heap ===
 
