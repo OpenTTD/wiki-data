@@ -12,13 +12,13 @@ Of course you want to start with your own AI.
 A general rule of the thumb is to write extensive documentation for your AI, so after a few days you can easily remember what the functions are supposed to do. Another way to help with this is to split the AI into smaller, logical files.
 
 ===Squirrel===
-* Create a new directory in 'bin/ai/' (source-builds) or 'ai/' (binary-builds). For example 'MyNewAI'.
-* Create a file called info.nut. This is important as the Squirrel loader looks for main.nut in all subdirectories. If it doesn't find info.nut, the directory is considered to be something else, and your AI won't be loaded.
-* Open info.nut and then continue reading the next section.
+* Create a new directory in <code>bin/ai/</code> (source-builds) or <code>ai/</code> (binary-builds). For example <code>MyNewAI</code>
+* Create a file called <code>info.nut</code>. This is important as the Squirrel loader looks for <code>main.nut</code> in all subdirectories. If it doesn't find <code>info.nut</code>, the directory is considered to be something else, and your AI won't be loaded.
+* Open <code>info.nut</code> and then continue reading the next section.
 
 ==Register==
 
-You want to let OpenTTD know you have an AI that wants to take over a company. For this, you need to add a class that extends AIInfo:
+You want to let OpenTTD know you have an AI that wants to take over a company. For this, you need to add a class that extends <code>AIInfo</code>:
 
  class MyNewAI extends AIInfo {
    function GetAuthor()      { return "Newbie AI Writer"; }
@@ -39,7 +39,7 @@ This is enough to initialise your AI. But, we are not quite there yet to give it
 
 ==Your First AI==
 
-To do this, create a file main.nut in the same dir, and make a class that extends AIController.
+To do this, create a file <code>main.nut</code> in the same dir, and make a class that extends <code>AIController</code>.
 
  class MyNewAI extends AIController {
    function Start();
@@ -53,8 +53,8 @@ To do this, create a file main.nut in the same dir, and make a class that extend
    }
  }
 
-The first block creates the class extending AIController.The second blocks creates a Start() functions, which is called once when your AI is started. If you exit from this function, your AI dies. Therefore we create a while() which never stops. 
-To avoid your AI eating up all the CPU of your computer (and thus stopping the game itself from running), it is wise to put something in the loop to delay the AI. You do this with the Sleep() command. You will see when we start this AI in a moment, that you get a print line in your console every 50 ticks.
+The first block creates the class extending <code>AIController</code>.The second blocks creates a <code>Start()</code> function, which is called once when your AI is started. If you exit from this function, your AI dies. Therefore we create a <code>while()</code> which never stops. 
+To avoid your AI eating up all the CPU of your computer (and thus stopping the game itself from running), it is wise to put something in the loop to delay the AI. You do this with the <code>Sleep()</code> command. You will see when we start this AI in a moment, that you get a print line in your console every 50 ticks.
 
 So, let's start our AI. As AIs are currently picked randomly from all AIs that are registered, it can be a bit hard to get your AI started if you're just relying on chance. Later there will be added a GUI that can control this, but for now you have to start OTTD with the following arguments:
 
@@ -64,7 +64,7 @@ Linux etc
 Windows
  openttd.exe -a "MyNewAI"
 
-Additionally, on Windows Vista you will need to run openttd.exe as administrator. Either right click and choose "Run as Administrator" each time, or turn off UAC for Administrators ([http://www.howtogeek.com/howto/windows-vista/disable-user-account-controluac-for-administrators-only/ Instructions]). If OpenTTD is not run as administrator the AI directories will be invisible to the executable, and loading any AI will result in an "The AI named 'XYZ' is unknown or not suitable" error.
+Additionally, on Windows Vista you will need to run <code>openttd.exe</code> as administrator. Either right click and choose "Run as Administrator" each time, or turn off UAC for Administrators ([http://www.howtogeek.com/howto/windows-vista/disable-user-account-controluac-for-administrators-only/ Instructions]). If OpenTTD is not run as administrator the AI directories will be invisible to the executable, and loading any AI will result in an "The AI named 'XYZ' is unknown or not suitable" error.
 
 Make sure to change your difficulty settings so that AIs start immediately, and add 1 or more AIs. Soon you will see a new company starting, hopefully with your AI attached. If you open the AI Debug Window, which can be found under the QuestionMark icon, you will see a nice line printing we are active. You can also manually start your newly created AI by typing the command
  start_ai MyNewAI
@@ -77,4 +77,4 @@ You can also redirect the output to the in-game console by opening in-game conso
 Enable output of <code>print</code> statements from your AI by typing
  debug_level ai=4
 
-So, there you have your first AI. Of course now we need to add functions. For this we advise you continue to the next chapter [[en/Development/Script/Basics|Basics]]. You only have to know that all your code should go in Start(). One more thing you should know: never create global variable. Keep everything in your class instance. But this is just a house-rule and if you don't know what it means, it doesn't really matter at this point.
+So, there you have your first AI. Of course now we need to add functions. For this we advise you continue to the next chapter [[en/Development/Script/Basics|Basics]]. You only have to know that all your code should go in <code>Start()</code>. One more thing you should know: never create global variable. Keep everything in your class instance. But this is just a house-rule and if you don't know what it means, it doesn't really matter at this point.
