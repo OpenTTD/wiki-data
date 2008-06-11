@@ -1,13 +1,13 @@
 [[Translation:en/Development/Script/AIInfo]]
 {{en/Development/Script/Navigation}}
 
-As of 2008-05-20 (r13194), a new method of registering your AI is in place. This method solves many of the old problems. Like if you have a compile-problem now in your main.nut, at start-up this no longer gives an error. The error shows up when the AI wants to start, and this way we can redirect it to the AI Debug window. This solves the problem where the user had no idea why the AI didn't show up (as many (Windows) users never look at the console). The only thing important now, is that at start-up your info.nut is correct. Which should not be too difficult for most people.
+As of 2008-05-20 (r13194), a new method of registering your AI is in place. This method solves many of the old problems. Like if you have a compile-problem now in your <code>main.nut</code>, at start-up this no longer gives an error. The error shows up when the AI wants to start, and this way we can redirect it to the AI Debug window. This solves the problem where the user had no idea why the AI didn't show up (as many (Windows) users never look at the console). The only thing important now, is that at start-up your <code>info.nut</code> is correct. Which should not be too difficult for most people.
 
 ===Upgrading from the old system===
 
-Basically, what you should do, is move a small part of your main.nut to info.nut. Example:
+Basically, what you should do, is move a small part of your <code>main.nut</code> to <code>info.nut</code>. Example:
 
- class FWrightAI extends AIFactory {
+ class FWrightAI extends '''AIFactory''' {
  	function GetAuthor()      { return "OpenTTD Dev Team"; }
  	function GetName()        { return "WrightAI"; }
  	function GetDescription() { return "A simple AI that tries to beat you with only aircrafts"; }
@@ -17,11 +17,11 @@ Basically, what you should do, is move a small part of your main.nut to info.nut
  }
  
  /* Tell the core we are an AI */
- iFWrightAI <- FWrightAI();
+ '''iFWrightAI <- FWrightAI();'''
 
-Should be removed and info.nut should get:
+Should be removed and <code>info.nut</code> should get:
 
- class WrightAI extends AIInfo {
+ class WrightAI extends '''AIInfo''' {
  	function GetAuthor()      { return "OpenTTD Dev Team"; }
  	function GetName()        { return "WrightAI"; }
  	function GetDescription() { return "A simple AI that tries to beat you with only aircrafts"; }
@@ -30,14 +30,16 @@ Should be removed and info.nut should get:
  	function CreateInstance() { return "WrightAI"; }
  }
  
- RegisterAI(WrightAI());
+ '''RegisterAI(WrightAI());'''
 
-Things to remember: the <- line becomes RegisterAI. AIFactory becomes AIInfo.
+Things to remember:
+* the <code><-</code> line becomes <code>RegisterAI</code>
+* <code>AIFactory</code> becomes <code>AIInfo</code>.
 
 
 ===New User===
 
-Create an info.nut and give it this content:
+Create an <code>info.nut</code> and give it this content:
 
  class WrightAI extends AIInfo {
  	function GetAuthor()      { return "OpenTTD Dev Team"; }
@@ -50,4 +52,4 @@ Create an info.nut and give it this content:
  
  RegisterAI(WrightAI());
 
-Where of course you should change the names how ever you like to call everything. Just don't forget the RegisterAI(), and don't forget to extend AIInfo. If something goes wrong, check if you did: RegisterAI(WrightAI()). Mind the () after WrightAI!
+Where of course you should change the names how ever you like to call everything. Just don't forget the <code>RegisterAI()</code>, and don't forget to extend <code>AIInfo</code>. If something goes wrong, check if you did: <code>RegisterAI(WrightAI())</code>. Mind the <code>()</code> after <code>WrightAI</code>!
