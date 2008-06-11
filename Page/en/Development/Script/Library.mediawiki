@@ -14,13 +14,14 @@ To use an existing library, you just have to load it into your AI. Doing this is
  category2/
    some_other_implementation/
  '''queue/'''
+  binary_heap
    '''priority_queue/'''
 
 Say you want to use the [[en/Development/Script/Library#priority-queue|Priority Queue]], you simply do:
 
  import("queue.priority_queue", "PriorityQueue", 2);
 
-The first parameter is the category and the implementation, divided with a dot ('.'). The next parameter is the name the library you import will have, in this case PriorityQueue. It can be anything you like, as long as it doesn't exist yet. The last parameter is the version you expect the library to be. To get the current version of a library, open library.nut from the corresponding directory. 
+The first parameter is the category and the implementation, divided with a dot ('.'). The next parameter is the name the library you import will have, in this case <code>PriorityQueue</code>. It can be anything you like, as long as it doesn't exist yet. The last parameter is the version you expect the library to be. To get the current version of a library, open library.nut from the corresponding directory. 
 
 The version check is very important. If you expect version 1, but on some users computer the library is in version 2, your AI will refuse to load. This is a good thing, as a new version means something changed with the existing functions, and your AI will most likely act up if you would use it. This early problem detection system should avoid many conflicts in the future.
 
@@ -29,11 +30,11 @@ Now how to use the library? Simple:
  local pq = PriorityQueue();
  pq.Insert(2);
 
-Of course it depends on the library which parameters should be given to the constructor, and which functions exist. You'll have to open queue/priority_queue/main.nut to see all the documentation.
+Of course it depends on the library which parameters should be given to the constructor, and which functions exist. You'll have to open <code>queue/priority_queue/main.nut</code> to see all the documentation.
 
 === Creating a library ===
 
-Creating a library is like creating an AI. You create a directory in a category in bin/ai/library, and you put in it a file called 'library.nut'. Now this is almost identical with 'info.nut', as you put in your AI directory, but instead of extending AIInfo, it extends AILibrary, and instead of calling RegisterAI, you need to call RegisterLibrary. All makes sense, not? An example:
+Creating a library is like creating an AI. You create a directory in a category in <code>bin/ai/library</code>, and you put in it a file called '<code>library.nut</code>'. Now this is almost identical with '<code>info.nut</code>', as you put in your AI directory, but instead of extending <code>AIInfo</code>, it extends <code>AILibrary</code>, and instead of calling <code>RegisterAI</code>, you need to call <code>RegisterLibrary</code>. All makes sense, not? An example:
 
  class PriorityQueue extends AILibrary {
         function GetAuthor()      { return "OpenTTD NoAI Developers Team"; }
@@ -43,15 +44,15 @@ Creating a library is like creating an AI. You create a directory in a category 
         function GetDate()        { return "2008-06-10"; }
         function CreateInstance() { return "PriorityQueue"; }
  }
-
+ 
  RegisterLibrary(PriorityQueue());
 
-Now what you need to do is to create a file called 'main.nut'. It should contain a class you named at CreateInstance(), like in your AI. Then the same rules apply as an AI. require() works as you expect, and you can define your class how ever you like.
+Now what you need to do is to create a file called '<code>main.nut</code>'. It should contain a class you named at <code>CreateInstance()</code>, like in your AI. Then the same rules apply as an AI. <code>require()</code> works as you expect, and you can define your class how ever you like.
 
 There are some things you can not do:
 
-* Register 2 libraries in one library.nut
-* Define more than 1 class in the main.nut (or any required file). However, you can define sub-classes. Say you need an extra class in PriorityQueue. You can name it PriorityQueue.Subclass. To access it from within your main class, use this.Subclass. See graph.AyStar for an example how it's done.
+* Register 2 libraries in one <code>library.nut</code>
+* Define more than 1 class in the <code>main.nut</code> (or any required file). However, you can define sub-classes. Say you need an extra class in <code>PriorityQueue</code>. You can name it <code>PriorityQueue.Subclass</code>. To access it from within your main class, use <code>this.Subclass</code>. See <code>[[en/Development/Script/Library#aystar|graph.AyStar]]</code> for an example how it's done.
 
 == Standard libraries ==
 
@@ -63,7 +64,7 @@ There are several libraries for common tasks bundled together with NoAI. These h
 
 This is an implementation of [http://en.wikipedia.org/wiki/A* AyStar pathfinding algorithm]. It solves graphs by finding the fastest route from one point to the other.
 
-'''Required libraries:''' [[en/Development/Script/Library#binary-heap|queue.binary_heap]]
+'''Required libraries:''' <code>[[en/Development/Script/Library#binary-heap|queue.binary_heap]]</code>
 
 === Category: Queue ===
 
