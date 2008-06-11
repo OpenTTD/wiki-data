@@ -7,20 +7,20 @@ We assume that you read the [[en/Development/Script/Introduction|Introduction]],
 
 Of course the first thing you want to do, is name your company. You want to promote yourself, won't you? To change your company name, you need to load up the AICompany class. In Squirrel all classes are pre-loaded, so you can use it directly.
 
-Now let's change our company name. The function to do this, as the API tells us, is SetCompanyName. The parameter is a string. So we get:
+Now let's change our company name. The function to do this, as the API tells us, is <code>SetCompanyName</code>. The parameter is a string. So we get:
  
  function MyNewAI::Start()
  {
    AICompany.SetCompanyName("MyNewAI");
  }
  
-Now if you payed a bit of attention, you immediately notice that this goes against a rule you learn in the Introduction: the Start() returns, therefor your AI dies. But, this is just for illustration, so it will do fine for now.
+Now if you payed a bit of attention, you immediately notice that this goes against a rule you learn in the [[en/Development/Script/Introduction|Introduction]]: the <code>Start()</code> returns, therefor your AI dies. But, this is just for illustration, so it will do fine for now.
 
-Start OpenTTD, start a new map, and see how your AI now makes the company name change of the new player to MyNewAI.
+Start OpenTTD, start a new map, and see how your AI now makes the company name change of the new player to ''MyNewAI''.
 
 ==Naming your company (advanced)==
 
-But now what happens if your AI starts two times. You can't have two AIs with the same company-name. If you run it, you will see that the second name stays Unnamed. That sucks. Lucky we can check the result of the function if it went okay. So let's extend it a bit, and check the result. If it fails, let's find ourself an other name.
+But now what happens if your AI starts two times. You can't have two AIs with the same company-name. If you run it, you will see that the second name stays ''Unnamed''. That sucks. Lucky we can check the result of the function if it went okay. So let's extend it a bit, and check the result. If it fails, let's find ourselves an other name.
 
  function MyNewAI::Start()
  {
@@ -32,11 +32,11 @@ But now what happens if your AI starts two times. You can't have two AIs with th
    }
  }
 
-What happens here, is that if naming the AI to 'MyNewAI' fails, it tries 'MyNewAI #2'. If that fails, it tries 'MyNewAI #3', etc etc. At some point it should work, or rather, that is the idea. So there you have it, your first AI that does something ingame.
+What happens here, is that if naming the AI to ''MyNewAI'' fails, it tries ''MyNewAI #2''. If that fails, it tries ''MyNewAI #3'', etc etc. At some point it should work, or rather, that is the idea. So there you have it, your first AI that does something ingame.
 
 ==Printing debug output==
 
-To print output to the [[en/Development/Script/Need To Know#logging-and-debug-panel|AI Debug Panel]], you can use [http://devs.openttd.org/~noai/aidocs/classAIELog.html AILog]. These message are also written to the console (AILog.Info with ai debug level 4 or higher, AILog.Warning with level 3 or higher and AILog.Error with level 1 or higher). Note that these functions only accept a string as parameter. If you want to print anything else, convert it to a string first. The easiest way to do that is appending an empty string, for example:
+To print output to the [[en/Development/Script/Need To Know#logging-and-debug-panel|AI Debug Panel]], you can use <code>[http://devs.openttd.org/~noai/aidocs/classAIELog.html AILog]</code>. These messages are also written to the console (<code>AILog.Info</code> with ai debug level 4 or higher, <code>AILog.Warning</code> with level 3 or higher and <code>AILog.Error</code> with level 1 or higher). Note that these functions only accept a string as parameter. If you want to print anything else, convert it to a string first. The easiest way to do that is appending an empty string, for example:
 
  AILog.Info(some_integer + "");
 
@@ -70,6 +70,6 @@ For more functions we refer to the [http://devs.openttd.org/~noai/aidocs/classAI
 
 How to proceed next depends very much on what you want your AI to do. The best thing to do is to start browsing through the [http://devs.openttd.org/~noai/aidocs/ API]. We suggest to start with a road-vehicle-only AI. We know it is really boring, but you can really make a lot of money with them, if done correctly. Also, it is much easier to create and understand than trains are. Ships and aircraft are also very doable, but more boring then road-vehicles.
 
-For example, if you want to build road and road-stations, check AIRoad documentation. You will find the right functions there. For station information check AIStation. For vehicle-building and settings orders, check AIVehicle. Sounds all pretty logical, doesn't it?
+For example, if you want to build road and road-stations, check <code>AIRoad</code> documentation. You will find the right functions there. For station information check <code>AIStation</code>. For vehicle-building and settings orders, check <code>AIVehicle</code>. Sounds all pretty logical, doesn't it?
 
 Of course there are many things that makes your life easier. There is for example a piece of code that queues all your commands in a big list and starts executing them on request all at once. Now if one fails, where it didn't before, it rolls everything back. This is very useful from time to time, as when planning a route it might have looked to be no problem to build it, but by the time a road piece is placed, it can be that an other company has taken the tile already. Such pieces of code makes handling those situations a bit easier. Other examples are pathfinders, and more of those things.
