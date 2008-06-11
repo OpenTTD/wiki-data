@@ -18,18 +18,18 @@ To use an existing library, you just have to load it into your AI. Doing this is
 
 Say you want to use the [[en/Development/Script/Library#priority-queue|Priority Queue]], you simply do:
 
- import("queue.priority_queue", "PriorityQueue", 1);
+ import("queue.priority_queue", "PriorityQueue", 2);
 
-The first parameter is the category and the implementation, divided with a dot ('.'). The next parameter is the name the library you import will have, in this case PriorityQueue. It can be anything you like, as long as it doesn't exist yet. The last parameter is the version you expect the library to be.
+The first parameter is the category and the implementation, divided with a dot ('.'). The next parameter is the name the library you import will have, in this case PriorityQueue. It can be anything you like, as long as it doesn't exist yet. The last parameter is the version you expect the library to be. To get the current version of a library, open library.nut from the corresponding directory. 
 
 The version check is very important. If you expect version 1, but on some users computer the library is in version 2, your AI will refuse to load. This is a good thing, as a new version means something changed with the existing functions, and your AI will most likely act up if you would use it. This early problem detection system should avoid many conflicts in the future.
 
 Now how to use the library? Simple:
 
- local pq = PriorityQueue(2);
+ local pq = PriorityQueue();
  pq.Insert(2);
 
-Of course it depends on the library which parameters should be given to the constructor, and which functions exist.
+Of course it depends on the library which parameters should be given to the constructor, and which functions exist. You'll have to open queue/priority_queue/main.nut to see all the documentation.
 
 == Creating a library ==
 
@@ -39,7 +39,7 @@ Creating a library is like creating an AI. You create a directory in a category 
         function GetAuthor()      { return "OpenTTD NoAI Developers Team"; }
         function GetName()        { return "Priority Queue"; }
         function GetDescription() { return "An implementation of a Priority Queue"; }
-        function GetVersion()     { return 1; }
+        function GetVersion()     { return 2; }
         function GetDate()        { return "2008-06-10"; }
         function CreateInstance() { return "PriorityQueue"; }
  }
@@ -51,7 +51,7 @@ Now what you need to do is to create a file called 'main.nut'. It should contain
 There are some things you can not do:
 
 * Register 2 libraries in one library.nut
-* Define more than 1 class in the main.nut (or any required file)
+* Define more than 1 class in the main.nut (or any required file). However, you can define sub-classes. Say you need an extra class in PriorityQueue. You can name it PriorityQueue.Subclass.
 
 = Standard libraries =
 
