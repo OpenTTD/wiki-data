@@ -4,8 +4,8 @@
 Lists are a basic part of the NoAI API. They allow fast and easy manipulation of all kinds of data. This page will explain in a simple matter how to use them and what you can expect from them.
 
 ===Valuators===
-To filter, you can apply valuators on the list using <list>.Valuate(<valuator>), they change the value of the list entry accordingly.
-The first param for this function is the function you want to use to valuate the items in the list. It should accept at least one integer which will be set to the item, and should return an integer, which will become the value of the item. Additional parameters are possible, then you need to add them to the Valuator to. Example:
+To filter, you can apply valuators on the list using <code><list>.Valuate(<valuator>)</code>, they change the value of the list entry accordingly.
+The first parameter for this function is the function you want to use to valuate the items in the list. It should accept at least one integer which will be set to the item, and should return an integer, which will become the value of the item. Additional parameters are possible, then you need to add them to the Valuator to. Example:
 
  list.Valuate(AIBridge.GetPrice, 5);
  list.Valuate(AIBridge.GetMaxLength);
@@ -16,18 +16,18 @@ The first param for this function is the function you want to use to valuate the
 
 After you have applied a valuator, you can modify (remove items, sort, etc.) the list using the functions found in the [http://devs.openttd.org/~noai/aidocs/classAIAbstractList.html API docs].
 
-==Examples of lists==
-===AIList()===
+== Examples of lists ==
+=== AIList() ===
 
-To start, AIList() is the most primary list we have. It doesn't depend in any way on the OpenTTD core. It is a simple list you can fill with items and make valuators for them. As AITownList() is a good example of a bit more complex AIList(), we will discuss that one rather then AIList().
+To start, <code>AIList()</code> is the most primary list we have. It doesn't depend in any way on the OpenTTD core. It is a simple list you can fill with items and make valuators for them. As <code>AITownList()</code> is a good example of a bit more complex <code>AIList()</code>, we will discuss that one rather then <code>AIList()</code>.
 
-===AITownList()===
+=== AITownList() ===
 
-Of course you want to know which towns are in the map, and most likely: which town has to most population, and what the location is. For that we have AITownList(). If you create an instance of it, it immediately fills itself with all towns. You can walk them like this:
+Of course you want to know which towns are in the map, and most likely: which town has to most population, and what the location is. For that we have <code>AITownList()</code>. If you create an instance of it, it immediately fills itself with all towns. You can walk them like this:
 
  for (local i = townlist.Begin(); townlist.HasNext(); i = townlist.Next()) { }
 
-This walks all the towns inside the list. Of course knowing the towns is only part of AITownList(), you can also make it find data for you. For example, we want to know all towns with population higher than 500. First we call a valuator that gets the population per town for us, and then we filter all the towns with a lower population than 500 out of the list. What is left, is a list of towns that have more than 500 people in them.
+This walks all the towns inside the list. Of course knowing the towns is only part of <code>AITownList()</code>, you can also make it find data for you. For example, we want to know all towns with population higher than 500. First we call a valuator that gets the population per town for us, and then we filter all the towns with a lower population than 500 out of the list. What is left, is a list of towns that have more than 500 people in them.
 
  townlist.Valuate(AITown.GetPopulation);
  townlist.KeepAboveValue(500);
@@ -38,8 +38,8 @@ If you now would print the list, you will see only towns with population higher 
 
 The only thing this means, is that the population per town is lost, and replaced by the location.
 
-AIList()s are automatically sorted. Normally this is down by value, descending (so highest first). You can change the sort order with the Sort() functions (see API documentation). You can see if a list is empty with Empty(), or find the amount of towns with Count(). For more details, see API documentation.
+AIList()s are automatically sorted. Normally this is down by value, descending (so highest first). You can change the sort order with the <code>Sort()</code> functions (see API documentation). You can see if a list is empty with <code>Empty()</code>, or find the amount of towns with <code>Count()</code>. For more details, see API documentation.
 
-===AITileList()===
+=== AITileList() ===
 
-Besides townlist, industrylist, and more of that, we also have a AITileList(). This is in fact the same as AITownList(), but it keeps track of tiles. You can add tiles to the list, and then, for example, see what the acceptance is for a certain cargo. Or filter away the non-buildable tiles. This means you can quickly find a good spot for a station of which you know will get a good amount of goods. Also you can ensure it connects to the town-road for example, with the AIRoad.GetNeighbourRoadCount() valuator.
+Besides townlist, industrylist, and more of that, we also have a <code>AITileList()</code>. This is in fact the same as <code>AITownList()</code>, but it keeps track of tiles. You can add tiles to the list, and then, for example, see what the acceptance is for a certain cargo. Or filter away the non-buildable tiles. This means you can quickly find a good spot for a station of which you know will get a good amount of goods. Also you can ensure it connects to the town-road for example, with the <code>AIRoad.GetNeighbourRoadCount()</code> valuator.
