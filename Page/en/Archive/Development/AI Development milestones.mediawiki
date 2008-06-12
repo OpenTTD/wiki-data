@@ -1,0 +1,79 @@
+[[Translation:en/Archive/Development/AI Development milestones]]
+{{en/Development/Script/Navigation}}
+
+As development progresses, some important changes are introduced to NoAI system. This page documents them. The newest items are on top.
+
+== 20 May 2008 - main.nut is split in two ==
+
+As of 2008-05-20 (r13194), a new method of registering your AI is in place. This method solves many of the old problems. Like if you have a compile-problem now in your <code>main.nut</code>, at start-up this no longer gives an error. The error shows up when the AI wants to start, and this way we can redirect it to the AI Debug window. This solves the problem where the user had no idea why the AI didn't show up (as many (Windows) users never look at the console). The only thing important now, is that at start-up your <code>info.nut</code> is correct. Which should not be too difficult for most people.
+
+===Upgrading from the old system===
+
+Basically, what you should do, is move a small part of your <code>main.nut</code> to <code>info.nut</code>. Example:
+
+ class FWrightAI extends '''AIFactory''' {
+ 	function GetAuthor()      { return "OpenTTD Dev Team"; }
+ 	function GetName()        { return "WrightAI"; }
+ 	function GetDescription() { return "A simple AI that tries to beat you with only aircrafts"; }
+ 	function GetVersion()     { return 1.1; }
+ 	function GetDate()        { return "2008-02-24"; }
+ 	function CreateInstance() { return "WrightAI"; }
+ }
+ 
+ /* Tell the core we are an AI */
+ '''iFWrightAI <- FWrightAI();'''
+
+Should be removed and <code>info.nut</code> should get:
+
+ class WrightAI extends '''AIInfo''' {
+ 	function GetAuthor()      { return "OpenTTD Dev Team"; }
+ 	function GetName()        { return "WrightAI"; }
+ 	function GetDescription() { return "A simple AI that tries to beat you with only aircrafts"; }
+ 	function GetVersion()     { return 1.1; }
+ 	function GetDate()        { return "2008-02-24"; }
+ 	function CreateInstance() { return "WrightAI"; }
+ }
+ 
+ '''RegisterAI(WrightAI());'''
+
+Things to remember:
+* the <code><-</code> line becomes <code>RegisterAI</code>
+* <code>AIFactory</code> becomes <code>AIInfo</code>.
+
+=== New User ===
+
+Create an <code>info.nut</code> and give it this content:
+
+ class WrightAI extends AIInfo {
+ 	function GetAuthor()      { return "OpenTTD Dev Team"; }
+ 	function GetName()        { return "WrightAI"; }
+ 	function GetDescription() { return "A simple AI that tries to beat you with only aircrafts"; }
+ 	function GetVersion()     { return 1.1; }
+ 	function GetDate()        { return "2008-02-24"; }
+ 	function CreateInstance() { return "WrightAI"; }
+ }
+ 
+ RegisterAI(WrightAI());
+
+Where of course you should change the names how ever you like to call everything. Just don't forget the <code>RegisterAI()</code>, and don't forget to extend <code>AIInfo</code>. If something goes wrong, check if you did: <code>RegisterAI(WrightAI())</code>. Mind the <code>()</code> after <code>WrightAI</code>!
+
+
+
+== 17 March 2008 - C++ support is dropped ==
+
+As of 17 March 2008, it is no longer possible to write your AI in C++. The only language to write your AI in, is Squirrel. This because of several reasons, some listed below:
+
+* It is hard to maintain a framework that supports both Squirrel and C++.
+* Squirrel limited us to make cool stuff in C++, and C++ limited us to make cool stuff in SQ.
+* When I have an AI in C++, and you want to try it, I need to send you the source and you need to recompile OpenTTD.
+* Even if the last point was resolved with modules, it wouldn't be cross-platform compatible.
+* Squirrel is mature enough to take over.
+* Squirrel allows easy trading AIs between users.
+* If you make a mistake in C++, you can crash the game. In SQ we can contain any problem within the Virtual Machine and only kill the AI.
+
+Of course there are some downsides, which for the records are listed too:
+
+* C++ is faster, although the difference isn't as big as you might expect.
+* C++ allows pointer-toying. Although this is also a bad thing, it can work for the best
+
+So to summarize it: by removing C++ as possible language to write your AI in, we gain simplicity in the framework, we gain security, and most of all: portability. For those reasons it was unanimous decided to remove C++ as possible language for the NoAI framework.
