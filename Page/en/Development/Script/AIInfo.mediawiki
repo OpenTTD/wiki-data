@@ -1,2 +1,22 @@
 [[Translation:en/Development/Script/AIInfo]]
-#REDIRECT [[en/Archive/Development/AI Development milestones#20-may-2008-main-nut-is-split-in-two]]
+{{en/Development/Script/Navigation}}
+
+'''info.nut''' is a file in which you tell NoAI basic things about your AI. It used to be part of <code>main.nut</code>, but it has been separated to make debugging easier ([[en/Archive/Development/AI Development milestones#20-may-2008-main-nut-is-split-in-two|see here]] if you're interested in details).
+
+== info.nut structure ==
+
+The internal structure of <code>info.nut</code> is very simple and follows a template presented below.
+
+ class '''MyNewAI''' extends AIInfo {
+   function GetAuthor()      { return "Newbie AI Writer"; }
+   function GetName()        { return "MyNewAI"; }
+   function GetDescription() { return "An example AI by following the tutorial at http://wiki.openttd.org/"; }
+   function GetVersion()     { return 1; }
+   function GetDate()        { return "2007-03-17"; }
+   function CreateInstance() { return "MyNewAI"; }
+ }
+ 
+ /* Tell the core we are an AI */
+ RegisterAI('''MyNewAI'''());
+
+Where of course you should change the names how everyou like to call everything. Just don't forget the <code>RegisterAI()</code>, and don't forget to extend <code>AIInfo</code>. If something goes wrong, check if you did: <code>RegisterAI(MyNewAI())</code>. Mind the <code>()</code> after <code>MyNewAI</code>!
