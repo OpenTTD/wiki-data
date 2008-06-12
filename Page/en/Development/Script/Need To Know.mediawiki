@@ -107,14 +107,6 @@ This snippet creates a list containing all tiles within an 11x11 square area cen
 
 To avoid falling off the edge of the map, you should ensure that tiles are checked with AIMap.IsValidTile().
 
-==== Coastal Tiles ====
-
-All coast tiles are of the 'water' class by design, i.e. calling <code>AITile.IsWaterTile()</code> will return true on a land tile next to water. Knowing that any coast tile must logically be sloped, you can use these two to quickly find coast tiles.
-
- local is_coast = AITile.IsWaterTile(tile) && AITile.GetSlope(tile) > AITile.SLOPE_FLAT;
-
-This could help an AI find possible locations for bridge heads in order to span lakes and rivers, or to avoid costly coastal construction. Note that building on coast tiles is considerably more expensive on inland tiles.
-
 === Cargos ===
 
 CargoID, like any ID, is an index (for people who didn't figure that out yet). An index on its own means nothing, it is just a pointer to a value in an array, and in this case, a cargo-array. The main problem with Cargo, is that you can't trust a value to mean something in all cases. NewGRFs are very powerful, and allows changing of cargos in all kinds of way. Normally, CargoID 0 represents Passengers, but with a single NewGRF, this can be changed to, say, Coal. Now here is the tricky part of it all: no longer you can transport this cargo from and to towns. So, how to make sure your AI is compatible enough that it works in all cases?
