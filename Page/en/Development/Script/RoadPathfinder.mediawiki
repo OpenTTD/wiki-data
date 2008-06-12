@@ -1,0 +1,131 @@
+[[Translation:en/Development/Script/RoadPathfinder]]
+{{en/Development/Script/Navigation}}
+
+== Benefits ==
+
+If you've tried to build a road pathfinder yourself, you may have noticed it's hard to get it correctly. Mainly corners on foundations are a problem. Using the pathfinder from the library will solve that for you, so you don't have to do the hard work yourself.
+
+== Initialization ==
+
+As with any library, before you can use it, you need to import it. You can do this by placing the following line at the top of your code.
+ import("pathfinder.road", "RoadPathFinder", 1);
+This imports the road pathfinder version 1 and names it RoadpathFinder. You can now instance it like any other class:
+ local pathfinder = RoadPathFinder();
+Before you start finding a route, you may want to set some parameters first. The available parameters are:
+
+{| class="wikitable"
+|-
+! Name
+! Default value
+! Meaning
+|-
+| cost.max_cost
+| 2000000000
+| The maximum cost for a route.
+|-
+| cost.tile
+| 100
+| The cost for a single tile.
+|-
+| cost.no_existing_road
+| 40
+| The cost that is added to _cost_tile if no road exists yet.
+|-
+| cost.turn
+| 100
+| The cost that is added to _cost_tile if the direction changes.
+|-
+| cost.slope
+| 200
+| The extra cost if a road tile is sloped.
+|-
+| cost.bridge_per_tile
+| 105
+| The cost per tile of a bridge.
+|-
+| cost.tunnel_per_tile
+| 105
+| The cost per tile of a tunnel.
+|-
+| cost.coast
+| 20
+| The extra cost for a coast tile.
+|}
+To set a parameter, you just use:
+ pathfinder.cost.tile = 100;
+
+== Planning a route ==
+
+SO, now we know how to create an instance of the pathfinder and to set the cost functions, it's time to put that knowledge to some use. Let's plan our first road. First we need one (or more) source tile(s) and one (or more) goal tile(s). For now let's assume we already have those, as it's outside the scope of this page to explain how to get those. So say for example we want to build a road between tile_a and tile_b. First we call InitializePath on our pathfinder object:
+ pathfinder.InitializeRoute([tile_a], [tile_b]);
+The pathfinder expects and array of source tiles and an array of goal tiles, since we only have one source and one goal tile, we'll just create two arrays with one element each. Now the pathfinder is ready to find a path.
+ local path = false;
+ while (path == false) {
+   path = pathfinder.FindPath(100);
+   AIController.Sleep(0);
+ }
+The parameter <code>FindPath</code> accepts is the number of iterations it should do before returning. 100 is just fine. Don't make that value too big, as you'll notice slowdowns in OpenTTD. The <code>AIController.Sleep(0);</code> line is really needed. FindPath returns false if it isn't finished with pathfinding. When it's done, it returns either the path it found or null to indicate no route exists.
+
+== Building the planned route ==
+
+Suppose the pathfinder returned a path, how do start building it? For a start, it's nice to know that FindPath returns an instance of the AyStar.Path class. To view the documentation, open bin/ai/library/graph/aystar/main.nut. Basically, it has three functions: GetParent(), GetCost() and GetNode(). GetCost() isn't usefull for now, so we'll just use GetParent() and GetNode(). To build the route found by the pathfinder, we call path.GetParent() untill it returns null:
+ while (path != null) {
+   if (path.GetParent() != null) {
+     local parent = path.GetParent().GetNode();
+     if (!AIRoad.AreRoadTilesConnected(path.GetNode(), parent) && (!AIBridge.IsBridgeTile(path.GetNode()) || AIBridge.GetOtherBridgeEnd(path.GetNode()) != parent)) {
+       AIRoad.BuildRoad(path.GetNode(), parent);
+     }
+   }
+ }
+This code loops over all the whole route. For every element, it checks whether it's already connected to the previous tile via road or via a bridge. If it's not connected it tries to build a road. Note that in a real AI you'll problebly want to check if AIRoad.BuildRoad returns true, and if not restart pathfinding. 
+
+== A sample AI ==
+ import("pathfinder.road", "RoadPathFinder", 1);
+ 
+ class SampleAI {
+ }
+ 
+ function SampleAI::Start() {
+   /* Get a list of all towns on the map. */
+   local townlist = AITownList();
+   /* Sort the list by population, highest population first. */
+   townlist.Valuate(AITown.GetPopulation);
+   townlist.Sort(AIAbstractList.SORT_BY_VALUE, false);
+   /* Pick the two towns with the highest population. */
+   local townid_a = townlist.Begin();
+   local townid_b = townlist.Next();
+   /* Print the names of the towns we'll try to connect. */
+   AILog.Info("Going to connect " + AITown.GetName(townid_a) + " to " + AITown.GetName(townid_b));
+ 
+   /* Create an instance of the pathfinder. */
+   local pathfinder = RoadPathFinder();
+   /* Set the cost for making a turn extreme high. */
+   pathfinder.cost.turn = 5000;
+   /* Give the source and goal tiles to the pathfinder. */
+   pathfinder.InitializePath([AITown.GetLocation(townid_a)], [AITown.GetLocation(townid_b)]);
+ 
+   /* Try to find a path. */
+   local path = false;
+   while (path == false) {
+     path = pathfinder.FindPath(100);
+     this.Sleep(0);
+   }
+ 
+   if (path == null) {
+     /* No path was found. */
+     AILog.Error("pathfinder.FindPath return null");
+   }
+ 
+   /* If a path was found, build a road over it. */
+   while (path != null) {
+     if (path.GetParent() != null) {
+       local par = path.GetParent().GetNode();
+       if (!AIRoad.AreRoadTilesConnected(path.GetNode(), par)) {
+         AIRoad.BuildRoad(path.GetNode(), par);
+       }
+     }
+     path = path.GetParent();
+   }
+   AILog.Info("Done");
+ }
+Create an info.nut for this AI and give it a try. Play a bit with various cost, for example setting pathfinder.cost.no_existing_road = pathfinder.cost.max_cost. now the pathfinder will only find routes over already existing road. Not very usefull if you want to build a new connection, but it can be nice if you want to check if a previously build connection is still ok.
