@@ -88,6 +88,15 @@ Map (X, Y) coordinates are done from the top to the bottom - the top most tile i
 
 When for example using <code>AITile.IsBuildableRectangle</code> with [[en/Development/Script/Lists|Lists]], the list will contain those tiles where you can build an object of the size specified, where the returned tile is the one with the lowest X and Y value of the rectangle (or rather: the tile most North).
 
+=== Distance Calculations ===
+
+All in-game distances use [http://en.wikipedia.org/wiki/Taxicab_geometry Manhattan distance] calculations, so the distance between (3,3) and (5,5) calculated by the game is 4:
+ abs(3-5)  + abs(3-5) = 4
+Use <code>AITile.GetDistanceManhattanToTile</code> to get this distance between tiles. <code>AITile.GetDistanceSquareToTile</code> is much less necessary, calculating the same distance as 16:
+ (3-5)^2 + (3-5)^2 = 16
+
+The distance might not be exactly what a "plane would fly", since planes, boats and trains with the correct tracks can move diagonally, lowering the direct distance taken between tiles. Buses always must move Manhattan distances however due to having no type of diagonal roads.
+
 ==== Tile Arithmetic ====
 
 As part of various applications (e.g. pathfinding), an AI will need the ability to move around the map. Because of the way tile indices are represented, you can perform simple arithmetic on a tile index to find a new tile relative to its position. Adding or subtracting the result of <code>AIMap.GetTileIndex(x, y)</code> to a tile will yield the index of the tile ''x'' and ''y'' tiles from the original position.
