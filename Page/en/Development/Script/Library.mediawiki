@@ -1,11 +1,11 @@
 [[Translation:en/Development/Script/Library]]
 {{en/Development/Script/Navigation}}
 
-== Libraries ==
+= Libraries =
 
 To avoid code-duplication, and every AI creator doing the same work over and over, there is the library system. There are, of course, two sides on this: creating a library, and using a library.
 
-=== Using Existing Libraries ===
+== Using Existing Libraries ==
 
 To use an existing library, you just have to load it into your AI. Doing this is very simple. They layout of the library directory (bin/ai/library/):
 
@@ -32,7 +32,7 @@ Now how to use the library? Simple:
 
 Of course it depends on the library which parameters should be given to the constructor, and which functions exist. You'll have to open <code>queue/priority_queue/main.nut</code> to see all the documentation.
 
-=== Creating a library ===
+== Creating a library ==
 
 Creating a library is like creating an AI. You create a directory in a category in <code>bin/ai/library</code>, and you put in it a file called '<code>library.nut</code>'. Now this is almost identical with '<code>info.nut</code>', as you put in your AI directory, but instead of extending <code>AIInfo</code>, it extends <code>AILibrary</code>, and instead of calling <code>RegisterAI</code>, you need to call <code>RegisterLibrary</code>. All makes sense, not? An example:
 
@@ -54,32 +54,32 @@ There are some things you can not do:
 * Register 2 libraries in one <code>library.nut</code>
 * Define more than 1 class in the <code>main.nut</code> (or any required file). However, you can define sub-classes. Say you need an extra class in <code>PriorityQueue</code>. You can name it <code>PriorityQueue.Subclass</code>. To access it from within your main class, use <code>this.Subclass</code>. See <code>[[en/Development/Script/Library#aystar|graph.AyStar]]</code> for an example how it's done.
 
-== Standard libraries ==
+= Standard libraries =
 
 There are several libraries for common tasks bundled together with NoAI. These have been prepared by 'OpenTTD NoAI Developers Team'.
 
-=== Category: Graph ===
+== Category: Graph ==
 
-==== AyStar ====
+=== AyStar ===
 
 This is an implementation of [http://en.wikipedia.org/wiki/A* AyStar pathfinding algorithm]. It solves graphs by finding the fastest route from one point to the other.
 
 '''Required libraries:''' <code>[[en/Development/Script/Library#binary-heap|queue.binary_heap]]</code>
 
-=== Category: Pathfinder ===
+== Category: Pathfinder ==
 
-==== Road ====
+=== Road ===
 
 This is an implementation of a basic road pathfinder. You can use it to find the length of existing routes and / or to build new routes. It won't be able to build new tunnels / bridges, however, it's able to use existing ones. For more information, see [[en/Development/Script/RoadPathfinder]]
 
 '''Required libraries:''' <code>[[en/Development/Script/Library#aystar|graph.aystar]]</code>
 
-=== Category: Queue ===
+== Category: Queue ==
 
-==== Binary Heap ====
+=== Binary Heap ===
 
 This is an implementation of [http://en.wikipedia.org/wiki/Binary_heap binary heap] data structure.
 
-==== Priority Queue ====
+=== Priority Queue ===
 
 This is an implementation of [http://en.wikipedia.org/wiki/Priority_queue priority queue] data structure.
