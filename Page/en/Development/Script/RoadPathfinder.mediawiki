@@ -44,16 +44,24 @@ Before you start finding a route, you may want to set some parameters first. The
 | The extra cost if a road tile is sloped.
 |-
 | cost.bridge_per_tile
-| 105
-| The cost per tile of a bridge.
+| 150
+| The cost per tile of a new bridge, this is added to _cost_tile.
 |-
 | cost.tunnel_per_tile
-| 105
-| The cost per tile of a tunnel.
+| 120
+| The cost per tile of a new tunnel, this is added to _cost_tile.
 |-
 | cost.coast
 | 20
 | The extra cost for a coast tile.
+|-
+| cost.max_bridge_length
+| 10
+| The maximum length of a bridge that will be build. Note that all existing bridges will be explored, regardless of their length.
+|-
+| cost.max_tunnel_length
+| 20
+| The maximum length of a tunnel that will be build. Note that all existing tunnels will be explored, regardless of their length.
 |}
 
 To set a parameter, you just use:
@@ -78,16 +86,38 @@ The parameter <code>FindPath</code> accepts is the number of iterations it shoul
 
 == Building the planned route ==
 
-Suppose the pathfinder returned a path, how do start building it? For a start, it's nice to know that <code>FindPath</code> returns an instance of the <code>AyStar.Path</code> class. To view the documentation, open <code>bin/ai/library/graph/aystar/main.nut</code>. Basically, it has three functions: <code>GetParent()</code>, <code>GetCost()</code> and <code>GetNode()</code>. <code>GetCost()</code> isn't useful for now, so we'll just use GetParent() and GetNode(). To build the route found by the pathfinder, we call path.GetParent() until it returns null:
+Suppose the pathfinder returned a path, how do start building it? For a start, it's nice to know that <code>FindPath</code> returns an instance of the <code>AyStar.Path</code> class. To view the documentation, open <code>bin/ai/library/graph/aystar/main.nut</code>. Basically, it has three functions: <code>GetParent()</code>, <code>GetCost()</code> and <code>GetNode()</code>. <code>GetCost()</code> isn't useful for now, so we'll just use GetParent() and GetNode(). To build the route found by the pathfinder, we call path.GetParent() until it returns null. As the pathfinder can also return bridges / tunnels, we need to check the distance between the current node and the previous node. If that distance is more than 1, we should build a bridge / tunnel.
 
  while (path != null) {
-   if (path.GetParent() != null) {
-     local par = path.GetParent().GetNode();
-     if (!AIRoad.AreRoadTilesConnected(path.GetNode(), par) && (!AIBridge.IsBridgeTile(path.GetNode()) || AIBridge.GetOtherBridgeEnd(path.GetNode()) != par)) {
-       AIRoad.BuildRoad(path.GetNode(), par);
+   local par = path.GetParent();
+   if (par != null) {
+     local last_node = path.GetNode();
+     if (AIMap.DistanceManhattan(path.GetNode(), par.GetNode()) == 1 ) {
+       if (!AIRoad.BuildRoad(path.GetNode(), par.GetNode())) {
+         /* An error occured while building a piece of road. TODO: handle it. 
+          * Note that is can also be the case that the road was already build. */
+       }
+     } else {
+       /* Build a bridge or tunnel. */
+       if (!AIBridge.IsBridgeTile(path.GetNode()) && !AITunnel.IsTunnelTile(path.GetNode())) {
+         /* If it was a road tile, demolish it first. Do this to work around expended roadbits. */
+         if (AIRoad.IsRoadTile(path.GetNode())) AITile.DemolishTile(path.GetNode());
+         if (AITunnel.GetOtherTunnelEnd(path.GetNode()) == par.GetNode()) {
+           if (!AITunnel.BuildTunnel(AIVehicle.VEHICLE_ROAD, path.GetNode())) {
+             /* An error occured while building a tunnel. TODO: handle it. */
+           }
+         } else {
+           local bridge_list = AIBridgeList_Length(AIMap.DistanceManhattan(path.GetNode(), par.GetNode()));
+           bridge_list.Valuate(AIBridge.GetMaxSpeed);
+           bridge_list.Sort(AIAbstractList.SORT_BY_VALUE, false);
+           if (!AIBridge.BuildBridge(AIVehicle.VEHICLE_ROAD, bridge_list.Begin(), path.GetNode(), par.GetNode())) {
+             /* An error occured while building a bridge. TODO: handle it. */
+           }
+         }
+       }
      }
    }
-   path = path.GetParent();
+   path = par;
  }
 
 This code loops over all the whole route. For every element, it checks whether it's already connected to the previous tile via road or via a bridge. If it's not connected it tries to build a road. Note that in a real AI you'll probably want to check if <code>AIRoad.BuildRoad</code> returns true, and if not restart pathfinding.
@@ -133,13 +163,35 @@ This code loops over all the whole route. For every element, it checks whether i
  
    /* If a path was found, build a road over it. */
    while (path != null) {
-     if (path.GetParent() != null) {
-       local par = path.GetParent().GetNode();
-       if (!AIRoad.AreRoadTilesConnected(path.GetNode(), par)) {
-         AIRoad.BuildRoad(path.GetNode(), par);
+     local par = path.GetParent();
+     if (par != null) {
+       local last_node = path.GetNode();
+       if (AIMap.DistanceManhattan(path.GetNode(), par.GetNode()) == 1 ) {
+         if (!AIRoad.BuildRoad(path.GetNode(), par.GetNode())) {
+           /* An error occured while building a piece of road. TODO: handle it. 
+            * Note that is can also be the case that the road was already build. */
+         }
+       } else {
+         /* Build a bridge or tunnel. */
+         if (!AIBridge.IsBridgeTile(path.GetNode()) && !AITunnel.IsTunnelTile(path.GetNode())) {
+           /* If it was a road tile, demolish it first. Do this to work around expended roadbits. */
+           if (AIRoad.IsRoadTile(path.GetNode())) AITile.DemolishTile(path.GetNode());
+           if (AITunnel.GetOtherTunnelEnd(path.GetNode()) == par.GetNode()) {
+             if (!AITunnel.BuildTunnel(AIVehicle.VEHICLE_ROAD, path.GetNode())) {
+               /* An error occured while building a tunnel. TODO: handle it. */
+             }
+           } else {
+             local bridge_list = AIBridgeList_Length(AIMap.DistanceManhattan(path.GetNode(), par.GetNode()));
+             bridge_list.Valuate(AIBridge.GetMaxSpeed);
+             bridge_list.Sort(AIAbstractList.SORT_BY_VALUE, false);
+             if (!AIBridge.BuildBridge(AIVehicle.VEHICLE_ROAD, bridge_list.Begin(), path.GetNode(), par.GetNode())) {
+               /* An error occured while building a bridge. TODO: handle it. */
+             }
+           }
+         }
        }
      }
-     path = path.GetParent();
+     path = par;
    }
    AILog.Info("Done");
  }
