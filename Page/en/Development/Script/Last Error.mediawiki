@@ -4,17 +4,17 @@
 OpenTTD is a realtime game, so no program can predict whether a certain planned action will fail or succeed until it has been executed. When letting AIs build bridges, vehicles, reroute aircraft chances are some of these commands will fail due to some reason or another. Aircraft can crash, more money may be required and other opponents might interfere with its plans. As of now NoAI can report whether a command has been executed successfully, however, if a command has failed it can't report why it has failed. This page is both a manual for AI writers as it provides coding guidelines for developers who want to help updating this feature and fixing bugs.
 
 == Code ==
-Every error code in OpenTTD has its own ID (StringID) and is used to translate the error into one of the various languages to notify the user through a message on the GUI. In order to translate these errors we have to translate these StringIDs into error messages and expose them through the NoAI API. The last error message can be acquired by calling <code>AIError::GetLastError()</code>, and error messages can be checked by:
+Every error code in OpenTTD has its own ID (StringID) and is used to translate the error into one of the various languages to notify the user through a message on the GUI. In order to translate these errors we have to translate these StringIDs into error messages and expose them through the NoAI API. The last error message can be acquired by calling <code>AIError.GetLastError()</code>, and error messages can be checked by:
 
  if (!AIAirport.BuildAirport(...)) {
    switch(AIError.GetLastError()) {
      case AIError.ERR_NOT_ENOUGH_CASH: // Get some more change
        ...
        break;
-     case AIError.LOCAL_AUTHORITY_REFUSES: // Bribe!
+     case AIError.ERR_LOCAL_AUTHORITY_REFUSES: // Bribe!
        ...
        break;
-     case AIAirport.LAND_SLOPES_IN_WRONG_DIRECTION: // Do some terraforming
+     case AIAirport.ERR_LAND_SLOPES_IN_WRONG_DIRECTION: // Do some terraforming
        ...
        break;
      ...
@@ -24,12 +24,12 @@ Every error code in OpenTTD has its own ID (StringID) and is used to translate t
    }
  }
 
-Internally error messages are mapped to both enum constants (like <code>AIError::ERR_NOT_ENOUGH_CASH</code>) and a string representation. The string representation can be acquired by calling <code>AIError::GetLastErrorString</code> and will match with the name of the enum constant, note that this is meant to be used for debug purposes only! The API documentation lists all errors per method that can occur by invoking it. There are however some exceptions, the following errors will not be listed as they apply to (nearly) all methods:
+Internally error messages are mapped to both enum constants (like <code>AIError.ERR_NOT_ENOUGH_CASH</code>) and a string representation. The string representation can be acquired by calling <code>AIError.GetLastErrorString</code> and will match with the name of the enum constant, note that this is meant to be used for debug purposes only! The API documentation lists all errors per method that can occur by invoking it. There are however some exceptions, the following errors will not be listed as they apply to (nearly) all methods:
 
-* <code>AIError::ERR_UNKNOWN</code>: There has been an error which hasn't been mapped to NoAI. This can either mean 2 things, there is no StringID for this error or we forgot to map it. In the latter case please file a bug report and tell us about it so we can fix it.
-* <code>AIError::ERR_PRECONDITION_FAILED</code>: You violated one of the preconditions of the method, no call to the underlaying system has been made.
-* <code>AIError::ERR_NEWGRF_SUPPLIED_ERROR</code>: This error is NewGRF specific and we're unable to trace it down and map it.
-* <code>AIError::ERR_NOT_ENOUGH_CASH</code>: You don't have enough money for the given action. This error is always checked for ''after'' other error conditions. This means that the operation would have succeed if there had been enough funds available.
+* <code>AIError.ERR_UNKNOWN</code>: There has been an error which hasn't been mapped to NoAI. This can either mean 2 things, there is no StringID for this error or we forgot to map it. In the latter case please file a bug report and tell us about it so we can fix it.
+* <code>AIError.ERR_PRECONDITION_FAILED</code>: You violated one of the preconditions of the method, no call to the underlaying system has been made.
+* <code>AIError.ERR_NEWGRF_SUPPLIED_ERROR</code>: This error is NewGRF specific and we're unable to trace it down and map it.
+* <code>AIError.ERR_NOT_ENOUGH_CASH</code>: You don't have enough money for the given action. This error is always checked for ''after'' other error conditions. This means that the operation would have succeed if there had been enough funds available.
 
 The meaning of the other error messages can be looked up in the [http://dev.openttd.org/~noai/aidocs/ API].
 
