@@ -8,7 +8,7 @@ Every error code in OpenTTD has its own ID (StringID) and is used to translate t
 
  if (!AIAirport.BuildAirport(...)) {
    switch(AIError.GetLastError()) {
-     case AIError.NOT_ENOUGH_CASH: // Get some more change
+     case AIError.ERR_NOT_ENOUGH_CASH: // Get some more change
        ...
        break;
      case AIError.LOCAL_AUTHORITY_REFUSES: // Bribe!
@@ -19,14 +19,14 @@ Every error code in OpenTTD has its own ID (StringID) and is used to translate t
        break;
      ...
      default:
-       AILog.Warning("Unhandled exception: " + AIError::GetLastErrorString());
+       AILog.Warning("Unhandled exception: " + AIError.GetLastErrorString());
        break;
    }
  }
 
-Internally error messages are mapped to both enum constants (like <code>AIError::NOT_ENOUGH_CASH</code>) and a string representation. The string representation can be acquired by calling <code>AIError::GetLastErrorString</code> and will match with the name of the enum constant, note that this is meant to be used for debug purposes only! The API documentation lists all errors per method that can occur by invoking it. There are however some exceptions, the following errors will not be listed as they apply to (nearly) all methods:
+Internally error messages are mapped to both enum constants (like <code>AIError::ERR_NOT_ENOUGH_CASH</code>) and a string representation. The string representation can be acquired by calling <code>AIError::GetLastErrorString</code> and will match with the name of the enum constant, note that this is meant to be used for debug purposes only! The API documentation lists all errors per method that can occur by invoking it. There are however some exceptions, the following errors will not be listed as they apply to (nearly) all methods:
 
-* <code>AIError::UNKNOWN_ERROR</code>: There has been an error which hasn't been mapped to NoAI. This can either mean 2 things, there is no StringID for this error or we forgot to map it. In the latter case please file a bug report and tell us about it so we can fix it.
+* <code>AIError::ERR_UNKNOWN</code>: There has been an error which hasn't been mapped to NoAI. This can either mean 2 things, there is no StringID for this error or we forgot to map it. In the latter case please file a bug report and tell us about it so we can fix it.
 * <code>AIError::ERR_PRECONDITION_FAILED</code>: You violated one of the preconditions of the method, no call to the underlaying system has been made.
 * <code>AIError::ERR_NEWGRF_SUPPLIED_ERROR</code>: This error is NewGRF specific and we're unable to trace it down and map it.
 * <code>AIError::ERR_NOT_ENOUGH_CASH</code>: You don't have enough money for the given action. This error is always checked for ''after'' other error conditions. This means that the operation would have succeed if there had been enough funds available.
