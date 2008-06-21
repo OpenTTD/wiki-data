@@ -86,7 +86,7 @@ The parameter <code>FindPath</code> accepts is the number of iterations it shoul
 
 == Building the planned route ==
 
-Suppose the pathfinder returned a path, how do start building it? For a start, it's nice to know that <code>FindPath</code> returns an instance of the <code>AyStar.Path</code> class. To view the documentation, open <code>bin/ai/library/graph/aystar/main.nut</code>. Basically, it has three functions: <code>GetParent()</code>, <code>GetCost()</code> and <code>GetTile()</code>. <code>GetCost()</code> isn't useful for now, so we'll just use GetParent() and GetTile(). To build the route found by the pathfinder, we call path.GetParent() until it returns null. As the pathfinder can also return bridges / tunnels, we need to check the distance between the current node and the previous node. If that distance is more than 1, we should build a bridge / tunnel.
+Suppose the pathfinder returned a path, how do start building it? For a start, it's nice to know that <code>FindPath</code> returns an instance of the <code>AyStar.Path</code> class. To view the documentation, open <code>bin/ai/library/graph/aystar/main.nut</code>. Basically, it has three functions: <code>GetParent()</code>, <code>GetCost()</code> and <code>GetTile()</code>. <code>GetCost()</code> isn't useful for now, so we'll just use <code>GetParent()</code> and <code>GetTile()</code>. To build the route found by the pathfinder, we call <code>path.GetParent()</code> until it returns null. As the pathfinder can also return bridges / tunnels, we need to check the distance between the current node and the previous node. If that distance is more than 1, we should build a bridge / tunnel.
 
  while (path != null) {
    local par = path.GetParent();
@@ -122,7 +122,7 @@ Suppose the pathfinder returned a path, how do start building it? For a start, i
 
 This code loops over all the whole route. For every element, it checks whether it's already connected to the previous tile via road or via a bridge. If it's not connected it tries to build a road. Note that in a real AI you'll probably want to check if <code>AIRoad.BuildRoad</code> returns true, and if not restart pathfinding.
 
-'''Note''': do not use parent as variable name for GetParent, it's a keyword, giving peculiar results.
+'''Note''': do not use parent as variable name for <code>GetParent</code>, it's a keyword, giving peculiar results.
 
 == A sample AI ==
  import("pathfinder.road", "RoadPathFinder", 3);
