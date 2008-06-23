@@ -36,13 +36,13 @@ What happens here, is that if naming the AI to ''MyNewAI'' fails, it tries ''MyN
 
 ==Printing debug output==
 
-To print output to the [[en/Development/Script/Need To Know#logging-and-debug-panel|AI Debug Panel]], you can use <code>[http://devs.openttd.org/~noai/aidocs/classAIELog.html AILog]</code>. These messages are also written to the console (<code>AILog.Info</code> with ai debug level 4 or higher, <code>AILog.Warning</code> with level 3 or higher and <code>AILog.Error</code> with level 1 or higher). Note that these functions only accept a string as parameter. If you want to print anything else, convert it to a string first. The easiest way to do that is appending an empty string, for example:
+To print output to the [[en/Development/Script/Need To Know#logging-and-debug-panel|AI Debug Panel]], you can use <code>[http://devs.openttd.org/~noai/aidocs/classAILog.html AILog]</code>. These messages are also written to the console (<code>AILog.Info</code> with ai debug level 4 or higher, <code>AILog.Warning</code> with level 3 or higher and <code>AILog.Error</code> with level 1 or higher). Note that these functions only accept a string as parameter. If you want to print anything else, convert it to a string first. The easiest way to do that is appending an empty string, for example:
 
  AILog.Info(some_integer + "");
 
-==Message System==
+==Event System==
 
-The message system is a simple event-poll system. You will need to poll the event-controller once in a while to see if there are any relevant messages for you on the stack. Doing this is relative easy:
+The event system is a simple poll system. You will need to poll the event-controller once in a while to see if there are any relevant events for you on the stack. Doing this is relative easy:
 
  while (AIEventController.IsEventWaiting()) {
    local e = AIEventController.GetNextEvent();
@@ -70,6 +70,6 @@ For more functions we refer to the [http://devs.openttd.org/~noai/aidocs/classAI
 
 How to proceed next depends very much on what you want your AI to do. The best thing to do is to start browsing through the [http://devs.openttd.org/~noai/aidocs/ API]. We suggest to start with a road-vehicle-only AI. We know it is really boring, but you can really make a lot of money with them, if done correctly. Also, it is much easier to create and understand than trains are. Ships and aircraft are also very doable, but more boring then road-vehicles.
 
-For example, if you want to build road and road-stations, check <code>AIRoad</code> documentation. You will find the right functions there. For station information check <code>AIStation</code>. For vehicle-building and settings orders, check <code>AIVehicle</code>. Sounds all pretty logical, doesn't it?
+For example, if you want to build road and road-stations, check <code>AIRoad</code> documentation. You will find the right functions there. For station information check <code>AIStation</code>. For vehicle-building and settings orders, check <code>AIVehicle</code> and <code>AIOrder</code>. Sounds all pretty logical, doesn't it?
 
 Of course there are many things that makes your life easier. There is for example a piece of code that queues all your commands in a big list and starts executing them on request all at once. Now if one fails, where it didn't before, it rolls everything back. This is very useful from time to time, as when planning a route it might have looked to be no problem to build it, but by the time a road piece is placed, it can be that an other company has taken the tile already. Such pieces of code makes handling those situations a bit easier. Other examples are pathfinders, and more of those things.
