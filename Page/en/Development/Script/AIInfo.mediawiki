@@ -20,3 +20,33 @@ The internal structure of <code>info.nut</code> is very simple and follows a tem
  RegisterAI('''MyNewAI'''());
 
 Where of course you should change the names however you like to call everything. Just don't forget the <code>RegisterAI()</code>, and don't forget to extend <code>AIInfo</code>. If something goes wrong, check if you did: <code>RegisterAI(MyNewAI())</code>. Mind the <code>()</code> after <code>MyNewAI</code>!
+
+
+== Settings ==
+
+It is possible to allow users to change settings in your AI. The only requirement is that you tell them which settings. You can do this by altering your <code>info.nut</code> in the following way:
+
+ class '''MyNewAI''' extends AIInfo {
+   function GetAuthor()      { return "Newbie AI Writer"; }
+   function GetName()        { return "MyNewAI"; }
+   function GetDescription() { return "An example AI by following the tutorial at http://wiki.openttd.org/"; }
+   function GetVersion()     { return 1; }
+   function GetDate()        { return "2007-03-17"; }
+   function CreateInstance() { return "MyNewAI"; }
+   function GetSettings() {
+     SetSetting({name = "NameOfSetting", description = "Description of setting", min_value = 0, max_value = 10, easy_value = 10, medium_value = 5, hard_value = 0, custom_value = 5, flags = 0});
+   }
+ }
+ 
+ /* Tell the core we are an AI */
+ RegisterAI('''MyNewAI'''());
+
+The new lines of course are those about Settings. In SetSetting it is important to define all properties. If not, an error will be given. Now in the GUI on your AI there will be an option to alter NameOfSetting between the values of 0 and 10, or a preset value if your have a difficulty setting different than 'Custom'.
+
+Now inside your AI you can request the value of this setting, by doing:
+
+ this.GetSetting("NameOfSetting");
+
+There are a few things to remember:
+* Settings never change during runtime. You set them before you start a game, and that is final.
+* Settings are always integers.
