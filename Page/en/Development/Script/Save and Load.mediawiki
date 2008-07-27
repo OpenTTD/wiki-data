@@ -1,6 +1,7 @@
 [[Translation:en/Development/Script/Save and Load]]
 == Save ==
 If you create a <code>Save()</code> function in your AI, you can store some data inside the savegame. You can only store integers, strings, arrays, tables and booleans. Instances of classes can't be saved. Please note that this includes AIList, so if you want to store an AIList, you have to convert it to an array or table on save and convert it back on load. The <code>Save()</code> function should return a table with the information you want to store. That table can contain integers, strings, arrays, tables and booleans, but only nested to a maximum level of 5 deep. As soon as the users saves the game, the <code>Save()</code> function of your AI is called. Your AI can be doing anything at that moment. It can be doing pathfinding, maybe it just finished that and build part of the road and was interrupted then, or could've been changing an internal array. The only place you can be sure your AI won't be interrupted is directly after a <code>Sleep()</code> call.
+
 '''Note:''' No other information is saved, so for example all pending events are lost as soon as the game is loaded. To circumvent this you can store all events (ocnverted to allowed types) in the savegame yourself. However, the game will continue normally after the <code>Save()</code> function is called, so you also need to handle those events.
 
 == Load ==
