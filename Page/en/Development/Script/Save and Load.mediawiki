@@ -1,9 +1,15 @@
 [[Translation:en/Development/Script/Save and Load]]
 == Save ==
-If you create a <code>Save()</code> function in your AI, you can store some data inside the savegame. You can only store integers, strings, arrays and tables. Instances of classes can't be saved. Please note that this includes AIList, so if you want to store an AIList, you have to convert it to an array or table on save and convert it back on load. As soon as the users saves the game, the <code>Save()</code> function of your AI is called. Your AI can be doing anything at that moment. The <code>Save()</code> function should return a table with the information you want to store. That table can contain integers, strings, arrays and tables, but only nested to a maximum level of 5 deep. 
+If you create a <code>Save()</code> function in your AI, you can store some data inside the savegame. You can only store integers, strings, arrays tables and booleans. Instances of classes can't be saved. Please note that this includes AIList, so if you want to store an AIList, you have to convert it to an array or table on save and convert it back on load. As soon as the users saves the game, the <code>Save()</code> function of your AI is called. Your AI can be doing anything at that moment. The <code>Save()</code> function should return a table with the information you want to store. That table can contain integers, strings, arrays, tables and booleans, but only nested to a maximum level of 5 deep. 
 
 == Load ==
-If an savegame with an AI 
+If a savegame with an AI in it is loaded, OpenTTD tries to start the same AI as the game was saved with. If this fails (for example, you send your savegame to your friend who does not have all AIs you have), it'll load a random AI that is available. First the constructor of your AI is called, and after that your <code>Load()</code> function is called, even if the AI that saved the data is not the same as the one that is started now. Because of this you should check all savedata for validity before trying to do anything with it. The <code>Load()</code> function gets exactly one parameter with as value the data that was saved by the AI. If an AI didn't save any data, the <code>Load()</code> function won't be called. 
+
+== What data to save? ==
+Of course what data you save exactly is up to you, but as a general rule you shouldn't save anything that can be easily detected by reading the map again. So you can store a mapping of truck station to industry, but storing just a station list is useless.
+
+== What you can't do in your Save() and Load() function ==
+Both the Save() and Load function() are called from within the main thread. This means that it is not possible to execute any command that builds / removes / changes something in the game. You can execute some API functions, but only those that fetch data. Please try to minimize the code in Save() and Load(), as the user has to wait for those functions everytime they save and load a game.
 
 == Example Save() / Load() code ==
  class testai extends AIController
