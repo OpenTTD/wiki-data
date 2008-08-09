@@ -100,6 +100,15 @@ This is an example of a compact and high performance [[en/Manual/Railway station
 You will also notice, that the station is divided into two sides. Vehicles that come from Side A will try to occupy Side's A platforms. Same goes with Side B. When traffic load gets lower or many platforms are filled, trains will also occupy adjacent side if it is better/faster. NOTE: it is worth building a [http://www.openttdcoop.org/wiki/Guides:Load_Balancers#Simple_track_switching load balancer] after this station as trains don't have a choice over two exiting tracks.
 [[File:en/Community/Junctionary/Roro pbs4.png|frame|center|High capacity RoRo station]]
 
+== Known issues ==
+=== Outdated reservations at stations ===
+[[File:en/Outdated reservation.jpeg|frame|right|thumb|300px|Converted station. The train at lower right is about to enter an occupied platform with disastrous consequences.]]
+If you add PBS signals to a station block which previously had standard signals or pre-signals any trains in the station ''at that time'' will not have their reservations updated. Put another way, from the perspective of any train which enters the station's signal block, the tracks occupied by those trains is available.
+
+In the example at right, the station was originally built as a terminus with pre-signals. Later, it was rebuilt as a through station with PBS signals on both sides. The train at platform #3, at 67% loading, was at the station prior to the conversion and has not moved since then. A third train carrying coal is coming up the new branch toward the station. Because the loading train entered the station prior to the implementation of PBS signals there is no reservation, so the platform appears empty. The coal train will enter that platform and crash.
+
+In this case, the solution was to send the loading train to a depot, then back to the station. When it came back it reserved the track, thus updating its status and eliminating the potential collision.
+
 [[Category:en/Manual/Railways]]
 [[Category:en/Patch Settings]]
 [[Category:en/Development]]
