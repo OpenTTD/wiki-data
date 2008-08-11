@@ -57,9 +57,37 @@ This is an example table that sets up six rail type translations:
 
 A very big TODO: Figure out the best method of selecting and using sprites.
 
-==Rail type varactions (action 2)==
+==Rail type Action3/2/1 scheme==
 
-Executing a varaction for every rail tile would probably be quite slow, but it IS done for newhouses and newindustrytiles. Perhaps a solution is to call a varaction once a month, so graphics can change but it can still be speedy...
+===Action 1===
+
+Just a regular action 1 for sprites.
+
+===Action 2===
+
+Like normal, used to assign sprites from action 1 to 'cargo ids'. There are no variables for rail types.
+
+===Action 3===
+
+For rail types the cargo type byte specifies the type of sprites being assigned. These are as follows:
+
+{| border = "1" cellpadding="4"
+!'Cargo' type!!Sprite type!!Number of sprites
+|-
+|00||Overlay||8
+|-
+|01||Cursors||5
+|-
+|02||Ground||26
+|-
+|03||Tunnel||08
+|-
+|04||Snowy/desert ground||26
+|-
+|05||Snowy/desert tunnel||08
+|}
+
+Executing a varaction for every rail tile would probably be quite slow, so for the moment it is done once on starting a game. For this reason, no global varaction 2 variables should be used.
 
 ==Action 7/9 additions==
 
