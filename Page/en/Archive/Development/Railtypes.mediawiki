@@ -41,26 +41,34 @@ This is an example table that sets up six rail type translations:
 |-
 ||08||dword||Label - this is loaded in the reservation stage.
 |-
-||09||word||Name of railtype, from Action 4 string (Action 4 *MUST* appear before railtype definition)
+||09||word||String ID for tool bar window caption (must start with white)
 |-
-||0A||byte (dword ...)||Compatible rail type list (list of labels, turned into a bitmask internally)
+||0A||word||String ID for main menu text
 |-
-||0B||byte (dword ...)||Powered rail type list (list of labels, turned into a bitmask internally)
+||0B||word||String ID for build vehicle window caption (must start with white)
 |-
-||0C||byte||Toggle drawing of catenary: 0 = No, 1 = Yes, use global sprites, 2 = Yes, use custom sprites.
+||0C||word||String ID for rail type shown in autoreplace window
 |-
-||0D||byte||Acceleration model: 0 = rail, 1 = maglev, other models available?
+||0D||word||String ID for new locomotive text: We have just designed a new "railway locomotive"
 |-
-||0E||byte||Curve speed advantage, format to be decided
+||0E||byte (dword ...)||Compatible rail type list (list of labels, turned into a bitmask internally)
 |-
-||0F||word||Max speed limit in mph*1.6 (approximately km/h) (To be decided)
+||0F||byte (dword ...)||Powered rail type list (list of labels, turned into a bitmask internally)
 |-
-||10||byte||Type of default station building graphic to use: 0 = Rail, 1 = Monorail, 2 = Maglev.
+||10||byte||Rail type flags: bit 0 = draw catenary, bit 1 = maglev acceleration model
 |-
-||11||byte||Construction cost factor.
+||11||byte||Curve speed advantage, format to be decided
+|-
+||12||byte||Type of default station building graphic to use: 0 = Rail, 1 = Monorail, 2 = Maglev.
+|-
+||13||byte||Construction cost factor.
+|-
+||14||word||Max speed limit in mph*1.6 (approximately km/h) (To be decided)
 |}
 
 In NFO, rail type IDs will be GRF local, with an ID to label mapping. Therefore to modify an existing rail type, specify its label in property 08. To create a new rail type, again just specify its label in property 08. This way there is no need for complex GRM mechanisms to allocate IDs. If a label 'clashes' with another GRF, then one GRF will end up modifying the properties instead of creating a new rail type.
+
+When a new rail type is created, it is populated with the information from the first rail type, except that the compatible and powered list contain only the rail type being created. However, no default values should be assumed, as the first rail type may have been modified.
 
 ==Rail type Action3/2/1 scheme==
 
