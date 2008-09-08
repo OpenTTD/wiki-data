@@ -365,12 +365,12 @@ Also in the comment block you can include so-called structural commands which te
 ===Remove trailing whitespace===
 To find out if/where you have trailing whitespace, you can use the following (unix/bash) command:
 <pre>grep -n -R --include "*.[ch]" '[ 	]$' * | grep --invert-match ".diff" | grep --invert-match ".patch"</pre>
-Automatically removing whitespace is also possible with the following shell script (Note that it only checks .c, .cpp, .h and .mm files):
+Automatically removing whitespace is also possible with the following shell script (Note that it only checks .c, .cpp, .h, .hpp and .mm files):
 <pre>
 #!/bin/sh
 IFS='
 '
-for i in Makefile `find . -name \*.c``find . -name \*.cpp` `find . -name \*.h` `find . -name \*.mm`
+for i in Makefile `find . -name \*.c -o -name \*.cpp -o -name \*.h -o -name \*.hpp -o -name \*.mm`
 do
   (
     echo '%s/[ 	]\{1,\}$/'
