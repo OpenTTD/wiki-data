@@ -81,4 +81,84 @@ While new games will automatically use your newly installed .grf files, previous
 # Type in "resetengines".
 # Press ` to close the console.
 
-Note that even after typing “resetengines
+Note that even after typing “resetengines�?, your pre-existing vehicles will still be of the old type.  However, you should now be able to build the new types of vehicles from any of your depots.
+
+==Configuration File==
+An alternative way of specifying which NewGRF files to use is by directly altering the openttd.cfg configuration file. The steps to do this are as follows:
+# Copy the new .grf file to the \data directory.
+# Open the openttd.cfg file in the \ directory.
+# Go to the end of the file and enter the following:
+
+ [newgrf]
+ firstset.grf
+ secondset.grf
+ thirdset.grf
+
+Where firstset, secondset etc.. are the names of the .grf files of the set. The files are loaded in the specified order... so if secondset has some features that are also in firstset, the features of the first set would be overwritten.
+
+Note that it is a good practice to put all the newgrf files to a directory such as \data\custom or \data\newgrf. It especially makes upgrading OpenTTD easier, as well as managing a large number of newgrf files.
+
+Be careful when using subdirs of the data directory for storing custom newgrf files. You have to adjust the path in the openttd.cfg like \custom\newgrffile.grf if your "custom" folder is a subfolder of the OpenTTDs data folder.
+
+=== Multiple combinations ===
+If you want to configure more than one combination of sets you can do this:
+
+ [newgrf]
+ #COMBINATION 1
+ firstset.grf
+ secondset.grf
+ #COMBINATION 2
+ #another_firstset.grf
+ #another_secondset.grf
+
+Now you can switch between the combinations by removing the "#" from before one combination and add it to the other combination.
+
+Words after # are treated just like a comment - they are skipped.
+
+ [newgrf]
+ #
+ #Trains
+ #
+ firstset.grf
+ secondset.grf
+ #
+ #Newstations
+ #
+ #thirdset.grf - I turned it off because it's buggy
+ fourthset.grf
+ #
+ #Ships
+ #
+ fifthset.grf
+
+I'm testing some combinations like "DBset + Arcticset", "Temperateset + Tropicset" and so on... for the moment the only combination that works well is "Temperateset + Arcticset" (note that this information can be obsolete and may not reflect the current state of things; please refer to the Forums for the current status).
+
+===Parameters===
+
+Some NewGRF files accept one or more parameters. See the [[en/Manual/NewGRF]] article for information on adding parameters to a GRF file, or do the following in your openttd.cfg file:
+
+ [newgrf]
+ firstsetw.grf           # Doesn't require any parameters
+ secondsetw.grf 5 3 1250 # Three parameters
+ thirdsetw.grf=10        # Alternate form of providing parameters.
+
+Note: As you can see, multiple NewGRF parameters are separated by spaces.
+
+== NewGRF Compatibility and Features ==
+NewGRF is originally a [[en/Archive/OpenTTD/TTDPatch]] feature, and as such, the latest NewGRF features are not always available in OpenTTD.
+
+What has to be done/is done next can be found in the [[en/NewGRF TODO]]. What has been done is in the [[en/NewGRF Features]] list..
+
+== External links ==
+
+Links to some downloadable GRF files (note that these are meant for [[en/Archive/OpenTTD/TTDPatch]] and not all of them will work with OpenTTD, and that some of these are already included with OpenTTD - see ''[[en/NewGRF Features]]'' for what works with OpenTTD)
+
+
+* [http://www.ttdpatch.net/newgrf.html TTDPatch] &mdash; A list of GRF files on the TTDPatch webpage.
+* [http://wiki.ttdpatch.net/tiki-index.php?page=NewGraphicsSpecs NewGraphicSpecs] Specs of the GRF Format
+* [http://www.tt-forums.net/viewtopic.php?t=9376 'NewGRF problems' forum topic].
+
+{{Page:en/Manual/NewGRF}}
+
+[[Category:en/Manual/Settings & Preferences]]
+[[Category:en/NewGRF]]
