@@ -19,7 +19,7 @@ void ThisIsAFunction()
 === Variables ===
 * Variable names are all lowercase, and use "_" as separator.
 * Global variables are preceded by an underscore. ("_") Use descriptive names because leading underscores are often used for system / compiler variables.
-* private and protected members are preceded by "m_"
+* own members of classes should always be referenced usng "this->"
 * Pointers and references should have their reference symbol next to the name (compatibility with current code).
 * Variables that are declared below one another should have their type, name or reference operator, and assignment operator aligned by spaces.
 * There are set names for many variables. Those are (but not limited to): Vehicle *u, *v, *w; Station *st; Town *t; Window *w; Engine *e.
@@ -34,7 +34,7 @@ int     value          = v->value;
 uint32 _global_variable = 3750;
 
 protected:
-    char m_private_array[10];
+    char protected_array[10];
 
 for (int i = 0;;);
 </pre>
@@ -145,32 +145,32 @@ enum SomeEnumeration {
 * In if without an else statements, a single statement may follow on the same line.
 <pre>
   if (a == b) {
-    foo();
+    Foo();
   } else {
-    bar();
+    Bar();
   }
 
-  if (a == b) foo();
+  if (a == b) Foo();
 
   switch (a) {
-    case 0: dosomethingshort(); break;
+    case 0: DoSomethingShort(); break;
 
     case 1:
-      domore();
+      DoMore();
       b = a;
       break;
 
     case 2: {
       int q = 345;
 
-      doit();
+      DoIt();
       break;
     }
   }
 
   for (int i = 0; i < 10; i++) {
-    foo();
-    bar()
+    Foo();
+    Bar();
   }
 </pre>
 
@@ -187,9 +187,9 @@ class ThisIsAClass {
 public:
     typedef Titem_   *ItemPtr;
 private:
-    static const int m_max_size = 500;
-    int              m_size;
-    ItemPtr          *m_items;
+    static const int MAX_SIZE = 500;
+    int              size;
+    ItemPtr          *items;
 
 public:
     explicit ThisIsAClass();
@@ -200,6 +200,7 @@ public:
 
 /*virtual*/ void Class::Method()
 {
+    this->size *= 2;
 }
 </pre>
 
