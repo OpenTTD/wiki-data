@@ -1,0 +1,11 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/Settings/CreateSavegame]]
+'''Note''': This is just a rough overview of what to do if you want to bump to a new savegame. I myself am not very experienced and hope some more experienced person will complete this to a minimalistic guide on how to create a new savegame version.
+
+------
+
+Important locations in the code to look at, when you want to do a savegame bump:
+
+* saveload.cpp:40
+** extern const uint16 SAVEGAME_VERSION = 103; // increase by one
+* openttd.cpp:AfterLoadGame(...) // use this to do default variable settings if a older save game was loaded
+* have a look at all the references of the class SaveLoad. Use SLE_ macros to add your variables to save
