@@ -95,13 +95,18 @@ Suppose the pathfinder returned a path, how do start building it? For a start, i
          bridge_list.Sort(AIAbstractList.SORT_BY_VALUE, false);
          AIBridge.BuildBridge(AIVehicle.VEHICLE_RAIL, bridge_list.Begin(), prev, path.GetTile());
        }
+       prevprev = prev;
+       prev = path.GetTile();
+       path = path.GetParent();
      } else {
        AIRail.BuildRail(prevprev, prev, path.GetTile());
      }
    }
-   prevprev = prev;
-   prev = path.GetTile();
-   path = path.GetParent();
+   if (path != null) {
+     prevprev = prev;
+     prev = path.GetTile();
+     path = path.GetParent();
+   }
  }
 
 This code loops over all the whole route. For every element it tries to build either a bridge / tunnel or a piece of rail. Note that in a real AI you'll probably want to check if <code>AIRail.BuildRail</code> returns true, and if not restart pathfinding.
