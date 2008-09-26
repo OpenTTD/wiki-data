@@ -242,21 +242,47 @@ The <code>cd</code> command brings you to the <code>bin</code> directory, where 
 Also, you can install the game in <code>/usr/local/</code> or somewhere else, but this is mainly for packagers. This requires some more in-depth knowledge about installing software and OpenTTD, so look in the Makefile for hints.
 
 == Playing the soundtrack==
-
 {{en/Outdated}}
+
+===With Timidity===
+
 If you want the original TTD music you need to copy the whole <code>gm/</code> directory. Additionally the TiMidity program is required:
 
-*TiMidity++-2.12.0-0.pre1.4mdk (+ dependencies)
-*timidity and freepats packages (For Debian and Ubuntu) (<code>$ sudo aptitude install timidity freepats</code>)
-* On Fedora Core 5, install timidity++ (<code># yum install timidity++</code>). Timidity wants to talk to ESD, so you will need to "enable software sound mixing (ESD)" (System &rarr; Preferences &rarr; Sound).
+In Debian/Ubuntu
+
+Download "timidity & freepats
+
+ sudo apt-get install timidity freepats
+
+Start "System Setting" then click on the "Sound System" select the "Hardware" tab, click on the "Select the Midi Device"
+the Select the "Timidity port 0 - Alsa device" (tip: it may be different just search for timidity) then click the "apply" button.
+
+In Fedora
+
+Install timidity++ 
+
+ yum install timidity++ 
+
+Timidity wants to talk to ESD, so you will need to "enable software sound mixing (ESD)" (System &rarr; Preferences &rarr; Sound).
 
 To run OpenTTD with music support type
 
-Alternatively you can use Fluidsynth
-
 <code>$ ./openttd -m extmidi</code>
 
-(On Fedora Core and Ubuntu, the soundtrack is played even without specifying <code>-m extmidi</code>.)
+===Whit Fluidsynth===
+
+In Debian/Ubuntu
+
+Download Fluidsynth, Qsynth & Fluidsoundfonts
+
+ sudo apt-get install fluid-soundfont-gm fluid-soundfont-gs fluidsynth qsynth
+
+Start Qsynth, (If you can`t find it in the menu, just type "qsynth" in the konsole) 
+click Setup select the "soundfont" tab click open, navigate to "/usr/share/sounds/sf2/" and add both files find there,
+then select the "audio" tab and at the Audio Driver Menu select "Alsa" or "OSS" then click "OK, if it asks you to restart the engine, click yes,
+then click the "Options" button, then Check the "Enable system tray icon" then clcik the "X" button at the to right corner of the window.
+
+Note: You must start Qsynth every time you start your computer!
 
 == Debian package ==
 You should be able to build a Debian package from the latest source using the supplied debian directory. You can replace step 3 by this. This Debian directory is, conforming to OpenTTD standards, put inside the <code>os/</code> directory and needs to be moved a level up first:
