@@ -84,12 +84,6 @@ This is stuff which will ''not'' be in the first incarnation of cargodest, no ma
 * New icon for the Route Network view of the map: Suggestion: [[File:en/Community/Patches/Minimaprouting.png]] Full quality TIF here: [http://www.fvfischer.de/minimaprouting.tif]
 
 
-=== Concept ===
-
-The basic idea of the implementation was to make the whole system as little intrusive as possible. The whole cargo handling system has been moved into a new base class, and the derived classes determine whether it is "routed" or "unrouted"
-
-Check the doxygen documentation of the tree for more info, everything is documented in there
-
 == Technical details ==
 
 === Obtaining the source code ===
@@ -128,6 +122,13 @@ The normal configure/make applies as well.
 Note, however, that the ./configure script currently does not support/check the boost libraries, so you may need to run configure with
     ./configure CFLAGS="-I/path/to/boost"
 instead, where /path/to/boost is the directory you installed the boost libraries to.
+
+=== Concept ===
+
+The basic idea of the implementation was to make the whole system as little intrusive as possible. The whole cargo handling system has been moved into a new base class, and the derived classes determine whether it is "routed" or "unrouted"
+
+Check the doxygen documentation of the tree for more info, everything is documented in there
+
 
 === Configuring ===
 
@@ -184,7 +185,7 @@ The "cost" of a route is the distance (Manhattan) times the vehicle penalty fact
 | This is the base cost of a route (that is added to the length-dependent part). The higher this value (from 1 to 1000), the more likely cargo will use direct trains over ones with stopover. This especially plays a role when there are routes on different vehicle types from A to B.
 |}
 
-== Minimap Route Network ==
+=== Minimap Route Network ===
 
 [[File:en/Community/Patches/Paxdest-graph.png|thumb|An example of a graph showing the route network]]
 
@@ -192,7 +193,7 @@ The minimap got a new icon which shows the route network of the game.
 
 {{en/-}}
 
-== Console ==
+=== Console ===
 
 There's a new console command called "rn" in the game, which has a number of subcommands:
 
@@ -206,7 +207,7 @@ There's a new console command called "rn" in the game, which has a number of sub
 ** rr: Resets the whole routing network and start from scratch. *Believe it or not, this is network safe on both server and client. You shouldn't need it anyway, it's in there for testing
 ** dl: Shows the destination list. This dumps the cache that is stored for each GoodsEntry of each Station. It's only used for debugging purposes and it's output should be identical to the NextHop view of the station list. We see how many pieces of cargo go via what NextHop.
 
-== Station Cargo List ==
+=== Station Cargo List ===
 
 The Station Cargo List will be one of your main tools to work with. To ease network optimization,
 several different cargo views are available in the station view window:
@@ -222,13 +223,13 @@ several different cargo views are available in the station view window:
 You can expand the conventional view to a detailed view, which gives you more information about the waiting cargo's routing. It's possible to switch between the different detailed views by using the drop down box in the in station view. The view type can be set for each window individually, and the default view type (which will be selected each time you open a window) can be set in the advanced options (Patch options?)
 
 [[File:en/Community/Patches/Svw retract.png|frame|conventional view]]
-=== Conventional View ===
+==== Conventional View ====
 We all know this view from the early days of TTO, but it doesn't reveal much information except how much cargo we have for each type.
 
 The little "+" sign indicates that there is more information about this cargo type. This is available for routed and unrouted cargo, however, the unrouted cargo needs this by far not as badly as the routed stuff. Click on the "+" and you can be bombarded with loads of information.
 
 [[File:en/Community/Patches/Svw full.png|frame|"full" view - Shows origin and destination for everything]]
-=== Full View ===
+==== Full View ====
 This is possibly less useful a view but it's there nonetheless. It shows, for every piece of the selected cargo type, the origin and the destination. This is more for the detail-loving people among us than to really help optimizing your network.
 
 Yellow lines indicate cargo that transfers at this station (i.e. comes from somewhere else and goes one), while black lines show cargo that originated here (i.e. has never been transported before)
@@ -239,13 +240,13 @@ The Full View can be sorted alphabetically (by destination) or by the amount of 
 
 [[File:en/Community/Patches/Svw destination.png|frame|"destination" view - Shows the ultimate destination of the cargo]]
 
-=== Destination View ===
+==== Destination View ====
 Here we go simple and straightforward again. We see all the destinations are currently "in use" along with the amount. However, we don't know how the cargo is attempting to get there.
 
 The Destination View can be sorted alphabetically or by the amount of cargo.
 
 [[File:en/Community/Patches/Svw nexthop.png|frame|"nexthop" view - Shows the station the cargo wishes to go next, independent of the question whether the cargo will leave the vehicle there or not]]
-=== NextHop View ===
+==== NextHop View ====
 We call this the NextHop view.
 
 The term NextHop refers to the station an piece of cargo will go to next. What is important to understand that the piece of cargo might '''not''' leave the vehicle at the NextHop, should the vehicle then continue to the following NextHop.
@@ -256,7 +257,7 @@ The NextHop View can be sorted alphabetically or by the amount of cargo.
 
 [[File:en/Community/Patches/Svw tree.png|frame|"tree" view - Shows a logical tree where the cargo is going from the current station, includes information on how many units transfer or arrive at subsequent stations]]
 
-=== Tree View ===
+==== Tree View ====
 This view is possibly the most useful, if you get used to it. It shows a forward-tree of the cargo and its destinations (i.e. forward tree because this tree doesn't care about where the cargo comes from).
 
 Each level of indentation indicates an additional hop between the current station and the one displayed. So, the stations that are not indented are the NextHops. However, here we can see what amount of cargo actually uses the NextHop as a destination, and the number that uses it as a transfer point (including the ones staying on board). There, we see the NextHops from there, but only the amount from the current station (i.e. the one who the window belongs to), and so on.
@@ -269,15 +270,15 @@ The Tree View cannot, at this point, be sorted.
 
 {{en/-}}
 
-== Vehicle Cargo List ==
+=== Vehicle Cargo List ===
 
 You can view the destinations of the loaded cargo in the "Total Cargo" Tab of train detail windows. The sources of the cargo are not shown.
 For other types of vehicles it is not (yet) possible to view cargo routing information.
 
-== Destination Algorithm ==
+=== Destination Algorithm ===
 
 (how OpenTTD picks destinations for cargos)
 
-== Routing Algorithm ==
+=== Routing Algorithm ===
 
 (how OpenTTD picks the route/vehicles to use)
