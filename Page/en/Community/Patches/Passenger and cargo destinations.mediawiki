@@ -2,18 +2,44 @@
 {{en/Current}}
 {{en/Cleanup}}
 
-Support for Passenger and cargo destinations in OpenTTD exists in the new cargo packets branch by [[en/Archive/Community/Users/Celestar]] and [[en/Archive/Community/Users/Peter1138]].
+Support for [[en/Community/Patches/Passenger and cargo destinations]] in OpenTTD exists in the new cargo packets branch by [[en/Archive/Community/Users/Celestar]] and [[en/Archive/Community/Users/Peter1138]]. An explanation on how to download and install this branch is given in the [[en/Community/Patches/Passenger and cargo destinations#installation|Installation]] section of this page.
 
 == Overview ==
-''Cargodest'' is a system where cargo decides where it wishes to go and not the player (by sending vehicles somewhere). This greatly increases the challenge and detail of the game and frankly, it's more fun and realistic as well. There have been a number of attempts at integrating this feature into OpenTTD and we're nearly there meanwhile. This page deals with some of the technical and gameplay details of ''cargodest'' and provides a short manual on how to use it.
+[[File:en/Community/Patches/Example.png|thumb|Example city with long distance and local trains as well as an assortment of trams and buses]]
 
-[[File:en/Community/Patches/Example.png|700px|center|Example city with long distance and local trains as well as an assortment of trams and buses]]
+[[en/Community/Patches/Passenger and cargo destinations]], or in short ''Cargodest'', is a system where cargo (this term includes passengers in the following) has a fixed destination to be delivered to, instead of the player deciding where to deliver it (by sending vehicles somewhere). This greatly increases the challenge and detail of the game and frankly, it's more fun and realistic as well. There have been a number of attempts at integrating this feature into OpenTTD and we're nearly there meanwhile.
+This page provides a short manual on how to use [[en/Community/Patches/Passenger and cargo destinations]], and a more detailed section on the technical side of its implementation in OpenTTD.
 
-{{en/Warning|Savegames which are created with this branch might no longer work in subsequent versions. They will for sure not work in trunk, even after cargodest has been merged into trunk<br>Also, please bear in mind that not all trunk games, especially the latest ones, do not work}}
+
+{{en/Warning|Savegames which are created with this branch might no longer work in subsequent versions. They will for sure not work in trunk, even after cargodest has been merged into trunk<br>Also, please bear in mind that savegames from trunk might not work in the patched version}}
 
 {{en/Note|Please bear in mind that this is a feature which might not yet be stable. Read this page carefully because it shows what might work and what doesn't}}
 
-== Terms ==
+== Manual ==
+This section explains how to install and use [[en/Community/Patches/Passenger and cargo destinations]].
+
+=== Installation ===
+For windows and Unix systems, you can download a precompiled binary [http://www.openttd.org/download-cargodest here]. Like any normal OpenTTD version, it needs the trg*.grf and sample.cat files to work, as described in the [[en/Archive/Manual/Installation FAQ#what-files-do-i-need-from-ttd|Installation FAQ]].
+
+If you have another system than those two or want to compile yourself from the source code, look in the section [[en/Community/Patches/Passenger and cargo destinations#obtaining-the-source-code|Obtaining the source code]].
+
+=== Usage ===
+CargoDest is easy enough to use: Once it is enabled in the GUI or the configuration file (openttd.cfg in most cases), the cargo will find its routes on its own. The Routing Network is built up using the orders of the vehicles. If you have two vehicles, one which goes from A to B and another from B to C, there will be (among others) cargo generated in A with C as its destination. That cargo at A will board '''''any''''' vehicle that goes to B (the ''transfer station''), unload there and then use '''''any''''' vehicle that goes to C. Any vehicle implies any vehicle going directly from A to B, vehicles with a stopover in D (meaning A-D-B) will not be used.
+
+{{en/Note|When your vehicles have Transfer orders, they will be ignored, the cargodest system handles it automatically. Transfer orders don't break anything, they're also not removed, they just act like any normal order does.}}
+
+It should be noted that for the purpose of Routing Network, any stopover a vehicle has (a ''transit station'') is treated exactly like a ''transfer station''.
+
+Look at the following example:
+[[File:en/Community/Patches/Addroute.png|frame|center]]
+
+The first four orders don't add any route from one station to another, but they're there for some kind of realistic depot usage of the train.
+
+However, as order #5 is inserted, the routing system parses the new data and adds a new ''edge'' from Badinghead (Station <0>) to Senpool(<1>). It also adds an edge for the return trip. Both edges get a cost of 105, and are shown in the minimap.
+
+The route is added both for passengers and mail as it seems that the train can carry both types of cargo.
+
+=== Terms ===
 ''Route Network'' is the representation of stations and orders in order to make cargo go from a Station A to a Station B. Route networks are stored in graphs (not graphics, graphs in the mathematical sense!) There exists one Route Network for each cargo type.
 
 ''Vertex'' is the representation of a station in the graph. For this purpose, "Station" and "Vertex" are interchangeable. However each station is represented by one vertex per cargo type.
@@ -30,20 +56,17 @@ Support for Passenger and cargo destinations in OpenTTD exists in the new cargo 
 
 ''Terminal Station'' is the station where the cargo ultimately wishes to go to
 
-== Features ==
-
-
-Features:
+=== Features ===
 * Destinations are assigned by station size and distance
 * Destinations can be activated and deactivate in a running game
 * Independent settings for Passengers, Mail, Valuable-type cargo, and other cargo.
 * Fast
 * Network-Safe
 
-== Limitations ==
+=== Limitations ===
 * Intermediate stops are not taken into account. For local trains, you'll have to set orders to each and every station it is supposed to go to. Concepts on how to overcome this are under consideration
 
-== Items for version 2 ==
+=== Items for version 2 ===
 This is stuff which will ''not'' be in the first incarnation of cargodest, no matter how much you bug us ;)
 * Symmetric cargo generation (Passengers and Mail), i.e. the same amount of passengers go from A to B as vice versa. This requires a rewrite of the cargo generation system and is currently not within the scope of the project. It's big enough as it is
 * Adjust cargo generation to network (if you only have one power station connected, you just get less coal than when you have five)
@@ -53,34 +76,23 @@ This is stuff which will ''not'' be in the first incarnation of cargodest, no ma
 * Full handling of conditional orders
 * MAYBE: Distance dependency depends on town size
 
-== Known problems ==
+=== Known problems ===
 * The game asserts sometimes when switching from unrouted to routed cargo. This is because sometimes cargopackets get a destination that is their current position.
 
-== Missing features ==
+=== Missing features ===
 * Modification of the vehicle detail window so that is shows the origins
 * New icon for the Route Network view of the map: Suggestion: [[File:en/Community/Patches/Minimaprouting.png]] Full quality TIF here: [http://www.fvfischer.de/minimaprouting.tif]
 
-== Usage ==
-CargoDest is easy enough to use: Once it is enabled in the GUI or the configuration file (openttd.cfg in most cases), the cargo will find its routes themselves. The Routing Network is built up using the orders of the vehicles. If you have two vehicles, one which goes from A to B and another from B to C, there will be cargo that wishes to from A to C. In this case, the cargo at A will board '''''any''''' vehicle that goes to B (The ''transfer station''), leave there and then use '''''any''''' vehicle that goes to C. Any vehicle implies any vehicle going directly from A to B, vehicles with have a stopover in D (thus go A-D-B) will not be used.
 
-{{en/Note|When your vehicles have Transfer orders, they will be ignored, the cargodest system handles it automatically. Transfer orders don't break anything, they're also not removed, they just act like any normal order does}}
+=== Concept ===
 
-[[File:en/Community/Patches/Addroute.png|frame|center]]
-It should be noted that for the purpose of Routing Network, any stopover a vehicle has (a ''transit station'') is treated exactly like a ''transfer station''.
+The basic idea of the implementation was to make the whole system as little intrusive as possible. The whole cargo handling system has been moved into a new base class, and the derived classes determine whether it is "routed" or "unrouted"
 
-Nothing needs to be done to build up the routing system, see the example on the right.
+Check the doxygen documentation of the tree for more info, everything is documented in there
 
-The first four orders don't add any route from one station to another, but they're there for some kind of realistic depot usage of the train.
+== Technical details ==
 
-However, as order #5 is inserted, the routing system parses the new data and adds a new ''edge'' from Badinghead (Station <0>) to Senpool(<1>). It also adds an edge for the return trip. Both edges get a cost of 105, and are shown in the minimap.
-
-The route is added both for passengers and mail as it seems that the train can carry both types of cargo.
-
-== Windows/Unix Binary ==
-
-Available via [http://www.openttd.org/download-cargodest openttd.org/download-cargodest]
-
-== Code ==
+=== Getting the source code ===
 
 Available via [http://www.selenic.com/mercurial/wiki/ mercurial]:
 * [http://hg.openttd.org/developers/celestar/cargodest.hg/ Celestar]
@@ -90,15 +102,7 @@ So for example:
 
     hg clone http://hg.openttd.org/developers/celestar/cargodest.hg/ cargodest-celestar
 
-
-
-=== Concept ===
-
-The basic idea of the implementation was to make the whole system as little intrusive as possible. The whole cargo handling system has been moved into a new base class, and the derived classes determine whether it is "routed" or "unrouted"
-
-Check the doxygen documentation of the tree for more info, everything is documented in there
-
-== Dependencies ==
+==== Dependencies ====
 
 In addition to the normal libraries and such that OpenTTD trunk requires, you will need the development headers/libraries for [http://www.boost.org/ Boost] - specifically, the Boost Graph library. Both versions 1.34 and 1.35 should work.
 
@@ -114,14 +118,15 @@ On Mac OSX these can be installed from [http://www.macports.org/ MacPorts]:
 
 For Windows installer try [http://www.boostpro.com/products/free/ Boostpro Computing]:
 
-== Compiling ==
+==== Compiling ====
 
 The normal configure/make applies as well. Note, however, that the ./configure script currently does not support/check the boost libraries.
 
     ./configure
     make
 
-== Configuring ==
+
+=== Configuring ===
 
 A couple of new patches are available:
 
