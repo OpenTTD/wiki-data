@@ -28,15 +28,6 @@ CargoDest is easy enough to use: Once it is enabled in the GUI or the configurat
 
 {{en/Note|When your vehicles have Transfer orders, they will be ignored, the cargodest system handles it automatically. Transfer orders don't break anything, they're also not removed, they just act like any normal order does.}}
 
-Look at the following example:
-[[File:en/Community/Patches/Addroute.png|frame|center]]
-
-The first four orders don't add any route from one station to another, but they're there for some kind of realistic depot usage of the train.
-
-However, as order #5 is inserted, the routing system parses the new data and adds a new ''edge'' from Badinghead (Station <0>) to Senpool(<1>). It also adds an edge for the return trip. Both edges get a cost of 105, and are shown in the minimap.
-
-The route is added both for passengers and mail as it seems that the train can carry both types of cargo.
-
 === New Advanced Settings ===
 Some settings were added to the ''Advanced Settings'' menu to tune [[en/Community/Patches/Passenger and cargo destinations]] to your liking.
 * Enable or disable the usage destinations for passengers, mail, valuables and other cargo individually in the ''Economy'' tab.
@@ -292,6 +283,19 @@ instead, where /path/to/boost is the directory you installed the boost libraries
 The basic idea of the implementation was to make the whole system as little intrusive as possible. The whole cargo handling system has been moved into a new base class, and the derived classes determine whether it is "routed" or "unrouted"
 
 Check the doxygen documentation of the tree for more info, everything is documented in there
+
+=== Adding Routes ===
+Routes are added to the Routing Graph when the corresponding orders are inserted in a vehicle's order list.
+
+Look at the following example:
+[[File:en/Community/Patches/Addroute.png|frame|center]]
+
+The first four orders don't add any route from one station to another, but they're there for some kind of realistic depot usage of the train.
+
+However, as order #5 is inserted, the routing system parses the new data and adds a new ''edge'' from Badinghead (Station <0>) to Senpool(<1>). It also adds an edge for the return trip. Both edges get a cost of 105, and are shown in the minimap.
+
+The route is added both for passengers and mail as it seems that the train can carry both types of cargo.
+
 
 === Destination Algorithm ===
 
