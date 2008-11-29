@@ -37,19 +37,19 @@ However, as order #5 is inserted, the routing system parses the new data and add
 
 The route is added both for passengers and mail as it seems that the train can carry both types of cargo.
 
-=== New GUI ===
-Some changes were made to the user interface to help you finding out more about your routes.
-
-* The minimap got a new map overlay, see [[en/Community/Patches/Passenger and cargo destinations#minimap-route-network|Minimap Route Network]]
-* The station window has new options for displaying the waiting cargo, see [[en/Community/Patches/Passenger and cargo destinations#station-cargo-list|Station Cargo List]]
-* The vehicle detail window now shows the destination of its transported cargos under ''Total Cargo'', see [[en/Community/Patches/Passenger and cargo destinations#vehicle-cargo-list|Vehicle Cargo List]]
-
 === New Advanced Settings ===
 Some settings were added to the ''Advanced Settings'' menu to tune [[en/Community/Patches/Passenger and cargo destinations]] to your liking.
 * Enable or disable the usage destinations for passengers, mail, valuables and other cargo individually in the ''Economy'' tab.
 * Select your preferred cargo view method for the station window in the ''Interface'' tab. You can still switch between those views during the game by CTRL-clicking in the station window.
 
 More details about the new settings can be found in the [[en/Community/Patches/Passenger and cargo destinations#configuring|Configuring]] section.
+
+=== New GUI ===
+Some changes were made to the user interface to help you finding out more about your routes.
+
+* The minimap got a new map overlay, see [[en/Community/Patches/Passenger and cargo destinations#minimap-route-network|Minimap Route Network]]
+* The station window has new options for displaying the waiting cargo, see [[en/Community/Patches/Passenger and cargo destinations#station-cargo-list|Station Cargo List]]
+* The vehicle detail window now shows the destination of its transported cargos under ''Total Cargo'', see [[en/Community/Patches/Passenger and cargo destinations#vehicle-cargo-list|Vehicle Cargo List]]
 
 == Detailed description ==
 
@@ -160,20 +160,6 @@ The minimap got a new icon which shows the route network of the game.
 
 {{en/-}}
 
-=== Console ===
-
-There's a new console command called "rn" in the game, which has a number of subcommands:
-
-* These commands are used to obtain indices (cargo type and station index) we need for the other ones
-** lv: Lists all "vertices" of the routing network along with their indices (we'll need them later). You can define a filter by using "rn lv Foo". This will list only stations that start with "Foo" in their name.
-** lc: Lists all cargo types with their indices
-* These commands can be used to analyse your network:
-** le: Lists all outgoing edges of a station for a given cargotype. This needs the cargo type and the station in index form (to be obtained from 'lv' and 'lc'.
-** fr: Manually finds a route from one vertex to another. This needs one cargo type and two stations in index form
-* Debugging stuff:
-** rr: Resets the whole routing network and start from scratch. *Believe it or not, this is network safe on both server and client. You shouldn't need it anyway, it's in there for testing
-** dl: Shows the destination list. This dumps the cache that is stored for each GoodsEntry of each Station. It's only used for debugging purposes and it's output should be identical to the NextHop view of the station list. We see how many pieces of cargo go via what NextHop.
-
 === Station Cargo List ===
 
 The Station Cargo List will be one of your main tools to work with. To ease network optimization,
@@ -246,6 +232,20 @@ To see the destinations of cargo a ''Train'' is currently transporting, click on
 For other types of vehicles, this information is displayed directly in the details window.
 
 The sources of the cargo are not displayed (yet).
+
+=== Console ===
+
+There's a new console command called "rn" in the game, which has a number of subcommands:
+
+* These commands are used to obtain indices (cargo type and station index) we need for the other ones
+** lv: Lists all "vertices" of the routing network along with their indices (we'll need them later). You can define a filter by using "rn lv Foo". This will list only stations that start with "Foo" in their name.
+** lc: Lists all cargo types with their indices
+* These commands can be used to analyse your network:
+** le: Lists all outgoing edges of a station for a given cargotype. This needs the cargo type and the station in index form (to be obtained from 'lv' and 'lc'.
+** fr: Manually finds a route from one vertex to another. This needs one cargo type and two stations in index form
+* Debugging stuff:
+** rr: Resets the whole routing network and start from scratch. *Believe it or not, this is network safe on both server and client. You shouldn't need it anyway, it's in there for testing
+** dl: Shows the destination list. This dumps the cache that is stored for each GoodsEntry of each Station. It's only used for debugging purposes and it's output should be identical to the NextHop view of the station list. We see how many pieces of cargo go via what NextHop.
 
 == Technical details ==
 
