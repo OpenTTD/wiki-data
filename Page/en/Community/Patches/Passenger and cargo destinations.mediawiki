@@ -39,51 +39,6 @@ However, as order #5 is inserted, the routing system parses the new data and add
 
 The route is added both for passengers and mail as it seems that the train can carry both types of cargo.
 
-=== Terms ===
-''Route Network'' is the representation of stations and orders in order to make cargo go from a Station A to a Station B. Route networks are stored in graphs (not graphics, graphs in the mathematical sense!) There exists one Route Network for each cargo type.
-
-''Vertex'' is the representation of a station in the graph. For this purpose, "Station" and "Vertex" are interchangeable. However each station is represented by one vertex per cargo type.
-
-''Edge'' is something that connects two vertices. If any vehicle has an order that causes it to load a specific cargo type at a station P and unload the same cargo type at station Q, a directed edge connects P to Q (but not necessarily Q to P).
-
-''Routed'' cargo is any kind of cargo that has one specific destination
-
-''Unrouted'' cargo is any kind of cargo that behaves like previously (i.e. can be transported to any station that accepts it)
-
-''Transit Station'' is a station where the vehicle stops, but the cargo remains in the vehicle and moves on
-
-''Transfer Station'' is a station where the vehicle stops and the cargo deboards to continue its trip on another vehicle
-
-''Terminal Station'' is the station where the cargo ultimately wishes to go to
-
-=== Features ===
-* Destinations are assigned by station size and distance
-* Destinations can be activated and deactivate in a running game
-* Independent settings for Passengers, Mail, Valuable-type cargo, and other cargo.
-* Fast
-* Network-Safe
-
-=== Limitations ===
-* Intermediate stops are not taken into account. For local trains, you'll have to set orders to each and every station it is supposed to go to. Concepts on how to overcome this are under consideration
-
-=== Items for version 2 ===
-This is stuff which will ''not'' be in the first incarnation of cargodest, no matter how much you bug us ;)
-* Symmetric cargo generation (Passengers and Mail), i.e. the same amount of passengers go from A to B as vice versa. This requires a rewrite of the cargo generation system and is currently not within the scope of the project. It's big enough as it is
-* Adjust cargo generation to network (if you only have one power station connected, you just get less coal than when you have five)
-* Distinguish between a transit and transfer station, so that cargo prefers to stay in the vehicle
-** Preview finished, test phase
-* Route load balancing (don't send everything via the cheapest route)
-* Full handling of conditional orders
-* MAYBE: Distance dependency depends on town size
-
-=== Known problems ===
-* The game asserts sometimes when switching from unrouted to routed cargo. This is because sometimes cargopackets get a destination that is their current position.
-
-=== Missing features ===
-* Modification of the vehicle detail window so that is shows the origins
-* New icon for the Route Network view of the map: Suggestion: [[File:en/Community/Patches/Minimaprouting.png]] Full quality TIF here: [http://www.fvfischer.de/minimaprouting.tif]
-
-
 == Technical details ==
 
 === Obtaining the source code ===
@@ -129,6 +84,49 @@ The basic idea of the implementation was to make the whole system as little intr
 
 Check the doxygen documentation of the tree for more info, everything is documented in there
 
+=== Terms ===
+''Route Network'' is the representation of stations and orders in order to make cargo go from a Station A to a Station B. Route networks are stored in graphs (not graphics, graphs in the mathematical sense!) There exists one Route Network for each cargo type.
+
+''Vertex'' is the representation of a station in the graph. For this purpose, "Station" and "Vertex" are interchangeable. However each station is represented by one vertex per cargo type.
+
+''Edge'' is something that connects two vertices. If any vehicle has an order that causes it to load a specific cargo type at a station P and unload the same cargo type at station Q, a directed edge connects P to Q (but not necessarily Q to P).
+
+''Routed'' cargo is any kind of cargo that has one specific destination
+
+''Unrouted'' cargo is any kind of cargo that behaves like previously (i.e. can be transported to any station that accepts it)
+
+''Transit Station'' is a station where the vehicle stops, but the cargo remains in the vehicle and moves on
+
+''Transfer Station'' is a station where the vehicle stops and the cargo deboards to continue its trip on another vehicle
+
+''Terminal Station'' is the station where the cargo ultimately wishes to go to
+
+=== Features ===
+* Destinations are assigned by station size and distance
+* Destinations can be activated and deactivate in a running game
+* Independent settings for Passengers, Mail, Valuable-type cargo, and other cargo.
+* Fast
+* Network-Safe
+
+=== Limitations ===
+* Intermediate stops are not taken into account. For local trains, you'll have to set orders to each and every station it is supposed to go to. Concepts on how to overcome this are under consideration
+
+=== Items for version 2 ===
+This is stuff which will ''not'' be in the first incarnation of cargodest, no matter how much you bug us ;)
+* Symmetric cargo generation (Passengers and Mail), i.e. the same amount of passengers go from A to B as vice versa. This requires a rewrite of the cargo generation system and is currently not within the scope of the project. It's big enough as it is
+* Adjust cargo generation to network (if you only have one power station connected, you just get less coal than when you have five)
+* Distinguish between a transit and transfer station, so that cargo prefers to stay in the vehicle
+** Preview finished, test phase
+* Route load balancing (don't send everything via the cheapest route)
+* Full handling of conditional orders
+* MAYBE: Distance dependency depends on town size
+
+=== Known problems ===
+* The game asserts sometimes when switching from unrouted to routed cargo. This is because sometimes cargopackets get a destination that is their current position.
+
+=== Missing features ===
+* Modification of the vehicle detail window so that is shows the origins
+* New icon for the Route Network view of the map: Suggestion: [[File:en/Community/Patches/Minimaprouting.png]] Full quality TIF here: [http://www.fvfischer.de/minimaprouting.tif]
 
 === Configuring ===
 
