@@ -304,4 +304,30 @@ The route is added both for passengers and mail as it seems that the train can c
 
 === Routing Algorithm ===
 
-(how OpenTTD picks the route/vehicles to use)
+Cargodest uses a shorted path routing algorithm to find a route for the passengers and cargo to take. What is considered shortest is determined by the following metric:
+
+Each hop (scheduled stop) is assigned a cost which is the Manhattan distance between the stations times a vehicle type dependent penalty factor plus a stop-over penalty. The cost of the complete route is the sum of the costs of the needed stops. Only the route with the lowest cost is selected (i.e. cargo will never take the second best route). All penalties are configurable (see above).
+
+==== Example ====
+
+From a [http://www.tt-forums.net/viewtopic.php?p=735200#p735200 post in tt-forums]:
+
+<blockquote>
+But I also have a question about this:
+Suppose I have 2 cities quite far away on the map. They are connected by train via some other train stations. but there are also 2 airports that have connection with the railway stations of these 2 cities. If I have a hovercraft service from the airport to the railway station, do passengers still prefer the airport then? I'm wondering because I've read that they prefer planes over trains over buses over ships? ''(OpenTTDHooligan)''
+</blockquote>
+
+
+Train from A1 stops at A2 and then goes to airport A3, flight to B1, take ship to B2, take non stop train to B3:
+
+#A1 -> A2: 50 tiles, cost 2 * 50 = 100
+#A2 -> A3: 20 tiles, cost 2 * 20 = 40
+#A3 -> B1: 200 tiles, cost 1 * 200 = 200
+#B1 -> B2: 20 tiles, cost 4 * 20 = 80
+#B2 -> B3: 20 tiles, cost 2 * 20 = 40
+#+ 5*25 for the stop-overs = 125
+
+The total route has a cost of 100+40+200+80+40+125 = 580
+
+
+Of the possible routes between A1 and B3 that with the minimum cost is taken. So, to answer the question above, it depends on how many stations the train stops at. If it went from A1->B3 non-stop and the distance was 250 tiles the cost would be 525 and thus considered cheaper than train+train+flight+ship+train.
