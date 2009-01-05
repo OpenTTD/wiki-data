@@ -37,18 +37,51 @@ You should make sure that trains:
 * Can '''service effectively''';
 * Will '''not cause traffic jams''' by servicing.
 
+
 There are a few strategies for achieving those purposes:
-* Let the trains to service at the specified time intervals (works well in small rail networs)
-* Add a depot into the order list of trains next to the stations and waypoints (works well for high speed trains)
-* Build rails in such a way that trains are forced to enter a depot each time they pass through a station or rail (works well for slow trains but also it can be adapted for high speed trains in advanced rail networks)
 
-For example, you can position the depot at the end of a station:
-[[File:en/Manual/Depot end of station.png|none|frame|Depots at the end of station lines]]
-
-Or you can put a depot at the entrance of the station:
+1. Let the trains to service at the specified time intervals or add depots into the train's orders list. The depots can be added into the train's orders list in the same way as stations and waypoints.
 [[File:en/Manual/Depot at station entrance.png|none|frame|Depots at the entrance of a station]]
+[[File:en/Manual/Depots-basic.png|none|frame|Depots placed on tracks]]
 
-Or you might decide to create drive-through servicing depots right on the main tracks:
+2. Build rails in such a way that trains are forced to enter a depot each time they pass through a station or rail
+[[File:en/Manual/Depot end of station.png|none|frame|Depots at the end of station lines. Trains are forced to service.]]
+[[File:en/Manual/Depots-forced.png|none|frame|Depots that forces trains to service]]
+
+
+There are also other '''advanced depot configurations''' that solves some issues found into the basic configurations described above.
+
+The most common problems related to depots are:
+* Fast trains slow down when enter or exit a depot which slows down other incoming trains. This could lead to traffic jam in a crowded rail network.
+* Sharp corners often used near the depots are also slowing down trains
+* If the traffic is intense then trains can 'accumulate' into depots and stay there for long time. For example when placing a depot at the end of a station and a train enters into the depot then a new train can enter the station on the same line blocking the first train into the depot. This can continue until several trains are blocked inside.
+
+== Advanced depot configurations ==
+
+1. This configuration allows the trains to accelerate when enter/exit a depot without slowing down other trains running on the main lines:
 [[File:en/Depot on tracks.png|none|frame|Depots at both lines]]
+
+2. Often it makes sense to service a train after delivering the cargo or right before loading new cargo. This is because the income amount depends of the total time passed since the cargo was loaded and until it was delivered. So you may want to load cargo into a recently serviced train and do not send it to service again until the cargo is delivered.
+
+Example of forced service after delivering the cargo:
+[[File:en/Manual/Unload-then-service.png|none|frame|Trains are forced to service right after delivering the cargo]]
+Other advantages for this configuration:
+* Needs minimal space
+* The fast and long trains are slowed down only once for both servicing and passing through the station.
+* Avoids sharp turns by using the 'depot trick' (this is considered bad by some players because it looks ugly and it is not realistic)
+
+
+3. Right-of-way depots
+
+Trains exiting depots move much slower than trains traveling on the main lines.  With [[en/Manual/Signals]], you can make trains exiting the depot wait for trains on the main line to pass.  It is a good idea to understand pre-signals if you want to understand HOW and WHY this works.
+
+This layout creates a pre-signal chain running backwards along your track.  In the picture, a train on the main line has made the gray exit pre-signal red.  The red exit pre-signal communicates to the combo pre-signals, and turn them red.  The entry pre-signal is red because its only exit pre-signal is red.
+
+[[File:en/Manual/Right-of-way depot.png|none|frame|Right-of-way depot. The train from main line has the priority over the trains exiting the depot]]
+
+
+4. Split in 2 ore more rails before servicing is useful if the traffic is high. The trains slows down when entering depots so a queue of trains may appear before a depot. If the trains are directed to 2 depots using [[en/Manual/Signals]] then 2 trains can be serviced in the same time allowing a high traffic on that line.
+
+[[File:en/Manual/Split-before-servicing.png|none|frame|This does not affect the average speed on the main rail.]]
 
 [[Category:en/Manual/Construction]]
