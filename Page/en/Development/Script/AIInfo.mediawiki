@@ -49,7 +49,73 @@ It is possible to allow users to change settings in your AI. The only requiremen
 
 The new lines of course are those about Settings. In SetSetting it is important to define all properties. If not, an error will be given. Now in the GUI on your AI there will be an option to alter NameOfSetting between the values of 0 and 10, or a preset value if your have a difficulty setting different than 'Custom'.
 
-The flags parameter can be set to AICONFIG_BOOLEAN to make the setting a boolean choice.
+Available parameters for AddSetting:
+{|
+|-
+! Name
+! Type
+! Required
+! Description
+|-
+| name
+| string
+| yes
+| The name of the setting which you reference in your AI in this.GetSetting(name) (member of AIController). The characters ',' and '=' are not allowed.
+|-
+| description
+| string
+| yes
+| A description of what the setting does. Visible for the user in the AI Settings window.
+|-
+| min_value
+| integer
+| Only if flags doesn't contain AICONFIG_RANDOM.
+| The minimum value of the setting
+|-
+| max_value
+| integer
+| Only if flags doesn't contain AICONFIG_RANDOM.
+| The maximum value of the setting.
+|-
+| easy_value
+| integer
+| yes
+| The default value on the easy difficulty level.
+|-
+| medium_value
+| integer
+| yes
+| The default value on the medium difficulty level.
+|-
+| hard_value
+| integer
+| yes
+| The default value on the hard difficulty level.
+|-
+| custom_value
+| integer
+| yes
+| The default value on the custom difficulty level.
+|-
+| random_deviation
+| integer
+| no, forbidden if flags contain AICONFIG_RANDOM
+| When the game is started, the value for the setting will be randomized between user_specified_value - random_deviation and user_specified_value + random_deviation. 
+|-
+| step_size
+| integer
+| no
+| The amount the value is changed for every time the user clicks one of the buttons.
+|-
+| flags
+| bitset
+| yes
+| You can specify the following flags (combine via the binary or operator): AICONFIG_RANDOM and AICONFIG_BOOLEAN. See below for a description about what they do.
+|}
+
+The flags parameter can be set to AICONFIG_BOOLEAN to make the setting a boolean choice. If you do so, don't specify min_value or max_value. All of easy_value, medium_value, hard_value and custom_value should be either 0 or 1 (not false/true).
+Flags can also be set to AICONFIG_RANDOM. If you do so and the users doesn't explicitly set the value, it'll get a random value between min_value and max_value.
+It's possible to combine AICONFIG_BOOLEAN and AICONFIG_RANDOM by using: flags = AICONFIG_BOOLEAN | AICONFIG_RANDOM
 
 Now inside your AI you can request the value of this setting, by doing:
 
