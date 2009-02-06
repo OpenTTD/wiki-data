@@ -41,6 +41,7 @@ It is possible to allow users to change settings in your AI. The only requiremen
    }
    function GetSettings() {
      AddSetting({name = "NameOfSetting", description = "Description of setting", min_value = 0, max_value = 10, easy_value = 10, medium_value = 5, hard_value = 0, custom_value = 5, flags = 0});
+     AddLabels("NameOfSetting", {_0 = "It's off now", _10 = "Maximum"});
    }
  }
  
@@ -116,6 +117,8 @@ Available parameters for AddSetting:
 The flags parameter can be set to AICONFIG_BOOLEAN to make the setting a boolean choice. If you do so, don't specify min_value or max_value. All of easy_value, medium_value, hard_value and custom_value should be either 0 or 1 (not false/true).
 Flags can also be set to AICONFIG_RANDOM. If you do so and the users doesn't explicitly set the value, it'll get a random value between min_value and max_value.
 It's possible to combine AICONFIG_BOOLEAN and AICONFIG_RANDOM by using: flags = AICONFIG_BOOLEAN | AICONFIG_RANDOM
+
+AddLabels accepts two parameters, first is the name of the setting to define labels for, and second a table with a mapping from values to labels. As identifiers can't start with a digit, the first character is ignored (the underscore in the example). The rest of the identifier should be a number you want to define a label for. In case you don't define a label, the number is shown as number. Those labels are only for the users, in your AI you'll still get the numerical values if you use GetSetting().
 
 Now inside your AI you can request the value of this setting, by doing:
 
