@@ -26,3 +26,17 @@ Here is a list of suggestions to extend/change the AI API before it becomes stab
 
 * Support for distant-join is missing. Though not very important, it might be a test-case for how to add new aspects to existing API functions in a nice way without breaking the existing AIs. --Frosch 17:59, 27 January 2009 (UTC)
 *: Patch here: http://devs.openttd.org/~Yexo/ai_api/distant_join.diff
+
+=== Remove non-reasonable usage of booleans ===
+By either splitting functions into multiple functions, or by turning them into enums. This also increases future-extensibility.
+
+* AIMarine::BuildWaterDepot: Unification with other depot functions. --Frosch 16:13, 14 February 2009 (UTC)
+*: Patch here: http://devs.openttd.org/~frosch/diffs/api_uses_bool_parameters_shipdepot.diff
+
+* AIRoad::BuildRoadStation: Turn 'truck' into enum. Add separate function for drive-through-stops. --Frosch 16:13, 14 February 2009 (UTC)
+*: Patch here: http://devs.openttd.org/~frosch/diffs/api_uses_bool_parameters_roadstation.diff
+*: Note: Regression is done, so it does not fail. But the comments do not fit anymore.
+
+* AIVehicle:MoveWagon, SellWagon: Add separate functions to move chains of wagons starting from a certain wagon. --Frosch 16:13, 14 February 2009 (UTC)
+*: Patch here: http://devs.openttd.org/~frosch/diffs/api_uses_bool_parameters_wagonchain.diff
+*: Note: Regression is done, so it does not fail. But the comments do not fit anymore.
