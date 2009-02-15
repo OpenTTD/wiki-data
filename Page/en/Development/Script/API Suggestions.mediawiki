@@ -3,64 +3,8 @@
 
 Here is a list of suggestions to extend/change the AI API before it becomes stable. The goal is to improve sustainability and to reduce the chance of needing to break the API in the future.
 
-=== Industries ===
-
-* Usage of IndustrySpec should be minimised, as all of its members are potential candidates to vary between industries of the same type.
-*: For AIIndustryType::GetProducedCargo and AIIndustryType::GetAcceptedCargo this is already the case. (See warning in API)
-*: Those functions could be moved/copied to AIIndustry in addition to IsCargoAccepted. --Frosch 14:12, 24 January 2009 (UTC)
-*:: They are already available, but as seperate classes: AICargoList_IndustryAccepting and AICargoList_IndustryProducing. Yexo 00:30, 5 February 2009 (UTC)
-
-* AIIndustry::GetProduction is not very useful. (See warning in API) --Frosch 14:12, 24 January 2009 (UTC)
-*: Patch here: http://devs.openttd.org/~yexo/ai_api/remove_industry_getproduction.diff Yexo 01:19, 5 February 2009 (UTC)
-
-* AIIndustry::HasHeliportAndDock and AIIndustry::GetHeliportAndDockLocation might need splitting into separate functions for docks and heliport, as industries might restrict their availability. Also theoretically multiple stations per industry are already possible though unlikely used. --Frosch 14:12, 24 January 2009 (UTC)
-*: Patch here: http://devs.openttd.org/~yexo/ai_api/split_hasheliportanddock.diff Yexo 01:19, 5 February 2009 (UTC)
-
 === Vehicles ===
 
 * AIOrder needs to be extended so conditional orders become available for AIs. Yexo 20:41, 26 January 2009 (UTC)
 
 * Support for timetables. Yexo 21:38, 6 February 2009 (UTC)
-
-* AIEventVehicleCrashed::CloneCrashedVehicle was never implemented. It is also troublesome, as it is currently not possible to detect, whether the crashed vehicle is still alive and can be cloned, or whether the vehicle id has already been reused.
-*: And as the AI can execute a Clone- and a Start-Command itself, there is no reason to keep it.
-*: Patch here: http://devs.openttd.org/~frosch/diffs/remove_CloneCrashedVehicle.diff
-
-=== Stations ===
-
-* Support for distant-join is missing. Though not very important, it might be a test-case for how to add new aspects to existing API functions in a nice way without breaking the existing AIs. --Frosch 17:59, 27 January 2009 (UTC)
-*: Patch here: http://devs.openttd.org/~yexo/ai_api/distant_join2.diff
-
-=== Companies ===
-
-* Remove the long-obsolete functions AICompany::GetCompanyName and AICompany::SetCompanyName. They've been replace with AICompany::GetName and AICompany::SetName
-*: Patch here: http://devs.openttd.org/~yexo/ai_api/remove_aicompany_setcompanyname.diff
-
-=== Airports ===
-
-* Replace IsValidAirportType with the current behaviour of AirportAvailable and remove the latter.
-*: Patch here: http://devs.openttd.org/~yexo/ai_api/airport_available.diff
-
-=== Bridges ===
-
-* Remove GetYearAvailable and make IsValidBridge only return true if the bridgetype is available.
-*: Patch here: http://devs.openttd.org/~yexo/ai_api/valid_bridge.diff
-
-=== Towns ===
-
-* Remove AITown::GetMaxTownID.
-*: Patch here: http://devs.openttd.org/~yexo/ai_api/remove_getmaxtownid.diff
-
-=== Remove non-reasonable usage of booleans ===
-By either splitting functions into multiple functions, or by turning them into enums. This also increases future-extensibility.
-
-* AIMarine::BuildWaterDepot: Unification with other depot functions. --Frosch 16:13, 14 February 2009 (UTC)
-*: Patch here: http://devs.openttd.org/~frosch/diffs/api_uses_bool_parameters_shipdepot.diff
-
-* AIRoad::BuildRoadStation: Turn 'truck' into enum. Add separate function for drive-through-stops. --Frosch 16:13, 14 February 2009 (UTC)
-*: Patch here: http://devs.openttd.org/~frosch/diffs/api_uses_bool_parameters_roadstation.diff
-*: Note: Regression is done, so it does not fail. But the comments do not fit anymore.
-
-* AIVehicle:MoveWagon, SellWagon: Add separate functions to move chains of wagons starting from a certain wagon. --Frosch 16:13, 14 February 2009 (UTC)
-*: Patch here: http://devs.openttd.org/~frosch/diffs/api_uses_bool_parameters_wagonchain.diff
-*: Note: Regression is done, so it does not fail. But the comments do not fit anymore.
