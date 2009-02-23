@@ -48,23 +48,13 @@ The event system is a simple poll system. You will need to poll the event-contro
    local e = AIEventController.GetNextEvent();
    switch (e.GetEventType()) {
      case AIEvent.AI_ET_VEHICLE_CRASHED:
-       local ec = AIEventVehicleCrash.Convert(e);
+       local ec = AIEventVehicleCrashed.Convert(e);
        local v  = ec.GetVehicleID();
        AILog.Info("We have a crashed vehicle (" + v + ")");
        /* Handle the crashed vehicle */
        break;
    }
  }
-
-Of course you might not be interested in all events. For this you can use the event-filter system. Note: all events already on the stack are untouched at all times. The filter has 2 modes: disable-all and allow several, or enable-all and disallow several. By default the latter is used. You can change this via:
-
- AIEventController.DisableAllEvents();
-
-To disable and enable a certain event, use:
-
- AIEventController.EnableEvent(AIEvent.AI_ET_VEHICLE_CRASHED);
-
-For more functions we refer to the [http://noai.openttd.org/docs/classAIEventController.html documentation].
 
 ==Now what?==
 
