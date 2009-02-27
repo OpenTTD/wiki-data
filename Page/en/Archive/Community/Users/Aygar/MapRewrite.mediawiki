@@ -1,0 +1,288 @@
+<pre>
+#include <stdio.h>
+#define MAPSIZEX 1024
+#define MAPSIZEY 1024
+
+typedef signed char int8;
+typedef unsigned char uint8;
+typedef unsigned short uint16;
+typedef unsigned long uint32;
+
+//#define PACK // uncomment at will
+
+#ifdef PACK
+#pragma pack(push, 1)
+#endif
+
+// Maybe the numbers should be changed later on but I'll dig into this later.
+enum Transport_Types {
+  // WARNING!
+  // Be sure to code as such that changing one (or more) of these numbers don't break the code!
+  TT_ROAD   = 0,
+  TT_RAIL   = 1,
+  TT_ERAIL  = 2,
+  TT_MONO   = 3,
+  TT_MAGLV  = 4,
+  TT_TRAM   = 5,
+  TT_WATER  = 14,
+  TT_AIR    = 15,
+};
+
+typedef struct Height_t {
+  uint16 altitude:4;    // height of tile
+  uint16 height_N:3;    // offset of North corner from height
+  uint16 height_E:3;    // offset of East corner from height
+  uint16 height_W:3;    // offset of West corner from height
+  uint16 height_S:3;    // offset of South corner from height
+  /* 0 unused bits */
+} Height_t; /* 16 bits */
+
+/********************** Surface Tile types ********************/
+/* just a basic ground tile */
+typedef struct Ground_t {
+  uint8 ground_type:4;  // grass, desert, rocks, snow ..
+  uint8 amount:2;       // amount of grass, desert and stuff.
+  uint8 counter:2;      // update counter
+  /* 8 unused bits */
+} Ground_t; /* 16 bits */
+
+/* underground for roads as grass, paved street, etc. Also for trams, crossings */
+typedef struct Foundation_t {
+  uint8 type:4;         // uses 3 bits now, could be more in the future
+  uint8 ground_type:4;  // backup of Ground_t.ground_type to grow back farms, etc.
+  /* 8 unused bits */
+} Foundation_t; /* 16 bits */
+
+typedef struct Water_t {
+  uint8 type:4;         // water/coast/canal
+  uint8 shores:4;       // cache for which edge is a shore/water
+  /* 8 unused bits */
+} Water_t; /* 16 bits */
+
+typedef struct Bridge_t {
+  uint8 type:4;         // type of bridge, e.g. wooden, concrete, tubular
+  uint8 part:4;         // hmm, donnu what this is supposed to be??
+  uint8 dir:3;          // direction of bridge
+  uint8 section:1;      // is it a middle part, or a "endcap"? endcaps will not be needed for cliffs maybe
+  uint8 ending:1;       // northern/southern end of bridge
+  /* 3 unused bits */
+} Bridge_t; /* 16 bits */
+
+/* Blathijs needs to detail this */
+typedef struct Support_t {
+  uint8 type;           // different types of support, also depending on year
+  uint8 reserved;       // whatever we need to put there
+  /* 0 unused bits */
+} Support_t; /* 16 bits */
+
+/* here come all things that are underground, for example tunnels,
+   underground stations and the like */
+typedef struct Underground_t {
+  uint8 type:8;         // something
+  /* 8 unused bits */
+} Underground_t; /* 16 bits */
+
+
+/********************** Build Tile types **********************/
+typedef struct Industry_t {
+  uint16 gfx;           // index into industries array
+  uint8 type;           // type of the industry (graphics)
+  uint8 animation;      // animation states of industry (6 bits, some toyland 8 bits)
+  uint8 sound:1;        // sound-effect generated
+  uint8 built:1;        // under construction
+  uint8 counter:3;      // counstruction counter
+  uint8 stage:2;        // stage of construction
+  /* 9 unused bits */
+} Industry_t; /* 48 bits */
+
+typedef struct Stop_t {
+  uint8 status;           // status of the RV stop
+  /* here we store which of the two bays is in use, if there is a vehicle driving
+     around in the stop and the like. maybe we can merge the slots in there. */
+  uint8 slotA:4;          // TTL of the first slot
+  uint8 slotB:4;          // TTL of the second stot
+  /* 0 unused bits */
+} Stop_t; /* 16 bits */
+
+typedef struct Station_t {
+  uint16 index;           // index of the station
+  uint16 gfx:12;          // type of station (graphics)
+  uint16 transport_type:4;// rail, electric rail, monorail, trams, maglev ...
+  union {
+    Stop_t stop;          // this clarifies the status of a stop (16 bits)
+    /* in case we put other things here for different station types (as identified
+       by transport_type), they should be a maximum of 16 bits in lengh */
+  } status;
+  /* 0 unused bits */
+} Station_t ; /* 48 bits */
+
+typedef struct Checkpoint_t {
+  uint16 index;           // index of the checkpoint (allowing checkpoints to spawn across tiles)
+  uint8 gfx;              // type of checkpoint (graphics)
+  uint8 dir:2;            // direction, unused for buoys
+  uint8 transport_type:4; // road/rail/water(buoys)
+  /* 18 unused bits */
+} Checkpoint_t; /* 48 bits */
+
+typedef struct Depot_t {
+  uint8 part;             // part of the depot (ship depots, large train depots .. )
+  uint8 transport_type:4; // road/rail/water
+  uint8 dir:2;            // direction (facing of opening)
+  /* 34 unused bits */
+} Depot_t; /* 48 bits */
+
+/* REAL locks sometime, we need status of the doors/lift, which will be placed here.
+   Someone just has to code the graphics and the system in the program */
+typedef struct Locks_t {
+  uint8 status;           // locks status open/closed, etc.
+  uint8 dir:2;            // direction of locks
+  uint8 type:3;           // Sea or in-land locks ???
+  uint8 part:3;           // part of the lock
+  /* 32 unused bits */
+} Locks_t; /* 48 bits */
+
+typedef struct Track_t {
+  uint8 transport_type:4; // type of transport to be used train/bus/tram, etc.
+  uint8 ground_fence:1;   // is the ground fence for this part present?
+  uint8 reserved:1;       // this part of track is reserved
+  /* signal part */
+  uint8 sig_status1:2;    // red / green / yellow / blue one way
+  uint8 sig_status2:2;    // the other way
+  uint8 sig_present:2;    // which directions are found
+  uint8 sig_type:3;       // presignals, normal signals, new types ...
+  uint8 sig_semaphore:1;  // signal or semaphores
+  /* 0 unused bits */
+} Track_t; /* 16 bits */
+
+/* All road and rail types go here */
+typedef struct Transport_t {
+  uint8 pieces;           // what bits of transport are present (8 bits for road)
+  //the "other half" is either the southern or the western part of the tile
+  uint8 second_owner;     // who owns the "other half" of a 'doubly-built' tile?
+  struct Track_t track_info[2];  // track information as layout, signal, etc. (2x16 bits)
+} Transport_t; /* 48 bits */
+
+typedef struct Lift_t {
+  uint8 pos:7;            // position of the lift
+  uint8 moving:1;         // is the lift moving or not?
+  uint8 dest:6;           // final position of lift
+  /* 2 unused bits */
+} Lift_t; /* 16 bits */
+
+typedef struct Town_t {
+  struct Lift_t lift;     // lift (16 bits)
+  uint16 index:11;        // index to which town a building belongs to
+  uint16 stage:2;         // stage of construction
+  uint16 counter:3;       // construction counter
+  uint8 gfx;              // town building type (graphics)
+  /* 8 unused bits */
+} Town_t; /* 48 bits */
+
+typedef struct Hedge_t {
+  uint8 hedge_SW:4;       // hedge-type on SW border
+  uint8 hedge_SE:4;       // hedge-type on SE border
+  uint8 hedge_NE:4;       // hedge-type on NE border
+  uint8 hedge_NW:4;       // hedge-type on NW border
+  /* 0 unused bits */
+} Hedge_t; /* 16 bits */
+
+typedef struct Trees_t {
+  uint8 type;             // type of trees
+  uint8 counter:4;        // update counter
+  uint8 count:2;          // number of trees
+  /* 2 unused bits */
+  struct Hedge_t hedge;   // type of hedge for wild-reverse (16 bits)
+  uint16 growthA:3;       // growth status of tree A
+  uint16 growthB:3;       // growth status of tree B
+  uint16 growthC:3;       // growth status of tree C
+  uint16 growthD:3;       // growth status of tree D
+  /* 4 unused bits */
+} Trees_t; /* 48 bits */
+
+typedef struct Fields_t {
+  struct Hedge_t hedge;   // type of hedge for farmfields (16 bits)
+  uint8 type:4;           // type of farm-fields
+  uint8 counter:2;        // update counter for fields
+  /* 26 unused bits */
+} Fields_t; /* 48 bits */
+
+typedef struct Unmovable_t {
+  uint8 type;             // unmoveables like transmitter, lighthouse, HQ
+  /* 40 unused bits */
+} Unmovable_t; /* 48 bits */
+
+/********************** _map Tile struct **********************/
+typedef struct Tile {
+  struct Tile *next;      // pointer to bridge/tunnel, etc. 32/64 bits arch dep.
+  Height_t height;        // altitude information
+  uint8 owner;            // owner of a tile, 255 no-owner ??
+  uint8 surface_class:3;  // class of a surface  on a tile. Directs to surface_t union
+  uint8 build_class:5;    // class of a building on a tile. Directs to build_t union
+  union {
+    Ground_t ground;          // basic ground type
+    Foundation_t foundation;  // underground for roads/trams as paved street, etc.
+    Water_t water;            // water, coast, canals
+    Bridge_t bridge;          // bridge type, section, directoin, etc.
+    Support_t support;        // Blathijs needs to detail this
+    Underground_t underground;// all underground stuff
+  } surface;  /* 16 bits */
+
+  union {
+    Industry_t industry;      // industry tiles
+    Station_t station;        // station tiles
+    Checkpoint_t checkpoint;  // checkpoint tiles
+    Depot_t depot;            // depot tiles, road/train but also ship depots
+    Locks_t locks;            // locks for canals
+    Transport_t transport;    // all kinds of roads, and rail, incl. tram
+    Town_t town;              // town (houses, offices) tiles
+    Trees_t trees;            // tree tile types
+    Fields_t fields;          // farm fields tile types
+    Unmovable_t unmovable;
+  } build; /* 48 bits */
+  /* 0 unused bits */
+} Tile; /* 128 bits */
+#ifdef PACK
+#pragma pack(pop)
+#endif
+
+Tile _map[MAPSIZEX][MAPSIZEY];
+
+int main ( void ) {
+  printf("Tile\n");
+  printf("|-- *next:          %3d\n", sizeof(_map[0][0].next)*8);
+  printf("|-- height:         %3d\n", sizeof(_map[0][0].height)*8);
+  printf("|-- owner:          %3d\n", sizeof(_map[0][0].owner)*8);
+  printf("|-- class:            8\n");
+  printf("|-- surface:        %3d\n",sizeof(_map[0][0].surface)*8);
+  printf("    |-- barren:          %3d\n",sizeof(_map[0][0].surface.ground)*8);
+  printf("    |-- foundation:      %3d\n",sizeof(_map[0][0].surface.foundation)*8);
+  printf("    |-- water:           %3d\n",sizeof(_map[0][0].surface.water)*8);
+  printf("    |-- bridge:          %3d\n",sizeof(_map[0][0].surface.bridge)*8);
+  printf("    |-- support:         %3d\n",sizeof(_map[0][0].surface.support)*8);
+  printf("    |-- underground:     %3d\n",sizeof(_map[0][0].surface.underground)*8);
+  printf("|-- build:          %3d\n",sizeof(_map[0][0].build)*8);
+  printf("    |-- industry         %3d\n",sizeof(_map[0][0].build.industry)*8);
+  printf("    |-- station          %3d\n",sizeof(_map[0][0].build.station)*8);
+  printf("    |-- checkpoint       %3d\n",sizeof(_map[0][0].build.checkpoint)*8);
+  printf("    |-- depot            %3d\n",sizeof(_map[0][0].build.depot)*8);
+  printf("    |-- locks:           %3d\n",sizeof(_map[0][0].build.locks)*8);
+  printf("    |-- transport:   %3d\n",sizeof(_map[0][0].build.transport)*8);
+  printf("        |-- trackinfo:      %3d\n",sizeof(_map[0][0].build.transport.track_info[0]) * 8);
+  printf("        |-- trackinfo:      %3d\n",sizeof(_map[0][0].build.transport.track_info[1]) * 8);
+  printf("    |-- town:            %3d\n",sizeof(_map[0][0].build.town)*8);
+  printf("        |-- lift            %3d\n",sizeof(_map[0][0].build.town.lift)*8);
+  printf("    |-- trees:           %3d\n",sizeof(_map[0][0].build.trees)*8);
+  printf("        |-- hedges          %3d\n", sizeof(_map[0][0].build.trees.hedge)*8);
+  printf("    |-- fields:          %3d\n",sizeof(_map[0][0].build.fields)*8);
+  printf("        |-- hedges          %3d\n", sizeof(_map[0][0].build.fields.hedge)*8);
+  printf("    |-- unmovable:       %3d\n\n",sizeof(_map[0][0].build.unmovable)*8);
+  printf("Tile (total size):  %3d (Mapsize %dx%d %dKB)\n",sizeof(_map[0][0])*8, MAPSIZEX, MAPSIZEY, sizeof(_map)/1024);
+  printf("Compr. (50/%3d):               %2.1f%%\n", sizeof(_map[0][0])*8, 5000.0/(sizeof(_map[0][0])*8));
+  printf("Compr. without *next(50/%3d):  %2.1f%%\n", (sizeof(_map[0][0])-sizeof(_map[0][0].next))*8, 5000.0/((sizeof(_map[0][0])-sizeof(_map[0][0].next))*8));
+  printf("--The higher value the better the compression.\n");
+  printf("Old-Tile (total):   %3.0f (Mapsize %dx%d %.0fKB)\n", 6.25*8, MAPSIZEX, MAPSIZEY, (6.25*MAPSIZEX*MAPSIZEY)/1024);
+  return 0;
+}
+</pre>
+
+[[Category:en/Archive/Map Re-write]]
