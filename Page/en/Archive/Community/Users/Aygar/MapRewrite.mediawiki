@@ -28,6 +28,10 @@ enum Transport_Types {
   TT_AIR    = 15,
 };
 
+/* This layout allow vertical walls to exist. between tiles
+ * North corner altitude = altitude*4 + height_N
+ * total altitude range 0 - 68                    
+ */
 typedef struct Height_t {
   uint16 altitude:4;    // height of tile
   uint16 height_N:3;    // offset of North corner from height
@@ -46,12 +50,14 @@ typedef struct Ground_t {
   /* 8 unused bits */
 } Ground_t; /* 16 bits */
 
-/* underground for roads as grass, paved street, etc. Also for trams, crossings */
+/* foundation tile 
+*/
 typedef struct Foundation_t {
   uint8 type:4;         // uses 3 bits now, could be more in the future
   uint8 ground_type:4;  // backup of Ground_t.ground_type to grow back farms, etc.
   /* 8 unused bits */
 } Foundation_t; /* 16 bits */
+
 
 typedef struct Water_t {
   uint8 type:4;         // water/coast/canal
