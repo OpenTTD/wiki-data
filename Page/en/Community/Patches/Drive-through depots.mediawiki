@@ -1,7 +1,32 @@
-Basic idea is to be able to drive into the back of a depot, or drive through it (at reduced speed), or whatever. More info coming when I get time to write it (this week I hope). For now, here's an early video (current code is a bit further along than this):
+Drive-through depots are effectively depots that have a door in both sides. A train or road vehicle can enter and leave from either side. This allows build of space-efficient sidings, service areas, etc.
 
-[http://www.youtube.com/watch?v=zsEpFy_RSuU Work in progress, 4 March 2009]
+== Current patch ==
 
-== Code ==
+* [http://cataclysm.cx/random/openttd/drive-through-depots.r15684.diff drive-through-depots.r15684.diff] (against r15684)
 
-Browse: http://cataclysm.cx/git/cgit.cgi?url=openttd/log/&h=drive-through-depots
+== Features ==
+
+* Enter/leave rail depots from front and back sides
+* Leaving depot triggers "leave station" codepaths, ie determine path to next order and reverse/don't reverse as necessary. If no path found or no next order, leave as we entered, just like the old depots.
+* Two trains can enter depot from opposite sides at the same time without collisions
+* Building a depot will also build junction rails on both side to join up to rails there, as required.
+
+== Todo ==
+
+* Implement features to road/tram depots
+
+To be considered:
+
+* Should it be possible for vehicles to drive through without stopping, ie treat the depot as a normal piece of road/rail?
+** Note in this case collisions from opposite sides need to be reconsidered. The depot pseudo-signal probably needs to get smarter.
+* If a vehicle can drive through without stopping, should it incur a speed penalty?
+* Are single-entry depots required anymore?
+** If you only want to use one side, just don't hook up the other side.
+** On the other hand, a front-side door to nowhere looks silly.
+** Also potential frustration with the autotrack/road stuff if you didn't want to join the depot to one side.
+* Are new graphics required?
+
+== Videos ==
+
+* [http://www.youtube.com/watch?v=EyndHZ6Bqtk 13 March 2009 (r15684)]
+* [http://www.youtube.com/watch?v=zsEpFy_RSuU 4 March 2009]
