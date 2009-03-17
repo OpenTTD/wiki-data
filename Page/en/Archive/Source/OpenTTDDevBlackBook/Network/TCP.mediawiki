@@ -165,12 +165,114 @@ The packet list is ordered is the same way than in the enum definition located i
 |}
 
 ===Packet Format===
-====Server Packets====
-{|
-|-
-|-
-|-
-|}
+====Packets Sent by Server ====
+*PACKET_SERVER_CLIENT_INFO
+**uint32 Client Id
+**uint8 Client PlayAs
+**str Client Name
+
+*PACKET_SERVER_COMPANY_INFO
+**uint8 Network Company Info Version
+**bool More Data ?
+**uint8 Company Id
+**str Company Name
+**uint32 Inaugurated Year
+**uint64 Company Value
+**uint64 Money
+**uint64 Income
+**uint16 Performance
+**bool Password Protected
+**uint16[] Number of Vehicle per Type
+**uint16[] Number of Station per Type
+**str[] Client Name List
+
+*PACKET_SERVER_ERROR
+**uint8 Error Id (''network_data.h'')
+
+*PACKET_SERVER_CHECK_NEWGRFS
+**uint8 NewGrf Count
+**For Each Grf
+**uint32 Grf ID
+**uint8[16] Grf MD5 hash
+
+*PACKET_SERVER_NEED_PASSWORD
+**uint8 Password Type
+**uint32 Generation Seed
+**str Network Id
+
+*PACKET_SERVER_WELCOME
+**uint32 Client Id
+**uint32 Generation Seed
+**str Network Id
+
+*PACKET_SERVER_WAIT
+**uint8 Client Count waiting
+
+*PACKET_SERVER_MAP
+**uint8 Packet Map Type
+***MAP_PACKET_START
+****uint32 Frame Counter
+****uint32 Map Size
+***MAP_PACKET_NORMAL
+****[] Map information
+***MAP_END
+****nothing
+
+*PACKET_SERVER_JOIN
+**uint32 Client Id
+
+*PACKET_SERVER_FRAME
+**uint32 Frame Counter
+**uint32 Frame Counter Max
+
+*PACKET_SERVER_SYNC
+**uint32 Frame Counter
+**uint32 General Seed 1
+
+*PACKET_SERVER_COMMAND
+**uint8 Company Id
+**uint32 Command Id (''command.h'')
+**uint32 p1
+**uint32 p2
+**uint32 Tile
+**str Text
+**uint8 Call Back Id (''callback_table.c'')
+**uint32 Frame Number
+
+*PACKET_SERVER_CHAT
+**uint8 Action Id (''network_date.h'')
+**uint32 Client Id
+**str Message
+**uint64 Arbitrary Data
+
+*PACKET_SERVER_ERROR_QUIT
+**uint32 Client Id
+**uint8 Error Id (''network_data.h'' - NetworkErrorCode)
+
+*PACKET_SERVER_QUIT
+**uint32 Client Id
+
+*PACKET_SERVER_SHUTDOWN
+**nohting
+
+*PACKET_SERVER_NEWGAME
+**nothing
+
+*PACKET_SERVER_RCON
+**uint16 Colour
+**str Text
+
+*PACKET_SERVER_MOVE
+**uint32 Client Id
+**uint8 Company Id
+
+*PACKET_SERVER_COMPANY_UPDATE
+**uint16 Network Company Passworded
+
+*PACKET_SERVER_CONFIG_UPDATE
+**uint8 Max Companies
+**uint8 Max Spectators
+
 ====Client Packets====
 {|
 |-
