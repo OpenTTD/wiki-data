@@ -1,0 +1,134 @@
+[[Translation:en/Archive/Community/Base graphics]]
+{{en/Nightly}}
+'''Base graphics''' are a set of graphic files that OpenTTD requires to be a game.
+
+<div style="float:right; padding-left: 10px;">__TOC__</div>
+==Available base graphics sets==
+There are two types of base graphics sets: the TTD base graphics and alternative base graphics sets. Ever since OpenTTD was created, it used Transport Tycoon's graphics. Since svn r14197 the game has the ability to load base graphics sets other than the ones from TTD.
+
+===TTD base graphics===
+The TTD base graphics set refer to the original graphics of Transport Tycoon Deluxe and comes in two flavours: the Windows and the DOS version. The Windows version obviously originates from the Windows version of TTD; the DOS version from the DOS version of TTD. It doesn't matter which operating system you're running, both versions will work regardless of their names: the TTD DOS base graphics work on a Windows system just as well as the TTD Windows base graphics work on a Mac or Linux.
+
+====original_windows====
+The ''Original Transport Tycoon Deluxe Windows edition base graphics set'' consists out of the following files:
+* trg1r.grf
+* trgcr.grf
+* trghr.grf
+* trgir.grf
+* trgtr.grf
+* openttdw.grf (distributed with OpenTTD)
+* orig_win.obg (distributed with OpenTTD)
+
+====original_dos====
+The ''Original Transport Tycoon Deluxe DOS edition base graphics set'' consists out of the following files:
+* trg1.grf
+* trgc.grf
+* trgh.grf
+* trgi.grf
+* trgt.grf
+* openttdd.grf (distributed with OpenTTD)
+* orig_dos.obg (distributed with OpenTTD)
+
+
+'''Trivia:''' The toyland grf file (trgt.grf) of the German TTD DOS CD contains one broken sprite. Therefore an extra obg-file (orig_dos_de.obg) is distributed with OpenTTD.
+
+
+===Alternative base graphics===
+As of August 31st 2008, OpenTTD can load base graphics sets other than the ones from TTD.
+
+====List of alternative base graphics====
+Currently, there's only one alternative base graphics set known that is more or less playable.
+* [[en/Archive/Community/OpenGFX Readme]]
+
+
+==Installing a base graphics set==
+Alternative base graphics sets are usually distributed as [https://www.wikipedia.org/wiki/tar (file format) tar files]. The only thing you have to do to install a base graphics set is to place it in the OpenTTD /data directory. Your OpenTTD data directory is either located in: 
+* An OpenTTD folder in your user account's home directory 
+* The OpenTTD installation directory. 
+
+
+TTD base graphics sets are not tarred. If you have one flavour of TTD base graphics set installed, there's absolutely no point in installing the other flavour of TTD base graphics set, as they will look the same.
+If you haven't installed a TTD base graphics set while installing OpenTTD and you want to install it afterwards, just copy the files listed [[#ttd-base-graphics|above]] (the ones that are not distributed with OpenTTD that is) to the OpenTTD /data directory.
+
+
+==Switching between base graphics sets==
+Only one base graphics set can be active at any time. If you have multiple base graphics sets installed, there are several ways to switch between them.
+
+===Ingame selection===
+One way to switch between base graphics sets is using the ingame feature.
+* In the main menu of the game, click the Game Options button. The Game Options dialog will appear. 
+* Select the preferred base graphics set from the drop-down list below Base graphics set (bottom left of window).
+* Close the window using the × in the upper left corner to activate your selection.
+
+===Editing the config file===
+Another way to switch between base graphics sets is to edit the config file.
+* Locate and open [[en/Archive/Manual/Settings/Openttd.cfg]] using your favourite plain text editor.
+* Locate the [misc] section and add the following (or edit the existing) line to the end of that section:
+ graphicsset = name_of_base_graphics_set
+: The name of the base graphics set is listed in it's obg-file and may or may not be identical to the obg's file name.
+* Save the changes you made and run OpenTTD.
+
+===Starting OpenTTD from the command line===
+The third way to select a certain base graphics set is starting the game from the commandline, adding a parameter option.
+ openttd -I name_of_base_graphics_set
+: The name of the base graphics set is listed in it's obg-file and may or may not be identical to the obg's file name.
+
+
+==Creating a base graphics set==
+Apart from the actual drawing and aligning of [[en/Sprites]], creating a base graphics set that can be used by OpenTTD is fairly easy. A base graphics set consist of the following files:
+* Exactly 6 .grf files;
+* Exactly 1 .obg file.
+It's useful to pack all files of a base graphics set as a tar file. This keeps all files from one base graphics set neatly together. OpenTTD can read tar files, so there's no need for the user to extract it.
+
+===The .grf files===
+* Five of the six .grf files have exactly the same format as the five .grf files from the original TTD cd, having exactly as many sprites as the TTD .grf files in exactly the same order and cannot contain any [[en/Manual/NewGRF]] actions.
+* One .grf file has the same format as openttd[w|d].grf containing all [http://wiki.ttdpatch.net/tiki-index.php?page=Action5 NewGRF Action 5]s. This file can also contain some other NewGRF actions, as long as they are static and do not change game properties (1, 5, 6, 7, 8, 9, A, C, 10, 12, possibly some static features from 0 and 2).
+
+===The .obg file===
+The .obg file is what links all .grf files together and is essentially the base of a base graphics set. The .obg file is a plain text file and has the following format (example taken from orig_win.obg):
+
+ [metadata]
+ name         = original_windows
+ shortname    = TTDW
+ version      = 0
+ description  = Original Transport Tycoon Deluxe Windows edition graphics
+ palette      = Windows
+ 
+ [files]
+ base         = TRG1R.GRF
+ logos        = TRGIR.GRF
+ arctic       = TRGCR.GRF
+ tropical     = TRGHR.GRF
+ toyland      = TRGTR.GRF
+ extra        = OPENTTDW.GRF
+ 
+ [md5s]
+ TRG1R.GRF    = b04ce593d8c5016e07473a743d7d3358
+ TRGIR.GRF    = 0c2484ff6be49fc63a83be6ab5c38f32
+ TRGCR.GRF    = 3668f410c761a050b5e7095a2b14879b
+ TRGHR.GRF    = 06bf2b7a31766f048baac2ebe43457b1
+ TRGTR.GRF    = de53650517fe661ceaa3138c6edb0eb8
+ OPENTTDW.GRF = b6689105405fa3ea34cb8a5543633d29
+ 
+ [origin]
+ default      = You can find it on your Transport Tycoon Deluxe CD-ROM.
+ OPENTTDW.GRF = This file was part of your installation.
+
+===[metadata]===
+* '''name''': The name of the base graphics set as it will be displayed ingame.
+* '''shortname''': A unique four character string, similar to the GRFID in NewGRFs.
+* '''version''': An integer value indicating the version of the base graphics set. If two sets with the same shortname are available, this interger indicated the newer version.
+* '''description''': A short description of your base graphics set.
+* '''palette''': The colour palette used for the .grf files. Can be either ''Windows'' or ''DOS''.
+
+===[files]===
+A list of the six different grf file features together with the file names of the six .grf files in the base graphics set.
+
+===[md5s]===
+A list of the exact same filenames as per [files] together with their [https://www.wikipedia.org/wiki/MD5 MD5] hashes.
+
+===[origin]===
+A list of the exact same filenames as per [files] together with an error message text that is shown if one of the .grf files from the base graphics set is missing or corrupted. You can only specify ''default'' if you want the error text to be the same for all files, and/or list each file with a specific error text.
+
+[[Category:en/Archive/Community/Base graphics]]
+[[Category:en/Manual/Settings & Preferences]]
