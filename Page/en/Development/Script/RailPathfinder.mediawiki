@@ -88,12 +88,12 @@ Suppose the pathfinder returned a path, how do start building it? For a start, i
    if (prevprev != null) {
      if (AIMap.DistanceManhattan(prev, path.GetTile()) > 1) {
        if (AITunnel.GetOtherTunnelEnd(prev) == path.GetTile()) {
-         AITunnel.BuildTunnel(AIVehicle.VEHICLE_RAIL, prev);
+         AITunnel.BuildTunnel(AIVehicle.VT_RAIL, prev);
        } else {
          local bridge_list = AIBridgeList_Length(AIMap.DistanceManhattan(path.GetTile(), prev) + 1);
          bridge_list.Valuate(AIBridge.GetMaxSpeed);
          bridge_list.Sort(AIAbstractList.SORT_BY_VALUE, false);
-         AIBridge.BuildBridge(AIVehicle.VEHICLE_RAIL, bridge_list.Begin(), prev, path.GetTile());
+         AIBridge.BuildBridge(AIVehicle.VT_RAIL, bridge_list.Begin(), prev, path.GetTile());
        }
        prevprev = prev;
        prev = path.GetTile();
