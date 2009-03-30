@@ -36,24 +36,34 @@ This article gets you started on compiling OpenTTD using Microsoft Visual C++ 20
 
 =Copying from OpenTTD needed includes and libraries=
 ===openttd_useful.zip===
-:Now extract the [http://binaries.openttd.org/extra/openttd-useful/ Openttd-useful.zip] file and copy:
-:* The contents of the <code>include</code> folder to <code>C:\Program Files\Microsoft Visual Studio 9.0\VC\include\</code>.
-:* The contents of the <code>library</code> folder to <code>C:\Program Files\Microsoft Visual Studio 9.0\VC\lib\</code>.
+:*Extract the [http://binaries.openttd.org/extra/openttd-useful/ Openttd-useful.zip] file and copy the content to some <code><personal folder></code>.
+:*Now you need to tell Visual C++ where the files are located. Navigate to ''Tools > Options > Projects and Solutions > VC++ Directories'':<br />
+:**Select Platform '''Win32''' (Be sure that all your entries are '''before''' any SDK folder!):
+:***Select '''Include Files''', press the new folder button and add the folder <code><personal folder>\shared\include</code> to the list.
+:***Select '''Library Files''', press the new folder button and add the folder <code><personal folder>\win32\library</code> to the list.
+:**Select Platform '''x64''' (Skip if it isn't available! Again be sure that all your entries are '''before''' any SDK folder!) :
+:***Select '''Include Files''', press the new folder button and add the folder <code><personal folder>\shared\include</code> to the list.
+:***Select '''Library Files''', press the new folder button and add the folder <code><personal folder>\win64\library</code> to the list.<br />
+
+:Don't forget to replace <code><personal folder></code> with the folder where you extracted openttd-useful.zip.
 
 ===Microsoft® DirectX SDK - August 2007===
 : '''Information''': The DirectX SDK from November 2007 is the first one which supports Microsoft® Visual Studio 2008. But it's also the first version which doesn't support DirectMusic which is needed to compile OpenTTD. That is why we must copy the missing files from an older version, preferably the final one for DirectMusic: 'August 2007'.
 :* Extract ('''no double-click, do not install''') <code>dxsdk_aug2007.exe</code> in an extra directory and you get a file called <code>dxsdk_aug2007.exe</code> (yes that's right, both files have the same name).
 :* Extract the second <code>dxsdk_aug2007.exe</code> in an extra directory.
-:* Now copy following 9 files from <code>.\dxsdk_aug2007\dxsdk_aug2007\Include\</code> to <code>C:\Program Files\Microsoft DirectX SDK (November 2007)\Include</code> ('''note''': Please update the paths as necessary):
-:** dls1.h
-:** dmdls.h
-:** dmerror.h
-:** dmksctrl.h
-:** dmplugin.h
-:** dmusbuff.h
-:** dmusicc.h
-:** dmusicf.h
-:** dmusici.h
+:* Now copy following 9 files from <code>.\dxsdk_aug2007\dxsdk_aug2007\include\</code> to <code><personal folder>\include\</code> ('''note''': Please replace <code><personal folder></code> with the folder which you added to the VC++ Directories before):
+:** <code>dls1.h</code>
+:** <code>dmdls.h</code>
+:** <code>dmerror.h</code>
+:** <code>dmksctrl.h</code>
+:** <code>dmplugin.h</code>
+:** <code>dmusbuff.h</code>
+:** <code>dmusicc.h</code>
+:** <code>dmusicf.h</code>
+:** <code>dmusici.h</code>
+:* You also have to copy 2 files from <code>.\dxsdk_aug2007\dxsdk_aug2007\lib\</code> to <code><personal folder>\library\</code> to avoid linker errors with newer dxguid.lib's without DirectMusic support:
+:** <code>\x86\dxguid.lib</code>
+:** <code>\x64\dxguid.lib</code>
 
 : '''Alternative''': If you are willing to compile without support for MIDI music you will not be needing the older DirectX SDK. To disable music, remove the WIN32_ENABLE_DIRECTMUSIC_SUPPORT preprocessor definition from the openttd project using the project properties dialog.
 
