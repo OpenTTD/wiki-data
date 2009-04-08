@@ -1,0 +1,90 @@
+[[Translation:en/Manual/Passenger and cargo distribution]]
+So this is the (n+1)th attempt to provide passengers and freight with destinations and then getting them there using the existing transport links as efficiently as possible. Further details on the problem can be found [[en/Community/Patches/Passenger and cargo destinations|here]]. However, in contrast to the cargod'''e'''st project the problems of routing cargo and balancing loads on different routes are seen as inseperable here and thus solved together. Also the definition of transportation demand is seen as precondition to solving above problems and handled first. 
+
+Patches can be found in the [http://www.tt-forums.net/viewtopic.php?f=33&t=41992&start=0 forum topic].
+
+The following significant mile stones have been identified for cargo distribution:
+
+==tracking capacities, usages and supplies==
+
+[[File:en/Cargodist-capacities.png|frame|Screenshot of smallmap with capacities]]
+
+The transport capacity of the link between station A and station B is the sum of the capacities of all vehicles arriving at B and coming from A. The usage of the link is the number of goods actually transported from A to B. The supply is the amount of cargo generated at a station. These numbers are calculated per cargo type and in order to not let them grow infinitely a moving average is taken over a configurable time. The moving average is calculated differently for supply on the one hand and capacity and usage on the other. Capacity and usage are scaled linearly when dropping below the moving average length. This helps cleaning up stale links. To compensate, capacity and usage get a boost when being increased from a small base value. Like this small but regular increases to capacities and usages don't lead to loss of links.
+
+The capacity and usage numbers are visualized in the small map, using the route graph from cargodest. The nodes, however, don't display the waiting cargo but the supply. You can configure the moving average unit and length in the economy settings. The higher you set them the longer it takes for the numbers to settle at a somewhat correct value. The lower you set them the more the numbers fluctuate with every vehicle arriving at a station. If you disable the display of town names in the smallmap the capacities and usages will be shown as little grey and white bars instead of numbers. The grey part is the usage, the white part is the unused capacity. A known problem is that the visualization is rather crude.
+
+==link graph and connected components==
+
+The nodes in the graph are partitioned into connected components. This isn't very useful on its own, but will be needed for further steps. The computation of connected components doesn't work if there are a lot of vehicles that visit a station and never come back to that station. This behaviour has been shown by certain AIs, but fixing isn't a high priority. You get a new settings page here: ''linkgraph''. Every time a connected component is calculated a copy of these settings is made for this component. These copies are saved and loaded. Later on a seperate thread will be created for the calculation of each component and the settings at the time of the creation will be carried around. Like this all settings can be changed during the game and the threading model stays network-safe. The first entry in the link graph settings is ''recalculation interval''. This is the time between subsequent recalculations of the link graph. If you increase it, it will take less CPU power. If you decrease it, the cargodist algorithm will run more often, resulting in a more accurate routing if your routes change often.
+
+==transport demand==
+
+A demand function defines how many units of cargo '''should''' be transported between certain nodes in the link graph. It doesn't say how many units of cargo are actually transported, nor how they are transported.
+Actually two such functions are needed. Certain cargos, passengers and mail mostly, require a symmetric demand function, others a roughly antisymmetric one: The symmetric function should have the following property:
+
+  for all pairs of nodes (i, j): demand(i, j) == demand(j,i)
+
+The antisymmetric one should have the following property instead:
+
+  for all pairs of nodes (i, j): demand(i, j) > 0 => demand(j, i) == 0
+
+The function to calculate the symmetric demand is defined as follows:
+
+* Loop over all possible pairs of nodes repeatedly
+* For each pair (from, to) assign ''d'' demand units in both directions, but never more than the remaining supply of either from or to, where:
+** maxDistance is the sum of the x- and y-dimensions of the map.
+** supplySum is the sum of all all supplies in the connected component to and from are in.
+** distance is the manhattan distance between the stations associated with from and to on the map.
+  d = from.supply * to.supply * (maxDistance - distance) / maxDistance / supplySum + 1 
+* decrement the supply at to and from by the amount of demand assigned.
+* stop if there is at most one node with supply > 0 left.
+
+This function has a few desirable properties:
+* The demand between two stations is symmetric.
+* The demand grows proportionally to the sizes of both stations
+* The demand decreases inversely proportial to the distance between the stations
+* There is at most one station with undeliverable supply in each component.
+
+For the antisymmetric function the algorithm is similar. Instead of looping over all pairs of stations two lists of stations are generated - supplying and accepting stations. Then a demand for each accepting station is calculated by dividing the supply sum by the number of accepting stations. Then a loop is run over all combinations of stations from different lists. The demand assigned to each pair of stations in each iteration is then:
+ d = from.supply * demandPerNode * (maxDistance - distance) / maxDistance / supplySum + 1
+And of course it is only assigned in one direction and the supply is only decremented at the supplying node.
+
+You can change which function is used for which cargo class in the link graph settings. Additionally there is an entry ''unhandled'' which will result in no demands being calculated. The calculation of the demands (as well as later parts of the algorimth) takes place per connected component and in a seperate thread for each component. The threads all work on their own data and are joined with the main thread after defined intervals for copying the results. When saving the starting state, joining time and link graph settings of each running thread are saved. Like this the threads can be started in a valid state when loading a game or joining a network game.
+
+==multi commodity flow proplem==
+
+With the demands and capacities known a [http://en.wikipedia.org/wiki/Multi_commodity_flow multi commodity flow] problem is defined. To solve it [http://www.cs.princeton.edu/~gk/papers/mincostflow.ps this algorithm] is used. It seems to be state of the art. You get another link graph setting for the desired accuracy of the solution. The more accurate you want the solution the heavier the toll on your CPU. 
+
+==flow mapping==
+
+The solution of the multi commodity flow problem is a set of flows along the edges of the link graph. These flows have to be translated into assignments of goods to vehicles. In order to do that at each node a flow mapping is created. An example for a flow mapping could be:
+
+For 15 cargo arriving at A from SOURCE do:
+* deliver 5 to this station.
+* send 7 to C
+* send 3 to D
+
+The actual numbers are deduced from the supplies and the relative sizes of the different flows passing a node. In addition to those ''planned'' flows, the ''real'' flows are tracked. In the example above the amount of cargo originating from SOURCE that has been sent to C or D or consumed locally is tracked as ''real'' flow. When a new cargo packet from SOURCE shows up it is sent to the destination with the greatest difference between real and planned flow. Like this it is not necessary to determine the destination for each cargo entity in advance. Only the flow mappings for each node need to be known in order to route cargo. It is also never necessary to split packets for cargodist reasons. For the real flows again a moving average is taken, like for the capacities and usages.
+
+Unfortunately for this milestone much more code needs to be written than for the others. This is mainly because the vehicle loading code needs to be cleaned up, which is quite an extensive task. Considering that,  the task has been split into three smaller parts for which distinct patches are provided:
+
+===Core functionality===
+Here the assignment of flow is calculated for each station from the path forest the MCF algorithm returns. This is rather easy. Simply scale all paths by the supply of the origin station and insert them into a clever data structure that retrieves the most underprovisioned flow in constant time.
+
+===Vehicle loading===
+This part includes loading and unloading vehicles according to the flows calculated above. It was unavoidable to rewrite much of the vehicle loading code, so there might still be bugs in it. Yet, this solution is easier to read, reuse and debug than the previous one, so the rewrite should pay for itself eventually.
+
+A cargo packet unloaded at a station selects its next hop according to the flow for its origin saved at the station. When a vehicle loads at a station it will only take cargo wanting to go to the next station in its order list where it can unload cargo. This means some conditional orders and implicit orders (non-nonstop) won't work with this patch. Switch the demand function to ''unhandled'' for those cargos.
+
+Cargo not handled by cargodist or wanting to go over a nonexistant link is routed traditionally. The latter case is detected when deleting link statistics.
+
+===GUI===
+
+[[File:en/Manual/Cargodist-station.png|frame|Screenshot of station GUI]]
+
+The station GUI shows the sources and next hops of the cargo waiting as well as those of the planned cargo flows through this node. In future versions the final destinations will be shown and you'll be able to group and sort the entries by source station, next hop, final destination and amount of cargo.
+
+[[File:fr/Manual/Cargodist-smallmap-flow.png|frame|Screenshot of smallmap with flows]]
+In the smallmap additional bars are shown for planned and real flow over each link.
+
+--Fonsinchen 20:53, 8 April 2009 (UTC)
