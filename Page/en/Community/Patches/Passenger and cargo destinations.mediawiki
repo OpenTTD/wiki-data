@@ -309,9 +309,7 @@ The route is added both for passengers and mail as it seems that the train can c
 
 === Routing Algorithm ===
 
-Cargodest uses a shorted path routing algorithm to find a route for the passengers and cargo to take. What is considered shortest is determined by the following metric:
-
-Each hop (scheduled stop) is assigned a cost which is the Manhattan distance between the stations times a vehicle type dependent penalty factor plus a stop-over penalty. The cost of the complete route is the sum of the costs of the needed stops. Only the route with the lowest cost is selected (i.e. cargo will never take the second best route). All penalties are configurable (see above).
+Cargodest uses a [http://en.wikipedia.org/wiki/Shortest_path_problem shortest path] routing algorithm to find a route for the passengers and cargo to take. The distance between two stations is defined as the [http://en.wikipedia.org/wiki/Taxicab_geometry Manhattan distance] between them, multiplied by a (vehicle type-dependent) penalty factor, plus a stop-over penalty. The cost of the complete route is the sum of the costs of the needed stops. Only the route with the lowest cost is selected (i.e. cargo will never take the second-best route). All penalties are configurable (see above).
 
 ==== Example ====
 
@@ -333,6 +331,5 @@ Train from A1 stops at A2 and then goes to airport A3, flight to B1, take ship t
 #+ 5*25 for the stop-overs = 125
 
 The total route has a cost of 100+40+200+80+40+125 = 580
-
 
 Of the possible routes between A1 and B3 that with the minimum cost is taken. So, to answer the question above, it depends on how many stations the train stops at. If it went from A1->B3 non-stop and the distance was 250 tiles the cost would be 525 and thus considered cheaper than train+train+flight+ship+train.
