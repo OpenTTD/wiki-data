@@ -22,19 +22,21 @@ The nodes in the graph are partitioned into connected components. This isn't ver
 A demand function defines how many units of cargo '''should''' be transported between certain nodes in the link graph. It doesn't say how many units of cargo are actually transported, nor how they are transported.
 Actually two such functions are needed. Certain cargos, passengers and mail mostly, require a symmetric demand function, others a roughly antisymmetric one: The symmetric function should have the following property:
 
-  for all pairs of nodes (i, j): demand(i, j) == demand(j,i)
+  for all pairs of nodes (i, j): demand(i, j) == demand(j, i)
 
 The antisymmetric one should have the following property instead:
 
   for all pairs of nodes (i, j): demand(i, j) > 0 => demand(j, i) == 0
 
+===symmetric demand===
+
 The function to calculate the symmetric demand is defined as follows:
 
 * Loop over all possible pairs of nodes repeatedly
-* For each pair (from, to) assign ''d'' demand units in both directions, but never more than the remaining supply of either from or to, where:
-** maxDistance is the sum of the x- and y-dimensions of the map.
-** supplySum is the sum of all all supplies in the connected component to and from are in.
-** distance is the manhattan distance between the stations associated with from and to on the map.
+* For each pair ''(from, to)'' assign ''d'' demand units in both directions, but never more than the remaining supply of either ''from'' or ''to'', where:
+** ''maxDistance'' is the sum of the x- and y-dimensions of the map.
+** ''supplySum'' is the sum of all all supplies in the connected component ''to'' and ''from'' are in.
+** ''distance'' is the manhattan distance between the stations associated with ''from'' and ''to'' on the map.
   d = from.supply * to.supply * (maxDistance - distance) / maxDistance / supplySum + 1 
 * decrement the supply at to and from by the amount of demand assigned.
 * stop if there is at most one node with supply > 0 left.
@@ -45,9 +47,17 @@ This function has a few desirable properties:
 * The demand decreases inversely proportial to the distance between the stations
 * There is at most one station with undeliverable supply in each component.
 
+===antisymmetric demand===
+
 For the antisymmetric function the algorithm is similar. Instead of looping over all pairs of stations two lists of stations are generated - supplying and accepting stations. Then a demand for each accepting station is calculated by dividing the supply sum by the number of accepting stations. Then a loop is run over all combinations of stations from different lists. The demand assigned to each pair of stations in each iteration is then:
  d = from.supply * demandPerNode * (maxDistance - distance) / maxDistance / supplySum + 1
 And of course it is only assigned in one direction and the supply is only decremented at the supplying node.
+
+===acceptance-based demand===
+
+As a third option there could be a function that takes the quantity of acceptance (intentionally not called ''demand'' here) of stations into account. Implementation would be analog to the symmetric and antisymmetric demand functions, but the quantities of acceptance would need to be known. One way to determine them could be a measurement of consumed goods at the station, just like the supply is a measurement of generated goods at a station.
+
+===configuration===
 
 You can change which function is used for which cargo class in the link graph settings. Additionally there is an entry ''unhandled'' which will result in no demands being calculated. The calculation of the demands (as well as later parts of the algorimth) takes place per connected component and in a seperate thread for each component. The threads all work on their own data and are joined with the main thread after defined intervals for copying the results. When saving the starting state, joining time and link graph settings of each running thread are saved. Like this the threads can be started in a valid state when loading a game or joining a network game.
 
