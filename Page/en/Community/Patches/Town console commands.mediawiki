@@ -11,20 +11,39 @@ Usage:
 
  town &lt;identifier&gt; &lt;command&gt; [&lt;optional command parameters...&gt;]
 
-
 Command can be:
 {|
+|  ad_large      ||  Launch large advertising campaign in the town (Aliases: large_ad)
+|-
+|  ad_medium     ||  Launch medium advertising campaign in the town (Aliases: medium_ad)
+|-
+|  ad_small      ||  Launch small advertising campaign in the town (Aliases: small_ad)
+|-
+|  auth          ||  Open town authority window
+|-
+|  bribe         ||  Bribe town authority
+|-
 |  center        ||  Center main view on town location (Aliases: centre)
 |-
 |  count         ||  Count towns matching given criteria. This command will do nothing, but you'll see how many towns are matched by the identifier
 |-
-|  print         ||  Print town name on console.
+|  delete        ||  Delete the town (scenario editor only)
+|-
+|  exclusive     ||  Buy exclusive rights in town
+|-
+|  expand        ||  Expand town (scenario editor only) Parameter specifies number of repetitions (default 1)
+|-
+|  fund          ||  Fund construction of new buildings (Aliases: building)
 |-
 |  info          ||  Show town info on console. Some basic statistics like population, comnpany ratings for town, etc ... are printed to console for each matched town.
 |-
 |  open          ||  Open town window (Aliases: show)
 |-
-|  auth          ||  Open town authority window
+|  print         ||  Print town name on console.
+|-
+|  road          ||  Fund road reconstruction in town (Aliases: reconstruction)
+|-
+|  statue        ||  Build statue in town
 |}
 
 Identifier is used to specify on which industry the command will be applied.
@@ -67,17 +86,24 @@ Operators '''&lt;''', '''&gt;''', '''&lt;=''', '''&gt;=''' and '''&lt;&gt;''' ca
 | '''unwanted='''[value] ||  for matching months you are unwanted in town due to bribe
 |}
 
+You can specify multiple match conditions before the command.
+If you use more than one match conditoion, you have to separate them by 'and' or '&' parameter. Number of match conditions is not limited.
+
 === Some useful examples ===
 
 {|
-| ''' town noise>=25 print        || List towns where I can build intercontinental airport
+| ''' town noise&gt;=25 print        || List towns where I can build intercontinental airport
 |-
-| ''' town other_exclusive>0 auth || Open town authority window for towns where someone else have exclusive rights
+| ''' town population&gt;3000 and rating&gt;600 print || List towns over 3000 people where you have good rating
 |-
-| ''' town other_exclusive<2 auth || Open town authority window for towns where your exclusive rights are almost over (last month remaining)
+| ''' town population&lt;300 delete || Delete small towns (in scenario editor)
+|-
+| ''' town other_exclusive&gt;0 auth || Open town authority window for towns where someone else have exclusive rights
+|-
+| ''' town other_exclusive&lt;2 auth || Open town authority window for towns where your exclusive rights are almost over (last month remaining)
 |}
 
-Note: This help is for version 17 of the patch.
+Note: This help is for version 18 of the patch.
 
 === See also ===
 * [[en/Community/Patches/Vehicle console commands]]
