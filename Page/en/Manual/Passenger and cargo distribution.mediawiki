@@ -63,7 +63,11 @@ You can change which function is used for which cargo class in the link graph se
 
 ==multi commodity flow proplem==
 
-With the demands and capacities known a [http://en.wikipedia.org/wiki/Multi_commodity_flow multi commodity flow] problem is defined. To solve it [http://www.cs.princeton.edu/~gk/papers/mincostflow.ps this algorithm] is used. It seems to be state of the art. You get another link graph setting for the desired accuracy of the solution. The more accurate you want the solution the heavier the toll on your CPU. 
+With the demands and capacities known a [http://en.wikipedia.org/wiki/Multi_commodity_flow multi commodity flow] problem is defined. To solve it an algorithm inspired by [http://www.cs.princeton.edu/~gk/papers/mincostflow.ps this one] is used. You get another link graph setting for the desired accuracy of the solution. The more accurate you want the solution the heavier the toll on your CPU.
+
+The algorithm repeatedly calculates the best paths from any node to any other in the component it is working on and adds to every path a flow of 1/accuracy of the unsatisfied demand between the path's source and destination nodes. It does this until there is no more unsatisfied demand or no more capacity between any nodes. The best path could either be the shortest one with capacity left or the one with the highest capacity left. The length of a path is the sum of the manhattan distances between the stations involved. At the moment the paths with the highest capacity are saturated first, but this will be made configurable in future versions. Best paths are calculated using [http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm Dijkstra's algorithm].
+
+A shortcoming of the MCF algorithm is that it stops assigning flows when there is no more capacity. This means different quantities of demand may be met for a single source node. Considering the workings of the flow mapping later on this leads to cargo being sent to a different place than determined by the demand function. In future versions the MCF solver will assign flow as long as there is demand, even if the flow over an edge surpasses its capacity.
 
 ==flow mapping==
 
