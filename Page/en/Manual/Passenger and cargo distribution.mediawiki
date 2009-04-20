@@ -96,6 +96,8 @@ A cargo packet unloaded at a station selects its next hop according to the flow 
 
 Cargo not handled by cargodist is routed traditionally. Cargo wanting to go over a nonexistant link is rerouted according to the other flows for its source station. The latter case is detected when deleting link statistics.
 
+Order modifications such as "no unloading", "unload all", "transfer", "no loading", etc generally do what they are supposed to when using cargo distribution. However, as the link graph doesn't know about orders it assumes it can use any link with a capacity. It will thus also plan cargo to be sent with those vehicles that decline loading cargo. In the same way it will plan cargo to be transferred at a station where you force cargo to be delivered. This means you artificially change the ratios between sent and planned cargo on those links, which will make the flow mapping assign even more cargo to the links you are trying to avoid. It is thus suggested to not use order modifications together with cargo distribution. This excludes "full load", which is the only order modification that doesn't have any bad effects on the flow mapping.
+
 ==GUI==
 
 [[File:en/Manual/Cargodist-station.png|frame|Screenshot of station GUI]]
