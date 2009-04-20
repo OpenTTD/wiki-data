@@ -84,12 +84,16 @@ For 15 cargo arriving at A from SOURCE do:
 
 The actual numbers are deduced from the supplies and the relative sizes of the different flows passing a node. In addition to those ''planned'' flows, the ''real'' flows are tracked. In the example above the amount of cargo originating from SOURCE that has been sent to C or D or consumed locally is tracked as ''real'' flow. When a new cargo packet from SOURCE shows up it is sent to the destination with the greatest difference between real and planned flow. Like this it is not necessary to determine the destination for each cargo entity in advance. Only the flow mappings for each node need to be known in order to route cargo. It is also never necessary to split packets for cargodist reasons. For the real flows again a moving average is taken, like for the capacities and usages.
 
+[[File:en/Manual/Cargodist-station.png|frame|Screenshot of station GUI]]
+
 Unfortunately for this milestone much more code needs to be written than for the others. This is mainly because the vehicle loading code needs to be cleaned up, which is quite an extensive task. Considering that,  the task has been split into three smaller parts for which distinct patches are provided:
 
 ===Core functionality===
+
 Here the assignment of flow is calculated for each station from the path forest the MCF algorithm returns. This is rather easy. Simply scale all paths by the supply of the origin station and insert them into a clever data structure that retrieves the most underprovisioned flow in constant time.
 
 ===Vehicle loading===
+
 This part includes loading and unloading vehicles according to the flows calculated above. It was unavoidable to rewrite much of the vehicle loading code, so there might still be bugs in it. Yet, this solution is easier to read, reuse and debug than the previous one, so the rewrite should pay for itself eventually.
 
 A cargo packet unloaded at a station selects its next hop according to the flow for its origin saved at the station. When a vehicle loads at a station it will only take cargo wanting to go to the next station in its order list where it can unload cargo. This means some conditional orders and implicit orders (non-nonstop) won't work with this patch. Switch the demand function to ''unhandled'' for those cargos.
@@ -100,11 +104,9 @@ Order modifications such as "no unloading", "unload all", "transfer", "no loadin
 
 ==GUI==
 
-[[File:en/Manual/Cargodist-station.png|frame|Screenshot of station GUI]]
+[[File:fr/Manual/Cargodist-smallmap-flow.png|frame|Screenshot of smallmap with flows]]
 
 The station GUI shows the sources, next hops and estimated destinations of the cargo waiting as well as those of the planned and sent cargo flows through this node. Final destinations are estimated according to the flows saved at each station. Don't expect each packet of cargo to go exactly that way, though. As explained above, packets are always routed without splitting them, so the numbers given in the station GUI are always a little incorrect, but in the long run everything is still sent to their proper destinations. You can group the cargo by source station, next hop and destination in any order. Also you can sort within the groups by the property you group by (''station'') or the amount of cargo displayed (''amount''). Groups can be opened and collapsed by clicking on the respective lines in the cargo display.
-
-[[File:fr/Manual/Cargodist-smallmap-flow.png|frame|Screenshot of smallmap with flows]]
 
 In the smallmap the planned and real flow over each link are shown. The planned flow is shown in red, the real flow in yellow. Also, instead of bars (as with the capacities patch) overlapping rectangles are shown. With bars scaling quickly becomes a problem if you want to show many widely different values. Rectangles scale in two directions and thus provide more space for showing differences. The area of the rectangles represents the amount of cargo. The white and grey rectangles represent capacity and usage of the link, like above. The red one is the planned flow through the link and the yellow one the amount of cargo already sent along that flow. The difference between the yellow and grey rectangle represents the amount of cargo which has been assigned the remote end of the link as next hop, but hasn't arrived there yet. If the grey rectangle is considerably larger than the yellow one, cargo has been sent along the link unexpectedly. This can happen if there are problems predicting the flow of cargo due to order modifications.
 
