@@ -12,19 +12,19 @@ Rule 1 of good network design: trains on the network ''never'' slow down
 Let's consider the various factors.
 
 
-==Signal distance==
+==Signal distance (SD)==
 
 [[File:en/Community/Pat Fig1.png|frame|right|Figure 1, Minimum train gap of five from a signal distance of 4]]
-This is a fairly obvious one. Widely-spaced signals will result in a lower carrying capacity. With a signal distance of one signal every N tiles, the '''Minimum Gap''' between two full-speed trains can never be less than N+1 (Figure 1). When trains are this close together, you have reached the theoretical maximum train density. In practice, as we shall see, reaching this density is nigh-on impossible. 
+This is a fairly obvious one. Widely-spaced signals will result in a lower carrying capacity. With an '''SD''' of one signal every N tiles, the '''Minimum Gap''' between two full-speed trains can never be less than N+1 (Figure 1). When trains are this close together, you have reached the theoretical maximum train density. In practice, as we shall see, reaching this density is nigh-on impossible. 
 
 
 ===So what signal distance should I use?===
 
 * Two tiles
-One signal every two tiles gives a '''Minimum Gap''' of 3, and is the optimal practical solution. 
+a signal distance of two gives a '''Minimum Gap''' of 3, and is the optimal practical solution. 
 
 *One tile
-A one-tile signal gap is fraught with problems. Even a track split causes a signalling gap and reduced capacity. It would be possible to join angled rails with a signal gap of 1, but this would result in a considerable increase in build complexity.
+A signal distance of one is fraught with problems. Even a track split causes a signalling gap and reduced capacity. It would be possible to join angled rails with a signal gap of 1, but this would result in a considerable increase in build complexity.
 
 * Half tile
 Angled track is capable of double density signals. This may be of theoretical interest, or for shaving a few millimeters off a near-miss situation.
@@ -32,5 +32,24 @@ Angled track is capable of double density signals. This may be of theoretical in
 [[File:en/Community/Pat Fig2.png|frame|right|Figure 2, A signalling gap spells disaster!]]
 Whatever signal distance you choose, one important consideration is consistency. The capacity of a track is determined by whichever individual signal gap is the largest. Thus, a track with one signal every two tiles, that has an anomalous one-off gap of three or four tiles, will suffer from greatly diminished capacity and can potentially violate rule 1 (Figure 2)
 
+
 ==Train length==
-This is a double-edged sword. A longer train will increase the likelihood of incurring a realistic acceleration penalty, which violates rule 1. However, a longer train length increases the Theoretical Maximum Cargo Capacity of your network.
+
+This is a double-edged sword. A longer train will increase the likelihood of incurring a realistic acceleration penalty, which violates rule 1. However, a longer train length increases the Theoretical Maximum Cargo Capacity of your network. Note that when using engines that have a front and rear sections, the additional 1/2 tile taken up makes shorter train lengths less favourable. 
+
+The train length ('''TL''') and the signal distance ('''SD''') together determine the maximum possible track coverage, which is given by '''TL''' / ('''N''' + '''SD''' + 1)
+For 4-tile trains on a signal distance of 2 ( a common set of parameters ) then the maximum possible track coverage is 57%.
+
+
+==Quantifying carrying capacity==
+
+Ok, this is where it gets interesting.
+Your network will carry a certain number of trains on it, and assuming you have a standardised train length, we can define some metrics. The '''Train Density (TD)''' is given in units of trains per track per thousand tiles, and can be calculated by counting the number of trains on a single track and dividing by the length of the track. 
+Alternatively, you could estimate the total number of trains in transit by subtracting the number of waiting trains from your total train count, and then dividing by your network length. 
+Typical values for an unoptimised network of 4-tile trains are a '''TD''' of 25 trains per track per 1000 tiles, giving a track coverage of 10%. 
+Track coverage can be simply calculated from the '''TC''' by 
+
+Now, because train length alters the carrying capacity of a line, comparing train densities across different train lengths is meaningless. We therefore define a new metric, the '''Carrying Capacity'''. This is given by the Train density, multiplied by the speed in miles/h and divided by the number of cargo wagons, and it will be directly proportional to the amount of cargo your line can carry (independant of cargo type). 
+The aforementioned network with a TD of 26, had 4-tile chimeras (top speed 400mph, and 6 cargo wagons) giving a CC of 1730 (to 3 significant figures)
+
+As a challenge, this scientist has constructed a network with a TD of 62 and a CC of
