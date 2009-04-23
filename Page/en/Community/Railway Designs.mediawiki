@@ -1,0 +1,76 @@
+[[Translation:en/Community/Railway Designs]]
+=Carrying capacity of your network=
+
+
+So you've built a network, and you can gaze at it, get a feel for how much your junctions are jamming, but I've seen no attempt at a rigorous treatment of network capacity so far.
+
+Rule 1 of good network design: trains on the network ''never'' slow down
+
+Let's consider the various factors.
+
+
+==Signal distance (SD)==
+
+[[File:en/Community/Pat Fig1.png|frame|right|Figure 1, Minimum train gap of five from a signal distance of 4]]
+This is a fairly obvious one. Widely-spaced signals will result in a lower carrying capacity. With an '''SD''' of one signal every N tiles, the minimum gap between two full-speed trains can never be less than N+1 (Figure 1). When trains are this close together, you have reached the theoretical maximum train density. In practice, as we shall see, reaching this density is nigh-on impossible. 
+
+===So what signal distance should I use?===
+
+* Two tiles
+An '''SD''' of two gives a minimum gap of 3, and is the optimal practical solution. 
+
+*One tile
+An '''SD''' of one is fraught with problems. Even a track split causes a signalling gap and reduced capacity. It would be possible to join angled rails with a signal gap of 1, but this would result in a considerable increase in build complexity.
+
+* Half tile
+Angled track is capable of double density signals. This may be of theoretical interest, or for shaving a few millimeters off a near-miss situation.
+
+[[File:en/Community/Pat Fig2.png|frame|right|Figure 2, A signalling gap spells disaster!]]
+Whatever '''SD'''  you choose, one important consideration is consistency. The capacity of a track is determined by whichever individual signal gap is the largest. Thus, a track with one signal every two tiles, that has an anomalous one-off gap of three or four tiles, will suffer from greatly diminished capacity and can potentially violate rule 1 (Figure 2)
+
+
+==Train length (TL)==
+
+
+This is a double-edged sword. A longer train will increase the likelihood of incurring a realistic acceleration penalty, which violates rule 1. However, a longer train length increases the maximum cargo capacity of your network. Note that when using engines that have a front and rear sections, the additional 1/2 tile taken up makes shorter train lengths even less favourable. 
+
+Typical values of three to five tiles are normal, with four being a particular favourite for high-speed networks.
+
+
+==Quantifying carrying capacity==
+
+===Train Density (TD)===
+
+Your network will carry a certain number of trains on it, and assuming you have a standardised train length, we can define some metrics. The '''Train Density (TD)''' is given in units of trains per track per thousand tiles, and can be calculated by counting the number of trains on a single track and dividing by the length of the track. 
+
+Typical measured values for an unoptimised network of 4-tile trains are a '''TD''' of 25 trains per track per 1000 tiles.
+
+The maximum '''TD''' before traffic jams become self-propogating can be measured by permitting a queue of trains to accelerate from a halt and then measuring the train-train distance when both trains have reached full speed, and using the formula 
+
+'''1000 / (TL + train gap)'''
+
+For example, a fully-laden 4-tile chimera (top-end maglev) was found to have a train-train distance of 12, giving critical density of 1000/16 or 62.5 (track usage of 25%)
+
+Because this critical density incorporates information about acceleration and time to reach top speed, it can also tell you about the practical capacity of your network. For example, using trains with a lower top speed actually makes it easier to have a dense network. The average train-train gap is much smaller for rail than for monorail or maglev. Repeating the previous example but using the electric rail T.I.M gives a train-train distance of only 6, giving a critical density of 100. Slow doesn't mean better, however, as the reduced line density will be more than compensated for by quick turnaround times.
+
+It is possible to run a network at higher than the critical density, but it takes balls.
+
+===Theoretical Maximum Train Density===
+
+Simply put, this is the train density if your network is entirely filled with trains at the minimum distance between each other. You will never reach this.
+
+This is given by ''' 1000 / (TL + SD + 1) '''
+
+For example, 4-tile trains and a signal distance of 2 will give a theoretical maximum train density of 140.
+
+
+==Carrying Capacity (CC)==
+
+
+Since '''TL''' alters the carrying capacity of a line, comparing '''TD''' across different '''TL''' is meaningless. We therefore need a new metric, which will be a measure of how many units of cargo your network can transport per year. It will be directly proportional to the average quantity of cargo per track tile, and also to how fast this cargo is moving.
+
+TODO
+
+===Making your network more efficient===
+
+Ok, so now that we've defined the parameters that we had already intuitively understood, how can we use them to improve our networks?
