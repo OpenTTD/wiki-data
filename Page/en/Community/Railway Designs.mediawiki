@@ -73,8 +73,15 @@ Since '''TL''' alters the carrying capacity of a line, comparing '''TD''' across
 
 Work on this unit is pending.
 
-===Making your network more efficient===
 
-Ok, so now that we've defined the parameters that we had already intuitively understood, how can we use them to improve our networks?
+=Making your network more efficient=
 
-TODO: write an openttd wiki section on priority merges, similar to the openttdcoop section but they have some design flaws and Pitt2 has developed an improved terminal merger
+Ok, so now that we've defined the parameters that we had already intuitively understood, how can we use them to improve our networks? The golden rule of network optimisation is that trains on the network never slow down. There are two possible parts of a network where this could happen, splits and merges.
+
+==Splits==
+For a track split, one must ensure that there is not a longer-than-normal signalling gap at the split point. This can be taken care of by careful or over-abundant signalling.
+
+==Merges==
+Merges present us with a unique problem. For a trivial merge, trains on the mainline could potentially be stopped by a sideline train. There is already a body of work on [http://www.openttdcoop.org/wiki/Priorities Priorities] by our colleagues in the cooperative circuit, however these designs usually call for a cumbersome pre-acceleration and/or tweaking.
+
+Consider a typical merge situation, at the exit of a pickup station. A tightly-packed optimised stream of trains enters the station, but because of differences in loading times, this order is disrupted on the station exit, and you end up with two tracks of loosely-packed trains. Simply connecting the two lines together will not work. Note that, because trains that drop off cargo always spend the same length of time at a platform, it is possible to dematerialise and reassemble a tightly packed stream of trains, even one above the critical density [[File:en/Community/Diamond Stream.png|as shown here.]]
