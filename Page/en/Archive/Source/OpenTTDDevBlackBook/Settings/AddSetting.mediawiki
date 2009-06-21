@@ -4,26 +4,24 @@
 This is a guide on creating patch settings that the user can manipulate and saving them into the config file. This article does '''not''' cover creating a new window.
 
 ==About save games==
-The savegame holds the map and the data needed to continue a game. Which variables are saved are controlled by data CHUNKs, usually defined at the end of the appropriate file. EG. for vehicles, see the end of vehicles.c.
+The savegame holds the map and the data needed to continue a game. Which variables are saved are controlled by data CHUNKs, usually defined in files under the saveload folder.
 
-The game settings are saved in chunks defined in settings.c. These themselves are split into categories of data - _music_settings, _win32_settings, _network_settings, _misc_settings, _gameopt_settings, and the one most useful to patch writers: _patch_settings.
+The game settings are saved in chunks defined in settings.h. Search for the variable <code>const SettingDesc _settings[]</code>.
 
 ==About Patch Settings==
-The patch settings are themselves grouped into areas - but this is just for clarity of reading. Generally minor single line settings get squeezed into their appropriate position in the list. Larger groups of settings are added at the end of the list (somewhere after YAPF options).
+The patch settings are grouped into areas - but this is just for clarity of reading. Generally minor single line settings get squeezed into their appropriate position in the list. Larger groups of settings are added at the end of the list (somewhere after YAPF options).
 
 Patch settings can be saved in up to three different locations (currently); a single player game, a network game, and the config.cfg file. This is controlled by one of the values given for each of the patch settings.
 
 ====Current Patch Categories====
-These patch categories can be seen from the patch settings windows, so they're easily recognizable.
+The patch categories can be seen from the advanced settings window, so they're easily recognizable.
 
-*[[en/Archive/Manual/Settings/Configuring patches/Interface]] - General interface options such as toolbar options and main window options.
-*[[en/Archive/Manual/Settings/Configuring patches/Construction]] - Options dealing with what and how you can construct things.
-*[[en/Archive/Manual/Settings/Configuring patches/Vehicles]] - Options dealing with vehicle behavior.
-*[[en/Archive/Manual/Settings/Configuring patches/Stations]] - Options dealing with station behavior.
-*[[en/Archive/Manual/Settings/Configuring patches/Economy]] - Options dealing with the economy.
-*[[en/Archive/Manual/Settings/Configuring patches/Competitors]] - Options dealing with AI competitors.
-*[http://www.tt-forums.net/viewtopic.php?t=23434 Terrain]([[en/Archive/Community/Mini Integrated Nightly]] or patch only) - Options dealing with terrain generation.
-*[http://www.tt-forums.net/viewtopic.php?t=11942 Cooperation]([[en/Archive/Community/Mini Integrated Nightly]] or patch only) - Options dealing with human cooperation (or friendly competition).
+*[[en/Archive/Manual/Settings/Advanced Settings/Interface|Interface]] - General interface options such as toolbar options and main window options.
+*[[en/Archive/Manual/Settings/Advanced Settings/Construction|Construction]] - Options dealing with what and how you can construct things.
+*[[en/Archive/Manual/Settings/Advanced Settings/Vehicles|Vehicles]] - Options dealing with vehicle behavior.
+*[[en/Archive/Manual/Settings/Advanced Settings/Stations|Stations]] - Options dealing with station behavior.
+*[[en/Archive/Manual/Settings/Advanced Settings/Economy|Economy]] - Options dealing with the economy.
+*[[en/Archive/Manual/Settings/Advanced Settings/Competitors|Competitors]] - Options dealing with AI competitors.
 
 NOTE: This document does not cover how to create a new category.
 
@@ -31,63 +29,57 @@ NOTE: This document does not cover how to create a new category.
 There are several files that you need to edit in order to add a patch setting.  This section lists those files and tells you what you need to do to each.  For the most part, you have to look at the surrounding code to figure out where the most appropriate place for your new patch variable to go, but unless you have a radically new idea, there will probably be a place for you.
 
 ====english.txt ( and language files)====
-First and foremost, you must add text entries into [http://svn.openttd.org/cgi-bin/trac.cgi/browser/trunk/lang/english.txt english.txt].  If you speak another language, you may also add your entries into that file.  For any other languages, just leave them and somebody will eventually translate it for you.
+First and foremost, you must add text entries into [http://svn.openttd.org/trunk/src/lang/english.txt english.txt].  If you speak another language, you may also add your entries into that file.  For any other languages, just leave them and somebody will eventually translate it for you.
 
 Take a look at the link above to get a feel for the text file.  Any patch option strings should begin with the STR_CONFIG_PATCHES_ extension.  
 
 <pre>
-STR_CONFIG_PATCHES_MY_VAR_OPT         :{LTBLUE}My variable option: {ORANGE}{STRING1} 
-STR_CONFIG_PATCHES_MY_BOOL_OPT        :{LTBLUE}My boolean option {ORANGE}{STRING1}
+STR_CONFIG_SETTING_MY_VAR_OPT         :{LTBLUE}My variable option: {ORANGE}{STRING1} 
+STR_CONFIG_SETTING_MY_BOOL_OPT        :{LTBLUE}My boolean option {ORANGE}{STRING1}
 </pre>
 
 Note that there are no tabs in this file, only spaces.
 
 ====settings_type.h====
-The patches structure keeps track of the current configuration.  It is located in [http://svn.openttd.org/cgi-bin/trac.cgi/browser/trunk/settings_type.h settings_type.h], and is defined as:
+There are several structures that keep track of the current configuration. They are named after each setting category. They are located in [http://svn.openttd.org/trunk/src/settings_type.h settings_type.h].
+
+Find an appropriate structure for your patch setting and add a line similar to that shown here:
 
 <pre>
-struct Patches {
-</pre>
-
-Find an appropriate place for your patch setting in the structure and add a line similar to that shown here:
-
-<pre>
-uint8 my_var_opt;	// *Describe what my_var_opt is about*
-bool my_bool_opt;	// *Describe what my_bool_opt is about*
+	uint8 my_var_opt;	// *Describe what my_var_opt is about*
+	bool my_bool_opt;	// *Describe what my_bool_opt is about*
 </pre>
 
 ====settings_gui.cpp====
-You must also define a string that contains your variable name for the purposes of saving and loading from the [[en/Archive/Manual/Settings/Openttd.cfg]] file.  These are defined in [http://svn.openttd.org/cgi-bin/trac.cgi/browser/trunk/settings_gui.c settings_gui.c].
+You must also define a string that contains your variable name for the purposes of saving and loading from the [[en/Archive/Manual/Settings/Openttd.cfg]] file.  These are defined in [http://svn.openttd.org/trunk/src/settings_gui.cpp settings_gui.cpp].
 
 There is one array of strings defined for each category (described above) for organization purposes:
 
-*_patches_ui[]
-*_patches_construction[]
-*_patches_stations[]		
-*_patches_economy[]
-*_patches_ai[]
-*_patches_vehicles[]
-*_patches_terrain[]
-*_patches_cooperation[]
+*_settings_ui[]
+*_settings_construction[]
+*_settings_stations[]		
+*_settings_economy[]
+*_settings_ai[]
+*_settings_vehicles[]
 
 You must define your string in the most appropriate one:
 
 <pre>
-	"my_var_opt",
-	"my_bool_opt",
+	SettingEntry("my_var_opt"),
+	SettingEntry("my_bool_opt"),
 </pre>
 
-====settings.cpp====
-The last change you have to make determines the behavior of the Configure Patches window and exactly how your setting will be saved to [[en/Archive/Manual/Settings/Openttd.cfg]].  This is set with a line in [http://svn.openttd.org/cgi-bin/trac.cgi/browser/trunk/settings.c settings.c].
+====settings.h====
+The last change you have to make determines the behavior of the Configure Patches window and exactly how your setting will be saved to [[en/Archive/Manual/Settings/Openttd.cfg]].  This is set with a line in [http://svn.openttd.org/trunk/src/settings.h settings.h].
 
-While you only add a single line per setting that you make, it is fairly complicated.  To give you an idea here is an example:
+While you only add a single line per setting that you make, it is fairly complicated. To give you an idea here is an example:
 
 <pre>
- SDT_VAR(Patches, my_var_opt,SLE_UINT8,S, 0,  4, 1,20, STR_CONFIG_PATCHES_MY_VAR_OPT,NULL),
-SDT_BOOL(Patches, my_bool_opt,          0, 0, false,    STR_CONFIG_PATCHES_MY_BOOL_OPT,      NULL),
+SDT_VAR(GameSettings, my_var_opt,SLE_UINT8,S, 0, 4, 1, 20, STR_CONFIG_SETTING_MY_VAR_OPT,NULL),
+SDT_BOOL(GameSettings, my_bool_opt, 0, 0, false, STR_CONFIG_SETTING_MY_BOOL_OPT, NULL),
 </pre>
 
-Of course you will have to place it in the appropriate order in _patch_settings[] array (hopefully this will be fairly obvious).
+Of course you will have to place it in the appropriate order in _settings[] array (hopefully this will be fairly obvious).
 
 Following is a detailed explanation of what it all means:
 
@@ -103,7 +95,7 @@ SDT_VAR( <settings group>, <varname>, <vardef>, <savewhereflags>, <gui flags>, <
 </pre>
 
 where:
-*<settings group> = Patches
+*<settings group> = GameSettings
 *<varname> = name_of_your_variable
 *<vardef> = data size for the variable - not required for BOOL, but can be a variety of sizes; SLE_UINT8, SLE_INT16, SLE_UINT32, etc. etc... pick what you need
 *<savewhereflags> - this is the most awkward to understand, and is quite cryptic. It can take the following values:
@@ -121,9 +113,9 @@ where:
 *<display string> = the string used in the language file for the patch setting when displayed in the Patch Settings control panel. If you don't need to display it, just leave it as NULL.
 *<callback proc> = the procedure to call when the value is changed. Just leave this as NULL - safer that way.
 
-=====SAVEGAME VERSION & CONDVARs=====
+=====SAVEGAME_VERSION & CONDVARs=====
 
-You have your saved patch variable, but if you add it straight, OTTD will expect to find it in every savegame. So there is an extra pair of entries available for CONDitional variables; ones only available for a range of savegame versions. The savegame version number is found near line 37 of saveload.cpp.
+You have your saved patch variable, but if you add it straight, OTTD will expect to find it in every savegame. So there is an extra pair of entries available for CONDitional variables; ones only available for a range of savegame versions. The savegame version number is found near the start of [http://svn.openttd.org/trunk/src/saveload/saveload.cpp saveload.cpp].
 
 The format for conditional patch settings is:
 <pre>
@@ -149,7 +141,13 @@ When a normal OTTD tries to load a savegame from your system, it will see the sa
 
 However, to do the reverse - you loading older OTTD games - you need to identify your patch settings as "new in version XX" by using the <valid from> and <valid to> entries.
 
-So for our example; we BUMP the savegame to 87, and set our vars as CONDVAR or CONDBOOL, with a <valid from> of 30, and a <valid to> of SL_MAX_VERSION, which as you can guess means "from now on". 
+So for our example; we BUMP the savegame to 87, and set our vars as CONDVAR or CONDBOOL, with a <valid from> of 87, and a <valid to> of SL_MAX_VERSION, which as you can guess means "from now on". 
+
+<pre>
+SDT_CONDVAR(GameSettings, my_var_opt, SLE_UINT8, 87, SL_MAX_VERSION, S, 0, 4, 1, 20, STR_CONFIG_SETTING_MY_VAR_OPT, NULL),
+SDT_CONDBOOL(GameSettings, my_bool_opt, 87, SL_MAX_VERSION, 0, 0, false, STR_CONFIG_SETTING_MY_BOOL_OPT, NULL),
+</pre>
+
 
 [[Category:en/Archive/Source/OpenTTDDevBlackBook|P]]
 [[Category:en/Development]]
