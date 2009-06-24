@@ -331,36 +331,51 @@ Display a classification for the town, depending on its size ''Could be done eve
  if size >= 15000 display (g)
 
 ==Town claiming==
+Changes to allow a company to claim a town.
 
 ===Town logic===
-* town claiming
-* town cargo delivered
-* town growth depending on cargo delivered
+ Add a claimant variable; current town claimant
+ Add an integer entry for each possible company: holds received amount of cargo
+ When a company exceeds the current claimants amount of received cargo, they become the new claimant
 
 ===World gui===
-* print town names in company color of claiming company. non-claimed towns in gray ''Or add a company colour marker?'' ''What about a company-colored flag before town name?''
+* print town names in company color of claiming company. non-claimed towns in gray 
+ Create a translation table from company color to string color
+ print town name with string "{COLOR}{TOWN}", with parameter color: ColorTranslation(GetCompanyColor(Town->claimant))
+ 
+''Or add a company colour marker?'' ''What about a company-colored flag before town name?''
+ draw company icon before town string
+Advantage of this approach: works together with other town-string changing patches.
+Disadvantage: more code changes required.
 
 ===Town gui===
-* below normal cargo supply text, show amount of cargo delivered to this town last month. Highlight in red any amount that is insufficient for town growth. Highlight in yellow any amount that is sufficient for growth.
-* show company logo and name of claiming company
+show company logo and name of claiming company
 
 ===Town directory gui===
-* show town names in claimed colors (and gray for unclaimed)
+show town names in claimed colors (and gray for unclaimed)
 
 ===News ticker gui===
-* add town claiming messages (with own category)
+add town claiming messages (with own category)
+ Add a category for Town claiming messages
+ Add string: "{TOWN} was claimed by {COMPANY}"
+ When town claimant changes, generate new message
 
 ===Map gui===
-* add all industries to industry view ''List is/will be dynamic based on available industries, nothing to change.''
-* color claimed towns in company color in town view
+color claimed towns in company color in town view
 
 ==Town growth==
+* town cargo delivered
+* town growth depending on cargo delivered
 
 * water provided to a water tower counts as water supplied to the town ''normal TTD behaviour''
 * food provided to a shopping mall counts as food supplied to the town (in addition to buildings ''normal TTD behaviour''
 * goods provided to a shopping mall counts as goods supplied to the town
 * valuables provided to a shopping mall or bank counts as valuables supplied to the town
 * do not accept passengers or mail originating from the same town
+
+===Town gui===
+* below normal cargo supply text, show amount of cargo delivered to this town last month. Highlight in red any amount that is insufficient for town growth. Highlight in yellow any amount that is sufficient for growth.
+
 
 ==Scoring==
 
