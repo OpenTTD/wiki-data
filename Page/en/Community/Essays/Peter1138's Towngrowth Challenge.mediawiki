@@ -309,6 +309,27 @@ Playable implementation of cargo and industries:
 
 =Required Programming Changes=
 
+The goal with these changes is to do them in modules, and try and make them as minimally invasive as possible. 
+
+==Town classification==
+Display a classification for the town, depending on its size ''Could be done even for normal games?''
+* add strings for classifications
+ a) "Community of {TOWN}"
+ b) "Village of {TOWN}"
+ c) "Township of {TOWN}"
+ d) "Town of {TOWN}"
+ e) "City of {TOWN}"
+ f) "Metropolis of {TOWN}"
+ g) "Capitol of {TOWN}"
+* update town gui title bar
+ if size < 300 display (a)
+ if size >= 300 && size < 600 display (b)
+ if size >= 600 && size < 1000 display (c)
+ if size >= 1000 && size < 3000 display (d)
+ if size >= 3000 && size < 6000 display (e)
+ if size >= 6000 && size < 15000 display (f)
+ if size >= 15000 display (g)
+
 ==Town claiming==
 
 ===Town logic===
@@ -320,7 +341,6 @@ Playable implementation of cargo and industries:
 * print town names in company color of claiming company. non-claimed towns in gray ''Or add a company colour marker?'' ''What about a company-colored flag before town name?''
 
 ===Town gui===
-* show classification of town in title ("Community of Pitsburg", "City of Wiltshire", etc) ''Could be done even for normal games?''
 * below normal cargo supply text, show amount of cargo delivered to this town last month. Highlight in red any amount that is insufficient for town growth. Highlight in yellow any amount that is sufficient for growth.
 * show company logo and name of claiming company
 
