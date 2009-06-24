@@ -307,55 +307,14 @@ Playable implementation of cargo and industries:
 
 * [http://www.tt-forums.net/viewtopic.php?f=36&t=44069 Cargo and Industries for Towngrowth Challenge]
 
-==Required Programming Changes==
+=Required Programming Changes=
 
-{|
-|-
-||Change Required||State||Comment
-|-
-||industries must accept at least 4 cargo types (not required, be pruned to 3)||Done||
-|-
-||support must exist for at least 20 cargo types, preferably more||Done||32 already allowed
-|-
-|colspan=3|
-|-
-||town claiming||||
-|-
-||town cargo delivered||||
-|-
-||town growth depending on cargo delivered||||
-|-
-||disallow building of statues and fountains in towns, those drop population||||newhouses
-|-
-||disallow building of shopping mall, it is now an industry||||newhouses
-|-
-||add food acceptance to buildings (in addition to other acceptance)||||newhouses
-|-
-|colspan=3|
-|-
-||make oil wells behave like normal industries, so no forced closing down||||newindustries
-|-
-||water provided to a water tower counts as water supplied to the town||N/A||normal TTD behaviour
-|-
-||food provided to a shopping mall counts as food supplied to the town (in addition to buildings)||N/A||normal TTD behaviour
-|-
-||goods provided to a shopping mall counts as goods supplied to the town||||
-|-
-||valuables provided to a shopping mall or bank counts as valuables supplied to the town||||
-|-
-||do not accept passengers or mail originating from the same town||||
-|-
-|colspan=3|
-|-
-||allow all vehicles that are refittable to refit to all cargo types||||newgrf, but is this necessary?
-|-
-||check for winning conditions and if they are met do game won stuff||||
-|}
+==Town claiming==
 
-==GUI changes==
-
-===Station gui===
-* allow display of more cargo types (should be done already) ''Done already. Allows unlimited cargo types (ignoring screen width).''
+===Town logic===
+* town claiming
+* town cargo delivered
+* town growth depending on cargo delivered
 
 ===World gui===
 * print town names in company color of claiming company. non-claimed towns in gray ''Or add a company colour marker?'' ''What about a company-colored flag before town name?''
@@ -365,16 +324,7 @@ Playable implementation of cargo and industries:
 * below normal cargo supply text, show amount of cargo delivered to this town last month. Highlight in red any amount that is insufficient for town growth. Highlight in yellow any amount that is sufficient for growth.
 * show company logo and name of claiming company
 
-===Town authority gui===
-* add 3 options: Fund water tower (cheap), Fund shopping mall (moderately expensive), Fund power station (expensive)
-* funding those buildings is not possible if that building already exists for this town
-
-===Player company gui===
-* add line displaying total claimed population
-* add line displaying total number of claimed towns
-
 ===Town directory gui===
-* add total world population at bottom (not as part of list obviously) ''Already in trunk''
 * show town names in claimed colors (and gray for unclaimed)
 
 ===News ticker gui===
@@ -383,6 +333,23 @@ Playable implementation of cargo and industries:
 ===Map gui===
 * add all industries to industry view ''List is/will be dynamic based on available industries, nothing to change.''
 * color claimed towns in company color in town view
+
+==Town growth==
+
+* water provided to a water tower counts as water supplied to the town ''normal TTD behaviour''
+* food provided to a shopping mall counts as food supplied to the town (in addition to buildings ''normal TTD behaviour''
+* goods provided to a shopping mall counts as goods supplied to the town
+* valuables provided to a shopping mall or bank counts as valuables supplied to the town
+* do not accept passengers or mail originating from the same town
+
+==Scoring==
+
+===World Logic===
+* check for winning conditions and if they are met do game won stuff
+
+===Player company gui===
+* add line displaying total claimed population
+* add line displaying total number of claimed towns
 
 ===(new) goal gui===
 * short explanation of goal
@@ -398,9 +365,14 @@ Playable implementation of cargo and industries:
 * show amount of days played since game start
 * show amount of cargo transported
 
-==required grf changes==
- 
-* vehicles for all transport types and cargo types
-* the industries and cargos defined above
+==Finish industries==
+* disallow building of statues and fountains in towns, those drop population ''newhouses''
+* disallow building of shopping mall, it is now an industry ''newhouses''
+* add food acceptance to buildings (in addition to other acceptance) ''newhouses''
 
-''This will be supported by NewGRF without any changes.'' Peter1138 14:28, 19 April 2007 (CEST)
+===Town authority gui===
+* add 3 options: Fund water tower (cheap), Fund shopping mall (moderately expensive), Fund power station (expensive)
+* funding those buildings is not possible if that building already exists for this town
+
+
+Peter1138 14:28, 19 April 2007 (CEST)
