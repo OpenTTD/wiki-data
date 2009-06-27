@@ -1,15 +1,39 @@
 [[Translation:en/Manual/Passenger and cargo distribution]]
 So this is the (n+1)th attempt to provide passengers and freight with destinations and then getting them there using the existing transport links as efficiently as possible. Further details on the problem can be found [[en/Community/Patches/Passenger and cargo destinations|here]]. However, in contrast to the cargod'''e'''st project the problems of routing cargo and balancing loads on different routes are seen as inseperable here and thus solved together. Also the definition of transportation demand is seen as precondition to solving above problems and handled first. 
 
-Patches can be found in the [http://www.tt-forums.net/viewtopic.php?f=33&t=41992&start=0 forum topic].
+Patches can be found in the [http://www.tt-forums.net/viewtopic.php?f=33&t=41992&start=0 main forum topic] and in the topics for the two sub projects, [http://www.tt-forums.net/viewtopic.php?f=33&t=44101 pay on unloading] and [http://www.tt-forums.net/viewtopic.php?f=33&t=32923 zoomable smallmap].
 
 You can also pull from my git tree. It's located at http://fickzoo.com/fonsinchen/openttd.git and contains hierarchical branches named as follows:
 
- master -> capacities -> components -> demands -> mcf -> flowmapping-core -> flowmapping-vehload -> station-gui
- master -> smallmap-zoom -> smallmap-stats
- smallmap-stats + station-gui -> cargodist
+       /------------------master-----------------\
+       |                    |                    |
+       v                    v                    v
+ smallmap-zoom          capacities          unload-pay
+       |                    |                    |
+       |                    v                    |
+       |                components               |
+       |                    |                    |
+       |                    v                    |
+       |                 demands                 |
+       |                    |                    |
+       |                    v                    |
+       |                   mcf                   |
+       |                    |                    |
+       |                    v                    |
+       |             flowmapping-core            |
+       |                    |                    |
+       |                    |--------------------/
+       |                    |
+       |                    v
+       |------------flowmapping-vehload----------\
+       |                                         |
+       v                                         v
+ smallmap-stats-----------------------------station-gui
+                            |
+                            v
+                        cargodist
 
-The branches in the first hierarchy mostly correspond to the milestones mentioned below. ''master'' is a clone of the main openttd repository. So if you want the latest version of everything, do:
+The branches mostly correspond to the milestones mentioned below. ''master'' is a clone of the main openttd repository. ''cargodist'' merges all branches. So if you want the latest version of everything, do:
 
  git clone http://fickzoo.com/fonsinchen/openttd.git
  git checkout origin/cargodist
