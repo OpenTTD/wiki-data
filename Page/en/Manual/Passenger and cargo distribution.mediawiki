@@ -104,7 +104,7 @@ The second pass is run if demand is left after the first pass, but no capacity. 
 
 Because of the increasing property of the first pass and the fact that the second pass doesn't add any paths the MCF solver cannot build cyclic paths. Assigning all available demand is necessary in order to guarantee that cargo is actually sent where the demand calculator has determined it to go and not only to the destinations connected by the best paths.
 
-==flow mapping==
+==Flow mapping core functionality==
 
 The solution of the multi commodity flow problem is a set of flows along the edges of the link graph. These flows have to be translated into assignments of goods to vehicles. In order to do that at each node a flow mapping is created. An example for a flow mapping could be:
 
@@ -117,13 +117,9 @@ The actual numbers are deduced from the supplies and the relative sizes of the d
 
 [[File:en/Manual/Cargodist-station.png|frame|Screenshot of station GUI]]
 
-Unfortunately for this milestone much more code needs to be written than for the others. This is mainly because the vehicle loading code needs to be cleaned up, which is quite an extensive task. Considering that,  the task has been split into three smaller parts for which distinct patches are provided:
+The assignment of flow is calculated for each station from the path forest the MCF algorithm returns. This is rather easy. Simply scale all paths by the supply of the origin station and insert them into a clever data structure that retrieves the most underprovisioned flow in constant time.
 
-===Core functionality===
-
-Here the assignment of flow is calculated for each station from the path forest the MCF algorithm returns. This is rather easy. Simply scale all paths by the supply of the origin station and insert them into a clever data structure that retrieves the most underprovisioned flow in constant time.
-
-===Vehicle loading===
+==Vehicle loading==
 
 This part includes loading and unloading vehicles according to the flows calculated above. It was unavoidable to rewrite much of the vehicle loading code, so there might still be bugs in it. Yet, this solution is easier to read, reuse and debug than the previous one, so the rewrite should pay for itself eventually.
 
