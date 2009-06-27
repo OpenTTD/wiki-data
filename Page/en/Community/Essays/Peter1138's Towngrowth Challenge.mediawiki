@@ -312,8 +312,8 @@ Playable implementation of cargo and industries:
 The goal with these changes is to do them in modules, and try and make them as minimally invasive as possible. 
 Module definitions so far:
 * Town classification
-* Town claiming
 * Town growth
+* Town claiming
 * Scoring
 * Finish industries
 
@@ -336,8 +336,29 @@ Display a classification for the town, depending on its size ''Could be done eve
  if size >= 6000 && size < 15000 display (f)
  if size >= 15000 display (g)
 
+
+==Town growth==
+Make growth of towns depend on the cargo delivered as described above.<br>
+<br>
+This will bump the savegame version for TC, due to storing of delivered cargo last month and this month for each town.
+
+* town cargo delivered
+* town growth depending on cargo delivered
+
+* water provided to a water tower counts as water supplied to the town ''normal TTD behaviour''
+* food provided to a shopping mall counts as food supplied to the town (in addition to buildings ''normal TTD behaviour''
+* goods provided to a shopping mall counts as goods supplied to the town
+* valuables provided to a shopping mall or bank counts as valuables supplied to the town
+* do not accept passengers or mail originating from the same town
+
+===Town gui===
+* below normal cargo supply text, show amount of cargo delivered to this town last month. Highlight in red any amount that is insufficient for town growth. Highlight in yellow any amount that is sufficient for growth.
+
+
 ==Town claiming==
-Changes to allow a company to claim a town.
+Changes to allow a company to claim a town.<br>
+<br>
+This will bump the savegame version for TC, due to storing of cargo delivery and claimant ID for each town
 
 ===Town logic===
  Add a claimant variable; current town claimant
@@ -369,24 +390,13 @@ add town claiming messages (with own category)
 ===Map gui===
 color claimed towns in company color in town view
 
-==Town growth==
-* town cargo delivered
-* town growth depending on cargo delivered
-
-* water provided to a water tower counts as water supplied to the town ''normal TTD behaviour''
-* food provided to a shopping mall counts as food supplied to the town (in addition to buildings ''normal TTD behaviour''
-* goods provided to a shopping mall counts as goods supplied to the town
-* valuables provided to a shopping mall or bank counts as valuables supplied to the town
-* do not accept passengers or mail originating from the same town
-
-===Town gui===
-* below normal cargo supply text, show amount of cargo delivered to this town last month. Highlight in red any amount that is insufficient for town growth. Highlight in yellow any amount that is sufficient for growth.
-
-
 ==Scoring==
+This module takes the changes from the previous modules and gives feedback to the players. Graphs for population, information about the goal, a screen to display when someone has won the challenge.<br>
+<br>
+This will bump the savegame version for TC, due to storing of graph data.
 
 ===World Logic===
-* check for winning conditions and if they are met do game won stuff
+* check for winning conditions and if they are met do game won stuff (in the montly loop)
 
 ===Player company gui===
 * add line displaying total claimed population
@@ -395,21 +405,28 @@ color claimed towns in company color in town view
 ===(new) goal gui===
 * short explanation of goal
 * show population goal for game win
-* show current total world population
+* show current claimed population
+* show 'top X' list, that shows each company with their claimed population, sorted to claimed population
 
 ===(new) population graph===
-* identical layout to standard company value graph ''World population? Could be done for normal games as well?''
-* on the y axis, instead of company value, show claimed population ''Why not both?''
+* identical layout to standard company value graph
+* first option in the list is World Population (black?) ''Could be done for normal games as well?''
+* on the y axis, instead of company value, show claimed population ''Why not both?'' - ''this is an additional graph, not a replacement''
+* data points have to be stored for companies and world population
 
 ===(new) game win gui===
 * show player company name, player name and portrait of winner
 * show amount of days played since game start
 * show amount of cargo transported
+* store game over state, so that this window does not pop up again
 
 ==Finish industries==
+In this final module, the last grf changes should be made for houses, and optionally the power station could be introduced (power station will bump savegame version, because amount of ''power'' needs to be stored for last month and this month).
+
 * disallow building of statues and fountains in towns, those drop population ''newhouses''
 * disallow building of shopping mall, it is now an industry ''newhouses''
 * add food acceptance to buildings (in addition to other acceptance) ''newhouses''
+* Optionally: cargo supplied to a power station supplies ''power'' to the town, instead of cargo. a town supplied with power grows four times faster than one that is not.
 
 ===Town authority gui===
 * add 3 options: Fund water tower (cheap), Fund shopping mall (moderately expensive), Fund power station (expensive)
