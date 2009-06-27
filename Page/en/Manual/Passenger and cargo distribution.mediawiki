@@ -135,18 +135,21 @@ Cargo not handled by cargodist is also routed traditionally. Cargo wanting to go
 
 Order modifications such as "no unloading", "unload all", "transfer", "no loading", etc generally do what they are supposed to when using cargo distribution. However, as the link graph doesn't know about orders it assumes it can use any link with a capacity. It will thus also plan cargo to be sent with those vehicles that decline loading cargo. In the same way it will plan cargo to be transferred at a station where you force cargo to be delivered. This means you artificially change the ratios between sent and planned cargo on those links, which will make the flow mapping assign even more cargo to the links you are trying to avoid. It is thus suggested to not use order modifications together with cargo distribution. This excludes "full load", which is the only order modification that doesn't have any bad effects on the flow mapping.
 
-==GUI==
-
-[[File:fr/Manual/Cargodist-smallmap-flow.png|frame|Screenshot of smallmap with flows]]
-
+==Station GUI==
 The station GUI shows the sources, next hops and estimated destinations of the cargo waiting as well as those of the planned and sent cargo flows through this node. Final destinations are estimated according to the flows saved at each station. Don't expect each packet of cargo to go exactly that way, though. As explained above, packets are always routed without splitting them, so the numbers given in the station GUI are always a little incorrect, but in the long run everything is still sent to their proper destinations. You can group the cargo by source station, next hop and destination in any order. Also you can sort within the groups by the property you group by (''station'') or the amount of cargo displayed (''amount''). Groups can be opened and collapsed by clicking on the respective lines in the cargo display.
 
+==Pay on Unloading==
+With the previous method of payment the amount of cargo to be unloaded, transferred or kept aboard has to be calculated before unloading or transferring cargo. When using cargodist vehicle loading this is not easily possible as the flow numbers change while cargo is unloaded, thus creating a feedback loop. So this branch changes the payment system such that cargo is paid after having been unloaded. The graphical representation of resulting profits is changed, too. Instead of showing a single floating number, the profit is visibly added up next to the loading indicator while unloading takes place.
+
+==Smallmap Zoom==
+[[File:fr/Manual/Cargodist-smallmap-flow.png|frame|Screenshot of smallmap with flows]]
+In order to increase the readability of the statistics display in the smallmap a zoom function has been added. It works in effect like the zoom function in other windows, but you can also zoom in to get a more detailed display of the link statistics, for example in a town center.
+
+==Smallmap Stats==
 In the smallmap the planned and real flow over each link are shown. If you choose to display town names numbers are shown in the following format:
  usage/capacity:real/planned
 Usage and capacity are like above, real flow and planned flow are new. Real flow is the amount of cargo already sent along the link. The difference between usage and real flow is the amount of cargo which has been assigned the remote end of the link as next hop, but hasn't arrived there yet. If the usage is considerable larger than the real flow, cargo has been sent along the link unexpectedly. This can happen if there are problems predicting the flow of cargo due to order modifications. 
 
 You can also switch off the town name display to see a graphical representation instead of numbers. Instead of bars (as with the capacities patch) overlapping rectangles are shown. With bars scaling quickly becomes a problem if you want to show many widely different values. Rectangles scale in two directions and thus provide more space for showing differences. The area of the rectangles represents the amount of cargo. The white and grey rectangles represent capacity and usage of the link, like above. The red one is the planned flow through the link and the yellow one the real flow.
-
-Yes, the graphical representation could use some polish.
 
 Fonsinchen 10:56, 24 May 2009 (UTC)
