@@ -7,7 +7,14 @@ If you create a <code>Save()</code> function in your AI, you can store some data
 '''Note:''' No other information is saved, so for example all pending events are lost as soon as the game is loaded. To circumvent this you can store all events (converted to allowed types) in the savegame yourself. However, the game will continue normally after the <code>Save()</code> function is called, so you also need to handle those events.
 
 == Load ==
-If a savegame with an AI in it is loaded, OpenTTD tries to start the same AI as the game was saved with. If this fails (for example, you send your savegame to your friend who does not have all AIs you have), it'll load a random AI that is available. First the constructor of your AI is called, and after that your <code>Load()</code> function is called, even if the AI that saved the data is not the same as the one that is started now. Because of this you should check all savedata for validity before trying to do anything with it. The <code>Load()</code> function gets exactly one parameter with as value the data that was saved by the AI. If an AI didn't save any data, the <code>Load()</code> function won't be called. 
+If a savegame with an AI in it is loaded, OpenTTD tries the following. As soon as one step succeeds, the sequence is stopped:
+* Try to load the exact same version of the same AI.
+* Try to load the latest version of the same AI that supports loading data from the saved version. (version of saved AI >= return value of MinVersionToLoad)
+* Load the latest version of the same AI.
+* Load a random AI.
+* Load the dummy AI.
+
+First the constructor of your AI is called, and after that your <code>Load()</code> function is called. If an AI didn't save any data, the <code>Load()</code> function won't be called.
 
 == What data to save? ==
 Of course what data you save exactly is up to you, but as a general rule you shouldn't save anything that can be easily detected by reading the map again. So you can store a mapping of truck station to industry, but storing just a station list is useless.
