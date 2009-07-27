@@ -15,7 +15,26 @@ Of course what data you save exactly is up to you, but as a general rule you sho
 == What you can't do in your Save() and Load() function ==
 Both the Save() and Load function() are called from within the main thread. This means that it is not possible to execute any command that builds / removes / changes something in the game. You can execute some API functions, but only those that fetch data. Please try to minimize the code in Save() and Load(), as the user has to wait for those functions everytime they save and load a game.
 
+== Handling of save versions ==
+When a game is saved, the name (or 4 digit code?) and version of each AI is saved. When OpenTTD loads a game it tries to find a version of the same AI that can load the game state from the version of the AI that was used in the save. By declaring <code>MinVersionToLoad()</code> in your info.nut and make it return the minimum version of saves from your AI it support. Again note, note version of your AI used in the save, not OpenTTD version. 
+
+Additionally there is a version argument to Load() that tells the load function which version of your AI that was used to save the game state.
+
 == Example Save() / Load() code ==
+ /* info.nut */
+ class testai extends AIInfo
+ {
+   /* ... */
+ 
+   function GetVersion() { return 3; }
+ 
+   /* Accept to load games saved by version >= 2 of this AI */
+   function MinVersionToLoad() { return 2; } 
+ 
+   /* ... */
+ }
+
+ /* main.nut */
  class testai extends AIController
  {
    constructor()
