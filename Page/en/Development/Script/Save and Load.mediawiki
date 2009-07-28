@@ -98,19 +98,19 @@ Since the various newgfx can change many of the different ID types used in the g
 |-
 | BridgeID
 | Type of bridge (ex. tubular)
-| ???
+| [0]
 | No
 | Use the AIBridge::* function to find suitable bridge type.
 |-
 | CargoID
 | Type of cargo
-| ???
+| [0]
 | No
 | You can filter the AICargoList using AICargo::CargoClass (ex. CC_PASSENGERS) or AICargo::TownEffect (ex. TE_PASSENGERS) to get the passenger cargoID
 |-
 | EngineID
 | Engine type
-| ???
+| [0]
 | No
 | Use the AIEngine::* functions to find an engineID that suits your need.
 |-
@@ -122,31 +122,31 @@ Since the various newgfx can change many of the different ID types used in the g
 |-
 | IndustryID
 | Specific industry somewhere on the map
-| ???
+| Yes
 | ---
 | 
 |-
 | IndustryType
 | Type of industry, ex. coal mine
-| ???
+| [0]
 | No
 | Use AIIndustryList_CargoAccepting and AIIndustryList_CargoProducing to find matching pairs.
 |-
 | SignID
 | A sign somewhere on the map
-| ???
+| yes
 | ---
 | 
 |-
 | StationID
 | Specific station somewhere on the map
-| ???
+| Yes
 | ---
 | 
 |-
 | SubsidyID
 | subsidy
-| ???
+| Yes (but is reused when subsidy expires)
 | ---
 | 
 |-
@@ -158,19 +158,21 @@ Since the various newgfx can change many of the different ID types used in the g
 |-
 | TownID
 | A town somewhere on the map
-| ???
+| Yes
 | ---
 | 
 |-
 | VehicleID
 | Vehicle
-| ???
+| yes
 | ---
 | 
 |-
 | WaypointID
 | Waypoint
-| ???
+| yes
 | ---
 | 
 |}
+
+[0] These should be save to store, but they can change when the newgrf config changes. Normally users shouldn't change it, so if your AI breaks because one of these changes, blame the user. Note that the newgrf config can also change during a game, and in that case there is nothing you can do if one of these IDs changes. (You could recompute the IDs everything you use them, but that's very unpractical).
