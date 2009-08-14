@@ -22,3 +22,47 @@ Make sure you initialize all your non-static class variables in the constructor.
      function SetName(name);
      // ...
  }
+
+
+== Squirrel lacks a way to mark methods as static or private ==
+
+In other object oriented languages you can limit how functions are called when you declare them. In squirrel the only difference between an instance function and a static function are the way you call them. In other languages you can also choose to make methods public or private. All methods in squirrel are public.
+
+There are two ways to call functions. You may call them from the '''instance''' or you may call them '''staticly'''. When you call a function from the instance you either preface the call with the the keyword '''this''' or you don't prefix it at all.
+
+The AIFoo.Valuate() methods always call your methods statically. So any custom valuators should be self contained.
+
+'''instance'''
+  function MyNewAI::Start()
+  {
+    this.MainLoop();
+    //MainLoop(); would also work. '''this.''' is usually optional.
+  }
+  
+  function MyNewAI::MainLoop()
+  {
+    while(true) //loop forever.
+    {
+      this.Sleep(10);
+    }
+  }
+  
+When you call the method from the instance, the method has all the variables and other information avialalble to this instance of the class. So the line this.Sleep(10) will work correctly, because AIController has the sleep method for your class. Remember your main class is an extension of AIController and so has all it's abilities as well as any you give it.
+
+In order to call a static instance you need to preface the method with the class name.
+
+'''static'''
+  function MyNewAI::Start()
+  {
+    MyNewAI.MainLoop();
+  }
+  
+  function MyNewAI::MainLoop()
+  {
+    while(true) //loop forever.
+    {
+      AIController.Sleep(10); //"'''this'''" no longer exists in static context.
+    }
+  }
+  
+Remember that you functions can be called in either way. It's up to the caller how to use the function.
