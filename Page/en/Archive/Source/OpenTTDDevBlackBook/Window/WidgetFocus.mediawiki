@@ -1,0 +1,40 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/Window/WidgetFocus]]
+{{en/Development/Navigation}}
+
+This document aims to give a short introduction to the widget focus system. 
+
+== Focus levels ==
+The focus system in OpenTTD has two levels. First there is a pointer that keeps track of which window has focus. Then each window instance keeps track of which widget is focused within that window. This means that a window that is not focused will still remember which widget was globally focused before another window stole the window focus. This widget might later become the globally focused widget if its window gets focused without changing the focused widget. (for example by clicking on the title bar)
+
+The term ''globally focused widget'' refers to the focused widget of the focused window. <code>Window::IsWidgetGloballyFocused</code> will only return if given widget as well as the window instance is focused. <code>Window::IsWidgetFocused</code> on the other hand only requires that the given widget is focused within the window instance, but the window itself does not need to be focused.
+
+The term ''local focus'' refers to focus within a window regardless if the window is focused or not.
+
+
+== How to interact with the focus system ==
+For the last and most accurate details please refer to the source code.
+
+=== Global functions ===
+* <code>SetFocusedWindow(Window *w)</code> : Sets the focused window
+
+=== Window members ===
+* <code>IsWidgetFocused(byte widget_index)</code> : Checks if given widget is focused within window
+* <code>IsWidgetGloballyFocused(byte widget_index)</code> : Checks if given widget is globally focused
+* <code>SetFocusedWidget(byte widget_index)</code> : Set local widget focus to given widget. 
+
+=== Unfocus ===
+If you want to unfocus the currently locally focused widget but does not want to give another widget focus then you have to use the following code: (written as how to write from within a Window)
+ if (this->nested_focus != NULL) {
+   this->nested_focus->SetDirty(this);
+   this->nested_focus = NULL;
+ }
+
+
+If the window however uses the old non-nested widget system the code above becomes:
+ if (this->focused_widget != NULL) {
+   this->InvalidateWidget(this->focused_widget - this->widget);
+   this->focused_widget = NULL;
+ }
+
+[[Category:en/Development]]
+[[Category:en/Archive/Source/OpenTTDDevBlackBook|W]]
