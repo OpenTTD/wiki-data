@@ -12,12 +12,12 @@ Compiling OpenTTD requires use of the command line, so before you start, you sho
 
 ==Installing Developer Tools/Xcode==
 First you need to install a compiler. You should do this by installing Developer Tools (10.2) or Xcode (10.3+)
-They should be on a CD when you got your OS. You can also download it from the Apple Developer Connection web site (free registration required), although it is over 500MB in size. This includes (amongst many other things) gcc, which is the compiler that are used by most opensource projects, including OpenTTD.
+They should be on a CD when you got your OS. You can also download it from the Apple Developer Connection web site (free registration required), although it is over 500MB in size. This includes, amongst many other things, gcc (in the ''UNIX Dev Support'' package), which is the compiler that are used by most opensource projects, including OpenTTD.
 
 ==Installing Extra Apps/Libraries==
-In order to get the very latest source, you will need the svn client. OS X 10.5 comes with svn pre-installed, so Leopard users don't need to worry about getting it. Users of older versions of OS X can either install it through fink (see below), or alternatively there are a number of binary packages linked from the [http://subversion.tigris.org/project_packages.html#osx official subversion website].
+In order to get the very latest source, you will need the svn client. Starting with Mac OS 10.5, svn is pre-installed, so Leopard & Snow Leopard users don't need to worry about getting it. Users of older versions of OS X can either install it through fink (see below), or alternatively there are a number of binary packages linked from the [http://subversion.tigris.org/project_packages.html#osx official subversion website].
 
-Compiling OpenTTD will also require the use of libpng. Again, this may be obtained through fink. Alternatively, you may compile and install it from source for yourself (get it from [http://www.libpng.org/pub/png/libpng.html libpng.org]). There is also a link to a binary package on the page if you wish to do that instead.
+Compiling OpenTTD will also require the use of ''libpng''. Again, this may be obtained through fink. Alternatively, you may compile and install it from source for yourself (get it from [http://www.libpng.org/pub/png/libpng.html libpng.org]). There is also a link to a binary package on the page if you wish to do that instead.
 
 ===Using fink===
 '''Note: fink is only used for installing svn and libpng. Even though it's recommended, it's not mandatory anymore.'''
@@ -29,18 +29,34 @@ fink selfupdate
 
 ====Installing the svn client with fink====
 Like you installed the libs, you can now install the svn client with the command:
-fink install svn-client.
-If you have Mac OS X Leopard, you already have svn. In a terminal window type "svn --version" to check it.
+ <code>fink install svn-client</code>
+If you have Mac OS X Leopard, you already have svn. In a terminal window type <code>svn --version</code> to check it.
 
 ====Installing libraries with fink====
 
 You need some libraries to link to when compiling. You can use fink to install them with the following commands in terminal:
-fink install libpng3 (needed for making screenshots in png. Not really needed now, but there are future plans, which makes it really needed, so you might as well get it now)
-in each case, fink will tell that you that you need to install a lot of other stuff too, just hit enter (answering yes) and fink will download and install all of it
-The docs telling about how to compile OpenTTD tells about zlib. Zlib is needed by OSX itself, so you already have it and there are no need to install it.
+ <code>fink install libpng3</code> 
+libpng3 is needed for making screenshots in png. Not really needed now, but there are future plans, so you might as well get it now.
+In each case, fink will tell that you that you need to install a lot of other stuff too, just hit enter (answering yes) and fink will download and install all of it.
+The docs telling about how to compile OpenTTD tells about ''zlib''. Zlib is needed by OSX itself, so you already have it and there is no need to install it.
 
+===Using MacPorts===
+[http://www.macports.org/ The MacPorts Project] is an open-source community initiative to design an easy-to-use system for compiling, installing, and upgrading either command-line, X11 or Aqua based open-source software on the Mac OS X operating system. In essence it is the same as fink.
 
-With libpng installed, you should now be able to compile OpenTTD. You can download the source from Sourceforge and compile it, but the real reason to be able to compile yourself is to be able to download and compile the newest source, so now you need the source itself form the svn server.
+====Installing libraries with MacPorts====
+Before installing any libraries, make sure you have access to the latest ports by updating the local repository:
+ <code>sudo port selfupdate</code>
+'''Note:''' The <code>sudo</code> command is required to install the libraries globally. Before doing anything, it will ask you for your user password. Further information regarding <code>sudo</code> can be found on [http://en.wikipedia.org/wiki/Sudo wikipedia].
+
+Install ''libpng'':
+ <code>sudo port install libpng</code>
+If it requires any additional packages (like ''libz'', zip libraries), it will ask you to confirm those as well.
+
+To compile a ''static binary'' (for redistribution) you will need these as well:
+ <code>sudo port install fontconfig
+ sudo port install freetype
+ sudo port install icu</code>
+
 
 ==Getting the newest source from the svn server==
 Now you need to make a "working copy" of the source with your new svn client. To do this, use your terminal and write:
@@ -51,10 +67,11 @@ Now you need to make a "working copy" of the source with your new svn client. To
 Because the makefile system is rewritten, this section is divided into two parts. Pick the one fitting for the source you have
 ==Compiling the trunk/nightly builds==
 For those just wanting a working copy for themselves, enter the following into a terminal window:
-* First go to the directory containing the source you just downloaded using the cd command
-* Type "./configure"
-* Type "make"
-* Type "make bundle"
+ <code>cd ~/Downloads/directory_containing_downloaded_sources
+ ./configure
+ make
+ make bundle
+</code>
 After the compiler is done doing all it's stuff, you should find yourself a working OpenTTD.app in the bundles folder :)
 
 
@@ -65,59 +82,58 @@ If you want to use a patch/diff file then you have to apply it before using conf
 This is done in the same way as on Linux so you should read this: [[en/Archive/Compilation and Ports/Compiling on GNU∕Linux and 🟉BSD#applying-a-patch]]
 
 ===Configure===
-There is a configure script. This is used to figure out what your system is like and generate a makefile to compile a binary designed for your system. To run it, just write "./configure" and it will figure everything out on it's own.
+There is a configure script. This is used to figure out what your system is like and generate a makefile to compile a binary designed for your system. To run it, just write <code>./configure</code> and it will figure everything out on it's own.
 
-If you have a special request for your compilation, then you need to give arguments to configure. To see a full list of available settings, use the help system (./configure --help)
+If you have a special request for your compilation, then you need to give arguments to configure. To see a full list of available settings, use the help system (<code>./configure --help</code>)
 
-Example: if you want to make a static build (the binary will contain the needed parts of the libraries so they do not have to be installed on the computer playing the game), you will have to type "./configure --enable-static". Multiple arguments can be added like "./configure --enable-static --enable-dedicated"
+Example: if you want to make a static build (the binary will contain the needed parts of the libraries so they do not have to be installed on the computer playing the game), you will have to type <code>./configure --enable-static</code>. Multiple arguments can be added like <code>./configure --enable-static --enable-dedicated</code>.
 
-If you don't have svn, and are trying to compile a nightly, configure with "./configure --revision=rXXXXX" (where XXXXX is the revision number).
+If you don't have svn, and are trying to compile a nightly, configure with <code>./configure --revision=rXXXXX</code> (where XXXXX is the revision number).
 
 ===Compiling===
-When configure has made a makefile for you, all you need to do to compile is to type "make". The binary is then placed in the "bin" subdirectory.
+When configure has made a makefile for you, all you need to do to compile is to type <code>make</code>. The binary is then placed in the "bin" subdirectory.
 
 If needed, make can accept arguments as well. Commonly used arguments will be (all of them will start by compiling the game if needed):
-make run: will start the game
-make bundle: this will create a bundle inside the bundle directory (created if needed). This means that the game will be executable from finder and not only terminal
-make help: lists all "targets" available (like make run and make bundle)
 
-Make also accepts standard make arguments. The most interesting is the -j option. By default GCC compiles one file at a time and it can only use one CPU/core to compile a single file. If you want to compile as fast as possible, you can tell it to compile more files at once with the -j option. Example: "make bundle -j 4". This will compile 4 files at once, making good use of a dualcore computer. Usually having two files compiling on each core is the fastest as one compile while the other one waits for read/write to the disk.
+* <code>make run</code>: will start the game
+* <code>make bundle</code>: this will create a bundle inside the bundle directory (created if needed). This means that the game will be executable from finder and not only terminal
+* <code>make help</code>: lists all "targets" available (like make run and make bundle)
+
+Make also accepts standard make arguments. The most interesting is the <code>-j</code> option. By default GCC compiles one file at a time and it can only use one CPU/core to compile a single file. If you want to compile as fast as possible, you can tell it to compile more files at once with the <code>-j</code> option. Example: <code>make bundle -j 4</code> will compile 4 files at once, making good use of a dualcore computer. Usually having two files compiling on each core is the fastest as one compile while the other one waits for read/write to the disk.
 Note: the makefile dependencies has to be set up correctly for this to work. While they are for OpenTTD, don't assume this for other projects or nasty stuff can happen, like weird compilation errors.
 
 ===Compiling universal binaries===
-Compiling a universal binary is done by adding "--enable-universal" to configure. This is all if your system is set up correctly.
-Make will then compile for intel, PPC and PPC970 (optimized for this particular CPU. Apple renamed it to G5), so setting G5 flags and such shouldn't be needed. Static is also enabled by default as it's assumed that the binary is to be moved to another computer.
+Compiling a universal binary is done by adding <code>--enable-universal</code> to configure:
+ <code>./configure --enable-universal</code>
+This is all if your system is set up correctly. Make will then compile for intel, PPC and PPC970 (optimized for this particular CPU. Apple renamed it to G5), so setting G5 flags and such shouldn't be needed. Static is also enabled by default as it's assumed that the binary is to be moved to another computer.
 
 For this to work, you will need universal libraries. For more info, read [[en/Archive/Compilation and Ports/Universal libraries]]
 
 ==Compiling OpenTTD 0.5.x or earlier (or revisions before 7759)==
 To compile the source, you should use the terminal to go into your working copy and write
-
-'''make'''
-OpenTTD will now compile
-
-
-If this way OpenTTD fails to link, try:
-'''make CC=gcc-3.3'''
+ <code>make</code>
+OpenTTD will now compile. If this way OpenTTD fails to link, try:
+ <code>make CC=gcc-3.3</code>
 
 If this still fails, try:
-'''make bundle''' and start the Application in the /bundle folder instead of the /bin folder
+ <code>make bundle</code>
+Then, start the Application in the /bundle folder instead of the /bin folder.
 
-This can happen if you got libraries compiled for OSX 10.3.x and you are using OSX 10.4.x. To solve this the right way, then replace the library with one compiled for OSX 10.4. It will take longer than using GCC 3.3 though.
+This can happen if you got libraries compiled for OSX 10.3.x and you are using OSX 10.4.x. To solve this the right way, replace the library with one compiled for OSX 10.4. It will take longer than using GCC 3.3 though.
 
-If you want to move the application you just compiled to another computer, you need to either install sdl (and libpng if you used it) on that computer too or compile statically. Apple recommends against static compilations, but I think it beats installing the libs if you just want to play the game.
+If you want to move the application you just compiled to another computer, you need to either install ''sdl'' (and ''libpng'' if you used it) on that computer too or compile statically. Apple recommends against static compilations, but I think it beats installing the libs if you just want to play the game.
 
 ===Compiling statically===
 To compile statically, you need to edit makefile.config to do so. You can do this in any text editor (including Developer tools/Xcode). Find the line, which says
-STATIC:=
+<code>STATIC:=</code>
 and change it to
-STATIC:=1
+<code>STATIC:=1</code>
 
 makefile.config are generated when running make, so it will not be generated before the first time you run make. To set it the first time you  compile, run
-make STATIC:=1
+<code>make STATIC:=1</code>
 
 Note: if you change anything in makefile.config, you should run
-make clean
+<code>make clean</code>
 to make sure you get rid of anything compiled using the old setup
 
 You are now ready to play after you added the grf files from winTTD
@@ -125,12 +141,10 @@ You are now ready to play after you added the grf files from winTTD
 ===Compiling universal binaries===
 '''Needs at least Xcode 2.1 and OSX 10.4'''''
 
-to compile universal binaries, make sure that you got the right crosscompilers installed from Xcode (default is 10.4u for i386 part and 10.3.9 for PPC part. This can be changed from Makefile.config)
-then type
+To compile universal binaries, make sure that you got the right crosscompilers installed from Xcode (default is 10.4u for i386 part and 10.3.9 for PPC part. This can be changed from Makefile.config)
+then type:
+ <code>make UNIVERSAL_BINARY:=1</code>
+Replace UNIVERSAL_BINARY with TRIPLE_BINARY if you want G5 optimised code on top of the normal universal binary.
+If you do not add a target argument to make, then it will optimise for the CPU it compiles on, which should always be the best choice unless you plan to move the binary to another computer.
 
-make UNIVERSAL_BINARY:=1
-
-replace UNIVERSAL_BINARY with TRIPLE_BINARY if you want G5 optimised code on top of the normal universal binary.
-if you do not add a target argument to make, then it will optimise for the CPU it compiles on, which should always be the best choice unless you plan to move the binary to another computer
-
-Note: you need to have universal libs (at the time of writing, this applies to libpng only) if you want to make universal binaries. If you use the default settings in OpenTTD, then you need to make a static lib (libpng.a) that contains code for i386 based on the 10.4u sdk and the ppc based part needs to be based on the 10.3.9 sdk
+'''Note:''' you need to have universal libraries (at the time of writing, this applies to ''libpng'' only) if you want to make universal binaries. If you use the default settings in OpenTTD, then you need to make a static library (libpng.a) that contains code for i386 based on the 10.4u sdk and the ppc based part needs to be based on the 10.3.9 sdk.
