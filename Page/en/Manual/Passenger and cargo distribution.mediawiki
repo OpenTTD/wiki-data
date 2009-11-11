@@ -132,4 +132,13 @@ In the smallmap the planned and real flows over each link are shown. You can cho
 
 You can either have the stats shown in numbers (units of cargo per month) or as graphs. If shown as numbers the numbers in the map are in the same order as the legend entries.
 
-Fonsinchen 15:55, 6 August 2009 (UTC)
+==Optimizations==
+The vehicle loading described above proved to be very slow when using the stock OpenTTD cargo lists. This is mainly because in order to find packets that could be loaded into vehicles the list has to be searched linearly for packets with the same next hop as the loading vehicle. With a lot of cargo waiting this can take a lot of time. As a second problem the cargo reserved for loading vehicles couldn't be saved as a simple number anymore because a vehicle couldn't load just any packet anymore. In order to make reservations work again specific packets had to be reserved for specific vehicles. Rebuilding those lists of reserved packets in each loading round is costly. To resolve these problems two optimizations have been introduced.
+
+===Station Cargolists sorted by next hop===
+Station cargo lists are sorted by the next hop a packet wants to travel to. Like this a loading vehicle doesn't have to search all packets in the list for loadable but can directly refer to the section of the list where packets travelling to its next stop reside. As an added benefit the next hop doesn't have to be saved inside the packet anymore but can be inferred from its index in the packet map. To make this work a multimap with some additional guarantees had to be designed. The order of entries with equal keys needs to be the same on all platforms in order to avoid desyncs. Unfortunately the standard C++ multimap doesn't guarantee this.
+
+===Explicit Reservation===
+Instead of rebuilding the reservation list in each loading round reserved cargo is kept in a seperate list inside the vehicle cargo list. Like this the amount of cargo to be searched in each loading round is reduced and the effort of rebuilding the reservations is spared. Reservation lists are saved in the savegames along with the normal vehicle cargo lists.
+
+--fonsinchen 22:50, 11 November 2009 (UTC)
