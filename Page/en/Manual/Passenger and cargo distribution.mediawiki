@@ -4,32 +4,31 @@ So this is the (n+1)th attempt to provide passengers and freight with destinatio
 Patches can be found in the [http://www.tt-forums.net/viewtopic.php?f=33&t=41992&start=0 main forum topic] and in the topics for the two sub projects, [http://www.tt-forums.net/viewtopic.php?f=33&t=44101 pay on unloading] and [http://www.tt-forums.net/viewtopic.php?f=33&t=32923 zoomable smallmap].
 
 You can also pull from my git tree. It's located at http://fickzoo.com/fonsinchen/openttd.git and contains hierarchical branches named as follows:
-
-                        master                                                                               
+                         master                                                                               
                            |                                                                                  
-      /-------------------/|\------------\----------\---------------\-------\--------\                        
-      v                    v             |          v               v       |        v                        
- zoomlevels          smallmap-zoom-out   |      capacities      cargolist   |    multimap                     
-      |                    |             |          v               |       |        |                        
-      \-------------------\|             v      components          |     slset      |                        
-                           v          texteff       v               |       |        |                        
-                     smallmap-zoom-in    |       demands            |       |        |                        
-                           |             |          v               |       |        |                        
-                           |             |         mcf              |       |        |                        
-                           |             |          v               |       |        |                        
-                           |             |   flowmapping-core       |       |        |                        
-                           |             v          v               |       |        |                        
-                           |         flowmapping-vehload            |       |        |                        
-                           |                   |                    |       |        |                        
-                           |/-----------------/ \------------------\|/------/--------/                        
+      /-------------------/|\------------\----------\---------------\----------\                              
+      v                    v             |          v               |          v                              
+ zoomlevels          smallmap-zoom-out   |      capacities          |     reservation                         
+      |                    |             |          v               |          |                              
+      \-------------------\|             v      components          |          |                              
+                           v          texteff       v               |          |                              
+                     smallmap-zoom-in    |   <<< demands            v          |                              
+                           |             |          v           multimap       |                              
+                           |             |         mcf              |          |                              
+                           |             |          v               |          |                              
+                           |             |   flowmapping-core       |          |                              
+                           |             |          |               |          |                              
+                           |             \---------\|/--------------/----------/                              
+                           |                        v                                                         
+                           |                    cargomap                                                      
+                           |                        |                                                         
+                           |/----------------------/ \--------------\                                         
                            v                                        v                                         
-                     smallmap-stats                             cargomap                                      
-                           |                                        v                                         
-                           |                                   station-gui                                    
-                           |                                        |                                         
-                           \-----------------------\ /--------------/                                         
+                     smallmap-stats       >>> warning-sign     station-gui                                    
+                           |                        |               |                                         
+                           \-----------------------\|/--------------/                                         
                                                     v                                                         
-                                                cargodist    
+                                                cargodist
 The branches mostly correspond to the milestones mentioned below. ''master'' is a clone of the main openttd repository. ''cargodist'' merges all branches. So if you want the latest version of everything, do:
 
  git clone http://fickzoo.com/fonsinchen/openttd.git
