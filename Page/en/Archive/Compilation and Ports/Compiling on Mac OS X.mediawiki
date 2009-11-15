@@ -19,7 +19,28 @@ In order to get the very latest source, you will need the svn client. Starting w
 
 Compiling OpenTTD will also require the use of ''libpng''. Again, this may be obtained through fink. Alternatively, you may compile and install it from source for yourself (get it from [http://www.libpng.org/pub/png/libpng.html libpng.org]). There is also a link to a binary package on the page if you wish to do that instead.
 
+===Using MacPorts===
+[http://www.macports.org/ The MacPorts Project] is an open-source community initiative to design an easy-to-use system for compiling, installing, and upgrading either command-line, X11 or Aqua based open-source software on the Mac OS X operating system.
+
+====Installing libraries with MacPorts====
+Before installing any libraries, make sure you have access to the latest ports by updating the local repository:
+ <code>sudo port selfupdate</code>
+'''Note:''' The <code>sudo</code> command is required to install the libraries globally. Before doing anything, it will ask you for your user password. Further information regarding <code>sudo</code> can be found on [http://en.wikipedia.org/wiki/Sudo wikipedia].
+
+Install ''libpng'':
+ <code>sudo port install libpng</code>
+If it requires any additional packages (like ''libz'', zip libraries), it will ask you to confirm those as well.
+
+To compile a ''static binary'' (for redistribution) you will need these as well:
+ <code>sudo port install fontconfig
+ sudo port install freetype
+ sudo port install icu</code>
+
+{{en/Warning| You might want to install further tools, e.g. mercurial or git also by means of macports. Mind that some of these have iconv as a dependency. That is nothing bad, but you'll end up with '''two iconv versions''' on your hard disc: one supplied by apple in /usr/lib and one installed by macports in /opt/local/lib. Those two are not compatible and define different symbols. It's wise to de-activate macport's libiconv as otherwise you might end up in some situations with a linker failure (see [http://bugs.openttd.org/task/3313 FS 3313])}}
+
 ===Using fink===
+fink is basically the same as macports, but it may not be as well supported on newer OSX.
+
 '''Note: fink is only used for installing svn and libpng. Even though it's recommended, it's not mandatory anymore.'''
 
 Fink is a nice tool to install opensource software with simple commands. You can get fink here http://fink.sourceforge.net/.
@@ -39,25 +60,6 @@ You need some libraries to link to when compiling. You can use fink to install t
 libpng3 is needed for making screenshots in png. Not really needed now, but there are future plans, so you might as well get it now.
 In each case, fink will tell that you that you need to install a lot of other stuff too, just hit enter (answering yes) and fink will download and install all of it.
 The docs telling about how to compile OpenTTD tells about ''zlib''. Zlib is needed by OSX itself, so you already have it and there is no need to install it.
-
-===Using MacPorts===
-[http://www.macports.org/ The MacPorts Project] is an open-source community initiative to design an easy-to-use system for compiling, installing, and upgrading either command-line, X11 or Aqua based open-source software on the Mac OS X operating system. In essence it is the same as fink.
-
-====Installing libraries with MacPorts====
-Before installing any libraries, make sure you have access to the latest ports by updating the local repository:
- <code>sudo port selfupdate</code>
-'''Note:''' The <code>sudo</code> command is required to install the libraries globally. Before doing anything, it will ask you for your user password. Further information regarding <code>sudo</code> can be found on [http://en.wikipedia.org/wiki/Sudo wikipedia].
-
-Install ''libpng'':
- <code>sudo port install libpng</code>
-If it requires any additional packages (like ''libz'', zip libraries), it will ask you to confirm those as well.
-
-To compile a ''static binary'' (for redistribution) you will need these as well:
- <code>sudo port install fontconfig
- sudo port install freetype
- sudo port install icu</code>
-
-You might want to install further tools, e.g. mercurial or git also by means of macports. Mind that some of these have iconv as a dependency. That is nothing bad, but you'll end up with two iconv versions on your hard disc: one supplied by apple in /usr/lib and one installed by macports in /opt/local/lib. Those two are not compatible and define different symbols. It's wise to de-activate macport's libiconv as otherwise you might end up in some situations with a linker failure (see [http://bugs.openttd.org/task/3313 FS 3313])
 
 ==Getting the newest source from the svn server==
 Now you need to make a "working copy" of the source with your new svn client. To do this, use your terminal and write:
@@ -102,6 +104,8 @@ If needed, make can accept arguments as well. Commonly used arguments will be (a
 
 Make also accepts standard make arguments. The most interesting is the <code>-j</code> option. By default GCC compiles one file at a time and it can only use one CPU/core to compile a single file. If you want to compile as fast as possible, you can tell it to compile more files at once with the <code>-j</code> option. Example: <code>make bundle -j 4</code> will compile 4 files at once, making good use of a dualcore computer. Usually having two files compiling on each core is the fastest as one compile while the other one waits for read/write to the disk.
 Note: the makefile dependencies has to be set up correctly for this to work. While they are for OpenTTD, don't assume this for other projects or nasty stuff can happen, like weird compilation errors.
+
+If it comes to frequent compiles, it might be worth to look for alternative compilers. Newer OSX bring also llvm-gcc binaries which offer a speed gain during compilation for the cost of a bit slower binaries. In order to activate the set the environment variables CC=/Developers/usr/bin/llvm-gcc and CXX=/Developers/usr/bin/llvm-g++
 
 ===Compiling universal binaries===
 Compiling a universal binary is done by adding <code>--enable-universal</code> to configure:
