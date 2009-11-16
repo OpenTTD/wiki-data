@@ -2,30 +2,28 @@
 This guide will show you how to cross compile OpenTTD on Linux to be run under Windows, using the freely available GNU and MinGW tools. It is based upon the
 [http://forums.gentoo.org/viewtopic-t-66125.html Building a cross compiler (compile on Linux, run on Windows)] guide on the Gentoo Forums.
 
-== IMPORTANT ==
-At the moment I cannot get libpng and zlib to work correctly with OpenTTD so if you want you can just ignore the "Zlib and libpng" section.
-
+{{en/Note|At the moment I cannot get libpng and zlib to work correctly with OpenTTD so if you want you can just ignore the "Zlib and libpng" section.}}
 == What you will need ==
-The first things you need to get are the sources for GCC and Binutils, and the binaries for the Win32 API and MinGW runtime. You need the binaries for the Win32 API and MinGW runtime, because you need a compiler to build those in the first place; but you need those to build the compiler; and so on....<br/><br/>
+The first things you need to get are the sources for '''GCC''' and '''Binutils'''. You will also need the binaries for the '''Win32 API''' and '''MinGW runtime'''. The '''Win32 API''' and the '''MinGW Runtime''' is important because you need a compiler to build those in the first place; but you need those to build the compiler; and so on....<br/><br/>
 
 You can get the latest version of these packages from the [http://mingw.org/download.shtml MinGW website].<br/><br/>
 
-*[http://sources.redhat.com/binutils/ GNU Binutils] - a collection of binary tools<br/>
-binutils-*-src.tar.gz ([http://prdownloads.sf.net/mingw/binutils-2.15.91-20040904-1-src.tar.gz?download binutils-2.15.91-20040904-1-src.tar.gz] 14mb)
-*Windows API - headers and import libraries to support the Win32 API<br/>
-w32api-*.tar.gz ([http://prdownloads.sf.net/mingw/w32api-3.2.tar.gz?download w32api-3.2.tar.gz])
-*MinGW runtime - Run time headers to build a compiler system to build code to be run on Windows<br/>
-runtime-*.tar.gz ([http://prdownloads.sf.net/mingw/mingw-runtime-3.7.tar.gz?download mingw-runtime-3.7.tar.gz])<br/><br/>
+*''GNU Binutils'' - A collection of binary tools.<br/>
+[http://downloads.sourceforge.net/project/mingw/GNU%20Binutils/Current%20Release_%20GNU%20binutils-2.19.1/binutils-2.19.1-src.tar.gz?use_mirror=cdnetworks-us-1 Download] (~30mb)
+*''Windows API'' - Headers and import libs to support the Win32 API<br/>
+[http://downloads.sourceforge.net/project/mingw/MinGW%20API%20for%20MS-Windows/Current%20Release_%20w32api-3.13/w32api-3.13-mingw32-src.tar.gz?use_mirror=iweb Download]
+*''MinGW runtime'' - Run time headers to build a compiler system to build code to be run on Windows<br/>
+[http://downloads.sourceforge.net/project/mingw/MinGW%20Runtime/mingwrt-3.16/mingwrt-3.16-mingw32-src.tar.gz?use_mirror=iweb Download]
+<br/>
+*''GCC'' - The GNU Compiler Collection
+[ftp://ftp.fu-berlin.de/unix/languages/gcc/releases/gcc-4.4.2/gcc-4.4.2.tar.gz Download]
+**You can choose a [http://gcc.gnu.org/mirrors.html different mirror].Make sure you download <code>releases/gcc-3.4.3/gcc-3.4.3.tar.gz.</code>
 
-I could not get the version of GCC from MinGW to compile, so I had to obtain a clean version from GCC. Choose a mirror near to you from [http://gcc.gnu.org/mirrors.html the mirror list] and then download ./releases/gcc-3.4.3/gcc-3.4.3.tar.gz. For example:<br/>ftp://ftp.mirrorservice.org/sites/sources.redhat.com/pub/gcc/releases/gcc-3.4.3/gcc-3.4.3.tar.gz.
-*[http://gcc.gnu.org/ GCC] - the GNU Compiler Collection<br/>
-gcc-*.tar.gz<br/><br/>
-
-You optionally need zlib and libpng, if you want to be able to have compressed save games, and png screenshots.
-*[http://www.gzip.org/zlib/ zlib]
-zlib-*.tar.gz ([http://prdownloads.sourceforge.net/libpng/zlib-1.2.2.tar.gz?download zlib-1.2.2.tar.gz])
-*[http://www.libpng.org/pub/png/libpng.html libpng]
-libpng-*-config.tar.gz ([http://prdownloads.sourceforge.net/libpng/libpng-1.2.8-config.tar.gz?download libpng-1.2.8-config.tar.gz])
+'''''Optional''''':
+*zlib (compressed save games)
+[http://downloads.sourceforge.net/project/libpng/zlib/1.2.3/zlib-1.2.3.tar.gz?use_mirror=iweb Download]
+*libpng (for png screenshots)
+[http://prdownloads.sourceforge.net/libpng/libpng-1.2.8-config.tar.gz?download Download]
 
 == Setting up the directories ==
 
