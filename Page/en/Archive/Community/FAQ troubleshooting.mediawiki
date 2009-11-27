@@ -91,6 +91,17 @@ Try running the Timidity media player with commands <pre>timidity -iAD -Os</pre>
 If you tried all the above and still didn't get sound you can try running "aoss openttd". It made the sound work for me.
 If that doesn't work. It's posible that your soundcard doesn't support multiple sound sources at once. Then try using ALSA compactibility mode (http://gentoo-wiki.com/ALSA/Install)
 
+=== Emu10k1 ===
+
+If you have an emu10k-based soundcard, you can use its built in wavetable synth to play music.
+You will need a General MIDI SF2 bank (such as 8MBGMGS.SF2), asfxload and pmidi, and the following commands:
+
+<pre>asfxload sf2file.sf2
+export ALSA_OUTPUT_PORTS=`pmidi -l | awk '/Emu/ { print $1; exit }'`
+openttd -m extmidi:cmd=pmidi</pre>
+
+If you get this working, you can put the first two commands to execute on start up, or login, and adjust the musicdriver configuration option, to make the settings permanent.
+
 == The game keeps scrolling on my IBM ThinkPad Laptop ==
 This seems to be a common problem with these laptops. The workaround for this problem is the following:
 In the "Pass 0 rules" section of (either) %SYSTEM_ROOT%\System32\tp4table.dat or %SYSTEM_ROOT%\System32\tp4scrol.dat, add:
