@@ -1,0 +1,138 @@
+[[Category:en/Development/Compiling OpenTTD]]
+
+This page will provide some hints and tips for building OpenTTD on OS/2.
+
+==Required software==
+
+OpenTTD requires a comprehensive GNU build environment on OS/2. It is highly recommended that you download [http://os2ports.smedley.info/index.php?page=build-environment Paul Smedley's build environment], which contains almost all the programs and libraries you will need. Note that, as of December 2009, the build environment is slightly outdated - you may want to download and install GCC 4, which is also available on that site.
+
+Libraries required by or highly recommended for OpenTTD include:
+
+* SDL
+* zlib
+* libpng
+
+These are all included in Paul's build environment.
+
+Furthermore, if you want to be as up to date as you can be, you should install the Subversion client to access the latest code in our Subversion repository. An OS/2 version can be found on Paul's site.
+
+Note that currently, libICU (recommended for Unicode support) is not supported on OS/2 (at least, I (Owen Rudge) haven't got it built properly yet.) You can build OpenTTD without this, however.
+
+== Getting the source ==
+=== Releases ===
+You can download the .zip or .tar.gz source files from the [http://www.openttd.org/download-trunk OpenTTD website]. Extracting the file will give you a directory called openttd-<version>, where <version> is the version you downloaded. Enter this directory, and you're ready to proceed to step 3.
+
+=== Nightly builds ===
+Similar to the release option above, you can download the latest source snapshot (made every day at 1900 GMT) from the [http://www.openttd.org/download-trunk OpenTTD website]. Unpack and enter the directory in which it is unpacked. Now, proceed to step 3.
+
+=== Most current version (aka Trunk/SVN) ===
+The most current version of the official code is stored in our subversion repository. Subversion makes it easy to track various versions and provides an easily shareable single location for our code. For you as a user this means you can quickly get the newest source code.
+
+==== Initial download ====
+
+To obtain the source code from the subversion server type:
+
+<code>svn checkout svn://svn.openttd.org/trunk openttd</code>
+
+from command line to dump the code into the directory <code>openttd/</code>. We will refer to this directory as your "working copy" from now on. Also, all svn commands given from now on assume your working directory is the <code>openttd</code> directory.
+
+You can now skip to step 3 if you just want to compile the latest version.
+
+==== Updating ====
+
+If you have previously downloaded the code and a new version is available (iow, new revisions have been committed), you can update your working copy to the latest version. Inside your working copy run the following:
+
+<code>svn update</code>
+
+Or, if you don't only want to update but also want to see what has changed, run our script that lists the changes:
+
+<code>sh ./svnup.sh</code>
+
+Also, if you have made any local changes to the source, these will be preserved and merged with changes in svn. If a conflict between the changes occurs, it will be flagged as conflicted (Marked "C" in <code>svn status</code>) (still preserving your local changes). For more information about resolving conflicts, look at the SVN Book at [http://subversion.tigris.org].
+
+====Creating a patch file====
+
+If you have made changes to your source that you want to share or upload as a patch, you can ask svn to generate a diff file.
+The command
+
+<code>svn diff > mypatch.diff</code>
+
+creates a diff file (also referred to as "patch") which you can submit to the developers to share your improvements.
+
+====Reverting====
+
+You can undo changes to a file with:
+
+<code>svn revert filename</code>
+
+or to your entire working directory with:
+
+<code>svn revert -R .</code>
+
+==== Applying a patch ====
+
+To apply a patch (diff file) to the source code, update your source code to the patch file's revision. Let's say the patch file has been made on r1234. You can see this in the first lines of the patch:
+<code>
+ Index: foo.c
+ ===================================================================
+ --- foo.c (revision 1234)
+ +++ foo.c (working copy)
+ </code>
+To update your source code to r1234, type
+
+<code> svn update -r 1234</code>
+
+Then you're ready to merge the patch file
+
+<code> patch -p0 < mydiff.diff</code>
+
+Now (optionally) update the source code to the newest revision with
+
+<code> svn update</code>
+
+If this produces conflicts (files marked with "C"), though luck, the patch doesn't work for the latest revision (you can always revert and retry the patching, skipping this last step and playing an older version).
+
+== Compiling and running ==
+
+Compile OpenTTD with:
+
+<code>sh ./configure</code>
+
+Note that in some cases, your CPU type may be detected incorrectly. This has happened for me (Owen Rudge) when building inside a virtual machine on an AMD64 host. If this happens, you may need to type:
+
+<code>sh ./configure --cpu-type=32</code>
+
+to force the CPU width to be 32-bits.
+
+The configure command will create a Makefile, so simply type:
+
+<code>make</code>
+
+If you have changed files or updated your source, this will only recompile modified code.
+
+== Required data files ==
+
+Copy the GRF files from Transport Tycoon Deluxe to the <code>data</code> directory:
+
+'''Windows version'''
+*sample.cat
+*trg1r.grf
+*trgcr.grf
+*trghr.grf
+*trgir.grf
+*trgtr.grf
+
+'''DOS version'''
+*SAMPLE.CAT
+*TRG1.GRF
+*TRGC.GRF
+*TRGH.GRF
+*TRGI.GRF
+*TRGT.GRF
+
+You can also use the free OpenGFX and OpenSFX files available from the web site.
+
+== Running ==
+You can run openttd using the openttd.exe program which is generated in the <code>bin</code> directory.
+
+TODO: Dedicated server note, any other OS/2 pitfalls
