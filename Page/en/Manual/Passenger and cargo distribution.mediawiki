@@ -68,11 +68,13 @@ In practice it is convenient to have a semi-symmetric function which is modifiab
 
 For ''k == 0'' this is the antisymmetric function and for ''k == 1'' it's the symmetric function.
 
-Furthermore the distance between the nodes and should play a role in the demand and the sum of all ''demand(i, j)'' can not be higher than ''supply(i)'' for any node ''i''.
+Furthermore the distance between the nodes should play a role in the demand calculation and the sum of all ''demand(i, j)'' cannot be higher than ''supply(i)'' for any node ''i''.
 Thus the algorithm implementing the demand function generates a list of nodes supplying cargo and another one of nodes accepting cargo. It then repeatedly loops over all pairs of nodes ''(from, to)'' where ''from'' supplies and ''to'' accepts. For each such pair it assigns a fraction of the supply at ''from'' as ''demand'' between ''from'' and ''to'' until no supply is left at any station. Provided that ''k > 0'' it also assignes ''demand * k'' in the other direction if there is enough supply at ''to'' and ''from'' also accepts. Otherwise less or no demand is generated in the forward direction. The size of the assigned fraction depends on:
 
-* The manhattan ''distance'' between the nodes. Generally the formula is ''maxDistance / (maxDistance - distance) / l'' where maxDistance is the the sum of the x- and y-dimensions of the map and ''0 <= l <= 1'' is a configuration setting. The lower this number, the more demand is assigned each round.
+* The manhattan ''distance'' between the nodes. 
 * An ''accuracy'' configuration setting. The higher the accuracy the less demand is generated each round.
+
+Generally the formula is ''maxDistance / (maxDistance - distance) / accuracy'' where maxDistance is the the sum of the x- and y-dimensions of the map.
 
 ===acceptance-based demand===
 
