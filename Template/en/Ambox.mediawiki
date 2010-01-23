@@ -1,7 +1,7 @@
 <noinclude>[[Translation:Template/en/Ambox]]</noinclude><!-- 
       Wiki Ambox code adaptation
 
---><includeonly><table style="margin: 0px 10% 0px 10%; border: 1px solid #aaa; background:#fbfbfb"><tr>
+--><includeonly><table style="{{#IF: {{{style|}}} | {{{style}}} | margin: 0px 10% 0px 10%; border: 1px solid #aaa; background:#fbfbfb}}"><tr>
 <td style="border-left: 10px solid {{#switch:{{{type|}}} 
   | delete     =#b22222;
   | content    =#f28500;
@@ -19,9 +19,7 @@
     | protected  =Protection.png
     | #default   =Notice.png
   }}
-}}|40px|
-]]</div></td>
-<td style="border: none; padding: 0.25em 0.9em; width: 100%;"> {{{text|}}} </td>
+}}|40px]]</div></td><td style="{{#IF: {{{text-style|}}} | {{{text-style}}} | border: none; padding: 0.25em 0.9em; width: 100%;}}"> {{{text|}}} </td>
 {{#if:{{{imageright|}}}
 <td style="padding: 2px 0.5em 2px 0;">No need at the moment</td>
 }}</tr></table><!-- 
@@ -42,17 +40,27 @@ Simple usage example:
 
 <pre>
 {{en/Ambox| text = Some text.}}
-</pre>
-{{en/Ambox| text = Some text.}}
-== List of parameters==
-<pre>
-{{en/Ambox| type       = delete / content / style / notice / move / protected
-| image      = en/Picture.Png/Picture.png|alt=Picture
-| text       = Text for a big box, for the top of articles.
-| smallimage = Picture.Png OR Picture.Png|alt=Picture <-- for subsection and not whole pages, not used yet
-| smalltext  = Text for the top of article sections. <-- for subsection and not whole pages, not used yet
+OR
+{{en/Ambox| type = content
+| text = Warning Some text.
 }}
 </pre>
+
+{{en/Ambox| text = Some text.}}
+{{en/Ambox| type = content | text = Warning Some text.}}
+
+
+== Available List of parameters==
+<pre>
+{{ambox
+| type       = delete / content / style / notice / move / protected
+| image      = Picture.Png / Picture.Png|alt=Picture (if the parameter does not present, default type icon will be supplied)
+| text       = Text for a big box, for the top of articles.
+
+| style      = Different table style. (preferably should not be used)
+| text-style = same as the above for text.
+</pre>
+
 
 
 === Article message box types ===
@@ -81,12 +89,13 @@ The following examples use different '''type''' parameters but use no image para
 
 === Other images ===
 
-The default images shown above are mostly for convenience. In many cases it is more appropriate to use more specific images. These examples use the '''image''' parameter to specify an image other than the default images.
+The default images shown above are mostly for convenience. In many cases it is more appropriate to use more specific images. These example use the '''image''' parameter to specify an image other than the default images.
 
 {{en/Ambox| type  = notice
 | image =en/Manual/OpenttdManual.png|alt= Openttd Manual
-| text  = something something something something something.
+| text  = Something Something Something 
 }}
+
 
 [[Category:en/Templates|A]][[Category:en/Message boxes|A]]
 </noinclude>
