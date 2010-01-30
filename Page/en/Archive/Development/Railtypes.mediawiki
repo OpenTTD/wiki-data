@@ -33,7 +33,7 @@ This is an example table that sets up six rail type translations:
 
  1 * 30      00 08 01 06 00 12 "RAIL" "3RDR" "ELRL" "NGRL" "MONO" "MGLV"
 
-==Rail type properties (action 0, feature 11)==
+==Rail type properties (action 0, feature 10)==
 
 {|
 |-
@@ -80,19 +80,7 @@ Just a regular action 1 for sprites.
 
 ===Action 2===
 
-Like normal, used to assign sprites from action 1 to 'cargo ids'.
-
-As well as the usual global varaction variables, the following specific variables are available too:
-
-{| border="1" cellpadding="4"
-!Variable!!Size!!Content
-|-
-|40||byte||Terrain type: 0 normal, 1 desert, 2 rainforest, 4 on or above snowline.
-|-
-|41||byte||Enhanced tunnels; entrance has track above. Always 0 in OpenTTD.
-|-
-|42||dword||Road type label of level-crossing. ??? Multiple road types on a crossing?
-|}
+Like normal, used to assign sprites from action 1 to 'cargo ids'. There are no variables for rail types yet.
 
 ===Action 3===
 
@@ -101,60 +89,45 @@ For rail types the cargo type byte specifies the type of sprites being assigned.
 {| border = "1" cellpadding="4"
 !'Cargo' type!!Sprite type!!Sprites!!Usage
 |-
-|00||*Icons and cursors||16||4 rail directions, autorail, depot, tunnel and convert rail.
+|00||Cursors and icons||16||4 rail directions, autorail, depot, tunnel and convert rail.
 |-
-|01||*Track overlays for junctions and PBS||10||6 flat and 4 slope pieces. [[File:en/Archive/Development/OverlayTiles.png]]
+|01||Track overlays for junctions and PBS||10||6 flat and 4 slope pieces. [[File:en/Archive/Development/OverlayTiles.png]]
 Sprites should contain only the track, with no landscape.
 |-
-|02||*Underlay||16||6 flat and 4 slope, and 1 X crossing pieces *with track*, and 5 junction pieces without track. [[File:en/Archive/Development/UnderlayTiles.png]]
+|02||Underlay||16||6 flat and 4 slope, and 1 X crossing pieces *with track*, and 5 junction pieces without track. [[File:en/Archive/Development/UnderlayTiles.png]]
 Sprites should contain the track and the 'ballast' below it. No landscape should be drawn.
 |-
-|03||*Tunnel||8||2 sprites for each direction, first sprite is underlay, second sprite is entrance.
+|03||Tunnel||8||2 sprites for each direction, first sprite is underlay, second sprite is entrance.
 |-
-|04||Catenary wires||28||Follows the same layout for wires as in [http://wiki.ttdpatch.net/tiki-index.php?page=Action5 Action5] type 5.
+|04||Custom catenary||48||Follows the same layout as [http://wiki.ttdpatch.net/tiki-index.php?page=Action5 Action5] type 5.
 |-
-|05||Catenary pylons||8||Follows the same layout for pylons as in [http://wiki.ttdpatch.net/tiki-index.php?page=Action5 Action5] type 5.
+|05||Level crossing overlay||6||2 for perpendicular, 4 for diagonal crossings.
 |-
-|06||*Bridge surfaces||6||10 sprites if we ever include diagonal bridges. In most cases the track overlay sprites can be reused.
+|06||Bridge surfaces||6||10 sprites if we ever include diagonal bridges.
 |-
-|07||*Level crossing overlay||6||2 for perpendicular, 4 for diagonal crossings. Sprite layout for level crossings:
-[[File:en/RailtypesCrossing.png]]
-|-
-|08||Depots||6||2 sprites for each southish, 1 sprite for each northish.
-|-
-|09||Fences||8||X, Y, Vertical, Horizontal, SW slope, SE slope, NE slope and NW slope.
+|07||Depots||6||2 sprites for each southish, 1 sprite for each northish.
 |-
 |xx||Autorail sprites||55||Follows the same layout as [http://wiki.ttdpatch.net/tiki-index.php?page=Action5 Action5] type 13. Is this necessary?
 |}
 
-Not all types need to be defined, if the type is not going to be used anyway. Items marked with * must always be supplied, however.
+Not all types need to be defined, if the type is not going to be used anyway.
 
-The default 'cargo' type, traditionally used for purchase lists, is not currently used.
+Executing a varaction for every rail tile may end up quite slow, so the result may need to be cached once on starting a game. For this reason, no global varaction 2 variables should be used yet.
 
 ==Action 7/9 additions==
 
-{| border="1" cellpadding="4"
-!Condition!!Description
+{|
 |-
-|0D||Skip if the rail type label is not defined
+||Condition||Description
 |-
-|0E||Skip if the rail type label is defined
-|}
-
-==Additional VarAction 2 Variables for Other Features==
-
-===Stations===
-
-{| border="1" cellpadding="4"
-!Variable!!Size!!Content
+||0D||Skip if the rail type label is not defined
 |-
-|48||dword||Rail type label of tile
+||0E||Skip if the rail type label is defined
+|-
 |}
 
 ==Code Already Written==
 
-Code to load rail type translation tables, along with adding default the labels, is already written. Loading properties, and sprites is handled. Drawing of track using overlays is supported for rail tiles, stations and bridges.
+Code to load rail type translation tables, along with adding default the labels, is already written. Loading properties, and sprites is handled. Drawing of track using overlays is support for rail tiles.
 
-Tunnels will work but only with landscape supplied. A plan of action is needed to handle this properly.
-
-Drawing of custom depots needs to be handled.
+Drawing of correct track for stations, bridges and tunnels needs to be done. Drawing of custom depots needs to be handled.
