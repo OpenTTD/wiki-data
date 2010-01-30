@@ -81,7 +81,7 @@ Each part of the player rating is a linear function, ie. earning 50% of the targ
 </td></tr></table>
 
 ==Station rating==
-This section shows the factors that affect how much of an industry's product is delivered to a station. All calculations are done separately for each cargo type.
+This section shows the factors that affect the station rating. All calculations are done separately for each cargo type.
 
 {| border="1" cellpadding="5"
 !Factor!!Condition!!Rating points!!Rating %
@@ -128,13 +128,14 @@ This section shows the factors that affect how much of an industry's product is 
 |}
 Divide the total rating points by 255 to get the percent rating.  The maximum possible rating is 100%.  Advertising campaigns give an instant, temporary boost to ratings of nearby stations. The boost will gradually fall down to the calculated rating.
 
-
 Every 2.5 days station ratings are computed; ratings can't change by more than 2 points per cycle.
 
-==Competition==
+==Cargo delivery to stations==
+During each cycle of 2.5 days for each cargo type of the delivering industry a maximum of 2 stations can get cargo assigned. If there are more than 2 possible stations with the same maximum rating value for the current cargo type then it depends on internal ordering of the stations which ones get the cargo.
 
-When competing over a resource (like a coal mine), the rating of a station determines the amount of cargo assigned to a station. Maximum 2 stations can get cargo assigned during each cycle of 2.5 days. The two highest rated stations get resources assigned.
-If more than two stations have a rating of a resource, the two highest ranked players get resources.
+If there's only one possible station then the delivered amount is: produced_amount * station_rating_in_percent, rounded up to the next integer value.
+
+For two possible stations the calculation is more complex.
 
 ==Local authority rating==
 Ratings limit some player actions; they start at +500 and can change based on some actions.
