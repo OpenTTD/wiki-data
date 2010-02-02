@@ -97,7 +97,11 @@ Sprites should contain only the track, with no landscape.
 |02||Underlay||16||6 flat and 4 slope, and 1 X crossing pieces *with track*, and 5 junction pieces without track. [[File:en/Archive/Development/UnderlayTiles.png]]
 Sprites should contain the track and the 'ballast' below it. No landscape should be drawn.
 |-
-|03||Tunnel||8||2 sprites for each direction, first sprite is underlay, second sprite is entrance.
+|03||Tunnel||4||1 sprite for each direction. Sprite is overlay for existing tunnel graphics.
+
+The original ground sprite is drawn, then the overlay, then the original tunnel head is drawn over the top.
+
+This keeps compatibility with different landscape types. 
 |-
 |04||Custom catenary||48||Follows the same layout as [http://wiki.ttdpatch.net/tiki-index.php?page=Action5 Action5] type 5.
 |-
@@ -105,14 +109,29 @@ Sprites should contain the track and the 'ballast' below it. No landscape should
 |-
 |06||Bridge surfaces||6||10 sprites if we ever include diagonal bridges.
 |-
-|07||Depots||6||2 sprites for each southish, 1 sprite for each northish.
+|07||Depots||6||2 sprites for each southish, 1 sprite for each northish. Follows the original layout for depot sprites.*
 |-
 |xx||Autorail sprites||55||Follows the same layout as [http://wiki.ttdpatch.net/tiki-index.php?page=Action5 Action5] type 13. Is this necessary?
 |}
 
-Not all types need to be defined, if the type is not going to be used anyway.
 
-Executing a varaction for every rail tile may end up quite slow, so the result may need to be cached once on starting a game. For this reason, no global varaction 2 variables should be used yet.
+====*Depot sprite layout====
+
+{| border = "1" cellpadding="4"
+!Sprite number!!Usage
+|-
+|0||NE wall for SE-entry depot.
+|-
+|1||Depot building for SE-entry depot.
+|-
+|2||NW wall for SW-entry depot.
+|-
+|3||Depot building for SW-entry depot.
+|-
+|4||Depot building for NE-entry depot.
+|-
+|5||Depot building for NW-entry depot.
+|}
 
 ==Action 7/9 additions==
 
