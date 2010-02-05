@@ -1,4 +1,23 @@
-<includeonly><table style="background:transparent; width:100%; text-align: center;"><tr>
+<!-- 
+
+--- Whatever you type table --- -->
+<includeonly>{{#ifeq: {{{1|}}}|label|<table style="background:transparent; width:100%;"><tr>
+<td>z0: {{#If: {{{z0|}}}|{{{z0}}}|UnClaimed}}</td>
+<td>z1: {{#If: {{{z1|}}}|{{{z1}}}|UnClaimed}}</td>
+<td>z2: {{#If: {{{z2|}}}|{{{z2}}}|UnClaimed}}</td>
+</tr></table>|<!-- 
+
+
+--- z0,z1,z2 Color table Index, probably will be better in rows than columns ---       -->
+{{#ifeq: {{{1|}}}|index|<table style="background:transparent; width:300px; text-align: center;"><tr>
+<td style="background:#FFEE88;">WIP</td>
+<td style="background:#006600;">Done</td>
+<td style="background:#888888;">UnClaimed</td>
+</tr></table>|<!-- 
+
+
+--- z0,z1,z2 Color table--- -->
+<table style="background:transparent; width:100%; text-align: center;"><tr>
 <td style="background:{{#switch: {{{z0|}}}
 | wip      =#FFEE88;
 | done     =#006600;
@@ -14,7 +33,7 @@
 | done     =#006600;
 | #default =#888888;
 }}">z2</td>
-</tr></table></includeonly><noinclude>
+</tr></table>}}}}</includeonly><noinclude>
 
 ==Usage==
 Type inside a table cell:
@@ -22,16 +41,37 @@ Type inside a table cell:
 <pre>{{en/Archive/Old 32bpp/Tracker sprite status|z0 = Status
 |z1 = Status
 |z2 = Status
+}}</pre>
+OR
+<pre>{{en/Archive/Old 32bpp/Tracker sprite status| z0 = Status | z1 = Status | z2 = Status }}</pre>
+
+When 'status' can be one of those: '''wip''', '''done''' or '''unclaimed''' 
+
+{{en/Archive/Old 32bpp/Tracker sprite status|z0 = unclaimed
+|z1 = wip
+|z2 = done
 }}
 
+and typing <code>&#123;&#123;Tracker sprite status|index&#125;&#125;</code> will produce a static index table, example:
+{{en/Archive/Old 32bpp/Tracker sprite status|index}}
+
+
+another option is a labeled table, works the same with only the added '''label'''
+
+<pre>{{en/Archive/Old 32bpp/Tracker sprite status|label
+|z0 = unclaimed
+|z1 = wip
+|z2 = done
+}}</pre>
 OR
+<pre>{{en/Archive/Old 32bpp/Tracker sprite status| z0 = Status | z1 = Status | z2 = Status }}</pre>
 
-{{en/Archive/Old 32bpp/Tracker sprite status| z0 = Status | z1 = Status | z2 = Status }}
-</pre>
+When 'status' can be one of those: '''wip''', '''done''' or '''unclaimed''' 
 
-When status can be:
-* wip
-* done
-* unclaimed
+{{en/Archive/Old 32bpp/Tracker sprite status|label
+|z0 = unclaimed
+|z1 = wip
+|z2 = done
+}}
 
 [[Category:en/Templates]]</noinclude>
