@@ -1,16 +1,160 @@
 [[Translation:en/Archive/Compilation and Ports/Compiling on Windows using MinGW]]
-please dont change please !
+==Introduction==
+This page contains guidelines for compiling OpenTTD in Win32 with '''MinGW'''. For help with compiling on various platforms, join [irc://irc.oftc.net/openttd.compile #openttd.compile] on OFTC.
 
+WARNING: I was having trouble to get things working using the howto below. Using MinGW 5.0.16 installer & MSYS-1.0.11 worked out fine!
 
+==Information==
+* Source tested: OTTD trunk at revision 17875.
+* Packages used here:
+** [http://switch.dl.sourceforge.net/sourceforge/mingw/MinGW-5.1.4.exe MinGW-5.1.4]
+*** binutils-2.18.50-20080109-2
+*** gcc-core-3.4.5-20060117-3
+*** gcc-g++-3.4.5-20060117-3
+*** mingw-runtime-3.14
+*** w32api-3.12
+** [http://heanet.dl.sourceforge.net/sourceforge/mingw/MSYS-1.0.10.exe MSYS-1.0.10]
+** wget-1.9.1 (from [http://prdownloads.sf.net/mingw/wget-1.9.1-mingwPORT.tar.bz2?download mingwPORT] or [ftp://ftp.gnu.org/gnu/wget/wget-1.9.1.tar.gz sources]) -> Needed to install mingwPORTs
+** zlib-1.2.3 (from [http://prdownloads.sf.net/mingw/zlib-1.2.3-mingwPORT-1.tar.bz2?download mingwPORT] or [http://prdownloads.sourceforge.net/libpng/zlib-1.2.3.tar.gz?download sources])
+** libpng-1.2.35 ([http://sourceforge.net/project/downloading.php?groupname=libpng&filename=libpng-1.2.35.tar.bz2 sources])
+** liblzo2 ([http://www.oberhumer.com/opensource/lzo/download/lzo-2.03.tar.gz file])
+** [http://subversion.tigris.org/files/documents/15/45940/svn-win32-1.6.2.zip SVN(1.6.2)], to retrieve latest OTTD code.
 
+All downloads combined is approximately 40MB and then you can expect another ~30MB of OTTD sourcecode.
+Expect a disk usage of about 250MB.
 
+==Setting up MinGW==
+Please note that MinGW should be installed to a directory path that doesn't contain any spaces.
+# Run the MinGW 5.1.4 install file.
+# On the install, select <i>Candidate</i>, then select the <i>Minimal install</i> plus the <i>g++ compiler</i>.
 
+==Setting up MSYS==
+Please note that MSYS should be installed to a directory path that doesn't contain any spaces.
+<ol>
+<li>Run the MSYS install. You will see the following messages after GUI:
+<pre>This is a post install process that will try to normalize between
+your MinGW install if any as well as your previous MSYS installs
+if any.  I don't have any traps as aborts will not hurt anything.
+Do you wish to continue with the post install? [yn ]</pre> Input "y". 
+</li>
+<li><pre>Do you have MinGW installed? [yn ]</pre> Input "y".</li>
+<li><pre>Please answer the following in the form of c:/foo/bar.
+Where is your MinGW installation?</pre>
+Input your MinGW installation path.  If you mistyped it, the best solution is to re-install MSYS.</li>
+</ol>
 
-Why are you messing up the pages ? Simply because you do not understand them?
+==Install SVN==
+# Create a new folder called local in the directory where MSYS is installed (default C:\msys\1.0, so the new directory will be C:\msys\1.0\local).
+# Unzip the folders ''bin'', ''iconv'', ''licenses'', ''share'' from the SVN zip file and place into the new folder created in step 1
 
-It worked for us so you are doing something wrong.
-Now I will revert to before you were here.
-If you must create your own damned moronic pages.
+==Testing the MinGW installation==
+<ul><li>Run MSYS.</li>
+<li>You might need to setup your PATH environment variable (Make sure it includes C:\msys\1.0\bin;C:\mingw\bin; C:\msys\1.0\bin\local)
+<li>Run the following commands:<pre>make -v
+gcc -v
+svn help</pre></li>
+<li>They should output something.  Check if something goes wrong.</li></ul>
 
-Revert again and I will go and ask for you get you banned from the wiki.
-Thank you?
+==Compiling wget==
+<ol><li>Place '''wget-1.9.1-mingwPORT.tar.bz2''' in a folder (e.g. /home). Again, remember MSYS doesn't like spaces!</li>
+<li>If the compilation fails, please just use the temporary wget.exe for the rest of this HOWTO</li>
+<li>Make sure you are in the same directory where you placed the file and Run: 
+<li> For help on how to browse using MinGW and list of commands: http://www.westwind.com/reference/OS-X/commandline/navigation.html</li>
+
+<pre>tar -xvjf wget-1.9.1-mingwPORT.tar.bz2
+mkdir -p /usr/local/bin
+cd wget-1.9.1/mingwPORT
+cp wget.exe /usr/local/bin
+mkdir -p /usr/src/wget-1.9.1
+./mingwPORT.sh</pre>
+'''Answer the questions by pressing enter.'''</li>
+<li>It will download wget sources, compile and install them for you.</li>
+<li>Remove the temporary wget: <pre>rm /usr/local/bin/wget.exe</pre></li></ol>
+
+==Compiling zlib==
+<ol>
+<li>Place <b>zlib-1.2.3-mingwPORT-1.tar.bz2</b> in a folder (e.g. /home)</li>
+<li>Start MSYS.</li>
+<li>Make sure you are in the same directory where you placed the file and Run: 
+<pre>tar -xvjf zlib-1.2.3-mingwPORT-1.tar.bz2
+cd zlib-1.2.3/mingwPORT
+mkdir /usr/src/zlib-1.2.3
+./mingwPORT.sh</pre>
+'''Answer the questions by just pressing enter.'''</li>
+<li>It will download zlib sources, compile and install them for you.</li>
+<li>Now its time to make the files available where they are needed. Run:   
+<pre>mkdir /usr/local/include
+mkdir /usr/local/lib
+cp /mingw/include/zlib.h /mingw/include/zconf.h /usr/local/include
+cp /mingw/lib/libz.a /usr/local/lib</pre>
+</li></ol>
+
+==Compiling pnglib==
+<ol><li>Place '''libpng-1.2.35.tar.bz2''' in a folder (e.g. /home)</li>
+<li>Start MSYS.</li>
+<li>Make sure you are in the same directory where you placed the file and Run: <pre>tar -xvjf libpng-1.2.35.tar.bz2
+cd libpng-1.2.35
+./configure
+make
+make install
+</pre></li>
+<li>That's all, libpng is installed now</li></ol>
+
+==Compiling liblzo2==
+<ol><li>Place '''lzo-2.03.tar.gz''' in a folder (e.g. /home)</li>
+<li>Extract the file to the folder "lzo-2.03.tar.gz"</li>
+<li>Start MSYS.</li>
+<li>Make sure you are in the same directory where you extracted the file and Run:</li><pre>
+./configure --prefix=/mingw
+make && make install
+cp -R /mingw/include/lzo /usr/local/include/
+cp /mingw/lib/liblzo2.a /usr/local/lib</pre>
+<li>There, now liblzo2 is installed.</li>
+</ol>
+
+==Getting and Managing the source code==
+There are several ways to [[en/Development/FAQ development#how-can-i-obtain-the-source-code|obtain]] the source:
+
+'''This is one way''':
+<ol><li>Start MSYS.</li>
+<li>Run: <pre>svn checkout svn://svn.openttd.org/trunk/</pre></li></ol>
+
+'''Downloading to a given folder''':
+<ol><li>Start MSYS.</li>
+<li>Run: <pre>svn checkout svn://svn.openttd.org/trunk/ ~/mytestdir</pre></li>
+This command will download trunk to mytestdir (<code>/home/mytestdir</code>)</ol>
+
+'''Getting a certain revision''':
+<ol><li>Start MSYS.</li>
+<li><pre>Run: <pre>svn checkout svn://svn.openttd.org/trunk/ -r#####</pre></li>
+Replace ##### which a revision number.</ol>
+
+'''Combining the two'''
+<ol><li>Start MSYS.</li>
+<li>Run: <pre>svn checkout svn://svn.openttd.org/trunk/ -r##### ~/mytestdir</pre></li>
+This would download the given revision (#####) into the dir <code>/home/mytestdir/</code></ol>
+
+'''Updating (to a certain revision)'''
+<ol><li>Start MSYS.</li>
+<li>Run: <pre>svn up</pre></li>
+This would update to the latest revision, to update to a specific revision:
+<li> Run: <pre>svn up -r#####</pre></li>
+Replace ##### with a revision number.</ol>
+
+==Compiling OpenTTD==
+If you cannot compile, don't panic. Sometimes it may be due to coding errors, but they should be reported on [http://bugs.openttd.org/ bugs.openttd.org], so they can be fixed.
+
+<ol><li>Start MSYS.</li>
+<li>Run:<pre>cd ~/trunk
+./configure
+make</pre>Some warnings may be shown, but they usually do not matter.</li>
+<li>The compiling is complete when the openttd.exe file is made. It will be copied to the <code>./bin</code> subfolder.</li></ol>
+
+==Testing OpenTTD==
+# Copy the following files from <code>(TTD)\data\</code> to <code>(OTTD)\data\</code> (alternatively, you can copy them to your [http://vcs.openttd.org/svn/browser/trunk/readme.txt#L246 shared directory data folder]):<br>sample.cat<br>trg1r.grf<br>trgcr.grf<br>trghr.grf<br>trgir.grf<br>trgtr.grf
+# Copy the folder <code>(TTD)\gm</code> to <code>(OTTD)\gm</code> (Optional: only if you want music)
+# Run <code>openttd.exe</code>.
+# Enjoy!
+
+[[Category:en/Development/Compiling OpenTTD]]
+[[Category:en/Archive/Program Descriptions]]
