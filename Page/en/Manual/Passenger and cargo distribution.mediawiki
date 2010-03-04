@@ -138,6 +138,13 @@ In the smallmap the planned and real flows over each link are shown. You can cho
 
 You can either have the stats shown in numbers (units of cargo per month) or as graphs. If shown as numbers the numbers in the map are in the same order as the legend entries.
 
+==Supply Scaling==
+The system as depicted by now doesn't require you to provide multiple destinations for a given source of cargo. The cargo will be distributed among the available destinations and you are free to provide any number of those. Also it has been noted that at transfer stations large amounts of cargo will pile up very quickly. Especially early in the game it's hard to get them transported. To address these points supply scaling has been implemented it allows you to set a cap to your station ratings. Lower ratings lead to less cargo being generated. The cap is raised when more destinations become available. The formula is:
+
+ rating = min_rating_cap + (100 - min_rating_cap) * global_acceptance / acceptance_in_component
+
+''min_rating_cap'' is a new setting in "Advanced settings" -> "Economy". ''global_acceptance'' is the overall sum of acceptance numbers for the given cargo on the map. ''acceptance_in_component'' is the sum of acceptance numbers for the given cargo on tiles in the catchment areas of stations belonging to the same link graph component. This means the larger your link graph component gets the higher your rating can grow in all stations belonging to the link graph component. If you set the minimum cap to 100%, however, you'll get the same behaviour as without supply scaling. If you set it to 0% you'll have a very hard time getting any cargo early in the game.
+
 ==Optimizations==
 The vehicle loading described above proved to be very slow when using the stock OpenTTD cargo lists. This is mainly because in order to find packets that could be loaded into vehicles the list has to be searched linearly for packets with the same next hop as the loading vehicle. With a lot of cargo waiting this can take a lot of time. As a second problem the cargo reserved for loading vehicles couldn't be saved as a simple number anymore because a vehicle couldn't load just any packet anymore. In order to make reservations work again specific packets had to be reserved for specific vehicles. Rebuilding those lists of reserved packets in each loading round is costly. To resolve these problems two optimizations have been introduced.
 
@@ -147,4 +154,4 @@ Station cargo lists are sorted by the next hop a packet wants to travel to. Like
 ===Explicit Reservation===
 Instead of rebuilding the reservation list in each loading round reserved cargo is kept in a seperate list inside the vehicle cargo list. Like this the amount of cargo to be searched in each loading round is reduced and the effort of rebuilding the reservations is spared. Reservation lists are saved in the savegames along with the normal vehicle cargo lists.
 
---fonsinchen 22:50, 11 November 2009 (UTC)
+fonsinchen 22:39, 4 March 2010 (UTC)
