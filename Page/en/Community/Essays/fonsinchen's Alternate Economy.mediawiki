@@ -1,14 +1,12 @@
 ==Problems with (O)TTDs economic model==
 
-At various occasions people have stated that OpenTTDs economic model is far from optimal. Complaints usually focus on the ability to gain large amounts of money with too little effort. The lack of opportunities to spend the money makes the game very easy in later stages. As with enough money the performance measures easy to manipulate the performance rating shown in 2051 seems fairly arbitrary. Especially air planes give the player an opportunity to make an enormous amount of money with very little effort. Thus, the economic model has frequently been called '''unbalanced'''.
+At various occasions people have stated that OpenTTDs economic model is far from optimal. Complaints usually focus on the ability to gain large amounts of money with too little effort. The lack of opportunities to spend the money makes the game very easy in later stages. As with enough money the performance measures are easy to manipulate the performance rating shown in 2051 seems fairly arbitrary. Especially planes give the player an opportunity to make an enormous amount of money with very little effort. Thus, the economic model has frequently been called '''unbalanced'''.
 
 Additionally the whole game is centered around money as '''the''' performance rating. This makes sense when viewing the game as a simulation of reality. In reality transport companies are subject to the laws of capitalism which makes the profit they generate their performance rating. This is where the analogy ends. If OpenTTD is a simulation of capitalist economy it is very shallow. People have already complained about the lack of a proper stock market, the lack of a more detailed bank system, the lack of taxes and other shortcomings. Obviously, once you have reached a certain level, it isn't possible anymore to play the game with a truly '''capitalist''' mindset. Money quickly becomes abundant and the game gets too easy. What keeps people playing the game afterwards are entirely different things.
 
-And, to make my personal motivation clear: '''Capitalism is boring. I want something else.'''
-
 ==Cheating the economic model==
 
-You can watch the lack of capitalist mindset in the games played by the [http://openttdcoop.org OpenTTDCoop community]. Most times they play cooperatively and set themselves goals outside or even conflicting with the economic model. Certain elements of their games still need to conform to that model in order to keep the game running, but those are commonly regarded as mere formal excercizes and named accordingly ("moneymaker"). Obviously, due to the weakness of the economic model, it is rather easy to subvert it and play your own game. This is widely regarded as a strength, not as a weakness of the game.
+You can watch the lack of capitalist mindset in the games played by the [http://openttdcoop.org OpenTTDCoop community]. Most times they play cooperatively and set themselves goals outside or even conflicting with the economic model. Certain elements of their games still need to conform to that model in order to keep the game running, but those are commonly regarded as mere formal exercises and named accordingly ("moneymaker"). Obviously, due to the weakness of the economic model, it is rather easy to subvert it and play your own game. This is widely regarded as a strength, not as a weakness of the game.
 
 ==Criteria for a new economic model==
 
@@ -24,22 +22,37 @@ Building on [[en/Manual/Passenger and cargo distribution]] a system can be desig
 
  In the alternate economic model you will not be paid for individual shipments of cargo.
 
-Instead you get money from towns supporting you. Another radical change is the final performance rating which won't include any monetary values. Instead the aggregated town ratings and/or service levels will be included. Some new concepts are introduced which need some clarification:
+Instead you get money from towns supporting you. Another radical change is the final performance rating which won't include any monetary values. Instead the aggregated town ratings will be included.
 
-===Service Level===
-The service level of a company in a town is calculated from the amount of cargo - passengers, mail, cargo from nearby industries - generated in or near the town that has been delivered to the correct destination. The destination is chosen by cargodist, if that's enabled. Otherwise it's any destination. That amount is taken as percentage of the theoretical maximum amount of cargo the town could generate. It is weighted by the speed of delivery similar to the way cargo payments are weighted. The classical town rating could perhaps be completely replaced with the service level. This arrangement needs some further thoughts, though.
+===New town ratings===
+In the new model your town ratings are dependent on the amount of cargo you deliver to a town and its industries. In order to determine the desired amount of cargo, the number of accepting tiles and their acceptance values is counted for each town and globally. The global production for each cargo is also counted globally. Like this for each town and each cargo the desired amount is:
 
-===Supply Scaling===
-The station rating is scaled by the amount of accepting tiles reachable from stations in the network. This number is calculated when calculating the link graph component the station belongs to. It is taken as fraction of the overall number of accepting tiles for this cargo in the map. There will be a configurable minimum and maximum for that scaling factor. The computed number represents a fraction of their difference. 
+ desired_amount = global_production * town_acceptance / global_acceptance
 
-===Town Support===
-When the service level of a company in a town surpasses a certain amount the town decides to '''support''' the company. When the service level falls below a certain amount the town drops support. "Support" means that the entire transport budget of that town is given to the company. The budget depends only on the number of inhabitants a town has. The amount each inhabitant contributes to the budget is configurable. The budget is paid either once per year or once per month. This still has to be decided on. Generally this means there is a first come, first serve principle. Once a company has a town's support another company can only aqcuire it if the first company's service level falls below the threshold. Additional settings can be introduced here, but making it hard to gain town support is essential to the concept. Service levels needed for town support rise and fall with the overall number of accepting tiles reachable from stations in any network. This number is taken as fraction of all accepting tiles. The minimum and maximum service levels needed for town support can be configured similar to the supply scaling range. The town where you build your first piece of infrastructure automatically supports you if it doesn't support another company already.
+If you deliver that amount or more you'll get an optimal rating. If you deliver less you'll get a worse rating. The other means of changing the town rating (frequency of service, bribe, construction, trees) can be switched on and off selectively.
 
-===Losing, Merging and Debt===
-If no town supports you, you lose the game - no matter how much money you have left. However, if you run into debt, you don't lose the game. Instead your company is auto-merged with a rich other company. If no other company is left or after merging with any other company you'd still be in debt, your stations, tracks and vehicles will start disappearing instead. The check is regularly rerun until you are either merged or you are out of debt or you have lost due to losing support of the last town. The stock market is removed. You can't buy other companies anymore.
+===Payment by town rating===
+This is the core of the new model. Each town has a monthly transport budget only dependent on its population number. This budget is given to the transport companies delivering cargo to the town and its industries. The share given to each company is calculated according to its town rating. Only positive ratings are considered. Companies with negative rating aren't paid at all. The formula is as follows:
 
-===Conclusions===
+ payment = population * own_rating / max(1000, sum_of_all_positive_ratings)
 
-Obviously this model can be configured to be very hard by setting the budget modifier very low and the required service levels very high. It can also be configured to be very easy by doing the opposite. It can be kept optional as it is composed of several isolated changes most of which can also be used with the current model. It doesn't interfer with any NewGRFs I can think of, except perhaps NewGRF defined cargo payment rates which are only partly respected by factoring in the speed factor into the service level. And, especially when someone is running into problems, it will provide for some interesting twists.
+While this mechanism is active the usual payments per delivery are switched off.
 
---fonsinchen 01:50, 12 November 2009 (UTC)
+===Weighting deliveries===
+In order to respect the newgrf specs about cargo payments the rating gain per delivery is weighted according to the number of days it has been in transport and the base price the cargo would generate in the standard economy. The base price thus determines the ''importance'' of the cargo. The weighting for number of days in transport can range from 1/4 to 2. The time factor calculation is the same as with standard economy but the factor is then normalized to get this range.
+
+===Modified performance rating===
+The performance rating should not contain any monetary values. Instead it should include things like:
+ * accumulated town ratings
+ * cargo delivered as percentage of cargo produced
+ * number of vehicles as inverse measure (the less vehicles you need to achieve the other goals, the better you are)
+
+===Modified town GUI===
+The town GUI should display:
+ * the expected payments for the various companies
+ * the next payday
+ * the monthly amount of goods expected
+ * possibly more ...
+
+===Modified vehicle profit rating===
+Determining the profitability of a single vehicle in this context is tricky. The current way is clearly misleading.
