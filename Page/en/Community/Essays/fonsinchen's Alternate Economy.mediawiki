@@ -29,7 +29,7 @@ In the new model your town ratings are dependent on the amount of cargo you deli
 
  desired_amount = global_production * town_acceptance / global_acceptance
 
-If you deliver that amount or more you'll get an optimal rating. If you deliver less you'll get a worse rating. The other means of changing the town rating (frequency of service, bribe, construction, trees) can be switched on and off selectively.
+If you deliver that amount or more you'll get an optimal rating. If you deliver less you'll get a worse rating. The other means of changing the town rating (frequency of service, bribe, construction, trees) can be switched on and off selectively. The rating decreases in fixed intervals so that you have to deliver the desired amount each month to keep up your rating. The amount by which the rating decreases grows with the rating number itself. Like this it's easier to keep up a low rating than a high rating.
 
 ===Payment by town rating===
 This is the core of the new model. Each town has a monthly transport budget only dependent on its population number. This budget is given to the transport companies delivering cargo to the town and its industries. The share given to each company is calculated according to its town rating. Only positive ratings are considered. Companies with negative rating aren't paid at all. The formula is as follows:
@@ -56,3 +56,7 @@ The town GUI should display:
 
 ===Modified vehicle profit rating===
 Determining the profitability of a single vehicle in this context is tricky. The current way is clearly misleading.
+
+===Losing, Merging and Debt===
+The ability to be bought up or lose the game if you run out of money doesn't really fit into the spirit of the alternate economic model. Thus some changes have to be made.
+If all your town ratings are below a certain threshold your company is dissolved, no matter how much money you have. Mind that this excludes towns where you have no rating at all. Thus, as long as you get a good start in any town you don't lose immediately after starting the game. If you run into debt, you don't lose the game either. Instead your company is auto-merged with the richest other company. If no other company is left or after merging with any other company you'd still be in debt, your stations, tracks and vehicles will start disappearing instead. The check is regularly rerun until you are either merged or you are out of debt or you have lost due to losing support of the last town. Additionally the stock market is removed. Thus you can't buy other companies for money anymore.
