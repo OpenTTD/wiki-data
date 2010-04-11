@@ -12,30 +12,42 @@ Compiling OpenTTD requires use of the command line, so before you start, you sho
 First you need to install a compiler. You should do this by installing Xcode (10.3+)
 They should be on the CD / DVD when you got your OS. You can also download it from the Apple Developer Connection web site (free registration required), although it is over 500MB in size. This includes, amongst many other things, gcc (in the ''UNIX Dev Support'' package), which is the compiler that are used by most opensource projects, including OpenTTD.
 
-==Installing Extra Apps/Libraries==
-In order to get the very latest source, you will need the svn client. Starting with Mac OS 10.5, svn is pre-installed, so Leopard & Snow Leopard users don't need to worry about getting it. Users of older versions of OS X can either install it through fink (see below), or alternatively there are a number of binary packages linked from the [http://subversion.tigris.org/project_packages.html#osx official subversion website].
+==Installing required libraries==
+In order to build OpenTTD from source you need to have installed some [http://www.openttd.org/en/development libraries] which it depends upon. Depending upon your local installation you maybe also want to install a(nother) version control system like svn or mercurial in order to obtain the lastest trunk source of OpenTTD.
 
-Compiling OpenTTD will also require the use of ''libpng''. Again, this may be obtained through fink or macports. Alternatively, you may compile and install it from source for yourself (get it from [http://www.libpng.org/pub/png/libpng.html libpng.org]). There is also a link to a binary package on the page if you wish to do that instead.
+The minimum requirements for OpenTTD on mac are:
+* [http://www.zlib.net/ zlib]
+* [http://www.libpng.org/pub/png/libpng.html libpng] (has zlib as dependency)
+
+and optioally you want also:
+* [http://www.oberhumer.com/opensource/lzo/ lzo2]
+* [http://www.freetype.org/ freetype2]
+* [http://icu-project.org/ icu]
+
+[http://www.libsdl.org/ SDL] and [http://fontconfig.org/ fontconfig] are not required on mac.
+
+The easiest solution in order to obtain these libraries is to have either [http://www.macports.org/ macports] or [http://www.finkproject.org/ fink] install them for you. Alternatively, you may compile and install it from source for yourself. As another alternative you may visit the pages of those libraries and see whether they provide ready-compiled binary versions. At least libpng does so.
 
 ===Using MacPorts===
-[http://www.macports.org/ The MacPorts Project] is an open-source community initiative to design an easy-to-use system for compiling, installing, and upgrading either command-line, X11 or Aqua based open-source software on the Mac OS X operating system.
+[http://www.macports.org/ The MacPorts Project] is an open-source community initiative to design an easy-to-use system for compiling, installing, and upgrading either command-line, X11 or Aqua based open-source software on the Mac OS X operating system. As you will install libraries in your system dirs, you'll need to do so as administrator via the command ''sudo'' - which will require you to enter the administrator password. Further information regarding <code>sudo</code> can be found on [https://www.wikipedia.org/wiki/Sudo wikipedia].
 
 ====Installing libraries with MacPorts====
 Before installing any libraries, make sure you have access to the latest ports by updating the local repository:
  <code>sudo port selfupdate</code>
-'''Note:''' The <code>sudo</code> command is required to install the libraries globally. Before doing anything, it will ask you for your user password. Further information regarding <code>sudo</code> can be found on [https://www.wikipedia.org/wiki/Sudo wikipedia].
 
 Install ''libpng'' (the required ''zlib'' will be installed as dependency automatically):
  <code>sudo port install libpng</code>
 You will be asked to confirm required additional packages (like ''libz'', zip libraries) as well.
 
-In order to compile a ''static binary'' (for redistribution) you will need these as well:
+At least in order to compile a ''static binary'' (for redistribution) but also for your conveniencea you might want these as well:
  <code>sudo port install fontconfig
  sudo port install freetype
  sudo port install icu</code>
 
-If you would like to compile binaries which you want to distribute to other people, you want to compile universal binaries. Most macport packages mentioned above offer the option to be installed as universal libaries, but it has to be requested for each install:
-<code>sudo port install zlib +universal</code>
+If you've gone through these steps you'll have watched your computer compile libraries for some time, but now you'll have installed all pre-requisits in order to be able to compile OpenTTD for yourself.
+====Some further notes on MacPorts====
+If you would like to compile binaries which you want to distribute to other people, you want to compile universal binaries. All macport packages mentioned above offer the option to be installed as universal libaries, but it has to be requested for each install:
+ <code>sudo port install zlib +universal</code>
 
 It might be worth to risk a look at the [http://guide.macports.org/#using.port macports documentation]. If you need for one or another reason an old(er) library version, a short walk-through is [https://trac.macports.org/wiki/howto/InstallingOlderPort found here]
 
