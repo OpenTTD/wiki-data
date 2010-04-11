@@ -25,14 +25,19 @@ Before installing any libraries, make sure you have access to the latest ports b
  <code>sudo port selfupdate</code>
 '''Note:''' The <code>sudo</code> command is required to install the libraries globally. Before doing anything, it will ask you for your user password. Further information regarding <code>sudo</code> can be found on [https://www.wikipedia.org/wiki/Sudo wikipedia].
 
-Install ''libpng'':
+Install ''libpng'' (the required ''zlib'' will be installed as dependency automatically):
  <code>sudo port install libpng</code>
-If it requires any additional packages (like ''libz'', zip libraries), it will ask you to confirm those as well.
+You will be asked to confirm required additional packages (like ''libz'', zip libraries) as well.
 
-To compile a ''static binary'' (for redistribution) you will need these as well:
+In order to compile a ''static binary'' (for redistribution) you will need these as well:
  <code>sudo port install fontconfig
  sudo port install freetype
  sudo port install icu</code>
+
+If you would like to compile binaries which you want to distribute to other people, you want to compile universal binaries. Most macport packages mentioned above offer the option to be installed as universal libaries, but it has to be requested for each install:
+<code>sudo port install zlib +universal</code>
+
+It might be worth to risk a look at the [http://guide.macports.org/#using.port macports documentation]. If you need for one or another reason an old(er) library version, a short walk-through is [https://trac.macports.org/wiki/howto/InstallingOlderPort found here]
 
 {{en/Warning| You might want to install further tools, e.g. mercurial or git also by means of macports. Mind that some of these have iconv as a dependency. That is nothing bad, but you'll end up with '''two iconv versions''' on your hard disc: one supplied by apple in /usr/lib and one installed by macports in /opt/local/lib. Those two are not compatible and define different symbols and are different versions. You can temporarily de-activate macport's libiconv ("sudo port deactivate libiconv") as otherwise you might end up in some situations with a linker failure (see [http://bugs.openttd.org/task/3313 FS 3313]). But this might render svn, mercurial or whatever relies on macport's version un-usable}}
 
