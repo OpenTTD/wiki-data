@@ -31,17 +31,9 @@ If the window may be changed in size by the user, a '''resizebox''' should be av
 {{en/Todo|panels, buttons}}
 
 == Focus ==
-=== Background ===
-In OpenTTD there is a [[en/Archive/Source/OpenTTDDevBlackBook/Window/WidgetFocus|focus system]] which allows users to switch between editing the contents of edit boxes or allow using global hotkeys. Since only edit boxes make use of focus this section is mostly only of use for windows where an edit box is considered.
+For some windows it is useful to by default give focus to an edit box, however there is a problem with that: When edit boxes has focus, no hotkeys can be used as all keyboard input is sent to the edit box.
 
-By calling Window::SetFocusedWidget in the window constructor it is possible to give focus to any widget when the windows open. Using this function it is possible to by default focus an edit box so that the user can start typing without having to click on the edit box. This is good for windows where the main usage of the window is to edit the contents of the edit box such as the query window. For windows that allow many different usages, and where editing the edit box is just one of them, it is not a good idea to by default give focus to the edit box. The problem with giving edit boxes focus by default is that they get all keyboard input until the user click on another widget. This includes any hotkey including things like Ctrl+Q etc. 
-
-=== Guidelines ===
-Because of the problems with stolen global hotkeys, only give edit boxes focus by default if
-* The main purpose of the window is to use the edit box
-* There is not a long delay between opening the window and when you want to use it
-
-In the game menu it is however possible to give edit boxes focus in multi-purpose windows like the content download window since there aren't that many hotkeys in the main menu.
+Therefore, most windows should not give focus to edit boxes by default. The exception is windows like the query string window which has the only purpose of letting users editing a string.
 
 === More reading ===
 See the [[en/Archive/Source/OpenTTDDevBlackBook/Window/WidgetFocus|Widget Focus]] article for more information regarding how the focus system works. Local vs. global focus etc.
