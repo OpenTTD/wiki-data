@@ -61,10 +61,35 @@ This article covers questions regarding development of OpenTTD, e.g. using SVN, 
 ====How to apply a patch?====
 It's usually best to apply patches to the revision stated by the patch creator.
 
+Different version control systems use different ways of expressing changes. Currently, there are SVN type patches and HG/GIT type patches.
+To know what you have, open the patch file with a text editor, and look at the first few lines.
+
+A SVN type patch starts like
+<pre>
+Index: src/gfx.cpp
+===================================================================
+--- src/gfx.cpp (revision 20024)
++++ src/gfx.cpp (working copy)
+@@ -641,14 +641,13 @@
+...
+</pre>
+
+and a HG/GIT type patch starts like
+<pre>
+diff --git a/src/gfx.cpp b/src/gfx.cpp
+--- a/src/gfx.cpp
++++ b/src/gfx.cpp
+@@ -641,14 +641,13 @@
+...
+</pre>
+The crucial difference is the <code>a/</code> and <code>b/</code> additions at the lines starting with <code>---</code> and <code>+++</code>.
+
+
 *'''Linux:''' Type the following line into a console (replace patch_name with the filename of the patch):
-:<code>patch -p0 < patch_name</code>. However, in some cases you might need <code>patch -p1 < patch_name</code>.
+:<code>patch -p0 < patch_name</code> (for SVN type patches). However, in some cases you might need <code>patch -p1 < patch_name</code> (for HG/GIT type patches).
  
 *'''Windows:''' Make sure you have [http://tortoisesvn.tigris.org TortoiseSVN] installed.
+{{en/Warning| TortoiseSVN can only handle SVN type patches, it '''CANNOT''' handle HG/GIT type patches!!}}
 :Right-click on the folder with the OpenTTD source code, open the TortoiseSVN submenu and select 'Apply Patch...'. Browse to the patch file and select it. Then, right click on the 'File Patches' window and click on 'Patch All'. After you're done, close the TortoiseMerge window.
 
 [[Category:en/FAQs]]
