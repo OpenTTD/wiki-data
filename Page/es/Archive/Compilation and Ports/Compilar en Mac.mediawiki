@@ -35,7 +35,7 @@ La solución más sencilla para obtener estas librerías es usar [http://www.mac
 Antes de instalar cualquier librería, asegúrese de tener acceso a los últimos puertos, actualizando el repositorio local:
  <code>sudo port selfupdate</code>
 
-Instale ''libpng'' (la librería ''zlib'', que también es necesaria, se instalará de forma automática con ella):
+Instale ''libpng'' (la librería ''zlib'', que también es necesaria, se instalará de forma automática con ella, por ser un archivo dependiente):
  <code>sudo port install libpng</code>
 Se le pedirá también que confirme los paquetes requeridos adicionales (como ''libz'', librerías zip).
 
@@ -45,15 +45,15 @@ No sólo para compilar un ''binario estático'' (para su redistribución), sino 
  sudo port install icu</code>
 
 Si ha seguido todos los pasos que hemos visto, se habrán instalado en tu ordenador las librerías necesarias (tardando algún tiempo) como pre-requisitos para poder compilar OpenTTD por usted mismo.
-{{es/Pendiente de traducción}}
-
-====Some further notes on MacPorts====
-If you would like to compile binaries which you want to distribute to other people, you want to compile universal binaries. All macport packages mentioned above offer the option to be installed as universal libaries, but it has to be requested for each install:
+====Algunas notas sobre MacPorts====
+Si usted quiere compilar binarios para distribuirlos a otras personas, puede que quiera compilar binarios universales. Todos los paquetes MacPort mencionados anteriormente tienen la opción instalarse como librerías universales, pero se tiene que solicitar en cada instalación:
  <code>sudo port install zlib +universal</code>
 
-It might be worth to risk a look at the [http://guide.macports.org/#using.port macports documentation]. If you need for one or another reason an old(er) library version, a short walk-through is [https://trac.macports.org/wiki/howto/InstallingOlderPort found here]
+Merece la pena echar un vistazo a la [http://guide.macports.org/#using.port documentación de MacPorts]. Si necesita por cualquier motivo una versión anterior de una librería, puede hacer una pequeña visita y [https://trac.macports.org/wiki/howto/InstallingOlderPort encontrarlo aquí].
 
-{{en/Note| You might want to install further tools, e.g. mercurial or git also by means of macports. Mind that some of these have iconv as a dependency. That is nothing bad, but you'll end up with '''two iconv versions''' on your hard disc: one supplied by apple in /usr/lib and one installed by macports in /opt/local/lib. Those two are not compatible and define different symbols and are different versions. You can temporarily de-activate macport's libiconv ("sudo port deactivate libiconv") as otherwise you might end up in some situations with a linker failure (see [http://bugs.openttd.org/task/3313 FS 3313]). But this might render svn, mercurial or whatever relies on macport's version un-usable}}
+{{en/Note| Es posible que desee instalar más herramientas, p.e. mercurial o git, también por medio de macports. Lamentamos que algunos incorporen inconv como archivo dependiente. Eso no es malo, pero acabará con ''dos versiones iconv'' en su disco duro: uno proporcionado por Apple en /usr/lib y otro instalado por macports en /opt/local/lib. Esas dos no son compatibles, definen diferentes símbolos y son diferentes versiones. Temporalmente se puede desactivar el libiconv de macport ("sudo port deactivate libiconv") de lo contrario podría terminar en ocasiones con un fallo de vinculación (vea [http://bugs.openttd.org/task/3313 FS 3313]). Pero esto podría hacer que svn, mercurial o lo que sea se base en la versión no-utilizable de macport}}
+
+{{es/Pendiente de traducción}}
 
 {{en/Note| There are issues with some gcc versions which are supplied by macports. Use one of the apple-supplied compilers if fails with illegal compiler arguments. You can switch the compiler being used using [http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/Xcode-2.5/man8/gcc_select.8.html gcc_select]}}
 
