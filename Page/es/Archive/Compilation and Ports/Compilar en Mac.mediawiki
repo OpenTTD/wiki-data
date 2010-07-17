@@ -143,28 +143,27 @@ Esto puede ocurrir si ha descargado las librerías compiladas para OSX 10.3.x y 
 Si desea mover la aplicación que acaba de compilar a otro equipo, deberá instalar  ''sdl'' (y ''libpng'' si lo va a usar) en ese equipo también o compilar estáticamente. Apple recomienda las compilaciones estáticas, pero si sólo quiere jugar el juego puede que sea mejor instalar las librerías.
 
 ===Compilar estáticamente===
-{{es/Pendiente de traducción}}
-To compile statically, you need to edit makefile.config to do so. You can do this in any text editor (including Developer tools/Xcode). Find the line, which says
+Para compilar de forma estática, es necesario modificar makefile.config. Esto se puede hacer con cualquier editor de texto (incluyendo las herramientas para desarrolladores/Xcode). Busque la línea que dice
 <code>STATIC:=</code>
-and change it to
+y cámbiela por
 <code>STATIC:=1</code>
 
-makefile.config are generated when running make, so it will not be generated before the first time you run make. To set it the first time you  compile, run
+makefile.config se genera al ejecutar make, por lo que no se generará antes de la primera vez que ejecute make. Para establecer esto la primera vez que compile, ejecute
 <code>make STATIC:=1</code>
 
-Note: if you change anything in makefile.config, you should run
+Nota: si cambia algo en makefile.config, debe ejecutar
 <code>make clean</code>
-to make sure you get rid of anything compiled using the old setup
+para estar seguro de deshacerse de cualquier cosa compilada usando la vieja configuración
 
-You are now ready to play after you added the grf files from winTTD
+Ya está listo para jugar, después de agregar los archivos GRF de winTTD.
 
-===Compiling universal binaries===
-'''Needs at least Xcode 2.1 and OSX 10.4'''''
+===Compilar binarios universales===
+'''Necesita por lo menos Xcode 2.1 y OSX 10.4'''
 
-To compile universal binaries, make sure that you got the right crosscompilers installed from Xcode (default is 10.4u for i386 part and 10.3.9 for PPC part. This can be changed from Makefile.config)
-then type:
+Para compilar los binarios universales, asegúrate de que tienes el derecho de compilaciones cruzadas (right crosscompilers) instalado desde Xcode (por defecto es 10.4u para la parte i386 y 10.3.9 para la parte de PPC. Esto se puede cambiar en Makefile.config)
+a continuación, escriba:
  <code>make UNIVERSAL_BINARY:=1</code>
-Replace UNIVERSAL_BINARY with TRIPLE_BINARY if you want G5 optimised code on top of the normal universal binary.
-If you do not add a target argument to make, then it will optimise for the CPU it compiles on, which should always be the best choice unless you plan to move the binary to another computer.
+Reemplace UNIVERSAL_BINARY con TRIPLE_BINARY si desea código optimizado para G5 en la parte superior del binario universal normal.
+Si no agrega un argumento a make, entonces se optimizará para la CPU sobre la que se compila, que será siempre la mejor opción a menos que usted se plantee mover el binario a otro equipo.
 
-'''Note:''' you need to have universal libraries (at the time of writing, this applies to ''libpng'' only) if you want to make universal binaries. If you use the default settings in OpenTTD, then you need to make a static library (libpng.a) that contains code for i386 based on the 10.4u sdk and the ppc based part needs to be based on the 10.3.9 sdk.
+'''Nota:''' es necesario tener librerías universales (a la hora de escribir, esto se aplica sólo a ''libpng'') si desea hacer binarios universales. Si utiliza la configuración predeterminada de OpenTTD, usted necesitará crear una librería estática (libpng.a) que contiene el código para i386 basado en el 10.4u sdk y la parte ppc que tiene que estar basada en el 10.3.9 sdk.
