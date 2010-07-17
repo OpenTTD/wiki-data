@@ -1,0 +1,132 @@
+[[Translation:en/Archive/Compilation and Ports/Nintendo DS]]
+{{es/Traducción|origen=Nintendo DS}}
+
+{{en/TOCright}}
+Work on the Nintendo DS port was started in November 2007 and it is currently still in the alpha stages of development. It is playable though and the most recent version can be downloaded from [[http://www.tt-forums.net/viewtopic.php?f=33&t=35306 this forum thread]].
+
+This port will hopefully become the first officially supported [[en/Archive/Compilation and Ports/Portable device version]].
+
+
+== Features ==
+
+* your favorite transport simulation to-go!
+* stylus-controlled interface
+* saving and loading games, even across all other platforms (Windows, Linux, ...)
+* play maps with a size of up to 256x128
+* stereo sound effects
+
+== Installation ==
+# Download all files from the tar package: http://tt-forums.net/viewtopic.php?f=33&t=35306&st=0&sk=t&sd=a
+# Patch openttd.nds with DLDI.
+## Get dldi : http://chishm.drunkencoders.com/DLDI/downloads/dlditool-win32.zip 
+## GUI at : http://chishm.drunkencoders.com/DLDI/downloads/dlditool-win32-gui.zip
+## Get dldi file for your card. : http://www.nbrew.nl/dldi-overzicht/
+## Patch with the GUI. : dlditool32.exe
+## Use the autopatch of your flashcard.
+# Copy openttd.nds, openttd.cfg and the openttd folder to the root of your card
+# Copy the Transport Tycoon data files from your original TTD CD to openttd/data. The following files are required:
+#* sample.cat
+#* trg1.grf
+#* trgc.grf
+#* trgh.grf
+#* trgi.grf
+#* trgt.grf
+# Start playing OTTD on your DS!
+
+== Controls ==
+
+{|
+!Button!!Function
+|-
+|D-Pad||scrolling
+|-
+|L||swap screens
+|-
+|R||close all windows
+|-
+|A||display the debug console
+|-
+|B||display a memory report
+|}
+
+Note: This table refers to version Alpha 6.
+
+== Frequently Asked Questions ==
+Q: How I can edit maps on Alpha 6? Button are on upper screen and I cant swap them!
+A: You can use one of the shoulder buttons to swap the screens. Sometimes you will need to hold the button for a second or so.
+
+== Screenshots ==
+Those shots were taken from version Alpha 6.
+
+[[File:en/Archive/Compilation and Ports/Nds-titlescreen.png]] [[File:en/Archive/Compilation and Ports/Nds-ingame.png]] [[File:en/Archive/Compilation and Ports/Nds-gui.png]]
+
+== Known Bugs ==
+
+* random crashes when the game runs out of memory
+* graphical glitches (mostly during scrolling) because the nds blitter needs to be rewritten
+* minimap glitches
+* trying to create maps bigger than 256x128 crashes
+* the screen resolution is too small making it impossible to click some windows
+
+== Changelog ==
+
+=== Alpha 6 ===
+
+* based on r12452 (internal rev1926)
+* the NDS port now has a different toolbar, more suitable for the small screen
+* for better access with the touchscreen the toolbars have been moved to the bottom screen
+* a fully customizable on-screen keyboard has been added (click on a text field to open it)
+* a newsticker display on the lower screen has been added
+* some windows have been adapted for the NDS screen (more will follow in future releases):
+** intro menu
+** game creation menu
+** minimap
+** build vehicle window
+* when building depots and stations only one preview image is shown which you can rotate by clicking on it
+* information regarding accepted cargo when building a station is displayed as icons now
+* switching screens (left shoulder button L) now only switches the windows
+* many windows (e.g. confirmation dialogs) are now centered on the bottom screen
+* the amount of free ram (in kb) is displayed in the middle of the status bar. This is only a temporary change to help with tracking down a memory leak
+* additionally you can view some memory information by pressing the B button
+* always use new global pathfinder (NPF). the original TTD pathfinder crashes due to too many recursions
+* fixed loading screen glitch
+
+=== Alpha 5 ===
+*  based on r12083
+* Major new feature: stereo sounds effects! Sounds require additional memory. Currently up to 200KB might be used for the sound samples. Therefore crashes due to memory shortage (especially on bigger maps) could be more frequent. Music is still not working due to the lack of a ARM7 midi library
+* sounds are also played for tiles on the border of the screen
+* config options and patch settings are now saved
+* more comprehensible error messages when files from the original game are missing
+* screenshots in BMP format are working (normal and giant) the debug console won't be drawn onto a screenshot.
+* added a loading screen and a an exit screen
+* code cleanup to fit OpenTTD project structure
+
+=== Alpha 4 ===
+*  based on r11899
+* added a start icon and description
+* the random seed works
+* loading original TTD saves disabled (256x256 too big for DS)
+* press A anytime (even after crashes) to toggle the console
+* Fix: trains can load and unload now
+* Fix: road depot window (and similar) doesn't crash any more
+* Fix: YAPF is completely disabled now. If the player enables it or it is enabled in a savegame, an error message is displayed and it is turned off
+* Fix: saving games with bigger maps is now possible. Due to this savegames have to be uncompressed. Still 256x128 maps is the biggest possible due to memory limitations.
+* Reduced viewport memory. crashes due to not enough memory available shouldn't happen so often any more.
+* The game bow the start menu at the beginning
+* Added a 128x64 version of the title screen savegame
+* Added a key combination for the cheat menu
+* Some bugs not mentioned should be fixed due to general improvements
+=== Alpha 3 ===
+* based on r11844
+* maps up to 256x128 running (but saving only works for 64x64 right now)
+* saving and loading works
+* in openttd.cfg you can define a path where your data resides
+* loading time greatly reduced from 45 seconds to 15 seconds
+* rewritten the blitter to free 96KB of main RAM
+
+== Roadmap ==
+Currently the following alpha releases are planned for the future. They are very much subject to change.
+* Alpha 7 (Memory): tweaks to make the port more memory efficent and support of Slot2 RAM expansions. Possibly standard sized maps (256x256) will work after this
+* Alpha 8 (GUI): further gui improvements
+* Alpha 9 (Speed): speed optimizations
+* Alpha 10 (Network): internet play through wifi
