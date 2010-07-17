@@ -109,19 +109,19 @@ Se pueden añadir argumentos múltiples como <code>./configure --enable-static -
 Si no tiene svn, y están tratando de compilar una nightly, configure con <code>./configure --revision=rXXXXX</code> (Donde XXXXX es el número de revisión).
 
 ===Compilar===
+Cuando configure haya hecho un makefile para ti, todo lo que necesitarás hacer para compilar es escribir <code>make</code>. El binario se colocará en el subdirectorio "bin".
+
+Si es necesario, también puede aceptar argumentos. Comúnmente se utilizan argumentos (que se ejecutarán con la compilación si es necesario):
+* <code>make run</code>: se iniciará el juego
+* <code>make bundle</code>: esto creará un paquete dentro de un directorio de paquete (que se creará si es necesario). Significa que el juego será ejecutable a partir del finder y no sólo desde la terminal
+* <code>make help</code>: lista todos los "objetivos" disponibles (como make run y make bundle)
+
+Make también acepta argumentos estándar. El más interesante es la opción <code>-j</code>. Por defecto GCC compila un archivo a la vez y sólo puede usar una CPU/núcleo para compilar un solo archivo. Si quieres compilarlo lo más rápido posible, se le puede pedir compilar varios archivos a la vez con la opción <code>-j</code>. Ejemplo: <code>make bundle -j 4</code> compilará 4 archivos a la vez, haciendo buen uso de una computadora DualCore. Por lo general, tener dos archivos de compilación en cada núcleo es lo más rápido, mientras compila uno, el otro espera para leer/escribir en el disco.
+Nota: las dependencias makefile tienen que estar configuradas correctamente para que esto funcione. Si bien esto es así para OpenTTD, no asuma esto para otros proyectos o pueden suceder cosas desagradables, como raros errores de compilación.
+
+Si hace frecuentes compilaciones, puede ser que valga la pena buscar compiladores alternativos. OSX también trae nuevos binarios llvm-gcc, que ofrecen un aumento de la velocidad durante la compilación a costa de unos binarios un poco más lentos. Para activar el conjunto de variables de entorno CC=/Developers/usr/bin/llvm-gcc and CXX=/Developers/usr/bin/llvm-g++
+
 {{es/Pendiente de traducción}}
-When configure has made a makefile for you, all you need to do to compile is to type <code>make</code>. The binary is then placed in the "bin" subdirectory.
-
-If needed, make can accept arguments as well. Commonly used arguments will be (all of them will start by compiling the game if needed):
-
-* <code>make run</code>: will start the game
-* <code>make bundle</code>: this will create a bundle inside the bundle directory (created if needed). This means that the game will be executable from finder and not only terminal
-* <code>make help</code>: lists all "targets" available (like make run and make bundle)
-
-Make also accepts standard make arguments. The most interesting is the <code>-j</code> option. By default GCC compiles one file at a time and it can only use one CPU/core to compile a single file. If you want to compile as fast as possible, you can tell it to compile more files at once with the <code>-j</code> option. Example: <code>make bundle -j 4</code> will compile 4 files at once, making good use of a dualcore computer. Usually having two files compiling on each core is the fastest as one compile while the other one waits for read/write to the disk.
-Note: the makefile dependencies has to be set up correctly for this to work. While they are for OpenTTD, don't assume this for other projects or nasty stuff can happen, like weird compilation errors.
-
-If it comes to frequent compiles, it might be worth to look for alternative compilers. Newer OSX bring also llvm-gcc binaries which offer a speed gain during compilation for the cost of a bit slower binaries. In order to activate the set the environment variables CC=/Developers/usr/bin/llvm-gcc and CXX=/Developers/usr/bin/llvm-g++
 
 ===Compiling universal binaries===
 Compiling a universal binary is done by adding <code>--enable-universal</code> to configure:
