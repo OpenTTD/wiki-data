@@ -154,12 +154,14 @@ Si no tiene svn, y quiere compilar una revisión de una '''nightly''', configure
  <code>./configure --revision=rXXXXX</code>
 
 ===Compilar===
-Cuando configure haya hecho el makefile para usted, todo lo que necesitará hacer para compilar es escribir <code>make</code>. El binario se colocará en el subdirectorio "bin".
+Cuando ''configure'' haya creado el ''makefile'', todo lo que necesitará para compilar es escribir:
+ <code>make</code>
+Se creará un binario se colocará en el subdirectorio <code>'''/bin'''</code>
 
-Si es necesario, también puede aceptar argumentos. Comúnmente se utilizan argumentos (que se ejecutarán con la compilación si es necesario):
-* <code>make run</code>: se iniciará el juego
-* <code>make bundle</code>: esto creará un paquete dentro de un directorio de paquete (que se creará si es necesario). Significa que el juego será ejecutable a partir del finder y no sólo desde la terminal
-* <code>make help</code>: lista todos los "objetivos" disponibles (como make run y make bundle)
+Si es necesario, Make acepta '''argumentos''' que se ejecutan con la compilación:
+* <code>'''make run'''</code>: se iniciará el juego
+* <code>'''make bundle'''</code>: esto creará un paquete dentro de un directorio de paquete (que se creará si es necesario). Significa que el juego será ejecutable a partir del finder y no sólo desde la terminal
+* <code>'''make help'''</code>: lista todos los "objetivos" disponibles (como make run y make bundle)
 
 Make también acepta argumentos estándar. El más interesante es la opción <code>-j</code>. Por defecto GCC compila un archivo a la vez y sólo puede usar una CPU/núcleo para compilar un solo archivo. Si quieres compilarlo lo más rápido posible, se le puede pedir compilar varios archivos a la vez con la opción <code>-j</code>. Ejemplo: <code>make bundle -j 4</code> compilará 4 archivos a la vez, haciendo buen uso de una computadora DualCore. Por lo general, tener dos archivos de compilación en cada núcleo es lo más rápido, mientras compila uno, el otro espera para leer/escribir en el disco.
 Nota: las dependencias makefile tienen que estar configuradas correctamente para que esto funcione. Si bien esto es así para OpenTTD, no asuma esto para otros proyectos o pueden suceder cosas desagradables, como raros errores de compilación.
