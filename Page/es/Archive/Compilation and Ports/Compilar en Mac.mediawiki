@@ -196,24 +196,24 @@ Ahora se compilará OpenTTD. Si de esta manera no se enlaza OpenTTD, pruebe:
 
 Si esto falla, intente:
  <code>make bundle</code>
-A continuación, inicie la aplicación de la /carpeta de paquete en lugar de la carpeta /bin.
+A continuación, inicie la aplicación de la ''carpeta de paquete'' <code>'''/bundle'''</code> (en lugar de la carpeta <code>/bin</code>)
 
-Esto puede ocurrir si ha descargado las librerías compiladas para OSX 10.3.x y está utilizando OSX 10.4.x. Para resolver lo correcto, reemplace la librería por otra compilada para OSX 10.4. Sin embargo esto llevará más tiempo que usando GCC 3.3.
+Este fallo puede ocurrir si ha descargado las librerías compiladas para OSX 10.3.x y está utilizando OSX 10.4.x. Para resolverlo correctamente, reemplace la librería por otra compilada para OSX 10.4. Sin embargo de está forma le llevará más tiempo que usando GCC 3.3.
 
-Si desea mover la aplicación que acaba de compilar a otro equipo, deberá instalar  ''sdl'' (y ''libpng'' si lo va a usar) en ese equipo también o compilar estáticamente. Apple recomienda las compilaciones estáticas, pero si sólo quiere jugar el juego puede que sea mejor instalar las librerías.
+Si desea mover la aplicación que acaba de compilar a otro equipo, deberá instalar  ''sdl'' (y ''libpng'' si la va a usar) en ese equipo también o compilar estáticamente. Apple recomienda las compilaciones estáticas, pero si sólo quiere jugar el juego puede que sea mejor instalar las librerías.
 
 ===Compilar estáticamente===
-Para compilar de forma estática, es necesario modificar makefile.config. Esto se puede hacer con cualquier editor de texto (incluyendo las herramientas para desarrolladores/Xcode). Busque la línea que dice
-<code>STATIC:=</code>
+Para compilar de forma estática, es necesario modificar '''makefile.config'''. Esto se puede hacer con cualquier editor de texto (incluyendo las herramientas para desarrolladores/Xcode). Busque la línea que dice:
+<code>'''STATIC:='''</code>
 y cámbiela por
-<code>STATIC:=1</code>
+<code>'''STATIC:=1'''</code>
 
-makefile.config se genera al ejecutar make, por lo que no se generará antes de la primera vez que ejecute make. Para establecer esto la primera vez que compile, ejecute
-<code>make STATIC:=1</code>
+Puede ocurrir que no aparezca '''makefile.config''', puesto que se genera la primera vez que ejecuta ''make'', por lo que no existe antes. Aún así puede proporcionar este parámetro, sin que exista ''makefile.config'', ejecutando:
+ <code>make STATIC:=1</code>
 
 Nota: si cambia algo en makefile.config, debe ejecutar
-<code>make clean</code>
-para estar seguro de deshacerse de cualquier cosa compilada usando la vieja configuración
+<code>'''make clean'''</code>
+para estar seguro de deshacerse de cualquier cosa compilada con la vieja configuración
 
 Ya está listo para jugar, después de agregar los archivos GRF de winTTD.
 
