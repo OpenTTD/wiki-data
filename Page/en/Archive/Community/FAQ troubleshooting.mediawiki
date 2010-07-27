@@ -36,39 +36,6 @@ run OTTD as root; you should probably fix the file permissions, though)
 :*It's because you haven't configured DirectX properly. For the same reason it may happen that the game runs with a higer refresh rate than your monitor supports. Try to download "DirectX Control Panel" from microsoft.com, copy it into /windows/system32, open the dialog in the Control Panel, go to DirectDraw tab, and set the "Forced Refresh Rate" to the maximum what your monitor can show.
 :*You can set '''display_hz''' to have correct refreshrate. This item is in '''[win32]''' group of [[en/Archive/Manual/Settings/Openttd.cfg]].
 
-== When loading an older game my airports are screwed ==
-:* If you have used some [[en/Archive/Community/Nightly build]] in the early era of development of larger airports, some of the indexes could be messed up. Again, this only applies if you have used nightly builds. Official releases cannot have this problem. Copy the code below somewhere to your OpenTTD source and call the function once. Most problems should be fixed. It could be that you only have a subproblem, eg. not all are faulty, then you need to filter on ''st->index'' (easiest to get by going to station_gui.c line 396 (''"ScrollMainWindowToTile(DEREF_STATION(w->window_number)->xy);"''), setting a breakpoint there. ''"w->window_number"'' is the index of the station.
-
-::<pre><nowiki>void FixSVNVersion() 
-{ 
- Station *st; 
- static bool only_once = true; 
- if (only_once) { 
-   FOR_ALL_STATIONS(st) { 
- /* if you have not built any new types of airports since first release of SVN:	*
-  * AT_HELIPORT 4 --> 2								*
-  * if (st->airport_type == 4) {st->airport_type = 2;}				*/
-
- /* if you have not built any new types of airports since first release of SVN AND	*
-  * oilrigs are screwed									*
-  * AT_OILRIG 3 --> 5									*
-  * if (st->airport_type == 3) {st->airport_type = 5;} 					*/
-
- /* if you have built new types of airports since first release:	*
-  * AT_METROPOLITAN 2 --> 3						*
-  * AT_INTERNATIONAL 3 --> 4						*
-  * AT_HELIPORT 4 --> 2							*/
-    switch (st->airport_type) { 
-      case 2: st->airport_type = 3; break; 
-      case 3: st->airport_type = 4; break; 
-      case 4: st->airport_type = 2; break; 
-    } 
-  } 
-  only_once = false; 
-  UpdateOldAircraft(); 
- } 
-}</nowiki></pre>
-
 == Cursor is hidden in fullscreen modes under Linux ==
 * OpenTTD is playable in window mode.
 * Ensure you have the latest ATi propetiary drivers installed correctly, follow [http://xoomer.virgilio.it/flavio.stanchina/debian/fglrx-installer.html this guide].
