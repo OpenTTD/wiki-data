@@ -151,6 +151,7 @@ enum SomeEnumeration {
 * Use curly braces and put the contained statements on their own lines (e.g., don't put them directly after the '''if''').
 * Opening curly bracket '''{''' stays on the first line, closing curly bracket '''}''' gets a line to itself (except for the '''}''' preceding an '''else''', which should be on the same line as the '''else''').
 * When only a single statement is contained, the brackets can be omitted. In this case, put the single statement on the same line as the preceding keyword ('''if''', '''while''', etc.). Note that this is only allowed for if statements without an '''else''' clause.
+* All fall throughs must be documented, using a FALL THROUGH comment.
 
 <pre>
 if (a == b) {
@@ -170,11 +171,22 @@ switch (a) {
 	case 0: DoSomethingShort(); break;
 
 	case 1:
+		DoSomething();
+		/* FALL THROUGH */
+
+	case 2:
 		DoMore();
 		b = a;
 		break;
 
-	case 2: {
+	case 3: {
+		int r = 2;
+
+		DoEvenMore(a);
+		/* FALL THROUGH */
+	}
+
+	case 4: {
 		int q = 345;
 
 		DoIt();
