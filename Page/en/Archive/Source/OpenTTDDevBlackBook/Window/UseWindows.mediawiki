@@ -18,51 +18,27 @@ void ShowMyNewWindow(void)
 
 ==Describing a window==
 
-Set up a <code>WindowDesc</code> with the name you gave <code>AllocateWindowDesc</code>.
+Set up a <code>WindowDesc</code> with the name you gave <code>this->InitNested()</code>.
 
 ;<nowiki>Syntax:</nowiki>
 
 <pre>
-static const WindowDesc _mywindow_desc = {
-	X-coordinate of window top-left corner, 
-	Y-coordinate of window top-left corner, 
-	window width, window height,
-	window class,
-	window parent class, 
-	window flags, 
-	widget definition, 
-	window procedure name
-};
+/** Window description for my new window. */
+static const WindowDesc _mywindow_desc(
+	window positioning,
+        default width,
+        default height,
+        window class,
+        parent window class,
+        window flags
+        widget parts,
+        length of widget parts
+);
 </pre>
+You can find plenty of examples in the source code, look in a ''*_gui.cpp'' file.
 
-;<nowiki>Example:</nowiki>
-
-<pre>
-static const WindowDesc _mywindow_desc = {
-	100, 100, 150, 200,
-	WC_ERRMSG,
-	0,
-	WDF_STD_TOOLTIPS | WDF_STD_BTN | WDF_DEF_WIDGET,
-	_mywindow_widgets,
-	MyWindowProc
-};
-</pre>
-
-===Coordinate variables===
-
-These variables can be used to replace static coordinate numbers.
-
-;<code>WDP_AUTO</code>
-:Finds a location automatically
-
-;<code>WDP_CENTER</code>
-:Centers the window (left/right or top/bottom)
-
-;<code>WDP_ALIGN_TBR</code>
-:Aligns the right side of the window with the right side of the main toolbar
-
-;<code>WDP_ALIGN_TBL</code>
-:Aligns the left side of the window with the left side of the main toolbar
+===Window positioning===
+The window positioning is one of the values of the ''WindowPosition'' enum defined in src/window_gui.h.
 
 ===Window classes===
 A window class is a unique number that represents a (set of) windows, for example a window that displays a town has class ''WC_TOWN_VIEW''. To differentiate which town is displayed by an actual window, the latter has an additional window number.
@@ -70,27 +46,7 @@ A window class is a unique number that represents a (set of) windows, for exampl
 The list of available window classes is defined by the ''WindowClass'' enum, in ''src/window_type.h''.
 
 ===Flags===
-
-;<code>WDF_STD_TOOLTIPS</code>
-:Use standard routine when displaying tooltips
-
-;<code>WDF_DEF_WIDGET</code>
-:Default widget control for some widgets in the onClick event
-
-;<code>WDF_STD_BTN</code>
-:Default handling for close and drag widgets (widget n:o 0 and 1)
-
-;<code>WDF_UNCLICK_BUTTONS</code>
-:Unclick buttons when the window event times out
-
-;<code>WDF_STICKY_BUTTON</code>
-:Set window to sticky mode; they are not closed unless closed with 'X' (widget 2)
-
-;<code>WDF_RESIZABLE</code>
-:A window can be resized
-
-;<code>WDF_MODAL</code>
-:The window is a modal child of some other window, meaning the parent is 'inactive'
+The window flags are a composition of bit values from the ''WindowDefaultFlag'' enum also defined in ''src/window_gui.h''. Use 0 if none of the flags apply.
 
 ==Setting up widgets==
 
