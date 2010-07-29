@@ -80,6 +80,12 @@ So what does this mean:
 
 As you might notice, you can't use <code>GetTick()</code> for anything else but debugging. It isn't a good indicator of time, it isn't usable to do something every 10 ticks or something, nothing of that. You will need to make such a system yourself.
 
+=== Opcodes ===
+
+Remember back in the [[en/Development/Script/Introduction#your-first-ai|Introduction]] when we told you that the AI would be suspended after X opcodes? Well, that was an half-truth. To dwell a little in the details, an opcode is, basically, one squirrel instruction. The framework simply count the number of squirrel instructions your AI does and put it to sleep after a certain amount. What's insidious about this is that it is possible to call C++ code from within squirrel, which instructions aren't counted because, well, it's not squirrel. 
+
+For example, if I were to play on a 2048x2048 map and make use of a Valuator to valuate all tiles on the map using a valuator written in C++, I would steal all the CPU resources and "freeze" the game for some time. (Thanks to [http://www.tt-forums.net/viewtopic.php?p=892576#p892576 Morloth] for the explanation and example!)
+
 == Game Mechanics ==
 
 === Map Coordinates ===
