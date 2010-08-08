@@ -1,0 +1,45 @@
+[[Translation:en/Archive/Community/Compile Farm]]
+==What is the compile farm?==
+The compile farm is a part of our main server that is used for compiling the nightlies and stable releases of OpenTTD as well as a number of other projects related to OpenTTD. It is a means to make releases (nightly or stable) of OpenTTD much easier and more uniform; the nightlies and releases are compiled with the same setup, so there is no difference whereas previously the Windows nightlies would be compiled using a MinGW cross-compiler whereas the Windows releases were build by someone using MSVC.
+
+Due to the use of VirtualBox, software to virtualise a whole computer, we can compile natively on all supported platform. The only "odd" platform in the mix is Mac OS X as it is (basically) illegal to run that on our server, but that is at the moment not supported although a cross-compiler setup still exists.
+
+==What does the compile farm compile?==
+The times in the following list are "Amsterdam" time, i.e. CET or CEST depending on whether it is summer or winter time which means UTC+1 during winter time and UTC+2 during summer time.
+The daily means that every day an attempt is made. If there were no changes to the source code since the previous compile run, then the compile run is cancelled. So we don't compile when it is already compiled
+
+*OpenTTD, the game we all love
+**nightlies, daily at 20:00
+**releases, manually
+*strgen, tool for creating OpenTTD language files
+**nightlies, daily at 02:30
+*grfcodec, tool for creating OpenTTD/TTDPatch NewGRFs
+**nightlies, daily at 03:00
+**releases, manually
+*catcodec, tool for creating OpenTTD compatible sound packs
+**releases, daily at 03:30
+*grfcodec, tool for validating NFOs (the non-graphical component of NewGRFs)
+**nightlies, daily at 04:00
+**releases, manually
+*pngcodec, tool for adding offset data to PNGs (for 32 bits graphics)
+**nightlies, daily at 04:30
+*TTDPatch, the other game we all should love
+**nightlies, daily at 05:00
+
+The compile farm is furthermore set up to compile the following upon request of the author, although nightlies are possible as well:
+*Fonso/Fonsinchen's cargodist branch, upon request
+*Hirundo's infrastructure sharing 2 branch, upon request
+*Yexo's NewGRF airports branch, upon request
+*Yexo's head-to-head branch, upon request
+
+==What do I need for you to compile my branch/patch?==
+For us to compile your branch/patch we need the following:
+*An url to a VCS to check out the source from; one of the following:
+**subversion
+**mercurial (hg)
+**git
+*A location where we can copy, using scp, the resulting binaries and logs to. So we do not post the binaries on our server!
+*At least one developer that claims that the code doesn't do something obviously harmful.
+We can, optionally, run the compiles on a daily basis although it's normal that we only run compiles upon request.
+
+For more information ask TrueBrain or Rubidium on IRC.
