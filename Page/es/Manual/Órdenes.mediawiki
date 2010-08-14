@@ -7,94 +7,124 @@ Se le permite dar órdenes a cualquier vehículo que usted posea. Sus conductore
 
 * Busque y haga clic en el vehículo al que desea dar órdenes. El vehículo puede estar dentro de un depósito si lo acaba de comprar, o moviéndose. Para un tren, hacer clic en cualquier vagón tendrá el mismo efecto. Esto le mostrará la ventana del vehículo.<br/>[[File:es/Manual/Orders-1.png|frame|none|La ventana del vehículo y el botón órdenes]]
 * Haga clic en el botón de ''Órdenes'' (el del círculo rojo en la captura de pantalla). Esto mostrará la ventana órdenes, que muestra las órdenes que el vehículo tiene actualmente (ejemplo: nuestro vehículo no tiene ninguna orden).<br/>[[File:es/Manual/Orders-2.png|frame|none|La ventana órdenes]]
-* Clique en el botón [[#ir-a|Ir a]] y haga clic en la estación de destino en el mapa.
-* Haga clic en la orden que acaba de crear en la lista para seleccionarla, y luego ndíquele al vehículo lo que debe hacer (instrucciones) en ese lugar. Puede indicarle que [[#carga|cargue]] que [[#descarga|descargue]] y [[#otras-opciones-de-parada|otras opciones]] de comportamiento en la parada. Por ejemplo: Si activa ''Carga completa de todas las cargas'' el vehículo esperará en la estación hasta que esté completamente lleno de cualquier carga que sea capaz de transportar.
+* Clique en el botón [[#ir-a|Ir a]] y haga clic en un destino en el mapa. Se añadirá un orden a la lista.
+* Haga clic en la orden que acaba de crear en la lista para seleccionarla, y luego indíquele al vehículo lo que debe hacer (instrucciones) en ese lugar. Puede indicarle que [[#carga|cargue]] que [[#descarga|descargue]] y otras opciones de [[#comportamiento-de-parada|comportamiento en la parada]]. Por ejemplo: Si activa ''Carga completa de todas las cargas'' el vehículo esperará en la estación hasta que esté completamente lleno de cualquier carga que sea capaz de transportar.
 
 ==Destino actual==
 Siempre puede ver el destino del vehículo en su [[es/Manual/Barra de estado|barra de estado]] y también en la ventana ''órdenes''. A la izquierda de las órdenes individuales un triángulo negro indica cual es el destino actual.
 
-==Instrucciones en las paradas==
-Usted puede especificar exactamente lo que debe hacer un vehículo en cada parada (estaciones, depósitos, puntos de ruta...), como que debe esperar hasta tener la carga completa, o forzar la descarga. Los trenes, los vehículos de carretera, los barcos y los aviones tienen los botones de instrucción ''comportamiento de parada'', ''comportamiento de carga'' y ''comportamiento de descarga'' (además de los botones ''saltar'', ''borrar'' e ''ir a''). Para añadir instrucciones a una orden, haga clic en esa orden (que activa los botones disponibles), y luego en el botón de la instrucción.
+==Botones de la ventana Órdenes==
+En [[es/OpenTTD 0.7.0|OpenTTD 0.7.0]] la ventana de órdenes ha sufrido algunos cambios para permitir nuevas características que se han agregado.
+Si está usando una versión anterior de OpenTTD consulte el [[es/Órdenes (antiguo)|artículo antiguo sobre órdenes]].
 
-===Carga===
+Aparecen los siguientes botones:
+* '''Ir a'''
+* '''Saltarse'''
+* '''Borrar'''
+* Y otros botones para establecer '''Instrucciones en las paradas'''
+
+===Ir a===
+Esta es la manera de enviar un vehículo a un lugar determinado. Se inserta una nueva orden antes de la orden resaltada (de color blanco), o si no hay ninguna orden seleccionada, se añade al final de la lista. Los destinos posibles donde ir a son:
+* Su propias estaciones, pero sólo las estaciones donde se acepta el vehículo en cuestión. Así que no puede darle a un autobús de la orden de ir a un aeropuerto si ese aeropuerto no tiene estación de autobuses. Tampoco puede enviar sus vehículos a las estaciones de la competencia.
+* A los [[es/Manual/Depósitos|depósitos]] si está activada la opción "Permitir órdenes de ir a depósito" de las Opciones avanzadas/Vehículos. Esto cambiará los botones disponibles (véa [[#mantenimiento|Mantenimiento]] y [[#reformar|Reformar]] más adelante)
+* Los vehículos del mismo tipo pueden [[#copiar-ordenes|copiar órdenes]] o [[#compartir-ordenes|compartir órdenes]]. Ver abajo más información.
+* [[es/Manual/Puntos de ruta|Puntos de ruta]], puede enviar un tren a un punto de ruta particular para influir en su elección de vía o por si las estaciones están muy alejadas y el tren se puede perder fácilmente. Una [[es/Boya|boya]] es un tipo de punto de referencia para los buques que recorren largas distancias.
+
+El botón Ir a tiene las siguientes '''opciones''':
+* '''Ir a'''
+* '''Ir al depósito más cercano'''
+* '''Salto de orden condicional'''
+[[File:es/Manual/Orders goto options.png|frame|none|Opciones del botón Ir a.]]
+Las dos primeros son obvias, pero con la tercera, es posible no pasar por las estaciones si, por ejemplo, el tren ya está completamente cargado.
+
+Vea [[es/Creación rápida de órdenes para vehículos|Creación rápida de órdenes para vehículos]] para métodos abreviados sobre crear órdenes.
+
+===Borrar===
+Esto eliminará la orden resaltada (de color blanco) de la lista de órdenes, cancelando así el destino a esa estación con ese vehículo.
+
+===Saltarse===
+Esto hace que el vehículo se salte la orden que actualmente está ejecutando y pase a la siguiente. Si presiona ''Saltarse'' mientras el vehículo está en su última orden hará que el vehículo pase a la primera orden.
+
+==Instrucciones en las paradas==
+Además de los botones ''saltar'', ''borrar'' e ''ir a'', existen otros botones para especificar exactamente lo que debe hacer un vehículo en cada parada (estaciones, depósitos, puntos de ruta...), como por ejemplo que debe esperar hasta tener la carga completa, o forzar la descarga. Para añadir instrucciones a una orden, haga clic en esa orden (se activarán los botones disponibles), y luego en el botón de la instrucción.
+
+Cuando selecciona una orden ''ir a una estación'' aparecen las siguientes instrucciones disponibles:
+* '''comportamiento de parada'''
+* '''comportamiento de carga'''
+* '''comportamiento de descarga'''
+
+Cuando selecciona una orden de ''ir a un depósito'' cambian los botones disponibles:
+* '''Reformar''' (en lugar de ''comportamiento de carga'')
+* '''Mantenimiento''' (en lugar de ''comportamiento de descarga'')
+
+==Carga==
 El botón ''Comportamiento de carga'' (pone "Carga completa de cualquier carga") tiene las opciones:
 *''"Cargar si está disponible"''
 *''"Carga completa de todas las cargas"''
 *''"Carga completa de cualquier carga"''
 *''"Sin cargar"''.<br/>[[File:es/Manual/Orders-Cargo-options.png|frame|none|Botón Comportamiento de carga]]
 
-====Carga si está disponible====
+===Carga si está disponible===
 :El vehículo pasará por la parada, cargará las mercancías que en ese momento estén disponibles y saldrá hacia el siguiente destino. Es la opción inicial por defecto. No es recomendable usarla (salvo para vehículos que transporten pasajeros, correo...).
 
-====Carga completa====
+===Carga completa===
 :Esta instrucción hace que el vehículo espere hasta que esté completamente lleno antes de salir de la estación. Tiene dos opciones:
 :* "Carga completa de todas las cargas" no saldrá hasta que no esté completamente lleno. Se añade en la orden de la parada "(Carga completa)".
 :* "Carga completa de cualquier carga" permite que el vehículo se vaya si está lleno de ''cualquiera'' de las diferentes cargas que pueda llevar. Se añade en la orden de la parada "(Carga completa cualquier carga)".
 
-====Sin cargar====
+===Sin cargar===
 :El vehículo pasará por ese punto sin cargar nada. Se añade en la orden de la parada "(Sin carga)".
 
-===Descarga===
+==Descarga==
 El botón ''Comportamiento de descarga'' (pone "Descargar todo") tiene las opciones:
 *''"Descargar si es aceptado"''
 *''"Descargar todo"''
 *''"Transferir"''
 *''"No descargar"''.<br/>[[File:es/Manual/Orders-Unload-options.png|frame|none|Botón Comportamiento de descarga]]
 
-====Descargar si es aceptado====
+===Descargar si es aceptado===
 :El vehículo pasará por la parada, descargará todas las mercancías que sean aceptadas en esa parada y saldrá hacia el siguiente destino. Es la opción inicial por defecto. No es recomendable usarla (salvo para vehículos que transporten pasajeros, correo...).
 
-====Descargar todo====
+===Descargar todo===
 :Esto indica al vehículo que descargue cualquier carga que transporte en una estación. Las mercancías aceptadas por esa estación se descargarán de la forma habitual, es decir, se pagarán. Las mercancías no aceptadas por la estación también se descargarán y quedarán disponibles para que las cargue cualquier otro vehículo. La carga quedará a la espera en la parada y aparecerá el mensaje ''En ruta desde (origen)'' en la sección ''Esperando'' de la ventana de la estación. El vehículo no recibirá el pago de la carga que no sea aceptada. Se añade en la orden de la parada "(Descargar y...)".
 
 :Esta opción no impide que el vehículo recoja cualquier otra carga en ese lugar, mediante el botón ''Comportamiento de carga''.
 
-====Transferir====
-{{es/Desactualizado}}
-{{es/Pendiente de traducción}}
+===Transferir===
+:Esta opción hace que el tren descargue su carga en una estación aunque no sea aceptada, como con la opción "Descargar todo". Sin embargo, en este caso recibirá parte del pago por la distancia que ha recorrido hasta ese lugar. Esto es útil para poner en marcha un [[es/Servicio de alimentación|servicio de alimentación]] sin que sus vehículos tengan un efecto negativo en sus beneficios por no realizar la parte final del viaje.
 
-This option will have the train unload its cargo to a station regardless of acceptance, just as Unload does.  However in this case you will receive part payment for the distance it has traveled so far.  This is useful to run a [[en/Manual/Feeder service|feeder service]] without your vehicles showing a negative profit if they are not running the final part of the journey.  
+:Esta opción no impide que el vehículo recoja cualquier otra carga en ese lugar, mediante el botón ''Comportamiento de carga''.
 
-By default the vehicle will also collect any waiting cargo as usual.  Confusingly this can include the cargo you just dropped off!  If this is the active setting, the order will show ''Transfer and take cargo''.  If this is not what you want, you can click the ''Unload'' order as well which will toggle the order to ''Transfer and leave empty'', preventing the vehicle picking up any cargo there; to do this in 0.7.0, under the ''Full Load'' dropdown menu, choose ''No Loading'' so the order now reads ''Transfer and Leave Empty''.
+:De forma predeterminada, el vehículo carga cualquier carga que haya disponible en la estación (en la orden pone "Transferir y tomar carga"). ¡Esto puede incluir cargar la carga que acabas de descargar! Para cambiar esto debes seleccionar la opción "Sin cargar" del botón "Comportamiento de carga" (ahora en la orden pondrá "transferir y dejar vacío").
 
-====No descargar====
+===No descargar===
 :El vehículo pasará por ese punto sin descargar nada. Se añade en la orden de la parada "(No descargar y...)".
 
 :Esta opción no impide que el vehículo recoja cualquier otra carga en ese lugar, mediante el botón ''Comportamiento de carga''.
 
-===Otras opciones de parada===
+==Comportamiento de parada==
 El botón ''Comportamiento de parada'' (pone "Sin paradas") tiene las opciones:
 *''"Ir a"''
 *''"Ir sin paradas a"''
 *''"Ir vía"''
 *''"Ir sin paradas vía"''.<br/>[[File:es/Manual/Orders-Stopping-options.png|frame|none|Botón Comportamiento de descarga]]
 
-====Sin paradas====
-This causes the train to skip the order it's currently fulfilling and move onto the next one. Pressing ''Skip'' while the vehicle is on its last order will cause the vehicle to start again at the first one.
+===Sin paradas===
+:Ir [[es/Sin paradas|sin paradas]] hace que el vehículo no pare en ninguna de las estaciones que no tengan instrucciones marcadas hasta llegar al destino marcado.
 
-===Otros botones===
-===Delete===
-This will delete the highlighted order from the vehicle's list, effectively canceling service to that station with that vehicle.
+===Ir vía===
+:Ir vía hace que el vehículo no pase por esa estación pero que no pare, como si se tratara de un [[es/Punto de ruta|punto de ruta]].
 
-===Non-Stop===
-[[en/Archive/Manual/Non-stop]] is an option for trains only, and only for an existing order. It will prevent a train stopping at any of the stations it passes through on the way to the highlighted destination. Note that if the [[en/Archive/Manual/Settings/Configuring patches/Stations#ttdpatch-compatible-non-stop-handling|TTDPatch compatible non-stop handling]] patch is enabled, the order without the ''Non-stop'' modifier will behave like the order with the ''Non-stop'' modifier without the patch, and the ''Non-stop'' will prevent the train from stopping at the destination (which is useful if you want to use a station as a waypoint).
+==Mantenimiento==
+Esta opción está disponible si usted tiene una orden ''"ir a depósito"'' seleccionada. Esto obligará al vehículo a ser reparado en el depósito. Puede ser útil incluir el [[es/Manual/Mantenimiento|mantenimiento]] en la lista de órdenes antes de que los vehículos recojan una nueva carga.
 
-===Go To===
-This is the way to direct a vehicle to a particular location.  It inserts a new order before the highlighted order, or if there is no order selected, adds it to the end of list.  Possible targets for go to are:
-*Your own stations, but only stations where that particular vehicle is accepted. So you cannot give a bus an order to go to an airport if that airport doesn't have a bus station. You cannot send your vehicles to competitor's stations.
-*[[en/Manual/Depots]] if the ''Allow goto depot orders'' is set in the ''[[en/Archive/Manual/Settings/Advanced Settings/Vehicles]]'' window.  This will change some of the other buttons - see Service and Refit below.
-*Vehicles of the same type to [[#copying-orders|copy orders]] or to create [[#shared-orders|shared orders]]. See below for more information.
-*[[en/Manual/Waypoints]], you can send a train to a particular waypoint to influence its choice of track or if the stations are too far apart and the train gets lost easily.  A [[en/Manual/Water Transport Tiles]] is a type of waypoint for ships traveling long distances.
+==Reforma==
+Puede incluir una instrucción de [[es/Manual/Reformar vehículos|reformar]] un vehículo en la lista de órdenes. Al seleccionar esta se le pide que elija el tipo de carga que el vehículo deberá transportar tras la reforma. Esta orden es de uso limitado ya que normalmente sólo se reforma un vehículo para un tipo de carga una sola vez.
 
-See [[en/Archive/Manual/Settings/Quick Goto]] for shortcuts to create orders.
+{{es/Desactualizado}}
+{{es/Pendiente de traducción}} 
 
-===Service===
-This option is available if you have a ''go to depot'' order selected.  This will force the vehicle to be [[en/Manual/Servicing|serviced]] in the depot.  It can be useful to include servicing in the schedule before vehicles pick up a new load of cargo.
-
-===Refit===
-You can include an instruction to [[en/Manual/Refit]] a vehicle in the orders list.  When you select this you will be prompted to choose the type of cargo to refit the vehicle to carry.  This order is of limited use as normally you only refit a vehicle for a cargo once.
-
-===List of vehicles sharing these orders===
+==List of vehicles sharing these orders==
 The [[File:en/Manual/SharedOrders.png]] icon to the right of the Transfer button is the Shared Orders button. It shows a list of all the vehicles that have the same [[#shared-orders|shared orders]] as the current vehicle. The icon will only be enabled if the vehicle is sharing orders.
 
 [[File:en/Archive/Manual/Orders-4.png|center|frame|Non-Stop and Unload modifiers set]]
@@ -163,21 +193,6 @@ However, if you leave it too long or deliberately don't build a new station to r
 
 ===Invalid stations===
 If you delete a part of a station (for example the bus stop that is attached to a train station) the order will not become void as the station does still exist. However, the vehicle has no way to get to the station as the correct facility is missing. This leads to the vehicle searching for the station forever.
-
-==New order window==
-In [[en/Archive/OpenTTD/OpenTTD 0.7.0]], the order window has undergone some changes to allow for new features that have been added.
-=== Route options ===
-[[File:en/Manual/Orders goto stopoptions.png|frame|right|The new order window with the new routeoptions.]]
-It is now possible to go directly to a station or go via a station. For every station it is possible to go non-stop by using the popup menu or clicking on "Non-Stop".
-
-=== (Un-)Loading options ===
-[[File:en/Manual/Orders goto load.png|frame|right|The new order window with the new loadoptions.]]
-[[File:en/Manual/Orders goto unload.png|frame|right|The new order window with the new unloadoptions.]]
-Now it is possible to manage loading and unloading separately. You can load nothing, everything you can get, full load of one load or get a full load of everything. To unload you can choose that you unload nothing, unload only accepted, unload everything or transfer the load.
-
-=== Go To Options ===
-[[File:en/Manual/Orders gotooptions.png|frame|right|The new order window with the new Go To Options.]]
-There is also an option to change the Go-To. There is the normal go-to-command, the go to next depot command and the "Conditional Order Jump". The first two are obvious, but with the third it is possible to leave out stations if for example the train is fully loaded.
 
 <!--- for cond. jump the images: 
 http://wiki.openttd.org/File:Orders_condjump_comparewith.png
