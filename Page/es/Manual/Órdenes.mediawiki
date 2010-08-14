@@ -1,5 +1,5 @@
 [[Translation:en/Manual/Orders]]
-{{es/Traducción|origen=Orders}}{{es/Desactualizado}}{{en/-}}{{es/Manual/Tutorial/Tutorial}}{{es/Manual/Tabla de contenido}}
+{{es/Traducción|origen=Orders}}{{es/Aviso|Este artículo se está actualizando según se va traduciendo al español}}{{en/-}}{{es/Manual/Tutorial/Tutorial}}{{es/Manual/Tabla de contenido}}
 Las '''órdenes''' son fundamentales para jugar a OpenTTD con éxito. Las [[es/Órdenes condicionales|órdenes condicionales]] son órdenes avanzadas que permiten un control adicional. Si no emite ningún tipo de órdenes, sus vehículos darán vueltas sin rumbo y tendrás mucha suerte si ganan algo de dinero. Con el fin de recoger y entregar con éxito la carga (que es después de todo, el objeto del juego), necesita dar órdenes a sus vehículos. Estas son instrucciones tipo "ir aquí, recoger la carga, luego descargar aquí".
 
 ==Dando órdenes==
@@ -18,32 +18,52 @@ Usted puede especificar exactamente lo que debe hacer un vehículo en cada parad
 
 ===Carga===
 El botón ''Comportamiento de carga'' (pone "Carga completa de cualquier carga") tiene las opciones:
-*''"Cargar si está disponible"
-*"Carga completa de todas las cargas"
-*"Carga completa de cualquier carga"
-*"Sin cargar"''.<br/>[[File:es/Manual/Orders-Cargo-options.png|frame|none|Botón Comportamiento de carga]]
+*''"Cargar si está disponible"''
+*''"Carga completa de todas las cargas"''
+*''"Carga completa de cualquier carga"''
+*''"Sin cargar"''.<br/>[[File:es/Manual/Orders-Cargo-options.png|frame|none|Botón Comportamiento de carga]]
 
 ====Carga si está disponible====
 :El vehículo pasará por la parada, cargará las mercancías que en ese momento estén disponibles y saldrá hacia el siguiente destino. Es la opción inicial por defecto. No es recomendable usarla (salvo para vehículos que transporten pasajeros, correo...).
 
 ====Carga completa====
 :Esta instrucción hace que el vehículo espere hasta que esté completamente lleno antes de salir de la estación. Tiene dos opciones:
-:* "Carga completa de todas las cargas" no saldrá hasta que no esté completamente lleno.
-:* "Carga completa de cualquier carga" permite que el vehículo se vaya si está lleno de ''cualquiera'' de las diferentes cargas que pueda llevar.
+:* "Carga completa de todas las cargas" no saldrá hasta que no esté completamente lleno. Se añade en la orden de la parada "(Carga completa)".
+:* "Carga completa de cualquier carga" permite que el vehículo se vaya si está lleno de ''cualquiera'' de las diferentes cargas que pueda llevar. Se añade en la orden de la parada "(Carga completa cualquier carga)".
 
 ====Sin cargar====
-:El vehículo pasará por ese punto sin cargar nada.
+:El vehículo pasará por ese punto sin cargar nada. Se añade en la orden de la parada "(Sin carga)".
 
 ===Descarga===
-{{es/Pendiente de traducción}}
-This instructs the vehicle to leave any cargo it is carrying at a station.  Any cargo accepted by that station will be handled as usual, i.e. you will be paid.  Any cargo not accepted by the station will be unloaded anyway and left for another vehicle to pick up.  The cargo will wait in the station showing ''"En route from (source)"'' in the Waiting screen.  That vehicle will not receive a payment for any cargo that is not accepted.  
+El botón ''Comportamiento de descarga'' (pone "Descargar todo") tiene las opciones:
+*''"Descargar si es aceptado"''
+*''"Descargar todo"''
+*''"Transferir"''
+*''"No descargar"''.<br/>[[File:es/Manual/Orders-Unload-options.png|frame|none|Botón Comportamiento de descarga]]
 
-This option also prevents the vehicle from picking up any new cargo at that station.
+====Descargar si es aceptado====
+:El vehículo pasará por la parada, descargará todas las mercancías que sean aceptadas en esa parada y saldrá hacia el siguiente destino. Es la opción inicial por defecto. No es recomendable usarla (salvo para vehículos que transporten pasajeros, correo...).
+
+====Descargar todo====
+:Esto indica al vehículo que descargue cualquier carga que transporte en una estación. Las mercancías aceptadas por esa estación se descargarán de la forma habitual, es decir, se pagarán. Las mercancías no aceptadas por la estación también se descargarán y quedarán disponibles para que las cargue cualquier otro vehículo. La carga quedará a la espera en la parada y aparecerá el mensaje ''En ruta desde (origen)'' en la sección ''Esperando'' de la ventana de la estación. El vehículo no recibirá el pago de la carga que no sea aceptada. Se añade en la orden de la parada "(Descargar y...)".
+
+:Esta opción no impide que el vehículo recoja cualquier otra carga en ese lugar, mediante el botón ''Comportamiento de carga''.
+
+====Transferir====
+{{es/Desactualizado}}
+{{es/Pendiente de traducción}}
+
+This option will have the train unload its cargo to a station regardless of acceptance, just as Unload does.  However in this case you will receive part payment for the distance it has traveled so far.  This is useful to run a [[en/Manual/Feeder service|feeder service]] without your vehicles showing a negative profit if they are not running the final part of the journey.  
+
+By default the vehicle will also collect any waiting cargo as usual.  Confusingly this can include the cargo you just dropped off!  If this is the active setting, the order will show ''Transfer and take cargo''.  If this is not what you want, you can click the ''Unload'' order as well which will toggle the order to ''Transfer and leave empty'', preventing the vehicle picking up any cargo there; to do this in 0.7.0, under the ''Full Load'' dropdown menu, choose ''No Loading'' so the order now reads ''Transfer and Leave Empty''.
+
+====No descargar====
+:El vehículo pasará por ese punto sin descargar nada. Se añade en la orden de la parada "(No descargar y...)".
+
+:Esta opción no impide que el vehículo recoja cualquier otra carga en ese lugar, mediante el botón ''Comportamiento de carga''.
+
 ===Otras opciones de parada===
 ====Sin paradas====
-
-
-
 ===Skip===
 This causes the train to skip the order it's currently fulfilling and move onto the next one. Pressing ''Skip'' while the vehicle is on its last order will cause the vehicle to start again at the first one.
 
@@ -62,13 +82,6 @@ This is the way to direct a vehicle to a particular location.  It inserts a new 
 *[[en/Manual/Waypoints]], you can send a train to a particular waypoint to influence its choice of track or if the stations are too far apart and the train gets lost easily.  A [[en/Manual/Water Transport Tiles]] is a type of waypoint for ships traveling long distances.
 
 See [[en/Archive/Manual/Settings/Quick Goto]] for shortcuts to create orders.
-
-
-===Opciones de parada===
-===Transfer===
-This option will have the train unload its cargo to a station regardless of acceptance, just as Unload does.  However in this case you will receive part payment for the distance it has traveled so far.  This is useful to run a [[en/Manual/Feeder service|feeder service]] without your vehicles showing a negative profit if they are not running the final part of the journey.  
-
-By default the vehicle will also collect any waiting cargo as usual.  Confusingly this can include the cargo you just dropped off!  If this is the active setting, the order will show ''Transfer and take cargo''.  If this is not what you want, you can click the ''Unload'' order as well which will toggle the order to ''Transfer and leave empty'', preventing the vehicle picking up any cargo there; to do this in 0.7.0, under the ''Full Load'' dropdown menu, choose ''No Loading'' so the order now reads ''Transfer and Leave Empty''.
 
 ===Service===
 This option is available if you have a ''go to depot'' order selected.  This will force the vehicle to be [[en/Manual/Servicing|serviced]] in the depot.  It can be useful to include servicing in the schedule before vehicles pick up a new load of cargo.
