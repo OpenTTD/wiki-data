@@ -66,35 +66,35 @@ Une nouvelle interface peut être utilisée pour placer des signaux, qui complè
 |}
 {{en/0.7-feature}}
 
-==Block signals==
+==Signaux blocs==
 
-Block signals, as the name suggests, operate based on blocks of track. If the block of track on the opposite side of a signal is occupied, the signal is red. If not, it is green. A block of track consists of all track tiles reachable from a given piece of track without crossing over signals.
+Un bloc est l'ensemble du réseau ferroviaire accessibles depuis un point donné sans croiser de signal. Les signaux blocs, comme le nom le suggère, fonctionne avec les blocs. Si le bloc du côté opposé du signal est occupé, alors celui-ci est rouge, sinon il est vert (pour simplifier, nous nous basons sur les signaux lumineux classiques, mais les électro-sémaphores fonctionnent sur le même principe).
 
-===Two-way signals===
-[[File:en/Manual/Two-way signal.png|frame|left]][[File:en/Manual/2-way signals.png|frame|right|Two-way signals at a loading station]]
-Two-way signals are used in a railway that has trains moving in both directions on the same track.  The most common use is at end-of-line stations, where trains enter and exit the same end of the station.  In the example at the right, the signals direct the next train to come to go to the empty loading bay.  They also prevent the train from leaving the loading bay if another train is in the way.
+===Signaux à double sens===
+[[File:en/Manual/Two-way signal.png|frame|left]][[File:en/Manual/2-way signals.png|frame|right|Signaux à double sens dans une gare]]
+Les signaux à double sens sont utilisés sur une voie ou des trains circulent dans les deux sens. L'utilisation la plus commune est au niveau des gares de fin de ligne, ou les trains entrent et sortent du même côté de la gare. Dans l'exemple à droite, les signaux indiquent au train d'entrer dans l'aire de chargement libre. Ils empêchent également le train en gare de la quitter si un autre train se trouve sur la voie.
 
-If a train has a choice of two or more directions, each with two-way signals on them, it will choose the direction with a green signal.  If all signals are red it will pick the easiest direction and wait for the signal to change.
+Si un train doit choisir parmi deux directions ou plus, chacune contenant un signal à double sens, il choisira la direction avec un signal vert. Si tous les signaux sont rouges, il va s'engager vers la direction la plus simple, s'arrêter au niveau du signal, et attendre le passage au vert de celui-ci.
 {{en/-}}
 
-===One way signals===
+===Signaux à sens unique===
 [[File:en/Manual/One-way signal.png|frame|left]]
-One-way signals limit train movement to one direction.  In the example below, the signals force the trains to move in a circle. This has two advantages: trains enter and exit stations efficiently, and the track can have more than 2 trains.  
+Les signaux à sens unique contraignent les trains à n'emprunter une voie que dans un seul sens. Dans l'exemple ci-dessous, les signaux forcent les trains à circuler en cercle : ceci à deux avantages : les trains entrent et sortent des gares de manière efficace, et plusieurs trains peuvent circuler en même temps sur la même voie (à condition de fractionner cette voie en blocs suffisamment petits pour ne pas bloquer le trafic, et suffisamment grand pour contenir une rame entière (locomotive + wagons). D'où l'importance du paramétrage ''Espacement des signaux en mode drag and drop''.
 
-When using one-way signals, be sure that they are ''all'' facing the correct direction.  It is a good idea to watch the first train you run on the newly signalled line all the way to its destination to ensure you haven't made any mistakes.
+En utilisant des signaux à sens unique, vérifiez bien qu'ils sont tous orientés dans le même sens. Une bonne idée est d'observer le premier train que vous faîtes circuler le long d'une voie nouvellement signalisée, afin de vous assurer que vous n'avez pas commis d'erreur.
 
-Click on an existing two-way signal to toggle it to a one-way signal. Click on it again to change its direction (leaving it one-way); the third time will revert it back to a two-way signal.
+Cliquez sur un signal à double sens existant pour le convertir en signal à sens unique. Cliquez à nouveau pour changer l'orientation du signal (qui reste sens-unique) ; un troisième clic convertira à nouveau le signal en double sens.
 
-If a train has a choice of tracks, each with a one way signal, it will pick the track heading towards its destination (i.e. it will wait until the signal on the track heading towards its destination turns green, as opposed to taking whichever signal is green if one of the signals is red).  This is in contrast with two way signals.
+Si un train doit choisir parmi plusieurs voies, chacune contenant un signal à sens unique, il s'engagera sur la voie menant à sa destination quelque soit la couleur des différents signaux (de sa voie, ou des autres) attendra si besoin que le signal passe au vert. Ceci contraste avec les signaux à double sens, ou le train s'engage dans n'importe quelle voie ou le signal est vert si un des signaux est rouge, même si la voie alors empruntée ne mène pas vers sa destination.
 
-If a train arrives at the wrong side of a one-way signal it will immediately reverse.
+Si un train arrive du mauvais côté d'un signal à sens unique, il fait immédiatement demi-tour.
 
-[[File:en/Manual/1-way signal loop.png|frame|none|One-way signals in a loop]]
+[[File:en/Manual/1-way signal loop.png|frame|none|Signaux à sens unique dans une boucle]]
 
-===Pre-signals===
-[[File:en/Manual/Station no pre-signals.png|frame|right|A problem - the left train may leave first.]]
-[[File:en/Manual/Station with pre-signals.png|frame|right|Solve the problem using presignals]]
-The image on the right shows a setup where entry to a station is controlled using ordinary signals.  When at least one platform is empty this works well as an incoming train is always directed to a free platform.  However, consider what happens when all platforms are full as in the screenshot.  All branches are showing red so the incoming train picks the easiest path - straight on.  But suppose the train on that platform is going to be in the station for some time.  Meanwhile the other train leaves.  The incoming train has committed itself to a platform and is stuck waiting for a train to depart even though there is now an empty platform available!  We need to stop that incoming train having to make a decision between two red signals. For this, we need to use '''pre-signals'''.
+===Pré-signaux===
+[[File:en/Manual/Station no pre-signals.png|frame|right|Un problème - le train de gauche devrait partir en premier.]]
+[[File:en/Manual/Station with pre-signals.png|frame|right|Résolution du problème par l'utilisation de pré-signaux]]
+L'image à droite montre une configuration oùThe image on the right shows a setup where entry to a station is controlled using ordinary signals.  When at least one platform is empty this works well as an incoming train is always directed to a free platform.  However, consider what happens when all platforms are full as in the screenshot.  All branches are showing red so the incoming train picks the easiest path - straight on.  But suppose the train on that platform is going to be in the station for some time.  Meanwhile the other train leaves.  The incoming train has committed itself to a platform and is stuck waiting for a train to depart even though there is now an empty platform available!  We need to stop that incoming train having to make a decision between two red signals. For this, we need to use '''pre-signals'''.
 
 Pre-signals are signals that decide on which colour to show not only by the status of the track immediately beyond, but also by the status of other pre-signals further down the line.  Specifically, a pre-signal shows a green light if, and only if, there is a green exit from the block behind it.  You as the planner need to identify which signals are to be the pre-signals and which are to identify exits.
 {{en/-}}
