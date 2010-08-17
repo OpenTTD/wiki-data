@@ -94,41 +94,39 @@ Si un train arrive du mauvais côté d'un signal à sens unique, il fait immédi
 
 [[File:en/Manual/1-way signal loop.png|frame|none|Signaux à sens unique dans une boucle]]
 
-===Pré-signaux===
+===Signaux dépendants===
 [[File:en/Manual/Station no pre-signals.png|frame|right|Un problème - le train de gauche devrait partir en premier.]]
-[[File:en/Manual/Station with pre-signals.png|frame|right|Résolution du problème par l'utilisation de pré-signaux]]
-L'image à droite montre une configuration oùThe image on the right shows a setup where entry to a station is controlled using ordinary signals.  When at least one platform is empty this works well as an incoming train is always directed to a free platform.  However, consider what happens when all platforms are full as in the screenshot.  All branches are showing red so the incoming train picks the easiest path - straight on.  But suppose the train on that platform is going to be in the station for some time.  Meanwhile the other train leaves.  The incoming train has committed itself to a platform and is stuck waiting for a train to depart even though there is now an empty platform available!  We need to stop that incoming train having to make a decision between two red signals. For this, we need to use '''pre-signals'''.
+[[File:en/Manual/Station with pre-signals.png|frame|right|Résolution du problème par l'utilisation de signaux dépendants]]
+L'image à droite montre une configuration où l'entrée dans une gare est contrôlée par des signaux ordinaires. Quand au moins un des quais est libre, ça fonctionne correctement car un train sera toujours dirigé vers un quai libre. Cependant, observez ce qui arrive quand toutes les quais sont occupés, comme dans la capture d'écran. Sur toutes les branches, les signaux sont rouges, et donc le train se dirige vers la voie la plus simple - droit devant.  Mais supposons que le train de ce quai reste un bon bout de temps à quai, pour quelque raison. Pendant ce temps, l'autre train quitte la gare. Le train entrant s'est engagée vers un quai, et est bloqué dans l'attente qu'il soit libéré, même si il y a maintenant un autre quai libre disponible ! Il faut donc éviter que le train entrant ait à prendre une décision entre deux signaux rouges. Pour cela, nous devons utiliser un système de signaux dépendants, pré-signal et signaux de sortie.
 
-Pre-signals are signals that decide on which colour to show not only by the status of the track immediately beyond, but also by the status of other pre-signals further down the line.  Specifically, a pre-signal shows a green light if, and only if, there is a green exit from the block behind it.  You as the planner need to identify which signals are to be the pre-signals and which are to identify exits.
-{{en/-}}
-====Entry Pre-signals====
-[[File:en/Manual/Entry presignal.png|left|60px]]An entry presignal shows green as long as there is at least one green exit signal on the following section of track.  Otherwise it shows red.  This prevents trains from entering the signal block until there is an available exit. Note that depots have a built-in two way signal (it works as an entry pre-signal in a pre-signal set).
-
-If there are no signals designated as exits behind the entry pre-signal, it behaves as a normal signal.  This is convenient for bi-directional presignals where only one direction needs presignal functionality.
+Les pré-signaux affichent une couleur, non seulement en fonction du statut de la voie immédiatement après, mais aussi en fonction d'autres signaux plus loin sur la voie. Spécifiquement, s'il est suivi par des signaux de sortie, un pré-signal est vert si, et seulement si, l'un des signaux de sortie est vert. Dans un système de signaux dépendants, vous devez identifier quels signaux doivent être des pré-signaux, et lesquels sont des signaux de sortie.
 {{en/-}}
 
-====Exit-signals====
-[[File:en/Manual/Exit presignal.png|60px|left]]An exit signal behaves in the same way as a normal signal but is necessary to trigger the correct colour on entry and combo pre-signals.
+====Pré-signaux d'entrée====
+[[File:en/Manual/Entry presignal.png|left|60px]]S'il est suivi par un ou plusieurs signaux de sortie, un pré-signal d'entrée est vert aussi longtemps qu'il y a au moins un signal de sortie vert à sa suite. Autrement, il est rouge. Ça empêche les trains d'entrer dans un bloc tant qu'une sortie n'est pas disponible. Notez que les dépôts ont un signal à double sens incorporé, qui peut fonctionner comme un pré-signal d'entrée dans un système de signaux dépendants.
+
+Si il n'y a pas de signal de sortie après un pré-signal d'entrée, celui-ci se comporte comme un signal normal. C'est pratique pour les pré-signaux d'entrée bi-directionnels qui n'ont besoin d'un système de signaux dépendants que dans une direction.
 {{en/-}}
 
-====Combo-signals====
-[[File:en/Manual/Station with pre-signals2.png|frame|right|Station with 1 entry pre-signal, 2 combo-signals, and 4 exit-signals]]
-[[File:en/Manual/Combo presignal.png|60px|left]]There is a third type of presignal that doesn't really introduce any new functionality.  It is called the '''combo signal''' and simply acts as both an entry and exit signal.  This allows you to build large "trees" of presignals as shown on the right.
+====Signaux de sortie====
+[[File:en/Manual/Exit presignal.png|60px|left]]Un signal de sortie se comporte comme un signal normal, mais est nécessaire au bon fonctionnement des signaux d'entrée et des signaux combinés.
 {{en/-}}
 
-====Building Presignals====
-To build presignals, first place an ordinary signal.  Then, with ''Ctrl'' held down, click the signal to cycle through the different kinds of presignal.
+====Signaux combinés====
+[[File:en/Manual/Station with pre-signals2.png|frame|right|Gare avec 1 pré-signal d'entrée, 2 signaux combinés et 4 signaux de sortie]]
+[[File:en/Manual/Combo presignal.png|60px|left]]Il y a un troisième type de signal dépendant, qui n'introduit pas vraiment de nouvelle fonctionnalité. C'est le '''signal combiné''' qui agit simplement à la fois comme signal d'entrée et signal de sortie. Cela permet de contruire de grands ''arbres'' de signaux dépendants, comme montré à droite.
+{{en/-}}
 
-Note that you can build one way pre-signals in the same way as you build ordinary one way signals.  Remember: holding ''Ctrl'' and clicking toggles the type of (pre)signal, clicking without ''Ctrl'' changes the direction of signalling.
-
-Remember not to hold down ''Ctrl'' when placing the signal initially or you will end up with a semaphore (see below).
+====Construire des signaux dépendants====
+* Sans l'interface de sélection des signaux, voir le paragraphe ''[[en/Construction de signaux]]''
+* Avec l'interface de sélection des signaux, voir le paragraphe ''[[en/Interface de sélection des signaux]]''
 {{en/-}}
 
 ====Limitations====
-[[File:en/Manual/PresignalLimitation.png|frame|The problem with presignals...]]
-An important point to note with exit signals is that a green exit signal will trigger a green on the entry pre-signal at the beginning of the block even if it is not actually possible for a train to get to that exit signal because of the track layout (as in the image to the right with a train entering on the bottom track).  This can ruin more complicated presignalling setups so care needs to be taken with planning.
+[[File:en/Manual/PresignalLimitation.png|frame|Le problèmes avec les signaux dépendants...]]
+Un point important à noter avec les signaux dépendants, est qu'un signal de sortie vert enclenche un pré-signal d'entrée vert au début du bloc,  même si il n'est en réalité pas possible pour un train de se rendre à ce signal de sortie en raison de l'aménagement des voies (comme dans l'image ci-contre, pour un train qui viendrait de la voie de droite). Cela peut ruiner des systèmes plus complexes de signaux dépendants, donc il faut aménager ces systèmes avec soin.
 
-One of bugs that noted as "will not be solved" is: lost trains ignore (block) exit signals. If trains are lost, a random direction is chosen at each junction, so they ignore block exit signals, and easily may completely block junctions with presignals.
+'''Note''' : un des bogue, marqué comme « ne sera pas résolu » est que les trains perdus ne prennent pas en compte les signaux de sorties de blocs. Si un train est perdu, il choisit une direction aléatoire à chaque jonction qu'il rencontre, donc ils ne prend pas en compte les signaux de sortie de bloc et peut ainsi facilement bloquer complètement un réseau avec des signaux dépendants.
 
 {{en/-}}
 
