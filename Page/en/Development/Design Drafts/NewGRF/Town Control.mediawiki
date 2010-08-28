@@ -1,0 +1,106 @@
+Feature XX Towns/Cities
+
+This specification is at Draft stage. There is no current effort to actually implement it.
+
+
+== VarAction2 Variables ==
+{| border="1"
+|-
+| 40 || Larger town effect
+|-
+| 41 || Town index
+|-
+| 42 || Distance and size of nearest town: xFDDPPPP
+: PPPP Population
+: DD   Distance: Manhattan or Squared Euclidian?
+: F    Larger town effect
+|-
+| 43 || Same as 42, but for nearest "larger" town. Identical to 42 if there are no larger towns.
+|-
+| 44 || Number of industries associated to the town: SSSSTTTT
+: TTTT Total amount
+: SSSS Serviced amount
+|-
+| 45 || Same as 44, but only primary/raw industries.
+|-
+| 46 || Same as 44, but only secondary/processing industries.
+|-
+| 47 || Same as 44, but for stations. (sum of all players)
+|-
+| 60 || Land info of nearby tiles (relative to townsign). Can be used to detect desert and such, also within a certain area -8 .. 7.
+|-
+| 61 || Cargo delivered last month to any station in the town (Parameter = translated cargo bit).
+: Returns FFFFFFFF if the cargo is not present at all.
+: Else it returns: xHHHAAAA
+:: AAAA  Amount last month
+:: HHH   History of last 12 months.
+::: Bit 0 is set if some cargo was delivered/transported last month.
+::: Bit 1 is set if some cargo was delivered/transported two months ago.
+::: ...
+::: Bit 11 is set if some cargo was delivered/transported 12 months ago.
+|-
+| 62 || Same as 61, but with towneffect instead of cargobit. The amounts are multiplied with the town-effect-multiplier as well.
+|-
+| 63 || Same as 61, but for produced cargo of any house or industry in the town.
+|-
+| 64 || Same as 62, but for produced cargo of any house or industry in the town.
+|-
+| 65 || Same as 61, but for transported cargo of any house or industry in the town.
+|-
+| 66 || Same as 62, but for transported cargo of any house or industry in the town.
+|-
+| 82 || Population
+|-
+| 94..9C || Town radii
+|-
+| B6 || Number of buildings
+|-
+| D4 || Remaining months of Road Reconstruction
+|-
+| D5 || Remaining months of Funded Buildings
+|-
+|}
+
+
+== Callbacks ==
+All callbacks are generic callbacks, and are chained across all Grfs.
+That is if one Grf returns "callback failed", the next Grf is tried. If all callbacks fail, the default behaviour kicks in.
+
+* Decide town growth:
+*: Called periodically, returns some growth speed (signed! :p ).
+*: Variable 10: Random bits
+
+* Decide town radius:
+*: Called periodically.
+*: Variable 18: Zone to return radius for.
+*: Variable 10: Random bits (same for all zones in one call-series)
+*: The radii should be strictly monoton. Therefore a NewGRF should always define all radii or none.
+
+* Decide town found cost and size:
+*: Called when founding a town.
+*: Variable 18: Randomly generated town or manually founded. (Both in game and in scenario editor.)
+*: Variable 10: Random bits
+*: Not sure about the exact result. Also the size is actually already set by the GUI when manually founding.
+*: Nevertheless, var 40, 42, 43 and 60 should be accessible.
+
+* Additonal text in town window:
+*: This callback also hides the default "Require water/food" text.
+*: Register 100: Mask of translated cargobits to show "Required"/"Delivered last month" for.
+*: Register 101: Mask of towneffects to show "Required"/"Delivered last month" for. (Displayed individually for each cargo, without duplicates)
+*: Register 102: Mask of translated cargobits to show "Required"/"Transported last month" for.
+*: Register 103: Mask of towneffects to show "Required"/"Transported last month" for. (Displayed individually for each cargo, without duplicates)
+*: Register 104...110: Textstack
+*: Is there some more clever way to register 100..103?
+*: Maybe some different callback for those lines also allowing text after the cargolines like industry CB 37?
+
+
+== Persistent storage ==
+Adding persistant storage to towns allows some strange features of NewGRFs, as basically everything (stations, houses, industries, objects)
+has access to the town, so there can be inter-object communication within a town's influence (not global).
+However NewGRF should not conflict when accessing this storage, so every GrfID should have its own storage (allocated on first access).
+OTOH some multi-NewGRFs sets like ECS might want to access this storage across NewGRFs, resp use some master GRF.
+
+Possible ways to archieve this:
+# Reading the persistent storage requires to put the GrfID in register 100. A value of 0 means the current GRF.
+# A action 0 property sets the GrfID to use for town access. That is, a Grf can only access data from a single GRF, which would be some master GRF in case of ECS-like sets. (Note, that the master GRF does not need to be present itself.)
+# A action 0 property sets up to 16 GrfIDs (ID 0 to 15, not a single property value for all). The Grf can then access up to 256 persistent registers, where the upper nibble is a index into the list of GrfIDs and the lower nibble is the actual register.
