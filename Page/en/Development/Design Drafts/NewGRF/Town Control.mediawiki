@@ -90,16 +90,43 @@ That is if one Grf returns "callback failed", the next Grf is tried. If all call
 
 * Additonal text in town window:
 *: The text callback is chained slightly different to the other callbacks. While for the other callbacks the chaining stops once there is a result, this callback is always called for all implementing Grfs. The returned texts are then concatenated in the GUI.
-*: This callback also hides the default "Require water/food" text.
-*: Register 100: Mask of translated cargobits to show "Required"/"Delivered last month" for.
-*: Register 101: Mask of towneffects to show "Required"/"Delivered last month" for. (Displayed individually for each cargo, without duplicates)
-*: Register 102: Mask of translated cargobits to show "Required"/"Transported last month" for.
-*: Register 103: Mask of towneffects to show "Required"/"Transported last month" for. (Displayed individually for each cargo, without duplicates)
-*: Register 104...110: Textstack
 *: Result: Usual offset (0-3FF) for a D0xx text.
-*: Is there some more clever way to register 100..103? There should also be some method to tell AIs how urgently some cargo is needed.
-*: Maybe some different callback for those lines also allowing text after the cargolines like industry CB 37?
 
+* Cargo requirement information callback:
+*: This callback makes the town GUI display the delivered and/or transported cargo class month and can optionally display a text behind the amounts. Like the additional text callback, this callback is also chained across multiple Grfs. However, only one Grf can display an additional text.
+*: Variable 18: xxxxTTCC
+*:: CC translated cargo bit
+*:: TT towneffect
+*: Big problem: How to get the information from variable 18 into the parameters of the 60+ variables?
+*: Register 100: TTTTDDDD
+*:: DDDD: D0xx text for delivered cargo.
+*:: TTTT: D0xx text for transported cargo.
+*: Result:
+{| border="1" style="margin-left: 90px;"
+|-
+! Bits !! Value !!
+|-
+|rowspan="4"| 0 - 1 || 0 || Show delivered cargo amounts if climate defaults require this.
+|-
+| 1 || Hide the amounts, unless another Grf wants to display them.
+|-
+| 2 || Show the amounts.
+|-
+| 3 || Show the amounts including an additional text from register 100.
+|-
+| 2 || 4 || The cargo is required regulary for growth.
+|-
+| 3 || 8 || The cargo is required in big amounts for growth.
+|-
+| 4 || 10 || The cargo requirement is very important.
+|-
+| 5- 7 || || (reserved)
+|-
+| 8 - 12 || || Same as bit 0-4, but for transport instead of delivery.
+|-
+| 13 - 14 || || (reserved)
+|-
+|}
 
 == Persistent storage ==
 Adding persistant storage to towns allows some strange features of NewGRFs, as basically everything (stations, houses, industries, objects)
