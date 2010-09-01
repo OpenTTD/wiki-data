@@ -77,7 +77,6 @@ Les signaux à double sens sont utilisés sur une voie ou des trains circulent d
 
 Si un train doit choisir parmi deux directions ou plus, chacune contenant un signal à double sens, il choisira la direction avec un signal vert. Si tous les signaux sont rouges, il va s'engager vers la direction la plus simple, s'arrêter au niveau du signal, et attendre le passage au vert de celui-ci.
 {{en/-}}
-
 ===Signaux à sens unique===
 [[File:en/Manual/One-way signal.png|frame|left]]
 Les signaux à sens unique contraignent les trains à n'emprunter une voie que dans un seul sens. Dans l'exemple ci-dessous, les signaux forcent les trains à circuler en cercle : ceci à deux avantages : les trains entrent et sortent des gares de manière efficace, et plusieurs trains peuvent circuler en même temps sur la même voie (à condition de fractionner cette voie en blocs suffisamment petits pour ne pas bloquer le trafic, et suffisamment grand pour contenir une rame entière (locomotive + wagons). D'où l'importance du paramétrage ''Espacement des signaux en mode drag and drop''.
@@ -99,35 +98,28 @@ L'image à droite montre une configuration où l'entrée dans une gare est contr
 
 Les pré-signaux affichent une couleur, non seulement en fonction du statut de la voie immédiatement après, mais aussi en fonction d'autres signaux plus loin sur la voie. Spécifiquement, s'il est suivi par des signaux de sortie, un pré-signal est vert si, et seulement si, l'un des signaux de sortie est vert. Dans un système de signaux dépendants, vous devez identifier quels signaux doivent être des pré-signaux, et lesquels sont des signaux de sortie.
 {{en/-}}
-
 ====Pré-signaux d'entrée====
 [[File:en/Manual/Entry presignal.png|left|60px]]S'il est suivi par un ou plusieurs signaux de sortie, un pré-signal d'entrée est vert aussi longtemps qu'il y a au moins un signal de sortie vert à sa suite. Autrement, il est rouge. Ça empêche les trains d'entrer dans un bloc tant qu'une sortie n'est pas disponible. Notez que les dépôts ont un signal à double sens incorporé, qui peut fonctionner comme un pré-signal d'entrée dans un système de signaux dépendants.
 
 Si il n'y a pas de signal de sortie après un pré-signal d'entrée, celui-ci se comporte comme un signal normal. C'est pratique pour les pré-signaux d'entrée bi-directionnels qui n'ont besoin d'un système de signaux dépendants que dans une direction.
 {{en/-}}
-
 ====Signaux de sortie====
 [[File:en/Manual/Exit presignal.png|60px|left]]Un signal de sortie se comporte comme un signal normal, mais est nécessaire au bon fonctionnement des signaux d'entrée et des signaux combinés.
 {{en/-}}
-
 ====Signaux combinés====
 [[File:en/Manual/Station with pre-signals2.png|frame|right|Gare avec 1 pré-signal d'entrée, 2 signaux combinés et 4 signaux de sortie]]
 [[File:en/Manual/Combo presignal.png|60px|left]]Il y a un troisième type de signal dépendant, qui n'introduit pas vraiment de nouvelle fonctionnalité. C'est le '''signal combiné''' qui agit simplement à la fois comme signal d'entrée et signal de sortie. Cela permet de contruire de grands ''arbres'' de signaux dépendants, comme montré à droite.
 {{en/-}}
-
 ====Construire des signaux dépendants====
 * Sans l'interface de sélection des signaux, voir le paragraphe ''[[fr/Manual/Signaux#construction-de-signaux|Construction de signaux]]''
 * Avec l'interface de sélection des signaux, voir le paragraphe ''[[fr/Manual/Signaux#interface-de-selection-des-signaux|Interface de sélection des signaux]]''
 {{en/-}}
-
 ====Limitations====
 [[File:en/Manual/PresignalLimitation.png|frame|Le problèmes avec les signaux dépendants...]]
 Un point important à noter avec les signaux dépendants, est qu'un signal de sortie vert enclenche un pré-signal d'entrée vert au début du bloc,  même si il n'est en réalité pas possible pour un train de se rendre à ce signal de sortie en raison de l'aménagement des voies (comme dans l'image ci-contre, pour un train qui viendrait de la voie de droite). Cela peut ruiner des systèmes plus complexes de signaux dépendants, donc il faut aménager ces systèmes avec soin.
 
 '''Note''' : un des bogue, marqué comme « ne sera pas résolu » est que les trains perdus ne prennent pas en compte les signaux de sorties de blocs. Si un train est perdu, il choisit une direction aléatoire à chaque jonction qu'il rencontre, donc ils ne prend pas en compte les signaux de sortie de bloc et peut ainsi facilement bloquer complètement un réseau avec des signaux dépendants.
-
 {{en/-}}
-
 ==Signaux de chemin ==
 [[File:fr/Manual/Yapp signalgui.png|frame|right|Deux nouveaux signaux dans l'[[fr/Manual/Interface de sélection des signaux|interface des signaux]].]]
 Il y a deux nouveaux types de signal. Ils permettent aux trains de réserver une voie jusqu'au signal suivant avant d'entrer dans le bloc. Si un autre train veut entrer dans le bloc, et réussit à y réserver une voie, le signal autorise le train à entrer dans le bloc, même si une autre voie du bloc est occupée.
@@ -141,24 +133,17 @@ Il faudrait donc fractionner ce bloc en plusieurs petits blocs en ajoutant des s
 [[File:en/Manual/Multiples standard.png|frame|center|le ''Y'' a été fractionné en trois blocs : branche droite, branche gauche et jonction en ajoutant deux ''signaux de blocs'' supplémentaires]]
 À l'inverse, le ''signal de chemin'' autorise le train venant du bas à pénétrer dans le bloc en Y car la voie de son itinéraire (la branche de gauche) est libre. Nul besoin de fractionner le bloc en plusieurs petits blocs (pas besoin de signaux après la jonction).
 [[File:en/Manual/Chemin.png|frame|center|bloc en Y délimité par un ''signal de chemin'' et deux ''signaux de bloc'' standards]]
-
 {{en/-}}
-
 Il y a deux choses à savoir à propos de ce signal :
 * Placez le uniquement là ou les trains peuvent attendre sans bloquer de jonction ;
 * Ce signal ne fonctionne que dans un sens. Dans l'autre sens, il est soit ignoré, soit considéré comme un sens interdit selon le type de ''signal de chemin''(voir ci-dessous).
 
-
 [[File:en/Manual/Yapp pbssignal.png|frame|left|<-->]]
 * '''Signal de chemin''' : Les trains peuvent traverser ce signal dans le sens inverse.
-
 {{en/-}}
-
 [[File:en/Manual/Yapp onewaypbssignal.png|frame|left|-->]]
 * '''Signal de chemin à sens unique''' : les trains ne peuvent pas traverser ce signal dans le sens inverse.
-
 {{en/-}}
-
 La plupart du temps, un ''signal de chemin'' standard sera suffisant, car passer par dans le sens opposé à un ''signal de chemin'' sera autant que possible évité lors de la recherche d'itinéraire. Cependant, les ''signaux de chemin'' à sens unique peuvent être utiles dans certains cas.
 
 Comme vu dans l'illustration ci-dessus, ces deux nouveaux signaux se comportent un peu différemment des signaux standards d'openTTD. Les ''signaux de chemin'' sont rouges par défaut, et ne deviendront vert que si, au moment ou un train rencontre ce signal (dans le ''bon'' sens), ce train peut alors réserver une voie vers la prochaine aire d'attente sécurisée de son itinéraire. Les aires d'attentes sécurisées sont - par définition - en face des signaux, des dépôts et en fin de ligne. L'arrière d'un ''signal de chemin'' n'est pas considérée comme une aire d'attente sécurisée, donc les voies sont réservés jusqu'au prochain signal.
@@ -211,5 +196,5 @@ Remarquez que les signaux ne sont pas le meilleur moyen de diriger les trains ve
 * [[:Category:en/Manual/Train Junctions]] for examples of complex junctions that take advantage of pre-signals.
 * [http://www.darkcoding.net/misc/openttd-trains-and-signals-for-beginners-a-tutorial/ Signals for the complete beginner (en)]
 
-[[Category:en/Manual/Railways]]
-[[Category:en/Manual/Construction]]
+[[Category:fr/Manual/Chemins de fer]]
+[[Category:fr/Manual/Construction]]
