@@ -114,17 +114,28 @@ One of the bugs that are noted as "will not be solved" is: lost trains ignore (b
 {{en/-}}
 ==Path Signals ==
 [[File:en/Manual/Yapp signalgui.png|frame|right|Two new signal types in the [[en/Manual/Signal GUI]].]]
-There are two new signal types. These signals enable trains to reserve a path through a signal block before entering the block. If another train wants to enter the block, and succeeds in reserving a path through the block, both trains can use one signal block at the same time.
+There are two new signal types. These signals enable trains to reserve a path through a block until the next signal, before entering the block. If another train wants to enter the block, and succeeds in reserving a path through the block, the path signal authorize the train to enter the block, even if another track of the block is used at the same time.
 {{en/-}}
+[[File:en/Manual/Signal bloc.png|frame|right|Y block between three ''block signals'']]
+Here is an example as illustration 
+
+We have here a Y block between three signals.
+The right track is used by a train. A train arrives from the lower track and wants to go to the left track. A standard block signal considers that all the block is occupied (even if the left track is free).
+{{en/-}}
+[[File:en/Manual/Multiples standard.png|frame|right|With two additionals block signals, the''Y'' has been split into three sections: right arm, left arm and junction]]
+A solution is to divide this block into smaller blocks by adding signals after the junction.
+{{en/-}}
+[[File:en/Manual/Chemin.png|frame|right|Y block between a ''path signal'' and two ''block signals'']]
+On the contrary, the path signal authorize the train coming from the bottom to enter the Y block as the path it tries to reserve is free (the left track). No need to split the block into smaller blocks (ie no need for signals after the junction).
+{{en/-}}
+There are two things you should know about this signal:
+* Place it only where trains can stop and wait without blocking junctions ;
+* This signal only works in one direction. In the other direction, it is either ignored or considered as a one-way signal, depending on the signal path (see below).
 [[File:en/Manual/Yapp pbssignal.png|frame|left|PS]]
-The first type is the basic '''Path Signal'''. There are two things you should know about this signal:
-* Place it only where trains can stop and wait without blocking junctions.
-* Trains can pass through this signal from the back side.
+* '''Path Signal''': trains can pass through this signal from the back side.
 {{en/-}}
 [[File:en/Manual/Yapp onewaypbssignal.png|frame|left|1W PS]]
-The second type is the '''One-way Path Signal'''. There are two things you should know about the second signal type:
-* Place it only where trains can stop and wait without blocking junctions.
-* Trains can pass through this signal from one direction.
+* '''One-way Path Signal''': trains can '''not''' pass through this signal from the back side.
 {{en/-}}
 Most of the times it will be sufficient to use a default Path signal, as passing a signal from the back is penalised by the pathfinder, however, one-way Path signals might be useful in certain specific cases.
 
