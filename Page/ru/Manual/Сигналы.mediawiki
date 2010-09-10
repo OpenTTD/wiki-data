@@ -1,0 +1,196 @@
+[[Translation:en/Manual/Signals]]
+{{ru/Перевод|en/Manual/Signals|0}}
+{{en/Manual/Navigation}}
+
+''See the [[en/Manual/Building signals]] tutorial for a practical introduction to signalling''
+
+'''Signals''' are useful devices that allow you to control [[en/Manual/Trains]] movement.  They are necessary to keep trains from crashing on [[en/Manual/Railway construction]] networks with more than one train.
+
+==Signal Construction==
+[[File:en/Manual/Signals-icon2.png|frame|centre|Signal build mode]]
+To do any construction work with signals, you need to be in signal build mode. Open the [[en/Manual/Railway construction]] toolbar and click the signals icon to enter this. A more advanced interface is also available, see [[en/Manual/Signals#signal-interface|Signal Interface]].
+
+Then, while in signal build mode:
+*To '''place a signal''', click on a clear section of track.  To begin with this will be a ''two way signal'', the most basic type. See below for how to change this to a different type.  If placing a signal where two parallel tracks share a map square, ensure you click on the precise track you wish to signal.
+*Place '''multiple signals''' at the same time by clicking an existing signal and [https://www.wikipedia.org/wiki/Drag-and-drop dragging] the mouse cursor along the track.  They will be spaced as set in the [[en/Archive/Manual/Settings/Drag signal density]] patch and will face the same way as the signal you started the drag on.
+*Place '''multiple signals''' along an ''entire'' line of track by holding down ''Ctrl'' and dragging from a signal already placed. You need only to drag one square and it will auto complete the entire line of track, based on the [[en/Archive/Manual/Settings/Drag signal density]] until either a station, another signal or a fork in the track is hit. (0.6.0-beta 2)
+*'''Remove signals''' by clicking the [[File:en/Manual/Toggle clear active.png]] bulldozer button (while remaining in signal build mode) and then clicking on the unwanted signal.  You can drag to remove multiple signals.
+* Create '''[[en/Manual/Signals#one-way-signals|One way signals]]''' by clicking on an existing signal. The signal will cycle through 2-way, one-way and one-way (opposite direction).
+* Create other types of '''[[en/Manual/Signals#block-signals|Block Signals]]''' and '''[[en/Manual/Signals#path-signals|Path Signals]]''' by ''Ctrl'' clicking on an existing signal.
+
+===Limitation===
+* Cannot place signals in squares containing junctions or level crossing with roadway.
+* Cannot place signals on the [[en/Manual/Bridges]] or inside the [[en/Manual/Tunnels]]. But a [[en/Community/Patches/Tunnel Signals|patch by HackaLittleBit]] can simulate the signals being placed automatically.
+
+==Signal Interface==
+A new signal interface can be used to place signals, which removes the need to ctrl-click cycle through the types of signal. Either ''Ctrl'' click the build signals icon, or in [[en/Archive/Manual/Settings/Advanced Settings/Construction]] set ''Enable the signal GUI'' (older versions: in openttd.cfg set enable_signal_gui as true). When you click on "build signals" you will now get this interface:
+[[File:en/Manual/Signal Selection.png|none|frame|New Interface]]
+{|
+|-
+|[[File:en/Manual/Signal Semaphore.png]]||Standard semaphore [[en/Manual/Signals#block-signals|block signal]]
+|-
+|[[File:en/Manual/Signal Semaphore Pre-Signal.png]]|| Semaphore [[en/Manual/Signals#entry-pre-signals|entry pre-signal]]
+|-
+|[[File:en/Manual/Signal Semaphore Exit-Signal.png]]|| Semaphore [[en/Manual/Signals#exit-signals|exit-signal]]
+|-
+|[[File:en/Manual/Signal Semaphore Combo-Signal.png]]|| Semaphore [[en/Manual/Signals#combo-signals|combo-signal]]
+|-
+|[[File:en/Manual/Signal Semaphore Path.png]]|| Semaphore [[en/Manual/Signals#path-signals|path signal]] (ignored when passing it in the reverse direction)
+|-
+|[[File:en/Manual/Signal Semaphore Path One-Way.png]]|| Semaphore [[en/Manual/Signals#path-signals|path signal]] (cannot pass it in the reverse direction)
+|-
+|[[File:en/Manual/Signal Electric.png]]||Standard Electric [[en/Manual/Signals#block-signals|block signal]]
+|-
+|[[File:en/Manual/Signal Electric Pre-Signal.png]]|| Electric [[en/Manual/Signals#entry-pre-signals|entry pre-signal]]
+|-
+|[[File:en/Manual/Signal Electric Exit-Signal.png]]|| Electric [[en/Manual/Signals#exit-signals|exit-signal]]
+|-
+|[[File:en/Manual/Signal Electric Combo-Signal.png]]|| Electric [[en/Manual/Signals#combo-signals|combo-signal]]
+|-
+|[[File:en/Manual/Signal Electric Path.png]]|| Electric [[en/Manual/Signals#path-signals|path signal]] (ignored when passing it in the reverse direction)
+|-
+|[[File:en/Manual/Signal Electric Path One-Way.png]]|| Electric [[en/Manual/Signals#path-signals|path signal]] (cannot pass it in the reverse direction)
+|-
+|[[File:en/Manual/Signal Convert.png]]|| Signal conversion tool - converts the signal type on the ''track'' to the one selected in the ''gui''. See [[en/Manual/Building signals#converting-signals-to-different-types|Building signals]]
+|-
+|[[File:en/Manual/Signal Density.png]]|| Signal density tool - sets how closely the signals are placed when auto build of signals are used. See [[en/Manual/Building signals#constructing-a-line-of-signals|Building signals]]
+|}
+{{en/Feature|0.7}}
+
+==Block Signals==
+
+Block signals, as the name suggests, operate based on blocks of track. If the block of track on the opposite side of a signal is occupied, the signal is red. If not, it is green. A block of track consists of all track tiles reachable from a given piece of track without crossing over signals.
+
+===Two-way signals===
+[[File:en/Manual/Two-way signal.png|frame|left]][[File:en/Manual/2-way signals.png|frame|right|Two-way signals at a loading station]]
+Two-way signals are used in a railway that has trains moving in both directions on the same track.  The most common use is at end-of-line stations, where trains enter and exit the same end of the station.  In the example at the right, the signals direct the next train to come to go to the empty loading bay.  They also prevent the train from leaving the loading bay if another train is in the way.
+
+If a train has a choice of two or more directions, each with two-way signals on them, it will choose the direction with a green signal.  If all signals are red it will pick the easiest direction and wait for the signal to change.
+{{en/-}}
+===One way signals===
+[[File:en/Manual/One-way signal.png|frame|left]]
+One-way signals limit train movement to one direction.  In the example below, the signals force the trains to move in a circle. This has two advantages: trains enter and exit stations efficiently, and the track can have more than 2 trains.  
+
+When using one-way signals, be sure that they are ''all'' facing the correct direction.  It is a good idea to watch the first train you run on the newly signalled line all the way to its destination to ensure you haven't made any mistakes.
+
+Click on an existing two-way signal to toggle it to a one-way signal. Click on it again to change its direction (leaving it one-way); the third time will revert it back to a two-way signal.
+
+If a train has a choice of tracks, each with a one way signal, it will pick the track heading towards its destination (i.e. it will wait until the signal on the track heading towards its destination turns green, as opposed to taking whichever signal is green if one of the signals is red).  This is in contrast with two way signals.
+
+If a train arrives at the wrong side of a one-way signal it will immediately reverse.
+
+[[File:en/Manual/1-way signal loop.png|frame|none|One-way signals in a loop]]
+
+===Pre-signals===
+[[File:en/Manual/Station no pre-signals.png|frame|right|A problem - the left train may leave first.]]
+[[File:en/Manual/Station with pre-signals.png|frame|right|Solve the problem using presignals]]
+The image on the right shows a setup where entry to a station is controlled using ordinary signals.  When at least one platform is empty this works well as an incoming train is always directed to a free platform.  However, consider what happens when all platforms are full as in the screenshot.  All branches are showing red so the incoming train picks the easiest path - straight on.  But suppose the train on that platform is going to be in the station for some time.  Meanwhile the other train leaves.  The incoming train has committed itself to a platform and is stuck waiting for a train to depart even though there is now an empty platform available!  We need to stop that incoming train having to make a decision between two red signals. For this, we need to use '''pre-signals'''.
+
+Pre-signals are signals that decide on which colour to show not only by the status of the track immediately beyond, but also by the status of other pre-signals further down the line.  Specifically, a entry pre-signal shows a green light if, and only if, there is a green exit from the block behind it.  You as the planner need to identify which signals are to be the pre-signals and which are to identify exits.
+{{en/-}}
+====Entry Pre-signals====
+[[File:en/Manual/Entry presignal.png|left|60px]]An '''entry presignal''' shows green as long as there is at least one green exit signal on the following section of track.  Otherwise it shows red.  This prevents trains from entering the signal block until there is an available exit. Note that depots have a built-in two way signal (it works as an entry pre-signal in a pre-signal set).
+
+If there are no signals designated as exits behind the entry pre-signal, it behaves as a normal signal.  This is convenient for bi-directional presignals where only one direction needs presignal functionality.
+{{en/-}}
+====Exit-signals====
+[[File:en/Manual/Exit presignal.png|60px|left]]An '''exit signal''' behaves in the same way as a normal signal but is necessary to trigger the correct colour on entry and combo pre-signals.
+{{en/-}}
+====Combo-signals====
+[[File:en/Manual/Station with pre-signals2.png|frame|right|Station with 1 entry pre-signal, 2 combo-signals, and 4 exit-signals]]
+[[File:en/Manual/Combo presignal.png|60px|left]]There is a third type of presignal that doesn't really introduce any new functionality.  It is called the '''combo signal''' and simply acts as both an entry and exit signal.  This allows you to build large "trees" of presignals as shown on the right.
+{{en/-}}
+====Building Presignals====
+To build a pre-signal select the appropriate button in [[#signal-interface|signal selection toolbar]].
+
+In previous versions, first place an ordinary signal.  Then, with ''Ctrl'' held down, click the signal to cycle through the different kinds of presignal:
+*Note that you can build one way pre-signals in the same way as you build ordinary one way signals.  Remember: holding ''Ctrl'' and clicking toggles the type of (pre)signal, clicking without ''Ctrl'' changes the direction of signalling - if not enabled interface signals.
+*Remember not to hold down ''Ctrl'' when placing the signal initially or you will end up with a semaphore (see below). Also use ''Ctrl'' if you have enabled the signal interface.
+{{en/-}}
+====Limitations====
+[[File:en/Manual/PresignalLimitation.png|frame|The problem with presignals...]]
+An important point to note with exit signals is that a green exit signal will trigger a green on the entry pre-signal at the beginning of the block even if it is not actually possible for a train to get to that exit signal because of the track layout (as in the image to the right with a train entering on the bottom track).  This can ruin more complicated presignalling setups so care needs to be taken with planning.
+
+One of the bugs that are noted as "will not be solved" is: lost trains ignore (block) exit signals. If trains are lost, a random direction is chosen at each junction, so they ignore block exit signals, and easily may completely block junctions with presignals.
+{{en/-}}
+==Path Signals ==
+[[File:en/Manual/Yapp signalgui.png|frame|right|Two new signal types in the [[en/Manual/Signal GUI]].]]
+There are two new signal types. These signals enable trains to reserve a path through a block until the next signal, before entering the block. If another train wants to enter the block, and succeeds in reserving a path through the block, the path signal authorize the train to enter the block, even if another track of the block is used at the same time.
+{{en/-}}
+[[File:en/Manual/Signal bloc.png|frame|right|Y block between three ''block signals'']]
+Here is an example as illustration 
+
+We have here a Y block between three signals.
+The right track is used by a train. A train arrives from the lower track and wants to go to the left track. A standard block signal considers that all the block is occupied (even if the left track is free).
+{{en/-}}
+[[File:en/Manual/Multiples standard.png|frame|right|With two additionals block signals, the''Y'' has been split into three blocks: right arm, left arm and junction]]
+A solution is to split this block into smaller blocks by adding signals after the junction.
+{{en/-}}
+[[File:en/Manual/Chemin.png|frame|right|Y block between a ''path signal'' and two ''block signals'']]
+On the contrary, the path signal authorize the train coming from the bottom to enter the Y block as the path it tries to reserve is free (the left track). No need to split the block into smaller blocks (ie no need for signals after the junction).
+{{en/-}}
+There are two things you should know about this signal:
+* Place it only where trains can stop and wait without blocking junctions ;
+* This signal only works in one direction. In the other direction, it is either ignored or considered as a one-way signal, depending on the signal path (see below).
+[[File:en/Manual/Yapp pbssignal.png|frame|left|PS]]
+* '''Path Signal''': trains can pass through this signal from the back side.
+{{en/-}}
+[[File:en/Manual/Yapp onewaypbssignal.png|frame|left|1W PS]]
+* '''One-way Path Signal''': trains can '''not''' pass through this signal from the back side.
+{{en/-}}
+Most of the times it will be sufficient to use a default Path signal, as passing a signal from the back is penalised by the pathfinder, however, one-way Path signals might be useful in certain specific cases.
+
+The two new signal types behave a bit different than standard OpenTTD signal types. The Path signals are red by default, and will only show green as soon as a train can reserve a path to the next safe waiting position on its route. Safe waiting positions are - by definition - in front of signals, depots and track ends. The back of a Path signal is not considered a safe waiting position, and therefore paths are reserved through these signals.
+
+Because the front of every signal is defined as a safe waiting position, you would normally not want to place a signal immediately behind a junction, only in front of a junction. This is because it is only safe for a train to wait in front of a junction. It is not safe for a a train to wait at a signal immediately after a junction before the whole train has cleared the junction, as it would be blocking the junction while waiting, as illustrated in the example below. This is a major advantage against standard OpenTTD signals, where you had to place signals before and after junctions, which caused trains to block junctions while waiting.
+[[File:en/Manual/Yapp unsafewaitinglocation.png|frame|center|The signal indicated by the arrow is a bad waiting location, as the train in the junction now blocks the otherwise free path of the train coming from the top. There's a second bad waiting location in this picture. Can you find it?]]
+
+====Advanced Settings====
+[[File:en/Manual/Yapp patch-options.png|frame|right|YAPP Advanced Settings]]
+There are three new [[en/Archive/Manual/Settings/Advanced Settings]] related to path signals.
+
+One option is to highlight reserved tracks. This option is useful to troubleshoot your path-signalled junctions, as you can see what paths trains have reserved through a junction.
+
+The other two options control how the build signal tool should behave. You can set the signal type which should be built
+by default when building a new signal with the signal tool and change which signal types should be cycled through on ctrl-clicking
+an already existing signal.
+
+There are a few more path signal related options which are not available through the Advanced Settings window. What these options are, and how to edit them is covered under [[en/Archive/Manual/Settings/Advanced path signal options & features]].
+
+===Basic Examples===
+Below are some example track layouts which use the path signals. [[en/Community/Junctionary/Advanced path signal layouts|Advanced track layouts]] that are not recommended for beginners can be found [[en/Community/Junctionary/Advanced path signal layouts|here]].
+
+====Basic junction====
+This basic junction now has a much higher throughput.
+[[File:en/Manual/Yapp basicjunction.png|frame|center|Basic junction for trains with maxlength three tiles. Note the use of normal signals on plain track.]]
+
+====Basic two-way station====
+With this station layout, trains can use both platforms when coming from either direction.
+[[File:en/Manual/Yapp basicstation.png|frame|center|Basic station.]]
+{{en/Feature|0.7}}
+
+==Semaphores==
+[[File:en/Manual/Semaphore.png|frame|left]]
+'''Semaphores''' are a type of signal with no functional difference from regular signals.  They simply have a different (old-style) appearance.
+
+Before OpenTTD 0.6.0 semaphores were only created by holding ''Ctrl'' while placing the signals. Since 0.6.0 semaphores will be created instead of light signals before a configurable year, 1975 by default. This setting is called "Automatically build semaphores before" and can be found in the "Advanced settings" under "Construction" and then "Signals".
+
+After placement, holding ''Ctrl'' and clicking changes the extended signal status of the signals (i.e. presignals). You can change pre-placed semaphores to light signals by choosing the "convert signal" tool from the signal-gui and ctrl+clicking on an existing signal.
+{{en/-}}
+===History===
+Semaphore signals have a long history in rail lines. Long before the advent of electric lights, Semaphores were used to indicate the direction of switch-tracks, and the safety of going into the tracks beyond. Semaphores are simply mechanically controlled signs that raise or lower based upon the status of the track.
+
+In the original Transport Tycoon, rail signals created before 1975 were semaphores. Afterwards, signals were created as standard coloured lights. Transport Tycoon Deluxe removed this functionality, but it has been restored in TTDPatch and OpenTTD.
+{{en/Feature|Old}}
+
+==Directing trains==
+Note that signals are not the best way to direct trains to completely separate destinations. Signals are intended to prevent trains from crashing into each other, and to and help them choose between several track sections to the same destination.  If you want to direct a train to a particular destination via a certain route, you should use [[en/Manual/Waypoints]].
+
+==See Also==
+* [[en/Community/Junctionary/Advanced signalling examples|Examples of advanced presignal setups]]
+* [[en/Manual/Building depots]]
+* [[:Category:en/Manual/Train Junctions]] for examples of complex junctions that take advantage of pre-signals.
+* [http://www.darkcoding.net/misc/openttd-trains-and-signals-for-beginners-a-tutorial/ Signals for the complete beginner]
+
+[[Category:en/Manual/Railways]]
+[[Category:en/Manual/Construction]]
