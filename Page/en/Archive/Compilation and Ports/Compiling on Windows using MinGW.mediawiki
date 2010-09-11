@@ -1,46 +1,33 @@
 [[Translation:en/Archive/Compilation and Ports/Compiling on Windows using MinGW]]
-{{en/Warning|zlib-1.2.3-mingwPORT-1.tar.bz2 does not work anymore due to it being removed at the other end. We are working on getting a newer version up ASAP}}
 ==Introduction==
 This page contains guidelines for compiling OpenTTD in Win32 with '''MinGW'''.
 
-{{en/Warning|Some users were having trouble to get things working using the howto below. Using MinGW 5.0.16 installer & MSYS-1.0.11 sometimes seems to fix the problem}}
-
-{{en/Ambox| type = notice
-| text = If by compilation you get following error:
-<code>configure: error: cannot run C compiled programs.</code>
-<u>One of the reasons</u> could be your anti-virus, that silently deletes a.exe binary files. Try temporary to disable anti-virus software and run mingwPORT.sh script again.}}
-
 ==Information==
-* Source tested: OTTD trunk at revision 17875.
-* Packages used here:
-** [http://sourceforge.net/projects/mingw/files/ MinGW-5.1.6]
-*** binutils-2.18.50-20080109-2
-*** gcc-core-3.4.5-20060117-3
-*** gcc-g++-3.4.5-20060117-3
-*** mingw-runtime-3.14
-*** w32api-3.12
-** [http://heanet.dl.sourceforge.net/sourceforge/mingw/MSYS-1.0.10.exe MSYS-1.0.10]
-*** Note that MSYS-1.0.11 ships with a [http://sourceforge.net/tracker/index.php?func=detail&aid=2825458&group_id=2435&atid=102435 broken patch.exe]
-** wget-1.9.1 (from [http://prdownloads.sf.net/mingw/wget-1.9.1-mingwPORT.tar.bz2?download mingwPORT] or [ftp://ftp.gnu.org/gnu/wget/wget-1.9.1.tar.gz sources]) -> Needed to install mingwPORTs
-** zlib-1.2.3 (from [http://prdownloads.sf.net/mingw/zlib-1.2.3-mingwPORT-1.tar.bz2?download mingwPORT] or [http://prdownloads.sourceforge.net/libpng/zlib-1.2.3.tar.gz?download sources])
-****See warning at the top of the page
-** libpng-1.2.35 ([http://sourceforge.net/project/downloading.php?groupname=libpng&filename=libpng-1.2.35.tar.bz2 sources])
-** liblzo2 ([http://www.oberhumer.com/opensource/lzo/download/lzo-2.03.tar.gz file])
-** [http://alagazam.net/svn-1.6.12/svn-win32-1.6.12.zip SVN(1.6.12)], to retrieve latest OTTD code.
+This tutorial has been tested with the following versions of the required packages:
 
-All downloads combined is approximately 40MB and then you can expect another ~30MB of OTTD sourcecode.
-Expect a disk usage of about 250MB.
+* OpenTTD trunk at revision r20783.
+* [http://sourceforge.net/projects/mingw/files/Automated%20MinGW%20Installer/mingw-get-inst/mingw-get-inst-20100909/mingw-get-inst-20100909.exe/download mingw-get-inst-20100909]
+* [http://www.sliksvn.com/en/download Subversion 1.6.12]
+* [http://zlib.net/zlib-1.2.5.tar.gz zlib-1.2.5]
+* [http://www.oberhumer.com/opensource/lzo/download/lzo-2.03.tar.gz lzo-2.03]
+* [http://prdownloads.sourceforge.net/libpng/libpng-1.4.3.tar.gz?download libpng-1.4.3]
+* [http://sourceforge.net/projects/freetype/files/freetype2/2.4.2/freetype-2.4.2.tar.gz/download freetype-2.4.2]
 
-==Setting up MinGW==
-Please note that MinGW should be installed to a directory path that doesn't contain any spaces.
-# Run the MinGW 5.1.4 install file.
-# On the install, select <i>Candidate</i>, then select the <i>Minimal install</i> plus the <i>g++ compiler</i>.
+==Installing MinGW and MSYS==
+#Download and run [http://sourceforge.net/projects/mingw/files/ mingw-get-inst].
+#Select "Use pre-packaged repository catalogues".
+#Accept the License agreement.
+#Please note that MinGW should be installed to a directory path that doesn't contain any spaces. This method has been tested with a directory path of C:\MinGW.
+#Select C++ Compiler and MSYS Basic System as optional components.
+#Wait until every package has been downloaded and installation is finished.
 
 ==Setting up MSYS==
-Please note that MSYS should be installed to a directory path that doesn't contain any spaces.
+After installation, you will still need to set up MSYS properly.
+
 <ol>
-<li>Run the MSYS install. You will see the following messages after GUI:
-<pre>This is a post install process that will try to normalize between
+<li>Launch MSYS (MinGW/MinGW Shell at the start menu).</li>
+<li><pre>/postinstall/pi.sh</pre></li>
+<li><pre>This is a post install process that will try to normalize between
 your MinGW install if any as well as your previous MSYS installs
 if any.  I don't have any traps as aborts will not hurt anything.
 Do you wish to continue with the post install? [yn ]</pre> Input "y". 
@@ -48,83 +35,78 @@ Do you wish to continue with the post install? [yn ]</pre> Input "y".
 <li><pre>Do you have MinGW installed? [yn ]</pre> Input "y".</li>
 <li><pre>Please answer the following in the form of c:/foo/bar.
 Where is your MinGW installation?</pre>
-Input your MinGW installation path.  If you mistyped it, the best solution is to re-install MSYS.</li>
+Input your MinGW installation path (by default c:/mingw). If you mistyped it, the best solution is to re-install MinGW/MSYS.</li>
 </ol>
-Note: If you are running Windows XP you may skip the rest of this part. On Windows 7 and Vista if you have UAC enabled, to let MSYS fully work go to folder your msys folder (C:\msys\1.0), open in Notepad msys.bat and ad the following line after @echo off:
-<pre>cd "C:\msys\1.0"</pre>
+
+
+On Windows 7 and Vista if you have UAC enabled, to let MSYS fully work you'll need additional steps. Go to your msys folder (C:\MinGW\msys\1.0), open msys.bat with a text editor (for example Notepad) and add the following line after @echo off:
+<pre>cd "C:\MinGW\msys\1.0"</pre>
 And if disk C: (or where you have msys installed) is not disk where your Windows is installed add one more line
 <pre>C:</pre>
-After saving the file, right click on msys.bat and choose "Run as Administrator". After that programs requiring admin rights, such as install and patch will work. (You will need right-click and run as administratort every time you run msys)
+After saving the file, right click on msys.bat and choose "Run as Administrator". After that programs requiring admin rights, such as install and patch will work. (You will need right-click and run as administrator every time you run msys).
 
-==Install SVN==
-# Create a new folder called local in the directory where MSYS is installed (default C:\msys\1.0, so the new directory will be C:\msys\1.0\local).
-# Unzip the folders ''bin'', ''iconv'', ''licenses'', ''share'' from the SVN zip file and place into the new folder created in step 1
+==Install Subversion==
+#Download and run [http://www.sliksvn.com/en/download Subversion 1.6.12] for your platform (32 or 64 bits).
+#Accept the license agreement.
+#Install to the default folder.
+#Choose typical installation.
+#Select install.
+#Wait until installation is finished.
 
 ==Testing the MinGW installation==
 <ul><li>Run MSYS.</li>
-<li>You might need to setup your PATH environment variable (Make sure it includes C:\msys\1.0\bin;C:\mingw\bin;C:\msys\1.0\local\bin;)
 <li>Run the following commands:<pre>make -v
 gcc -v
 svn help</pre></li>
 <li>They should output something.  Check if something goes wrong.</li></ul>
 
-==Compiling wget==
-<ol><li>Place '''wget-1.9.1-mingwPORT.tar.bz2''' in a folder (e.g. /home). Again, remember MSYS doesn't like spaces!</li>
-<li>If the compilation fails, please just use the temporary wget.exe for the rest of this HOWTO</li>
-<li>Make sure you are in the same directory where you placed the file and Run: 
-<li> For help on how to browse using MinGW and list of commands: http://www.westwind.com/reference/OS-X/commandline/navigation.html</li>
+==Compilation of the required libraries==
+For additional information about these libraries, check part 7.1) of OpenTTD Readme.
 
-<pre>tar -xvjf wget-1.9.1-mingwPORT.tar.bz2
-mkdir -p /usr/local/bin
-cd wget-1.9.1/mingwPORT
-cp wget.exe /usr/local/bin
-mkdir -p /usr/src/wget-1.9.1
-./mingwPORT.sh</pre>
-'''Answer the questions by pressing enter.'''</li>
-<li>It will download wget sources, compile and install them for you.</li>
-<li>Remove the temporary wget: <pre>rm /usr/local/bin/wget.exe</pre></li></ol>
+Alternatively to the wget and tar steps, you can just download all libraries and extract them to your MSYS home folder (by default it will be C:\MinGW\msys\1.0\home\UserName).
+
+If you get following error:
+<code>configure: error: cannot run C compiled programs.</code>
+, <u>one of the reasons</u> could be your anti-virus, that silently deletes a.exe binary files. Try temporary to disable anti-virus software and compile again.
 
 ==Compiling zlib==
-***See warning at the top of the page
-<ol>
-<li>Place <b>zlib-1.2.3-mingwPORT-1.tar.bz2</b> in a folder (e.g. /home)</li>
-<li>Start MSYS.</li>
-<li>Make sure you are in the same directory where you placed the file and Run: 
-<pre>tar -xvjf zlib-1.2.3-mingwPORT-1.tar.bz2
-cd zlib-1.2.3/mingwPORT
-mkdir /usr/src/zlib-1.2.3
-./mingwPORT.sh</pre>
-'''Answer the questions by just pressing enter.'''</li>
-<li>It will download zlib sources, compile and install them for you.</li>
-<li>Now its time to make the files available where they are needed. Run:   
-<pre>mkdir /usr/local/include
-mkdir /usr/local/lib
-cp /mingw/include/zlib.h /mingw/include/zconf.h /usr/local/include
-cp /mingw/lib/libz.a /usr/local/lib</pre>
-</li></ol>
+In MSYS:
 
-==Compiling pnglib==
-<ol><li>Place '''libpng-1.2.35.tar.bz2''' in a folder (e.g. /home)</li>
-<li>Start MSYS.</li>
-<li>Make sure you are in the same directory where you placed the file and Run: <pre>tar -xvjf libpng-1.2.35.tar.bz2
-cd libpng-1.2.35
-./configure
-make
-make install
-</pre></li>
-<li>That's all, libpng is installed now</li></ol>
+<pre>wget http://zlib.net/zlib-1.2.5.tar.gz
+tar xvfz zlib-1.2.5.tar.gz
+cd zlib-1.2.5
+make -f win32/Makefile.gcc BINARY_PATH=/mingw/bin INCLUDE_PATH=/mingw/include LIBRARY_PATH=/mingw/lib install
+cd ..</pre>
+
+==Compiling libpng==
+In MSYS:
+
+<pre>wget http://prdownloads.sourceforge.net/libpng/libpng-1.4.3.tar.gz?download
+tar xvfz libpng-1.4.3.tar.gz
+cd libpng-1.4.3
+mv INSTALL INSTALL.txt
+make -f scripts/makefile.mingw prefix=/mingw install
+cd ..</pre>
 
 ==Compiling liblzo2==
-<ol><li>Place '''lzo-2.03.tar.gz''' in a folder (e.g. /home)</li>
-<li>Extract the file to the folder "lzo-2.03.tar.gz"</li>
-<li>Start MSYS.</li>
-<li>Make sure you are in the same directory where you extracted the file and Run:</li><pre>
-./configure --prefix=/mingw
-make && make install
-cp -R /mingw/include/lzo /usr/local/include/
-cp /mingw/lib/liblzo2.a /usr/local/lib</pre>
-<li>There, now liblzo2 is installed.</li>
-</ol>
+In MSYS:
+
+<pre>wget http://www.oberhumer.com/opensource/lzo/download/lzo-2.03.tar.gz
+tar xvfz lzo-2.03.tar.gz
+cd lzo-2.03
+./configure --bindir=/mingw/bin --includedir=/mingw/include --libdir=/mingw/lib --enable-static
+make install
+cd ..</pre>
+
+==Compiling libfreetype==
+In MSYS:
+
+<pre>wget http://sourceforge.net/projects/freetype/files/freetype2/2.4.2/freetype-2.4.2.tar.gz/download
+tar xvfz freetype-2.4.2.tar.gz
+cd freetype-2.4.2
+./configure --prefix=/mingw/ --enable-static
+make install
+cd ..</pre>
 
 ==Getting and Managing the source code==
 There are several ways to [[en/Development/FAQ development#how-can-i-obtain-the-source-code|obtain]] the source:
@@ -163,6 +145,10 @@ If you cannot compile, don't panic. Sometimes it may be due to coding errors, bu
 ./configure
 make</pre>Some warnings may be shown, but they usually do not matter.</li>
 <li>The compiling is complete when the openttd.exe file is made. It will be copied to the <code>./bin</code> subfolder.</li></ol>
+
+If you plan to apply patches files to OpenTTD source you will need to install patch. You can do this easily by typing in MSYS:
+
+<pre>mingw-get install msys-patch</pre>
 
 ==Testing OpenTTD==
 # Copy the following files from <code>(TTD)\data\</code> to <code>(OTTD)\data\</code> (alternatively, you can copy them to your [http://vcs.openttd.org/svn/browser/trunk/readme.txt#L246 shared directory data folder]):<br>sample.cat<br>trg1r.grf<br>trgcr.grf<br>trghr.grf<br>trgir.grf<br>trgtr.grf
