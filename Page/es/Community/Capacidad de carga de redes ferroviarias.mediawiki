@@ -6,18 +6,18 @@
 Tenga en cuenta que esta página hace un tratamiento puramente teórico sobre la capacidad de carga de las redes de ferrocarril. Los cruces y la organización de la red son mucho más importantes. Después de este aviso, vamos a considerar los diversos factores que afectan la capacidad de carga de su red.
 
 ==Distancia entre señales (DES)==
-[[File:en/Community/Pat Fig1.png|thumb|left|Figura 1: El espacio mínimo entre los dos trenes es de 5 casillas, para una ''distancia entre señales (DES)'' de 4 casillas.]]
-Es un parámetro obvio, relativamente. Las señales muy espaciadas reducen la capacidad de transporte. Con una ''distancia entre señales (DES)'' de una señal cada '''n''' casillas, el ''espacio disponible'' entre dos trenes a máxima velocidad nunca podrá ser inferior a '''n+1''' casillas (figura 1); cuando los trenes estén tan próximos entre sí que hayan alcanzado la densidad máxima teórica posible. Lo que en la práctica es imposible.<br style="clear:both;">
+Es un parámetro obvio, relativamente. Las señales muy espaciadas reducen la capacidad de transporte. Con una ''distancia entre señales (DES)'' de una señal cada '''n''' casillas, el ''espacio disponible'' entre dos trenes a máxima velocidad nunca podrá ser inferior a '''n+1''' casillas (figura 1); cuando los trenes estén tan próximos entre sí que hayan alcanzado la densidad máxima teórica posible. Lo que en la práctica es imposible.
+[[File:en/Community/Pat Fig1.png|frame|none|Figura 1: El espacio mínimo entre los dos trenes es de 5 casillas, para una ''distancia entre señales (DES)'' de 4 casillas.]]
 
 ==¿Qué distancia entre señales (DES) debo usar?==
 ¿Cuál cree que es la distancia óptima entre señales? ¿1 señal cada dos casillas? ¿una señal por casilla? ¿o incluso menos? (los tramos diagonales cada casilla cuenta como media).
 
-===La ley de la mayor distancia entre señales===
 [[File:en/Community/Pat Fig2.png|frame|right|Figura 2: Señalización irregular. "Este hueco puede causar problemas".]]
+===La ley de la mayor distancia entre señales===
 Cualquiera que sea la distancia entre señales que elija, debe de tener también en cuenta también la ''regularidad''. La capacidad de un tramo de vía se determina en primer lugar por la mayor distancia que haya entre dos señales de entre todas las señales que haya en ese tramo. Así, por ejemplo, en un tramo con una señal cada dos casillas, si hay una anomalía de tres o cuatro casillas sin señales, se sufrirá una reducción en su capacidad y pueden producirse atascos y violar la Regla N&ordm; 1 (Figura 2). (Recuerda que las señales no pueden colocarse en cruces, puentes y túneles. Por lo tanto es inútil colocar señales cada dos casillas si luego hay un  puente de 12 casillas).<br style="clear:both;">
 
-===Vías en diagonal===
 [[File:en/Community/Tiles.png|frame|right|Figura 3: ABAJO: Hemos puesto una señal cada casilla. ARRIBA: Hemos puesto una señal cada media casilla (en diagonal dos casillas cuentan como una para el juego).]]
+===Vías en diagonal===
 Como usted habrá notado, las vías se construyen en casillas cuadradas. Por defecto, el motor del juego considera que las vías en diagonal tienen una distancia que equivale a la diagonal de una casilla (&radic;2=1,41). Por eso los trenes recorren menos casillas cuando van por tramos diagonales que cuando van por los tramos rectos (¡gracias SmatZ!).<br style="clear:both;">
 
 [[File:en/Community/Pythagoras.png|frame|right|Figura 4: Pitágoras.]]
@@ -65,16 +65,16 @@ En una separación o bifurcación de vías, uno debe asegurarse de que no hay un
 ==Uniones==
 Las confluencias nos presentan un único problema. En una confluencia trivial, los trenes de la vía principal podrían ser detenidos por un tren que vaya por la vía secundaria. Ya existe un trabajo sobre las [http://www.openttdcoop.org/wiki/Priorities prioridades] de nuestros colegas de #opentttdcoop (en inglés). Con una lectura atenta de este vínculo se familiarizará con los principios de prioridad en las confluencias.
 
+Considere una confluencia de vías típica, a la salida de una estación de carga. Un flujo de trenes optimizado bien repleto entra en la estación, pero debido a las diferencias en el tiempo de carga, el orden se altera a la salida de la estación, y usted termina con dos vías de tren sin optimizar y parcialmente llenas. En una de estas líneas, la llamaremos línea principal, se tiene, en promedio, un hueco entre trenes lo suficientemente grande como para que quepa otro tren. Conectar simplemente las dos vías juntándolas no funciona y es necesario una confluencia con prioridades.
+
+[[File:en/Community/Diamond Stream.png|thumb|700px|right|Figura 5: Vías de entrada y salida en diamante: Esta estación desmonta un flujo continuo de trenes y lo vuelve a montar con el mismo flujo continuo e idéntico. No hay señales previas y las vías largas de salida permiten la aceleración.]]
+Tenga en cuenta que, debido a que los trenes de carga siempre pasan la misma cantidad de tiempo en un andén, es posible desmontar y volver a montar una flujo apretado de trenes, ¡incluso por encima de la densidad crítica! (Figura 5)<br style="clear:both;">
+
+[[File:en/Community/Priority Merge.png|thumb|700px|right|Figura 6: Unión con prioridades (¿?).]]
+Una ''confluencia de primer paso usando un bloque de prioridad'' reduce la tasa de tráfico de 1:1 a aproximadamente 3:1 a favor de la vía principal (Figura 4). Añadir una segunda confluencia con prioridad inmediatamente después de la primera sería un gesto inútil, puesto que los trenes de ambas líneas continuarían con la misma velocidad y el tren de la línea principal simplemente reclamaría la prioridad de nuevo. La introducción de una demora mediante un bucle en la vía, seguida de una segunda confluencia con prioridad, reducirá la línea secundaria a un mero goteo de trenes, llenando la mayoría de las casillas disponibles de la línea principal. Las soluciones existentes implicarían una vía de pre-aceleración. Sin embargo un ciclotrón elimina la necesidad de perder impulso.<br style="clear:both;">
+
+===Ciclotrones===
 {{es/Pendiente de traducción}}
-
-Consider a typical non-junction merge, at the exit of a pickup station. A tightly-packed optimised stream of trains enters the station, but because of differences in loading times, this order is disrupted on the station exit, and you end up with two tracks of loosely-packed trains. One of these lines, designated the main line, will have, on average, train-train gaps large enough to fit a third train into. Simply connecting the two lines together will not work, and a priority merge is required.
-
-Note that, because trains that drop off cargo always spend the same length of time at a platform, it is possible to dematerialise and reassemble a tightly packed stream of trains, even one above the critical density! (Figure 3) [[File:en/Community/Diamond Stream.png|thumb|Figure 3: Dropoff with stream reassembly]]
-
-[[File:en/Community/Priority Merge.png|thumb|Figure 4: Priority merge]] A first-pass merge using a priority block will reduce the traffic ratio from 1:1 to about 3:1 in favour of the main track (Figure 4). Adding a second priority merge straight after the first one would be a futile gesture, since trains on both lines would continue at the same speed and the mainline train would simply claim priority again. Introducing a delay by a loop of track, followed by a second priority merge, will reduce the sideline to a mere trickle of trains and will have filled in most of the available slots on the mainline. Existing solutions would involve a pre-acceleration track, however a cyclotron eliminates the need to lose momentum.
-
-
-===Cyclotrons===
 
 Consider a sideline that loops back on itself after a failed priority merge. A train in this loop would continue to re-test the mainline for entry conditions, once every 8 * '''TL'' tiles until it found a space large enough to merge with the main line. After the cyclotron was empty, the next waiting train could pre-accelerate and be injected into the cyclotron, ready to continue the cycle. This system has some flaws, however, as it has a capacity of one train and there will be many missed opportunities due to the train being in the wrong position in the accelerator. The design is pictured [[:File:en/Community/Simple Cyclotron.png|here]] for reference. Junctions are a large and well-trodden area of openttd; I have restricted myself to unbranched feeder structures. You will find that a highly-optimised stream of trains does NOT weather a junction well.
 
