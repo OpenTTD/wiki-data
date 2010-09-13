@@ -67,38 +67,36 @@ Las confluencias nos presentan un único problema. En una confluencia trivial, l
 
 Considere una confluencia de vías típica, a la salida de una estación de carga. Un flujo de trenes optimizado bien repleto entra en la estación, pero debido a las diferencias en el tiempo de carga, el orden se altera a la salida de la estación, y usted termina con dos vías de tren sin optimizar y parcialmente llenas. En una de estas líneas, la llamaremos línea principal, se tiene, en promedio, un hueco entre trenes lo suficientemente grande como para que quepa otro tren. Conectar simplemente las dos vías juntándolas no funciona y es necesario una confluencia con prioridades.
 
-[[File:en/Community/Diamond Stream.png|thumb|700px|right|Figura 5: Vías de entrada y salida en diamante: Esta estación desmonta un flujo continuo de trenes y lo vuelve a montar con el mismo flujo continuo e idéntico. No hay señales previas y las vías largas de salida permiten la aceleración.]]
-Tenga en cuenta que, debido a que los trenes de carga siempre pasan la misma cantidad de tiempo en un andén, es posible desmontar y volver a montar una flujo apretado de trenes, ¡incluso por encima de la densidad crítica! (Figura 5)<br style="clear:both;">
+Tenga en cuenta que, debido a que los trenes de carga siempre pasan la misma cantidad de tiempo en un andén, es posible desmontar y volver a montar una flujo apretado de trenes, ¡incluso por encima de la densidad crítica! (Figura 5)
+[[File:en/Community/Diamond Stream.png|thumb|800px|none|Figura 5: Vías de entrada y salida en diamante: Esta estación desmonta un flujo continuo de trenes y lo vuelve a montar con el mismo flujo continuo e idéntico. No hay señales previas y las vías largas de salida permiten la aceleración.]]
 
 [[File:en/Community/Priority Merge.png|thumb|700px|right|Figura 6: Unión con prioridades (¿?).]]
-Una ''confluencia de primer paso usando un bloque de prioridad'' reduce la tasa de tráfico de 1:1 a aproximadamente 3:1 a favor de la vía principal (Figura 4). Añadir una segunda confluencia con prioridad inmediatamente después de la primera sería un gesto inútil, puesto que los trenes de ambas líneas continuarían con la misma velocidad y el tren de la línea principal simplemente reclamaría la prioridad de nuevo. La introducción de una demora mediante un bucle en la vía, seguida de una segunda confluencia con prioridad, reducirá la línea secundaria a un mero goteo de trenes, llenando la mayoría de las casillas disponibles de la línea principal. Las soluciones existentes implicarían una vía de pre-aceleración. Sin embargo un ciclotrón elimina la necesidad de perder impulso.<br style="clear:both;">
 
-===Ciclotrones===
 {{es/Pendiente de traducción}}
 
+A first-pass merge using a priority block will reduce the traffic ratio from 1:1 to about 3:1 in favour of the main track (Figure 6). Adding a second priority merge straight after the first one would be a futile gesture, since trains on both lines would continue at the same speed and the mainline train would simply claim priority again. Introducing a delay by a loop of track, followed by a second priority merge, will reduce the sideline to a mere trickle of trains and will have filled in most of the available slots on the mainline. Existing solutions would involve a pre-acceleration track, however a cyclotron eliminates the need to lose momentum.<br style="clear:both;">
+
+===Ciclotrones===
 Consider a sideline that loops back on itself after a failed priority merge. A train in this loop would continue to re-test the mainline for entry conditions, once every 8 * '''TL'' tiles until it found a space large enough to merge with the main line. After the cyclotron was empty, the next waiting train could pre-accelerate and be injected into the cyclotron, ready to continue the cycle. This system has some flaws, however, as it has a capacity of one train and there will be many missed opportunities due to the train being in the wrong position in the accelerator. The design is pictured [[:File:en/Community/Simple Cyclotron.png|here]] for reference. Junctions are a large and well-trodden area of openttd; I have restricted myself to unbranched feeder structures. You will find that a highly-optimised stream of trains does NOT weather a junction well.
 
 Refinements to the cyclotron are possible. There is enough space on the track loop to contain two trains, and a system of priority signals will enable a second train to optionally enter the cyclotron. With two trains in the cyclotron, there will be a doubled chance of entering a slot on the mainline. In order to prevent a traffic jam inside the cyclotron (which would be disasterous), some delay tweaking is necessary, but the end result is exceedingly useful.
 
 The injection delay assumes that the second injected train is accelerating from standstill, and there is a small chance that second train has in fact chanced upon the cyclotron entrance at full speed. In this case, the timing will be wrong and the second train will almost certainly cause a jam within the cyclotron (and consequently on the main line). This can be compensated for by some additional signalling to filter out full-speed trains. The filtered out full-speed trains can either be diverted onto a second loop, or simply drained of momentum by a signal. 
 
-
-A cyclotron incorporating all the optimisations discussed, and some additional fixes, is shown in Figure 5 [[File:en/Community/Junctionary/Cyclotron Full.png|thumb|Figure 5: full-featured cyclotron]].
-
+A cyclotron incorporating all the optimisations discussed, and some additional fixes, is shown in Figure 5 [[File:en/Community/Junctionary/Cyclotron Full.png|thumb|700px|none|Figure 7: full-featured cyclotron]].
 
 A savegame containing all of the techniques discussed above is available [http://patrickthomson.ath.cx/cyclotron.sav Here] (version 0.7 or higher required to open).
-
 
 Editor's note: Whilst I would like to defend my cyclotron refinements, experimentation has proven that pre-acceleration is a more robust system. The two have been combined in the savegame linked previously.
 {{en/Feature|0.7}}
 
-===Parallel cyclotrons===
+===Ciclotrones paralelos===
 An attempt to minimize the drawbacks of the full featured cyclotron leads to parallel, small, 1-train cyclotrons. In this design, an array of cyclotrons, each handling one train, may be fed simultaneously. They may have different loop size in order to prevent synchronization between the cycling trains, giving more chance to find a slot in the flow of the main line. Each loop still needs it own acceleration lane so the trains enter the loop at full speed. If a train happened to enter the loop at low speed, it would get a chance to join the main line at non-max speed and cause a possibly large traffic jam.
 
 Figure 6 shows a parallel cyclotron with two loops.
-[[File:en/Community/Junctionary/Parallel Cyclotron.png|thumb|Figure 6: Parallel cyclotron]]
+[[File:en/Community/Junctionary/Parallel Cyclotron.png|thumb|700px|none|Figure 8: Parallel cyclotron]]
 
-A savegame with the example given in Figure 6 is available [http://gbizzotto.free.fr/parallel_cyclotron.sav Here] (version 0.7 or higher required to open).
+A savegame with the example given in Figure 8 is available [http://gbizzotto.free.fr/parallel_cyclotron.sav Here] (version 0.7 or higher required to open).
 
 Advantages over the full featured cyclotron:
 * Can handle more than two trains
