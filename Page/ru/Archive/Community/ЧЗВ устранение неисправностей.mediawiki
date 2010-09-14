@@ -1,0 +1,120 @@
+[[Translation:en/Archive/Community/FAQ troubleshooting]]
+
+
+
+This article covers troubleshooting errors of [[en/Manual/Main Page]]. It is recommended that you try the latest [[en/Archive/Community/Nightly build|nightly build]], which is the very latest version of OpenTTD, before reporting a problem publicly. Often, the problem has been corrected already.
+
+If you are experiencing errors even with the most recent build, you can run the game in debug mode. Run the game with the ''"-d1"'' flag in that case. Read more in the [[en/Development/Debugging]] section.
+
+== The game will not start because ... ==
+
+=== ... it complains about missing files ===
+OpenTTD requires the graphics sets from Transport Tycoon Deluxe in order to function. Refer to the [[en/Archive/Manual/Installation FAQ|installation FAQ]] article and ensure you have followed the appropriate steps for your Operating System.
+
+If you have not completed these steps sucessfully, you may see one of the following errors:
+* ''' 'Nix style OS ''' (Linux, OSX, Morhops, etc.): Error: Cannot open file '/usr/share/games/openttd/data/sample.cat'
+* '''Windows OS''' (Win98, Win2k, WinXP, etc.): Cannot open file '<OpenTTD Install Directory>\data\sample.cat'
+
+NOTE:
+On *nix computers, if you copied the files from, say, a Windows partition as, say, "root" you may also have problems
+because you don't have the proper permissions to read the files as a normal user.  (if this is the case, you can still
+run OTTD as root; you should probably fix the file permissions, though)
+
+=== ... it crashes on Win98(SE) ===
+:* Windows98/98SE has problems with DirectX and DirectMusic. Try to start the game with: <pre>openttd.exe -m win32</pre>
+
+=== ... it outputs an error '''MD5 of <filename> is ****INCORRECT**** - File Corrupt ===
+:*This error comes about if you have a corrupt or changed GRF file. OpenTTD only checks the ones for the original TTD game, either DOS or Windows version, and if it finds that the file is corrupted, it presents this message. You should copy the file from your original TTD disk again.
+:*This message will also appear if you are using modified GRF files (but only if they modify the original TTD files).  Other GRF's are not checked for corruption. The message was incorporated to make sure that any problems within the game are caused by the error you report rather than corrupt files on the disk.
+
+=== ... it shows a white screen on MacOS X Leopard ===
+:* OpenTTD 0.6.0 running on Leopard has sometimes a problem with the color profile of the current display. The error message "Could not get system colour space. You may need to calibrate your monitor." can appear on OpenTTD 0.7.2 too. Please make sure the at least one color profile is selected in the 'Monitor Preferences'. If that doesn't work, please create a new color profile by calibrating the old one. This is not a OpenTTD bug, it's more a Leopard bug and it's very rare. After setting the color profile, restart the computer and try running OpenTTD again.
+
+=== ... it outputs an error 'Error: Unable to load driver 'sdl'. The error was: Couldn't open X11 display' ===
+:* When running xdm on Linux, this error may occur. This is an SDL issue. One can simply do <code>xhost +</code> before starting OpenTTD to work around this problem. Once OpenTTD is running you should do <code>xhost -</code>.
+
+== When I start game in fullscreen mode, the refresh rate is changed to 60Hz! (Windows) ==
+:*It's because you haven't configured DirectX properly. For the same reason it may happen that the game runs with a higer refresh rate than your monitor supports. Try to download "DirectX Control Panel" from microsoft.com, copy it into /windows/system32, open the dialog in the Control Panel, go to DirectDraw tab, and set the "Forced Refresh Rate" to the maximum what your monitor can show.
+:*You can set '''display_hz''' to have correct refreshrate. This item is in '''[win32]''' group of [[en/Archive/Manual/Settings/Openttd.cfg]].
+
+== Cursor is hidden in fullscreen modes under Linux ==
+* OpenTTD is playable in window mode.
+* Ensure you have the latest ATi propetiary drivers installed correctly, follow [http://xoomer.virgilio.it/flavio.stanchina/debian/fglrx-installer.html this guide].
+
+== The Jukebox won't play any music/skips through tracks really fast ==
+First of all, have you put all of the *.gm files into the 'gm' directory?
+=== What 'gm' directory? ===
+There should be one in the same directory as your OTTD program file. If there isn't, then create it and transfer the .gm files from your original TTD install/CD.
+If you only have the DOS version of the game, and you do not see any .gm files anywhere, then you may not have them. Sorry, no cheesy midi for you unless you find them elsewhere :(
+=== I copied the files, still isn't working ===
+It has been reported that the music will not play if you have any parent directories with spaces or special characters in them (eg. 'C:\\Program files\ottd\gm').
+Try putting your install into a path without spaces and special characters (like é).
+
+Also, there are sometimes issues with file permissions, especially if you have copied the files across direct from CD.
+Try setting all the file permissions to read/write:
+* OS X; goto 'gm' directory, select all files [cmd]+[a], select file->'get info' (or [cmd]+[i]), under 'owner permissions' select 'read and write'.
+* Windows; goto 'gm' directory, select all files [ctrl]+[a], select file->properties, uncheck 'read only'.
+
+== There is no sound or no music on Linux ==
+This is a known issue for some systems. Only one application can send to the sound driver.
+Install Timidity using your distributions package manager, eg. for Ubuntu use Synaptic, or from a terminal type <pre>sudo apt-get install timidity</pre>  the game music should now play.
+If not then try running the Timidity media player with commands <pre>timidity -iAD -Os</pre> or <pre>timidity -iA -Os</pre> The -iAD is daemonized, while -iA is not-daemonized.
+
+If you tried all the above and still didn't get sound you can try running "aoss openttd". It made the sound work for me.
+If that doesn't work. It's posible that your soundcard doesn't support multiple sound sources at once. Then try using ALSA compactibility mode (http://gentoo-wiki.com/ALSA/Install)
+
+=== Emu10k1 ===
+
+If you have an emu10k-based soundcard, you can use its built in wavetable synth to play music.
+You will need a General MIDI SF2 bank (such as 8MBGMGS.SF2), asfxload and pmidi, and the following commands:
+
+<pre>asfxload sf2file.sf2
+export ALSA_OUTPUT_PORTS=`pmidi -l | awk '/Emu/ { print $1; exit }'`
+openttd -m extmidi:cmd=pmidi</pre>
+
+If you get this working, you can put the first two commands to execute on start up, or login, and adjust the musicdriver configuration option, to make the settings permanent.
+
+== The game keeps scrolling on my IBM ThinkPad Laptop ==
+This seems to be a common problem with these laptops. The workaround for this problem is the following:
+In the "Pass 0 rules" section of (either) %SYSTEM_ROOT%\System32\tp4table.dat or %SYSTEM_ROOT%\System32\tp4scrol.dat, add:
+
+<pre>*,*,openttd.exe,*,*,*,WheelStd,0,9</pre>
+Thank you Sam for your helpful comment on the bugtracker [http://bugs.openttd.org/task/345 FlySpray #345]
+
+== My mouse is not sensitive enough (SDL / Fullscreen) ==
+OpenTTD does nothing with the mouse sensitivity, SDL takes full control over the mouse. Some people might feel it is not doing a good job about this; but luckily you can change SDL's mouse setting. Please read the doc over at [ftp://ptah.lnf.kth.se/pub/misc/sdl-env-vars].
+
+The necessary environment variable is SDL_VIDEO_X11_MOUSEACCEL.<br>
+I found that setting SDL_VIDEO_X11_MOUSEACCEL didn't work for me without setting SDL_MOUSE_RELATIVE=0 too.
+
+So, for example:
+<pre>
+$ SDL_MOUSE_RELATIVE=0 SDL_VIDEO_X11_MOUSEACCEL=6/1/0 openttd
+</pre>
+There are other reports which suggest that
+<pre>
+$ SDL_VIDEO_X11_DGAMOUSE=0
+</pre>
+might work.
+
+== OpenTTD crashes iTunes ==
+OpenTTD can cause iTunes to crash. This is due to iTunes not being compatible with the 256 screen colours OpenTTD will use by default. This can be corrected by setting OpenTTD to use the 32bpp blitter, or by running OpenTTD windowed as opposed to fullscreen. To activate the 32bpp blitter, use this parameter on the shortcut to OpenTTD or through the command prompt "-b32bpp-optimized". You can also use "-b32bpp-anim" if you wish to retain water animation and such. 
+
+This may also correct issues with other programs that crash randomly when OpenTTD launches, if the issue of 256 colors also affects it.
+
+== My User Interface is too small to read ==
+You can enlarge the font used by OpenTTD (after shutting down the program) by modifying the following settings in your ''openttd.cfg'' file
+<pre>
+small_font = /usr/share/X11/fonts/100dpi/courB10-ISO8859-1.pcf.gz
+medium_font = /usr/share/X11/fonts/100dpi/courB14-ISO8859-1.pcf.gz
+large_font = /usr/share/X11/fonts/100dpi/courB18-ISO8859-1.pcf.gz
+small_size = 10
+medium_size = 14
+large_size = 18
+</pre>
+'''You must change both the size entries and the font names'''. The above may work at a Linux system (change the paths to files that actually exist).
+For Windows, ''Arial'' may work.
+
+Note: The above values are just a demonstration of how to change it. The suggested values have not been chosen with care. If you have better values, please update the wiki.
+
+[[Category:en/FAQs]]
