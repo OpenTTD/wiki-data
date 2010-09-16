@@ -1,0 +1,275 @@
+[[Translation:en/Archive/Compilation and Ports/Compiling on GNU∕Linux and 🟉BSD]]
+[[Category:en/Development/Compiling OpenTTD]]
+{{ru/Перевод|en/Archive/Compilation and Ports/Compiling on GNU∕Linux and 🟉BSD|0}}
+
+A quick guide to get started with OpenTTD development on Linux and other Un*x-like systems. For help with compiling on various platforms, join [irc://irc.oftc.net/openttd.compile #openttd] on OFTC.
+
+==Required software==
+
+Most packages that are required for development (Like GCC) should already be installed on your box. You will require these packages in addition to GCC, make and the usual build tools.
+Beside those, OpenTTD requires the SDL development libraries to be installed. Optionally, but extremely recommended is install zlib development files, which compresses savegames (not having this doesn't just make your games bigger, but also makes you unable to load compressed savegames or join network games with compression, ie all network games).
+Lastly, OpenTTD can use the libpng development files to produce screenshots in PNG instead of BMP.
+
+Furthermore, if you want to be as up to date as you can be, you should install the subversion client to access the latest code in our subversion repository.
+
+=== Mandriva ===
+(tested on Mandriva 2009 Spring)
+
+* gcc (required)
+* gcc-c++ (required)
+* libSDL-devel (required)
+* zlib1-devel (recommended, for savegame compression) 
+* libpng-devel (optional, for PNG screenshots) 
+* subversion (optional, for getting the latest source) 
+* patch (optional, for patching)
+* patchutils (optional, for patch creating)
+
+Or enter the command:
+ <code>urpmi gcc gcc-c++ libsdl-devel zlib1-devel subversion patch patchutils</code>
+
+=== Debian and Ubuntu ===
+* build-essential (for compilers)
+* libsdl1.2-dev (required)
+* dpatch (required for at least 0.4.8)
+* zlib1g-dev (recommended, for savegame compression)
+* liblzo2-dev (recommended, for savegame compression)
+* libpng12-dev (optional, for PNG screenshots)
+* subversion (optional, for getting the latest source)
+* timidity (optional, for playing the music)
+* libsdl1.2debian-pulseaudio (required for Ubuntu 9.04 and higher, see also {{en/Flyspray|3294}})
+
+Or enter the command:
+ <code>sudo apt-get install build-essential libsdl1.2-dev subversion zlib1g-dev liblzo2-dev timidity dpatch</code>
+And for Ubuntu 9.04 and higher:
+ <code>sudo apt-get install libsdl1.2debian-pulseaudio</code>
+
+In at least one instance the package "libsdl1.2debian-all" was required for a full installation with a PowerPC build of Debian.  Without this package, only the dedicated server would compile. [http://www.tt-forums.net/viewtopic.php?f=31&t=37680]
+
+=== Fedora === 
+(tested on FC6 and Fedora 7, 8 & 11)
+* gcc
+* gcc-c++
+* SDL-devel
+* zlib-devel
+* subversion (optional, for getting the latest source)
+* timidity++ (optional, for soundtrack)
+* esound (optional, for soundtrack)
+
+Alternatively, if you have yum installed, issue the following command as root:
+* <code>$ yum install gcc gcc-c++ SDL-devel zlib-devel subversion timidity++ esound -y</code>
+
+
+
+=== openSUSE 11.3 ===
+Use YaST to download:
+* gcc-c++
+* SDL-devel
+* zlib-devel
+* libpng-devel
+* libicu-devel
+* lzo-devel 
+* freetype2-devel
+* subversion
+* timidity
+
+You can use the command-line tool `zypper' as well:
+* <code>$ zypper install gcc-c++ SDL-devel zlib-devel libpng-devel libicu-devel lzo-devel freetype2-devel subversion timidity</code>
+
+=== Gentoo ===
+
+As root run
+<code>$ emerge --onlydeps -av openttd</code>
+and it will install all the OpenTTD dependencies.
+
+If you want to use the most current version (aka TRUNK/SVN), run the following, again as root:
+ emerge subversion
+
+=== Arch Linux ===
+
+As root run
+<code>$ pacman -S openttd</code>
+and it will install all the OpenTTD dependencies.
+
+There are also openttd-beta and openttd-svn PKGBUILDs available in the AUR.
+
+=== FreeBSD ===
+
+To fetch, compile and install all necessary dependencies, as root run:
+ 
+<code>cd /usr/ports/games/openttd && make depends clean </code>
+
+If you are going to compile OpenTTD from subversion then again, as root run:
+
+<code> cd /usr/ports/devel/subversion && make install clean </code>
+
+=== NetBSD ===
+
+To fetch, compile and install all necessary dependencies run:
+
+<code>cd /usr/pkgsrc/games/openttd && make depends clean</code>
+
+If you are going to compile OpenTTD from subversion then again run:
+
+<code> cd /usr/pkgsrc/devel/subversion-base && make install clean</code>
+
+You should be asked for the root password once the code is compiled and ready for installation.
+
+
+== Getting the source ==
+=== Releases ===
+You can download the .tar.gz source files from the [http://www.openttd.org/download-stable OpenTTD website]. Extracting tarball will give you a directory called openttd-<version>, where <version> is the version you downloaded. Enter this directory, and you're ready to proceed to step 3.
+
+=== Nightly builds ===
+Similar to the release option above, you can download the latest source snapshot (made every day at 1900 GMT) from the [http://www.openttd.org/download-trunk OpenTTD website]. Unpack and enter the directory in which it is unpacked. Now, proceed to step 3.
+
+=== Most current version (aka Trunk/SVN) ===
+The most current version of the official code is stored in our subversion repository. Subversion makes it easy to track various versions and provides an easily shareable single location for our code. For you as a user this means you can quickly get the newest sourcecode.
+
+==== Initial download ====
+
+To obtain the source code from the subversion server type:
+
+<code>$ svn checkout svn://svn.openttd.org/trunk openttd</code>
+
+from command line to dump the code into the directory <code>openttd/</code>. We will refer to this directory as you "working copy" from now on. Also, all svn commands given from now on assume your working directory is the <code>openttd/</code> directory.
+
+You can now skip to step 3 if you just want to compile the latest version.
+
+==== Updating ====
+
+If you have previously downloaded the code and a new version is available (iow, new revisions have been committed), you can update your working copy to the latest version. Inside your working copy run the following:
+
+<code>$ svn update</code>
+
+Also, if you have made any local changes to the source, these will be preserved and merged with changes in svn. If a conflict between the changes occurs, it will be flagged as conflicted (Marked "C" in <code>svn status</code>) (still preserving your local changes). For more information about resolving conflicts, look at the SVN Book at [http://subversion.tigris.org].
+
+====Creating a patch file====
+
+If you have made changes to your source that you want to share or upload as a patch, you can ask svn to generate a diff file.
+The command
+
+<code>$ svn diff > mypatch.diff</code>
+
+creates a diff file (also referred to as "patch") which you can submit to the developers to share your improvements.
+
+====Reverting====
+
+You can undo changes to a file with:
+
+<code>$svn revert filename</code>
+
+or to your entire working directory with:
+
+<code>$svn revert -R .</code>
+
+==== Applying a patch ====
+
+To apply a patch (diff file) to the source code, update your source code to the patch file's revision. Let's say the patch file has been made on r1234. You can see this in the first lines of the patch:
+<code>
+ Index: foo.c
+ ===================================================================
+ --- foo.c (revision 1234)
+ +++ foo.c (working copy)
+ </code>
+To update your source code to r1234, type
+
+<code>$ svn update -r 1234</code>
+
+Then you're ready to merge the patch file
+
+<code>$ patch -p0 < mydiff.diff</code>
+
+Now (optionally) update the source code to the newest revision with
+
+<code>$ svn update</code>
+
+If this produces conflicts (files marked with "C"), tough luck, the patch doesn't work for the latest revision (you can always revert and retry the patching, skipping this last step and playing an older version).
+
+== Compiling and running ==
+
+Compile OpenTTD with:
+
+<code>$ ./configure</code>
+
+This will create a Makefile, then:
+
+<code>$ make</code>
+
+If you have changed files or updated your source, this will only recompile modified code.
+
+== Optional original TTD data files ==
+
+Copy the GRF files from Transport Tycoon Deluxe to the <code>data/</code> directory:
+
+'''Windows version'''
+*sample.cat
+*trg1r.grf
+*trgcr.grf
+*trghr.grf
+*trgir.grf
+*trgtr.grf
+
+'''DOS version'''
+*SAMPLE.CAT
+*TRG1.GRF
+*TRGC.GRF
+*TRGH.GRF
+*TRGI.GRF
+*TRGT.GRF
+
+== Running ==
+You can run openttd with:
+
+<code>$ cd bin</code>
+
+<code>$ ./openttd</code>
+
+The <code>cd</code> command brings you to the <code>bin</code> directory, where the <code>openttd</code> program has been put. Inside that directory, start the program.
+
+
+Also, you can install the game in <code>/usr/local/</code> or somewhere else, but this is mainly for packagers. This requires some more in-depth knowledge about installing software and OpenTTD, so look in the Makefile for hints.
+
+== Playing the soundtrack==
+
+If you want the original TTD music you need to copy the whole <code>gm/</code> directory. Additionally the TiMidity program is required:
+
+In Debian/Ubuntu
+
+Download "timidity & freepats"
+
+ sudo apt-get install timidity freepats
+
+Start "System Setting" then click on the "Sound System" select the "Hardware" tab, click on the "Select the Midi Device"
+the Select the "Timidity port 0 - Alsa device" (tip: it may be different just search for timidity) then click the "apply" button.
+
+In Fedora
+
+Install timidity++ 
+
+ yum install timidity++ 
+
+Timidity wants to talk to ESD, so you will need to "enable software sound mixing (ESD)" (System &rarr; Preferences &rarr; Sound).
+
+To run OpenTTD with music support type
+
+<code>$ ./openttd -m extmidi</code>
+
+== Debian package ==
+You should be able to build a Debian package from the latest source using the supplied debian directory. You can replace step 3 by this. This Debian directory is, conforming to OpenTTD standards, put inside the <code>os/</code> directory and needs to be moved a level up first:
+
+<code>$ mv os/debian .</code>
+
+After that, use normal debian tools to build the package:
+
+<code>$ dpkg-buildpackage -rfakeroot -uc -us</code>
+
+Installing can then be done by executing (as root):
+<code>$ dpkg -i ../openttd-<version>_<something>.deb</code>
+
+You now have OpenTTD installed. 
+
+In step 3 you need to copy the datafiles to <code>/usr/share/games/openttd/data</code>, since they are not included in the .deb due to licensing issues.
+
+Instead of running OpenTTD as <code>$ ./openttd</code>, you can just type <code>$ openttd</code> to start it.
+
+In step 5, you need to copy the music files from the gm directory into <code>/usr/share/games/openttd</code>.
