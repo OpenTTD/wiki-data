@@ -1,0 +1,35 @@
+[[Translation:en/Development/NewGRF/Alignment]]
+
+== What is this about? ==
+
+Sprite alignment can become a real pain, especially if it comes to train sets where the sprites all have to find a common alignment while they all may be of different sizes. 
+
+== Using templates for pcx and offsets ==
+
+One solution in order to simplify coding and reduce the time spent on fixing different offsets is actually to use a standard layout in which sprites are arranged in the image (pcx) file and then use always the same offsets, using 'templates'. [[en/Archive/Community/OpenGFX Readme|OpenGFX]] uses for all trains a common layout which works like this: The graphics of a single engine go into a separate graphics file with a common layout:
+[[File:en/Development/NewGRF/Template singletrain.png]] and the filled-out versions with the sprites put in look like
+[[File:en/Development/NewGRF/Temperate asiastar 88.png]] or [[File:en/Development/NewGRF/Monorail x2001 88.png]]
+Pay attention that the vehicles are arranged such that the upward travelling view is aligned to the bottom and the downward travelling one to the top of the sprite, generally the back of the vehicle touches the blue box' border while in the front we can allow to leave some space for slightly shorter vehicles. Adjustments for really shorter vehicles are described further down.
+Then we can write the offsets for these sprites as
+<pre>
+-1 TRAIN_88.pcx   0   0 01 24  8  -3 -13
+-1 TRAIN_88.pcx   9   0 09 20 22 -13 -11
+-1 TRAIN_88.pcx  32   0 01 17 32 -16 -12
+-1 TRAIN_88.pcx  65   0 09 20 22  -5 -11
+-1 TRAIN_88.pcx  88   0 01 24  8  -3 -11
+-1 TRAIN_88.pcx  97   0 09 20 22 -13 -11
+-1 TRAIN_88.pcx 120   0 01 17 32 -16 -12
+-1 TRAIN_88.pcx 153   0 09 20 22  -5 -11
+</pre>
+or - for symetric sprites we only need four views when we arrange them in the centre of the blue boxes:
+<pre>
+-1 TRAIN_88_SYMETRIC.pcx   0   0 01 24  8  -3 -13
+-1 TRAIN_88_SYMETRIC.pcx   9   0 09 20 22 -13 -11
+-1 TRAIN_88_SYMETRIC.pcx  32   0 01 17 32 -16 -12
+-1 TRAIN_88_SYMETRIC.pcx  65   0 09 20 22  -5 -11
+</pre>
+
+== See also ==
+*[http://users.tt-forums.net/pikka/wiki/index.php?title=Sprite_templates Pikkas sprite alignment scheme]
+*[http://wiki.ttdpatch.net/tiki-index.php?page=Action1 Action1 in the NewGRF wiki]
+*[http://wiki.ttdpatch.net/tiki-index.php?page=RealSprites Real sprites in the NewGRF wiki]
