@@ -44,19 +44,19 @@ The branches mostly correspond to the milestones mentioned below. ''master'' is 
 
 Of course you can also pull the milestones one by one and examine each one independently. Each milestone should compile and run cleanly. The mile stones are roughly as follows:
 
-==tracking capacities, usages and supplies==
+==Tracking capacities, usages and supplies==
 
 The transport capacity of the link between station A and station B is the sum of the capacities of all vehicles arriving at B and coming from A. The usage of the link is the number of goods actually transported from A to B. The supply is the amount of cargo generated at a station. These numbers are calculated per cargo type and in order to not let them grow infinitely a moving average is taken over a configurable time. The moving average is calculated differently for supply on the one hand and capacity and usage on the other. Capacity and usage are scaled linearly when dropping below the moving average length. This helps cleaning up stale links. To compensate, capacity and usage get a boost when being increased from a small base value. Like this small but regular increases to capacities and usages don't lead to loss of links.
 
-==link graph and connected components==
+==Link graph and connected components==
 
 The nodes in the graph are partitioned into connected components. This isn't very useful on its own, but will be needed for further steps. The computation of connected components doesn't work if there are a lot of vehicles that visit a station and never come back to that station. This behaviour has been shown by certain AIs, but fixing isn't a high priority. You get a new settings page here: ''linkgraph''. Every time a connected component is calculated a copy of these settings is made for this component. These copies are saved and loaded. Later on a seperate thread will be created for the calculation of each component and the settings at the time of the creation will be carried around. Like this all settings can be changed during the game and the threading model stays network-safe. The first entry in the link graph settings is ''recalculation interval''. This is the time between subsequent recalculations of the link graph. If you increase it, it will take less CPU power. If you decrease it, the cargodist algorithm will run more often, resulting in a more accurate routing if your routes change often.
 
-==transport demand==
+==Transport demand==
 
 A demand function defines how many units of cargo '''should''' be transported between certain nodes in the link graph. It doesn't say how many units of cargo are actually transported, nor how they are transported. Actually at least two such functions are needed. Certain cargos, passengers and mail mostly, require a symmetric demand function, others a roughly antisymmetric one.
 
-===symmetric and antisymmetric demand===
+===Symmetric and antisymmetric demand===
 
 The symmetric function should have the following property:
 
@@ -80,15 +80,15 @@ Thus the algorithm implementing the demand function generates a list of nodes su
 
 Generally the formula is ''maxDistance / (maxDistance - distance) / accuracy'' where maxDistance is the the sum of the x- and y-dimensions of the map.
 
-===acceptance-based demand===
+===Acceptance-based demand===
 
 As a third option there could be a function that takes the quantity of acceptance (intentionally not called ''demand'' here) of stations into account. Implementation would be analog to the symmetric and antisymmetric demand functions, but the quantities of acceptance would need to be known. One way to determine them could be a measurement of consumed goods at the station, just like the supply is a measurement of generated goods at a station.
 
-===configuration and save/load===
+===Configuration and save/load===
 
 You can change which function is used for which cargo class in the link graph settings. Additionally there is an entry ''unhandled'' which will result in no demands being calculated. The influences of station size (''k'', only for symmetric) and distance (''l'') as well as the accuracy can also be set in the link graph settings. The calculation of the demands (as well as later parts of the algorimth) takes place per connected component and in a seperate thread for each component. The threads all work on their own data and are joined with the main thread after defined intervals for copying the results. When saving the starting state, joining time and link graph settings of each running thread are saved. Like this the threads can be started in a valid state when loading a game or joining a network game.
 
-==multi commodity flow problem==
+==Multi-commodity flow problem==
 
 With the demands and capacities known a [http://en.wikipedia.org/wiki/Multi_commodity_flow multi commodity flow] problem is defined. To solve it an algorithm inspired by [http://www.cs.princeton.edu/~gk/papers/mincostflow.ps this one] is used. The link graph setting for the desired accuracy of the solution is reused here. The more accurate you want the solution the heavier the toll on your CPU.
 
