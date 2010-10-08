@@ -45,25 +45,27 @@
 :* Компиляция OpenTTD в [[en/Archive/Compilation and Ports/Compiling on Mac OS X|MacOS X]]
 :* Компиляция OpenTTD в [[en/Archive/Compilation and Ports/Compiling on Solaris|Solaris]]
 
-====I had a problem compiling! What should I do?====
-:* This is not a compiling FAQ, try to ask your compiler vendor for help.
+====Проблемы с компиляцией! Что делать?!====
+:* Здесь не задают вопросов про компиляцию, об этом вам лучше расскажет поставщик вашего компилятора.
+
 ====Why did the developers decide to use Subversion?====
 :* Subversion (SVN) was chosen over CVS because it is more advanced and easier to use. Also a lot of the developers don't like CVS any more now they know SVN.
 :* SVN was "chosen" over distributed version control systems (DVCS) like Bazaar, Darcs, git, Mercurial and SVK because at the time the choice had to be made none of these existed. GNU arch was one of the few DVCSes that existed but was difficult to learn and understand. Later on a versioning API for NewGRFs was made out of the SVN revision so migrating to a DVCS would remove that capability breaking lots of existing NewGRFs.
 
 ====What is the point of a version control system? Why don't they just upload the source code to an FTP directory?====
 :* Version control systems keep track of all the changes, when they were made and by who. If the developers later find out something they did was a mistake and broke something important they may have to rewrite it from scratch. With this they can just 'checkout' a revision from when it was working. It also allows the developers to add comments so they know what changes have been done.
-====How do I make a diff file to share my changes with other coders?====
-:* In Linux, use the command "svn diff > mypatch.diff" from the source directory to create a diff file.
-:* In Windows, you can do the same from the command prompt, or, if you have Tortoise SVN, right button in the source directory and press Create Patch. It will ask for a location and filename.
 
-====How to apply a patch?====
-It's usually best to apply patches to the revision stated by the patch creator.
+====Как сделать diff-файл, чтобы поделиться изменениями с другими?====
+{{en/Todo|Необходимо откорректировать содержание подраздела и конкретизировать термины и указания}}
+:* Чтобы создать diff-файл в Linux, используйте команду «svn diff > mypatch.diff» из директории с кодом.
+:* В Windows можно сделать то же самое из командной строки, или, если у вас есть Tortoise SVN: кликнуть правой кнопкой мыши на директории с кодом и нажать «Create Patch». Программа спросит о местонахождении и имени файла.
 
-Different version control systems use different ways of expressing changes. Currently, there are SVN type patches and HG/GIT type patches.
-To know what you have, open the patch file with a text editor, and look at the first few lines.
+====Как применить патч?====
+Обычно лучше применять патчи к ревизии, начатой создателем патча.
 
-A SVN type patch starts like
+Разные системы контроля версий используют разные способы внесения изменений. На данный момент есть патчи типа SVN и типа HG/GIT. Чтобы узнать, какой патч у вас, откройте файл патча текстовым редактором и посмотрите на первые строки.
+
+Патчи типа SVN начинаются так:
 <pre>
 Index: src/gfx.cpp
 ===================================================================
@@ -73,7 +75,7 @@ Index: src/gfx.cpp
 ...
 </pre>
 
-and a HG/GIT type patch starts like
+а патчи HG/GIT так:
 <pre>
 diff --git a/src/gfx.cpp b/src/gfx.cpp
 --- a/src/gfx.cpp
@@ -81,15 +83,16 @@ diff --git a/src/gfx.cpp b/src/gfx.cpp
 @@ -641,14 +641,13 @@
 ...
 </pre>
-The crucial difference is the <code>a/</code> and <code>b/</code> additions at the lines starting with <code>---</code> and <code>+++</code>.
+
+Критическая разница — в добавках <code>a/</code> и <code>b/</code> в строках, начинающихся с <code>---</code> и <code>+++</code>.
 
 
-*'''Linux:''' Type the following line into a console (replace patch_name with the filename of the patch):
-:<code>patch -p0 < patch_name</code> (for SVN type patches). However, in some cases you might need <code>patch -p1 < patch_name</code> (for HG/GIT type patches).
+*'''Linux:''' Наберите следующую строку в консоли (замените patch_name именем файла патча):
+:<code>patch -p0 < patch_name</code> (для патчей SVN-типа). Однако, в некоторых случаях, вам может понадобиться <code>patch -p1 < patch_name</code> (для HG/GIT-типа патчей).
  
-*'''Windows:''' Make sure you have [http://tortoisesvn.tigris.org TortoiseSVN] installed.
-{{en/Warning| TortoiseSVN can only handle SVN type patches, it '''CANNOT''' handle HG/GIT type patches!!}}
-:Right-click on the folder with the OpenTTD source code, open the TortoiseSVN submenu and select 'Apply Patch...'. Browse to the patch file and select it. Then, right click on the 'File Patches' window and click on 'Patch All'. After you're done, close the TortoiseMerge window.
+*'''Windows:''' Убедитесь, что у вас установлена [http://tortoisesvn.tigris.org TortoiseSVN].
+{{en/Warning| TortoiseSVN поддерживает только патчи типа SVN, и  '''не поддерживает''' HG/GIT-тип!}}
+:Правый клик на папке с исходным кодом OpenTTD, в подменю TortoiseSVN выбрать 'Apply Patch...' Найдите и выберите файл патча. Затем, правый клик на окне 'File Patches' и выберите 'Patch All'. После завершения, закройте окно TortoiseMerge.
 
 [[Category:en/FAQs]]
 [[Category:ru/Разработка]]
