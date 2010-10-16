@@ -8,7 +8,7 @@ Aquí puedes encontrar información acerca de cómo OpenTTD calcula en la puntua
 
 ==Calificación del jugador==
 
-Cada parte de la clasificación de jugador es una función lineal, por ejemplo, ganando el 50% de la meta de cada apartado dará 50% de los puntos asignados para este. Cuando el apartado se refiere a importes monetarios, este se convierte en la moneda de juego actual, internamente estas cantidades se almacenan como libras. (Aunque cambie la unidad monetaria del juego, como € por ejemplo, es sólo un múltiplo asignado para el funcionamiento del juego. No se corresponde a valores de cambio reales).
+Cada parte de la clasificación de jugador es una función lineal, por ejemplo, ganando el 50% de la meta de cada apartado dará 50% de los puntos asignados para este. Cuando el apartado se refiere a importes monetarios, este se convierte en la moneda de juego actual, aunque internamente estas cantidades se almacenan como libras. (Aunque cambie la unidad monetaria del juego, como € por ejemplo, es sólo un múltiplo asignado para el funcionamiento del juego. No se corresponde a valores de cambio reales).
 
 {| border="1"
 ! Apartado !! Objetivo !! Puntos (min) !! Puntos (max)
@@ -17,7 +17,7 @@ Cada parte de la clasificación de jugador es una función lineal, por ejemplo, 
 |-
 |Número de estaciones (por casilla) que posee el jugador||>=80||0 puntos por 0 casillas||100 puntos por al menos 80 casillas
 |-
-|Mínimo beneficio de los vehículos con al menos dos años de antiguedad||>=10.000£||0 puntos por perder £0||100 puntos por al menos 10.000£
+|Mínimo beneficio de los vehículos con al menos dos años de antigüedad||>=10.000£||0 puntos por perder £0||100 puntos por al menos 10.000£
 |-
 |Mínimo ingreso mensual ganado en los últimos 3 años||>=50mil£||0 puntos por 0£||50 puntos por al menos 50mil£
 |-
@@ -37,7 +37,7 @@ Cada parte de la clasificación de jugador es una función lineal, por ejemplo, 
 <table>
 <tr><td style="background:none; border:0px">
 {| border="1" cellpadding="5"
-!colspan="2"|Tabla de calificación de la compañia
+!colspan="2"|Tabla de calificación de la compañía
 |-
 !Calificación!!Rango
 |-
@@ -45,7 +45,7 @@ Cada parte de la clasificación de jugador es una función lineal, por ejemplo, 
 |-
 |De 128 a 255||Gestor de tráfico
 |-
-|De 256 a 383||Coodinador de transportes
+|De 256 a 383||Coordinador de transportes
 |-
 |De 384 a 511||Supervisor de ruta
 |-
@@ -61,77 +61,78 @@ Cada parte de la clasificación de jugador es una función lineal, por ejemplo, 
 |}
 </td><td style="background:none; border:0px">
 {| border="1" cellpadding="5"
-!colspan="2"|2050 High Score ratings
+!colspan="2"|Tabla de calificación en el 2050
 |-
-!Rating!!Title
+!Calificación!!Rango
 |-
-|0 to 319||Businessman
+|De 0 a 319||Hombre de negocios
 |-
-|320 to 447||Entrepreneur
+|De 320 a 447||Emprendedor
 |-
-|448 to 575||Industrialist
+|De 448 a 575||Industrial
 |-
-|576 to 703||Capitalist
+|De 576 a 703||Capitalista
 |-
-|704 to 831||Magnate
+|De 704 a 831||Magnate
 |-
-|832 to 959||Mogul
+|De 832 a 959||Mogol
 |-
-|960 to 1000||Tycoon of the Century
+|De 960 a 1000||Empresario del siglo
 |}
 </td></tr></table>
 
-==Station rating==
-This section shows the factors that affect the station rating. All calculations are done separately for each cargo type.
+==Calificación de las estaciones==
+En esta sección se muestran los factores que afectan a las calificaciones de las estaciones. Todos los cálculos se hacen por separado dependiendo el tipo de carga.
 
 {| border="1" cellpadding="5"
-!Factor!!Condition!!Rating points!!Rating %
+!Factores!!Condiciones!!Puntos de calificación!!Calificación en %
 |-
-| Max speed of last vehicle entering station || Above 85 km/h (52 mph)|| (Speed (km/h) - 85) / 4 || 0% to 17%
+| Máxima velocidad del último vehículo que entra en la estación || Por encima de 85 km/h (52 mph)|| (Velocidad (km/h) - 85) / 4 || De 0% a 17%
 |-
-|rowspan="3"|Age in years of last vehicle entering station || 2 || 10|| 4%
+|rowspan="3"|Edad en años del último vehículo que entra en la estación || 2 || 10|| 4%
 |-
 | 1 || 20 || 8%
 |-
 | 0 || 33 || 13%
 |-
-|rowspan="4"|Days since last cargo pickup <br> Multiply days in "Condition" column by 4 if last vehicle was a ship.<br><small>(Note: If a vehicle was ready to pick up a cargo but there was no cargo, it is regarded as a cargo pickup anyhow)</small>|| 32,5 to 52,5 || 25 || 10%
+|rowspan="4"|Días desde la última recogida de la carga <br> Multiplique los días en la columna de "condiciones" por 4 si el último vehículo era un barco.<br><small>(Nota: Si el vehículo estaba listo para recoger un cargamento, pero no se carga, se considera como una recogida de carga de todos modos)</small>|| De 32,5 a 52,5 || 25 || 10%
 |-
-| 17,5 to 32,5 || 50 || 20%
+| De 17,5 a 32,5 || 50 || 20%
 |-
-| 10 to 17,5  || 95 || 37%
+| De 10 a 17,5  || 95 || 37%
 |-
-| less than 10 || 130 || 51%
+| Menos de 10 || 130 || 51%
 |-
-|rowspan="6"|Units of cargo waiting at station || More than 1500 || -90 || -35%
+|rowspan="6"|Unidades de carga esperando en la estación || Más de 1500 || -90 || -35%
 |-
-| 1001 to 1500 || -35 || -14%
+| De 1001 a 1500 || -35 || -14%
 |-
-| 601 to 1000 || 0 || 0%
+| De 601 a 1000 || 0 || 0%
 |-
-| 301 to 600 || 10 || 4%
+| De 301 a 600 || 10 || 4%
 |-
-| 101 to 300 || 30 || 12%
+| De 101 a 300 || 30 || 12%
 |-
-| less than 100 || 40 || 16%
+| Menos de 100 || 40 || 16%
 |-
-|Statue in town of station||Built||26|| 10%
+|Estatua del fundador de la compañía en la ciudad de la estación||Construida||26|| 10%
 |-
-|Small advertising campaign||Station within 10 tiles of town center||+64|| +25%
+|Pequeña campaña publicitaria||Estación dentro del rango de 10 cuadrículas del centro de la ciudad||+64|| +25%
 |-
-|Medium advertising campaign||Station within 15 tiles of town center||+112|| +44%
+|Campaña publicitaria mediana||Estación dentro del rango de 15 cuadrículas del centro de la ciudad||+112|| +44%
 |-
-|Large advertising campaign||Station within 20 tiles of town center||+160|| +63%
+|Gran campaña publicitaria||Estación dentro del rango de 20 cuadrículas del centro de la ciudad||+160|| +63%
 |-
-|Road vehicle crashed||Station within 22 tiles of crash ||-160|| -63%
+|Vehículo de carretera estrellado||Estación a menos de 22 cuadrículas del accidente ||-160|| -63%
 |-
-|Train crashed||Station within 30 tiles of crash ||-160|| -63%
+|Tren estrellado||Estación a menos de 30 cuadrículas del accidente ||-160|| -63%
 |}
-Divide the total rating points by 255 to get the percent rating.  The maximum possible rating is 100%.  Advertising campaigns give an instant, temporary boost to ratings of nearby stations. The boost will gradually fall down to the calculated rating.
+Divida el total de puntos de calificación entre 255 para calcular el porcentaje de su estación. La calificación máxima posible es de 100%. Las campañas de publicidad son instantáneas, como un "turbo" para mejorar la calificación de sus estaciones más cercanas. Éste eventualmente ira decayendo al recuperar gradualmente la estación su calificación real.
 
-Every 2.5 days station ratings are computed; ratings can't change by more than 2 points per cycle.
+Cada 2,5 días las estaciones calculan su calificación; estas calificaciones no pueden cambiar más de 2 puntos por cada ciclo. 
 
-==Cargo delivery to stations==
+==Entrega de carga en las estaciones==
+
 During each cycle of 2.5 days for each cargo type of the delivering industry a maximum of 2 stations can get cargo assigned. If there are more than 2 possible stations with the same maximum rating value for the current cargo type then it depends on internal ordering of the stations which ones get the cargo.
 
 If there's only one possible station then the delivered amount is: produced_amount * station_rating_in_percent, rounded up to the next integer value.
