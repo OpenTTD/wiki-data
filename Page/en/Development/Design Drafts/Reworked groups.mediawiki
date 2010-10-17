@@ -14,4 +14,27 @@ Liveries can't be arbitrarily assigned to specific services or routes, only type
 ==Consists==
 Changing the consist of a train when its purpose is changed is useful, but not possible at the moment.
 =The solutions=
-One solution, which is used in [http://www.simutrans-germany.com/wiki/wiki/tiki-index.php?page=en_LineManagement], is to have a group-like interface (which might or might not be based on the current groups  seen in OpenTTD) where an orders sheet is given to a group, and vehicles which are members of that group follow the group's orders sheet rather than their own.
+One solution, which is used in [http://www.simutrans-germany.com/wiki/wiki/tiki-index.php?page=en_LineManagement], is to have a group-like interface (which might or might not be based on the current groups  seen in OpenTTD) where an orders sheet is given to a group, and vehicles which are members of that group follow the group's orders sheet rather than their own.  This could be extended; membership of a group could bestow a certain livery, or a consist, on a vehicle.
+
+==Some basic properties of groups==
+*Groups would be able to contain zero or more vehicles.  An empty group would not vanish; the player would have to delete the group.
+*Groups would be selectable from a global list, and would each have a control where certain proeprties, normally associated with vehicles, could be edited.
+**Liveries could be changed.
+**Orders sheet could be edited.
+**The consist (of trains) could be edited; changes would not apply to the train directly, but would take place a the next visit to a depot (funds permitting).
+**The servicing interval could be defined.
+**Other properties could be defined.
+
+==Some new problems, and their solutions==
+===Duplication and disambiguation===
+A vehicle might belong to more than one group, which might in turn bestow it with more than one orders list, or livery, etc.  Some solutions:
+;Prevent vehicles from being members of more than one group
+:This avoids the problem, but limits functionality drastically. Vehicles can't be member of one group for orders, and another for liveries.
+;Prevent vehicles from being in more than one group which bestows a given property
+:A nightmare to design; checks would have to be made as to whether groups gave a property to a vehicle to which a property had been given by another group, every time a group was modified, or its membership was modified.  It also would produce problems for the player, who might be frustrated at having to remove vehicles or porperties from some groups to assign them to others.
+;use different lists of groups for different properties, and force each vehicle to be a member of no more than one of each type
+:This stops a player from making a single group which simply sets both orders and livery, and would be very cluttered indeed.
+;Hierarchical groups, of which a vehicle can belong to only one or less
+:Avoids ambiguity, but forces duplication of some properties, once groups become complex.
+;Arbitrary groups, with a single global precedence number, or a global precedence number for each property
+:Neatly solves the problem; a list window can be used to order groups for the purposes of orders, livery, consist, etc.  If two groups define the same property to a vehicle, the one with the lowest priority number (or the lowest priority number for that property) is the winner.
