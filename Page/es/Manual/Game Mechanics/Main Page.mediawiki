@@ -123,15 +123,15 @@ En esta sección se muestran los factores que afectan a las calificaciones de la
 |-
 |Estatua del fundador de la compañía en la ciudad de la estación||Construida||26|| 10%
 |-
-|Pequeña campaña publicitaria||Estación dentro del rango de 10 cuadrículas del centro de la ciudad||+64|| +25%
+|Pequeña campaña publicitaria||Estación dentro del rango de 10 casillas del centro de la ciudad||+64|| +25%
 |-
-|Campaña publicitaria mediana||Estación dentro del rango de 15 cuadrículas del centro de la ciudad||+112|| +44%
+|Campaña publicitaria mediana||Estación dentro del rango de 15 casillas del centro de la ciudad||+112|| +44%
 |-
-|Gran campaña publicitaria||Estación dentro del rango de 20 cuadrículas del centro de la ciudad||+160|| +63%
+|Gran campaña publicitaria||Estación dentro del rango de 20 casillas del centro de la ciudad||+160|| +63%
 |-
-|Vehículo de carretera estrellado||Estación a menos de 22 cuadrículas del accidente ||-160|| -63%
+|Vehículo de carretera estrellado||Estación a menos de 22 casillas del accidente ||-160|| -63%
 |-
-|Tren estrellado||Estación a menos de 30 cuadrículas del accidente ||-160|| -63%
+|Tren estrellado||Estación a menos de 30 casillas del accidente ||-160|| -63%
 |}
 Divida el total de puntos de calificación entre 255 para calcular el porcentaje de su estación. La calificación máxima posible es de 100%. Las campañas de publicidad son instantáneas, como un "turbo" para mejorar la calificación de sus estaciones más cercanas. Éste eventualmente ira decayendo al recuperar gradualmente la estación su calificación real.
 
@@ -141,62 +141,64 @@ Cada 2,5 días las estaciones calculan su calificación; estas calificaciones no
 
 {{es/Pendiente de traducción}}
 
-During each cycle of 2.5 days for each cargo type of the delivering industry a maximum of 2 stations can get cargo assigned. If there are more than 2 possible stations with the same maximum rating value for the current cargo type then it depends on internal ordering of the stations which ones get the cargo.
+Durante cada ciclo de 2,5 días por cada tipo de carga entregada por la industria hay un máximo de 2 estaciones que pueden tener carga asignada. Si hay más de dos estaciones con el mismo valor máximo para el tipo de carga actual, entonces depende de la ordenación interna de las estaciones que reciben la carga.
 
-If there's only one possible station then the delivered amount is: produced_amount * station_rating_in_percent, rounded up to the next integer value.
+Si en el caso de que haya una sola estación admitiendo la carga, el total de carga producida es: carga_producida * calificación_de_la_estación_en_porcentaje, redondeado el valor al número entero siguiente (por ejemplo, una mina produce 133 toneladas de carbón y la estación tiene calificación de 67%, el calculo es: 133 * 0,67 = 89,11 = 82 toneladas de carbón al mes).
 
-For two possible stations the calculation is more complex. First the rating in points of station 2 is divided by 2 for the further local calculations. The amount available to station 1 is calculated as follows: (station_rating_in_points1 * (amount + 1)) / (station_rating_in_points1 + station_rating_in_points2); for simmilar ratings this is about 2/3 of the production, it increases for larger differences. The result is subject to the same calculation as in the single station case. This is delivered to station 1. If station 1 doesn't get the full amount available to it then that part won't be transported at all. The remaining amount of the production, if any, is subject to the same calculation as in the single station case and delivered to station 2.
+Para 2 estaciones el cálculo es más complejo. En primer lugar la calificación en puntos de la estación 2 se divide por 2 para los siguientes cálculos locales. La cantidad disponible para la estación 1 se calcula de la siguiente manera: (calificación_de_la_estación1_en_porcentaje * (cantidad_de_carga + 1)) / (calificación_de_la_estación1_en_porcentaje + calificación_de_la_estación2_en_porcentaje); para las calificaciones similares se trata de 2/3 de la producción, ello aumenta grandes diferencias. El resultado está sujeto a los mismos cálculos como en el caso de una sola estación. Este se entrega a la estación 1. Si una estación no recibe la cantidad total disponible para esa parte no serán todos transportados. El importe restante de la producción, en su caso, está sujeto a los mismos cálculos como en el caso de una sola estación y entregado a la estación 2.
 
-==Local authority rating==
-Ratings limit some player actions; they start at +500 and can change based on some actions.
+==Calificación de la autoridad local==
+Las calificaciones limitan las acciones del jugador; éste empieza con una calificación de +500 y cambian en base de diferentes acciones.
 
-Currently you can exploit the game by clearing ~200 trees and then replanting them.  This sets the rating to -1000 (the minimum), and then raises it to 220.
+Como un ejemplo de estos puntos, destruya alrededor de 200 casillas de árboles y vuelva a replantarlos. Esta acción hace que su calificación baje a -1000 (el mínimo) para posteriormente alzarlo a 220.
 
 <table>
 <tr valign="top"><td style="background:none; border:0px">
 {| {{en/Wikitable}}
 |- style="background:#efefef"
-!Rating points!!Rating
+!Puntos de calificación!!Calificación de la autoridad local
 |-
-| -1000 to -400 || Appalling
+| De -1000 a -400 || Espantoso
 |-
-| -399 to -200 || Very Poor
+| De -399 a -200 || Muy pobre
 |-
-| -199 to 0 || Poor
+| De -199 a 0 || Pobre
 |-
-| 0 to 200 || Mediocre
+| De 0 a 200 || Mediocre
 |-
-| 201 to 400 || Good
+| De 201 a 400 || Bueno
 |-
-| 401 to 600 || Very Good
+| De 401 a 600 || Muy bueno
 |-
-| 601 to 800 || Excellent
+| De 601 a 800 || Excelente
 |-
-| 801 to 1000 || Outstanding
+| De 801 a 1000 || Sobresaliente
 |}
 </td><td style="background:none; border:0px">
 {| {{en/Wikitable}}
 |- style="background:#efefef"
-!Player action!!Required rating!!Effect on rating
+!Acción del jugador!!Calificación necesaria!!Efectos en la calificación
 |-
-|Build a station|| -200 || n/a
+|Construir una estación|| -200 || n/a
 |-
-|Destroy an 'edge' piece of road|| 16 / 64 / 112 ||-18, down to -100.
+|Destruir un 'margen' de casilla de carretera|| 16 / 64 / 112 ||-18, bajando a -100.
 |-
-|Destroy an 'inner' piece of road|| 16 / 64 / 112 ||-50, down to -100.
+|Destruir 'toda' una casilla de carretera|| 16 / 64 / 112 ||-50, bajando a -100.
 |-
-|Destroy a city tunnel or bridge|| 144 / 208 / 400 ||-250, down to 0.
+|Destruir un tunel o puente de la cuidad|| 144 / 208 / 400 ||-250, bajando a 0.
 |-
-|Destroy building|| 40 to 300 ||-40 to -300
+|Destruir un edificio|| 40 to 300 ||-40 to -300
 |-
-|Plant tree on clear square|| n/a ||+7, up to 220.
+|Plantar un árbol en una casilla vacía|| n/a ||+7, subiendo a 220.
 |-
-|Clear a tile with trees|| n/a ||-35
+|Limpiar una casilla con árboles|| n/a ||-35
 |-
-|Successful bribe|| n/a ||+200, up to 800.
+|Soborno con éxito|| n/a ||+200, subiendo a 800.
 |-
-|Unsuccessful bribe|| n/a ||Set to -50.
+|Soborno sin éxito|| n/a ||La deja a -50.
 |}
+Las siguientes calificaciones responden a una cuidad Permisiva / Tolerante / Hostil, pudiéndose configurar en la opcion de [[es/Archive/Manual/Settings/Dificultad|dificultad]] --> ''Actitud de las autoridades locales ante cambios en el terreno''.
+
 Required rating is listed for the settings Permissive / Neutral / Hostile of<br>the [[en/Archive/Manual/Settings/Difficulty]] option ''City council attitude towards area restructuring''.
 </td></tr></table>
 
