@@ -76,6 +76,44 @@ All the industries are close to Altoona. There are 8 cargos under consideration 
 
 == Two catchments ==
 
+Existing discussions seem to say there is, for any station, one catchment area. This is only true for a [[en/Archive/Manual/Settings/Uniform station]]. For any irregular station, there are really two catchment areas, one for production, one for acceptance. Not only that; they catch two different definitions of "industry". 
+
+=== Production catchment area ===
+
+[[File:en/Manual/Catch-altoona-produce.png|thumb|400px|Altoona [[en/Production catchment area]]. Catchment is shown in red; the [[en/Bounding box]] of each industry is shown in bright green.]]
+
+: ''For production, catchment area of a logical station is the [[en/Union]] of the physical station radii.''
+
+: ''For production, an industry's [[en/Bounding box]] counts toward overlap. Any single tile of overlap is sufficient. 
+
+Industries that don't overlap the [[en/Production catchment area]] cannot ship goods out of the station. Therefore, no lumber nor sheep wait for pickup at Altoona; the Sawmill and Sheep Farm don't overlap the catchment. 
+
+The Brick Works overlaps Altoona's production catchment by a single tile, in its parking lot. Even so, Altoona can carry away the full brick production. The Glass Works is missing the tile that would otherwise overlap the catchment; but that's okay, since the Glass Works' bounding box ''does'' overlap. Therefore, both bricks and glass wait for pickup at Altoona. 
+
+=== Acceptance catchment area ===
+
+[[File:en/Manual/Catch-altoona-accept.png|thumb|400px|Altoona [[en/Acceptance catchment area]]. Catchment is shown in blue; the [[en/Footprint]] of each industry is shown in light brown.]]
+
+: ''For acceptance, catchment area of a logical station is the bounding box of its physical station radii.'' Equivalently, ''[[en/Acceptance catchment area]] is the station radius around the bounding box of its physical stations.'' 
+
+: ''For acceptance, an industry's [[en/Footprint]] only counts toward the overlap. Any single tile of overlap is sufficient.''
+
+Altoona's acceptance catchment overlaps the Sawmill and Brick Works, so the station will accept wood and clay for these industries. 
+
+The Sheep Farm's bounding box overlaps the acceptance catchment but no footprint tile does overlap; the same is true for the Glass Works, due to that missing corner. Therefore, Altoona cannot accept farm supplies or lime, respectively. 
+
+=== Summary ===
+
+{|
+! Catchment !! Station !! Industry
+|-
+| production || union of radii || bounding box
+|-
+| acceptance || bounding box || footprint
+|}
+
+== stub ==
+
 == See also ==
 
 * [[en/Archive/Manual/Settings/Modified catchment]]
