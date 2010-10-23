@@ -197,84 +197,87 @@ Como un ejemplo de estos puntos, destruya alrededor de 200 casillas de árboles 
 |-
 |Soborno sin éxito|| n/a ||La deja a -50.
 |}
-Las siguientes calificaciones responden a una cuidad Permisiva / Tolerante / Hostil, pudiéndose configurar en la opcion de [[es/Archive/Manual/Settings/Dificultad|dificultad]] --> ''Actitud de las autoridades locales ante cambios en el terreno''.
+Las siguientes calificaciones responden a una cuidad Permisiva / Tolerante / Hostil, pudiéndose configurar en la opción de [[es/Archive/Manual/Settings/Dificultad|dificultad]] --> ''Actitud de las autoridades locales ante cambios en el terreno''.
 
-Required rating is listed for the settings Permissive / Neutral / Hostile of<br>the [[en/Archive/Manual/Settings/Difficulty]] option ''City council attitude towards area restructuring''.
 </td></tr></table>
 
-Each month players' ratings automatically change:
-* Rating goes up by 5 if it is less than 200.
-* Rating goes up by 12 for each station that has transferred cargo in the last 50 days.
-* Rating goes down by 15 for each station that has not transferred cargo in the last 50 days.
+Cada mes las calificaciones del jugador automáticamente cambian:
+* La calificación '''sube 5''' puntos si ésta es '''menor de 200'''.
+* La calificación '''sube 12''' puntos por cada estación que '''transfiera''' carga a la ciudad en los últimos 50 días.
+* La calificación '''baja 15''' puntos por cada estación que '''no transfiera''' carga a la ciudad en los últimos 50 días.
 
 
-'''Example:'''<br>
-A player has a rating of -300, (Very Poor), 2 active stations and 1 unactive station at a town.<br>
-5pts + 2 * 12pts - 15pts = 14pts points gain per month.<br>
-(-200 - -300)pts / 14pts/mo = 8 months before the town will let him build another station.
+'''Ejemplo:'''<br>
 
-Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
+El jugador quiere construir una estación, pero no puede porque tiene una calificación de -300, (Muy pobre), además posee en la ciudad 2 estaciones activas y 1 stación inactiva (que no tiene uso).
+Como tiene que esperar a que esta calificación cambie cada mes, se resume en el siguiente cálculo:<br>
+5 puntos + 2 * 12 puntos - 15 puntos = 14 puntos gana el jugador por mes.<br>
+Ya sabiendo que gana 14 puntos cada mes, ha de esperar a que su calificación llegue a -200 (Muy Pobre - Pobre), para poder construirla. Esto se resume en el siguiente cálculo:<br>
+(-200 - -300) puntos / 14 puntos por mes = 8 meses deberá esperar antes de que la ciudad le deje construir la estación.
 
-==Industry production==
-Here is how the game determines how much cargo an industry produces per month.  This table lists possible starting productions governed by the  [[en/Archive/Manual/Settings/Configuring patches/Economy#enable-smooth-economy|smooth economy]] patch.  Production is a multiple of 8 or 9 (sometimes 10 with forests).
+El código para las calificaciones de la ciudad se encuentra en los archivos town.h, town_cmd.c, tree_cmd.c, y road_cmd.c.
+
+==Producción de la industria==
+
+Aquí se explica como el juego determina la cantidad de carga que una industria produce al mes. Esta tabla enumera posibles producciones que la partida regirá por la opción [[en/Archive/Manual/Settings/Configuring patches/Economy#enable-smooth-economy|economía fluctuante]]. La producción puede multiplicarse por 8 o 9 (incluso a veces por 10 en los bosques).
 
 {| {{en/Wikitable}}
 |- style="background:#efefef"
-!Raw Material Industry!!Produced Cargo!!Initial production range
+!Industria de materia prima!!Carga producida!!Rango inicial de producción
 |-
-|Coal Mine||Coal||56 to 176
+|Mina de carbón||Carbón||De 56 a 176 toneladas
 |-
-|Forest||Wood||48 to 152
+|Bosque||Madera||De 48 a 152 toneladas
 |-
-|Oil Rig||Oil||56 to 176
+|Plataforma petrolífera||Petróleo|| De 56.000 a 176.000 litros 
 |-
-|Farm||Grain and Livestock||40 to 112
+|Granja||Grano <br> Ganado|| De 40 a 112 toneladas<br> De 40 a 112 cabezas
 |-
-|Copper Mine||Copper Ore||56 to 112
+|Mina de cobre||Mineral de cobre||De 56 a 112 toneladas
 |-
-|Oil Well||Oil||48 to 152
+|Pozos de petrolíferos||Petróleo|| De 48.000 a 152.000 litros
 |-
-|Iron Mine||Iron Ore||40 to 112
+|Mina de hierro||Mineral de hierro||De 40 a 112 toneladas
 |-
-|Bank||Valuables||24 to 64
-|-
-|colspan="5"|
-|-
-|Gold Mine||Gold||24 to 80
+|Banco||Valores||De 24 a 64 bolsas
 |-
 |colspan="5"|
 |-
-|Diamond Mine||Diamonds||24 to 80
-|-
-|Fruit Plantation||Fruit||40 to 112
-|-
-|Rubber Plantation||Rubber||40 to 112
-|-
-|Water Supply||Water||48 to 152
-|-
-|Farm||Maize||40 to 128
-|-
-|Lumber Mill||Wood||180 or 225 (if trees available)
+|Mina de oro||Oro||De 24 a 80 bolsas
 |-
 |colspan="5"|
 |-
-|Cotton Candy Forest||Cotton Candy||48 to 152
+|Mina de diamantes||Diamantes||De 24 a 80 bolsas
 |-
-|Battery Farm||Batteries||40 to 128
+|Plantación de fruta||Fruta||De 40 a 112 toneladas
 |-
-|Cola Wells||Cola||48 to 136
+|Plantación de caucho||Caucho||De 40.000 a 112.000 litros 
 |-
-|Plastic Fountain||Plastic||56 to 160
+|Suministro de agua||Agua||48.000 a 152.000 litros
 |-
-|Bubble Generator||Bubbles||48 to 152
+|Granja (tropical)||Maíz||De 40 a 128 toneladas
 |-
-|Toffee Quarry||Toffee||40 to 112
+|Aserradero (tropical)||Madera||De 180 a 225 toneladas (si tiene árboles disponibles)
 |-
-|Sugar Mine||Sugar||40 to 128
+|colspan="5"|
+|-
+|Bosque de algodón dulce||Algodón dulce||De 48 a 152 toneladas
+|-
+|Granja de pilas||Pilas||De 40 a 128 pilas
+|-
+|Pozos de cola||Cola||De 48.000 a 136.000 litros
+|-
+|Fuentes de plástico||Plástico||De 56.000 a 160.000 litros
+|-
+|Generador de burbujas||Burbujas||De 48 a 152 burbujas
+|-
+|Cantera de caramelos||Caramelos||De 40 a 112 toneladas
+|-
+|Mina de azúcar||Azúcar||De 40 a 128 toneladas
 |}
 
-===Production change===
-Each month the game randomly changes some industry productions.
+===Cambios en la producción===
+Cada mes el juego cambia aleatoriamente la producción de algunas industrias. 
 ====Default / TTD-like Economy Rules====
 For 256x256 tile maps there is one change per month possible (only 1 industry changes). Number scales nicely with map size since the introduction of "Daily production changes" function in trunk (r14332). 
 
