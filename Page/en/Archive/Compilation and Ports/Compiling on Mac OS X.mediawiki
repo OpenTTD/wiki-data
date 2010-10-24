@@ -82,6 +82,41 @@ libpng3 is needed for making screenshots in png. Not really needed now, but ther
 In each case, fink will tell that you that you need to install a lot of other stuff too, just hit enter (answering yes) and fink will download and install all of it.
 The docs telling about how to compile OpenTTD tells about ''zlib''. Zlib is needed by OSX itself, so you already have it and there is no need to install it.
 
+=== Installing manually ===
+If you want truely universal libraries it might be needed that you compile the libraries yourself, especially as newer versions (e.g. Snow Leopard) only support 'universal' binaries and libraries with the i386 and x86_64 architechturs while OpenTTD's universal binaries can also include ppc, ppc64 and ppc970.
+
+There's no build script to get the required universal libraries, but some steps which can be followed will get you there.
+* get the source of the library
+* make sure it compiles with your usual settings w/o modification
+* build all different architectures. This short shell script gives you an idea how to do it analoguously for all libraries, this is made to build libz 1.2.5, you might need to adopt it accordingly:
+<pre>
+#!/bin/bash
+export archs="ppc ppc64 ppc970 i386 x86_64"
+#export archs="ppc"
+export sdk="/Developer/SDKs/MacOSX10.4u.sdk"
+export file="libz.1.2.5.dylib"
+
+
+for this in $archs; do
+	echo "$this"
+	flags="-arch $this -isysroot $sdk -I$sdk/usr/include -mmacosx-version-min=10.3"
+	export CFLAGS="$flags"
+	export CXXFLAGS="$flags"
+	export CPPFLAGS="$flags"
+	export LDFLAGS="$flags"
+	make clean
+	./configure
+	make
+	cp $file $this.$file
+done
+
+lipo -create *.$file -output $file
+
+</pre>
+* subsequently install the resulting libz.1.2.5.dylib into your library dir, either /usr/lib or /opt/local/lib
+
+Repeat similar steps for the other libraries.
+
 ==Getting the newest source from the svn server==
 Now you need to make a "working copy" of the source with your new svn client. To do this, use your terminal and write:
  <code>svn checkout svn://svn.openttd.org/trunk Folder_name</code>
