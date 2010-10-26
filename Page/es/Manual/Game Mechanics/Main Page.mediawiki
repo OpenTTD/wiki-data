@@ -156,11 +156,9 @@ Si las estaciones tienen calificaciones similares se le asignará aproximadament
 El resto de la producción está sujeto, en su caso, a los mismos cálculos que se aplicaron en el caso de una sola estación y entregado en la estación 2.
 
 ==Calificación de la autoridad local==
-Las calificaciones limitan las acciones del jugador; éste empieza con una calificación de +500 y cambia según diferentes acciones.
+Las calificaciones limitan las acciones que puede llevar a cabo un jugador; éste empieza con una calificación de +500 y cambia según sus diferentes actuaciones.
 
-{{es/Pendiente de traducción}}
-
-Como un ejemplo de estos puntos, destruya alrededor de 200 casillas de árboles y vuelva a replantarlos. Esta acción hace que su calificación baje a -1000 (el mínimo), para posteriormente alzarlo a 220.
+A modo de ejemplo, si destruye unos ~200 árboles y luego vuelve a plantarlos, hará que su calificación primero baje a -1000 (el mínimo) y después suba tan solo hasta 220.
 
 <table>
 <tr valign="top"><td style="background:none; border:0px">
@@ -182,53 +180,52 @@ Como un ejemplo de estos puntos, destruya alrededor de 200 casillas de árboles 
 |-
 | De 601 a 800 || Excelente
 |-
-| De 801 a 1000 || Sobresaliente
+| De 801 a 1000 || Excepcional
 |}
 </td><td style="background:none; border:0px">
 {| {{en/Wikitable}}
 |- style="background:#efefef"
-!Acción del jugador!!Calificación necesaria!!Efectos en la calificación
+!Acción del jugador!!Calificación necesaria*!!Efectos en la calificación
 |-
-|Construir una estación|| -200 || n/a
+|Construir una estación|| -200 || --
 |-
-|Destruir un 'margen' de casilla de carretera|| 16 / 64 / 112 ||-18, bajando a -100.
+|Destruir un casilla 'final' de una carretera|| 16 / 64 / 112 ||-18, bajando hasta -100.
 |-
-|Destruir 'toda' una casilla de carretera|| 16 / 64 / 112 ||-50, bajando a -100.
+|Destruir una casilla 'intermedia' de una carretera|| 16 / 64 / 112 ||-50, bajando hasta -100.
 |-
-|Destruir un túnel o puente de la cuidad|| 144 / 208 / 400 ||-250, bajando a 0.
+|Destruir un túnel o un puente de ciudad|| 144 / 208 / 400 ||-250, bajando hasta 0.
 |-
-|Destruir un edificio|| De 40 a 300 ||-40, bajando a -300.
+|Destruir un edificio|| De 40 a 300 ||-40, bajando hasta -300.
 |-
-|Plantar un árbol en una casilla vacía|| n/a ||+7, subiendo a 220.
+|Plantar un árbol en una casilla vacía|| -- ||+7, subiendo hasta 220.
 |-
-|Limpiar una casilla con árboles|| n/a ||-35 por casilla.
+|Eliminar árboles de una casilla|| -- ||-35 por casilla.
 |-
-|Soborno con éxito|| n/a ||+200, subiendo a 800.
+|Soborno con éxito|| -- ||+200, subiendo hasta 800.
 |-
-|Soborno sin éxito|| n/a ||La deja a -50.
+|Soborno sin éxito|| -- ||Se establece en -50.
 |}
-Las siguientes calificaciones responden a una cuidad Permisiva / Tolerante / Hostil, pudiéndose configurar en la opción de [[es/Archive/Manual/Settings/Dificultad|dificultad]] --> ''Actitud de las autoridades locales ante cambios en el terreno''.
-
+<nowiki>*</nowiki> En la columna "calificación necesaria" los valores separados por barras se corresponde con las opciones "Permisiva / Tolerante / Hostil" del parámetro "Actitud de las autoridades ante cambios en el terreno" del [[es/Archive/Manual/Settings/Dificultad|nivel de dificultad]].
 </td></tr></table>
 
-Cada mes las calificaciones del jugador cambian automáticamente:
-* La calificación '''sube 5''' puntos si ésta es '''menor de 200'''.
-* La calificación '''sube 12''' puntos por cada estación que '''transfiera''' carga a la ciudad en los últimos 50 días.
-* La calificación '''baja 15''' puntos por cada estación que '''no transfiera''' carga a la ciudad en los últimos 50 días.
+Cada mes las calificaciones de los jugadores cambian automáticamente:
+* La calificación '''sube 5 puntos''' si ésta es menor de 200.
+* La calificación '''sube 12 puntos''' por cada estación que transfiera carga en los últimos 50 días.
+* La calificación '''baja 15 puntos''' por cada estación que no transfiera carga en los últimos 50 días.
 
+'''Ejemplo:'''
 
-'''Ejemplo:'''<br>
+Un jugador quiere construir una estación, pero no puede porque tiene una calificación de -300 (Muy pobre), además posee en la ciudad 2 estaciones activas y 1 estación inactiva (que no tiene uso).
+La calificación cambia cada mes según en el siguiente cálculo:
 
-El jugador quiere construir una estación, pero no puede porque tiene una calificación de -300, (Muy pobre), además posee en la ciudad 2 estaciones activas y 1 estación inactiva (que no tiene uso).
-Como tiene que esperar a que esta calificación cambie cada mes, se resume en el siguiente cálculo:<br>
-5 puntos + 2 * 12 puntos - 15 puntos = 14 puntos gana el jugador por mes.<br>
-Ya sabiendo que gana 14 puntos cada mes, ha de esperar a que su calificación llegue a -200 (Muy Pobre - Pobre), para poder construirla. Esto se resume en el siguiente cálculo:<br>
-(-200 - -300) puntos / 14 puntos por mes = 8 meses deberá esperar antes de que la ciudad le deje construir la estación.
+5 puntos + 2 x 12 puntos - 15 puntos = 5+24-15 = 14 puntos gana el jugador cada mes.
 
-El código para las calificaciones de la ciudad se encuentra en los archivos town.h, town_cmd.c, tree_cmd.c, y road_cmd.c.
+Como a de esperar a que su calificación llegue a a -199 (Pobre), para poder construir la estación, deberá esperar 8 meses [(300-199)/14 = 7,21 redondeando 8] para que las autoridades locales le den permiso.
+
+Los códigos para las calificaciones de los pueblos se encuentra en los archivos town.h, town_cmd.c, tree_cmd.c, y road_cmd.c.
 
 ==Producción de la industria==
-
+{{es/Pendiente de traducción}}
 Aquí se explica como el juego determina la cantidad de carga que una [[es/Manual/Industrias|industria]] produce al mes. Esta tabla enumera posibles producciones que la partida regirá por la opción [[es/Archive/Manual/Settings/Opciones avanzadas/Economía|economía fluctuante]]. La producción puede multiplicarse por 8 o 9 (incluso a veces por 10 en los bosques).
 
 {| {{en/Wikitable}}
