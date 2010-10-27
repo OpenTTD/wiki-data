@@ -199,7 +199,7 @@ A modo de ejemplo, si destruye unos ~200 árboles y luego vuelve a plantarlos, h
 |-
 |Plantar un árbol en una casilla vacía|| -- ||+7, subiendo hasta 220.
 |-
-|Eliminar árboles de una casilla|| -- ||-35 por casilla.
+|Eliminar árboles|| -- ||-35 por casilla.
 |-
 |Soborno con éxito|| -- ||+200, subiendo hasta 800.
 |-
@@ -225,34 +225,33 @@ Como a de esperar a que su calificación llegue a -199 (Pobre) para poder constr
 Los códigos para las calificaciones de los pueblos se encuentra en los archivos town.h, town_cmd.c, tree_cmd.c, y road_cmd.c.
 
 ==Producción de la industria==
-{{es/Pendiente de traducción}}
-Aquí se explica como el juego determina la cantidad de carga que una [[es/Manual/Industrias|industria]] produce al mes. Esta tabla enumera posibles producciones que la partida regirá por la opción [[es/Archive/Manual/Settings/Opciones avanzadas/Economía|economía fluctuante]]. La producción puede multiplicarse por 8 o 9 (incluso a veces por 10 en los bosques).
+El juego determina la cantidad de carga que una [[es/Manual/Industrias|industria]] produce al mes. Esta tabla enumera las posibles producciones iniciales con la opción de [[es/Archive/Manual/Settings/Opciones avanzadas/Economía|economía fluctuante]] activa. La producción puede multiplicarse por 8 o 9 (incluso a veces por 10 con los bosques).
 
 {| {{en/Wikitable}}
 |- style="background:#efefef"
-!Industria de materia prima!!Carga producida!!Rango inicial de producción
+!Industria!!Carga producida!!Producción inicial
 |-
 |Mina de carbón||Carbón||De 56 a 176 toneladas
 |-
 |Bosque||Madera||De 48 a 152 toneladas
 |-
-|Plataforma petrolífera||Petróleo|| De 56.000 a 176.000 litros 
+|Plataforma petrolífera||Petróleo||De 56.000 a 176.000 litros 
 |-
-|Granja||Grano <br> Ganado|| De 40 a 112 toneladas<br> De 40 a 112 cabezas
+|Granja||Grano<br/>Ganado||De 40 a 112 toneladas<br/>De 40 a 112 cabezas
 |-
 |Mina de cobre||Mineral de cobre||De 56 a 112 toneladas
 |-
-|Pozos de petrolíferos||Petróleo|| De 48.000 a 152.000 litros
+|Pozos petrolíferos||Petróleo||De 48.000 a 152.000 litros
 |-
 |Mina de hierro||Mineral de hierro||De 40 a 112 toneladas
 |-
 |Banco||Valores||De 24 a 64 bolsas
-|-
-|colspan="5"|
+|- style="background:#efefef"
+|colspan="3"|
 |-
 |Mina de oro||Oro||De 24 a 80 bolsas
-|-
-|colspan="5"|
+|- style="background:#efefef"
+|colspan="3"|
 |-
 |Mina de diamantes||Diamantes||De 24 a 80 bolsas
 |-
@@ -265,8 +264,8 @@ Aquí se explica como el juego determina la cantidad de carga que una [[es/Manua
 |Granja (tropical)||Maíz||De 40 a 128 toneladas
 |-
 |Aserradero (tropical)||Madera||De 180 a 225 toneladas (si tiene árboles disponibles)
-|-
-|colspan="5"|
+|- style="background:#efefef"
+|colspan="3"|
 |-
 |Bosque de algodón dulce||Algodón dulce||De 48 a 152 toneladas
 |-
@@ -285,58 +284,61 @@ Aquí se explica como el juego determina la cantidad de carga que una [[es/Manua
 
 ===Cambios en la producción===
 Cada mes el juego cambia aleatoriamente la producción de algunas industrias. 
-====Por defecto o reglas de economía de TTD====
-Para los mapas de tamaño 256x256 un cambio por mes es posible (sólo 1 industria cambia). Number scales nicely with map size since the introduction of "Daily production changes" function in trunk (r14332). 
 
+====Reglas de la economía normal (por defecto o como en TTD)====
+En mapas de tamaño 256x256 solo es posible un cambio al mes (sólo cambia una industria). Este número varía muy bien según el tamaño del mapa desde que se introdujo la propiedad "cambios en la producción diaria".
 
-*Para una economía fluctuante, las industrias entregan mercancía a las estaciones 8, 9 (o 10 si son bosques con alta producción entregando mas de 400 toneladas) veces por mes.
+Igual que con la economía suave, las industrias entregan la carga en las estaciones 8, 9 ó 10 veces al mes (sólo los bosques alcanzan la producción más alta: más de 400t).
+
 No obstante las producciones están limitadas a 6 niveles de producción: muy bajo, bajo, normal (cuando se inicia un juego o cuando se construye una nueva industria), alto, alto x2 y muy alto.
-Los cambios de producción están limitados entre una bajada del 50% (a la mitad) o un incremento del 100% (al doble).
+Los cambios en la producción entre estos niveles son una disminución del 50% (a la mitad) o un incremento del 100% (al doble).
 
-*Ejemplos:
-**Una mina de carbón: muy bajo (de 32 a 40 toneladas por mes), bajo (de 64 a 72), normal (de 120 a 135), alto (de 240 a 270), alto x2 (de 480 a 540) y muy alto (de 960 a 1080).
-**Un bosque: muy bajo (de 32 a 64 toneladas por mes), bajo (de 35 a 70), normal (de 78 a 117), alto (de 208 a 260), alto x2 (de 416 a 468 (520 si es x10)) y muy alto (de 832 a 936 (1040 x10)).
-**Una mina de oro: muy bajo (de 12 a 18 bolsas por mes), bajo (de 32 a 40), normal (de 56 a 63), alto (de 112 a 126), alto x2 (de 224 a 252) y muy alto (de 448 a 504).
-
-
-Para simplificar las cosas, vamos a ver cuáles son las posibilidades de los mapas de 256x256 (1 cambio máximo al mes = 1 cambio máximo por mes de producción de la industria):
-
-*La posibilidad de un cambio de producción de cada mes es:
-** 50% for only_decrease industry to decrease (currently only Temperate terrain Oil Wells) or
-** 50% for 1/3 chance (=16.7%) that other industry (non only_decrease) changes production.
+Ejemplos de niveles de producción:
+*Una mina de carbón: muy bajo (de 32 a 40 toneladas al mes), bajo (de 64 a 72), normal (de 120 a 135), alto (de 240 a 270), alto x2 (de 480 a 540) y muy alto (de 960 a 1080).
+*Un bosque: muy bajo (de 32 a 64 toneladas al mes), bajo (de 35 a 70), normal (de 78 a 117), alto (de 208 a 260), alto x2 (de 416 a 468 (520 si es x10)) y muy alto (de 832 a 936 (1040 x10)).
+*Una mina de oro: muy bajo (de 12 a 18 bolsas al mes), bajo (de 32 a 40), normal (de 56 a 63), alto (de 112 a 126), alto x2 (de 224 a 252) y muy alto (de 448 a 504).
 
 
-*Si un cambio de producción se produce (aprox. un 16,7% de probabilidad por mes):
-** Para una industria que tiene un servicio pobre o nulo (menos de 60% de su producción es transportada): '''33%''' de posibilidades de que incremente, '''67%''' de posibilidades de que disminuya.
+Para simplificar las cosas, vamos a ver cuáles son las posibilidades para mapas de 256x256 (un cambio máximo al mes, o lo que es lo mismo, solo cambia la producción una industria al mes):
+
+*La posibilidad de que se produzca un cambio en la producción cada mes es de:
+** un 50% para que disminuya una industria que solo puede disminuir (actualmente solo los pozos petrolíferos del clima templado) o
+** un 50% por 1/3 (=16.7%) para que otras industrias (que no solo disminuyen) tengan cambios en la producción.
+
+*Si se produce un cambio en la producción (aprox. un 16,7% de probabilidades al mes):
+** Para una industria que tiene un servicio pobre o nulo (con menos de un 60% de su producción transportada): '''33%''' de posibilidades de que incremente, '''67%''' de posibilidades de que disminuya.
 ** Para una industria que tiene un buen servicio (superior al 60%): '''67%''' de posibilidades de que incremente, '''33%''' de posibilidades de que disminuya.
-** No hay bonificación por un servicio excelente con la economía estable.
+** No hay bonificación por un servicio excelente con la [[es/Archive/Manual/Settings/Opciones avanzadas/Economía#activar-economia-suave-cambios-mas-pequenos|economía suave]].
 
 
 *Para calcular la probabilidad de un cambio en particular, es decir, 50% * 1/3 * 33% = 5,56%:
-** Servicio pobre: '''5.56%''' de 1 posible cambio por mes siendo de aumento y '''11.12%''' de 1 posible cambio por mes siendo de disminución.
-** Buen servicio: '''11.12%''' de 1 posible cambio por mes siendo de aumento y '''5.56%''' de 1 posible cambio por mes siendo de disminución.
+** Para una industria con servicio pobre: Un '''5,56%''' de posibilidades de que se produzca un incremento en la producción y un '''11,12%''' de probabilidades de que se produzca una disminución, al mes.
+** Para una industria con buen servicio: Un '''11,12%''' de probabilidades de que se produzca un incremento en la producción y un'''5,56%''' de probabilidades de que se produzca una disminución, al mes.
 
-====Reglas de economía fluctuante====
-*La posibilidad de un cambio de producción de cada mes es del '''4.5%''', es decir, el 4,5% de la producción industrial en la lista de cambios de producción.
+====Reglas para la economía suave====
+:''Distíngase [[es/Archive/Manual/Settings/Opciones avanzadas/Economía#activar-economia-suave-cambios-mas-pequenos|economía suave]] (opciones avanzadas) y [[es/Archive/Manual/Settings/Dificultad#economia|economía estable]] (opciones de dificultad)''
+
+*La posibilidad de un cambio en la producción cada mes es del '''4,5%''', es decir, el 4,5% de las industrias productoras, de la lista de industrias, cambia su producción.
 
 
 *Si una producción cambia puede ocurrir lo siguiente:
-** Para una industria que tiene un servicio pobre o nulo (menos de 60% de su producción es transportada): '''33%''' de posibilidades de que incremente, '''67%''' de posibilidades de que disminuya. 
-** Para una industria que tiene un buen servicio (superior al 60%): '''67%''' de posibilidades de que incremente, '''33%''' de posibilidades de que disminuya. 
-** Para una industria que tiene un servicio excelente (superior al 80%): '''83%''' de posibilidades de que incremente, '''17%''' de posibilidades de que disminuya.
+** Para una industria que tiene un servicio pobre o nulo (cuando se transporta menos del 60% de su producción): un '''33%''' de posibilidades de que se incremente, un '''67%''' de posibilidades de que disminuya. 
+** Para una industria que tiene un buen servicio (superior al 60%): un '''67%''' de posibilidades de que se incremente, un '''33%''' de posibilidades de que disminuya. 
+** Para una industria que tiene un servicio excelente (superior al 80%): un '''83%''' de posibilidades de que se incremente, un '''17%''' de posibilidades de que disminuya.
 
 
-*Estos dos se multiplican entre sí, es decir, 4,5% * 33% = 1,5%:
-** Servicio pobre o nulo: '''1.5%''' de que incremente y '''3.0%''' para que disminuya.
-** Buen servicio: '''3.0%''' de que incremente y '''1.5%''' para que disminuya.
-** Servicio excelente: '''3.75%''' de que incremente y '''0.75%''' para que disminuya.
+*Estos dos factores se multiplican entre sí, es decir, 4,5% * 33% = 1,5%:
+** Servicio pobre o nulo: '''1.5%''' de que se incremente y '''3.0%''' de que disminuya.
+** Buen servicio: '''3.0%''' de que se incremente y '''1.5%''' de que disminuya.
+** Servicio excelente: '''3.75%''' de que se incremente y '''0.75%''' de que disminuya.
 
 
-*Con la opción [[en/Archive/Manual/Settings/Smooth economy|economía fluctuante]] activada, los cambios de producción por mes son entre el 3 y el 23%:
-**Industrias con producciones muy bajas, (de 12 a 40 toneladas por mes) tendrán cambios mayores.
-**Las industrias de materia prima producen carga 8 o 9 veces al mes (o 10 veces para los bosques de alta producción). La producción mensual de las industrias es el ''valor base'' multiplicado por 8 o 9 (o 10 para los bosques de alta producción).  Por ejemplo, en una mina de carbón, el ''valor base'' de entrega de mineral de carbón es de 15 toneladas, con lo que se calcula que la producción mensual es de 120 o 135 toneladas. Este ''valor base'' tiene un tope de 255, por lo que la máxima producción mensual posible para cualquier industria es de 2040 o 2295 (o 2550 con bosque de alta producción).[http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
+*Con la opción [[es/Economía suave|economía suave]] activada, los cambios en la producción al mes son entre el 3 y el 23%:
+**Las industrias con producciones muy bajas, (de 12 a 40 toneladas al mes) tendrán cambios mayores.
+**Las industrias primarias producen carga 8 ó 9 veces al mes (ó 10 veces si se trata de los bosques de alta producción). La producción mensual de las industrias es el ''valor base'' multiplicado por 8 ó 9 (ó 10 para los bosques de alta producción).  Por ejemplo, en una mina de carbón, el ''valor base'' de entrega de mineral de carbón es de 15 toneladas, con lo que se calcula que la producción mensual es de 120 ó 135 toneladas. Este ''valor base'' tiene un tope de 255, por lo que la máxima producción mensual posible para cualquier industria es de 2040 ó 2295 (ó 2550 para un bosque de alta producción). [http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
 
-====Examples====
+====Ejemplos====
+{{es/Pendiente de traducción}}
 If a coal mine has 70% of its output transported, there is a '''3%''' chance (4.5% * 67%) of a production increase from 3-23% and a '''1.5%''' chance (4.5% * 33%) of a production decrease from 3-23% (but 13% on average).
 
 (1 + (0.03 - 0.015) * 0.13) ^12 - 1 = 0.0237 or '''2.37%'''
