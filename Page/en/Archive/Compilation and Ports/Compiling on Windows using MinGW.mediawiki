@@ -32,27 +32,30 @@ And if disk C: (or where you have msys installed) is not disk where your Windows
 <pre>C:</pre>
 After saving the file, right click on msys.bat and choose "Run as Administrator". After that programs requiring admin rights, such as install and patch will work. (You will need right-click and run as administrator every time you run msys).
 
-==Install Subversion==
-# Create a new folder called local in the directory where MSYS is installed (by default C:\MinGW\msys\1.0, so the new directory will be C:\MinGW\msys\1.0\local).
-# Unzip the folders ''bin'', ''iconv'', ''licenses'', ''share'' from the Subversion zip file (see link at the list of packages) and place into the new folder created in the previous step.
-
-==Testing the MinGW installation==
-<ul><li>Run MSYS.</li>
+==Testing MinGW/MSYS installation==
+<ul><li>Open the MinGW shell (MSYS).</li>
 <li>Run the following commands:<pre>make -v
-gcc -v
-svn help</pre></li>
+gcc -v</pre></li>
 <li>They should output something.  Check if something goes wrong.</li></ul>
 
-==Compilation of the required libraries==
-For additional information about these libraries, check part 7.1) of OpenTTD Readme.
+==Compilation and installation of the required packages==
+For additional information about the libraries, check part 7.1) of OpenTTD Readme. To compile and install these packages, first you need to install the following commands:
 
-Alternatively to the wget and tar/unzip steps, you can just download all libraries and extract them to your MSYS home folder (by default it will be C:\MinGW\msys\1.0\home\UserName). To install wget you have to type in MSYS:
+<pre>mingw-get install msys-wget
+mingw-get install msys-unzip
+mingw-get install msys-patch</pre>
 
-<pre>mingw-get install msys-wget</pre>
+
+Alternatively to the wget and tar/unzip steps that appear in the following sections, you can just download all libraries and extract them to your MSYS home folder (by default it will be C:\MinGW\msys\1.0\home\UserName).
+
 
 If you get following error:
 <code>configure: error: cannot run C compiled programs.</code>
 , <u>one of the reasons</u> could be your anti-virus, that silently deletes a.exe binary files. Try temporary to disable anti-virus software and compile again.
+
+==Install Subversion==
+# Create a new folder called local in the directory where MSYS is installed (by default C:\MinGW\msys\1.0, so the new directory will be C:\MinGW\msys\1.0\local).
+# Unzip the folders ''bin'', ''iconv'', ''licenses'', ''share'' from the Subversion zip file (see link at the list of packages) and place into the new folder created in the previous step.
 
 ==Compiling zlib==
 In MSYS:
@@ -96,8 +99,7 @@ cd ..</pre>
 ==Compiling xz==
 Liblzma (which is a part of xz) is required for compiling OpenTTD since [http://vcs.openttd.org/svn/changeset/21044/ r21044]. It also needs pkg-config. In MSYS:
 
-<pre>mingw-get install msys-unzip
-wget http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-runtime_0.18.1.1-2_win32.zip
+<pre>wget http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-runtime_0.18.1.1-2_win32.zip
 unzip gettext-runtime_0.18.1.1-2_win32.zip -d /mingw
 wget http://ftp.gnome.org/pub/gnome/binaries/win32/glib/2.26/glib_2.26.0-2_win32.zip
 unzip glib_2.26.0-2_win32.zip -d /mingw
@@ -131,10 +133,6 @@ If you cannot compile, don't panic. Sometimes it may be due to coding errors, bu
 ./configure
 make</pre>Some warnings may be shown, but they usually do not matter.</li>
 <li>The compiling is complete when the openttd.exe file is made. It will be copied to the <code>./bin</code> subfolder.</li></ol>
-
-If you plan to apply patches files to OpenTTD source you will need to install patch. You can do this easily by typing in MSYS:
-
-<pre>mingw-get install msys-patch</pre>
 
 ==Testing OpenTTD==
 To test your freshly compiled OpenTTD, you will need to install a [http://wiki.openttd.org/Base_graphics base graphics set]. The simplest solution is to install [http://wiki.openttd.org/Opengfx#Installing_OpenGFX_Manually OpenGFX].
