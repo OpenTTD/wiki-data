@@ -16,6 +16,7 @@ This tutorial has been tested with the following versions of the required packag
 * [http://ftp.gnome.org/pub/gnome/binaries/win32/glib/2.26/glib_2.26.0-2_win32.zip glib_2.26.0-2]
 * [http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/pkg-config_0.23-3_win32 pkg-config_0.23-3]
 * [http://tukaani.org/xz/xz-5.0.0.tar.gz xz-5.0.0]
+* [http://download.icu-project.org/files/icu4c/4.0.1/icu4c-4_0_1-src.zip libicu-4.0.1]
 
 ==Installing MinGW and MSYS==
 #Download and run mingw-get-inst. (download above)
@@ -119,6 +120,19 @@ cd xz-5.0.0
 ./configure --prefix=/mingw/ --enable-static
 make install
 cd ..</pre>
+
+==Compiling libicu==
+libicu is an optional library for compiling OpenTTD. It is used for handling of right-to-left scripts (e.g. Arabic and Persian) and it can take a long time to compile, so you can safely omit this step if you don't require libicu. In MSYS:
+
+<pre>wget http://download.icu-project.org/files/icu4c/4.0.1/icu4c-4_0_1-src.zip
+unzip icu4c-4_0_1-src.zip
+cd icu
+wget http://devs.openttd.org/~terkhen/libicu_4_0_1_mingw32.diff
+patch -p1 -i libicu_4_0_1_mingw32.diff
+cd source
+./configure --prefix=/mingw --enable-static --disable-strict
+make install
+cd ../..</pre>
 
 ==Compiling 1.0.x and previous versions==
 Compiling code from a revision earlier than [http://vcs.openttd.org/svn/changeset/19285/ r19285] (which includes any stable from 1.0.x downwards) requires an additional step to ensure that the installed libraries are detected by OpenTTD. In MSYS:
