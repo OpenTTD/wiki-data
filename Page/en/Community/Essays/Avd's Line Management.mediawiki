@@ -29,11 +29,21 @@ Allows players to group trains with the same orders, and allows you to give orde
 
 ''Detailed information about this feature will be explained on [[en/Avd/Lines/Route]]''
 
-Abstracts of shared orders (but not depending on it). Allows grouping of same-like orders.
+Routes are an abstract version orders, given to vehicles without dependencies of vehicle types. Routes can be a template, allowing other routes, shared orders or simple orders to extend them.
 
-Should support subroutes (routes with more details - thanks to templating), connecting vehicles with shared orders, or no shared orders at all.
+To complete a template, it requires orders in the form of parameters. There are 2 types:
 
-It wil also support routes of multiple types of vehicles (where allowed) - Routes are self vehicle type independent
+- A single orderlist. An example of this would be a huge drop station, where the load order still have to be defined for each (shared) order list.
+
+- An array of orderlists. An example of could be a drop stations, with multiple stations to be served only when a train is full. This can be used for feeders.<br />A template can define a pre and a post orderlists, to be executed before and after each item of the array. It would also support orders to break, redo or continue (go to next item) the loop.
+
+An orderlist can exist of 0 or more orders. If an order is required, this would be 1 or more orders. Support for multiple orders instead of 1 order must prevent cases where orders (such as waypoints) are required.
+
+== Limitations for orders ==
+
+With adding such features, there should also be added some limitations to prevent impossible implementations. Here a short list:
+
+* The go to order can only refer to orders in his own list of orders, you can't jump to an order declared in a template
 
 == Vehicle management ==
 
