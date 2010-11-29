@@ -125,6 +125,9 @@ cd ..</pre>
 libicu is an optional library for compiling OpenTTD. It is used for handling of right-to-left scripts (e.g. Arabic and Persian) and it can take a long time to compile, so you can safely omit this step if you don't require libicu.
 
 
+{{en/Note| The application of the second patch is an optional step. It will reduce the size of compiled OpenTTD, at the cost of losing sorting data for most languages.}}
+
+
 {{en/Warning| Compiling with libicu will greatly increase the size of the resulting OpenTTD executable.}}
 
 
@@ -135,6 +138,8 @@ unzip icu4c-4_0_1-src.zip
 cd icu
 wget http://devs.openttd.org/~terkhen/libicu_4_0_1_mingw32.diff
 patch -p1 -i libicu_4_0_1_mingw32.diff
+wget http://devs.openttd.org/~terkhen/libicu_reduce_icudata_size.diff
+patch -p1 -i libicu_reduce_icudata_size.diff
 cd source
 ./configure --prefix=/mingw --enable-static --disable-strict --disable-threads
 make install
