@@ -138,27 +138,27 @@ This code loops over all the whole route. For every element, it checks whether i
  {
    /* Get a list of all towns on the map. */
    local townlist = AITownList();
-
+ 
    /* Sort the list by population, highest population first. */
    townlist.Valuate(AITown.GetPopulation);
    townlist.Sort(AIAbstractList.SORT_BY_VALUE, false);
-
+ 
    /* Pick the two towns with the highest population. */
    local townid_a = townlist.Begin();
    local townid_b = townlist.Next();
-
+ 
    /* Print the names of the towns we'll try to connect. */
    AILog.Info("Going to connect " + AITown.GetName(townid_a) + " to " + AITown.GetName(townid_b));
  
    /* Tell OpenTTD we want to build normal road (no tram tracks). */
    AIRoad.SetCurrentRoadType(AIRoad.ROADTYPE_ROAD);
-
+ 
    /* Create an instance of the pathfinder. */
    local pathfinder = RoadPathFinder();
-
+ 
    /* Set the cost for making a turn extreme high. */
    pathfinder.cost.turn = 5000;
-
+ 
    /* Give the source and goal tiles to the pathfinder. */
    pathfinder.InitializePath([AITown.GetLocation(townid_a)], [AITown.GetLocation(townid_b)]);
  
