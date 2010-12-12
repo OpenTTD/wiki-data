@@ -22,23 +22,27 @@ I have the feeling that many people, like me, are unhappy with the current share
 
 === Simple orders ===
 
-Allows players to create simple orders, ideal for a small network with few vehicles.
+Simple orders for 1 vehicle, cloning (without the use of special actions) will result in 2 independent ordersets.
 
 === Shared orders ===
 
-Allows players to group trains with the same orders, and allows you to give orders for many vehicles at the same time.
+1 orderset for many trains, "shared" cloning a vehicle with simple orders or shared orders would not create new orderlists, but add a train into a group with the same orders.
 
 === Routes (or incomplete (shared) orders) *NEW*===
 
 ''Detailed information about this feature will be explained on [[en/Avd/Lines/Route]]''
 
-Routes are an abstract version orders, given to vehicles without dependencies of vehicle types. Routes can be a template, allowing other routes, shared orders or simple orders to extend them.
+Routes are abstract version orders, you can give them to any vehicle type in the map, on condition that routes are compatible (waypoints for example are not compatible with any vehicle type).
 
-To complete a template, it requires orders in the form of parameters. There are 2 types:
+Routes may be simple orderlists, with or without missing parameters. A route with missing parameters is called a template.
 
-* A single orderlist. An example of this would be a huge drop station, where the load order still have to be defined for each (shared) order list.
+Templates could be close to programming language, with support for loops, conditions and ways to sort orders in functions, but is out of scope of this article.
 
-* An array of orderlists. An example of could be a drop stations, with multiple stations to be served only when a train is full. This can be used for feeders.<br />A template can define a pre and a post orderlists, to be executed before and after each item of the array. It would also support orders to break, redo or continue (go to next item) the loop.
+To complete a template, it requires orders in the form of parameters. There are 2 'data' types:
+
+* A single orderlist. This is the same as a simple orderlist.
+
+* An array of orderlists. A list of orderlists, useful to share multiple orders. An example would be if there is 1 drop station and multiple load stations. The template could have 2 parameters in this case: an orderlist to reach the drop station and an array or orderlists to reach the load stations.
 
 An orderlist can exist of 0 or more orders. If an order is required, this would be 1 or more orders. Support for multiple orders instead of 1 order must prevent cases where more then 1 orders (such as waypoints) are required.
 
