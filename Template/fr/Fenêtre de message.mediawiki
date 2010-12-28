@@ -1,0 +1,147 @@
+<noinclude>[[Translation:Template/en/Ambox]]</noinclude><!-- 
+      Adaptation du code Ambox de Wiki
+
+--><noinclude></noinclude><includeonly><table style="{{#IF: {{{style|}}} | {{{style}}} | margin: 0px 10% 0px 10%; border: 1px solid #aaa; background:#fbfbfb}}"><tr>
+<td style="border-left: 10px solid {{#switch:{{{type|}}} 
+  | suppression=#b22222;
+  | contenu    =#f28500;
+  | style      =#f4c430;
+  | mouvement  =#9932cc;
+  | protection =#bba;
+  | #default   =#1e90ff;
+}} padding: 2px 0 2px 0.5em;"><div style="width: 52px;">[[File:{{#if:{{{image|}}}
+  | {{{image}}}
+  | {{#switch:{{{type|}}}
+    | suppression=Deletion.png
+    | contenu    =Content.png
+    | style      =Edit-clear.png
+    | mouvement  =Move.png
+    | protection =Protection.png
+    | #default   =Notice.png
+  }}
+}}|40px]]</div></td><td style="{{#IF: {{{text-style|}}} | {{{text-style}}} | border: none; padding: 0.25em 0.9em; width: 100%;}}"> {{{text|}}} </td>
+{{#if:{{{imageright|}}}
+<td style="padding: 2px 0.5em 2px 0;">Inutile pour le moment</td>
+}}</tr></table><!-- 
+Détecte et informe sur l'utilisation avec un paramètre [[Template:Fenêtre de message/Fr#Types de fenêtre de message d'un article|"type"]] erroné:
+-->{{#switch:{{{type|}}}
+|            = <!--Aucun type fourni est également une entrée valide --> 
+| suppression=
+| contenu    = 
+| style      =
+| mouvement  =
+| protection =
+| annonce    =
+| #default   = <div style="text-align: center;">Cette fenêtre de message utilise un paramètre "type={{{type|}}}" invalide et doit être corrigée.</div>[[Category:fr/Mauvaise syntaxe]]
+}}</includeonly><noinclude>
+
+==Utilisation==
+Exemple d'une utilisation simple:
+
+<pre>
+{{fr/Fenêtre de message| texte = Un texte de message.}}
+OR
+{{fr/Fenêtre de message| type = contenu
+| texte = Un texte d'avertissement.
+}}
+</pre>
+
+{{fr/Fenêtre de message| texte = Un texte de message.}}
+{{fr/Fenêtre de message| type = contenu | texte = Un texte d'avertissement.}}
+
+
+==Liste des paramètres disponibles==
+<pre>
+{{Fenêtre de message/Fr
+| type       = suppression / contenu / style / annonce / mouvement / protection
+| image      = Picture.Png / Picture.Png|alt=Picture (si le paramètre n'est pas présent, l'icône du type par défaut sera fournie)
+| texte      = Texte pour une grande fenêtre, pour le sommet des articles.
+
+| style      = Style de table différent (déconseillé de l'utiliser).
+| texte-style= idem ci-dessous pour le texte.
+</pre>
+
+
+
+=== Types des fenêtres de message des articles ===
+
+Les exemples suivants utilisent différents paramètres '''type''', mais n'utilisent pas de paramètre image; ils utilisent donc les images par défaut pour chaque type.
+
+
+{{fr/Fenêtre de message| type  = suppression
+| texte = type=<u>suppression</u> – Problèmes de suppression, comme {{en/S|fr/Suppression}}.
+}}
+{{fr/Fenêtre de message| type  = contenu
+| texte = type=<u>contenu</u> – Problèmes de contenu, comme {{en/S|fr/Avertissement}}.
+}}
+{{fr/Fenêtre de message| type  = style
+| texte = type=<u>style</u> – Problèmes de style, comme {{en/S|fr/Nettoyage}}.
+}}
+{{fr/Fenêtre de message| type  = annonce
+| texte = type=<u>annonce</u> – Notes sur l'article, comme {{en/S|fr/Courant}}.
+}}
+{{fr/Fenêtre de message| type  = mouvement
+| texte = type=<u>mouvement</u> – Propositions de fusion, découpe et inter-wiki, comme {{en/S|fr/Découpe}}.
+}}
+{{fr/Fenêtre de message| type  = protection
+| texte = type=<u>protection</u> – Notes de protection, comme {{en/S|fr/Historique}}.
+}}
+
+=== Autres images ===
+
+Les images par défaut montrées ci-dessus sont présentes essentiellement pour des raisons pratiques. Très souvent, il sera plus approprié d'utiliser des images spécifiques. Cet exemple utilise le paramètre '''image''' pour spécifier une image différente de celles par défaut.
+
+{{fr/Fenêtre de message| type  = annonce
+| image =en/Manual/OpenttdManual.png|alt= Manuel Openttd
+| texte = Quelque chose Quelque chose Quelque chose
+}}
+
+[[Category:fr/Templates|A]][[Category:fr/Boîtes de message|A]]
+</noinclude><!--
+
+  CSS si l'option devient disponible
+
+/* Styles des fenêtres de message des articles */
+table.ambox {
+    margin: 0px 10%;   /* 10% = Ne débordera pas sur les autres éléments */
+    border: 1px solid #aaa; 
+    border-left: 10px solid #1e90ff;    /* "Annonce" bleue par défaut */
+    background: #fbfbfb; 
+}
+table.ambox + table.ambox {   /* Bordure simple entre les boîtes empilées. */
+    margin-top: -1px;
+}
+.ambox th.mbox-text, 
+.ambox td.mbox-text {            /* Les cellules du corps du message */
+    padding: 0.25em 0.5em;       /* 0.5em gauche/droite */
+}
+.ambox td.mbox-image {           /* La cellule de l'image à gauche */
+    padding: 2px 0 2px 0.5em;    /* 0.5em gauche, 0px droite */
+}
+.ambox td.mbox-imageright {      /* La cellule de l'image de droite */
+    padding: 2px 0.5em 2px 0;    /* 0px gauche, 0.5em droite */
+}
+
+table.ambox-notice {
+    border-left: 10px solid #1e90ff;    /* Bleu */
+}
+table.ambox-speedy {
+    border-left: 10px solid #b22222;    /* Rouge */
+    background: #fee;                   /* Rose */
+}
+table.ambox-delete {
+    border-left: 10px solid #b22222;    /* Rouge */
+}
+table.ambox-content {
+    border-left: 10px solid #f28500;    /* Orange */
+}
+table.ambox-style {
+    border-left: 10px solid #f4c430;    /* Jaune */
+}
+table.ambox-move {
+    border-left: 10px solid #9932cc;    /* Violet */
+}
+table.ambox-protection {
+    border-left: 10px solid #bba;       /* Gris métallisé */
+}
+-->
