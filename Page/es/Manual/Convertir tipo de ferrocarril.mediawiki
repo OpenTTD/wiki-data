@@ -1,31 +1,15 @@
 [[Translation:en/Manual/Convert rail]]
-{{es/Traducción|en/Manual/Convert rail|85|texto=Algunas partes no se han podido traducir por ser demasiado enfarragosas y se han dejado en inglés. Si tiene suficiente nivel de inglés puede colaborar traduciendo lo que falta.
-}}
+{{es/Esbozo}}
 
-El botón de [[File:en/Manual/Convert rail.png]] '''convertir tipo de ferrocarriles''' activará una herramienta de arrastrar y soltar que le permite convertir un tipo de vía a otro (ferrocarril -> monorraíl -> maglev). Esta herramienta se puede utilizar en [[en/Manual/Building tracks|vías de ferrocarril]], [[es/Manual/Construir depósitos de trenes|depósitos]], [[en/Manual/Stations|estaciones]] y [[en/Manual/Waypoints|puntos de ruta]].
+El botón de [[File:en/Manual/Convert rail.png]] '''convertir tipo de ferrocarriles''' activa una herramienta de tipo arrastrar-y-soltar que le permite convertir un tipo de ferrocarril a un tipo distinto (ferrocarril -> monorraíl -> maglev).  Esta herramienta se puede utilizar con las [[es/Manual/Construir vías|vías]], los [[es/Manual/Construir depósitos de trenes|depósitos]], las [[es/Manual/Estaciones|estaciones]] y los [[es/Manual/Puntos de ruta|puntos de ruta]].
 
-Los trenes que tenga en estén circulación se deben enviar al [[es/Manual/Depósitos|depósito]] y luego deben ser [[en/Manual/Sell entire train|vendidos por completo]].
+Los trenes que estén en funcionamiento se deben enviar a un depósito para [[es/Vender el tren entero|venderlos]].
 
-Sólo los depósitos vacíos podrán ser mejorados.
+{{es/Nota|Sólo los depósitos vacíos podrán convertirse (excepto si el tipo de ferrocarril es compatible).}}
 
-Consejo: Para ahorrar tiempo en convertir un tren con una gran cantidad de pedidos de un tipo de vía a otro, envíe el tren a un depósito y [[en/Manual/Sell entire train|venda el tren]]. Mientras que la ventana de depósito aún permanezca abierta, convierta el depósito al nuevo tipo de vía y el próximo tren que construya tendrá todas las órdenes de su anterior tren. La ventana del depósito debe permanecer abierta durante toda la operación. Tenga en cuenta que sólo se puede convertir un tren a la vez utilizando este método, pero también se puede convertir el almacén de nuevo al anterior tipo de vía, por lo que puede convertir otro tren con el mismo método.
+Consejo: Para ahorrar tiempo cuando convierta un tren con una gran cantidad de órdenes de un tipo de ferrocarril a otro, envíe el tren a un depósito y [[es/Vender el tren entero|véndalo]] y, con la ventana del depósito todavía abierta, convierta el depósito al nuevo tipo de ferrocarril. El próximo tren que construya tendrá todas las órdenes de su tren anterior. La ventana del depósito debe permanecer abierta durante toda la operación. Tenga en cuenta que de esta forma sólo se puede convertir un tren utilizando este método... aunque también puede volver a convertir el almacén al viejo tipo de ferrocarril para repetir toda la operación con otro tren usando el mismo método.
 
-===0.5.0 y versiones posteriores===
-
-Con la introducción de los ferrocarriles electrificados a partir de la versión r4152, la herramienta de conversión de ferrocarril ofrece esta opción que le permite convertir las vías normales a vías electrificadas.
-
-Para esta conversión, la actualización de los trenes no es de primera necesidad ya que los trenes de vapor y diesel funcionan perfectamente en los carriles electrificados. Los trenes electrificados, sin embargo, no podrán circular las vías sin actualizar.
-
-== Easier converting of trains ==
-For this method you have to compile from source, because a line of code must be commented out.
-You have to find the file rail_cmd.c and open it in an editor. Find the function
- CommandCost CmdConvertRail(TileIndex tile, DoCommandFlag flags, uint32 p1, uint32 p2, const char *text)
-and change the third line of code from
- if (!IsCompatibleRail(type, totype) && !EnsureNoVehicleOnGround(tile)) continue;
-to
- //if (!IsCompatibleRail(type, totype) && !EnsureNoVehicleOnGround(tile)) continue;
-
-En el caso de pasar de vías normales a vías electrificadas, es posible convertir los depósitos, incluso si hay trenes en el mismo. Tiene que vender la locomotora y reemplazar el depósito por un depósito electrificado, comprar la nueva locomotora eléctrica y tendrá las órdenes del antiguo automáticamente. Pero cuidado, es posible convertir solamente el depósito con trenes en él y éstos sean incapaces de recorrer las vías actualizadas (a no ser de que tenga activada la opción de [[en/Manual/Vehicles#disable-electric-rails|desactivar trenes eléctricos]]).
+Si convierte las vías a un tipo de ferrocarril compatible (por ejemplo, de ferrocarril normal a ferrocarril electrificado), actualizar los trenes no será de primera necesidad, ya los trenes de vapor y diésel pueden funcionar perfectamente en las vías electrificadas. Los trenes eléctricos, sin embargo, no pueden circular por las casillas sin electrificar.
 
 [[Category:es/Manual/Construcción]]
 [[Category:es/Manual/Ferrocarril]]
