@@ -1,52 +1,51 @@
 [[Translation:en/Archive/Manual/Yet Another Pathfinder]]
-{{fr/Traduction|en/Archive/Manual/Yet Another Pathfinder|0}}
-{{en/Expand|configuration}}
+{{fr/Compléter|Configuration}}
 
-'''Yet Another Pathfinder (YAPF)''' is the latest software algorithm used by [[en/Manual/Main Page]] to control vehicle movement.
+'''Encore une autre détermination de chemin (YAPF)''' est le dernier algorithme logiciel utilisé par [[fr/Manual/Main Page|OpenTTD]] pour contrôler le déplacement des véhicules.
 
-YAPF is the third attempt at creating a pathfinder algorithm for OpenTTD. The first new algorithm was [[en/Archive/Manual/Settings/New train pathfinding|New Train Pathfinding (NTP)]], which only works on trains. The second was [[en/Archive/Manual/Settings/New global pathfinding|New global Pathfinding (NPF)]], which works on all vehicles and is quite intelligent, but bogs down the system after many vehicles have been built. The goal of YAPF is to provide the power and flexibility of NPF while at the same time being very optimized, relieving the CPU load.
+YAPF est la troisième tentative pour créer un algorithme de détermination de chemin pour OpenTTD. Le premier nouvel algorithme était [[fr/Archive/Manual/Settings/Nouvelle détermination de chemin de train|Nouvelle détermination de chemin de train (NTP)]], qui ne fonctionnait que pour les trains. Le deuxième était [[fr/Archive/Manual/Settings/Nouvelle détermination de chemin globale|Nouvelle détermination de chemin globale (NPF)]], qui fonctionne pour tous les véhicules et est un peu plus intelligent, mais plante le système quand beaucoup de véhicules ont été construits. Le but de YAPF est de fournit la puissance et la flexibilité de NPF tout en étant très optimisé sans trop charger le CPU.
 
-The remainder of this article is meant for developers.
+Le reste de cet article est destiné aux développeurs.
 
-== Improvements over NPF ==
+== Améliorations par rapport à NPF ==
 
-According to a [http://www.tt-forums.net/viewtopic.php?t=32774 forum post by KUDr], there are 3 major improvements in YAPF compared to NPF:
+Selon un [http://www.tt-forums.net/viewtopic.php?t=32774 billet du forum par KUDr], il y a trois améliorations majeures dans YAPF par rapport à NPF:
 
-*NPF creates a node for each tile while YAPF extends the node by following the tile/trackdir until something important (station, waypoint, choice, etc.) is seen. This node extension is called a "segment".
-*YAPF caches its segments - begin/end tile/trackdir, cost, last signal tile/trackdir, etc.
-*YAPF has a much more complex structure - it is template based to allow the compiler to optimize calls between YAPF modules by inlining.
+*NPF crée un nœud pour chaque case alors que YAPF étend le nœud en suivant la direction de la voie de la case jusqu'à atteindre quelque chose d'important (gare, point de passage, embranchement, etc.). Cette extension de nœud est appelée un "segment".
+*YAPF met en cache ses sergments -  case et direction de voie de début et de fin, coût, dernier signal de case et direction de voie, etc.
+*YAPF a une structure beaucoup plus complexe - il est basé sur des modèles pour permettre au compilateur d'optimiser les appels entre modules de YAPF en ligne.
 
-These improvements increase the performance of YAPF over NPF but also make the code more complex and harder to understand.
+Ces améliorations accroissent la performance de YAPF par rapport à NPF mais rendent aussi le code plus complexe et difficile à comprendre.
 
-== Tuning ==
-Several options of YAPF can be tuned up. I will not describe all of them because they are clear what they do.<br>
-There are 4 options (3 actually) that are quite mysterious:<br>
+== Réglages ==
+Plusieurs options de YAPF peuvent être réglées. Je ne les décrirai aps toutes parce que ce qu'elles font est clair.<br>
+Il y a 4 options (en fait 3) qui sont assez mystérieuses:<br>
 rail_look_ahead_max_signals = 10<br>
 rail_look_ahead_signal_p0 = 500<br>
 rail_look_ahead_signal_p1 = -100<br>
 rail_look_ahead_signal_p2 = 5<br>
 <br>
-First one checks how many signals YAPF have look ahead of our train. The next options are used to calculate penalty array using following formula, where the parameter "i" is the value of the rail_look_ahead_max_signals :<br>
+La première vérifie combien de signaux YAPF doit rechercher en avant de notre train. Les options suivantes sont utilisées pour calculer un tableau de pénalités en utilisant la formule suivante, où le paramètre "i" est la valeur de rail_look_ahead_max_signals :<br>
 p=p0 + p1*i + p2*i*i<br>
-So, we have following array of signal penalties for the specified number in rail_look_ahead_max_signals as result:<br>
+Donc, nous avons le tableau de pénalités de signaux suivant pour le nombre spécifié dans rail_look_ahead_max_signals comme résultat:<br>
 p[]={500,405,320,245,180,125,80,45,20,5}
 <br>
-Now some examples.<br>
-For (the first) 3 signals: Red,Red,Red: penalty=500+405+320=1225<br>
-For (the first) 4 signals: Red,Green,Red,Green: penalty=500+0+320+0=820<br>
+Maintenant, quelques exemples.<br>
+Pour (les premiers) 3 signaux: Rouge,Rouge,Rouge: pénalité=500+405+320=1225<br>
+Pour (les premiers) 4 signaux: Rouge,Vert,Rouge,Vert: pénalité=500+0+320+0=820<br>
 <br>
-The final cost will be added to path cost. This can help to reduce traffic jams when we have some trains blocking a way (4 semaphores ahead) and we have alternate way.<br>
+Le coût final sera ajouté au coût du chemin. Cela peut aider à réduire les embouteillages quand nous avons des trains bloquant un chemin (4 sémaphores à l'avance) et que nous avons un autre chemin.<br>
 <br>
-This is internal YAPF stuff and is not supposed to be tuned really. Developer put a lot of effort to calculate right values into p0,p1,p2.<br>
-The only tunable value is p1 penalty. Fine value range is from -100 to -90. If you go outside that range, penalty array will have weird values and trains would start to go not as you expect.<br>
-If you want more agresive load balancing go for p1=-90 and you will get following array:<br>
+Ceci relève des affaires internes de YAPF et n'est pas supposé être véritablement réglé. Les développeurs ont fait de gros efforts pour calculer les bonnes valeurs dans p0,p1,p2.<br>
+La seule valeur paramétrable est la pénalité pl. L'éventail des valeurs convenables va de -100 à -90. Si vous sortez de cet intervalle, le tableau de pénalités aura des valeurs bizarres et des trains pourraient commencer à aller là où vous ne les attendez pas.<br>
+Si vous voulez une répartition plus agressive, essayez p1=-90 et vous obtiendrez le tableau suivant:<br>
 p[]={500,415,340,275,220,175,140,115,100,95}<br>
 
-== Dependent Projects ==
-Pathfinding is very important part of OpenTTD, and introducing a new pathfinder means extensive changes in the code. This was the reason, why development of some new features had been put on hold, until YAPF was finished. As YAPF is now fully introduced, these projects may again be developed.
+== Projets dépendants ==
+La détermination de chemin est une part très importante de OpenTTD, et introduire une nouvelle détermination signifie des changements massifs dans le code. C'était la raison pour laquelle le développement de certaines fonctionnalités nouvelles a été suspendu jusqu'à ce que YAPF soit terminé. Maintenant que YAPF est achevé, ces projets pourraient reprendre.
 
-=== Speed Signs ===
-There was a modest project to control which trains go on which tracks based on their speed, [http://www.tt-forums.net/viewtopic.php?t=24187 Speed Signs]. So far this project hasn't been picked up after implementing YAPF. Other patches that allow player to control train pathfinding can be found in [http://www.tt-forums.net/viewforum.php?f=33 development forums].
+=== Signaux de vitesse ===
+C'était un modeste projet pour contrôler quels trains vont sur quelles voies selon leur vitesse, [http://www.tt-forums.net/viewtopic.php?t=24187 Signaux de vitesse]. Pour l'instant, ce projet n'a pas été repris après l'implémentation de YAPF. D'autres corrections qui permettent au joueur de contrôler la détermination de chemin des trains peuvent être trouvés sur [http://www.tt-forums.net/viewforum.php?f=33 les forums de développement].
 
-[[Category:en/Manual/Settings & Preferences]]
-[[Category:en/Manual/Vehicles]]
+[[Category:fr/Manual/Réglages et préférences]]
+[[Category:fr/Manual/Véhicules]]
