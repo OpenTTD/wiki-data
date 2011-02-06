@@ -1,0 +1,144 @@
+<noinclude>[[Translation:Template/en/Ambox]]</noinclude><!-- 
+      Adaptação da predefinição wiki '''Ambox'''
+
+--><noinclude></noinclude><includeonly><table style="{{#IF: {{{estilo|}}} | {{{estilo}}} | margin: 0px 10% 0px 10%; border: 1px solid #aaa; background:#fbfbfb}}"><tr>
+<td style="border-left: 10px solid {{#switch:{{{tipo|}}} 
+  | eliminação =#b22222;
+  | conteúdo   =#f28500;
+  | estilo     =#f4c430;
+  | mover      =#9932cc;
+  | proteção   =#bba;
+  | #default   =#1e90ff;
+}} padding: 2px 0 2px 0.5em;"><div style="width: 52px;">[[File:{{#if:{{{imagem|}}}
+  | {{{imagem}}}
+  | {{#switch:{{{tipo|}}}
+    | eliminação =Deletion.png
+    | conteúdo   =Content.png
+    | estilo     =Edit-clear.png
+    | mover      =Move.png
+    | proteção   =Protection.png
+    | #default   =Notice.png
+  }}
+}}|40px]]</div></td><td style="{{#IF: {{{estilo-texto|}}} | {{{estilo-texto}}} | border: none; padding: 0.25em 0.9em; width: 100%;}}"> {{{texto|}}} </td>
+{{#if:{{{imageright|}}}
+<td style="padding: 2px 0.5em 2px 0;">Não é necessário neste momento</td>
+}}</tr></table><!-- 
+para detectar e reportar o uso defeituosos "tipo" parâmetro:
+-->{{#switch:{{{tipo|}}}
+|            = <!-- Não escreva nada também é uma entrada válida --> 
+| eliminação =
+| conteúdo   = 
+| estilo     =
+| mover      =
+| proteção   =
+| notícia    =
+| #predeter  = <div style="text-align: center;">Esta caixa de mensagem está usando um parâmetro inválido "tipo={{{tipo|}}}" e deve definir o outro.</div>[[Category:pt/Sintaxe incorreta]]
+}}</includeonly><noinclude>
+
+==Use==
+Exemplo de uso simples:
+
+<pre>
+{{pt/Ambox| texto = Cualquier texto.}}
+</pre>
+{{pt/Ambox| texto = Cualquier texto.}}
+O:
+<pre>
+{{pt/Ambox| tipo  = contenido
+| texto = Atención: cualquier texto.
+}}
+</pre>
+{{pt/Ambox| tipo  = contenido | texto = Atención: cualquier texto.}}
+
+== Lista de parámetros disponibles ==
+<pre>
+{{Ambox/Pt
+| tipo         = borrar / contenido / estilo / información / fusionar / protección
+| imagen       = Picture.Png / Picture.Png|alt=Imagen (si el parámetro no se establece, aparecerá el icono predeterminado)
+| texto        = Texto para una caja grande, para poner en la parte superior de los artículos.
+
+| estilo       = Diferente estilo de tabla. (Preferiblemente NO USAR)
+| estilo-texto = Igual que el anterior pero para el texto.
+</pre>
+
+=== Ejemplos según el parámetro "tipo" usado ===
+Los siguientes ejemplos utilizan diferentes valores para el parámetro '''tipo''', pero sin usar el parámetro imagen por lo que se utilizan las imágenes predeterminadas para cada tipo.
+
+{{pt/Ambox| tipo  = borrar
+| texto = tipo=<u>borrar</u> – Cuestiones de borrado, como {{en/S|es/Borrar}}.
+}}
+{{pt/Ambox| tipo  = contenido
+| texto = tipo=<u>contenido</u> – Cuestiones de contenido, como {{en/S|es/Aviso}} o {{en/S|es/Desactualizado}}.
+}}
+{{pt/Ambox| tipo  = estilo
+| texto = tipo=<u>estilo</u> – Cuestiones de estilo, como {{en/S|es/Corregir}} o {{en/S|es/Traducción}}.
+}}
+{{pt/Ambox| tipo  = información
+| texto = tipo=<u>información</u> – Información para los artículos, como {{en/S|es/Nota}} o {{en/S|es/Evento actual}}.
+}}
+{{pt/Ambox| tipo  = fusionar
+| texto = tipo=<u>fusionar</u> – Propuestas de fusión o traslado, como {{en/S|es/Dividir}}.
+}}
+{{pt/Ambox| tipo  = protección
+| texto = tipo=<u>protección</u> – Protección de páginas, como {{en/S|es/Histórico}}.
+}}
+
+=== Otras imágenes ===
+
+Las imágenes predeterminadas mostradas arriba se han fijado, en su mayoría, por conveniencia. En muchos casos es más apropiado usar imágenes más específicas. Estos ejemplos usan el parámetro '''imagen''' para especificar una imagen distinta a las predeterminadas.
+
+{{pt/Ambox| tipo   = Información
+| imagen =OpenttdManual.png|alt= Openttd Manual
+| texto  =  Algo Algo Algo 
+}}
+
+
+[[Category:pt/Predefinição|{{BASEPAGENAME}}]][[Category:pt/Caixas de mensagens|*]]
+</noinclude><!--
+
+  CSS if the option will become available
+
+/* Article message box styles */
+table.ambox {
+    margin: 0px 10%;   /* 10% = Will not overlap with other elements */
+    border: 1px solid #aaa; 
+    border-left: 10px solid #1e90ff;    /* Default "notice" blue */
+    background: #fbfbfb; 
+}
+table.ambox + table.ambox {   /* Single border between stacked boxes. */
+    margin-top: -1px;
+}
+.ambox th.mbox-text, 
+.ambox td.mbox-text {            /* The message body cell(s) */
+    padding: 0.25em 0.5em;       /* 0.5em left/right */
+}
+.ambox td.mbox-image {           /* The left image cell */
+    padding: 2px 0 2px 0.5em;    /* 0.5em left, 0px right */
+}
+.ambox td.mbox-imageright {      /* The right image cell */
+    padding: 2px 0.5em 2px 0;    /* 0px left, 0.5em right */
+}
+
+table.ambox-notice {
+    border-left: 10px solid #1e90ff;    /* Blue */
+}
+table.ambox-speedy {
+    border-left: 10px solid #b22222;    /* Red */
+    background: #fee;                   /* Pink */
+}
+table.ambox-delete {
+    border-left: 10px solid #b22222;    /* Red */
+}
+table.ambox-content {
+    border-left: 10px solid #f28500;    /* Orange */
+}
+table.ambox-style {
+    border-left: 10px solid #f4c430;    /* Yellow */
+}
+table.ambox-move {
+    border-left: 10px solid #9932cc;    /* Purple */
+}
+table.ambox-protection {
+    border-left: 10px solid #bba;       /* Gray-gold */
+}
+-->
