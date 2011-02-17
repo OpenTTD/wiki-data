@@ -1,5 +1,5 @@
 [[Translation:en/Manual/Signals]]
-{{de/Übersetzung|en/Signale|60}}
+{{de/Übersetzung|en/Signale|80}}
 
 {{en/Manual/Navigation}}
 
@@ -111,44 +111,43 @@ Wenn keine Signale als Ausfahrsignale gekennzeichnet hinter den Einfahrsignalen 
 ====Vorsignale bauen====
 Um ein Vorsignal zu bauen, wähle den entsprechenden Button im [[de/Manual/Signale#signal-interface|Signal-Interface]].
 
-In previous versions, first place an ordinary signal.  Then, with ''Ctrl'' held down, click the signal to cycle through the different kinds of presignal:
-*Note that you can build one way pre-signals in the same way as you build ordinary one way signals.  Remember: holding ''Ctrl'' and clicking toggles the type of (pre)signal, clicking without ''Ctrl'' changes the direction of signaling - if interface signals not enabled.
-*Remember not to hold down ''Ctrl'' when placing the signal initially or you will end up with a semaphore (see below). Also use ''Ctrl'' if you have enabled the signal interface.
+In vorherigen Versionen musst du zuerst ein normales Signal platzieren. Dann, mit ''Strg'' gedrückt, klicke das Signal um durch die verschieden Arten von Vorsignalen zu wechseln:
+* Merke, dass du Einweg-Vorsignale genauso bauen kannst wie normale Einwegsignale. Merke: ''Strg'' halten und klicken wechselt die Art von (Vor-)Signal, klicken ohne ''Strg'' ändert die Richtun des Signals - wenn Signal-Interface nicht aktiviert ist.
+* Vergiss nicht ''Strg'' zu drücken wenn du ein neues Signal platzierst, sonst bekommst du ein (altmodisches) Formsignal (siehe unten). Benutze auch ''Strg'' wenn du das Signal-Interface aktiviert hast.
 {{en/-}}
-====Limitations====
-[[File:en/Manual/PresignalLimitation.png|frame|The problem with presignals...]]
-An important point to note with exit signals is that a green exit signal will trigger a green on the entry pre-signal at the beginning of the block even if it is not actually possible for a train to get to that exit signal because of the track layout (as in the image to the right with a train entering on the bottom track).  This can ruin more complicated presignaling setups, so care needs to be taken with planning.
+====Einschränkungen====
+[[File:en/Manual/PresignalLimitation.png|frame|Das Problem mit Vorsignalen...]]
+Ein wichtiger Punkt bei Ausfahrtsignalen ist, dass ein grünes Ausfahrtssignal ein grünes Einfahrtssignal am Anfang eines Blocks bewirkt, auch wenn es für den Zug nicht möglich ist zu diesem Signal zu kommen, wegen des Strecken-Layouts (wie im Bild rechts mit einem Zug, der vom unteren Gleis kommt). Dies kann kompliziertere Vorsignal-Aufstellungen ruinieren, also musst du vorsichtig sein beim planen.
 
-One of the bugs that are noted as "will not be solved" is: lost trains ignore (block) exit signals. If trains are lost, a random direction is chosen at each junction, so they ignore block exit signals, and easily may completely block junctions with presignals.
+Eines der Bugs die als "wird nicht gelöst" gekennzeichnet ist: verlorene Züge ignorieren (Block-) Ausfahrsignale. Wenn Züge sich verirrt haben, wird eine zufällige Richtung an jeder Kreuzung eingeschlagen, d.h. dass sie Block-Ausfahrsignale ignorieren und vielleicht komplett Kreuzungen mit Vorsignalen blockieren.
 {{en/-}}
-==Path Signals ==
-[[File:en/Manual/Yapp signalgui.png|frame|right|Two new signal types in the [[en/Manual/Signal GUI]].]]
-There are two new signal types. These signals enable trains to reserve a path through a block until the next signal, before entering the block. If another train wants to enter the block, and succeeds in reserving a path through the block, the path signal authorize the train to enter the block, even if another track of the block is used at the same time.
+==Pfadsignale==
+[[File:en/Manual/Yapp signalgui.png|frame|right|Zwei neue Signalarten im [[de/Signal GUI|Signal GUI]].]]
+Es gibt zwei neue Signalarten. Diese Signale erlauben Züge eine Weg zu reservieren bis zum nächsten Signal, bevor sie in den nächsten Block einfahren. Wenn ein anderer Zug den Block betreten will, und es schafft den Weg zu reservieren, wird das Pfadsignal den Zug erlauben den Block zu betreten, auch wenn ein anderer Streckenteil des Blocks belegt ist.
 {{en/-}}
-[[File:en/Manual/Signal bloc.png|frame|right|Y block between three ''block signals'']]
-Here is an example as illustration 
+[[File:en/Manual/Signal bloc.png|frame|right|Y-Block zwischen drei ''Blocksignalen'']]
+Hier ist ein Beispiel als Erklärung 
 
-We have here a Y block between three signals.
-The right track is used by a train. A train arrives from the lower track and wants to go to the left track. A standard block signal considers that all the block is occupied (even if the left track is free).
+Wir haben hier einen Y-Block zwischen drei Signalen. Die rechte Strecke ist von einem Zug benutzt. Ein Zug kommt von der unteren Strecke an und will auf die linke Strecke fahren. Ein standardmäßiges Blocksignal sieht es so, dass der gesamte Block besetzt ist (auch wenn die linke Strecke frei ist).
 {{en/-}}
-[[File:en/Manual/Multiples standard.png|frame|right|With two additional block signals, the''Y'' has been split into three blocks: right arm, left arm and junction]]
-A solution is to split this block into smaller blocks by adding signals after the junction.
+[[File:en/Manual/Multiples standard.png|frame|right|Mit zwei weiteren Blocksignalen wurde das ''Y'' in drei Blöcke geteilt: rechter Arm, linker Arm und Kreuzung]]
+Eine Lösung ist diesen Block in kleinere Blöcke zu teilen indem man Signale hinter der Kreuzung platziert.
 {{en/-}}
-[[File:en/Manual/Chemin.png|frame|right|Y block between a ''path signal'' and two ''block signals'']]
-On the contrary, the path signal authorizes the train coming from the bottom to enter the Y block, as the path it tries to reserve is free (the left track). No need to split the block into smaller blocks (i.e. no need for signals after the junction).
+[[File:en/Manual/Chemin.png|frame|right|Y-Block zwischen einem ''Pfadsignal'' und zwei ''Blocksignalen'']]
+Im Gegenteil, erlaubt das Pfadsignal den Zug, der von unten kommt, den Y-Block zu betreten, weil der Streckenteil den der Zug belegen will frei ist (die linke Strecke). Kein Grund den Block in kleinere Blöcke zu teilen. (d.h. kein Grund für Signale hinter der Kreuzung).
 {{en/-}}
-There are two things you should know about this signal:
-* Place it only where trains can stop and wait without blocking junctions ;
-* This signal only works in one direction. In the other direction, it is either ignored or considered a one-way signal, depending on the signal path (see below).
+Es gibt zwei Dinge die du über dieses Signal wissen solltest:
+* Platziere es nur dort, wo Züge anhalten und warten können ohne die Kreuzung zu blockieren;
+* Dieses Signal funktioniert nur in einer Richtung. In der anderen Richtung wird es entweder ignoriert oder als Einwegsignal erkannt (siehe unten).
 [[File:en/Manual/Yapp pbssignal.png|frame|left|PS]]
-* '''Path Signal''': trains can pass through this signal from the back side.
+* '''Pfadsignal''': Züge können dieses Signal von hinten durchfahren.
 {{en/-}}
 [[File:en/Manual/Yapp onewaypbssignal.png|frame|left|1W PS]]
-* '''One-way Path Signal''': trains can '''not''' pass through this signal from the back side.
+* '''Einweg-Pfadsignal''': Züge können '''nicht''' diese Signal von hinten durchfahren.
 {{en/-}}
-Most of the time it will be sufficient to use a default Path signal, as passing a signal from the back is penalised by the pathfinder, however, one-way Path signals might be useful in certain specific cases.
+Die meiste Zeit genügt es, ein Standardmäßiges Pfadsignal zu nehmen, da das durchfahren von hinten vom Pfadfinder bestraft wird. Wie auch immer, Einweg-Pfadsignale könnten in bestimmten Fällen hilfreich sein.
 
-The two new signal types behave a bit differently than standard OpenTTD signal types. The Path signals are red by default, and will only show green as soon as a train can reserve a path to the next safe waiting position on its route. Safe waiting positions are - by definition - in front of signals, depots and track ends. The back of a Path signal is not considered a safe waiting position, and therefore paths are reserved through these signals.
+Die beiden neuen Signalarten reagieren etwas anders gegenüber den standardmäßigen OpenTTD Signalarten. Die Pfadsignale sind standardmäßig rot, und zeigen nur grün, solange ein Zug die Strecke bis zum nächsten sicheren Wartepunkt auf seiner Route reservieren kann. Sichere Wartepunkte - durch Bestimmung - vor Signalen, Depots und das Ende von Strecken. Die Rückseite eines Pfadsignals wird nicht als sichere Warteposition betrachte, und ist deswegen sind Wege durch diese Signale reserviert.
 
 Because the front of every signal is defined as a safe waiting position, you would normally not want to place a signal immediately behind a junction, only in front of a junction. This is because it is only safe for a train to wait in front of a junction. It is not safe for a a train to wait at a signal immediately after a junction before the whole train has cleared the junction, as it would be blocking the junction while waiting, as illustrated in the example below. This is a major advantage against standard OpenTTD signals, where you had to place signals before and after junctions, which caused trains to block junctions while waiting.
 [[File:en/Manual/Yapp unsafewaitinglocation.png|frame|center|The signal indicated by the arrow is a bad waiting location, as the train in the junction now blocks the otherwise free path of the train coming from the top. There's a second bad waiting location in this picture. Can you find it?]]
