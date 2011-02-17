@@ -45,11 +45,17 @@ You can set <groundsprite> to zero to not draw any sprite, and then use extended
 || 1 || 02 
 | colspan="2" | Add offset to sprite, disable default usage of construction stage
 |-
-|| 2 || 04 || Add offset for <xoffset> and <yoffset> || Add offset for <xpixeloffset>
+|| 2 || 04 
+| colspan="2" | Add offset to recoloursprite
 |-
-|| 3 || 08 || Add offset for <zoffset> || Add offset for <ypixeloffset>
+|| 3 || 08 
+| colspan="2" | Recolour sprite is from Action 1
 |-
-|| 4..7 || 
+|| 4 || 10 || Add offset for <xoffset> and <yoffset> || Add offset for <xpixeloffset>
+|-
+|| 5 || 20 || Add offset for <zoffset> || Add offset for <ypixeloffset>
+|-
+|| 6..7 || 
 | colspan="2" | reserved, should be zero
 |-
 |}
@@ -57,8 +63,8 @@ You can set <groundsprite> to zero to not draw any sprite, and then use extended
 <register>:
 Temporary storage registers to add to the individual parts. The register values are considered signed.
 The order of the registers is the same as the bits in <flags>. If a bit is not set, then no registers appears for it.
-Most bits require one register, but e.g. <xoffset> and <yoffset> can only be enabled together, using two registers.
-Wrt. of the "skip bounding box"-register: Set it to one to draw the sprite, and zero to skip it.
+Most bits require one register, but e.g. <xoffset> and <yoffset> can only be enabled together, using two registers. The "recolorsprite from Action 1" uses no register at all.
+Wrt. the "skip bounding box"-register: Set it to one to draw the sprite, and zero to skip it.
 
 = Example =
 
