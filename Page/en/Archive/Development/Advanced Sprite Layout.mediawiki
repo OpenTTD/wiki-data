@@ -1,0 +1,136 @@
+= Goal =
+When coding houses, industries, airports or objects you are having a hard time, if the tiles are slope- or climate-aware.
+You have to code a lot of spritelayouts which mostly consist of the same sprites and bounding boxes, and only vary in some groundsprite or some offsets.
+
+To solve that burden it would be nice if register values could be added to certain parts of the spritelayout. Examples:
+* The groundsprite should get an offset to match the slope.
+* The groundsprite shall get an offset to match the climate.
+* The buildingsprite shall be positioned following the slope of the tile.
+* The buildingsprite shall be snowy if everything else is snowy.
+* Certain parts of the layouts may be hidden depending on surrounding tiles.
+
+= Technical Interpretation =
+* Allow specifiing which sprite to use from a spriteset instead of always using the construction stage.
+* Allow specifiing an general offset to the spritenumber of Action A sprites in spritelayouts.
+* Allow specifiing an offset to the Z position of a sprite.
+* Allow hiding/skipping sprites from sprite layouts.
+
+= Technical Restrictions =
+* Parent sprites with bounding boxes stay parent sprites with bounding boxes.
+* Child sprites without bounding boxes stay childsprites without bounding boxes.
+* Hiding a parent sprite causes all child sprites within the bounding box to be hidden as well.
+* When using the usual construction-stage sprite selection, the number of sprites in the spritesets define the number of construction-stages (max 4). If the number of sprites per spriteset is higher than 4, the construction-stage-selection will use the first four.
+
+= Proposal for new Action2 format =
+
+ <Sprite-number> * <Length> 02 07/09/0F/11 <set-id>
+                   <num-sprites>
+                   <groundsprite>
+                   [<buildingsprite> ([<register-modifier>] <xoffset> <yoffset> <zoffset> <xextent> <yextent> <zextent> [<register>]...)
+                                   | ([<register-modifier>] <xpixeloffset> <ypixeloffset> 80 [<register>]...) ]...
+
+Note:
+In contrast to the usual Action2 <groundsprite> may be zero to not draw any sprite.
+This is to allow using the extended childsprite syntax also for the (first) groundsprite.
+
+<register-modifier>: Optional part, identified by the leading 80
+ 80 <flags>
+
+<flags>: Byte value with these flags:
+{| border="1"
+|-
+! Bit !! Hex !! Parentsprite !! Childsprite
+|-
+|| 0 || 01 || Skip bounding box including child sprites || Skip sprite
+|-
+|| 1 || 02 
+| colspan="2" | Add offset to sprite, disable default usage of construction stage
+|-
+|| 2 || 04 || Add offset for <xoffset> and <yoffset> || Add offset for <xpixeloffset>
+|-
+|| 3 || 08 || Add offset for <yoffset> || Add offset for <ypixeloffset>
+|-
+|| 4..7 || 
+| colspan="2" | reserved, should be zero
+|-
+|}
+
+<register>:
+Temporary storage registers to add to the individual parts. The register values are considered signed.
+If a bit is not set, then no registers appear for it.
+Most bits require one register, but e.g. <xoffset> and <yoffset> can only be enabled together, using two registers.
+Wrt. of the "skip bounding box"-register: Set it to one to draw the sprite, and zero to skip it.
+
+= Example =
+
+The example consists of
+* a climate-dependant slope-aware groundsprite,
+* a building,
+* a snow layer on top of the building.
+
+ -1 * -1    02 0F 40 81          // Procedure to compute the slope-dependent spriteoffset
+                     41    00 1F
+            \b 18
+                 \wx 8000  00 00 // flat
+                 \wx 8001  01 01 // normal slopes
+                 \wx 8002  02 02
+                 \wx 8003  03 03
+                 \wx 8004  04 04
+                 \wx 8005  05 05
+                 \wx 8006  06 06
+                 \wx 8007  07 07
+                 \wx 8008  08 08
+                 \wx 8009  09 09
+                 \wx 800A  0A 0A
+                 \wx 800B  0B 0B
+                 \wx 800C  0C 0C
+                 \wx 800D  0D 0D
+                 \wx 800E  0E 0E
+                 \wx 800F  1D 1D // steep slopes
+                 \wx 8010  1B 1B
+                 \wx 8011  17 17
+                 \wx 8012
+ 
+ -1 * -1    02 0F 41 81          // Procedure to compute the climate-dependent spriteoffset
+                     62 00 0A 07
+                 \wx 91C6  01 01 // desert
+                 \wx 91C6  04 04 // snow
+                 \wx 8F8D        // normal
+ 
+ -1 * -1    02 0F 42 82          // Procedure to compute the height offset in the middle of the tile
+                     41    00 1F
+            \b 9
+                 \wx 8004  03 03 // 2-corner inclined slopes
+                 \wx 8004  06 06
+                 \wx 8004  09 09
+                 \wx 8004  0C 0C
+                 \wx 8008  07 07 // 3-corner slopes
+                 \wx 8008  0B 0B
+                 \wx 8008  0D 0D
+                 \wx 8008  0E 0E
+                 \wx 8008  10 1F // steep slopes
+                 \wx 8000        // rest, no offset
+ 
+ -1 * -1    01 0F \b 2 \b* 1
+ -1         ugly_building.png  ? ? 01 ? ? ? ?
+ -1         pretty_snow.png    ? ? 01 ? ? ? ?
+ 
+ -1 * -1    02 0F 00 \b 3
+            \dx 0                                          // No regular groundsprite.
+            \dx 0         80 02   00 00 80            10   // Draw groundsprite from register 0x10.
+            \dx 80000000  80 08   00 00 00 10 10 30   11   // Draw building sprite at z-postion from register 0x11.
+            \dx 80000001  80 01   00 00 80            12   // Draw snow-overlay relative to building sprite, but only if register 0x12 is zero.
+ 
+ -1 * -1    02 0F 00 81
+                     7E 40 20 FF                           // Get slope offset from procedure 40
+              \2+    7E 41 20 FF                           // Add climate offset from procedure 41
+              \2sto  1A    20 10                           // Store in register 0x10
+              \2rst  7E 42 20 FF                           // Get height offset in the middle of the tile
+              \2sto  1A    20 11                           // Store in register 0x11
+              \2rst  62 00 2C 01                           // Test snow bit, 1 if snowy, 0 if not
+              \2sto  1A    00 12                           // Store in register 0x12
+            \b 1
+                 \wx 0     00 00                           // always procede at 00
+                 \wx 0
+ 
+ -1 * -1    03 0F 01 ?? \b 0 00                            // always procede at 00
