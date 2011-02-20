@@ -1,0 +1,45 @@
+Players often see a train reversing (swapping ends) at a signal, as opposed to at a station or end of line. This is usually caused by a [[en/Archive/Manual/Breakdowns]], [[en/Jam]], or [[en/Manual/Deadlock]] on heavily-loaded track: 
+
+[[File:en/Community/Reversing-at-signal.png]]
+
+In this demonstration, Train 15 has broken down; perhaps it has been waiting too long without service at a jammed junction farther down the line. Train 14 has been kept waiting at Signal 2 for so long it has given up and reversed itself, hoping to go the other way. But with Train 13 now waiting at Signal 1, it cannot proceed and its status is "Waiting for free path". Eventually, Train 13 will also swap ends and not be able to proceed because of Train 12; and so on. 
+
+Note that Train 13 need not be anywhere near in order for T14 to wait for a free path in this case; all the signals are standard path, facing the right way. T14 looks "up" the wrong way, searching for a free path all the way to the next signal that is set for that direction of traffic. That may be quite a long distance. 
+
+== Disabling ==
+
+There are several ways of dealing with this behavior; the most commonly requested is to disable such reversing entirely. You will need to alter the following settings: 
+
+* [[en/Archive/Manual/Settings/Wait oneway signal]]
+* [[en/Archive/Manual/Settings/Wait twoway signal]]
+* [[en/Archive/Manual/Settings/Wait for pbs path]]
+
+These control how many days a train will wait at each type of signal before reversing; a setting of 255 will disable reversing entirely. If you use only one type of signal, you only need to change one value. 
+
+If you want to disable reversing during a game, you must use the [[en/Manual/Console]]. Type: 
+
+:''']''' set pf.wait_oneway_signal 255
+:''']''' set pf.wait_twoway_signal 255
+:''']''' set pf.wait_for_pbs_path 255
+
+You may then use the '''patch''' command, if you like, to write the changed settings to your [[en/Archive/Manual/Settings/Openttd.cfg]] file, making them permanent. 
+
+If you want to disable reversing permanantly in future games, you may do so by editing openttd.cfg directly. Change these lines: 
+
+: wait_oneway_signal = '''255'''
+: wait_twoway_signal = '''255'''
+: wait_for_pbs_path = '''255'''
+
+This will not affect currently running or saved games. 
+
+== Why not? ==
+
+Why would you not want to disable reversing? Why do trains, by default, reverse at signals? How else can you deal with this issue? 
+
+In the example given, there is no use for Train 14 to reverse; it cannot go anywhere. Also, it is a bit of an annoyance, since even when Train 15 recovers and moves on, T14 will still be trying to go the wrong way. But on other track layouts, there may well be an alternate route. Why wait forever when that's not necessary? 
+
+Train reversing is usually a symptom, not a cause, of disruptions in traffic flow. The train isn't going anywhere anyway; so reversing is basically harmless. You will probably have to clear the jam up ahead by hand anyway; and while you are doing so, it won't help to have more trains rushing into the jam. When you have cleared the way, you can re-reverse the reversed trains. 
+
+When you see reversed trains, you may well have a more serious issue than a temporary jam. For example, the default ''wait_for_pbs_path'' is 30 days; you probably don't want trains stuck for a month. Besides clearing any jam, you may well want to rebuild a [[en/Community/Junctionary/Main Page]] or two that is forcing trains to wait while others pass. If the junctions look good, you may have trains that are not getting sufficient service; in which case you may want to add [[en/Manual/Building depots|depots]] to your layout or change your train [[en/Archive/Manual/Settings/Allow goto depot orders|orders]]. 
+
+Reversed trains are an indication that something is wrong. You may want to let trains show you clearly when they're in trouble.
