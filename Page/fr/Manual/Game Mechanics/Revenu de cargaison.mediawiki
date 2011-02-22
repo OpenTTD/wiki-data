@@ -1,135 +1,134 @@
 [[Translation:en/Manual/Game Mechanics/Cargo income]]
-{{fr/Traduction|en/Manual/Game Mechanics/Cargo income|0}}
 
-==Overview==
+==Aperçu==
 
-The amount of money earned when delivering a [[en/Manual/Cargo]] is determined by four factors: cargo, amount, distance, and days in transit, and is the product of the cargo payment rate, amount of cargo, transit distance, and time factor determined by days in transit.
+La quantité d'argent gagnée lors de la livraison d'une [[fr/Manual/Cargaison|cargaison]] est déterminée par quatre facteurs: la cargaison, la quantité, la distance et les jours de transit, et est le produit du taux de paiement de la cargaison, de la quantité de cargaison, de la distance de transit et du facteur temps déterminé par le nombre de jours de transit.
 
-Before OpenTTD 1.0/r17437, transporting [[en/Manual/Base Set/Cargos/Valuables]] a distance of fewer than 10 tiles yielded no money.
+Avant OpenTTD 1.0/r17437, transporter des [[fr/Manual/Base Set/Cargos/Biens de valeur|biens de valeur]] sur une distance de moins de 10 cases ne rapportait rien.
 
-The transit distance is measured as the [https://www.wikipedia.org/wiki/Manhattan distance manhattan distance] between the origin station and the destination station.
+La distance de transit est mesurée comme la [https://www.wikipedia.org/wiki/fr:Distance de Manhattan distance de Manhattan] entre la gare d'origine et celle de destination.
 
-The time scaler penalizes slow transportation. Each cargo type has two numbers, days1 and days2, that determine the boundaries between "fast", "medium", and "slow".
+L'échelle de temps pénalise les transports lents. Chaque type de cargaison a deux nombres, jours1 et jours2, qui déterminent les limites entre "rapide", "moyen" et "lent".
 
-'''Note:''' One "day" on this page is actually 2.5 days in the game. So if days_in_transit = 4, then you use 4 in the calculations that follow, but actually the cargo is already 10 days in transit.
+'''Note:''' Un "jour" sur cette page correspond en fait à 2.5 jours dans le jeu. Donc, si days_of_transit = 4, alors vous utiliserez 4 dans les calculs qui suivent, mais en réalité, la cargaison aura voyagé 10 jours.
 
 <!--
 <math>
 I(c,a,d,t)=c_\mathrm{Base} \cdot a \cdot d \cdot \max\left(31,
 \begin{cases}
 255 & t \le c_\mathrm{Days1} \\
-255 - (t-c_\mathrm{Days1}) & c_\mathrm{Days1} < t \le c_\mathrm{Days1} + c_\mathrm{Days2} \\
-255 - 2(t-c_\mathrm{Days1}) + c_\mathrm{Days2} & t > c_\mathrm{Days1} + c_\mathrm{Days2} 
+255 - (t-c_\mathrm{Days1}) & c_\mathrm{Jours1} < t \le c_\mathrm{Jours1} + c_\mathrm{Jours2} \\
+255 - 2(t-c_\mathrm{Days1}) + c_\mathrm{Jours2} & t > c_\mathrm{Jours1} + c_\mathrm{Jours2} 
 \end{cases}\right)\cdot\frac{1}{2^{21}}
 </math>
 -->
 
 [[File:en/Manual/Game Mechanics/Income Formula.png|Income Formula.png]]
 
-Income(cargo, amount, distance, time) = cargo payment rate ...
+Revenu(cargaison, quantité, distance, temps) = taux de paiement de la cargaison ...
 
-This function has the following form:
+Cette fonction a la forme suivante:
 
 [[File:en/Manual/Game Mechanics/Income vs time.png]]
 
-==Magic Numbers==
+==Nombres magiques==
 
-Here, "Base" means the cargo payment rate.
+Ici, "Base" signifie le taux de paiement de la cargaison.
 
 {| class="wikitable sortable" style="text-align:right"
-! Cargo Type !! Base !! Days1 !! Days2
+! Type de cargaison !! Base !! Jours1 !! Jours2
 |-
-|[[en/Manual/Base Set/Cargos/Batteries]]||4322||2||30
+|[[fr/Manual/Base Set/Cargos/Batterie|Batteries]]||4322||2||30
 |-
-|[[en/Manual/Base Set/Cargos/Bubbles]]||5077||20||80
+|[[fr/Manual/Base Set/Cargos/Bulles|Bulles]]||5077||20||80
 |-
-|[[en/Manual/Base Set/Cargos/Candyfloss]]||5005||10||25
+|[[fr/Manual/Base Set/Cargos/Barbe à papa|Barbe à papa]]||5005||10||25
 |-
-|[[en/Manual/Base Set/Cargos/Coal]]||5916||7||255
+|[[fr/Manual/Base Set/Cargos/Charbon|Charbon]]||5916||7||255
 |-
-|[[en/Manual/Base Set/Cargos/Cola]]||4892||5||75
+|[[fr/Manual/Base Set/Cargos/Coca-Cola|Coca-cola]]||4892||5||75
 |-
-|[[en/Manual/Base Set/Cargos/Copper Ore]]||4892||12||255
+|[[fr/Manual/Base Set/Cargos/Minerai de cuivre|Minerai de cuivre]]||4892||12||255
 |-
-|[[en/Manual/Base Set/Cargos/Diamonds]]||5802||10||255
+|[[fr/Manual/Base Set/Cargos/Diamant|Diamants]]||5802||10||255
 |-
-|[[en/Manual/Base Set/Cargos/Fizzy Drinks]]||6250||30||50
+|[[fr/Manual/Base Set/Cargos/Boisson gazeuse|Boissons gazeuses]]||6250||30||50
 |-
-|[[en/Manual/Base Set/Cargos/Food]]||5688||0||30
+|[[fr/Manual/Base Set/Cargos/Nourriture|Nourriture]]||5688||0||30
 |-
-|[[en/Manual/Base Set/Cargos/Fruit]]||4209||0||15
+|[[fr/Manual/Base Set/Cargos/Fruits|Fruits]]||4209||0||15
 |-
-|[[en/Manual/Base Set/Cargos/Gold]]||5802||10||40
+|[[fr/Manual/Base Set/Cargos/Or|Or]]||5802||10||40
 |-
-|[[en/Manual/Base Set/Cargos/Goods]]||6144||5||28
+|[[fr/Manual/Base Set/Cargos/Marchandises|Marchandises]]||6144||5||28
 |-
-|[[en/Manual/Base Set/Cargos/Grain]]||4778||4||40
+|[[fr/Manual/Base Set/Cargos/Céréales|Céréales]]||4778||4||40
 |-
-|[[en/Manual/Base Set/Cargos/Iron Ore]]||5120||9||255
+|[[fr/Manual/Base Set/Cargos/Minerai de fer|Minerai de fer]]||5120||9||255
 |-
-|[[en/Manual/Base Set/Cargos/Livestock]]||4322||4||18
+|[[fr/Manual/Base Set/Cargos/Bétail|Bétail]]||4322||4||18
 |-
-|[[en/Manual/Base Set/Cargos/Mail]]||4550||20||90
+|[[fr/Manual/Base Set/Cargos/Courrier|Courrier]]||4550||20||90
 |-
-|[[en/Manual/Base Set/Cargos/Maize]]||4322||4||40
+|[[fr/Manual/Base Set/Cargos/Maïs|Maïs]]||4322||4||40
 |-
-|[[en/Manual/Base Set/Cargos/Oil]]||4437||25||255
+|[[fr/Manual/Base Set/Cargos/Pétrole|Pétrole]]||4437||25||255
 |-
-|[[en/Manual/Base Set/Cargos/Oil|Oil (subtropical)]]||4892||25||255
+|[[fr/Manual/Base Set/Cargos/Pétrole|Pétrole (subtropical)]]||4892||25||255
 |-
-|[[en/Manual/Base Set/Cargos/Paper]]||5461||7||60
+|[[fr/Manual/Base Set/Cargos/Papier|Papier]]||5461||7||60
 |-
-|[[en/Manual/Base Set/Cargos/Passengers]]||3185||0||24
+|[[fr/Manual/Base Set/Cargos/Passagers|Passagers]]||3185||0||24
 |-
-|[[en/Manual/Base Set/Cargos/Plastic]]||4664||30||255
+|[[fr/Manual/Base Set/Cargos/Plastique|Plastique]]||4664||30||255
 |-
-|[[en/Manual/Base Set/Cargos/Rubber]]||4437||2||20
+|[[fr/Manual/Base Set/Cargos/Caoutchouc|Caoutchouc]]||4437||2||20
 |-
-|[[en/Manual/Base Set/Cargos/Steel]]||5688||7||255
+|[[fr/Manual/Base Set/Cargos/Acier|Acier]]||5688||7||255
 |-
-|[[en/Manual/Base Set/Cargos/Sugar]]||4437||20||255
+|[[fr/Manual/Base Set/Cargos/Sucre|Sucre]]||4437||20||255
 |-
-|[[en/Manual/Base Set/Cargos/Sweets]]||6144||8||40
+|[[fr/Manual/Base Set/Cargos/Bonbon|Bonbons]]||6144||8||40
 |-
-|[[en/Manual/Base Set/Cargos/Toffee]]||4778||14||60
+|[[fr/Manual/Base Set/Cargos/Caramel|Caramel]]||4778||14||60
 |-
-|[[en/Manual/Base Set/Cargos/Toys]]||5574||25||255
+|[[fr/Manual/Base Set/Cargos/Jouet|Jouets]]||5574||25||255
 |-
-|[[en/Manual/Base Set/Cargos/Valuables]]||7509||1||32
+|[[fr/Manual/Base Set/Cargos/Biens de valeur|Biens de valeur]]||7509||1||32
 |-
-|[[en/Manual/Base Set/Cargos/Water]]||4664||20||80
+|[[fr/Manual/Base Set/Cargos/Eau|Eau]]||4664||20||80
 |-
-|[[en/Manual/Base Set/Cargos/Wheat]]||4778||4||40
+|[[fr/Manual/Base Set/Cargos/Blé|Blé]]||4778||4||40
 |-
-|[[en/Manual/Base Set/Cargos/Wood]]||5005||15||255
+|[[fr/Manual/Base Set/Cargos/Bois|Bois]]||5005||15||255
 |-
-|[[en/Manual/Base Set/Cargos/Wood|Wood (subtropical)]]||7964||15||255
+|[[fr/Manual/Base Set/Cargos/Bois|Bois (subtropical)]]||7964||15||255
 |}
 
-==Visualization==
+==Visualisation==
 
 [[File:en/Manual/Game Mechanics/Speed vs income.png]]
 
-Image shows how income depends on 20 passengers delivered '''100''' tiles away at speed v (in km/h). According to this page equation, income of passengers delivered at 100 km/h equals 96.2% of the income delivered at 600 km/h. This means that the speed of the vehicle sometimes must not be prioritized as much as for example vehicles cargo capacity (especialy dealing with planes).
+Le graphique montre comment le revenu varie pour 20 passagers livrés à '''100''' cases à la vitesse v (en km/h). Selon l'équation de cette page, le revenu des passagers transportés à 100 km/h équivaut à 96,2% du revenu obtenu à 600 km/h. Cela veut dire que la vitesse du véhicule n'a pas toujours besoin d'être priorisée autant que, par exemple, la capacité de chargement des véhicules (surtout pour ce qui concerne les avions).
 
-Also, farther distances are more sensitive to speed. Take a look at the passenger delivery over '''500''' tiles:
+De plus, les plus grandes distances sont plus sensibles à la vitesse. Regardez ce que donne le transport de passagers sur '''500''' cases:
 
 [[File:en/Manual/Game Mechanics/Speed1.png]]
 
-This time, income of 100 km/h is 67.1% against 600 km/h which means that faster vehicle will substantialy increase our income.
+Cette fois, le revenu à 100 km/h n'est que 67,1% de celui à 600 km/h, ce qui veut dire qu'un véhicule plus rapide augmentera votre revenu de façon significative.
 
-Furthermore, very interesting graph we get from distance versus income (same 20 passengers but at '''100''' km/h):
+En outre, nous obtenons un graphe très intéressant en comparant distance et revenu (toujours pour 20 passagers, mais à '''100''' km/h):
 
 [[File:en/Manual/Game Mechanics/Distance vs income.png]]
 
-It is interesting to note that aproximately at 600 tiles you will be getting less and less money, because value of the passengers is falling faster than growing for a longer distance. To add more, if you pay close attention to this page equation, you will notice that if it takes too much time to deliver a cargo, you will be getting constant value of 31 for time. This suggests, that you can get very big income dependant only on the distance if the distance is extremely big (straight line).
+Il est intéressant de voir qu'à partir d'environ 600 cases, vous obtiendrez de moins en moins d'argent, car la valeur des passagers décroîtra plus rapidement que l'accroissement dû à la distance supérieure. De plus, si vous faites très attention à l'équation de cette page, vous noterez que s'il faut trop de temps pour livrer une cargaison, vous n'obtiendrez plus qu'une valeur constante de 31 quel que soit la durée. Cela veut dire que vous pouvez obtenir de très gros revenus uniquement dépendants de la distance, si celle-ci est extrêmement grande (en ligne droite).
 
-Also, if the speed of the vehicle is greater, larger distances can be reached without loss in income. Here is an example of speed of '''300''' km/h:
+Également, si la vitesse du véhicule est plus grande, de plus longues distances peuvent être atteintes sans perte de revenu. Voici un exemple à la vitesse de '''300''' km/h:
 
 [[File:en/Manual/Game Mechanics/Distance vs income2.png]]
 
-Similar graphs can be drawn in-game using [http://www.tt-forums.net/viewtopic.php?f=33&t=31984 new graphs patch].
+Des graphes similaires peuvent être réalisés dans le jeu en utilisant l'[http://www.tt-forums.net/viewtopic.php?f=33&t=31984 ajout de nouveaux graphiques].
 
-==See also==
+==Voir aussi==
 
-*[[en/Manual/Game Mechanics/Main Page#delivery-payment-rates]]
+*[[fr/Manual/Game Mechanics/Main Page#taux-de-paiement-des-livraisons]]
