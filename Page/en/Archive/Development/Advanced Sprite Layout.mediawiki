@@ -24,18 +24,18 @@ To solve that burden it would be nice if register values could be added to certa
 = Proposal for new Action2 format =
 
  <Sprite-number> * <Length> 02 07/09/0F/11 <set-id>
-                   <num-sprites>
+                   <0x40 + num-sprites>
                    <groundsprite>
-                   [<buildingsprite> ([<register-modifier>] <xoffset> <yoffset> <zoffset> <xextent> <yextent> <zextent> [<register>]...)
-                                   | ([<register-modifier>] <xpixeloffset> <ypixeloffset> 80 [<register>]...) ]...
+                   [<buildingsprite> (<xoffset> <yoffset> <zoffset> <xextent> <yextent> <zextent> <flags> [<register>]...)
+                                   | (<xpixeloffset> <ypixeloffset> 80 <flags> [<register>]...) ]...
 
 Hint:
 You can set <groundsprite> to zero to not draw any sprite, and then use extended childsprite syntax for the (first) groundsprite.
 
-<register-modifier>: Optional part, identified by the leading 80
- 80 <flags>
+<0x40 + num-sprite>:
+Number of sprites in the layout. Add 0x40 to identify the new format with register modifiers.
 
-<flags>: Byte value with these flags:
+<flags>: Word value with these flags:
 {| border="1"
 |-
 ! Bit !! Hex !! Parentsprite !! Childsprite
@@ -55,7 +55,7 @@ You can set <groundsprite> to zero to not draw any sprite, and then use extended
 |-
 || 5 || 20 || Add offset for <zoffset> || Add offset for <ypixeloffset>
 |-
-|| 6..7 || 
+|| 6..15 || 
 | colspan="2" | reserved, should be zero
 |-
 |}
@@ -120,11 +120,11 @@ The example consists of
  -1         ugly_building.png  ? ? 01 ? ? ? ?
  -1         pretty_snow.png    ? ? 01 ? ? ? ?
  
- -1 * -1    02 0F 00 \b 3
+ -1 * -1    02 0F 00 43
             \dx 0                                          // No regular groundsprite.
-            \dx 0         80 02   00 00 80            10   // Draw groundsprite from register 0x10.
-            \dx 80000000  80 20   00 00 00 10 10 30   11   // Draw building sprite at z-postion from register 0x11.
-            \dx 80000001  80 01   00 00 80            12   // Draw snow-overlay relative to building sprite, but only if register 0x12 is zero.
+            \dx 0         00 00 80          \wx02 10       // Draw groundsprite from register 0x10.
+            \dx 80000000  00 00 00 10 10 30 \wx20 11       // Draw building sprite at z-postion from register 0x11.
+            \dx 80000001  00 00 80          \wx01 12       // Draw snow-overlay relative to building sprite, but only if register 0x12 is zero.
  
  -1 * -1    02 0F 00 81
                      7E 40 20 FF                           // Get slope offset from procedure 40
