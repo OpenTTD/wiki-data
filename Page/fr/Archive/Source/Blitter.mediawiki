@@ -1,0 +1,41 @@
+[[Translation:en/Archive/Source/Blitter]]
+
+
+<div style="float: right;">__TOC__</div>
+La tâche principale du blitter est de dessiner des sprites à l'écran. Il doit gérer la réapplication des douleurs et les effets de transparence. Des méthodes supplémentaires sont fournies pour pré-encoder les données des sprites du jeu dans un format préféré par le blitter.
+
+Les blitters suivants existent dans SVN:
+
+* '''8bpp-simple''': Blitter 8bpp simple (assez lent, mais jamais faux)
+* '''8bpp-optimized''': Blitter 8bpp optimisé (compression + cache tous niveaux de zoom)
+* '''8bpp-debug''': Blitter 8bpp de débogage (pour test uniquement)
+* '''32bpp-simple''': Blitter 32bpp simple (pas de palette d'animation)
+* '''32bpp-optimized''': Blitter 32bpp optimisé (pas de palette d'animation)
+* '''32bpp-anim''': Blitter 32bpp avec animation (palette d'animation)
+* '''null''': Blitter nul (ne fait rien)
+
+== Méthodes ==
+
+=== uint8 GetScreenDepth() ===
+Obtient la profondeur d'écran pour laquelle travaille le blitter. Ce peut être: 8, 16, 24 ou 32.
+
+=== void Draw(Blitter::BlitterParams *bp, BlitterMode mode, ZoomLevel zoom) ===
+
+Dessine une image à l'écran, étant donnés un ensemble de paramètres définis précédemment.
+
+=== void DrawColorMappingRect(void *dst, int width, int height, int pal) ===
+
+Dessine une table de couleurs à l'écran. C'est-à-dire: la couleur de l'écran est recherchée dans la palette pour correspondre à une nouvelle couleur, qui est alors mise à l'écran de nouveau.
+
+=== Sprite *Encode(SpriteLoader::Sprite *sprite, Blitter::AllocatorProc *allocator) ===
+
+Convertit un sprite depuis le chargeur dans notre propre format.
+
+Le [[fr/Archive/Development/Chargeur de sprite|SpriteLoader]] appelle cette méthode pour chaque sprite réel chargé. Cette fonction a besoin de convertir les données d'un sprite depuis le [[fr/Format RGBAM|format RGBAM]] vers le format préféré du blitter. Pour les blitters 8bpp, ce sera fait en général en abandonnant les données RGBA et en n'utilisant que la partie M indexée.
+
+=== const char *GetRenderer() ===
+
+Obtient le programme de rendu dont cette classe dépend.
+
+[[Category:fr/Développement]]
+[[Category:fr/Archive/Documentation de développement graphique]]
