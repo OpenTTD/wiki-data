@@ -1,0 +1,17 @@
+[[Translation:en/Archive/Development/SpriteLoader]]
+
+
+Il y a actuellement deux chargeurs de sprite. Une fois que le sprite est chargé, il est passé à la fonction d'encodage du [Blitter/Fr|blitter]].
+
+== GRF ==
+
+Le chargeur de sprites GRF lit le sprite en mémoire et le décode. La donnée d'index de la couleur est alors copiée dans la partie M du format de pixel courant RGBAM. Aucune conversion vers RGBA n'est faite, mais la valeur alpha est positionnée pour correspondre à la  partie transparente du sprite.
+
+== PNG ==
+
+Tout d'abord, le sprite est chargé. Cela peut se faire en 32bpp, 16bpp ou 8bpp avec palette. La plupart des formats PNG devraient convenir. Ces données sont copiées dans les parties RGBA du format RGBAM. De plus, deux champs de données texte (tEXt) sont lus, contenant les décalages X et Y du sprite. Ils doivent être présents.
+
+Ensuite, un sprite de masque (avec un suffixe de nom de fichier de 'm'), s'il est disponible, est chargé. Il est utilisé pour faire correspondre les couleurs, et doit être une image 8bpp avec la palette de TTD. Si un des pixels de l'image n'est pas transparent (index de couleur 0), alors les données RGB de ce pixel sont nettoyées et la partie M est remplie. La valeur alpha est conservée de l'image RGBA d'origine, pour permettre des parties translucides.
+
+[[Category:fr/Développement]]
+[[Category:fr/Document de développement graphique]]
