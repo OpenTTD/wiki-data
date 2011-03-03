@@ -5,7 +5,7 @@ FIRS is a newGRF providing new industries and cargos for OpenTTD. It introduces 
 
 FIRS also allows certain tertiary industries to be founded quite cheaply in-game. These are the store, the petrol pump and the builder's yard. These are generally town-based industries which accept food, goods, alcohol, petrol and building materials. By providing a reasonably cheap means to obtain acceptance for these items, a FIRS game becomes less dependent on the random growth of a town, where e.g. goods acceptance at a given location will sometimes stop without warning. In FIRS, stores and petrol pumps provide a stable delivery point for these items that will not disappear unexpectedly.
 
-To get FIRS, download it using the in-game content service, or from #openttdcoop site: [http://bundles.openttdcoop.org/firs/]
+To get FIRS, download it using the in-game content service, or from the #openttdcoop site at the following URL: [http://bundles.openttdcoop.org/firs/ http://bundles.openttdcoop.org/firs/]
 
 
 == Strategy Tips ==
@@ -20,15 +20,35 @@ Over the years, typical production (for e.g. a scrap yard) might be something li
 
 On easier difficulty settings, these concerns do still apply, but they are less pressing, because new industries appear at a greater rate, replacing the losses and increasing the odds that a new industry will pop up in a convenient spot to be cheaply linked in to your transport network.
 
-=== Engineering Supplies ===
+=== Supplies ===
 
-Terkhen: "do the steel chain first, send ENSP everywhere, get $$$." Call this approach an 'engineering network', as it relies on supplying mines and quarries with engineering supplies, and initially ignores the smaller but more numerous farms.
+==== Engineering Supplies ====
 
-=== Farming Supplies ===
+Terkhen: "Do the steel chain first, send ENSP everywhere, get $$$." Call this approach an 'engineering network', as it relies on supplying mines and quarries with engineering supplies, and initially ignores the smaller but more numerous farms.
+
+==== Farming Supplies ====
 
 Farming supplies are easier to generate and will have many more customers on the map, so another course to consider is to produce farming supplies from a lime kiln or fertilizer plant and use a farm feeder system to spread these supplies about. Call this approach a 'farming network'. The greater numbers of farms on the map increases the odds that one of them will quickly increase production once it has received its spare parts. However, this setup requires greater initial spending on roads or rail lines, and may be too costly on harder difficulty settings. If you follow this route, it's important to connect a forest to a lumber yard reasonably quickly, otherwise the coal mines and quarries supplying your lime kiln &ndash; and hence chemicals to your fertilizer plant &ndash; will slowly degrade due to lack of spare parts. A similar concern applies if you use an oil wells/oil refinery route instead, because oil wells need engineering supplies too. Biorefineries, if available, are better to use; you can then run separate networks for farming industries (all supported with farming supplies) and mining industries (all supported with engineering supplies).
 
-=== Supply Orders ===
+==== Manufacturing Supplies ====
+
+Manufacturing supplies help to boost production too, but they work in a different way. The [[en/Community/NewGRF/FIRS#production-rates|Production Rates]] section below explains the behaviour of secondary industries receiving mixed cargos. For an industry that uses manufacturing supplies, manufacturing supplies must be one of the mixed cargos in order to qualify for the production boost. For example, the textile mill accepts wool, plant fibres and manufacturing supplies. Any combination of wool and plant fibres produces output at a rate of 5t per 8t delivered. Only if manufacturing supplies are delivered as well can the ideal 8t per 8t ratio be achieved.
+
+[[File:en/Community/NewGRF/Manufacturing supplies behaviour.png|Production behaviour with manufacturing supplies.]]
+
+To summarize:
+
+* Manufacturing supplies only: 3t per 8t delivered
+* Wool only: 5t pet 8t delivered
+* Plant fibres only: 5t per 8t delivered
+* Wool + plant fibres: still 5t per 8t delivered
+* Wool + manufacturing supplies: 5t + 3t = 8t per 8t delivered
+* Plant fibres + manufacturing supplies: 5t + 3t = 8t per 8t delivered
+* All three: still 5t + 3t = 8t per 8t delivered
+
+Hence this is another case where 'supply orders' may be useful. See below.
+
+==== Supply Orders ====
  
 The FIRS manual suggests using transfer orders to deliver engineering or farm supplies a few at a time in smaller vehicles. In fact, using such 'supply orders' effectively is probably the major gameplay difference between FIRS and standard OpenTTD.
 
@@ -81,11 +101,13 @@ Do keep an eye out for oil wells, dredging sites and fishing grounds close enoug
 
 === Production Rates ===
 
-The production rates of FIRS' secondary industries are affected by the number of ''different'' supply types arriving in the same month. For example, a lime kiln supplied with 100 tonnes of stone will generate 50 tonnes of output; 25 tonnes of farming supplies and 25 tonnes of chemicals. Allowing for a 50&ndash;75% station rating, that will generate 12&ndash;20 tonnes each of chemicals and farming supplies for you to deliver. This means you may want to size your outgoing delivery trains as small as 10&ndash;40% of the inbound supply trains. There is a compromise level to be chosen so that you transport reasonable amounts of secondary supplies reasonably quickly, without waiting too many months for an over-large delivery train to fill up.
+The production rates of FIRS' secondary industries are affected by the number of ''different'' supply types arriving in a given time period. For example, a lime kiln supplied with 100 tonnes of stone will generate 50 tonnes of output; 25 tonnes of farming supplies and 25 tonnes of chemicals. Allowing for a 50&ndash;75% station rating, that will generate 12&ndash;20 tonnes each of chemicals and farming supplies for you to deliver. This means you may want to size your outgoing delivery trains as small as 10&ndash;40% of the inbound supply trains. There is a compromise level to be chosen so that you transport reasonable amounts of secondary supplies reasonably quickly, without waiting too many months for an over-large delivery train to fill up.
 
-If both primary resources are supplied in the same month, production increases. 50 tonnes of coal plus 50 tonnes of stone to the same lime kiln would produce 50 tonnes each of farming supplies and chemicals; twice as much. Allowing for the station rating, you will then have perhaps 25&ndash;40 tonnes of each cargo type to deliver, and you can then double the size of your delivery trains. In fact, any mix of coal and stone would produce a similar production increase, even 99 of one and only one tonne of the other. (n.b. Last sentence TBC &ndash; Simons_Mith).
+If both primary resources are supplied in the same ''production cycle'', production increases. 50 tonnes of coal plus 50 tonnes of stone to the same lime kiln would produce 50 tonnes each of farming supplies and chemicals; twice as much. Allowing for the station rating, you will then have perhaps 25&ndash;40 tonnes of each cargo type to deliver, and you can then double the size of your delivery trains. In fact, any mix of coal and stone will produce a similar production increase, even 99 tonnes of one and only one tonne of the other.
 
-Hence this is another case where supply orders become useful; deliver 100 tonnes of coal and stone using a transfer order, then supply them to the lime kiln a tonne each a month, in just the same way as you might handle engineering supplies to a mine. Whenever your larger deliveries of coal or stone arrive, even if they don't appear in the same calendar month as one another, they will still qualify for the increased production rate. Once the kiln gets very busy, and you can be certain that both cargo types will always arrive within the same month, you can cancel the supply order as no longer needed.
+While there is some variation, to count as part of the same 'production cycle' generally requires cargos to arrive within 30 days of one another. 
+
+Note that this is another case where supply orders become useful; deliver 100 tonnes of coal and stone using a transfer order, then supply them to the lime kiln a tonne each a month, in just the same way as you might handle engineering supplies to a mine. Whenever your larger deliveries of coal or stone arrive, even if they don't appear in the same calendar month as one another, they will still qualify for the increased production rate. Once the kiln gets very busy, and you can be certain that both cargo types will always arrive within the same month, you can cancel the supply order as no longer needed.
 
 [[File:en/Community/NewGRF/Sample production rates.png|center|Sample production rates for a FIRS stockyard.]] 
 
