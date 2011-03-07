@@ -1,79 +1,79 @@
 [[Translation:en/Manual/Dedicated server]]
-{{fr/Traduction|en/Manual/Dedicated server|0}}
 
-[[File:en/Manual/Dedicated server.png|right|frame|Dedicated server window]]A '''dedicated server''' is a OpenTTD network game [[en/Manual/Server]] that does not have a local client taking part in the game. A dedicated server can run in the background on a computer.
+[[File:en/Manual/Dedicated server.png|right|frame|Fenêtre de serveur dédié]]
+Un '''serveur dédié''' est un [[fr/Manual/Serveur|serveur]] OpenTTD de jeu en réseau qui n'a pas de client local prenant part au jeu. Un serveur dédié peut tourner en tâche de fond sur une machine.
 
-==Starting a dedicated server==
-Run the OpenTTD executable using the {{en/C|-D|}} (capital D!) [[en/Manual/Command line]] option. 
+==Démarrer un serveur dédié==
+Lancez l'exécutable OpenTTD en utilisant l'option de [[fr/Manual/Ligne de commande|ligne de commande]] {{en/C|-D|}} (D majuscule!).
 
-===In Windows===
-Method 1:
-*Create a shortcut to {{en/C|openttd.exe|}}
-*Right-click on the shortcut and click Properties
-*Add {{en/C|-D|}} onto the end of the Target line
-*Click Apply
-*Run the shortcut
-
-
-Method 2:
-*On the start menu click Run
-*Enter: {{en/C|"c:\(path to openttd)\openttd.exe" -D|}}
-*Click OK
-
-===In Linux===
-*Run {{en/C|openttd -D|}} in a terminal. If you are connecting to the server via SSH and would like the game to run when you logout you should use [http://www.gnu.org/software/screen/ GNU Screen] or [http://dtach.sourceforge.net/ dtach].
-
-You can also start openttd with -f option. It means that the process will run in the background, but no console will be avaible. All output will be sent to the file openttd.log. You can display the log with tail : tail -f openttd.log to follow events.
-
-===In OS/2===
-*Run the {{en/C|dedicated.cmd|}} file. If you run {{en/C|openttd -D|}}, you will not see a console window and will be unable to provide commands to the program.
-
-===In Mac OS X===
-*Open Terminal.
-*cd into the directory with OpenTTD
-*type cd OpenTTD.app/Contents/MacOS/
-*type ./openttd -D
-*OpenTTD should start up in Dedicated Server.
-
-==Configuring the server==
-There are 3 ways to change the game options:
-*Launch a single player game, change the settings, and close the game.
-*Use the [[en/Manual/Console#server-commands|console commands]] to control the server while it is running.
-*Edit the [[en/Archive/Manual/Settings/Openttd.cfg]] file manually. See [[en/Archive/Manual/Settings/Diff custom]] for some help.
-Available Tools: [http://www.tt-forums.net/viewtopic.php?f=29&t=33967 Web Interface]
+===Sous Windows===
+Méthode 1:
+*Créez un raccourci vers {{en/C|openttd.exe|}}
+*Faites un clic droit sur le raccourci et cliquez sur Propriétés
+*Ajoutez {{en/C|-D|}} à la fin de la ligne Cible
+*Cliquez sur Appliquer
+*Lancez le raccourci
 
 
-Change the network settings in the Network section of [[en/Archive/Manual/Settings/Openttd.cfg]]:
-*Set [[en/Archive/Manual/Settings/Lan internet]] to 0.
-*Change [[en/Archive/Manual/Settings/Server name]] so you can identify the server, 
-*Set [[en/Archive/Manual/Settings/Server advertise]] to true, so it will be visible on the [[en/Server list]]
-*If you have multiple network interfaces make sure you set [[en/Archive/Manual/Settings/Server bind ip]].
-*If you are behind a router, make sure that you forward the port specified by [[en/Archive/Manual/Settings/Server port]] (both TCP and UDP)
+Méthode 2:
+*Dans le menu de démarrage, cliquez sur Exécuter
+*Entrez: {{en/C|"c:\(chemin de openttd)\openttd.exe" -D|}}
+*Cliquez sur OK
 
-==Controlling the server with rcon==
-Configure the dedicated server to accept [[en/Manual/Console#server-commands|rcon]] commands:
-*In the dedicated server window, type {{en/C|rcon_pw <password>|}}. 
-:Example: {{en/C|rcon_pw x8na7f|}}
+===Sous Linux===
+*Exécutez {{en/C|openttd -D|}} dans un terminal. Si vous êtes connecté au serveur via SSH et aimeriez que le jeu tourne même une fois déconnecté, vous devriez utiliser [http://www.gnu.org/software/screen/ GNU Screen] ou [http://dtach.sourceforge.net/ dtach].
+
+Vous pouvez aussi démarrer openttd avec l'option -f. Elle signifie que le processus tournera en tâche de fond, mais qu'aucune console ne sera disponible. Toutes les sorties seront envoyées dans le fichier openttd.log. Vous pouvez afficher la log avec tail: tail -f openttd.log, pour suivre les événements.
+
+===Sous OS/2===
+*Exécutez le fichier {{en/C|dedicated.cmd|}}. Si vous lancez {{en/C|openttd -D|}}, vous ne verrez pas de fenêtre de console et serez incapables de passer des commandes au programme.
+
+===Sous Mac OS X===
+*Ouvrez le terminal.
+*allez dans le répertoire contenant OpenTTD
+*tapez cd OpenTTD.app/Contents/MacOS/
+*tapez ./openttd -D
+*OpenTTD devrait démarrer comme serveur dédié.
+
+==Configurer le serveur==
+Il y a trois moyens de modifier les options du jeu:
+*Lancez un jeu mono-joueur, modifiez les paramètres, puis fermez le jeu.
+*Utilisez les [[fr/Manual/Console#commandes-de-la-console|commandes de la console]] pour contrôler le serveur alors qu'il fonctionne.
+*Éditez le fichier [openttd.cfg/Fr|openttd.cfg]] manuellement. Voyez [[fr/Archive/Manual/Settings/Difficulté personnalisée|diff_custom]] pour de l'aide.
+Outils disponibles: [http://www.tt-forums.net/viewtopic.php?f=29&t=33967 Interface web]
 
 
-Connect to the server as a client:
-*Launch OpenTTD normally.
-*Find your server on the multiplayer list and connect to it.
-*Open the console (~ key).
-*Type {{en/C|rcon <password> "<command>"|}}. 
-:Example: {{en/C|rcon x8na7f "kick 5"|}}
+Modifiez les paramètres du réseau dans la section Network de [[fr/Archive/Manual/Settings/Openttd.cfg|openttd.cfg]]:
+*Mettez [[en/Archive/Manual/Settings/Lan internet]] à 0.
+*Changez [[fr/Archive/Manual/Settings/Nom du serveur|server_name]] pour pouvoir identifier le serveur.
+*Positionnez [[fr/Archive/Manual/Settings/Annonce du serveur|server_advertise]] à true, afin qu'il soit visible sur la [[fr/Liste des serveurs|liste des serveurs]].
+*Si vous avez plusieurs interfaces réseau, assurez-vous de bien fixer [[fr/Archive/Manual/Settings/Adresse IP de lien du serveur|server_bind_ip]].
+*Si vous êtes derrière un routeur, assurez-vous de rediriger le port spécifié par [[fr/Archive/Manual/Settings/Port du serveur|server_port]] (à la fois pour TCP et pour UDP)
 
-==Loading a game==
-In the dedicated server window (or with rcon):
-*Type {{en/C|ls|}} to list the files of the current directory, a number will be beside each one, which represents {{en/C|<number>|}} below.
-*Type {{en/C|cd <number>|}} to go to that directory.
-*Type {{en/C|load <number>|}} to load that file.
+==Contrôler le serveur avec rcon==
+Configurez le serveur dédié pour accepter les commandes [[fr/Manual/Console#commandes-de-la-console|rcon]]:
+*Dans la fenêtre du serveur dédié, tapez {{en/C|rcon_pw <mot-de-passe>|}}. 
+:Exemple: {{en/C|rcon_pw x8na7f|}}
 
-*You can also load savegames and scenarios with the {{en/C|-g "<filename>"|}}, command line option. 
-:Example: {{en/C|openttd.exe -D -g "scenario/echo.scn"|}}.
 
-==See also==
-*[[en/Archive/Manual/Settings/Autoclean companies|Autoclean companies]]   in order to specify what happens when a player logs off during a game and a company becomes inactive
+Connectez-vous au serveur comme client:
+*Lancez OpenTTD normalement.
+*Trouvez votre serveur dans la liste multijoueurs et connectez-vous dessus.
+*Ouvrez la console (touche ~).
+*Tapez {{en/C|rcon <mot-de-passe> "<commande>"|}}. 
+:Exemple: {{en/C|rcon x8na7f "kick 5"|}}
 
-[[Category:en/Manual/Multiplayer]]
-[[Category:en/Manual/Tutorial]]
+==Charger une partie==
+Dans la fenêtre du serveur dédié (ou avec rcon):
+*Tapez {{en/C|ls|}} pour lister les fichiers du répertoire courant. Un nombre sera affiché devant chaque, lequel sera appelé {{en/C|<nombre>|}} dans la suite.
+*Tapez {{en/C|cd <nombre>|}} pour aller à ce répertoire.
+*Tapez {{en/C|load <nombre>|}} pour charger ce fichier.
+
+*Vous pouvez aussi charger des sauvegardes et des scénarios avec l'option en ligne de commande {{en/C|-g "<nom-fichier>"|}}.
+:Exemple: {{en/C|openttd.exe -D -g "scenario/echo.scn"|}}.
+
+==Voir aussi==
+*[[fr/Archive/Manual/Settings/Auto-nettoyage des compagnies|Nettoyage automatique des compagnies]] afin de spécifier ce qui doit arriver lorsqu'un joueur se déconnecte au cours d'une partie et que sa compagnie devient inactive.
+
+[[Category:fr/Manual/Multijoueur]]
+[[Category:fr/Manual/Tutoriel]]
