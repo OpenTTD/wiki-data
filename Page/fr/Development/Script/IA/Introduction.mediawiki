@@ -26,7 +26,7 @@ La hiérarchie de votre répertoire devrait désormais ressembler à ceci:
 <pre>
 $OpenTTD_Dir/
     | ai/
-        | MyNewAI/
+        | MaNouvelleIA/
             | info.nut 
             | main.nut
 </pre>
@@ -37,7 +37,7 @@ Ouvrez <code>info.nut</code> puis continuez à lire la section suivante.
 
 Vous voulez faire savoir à OpenTTD que vous avez une IA que vous voulez appliquer à une compagnie. Pour cela, vous devez ajouter une classe qui étend <code>AIInfo</code>:
 
- class MyNewAI extends AIInfo {
+ class MaNouvelleIA extends AIInfo {
    function GetAuthor()      { return "Écrivain d'IA débutant"; }
    function GetName()        { return "MaNouvelleIA"; }
    function GetDescription() { return "Un exemple d'IA en suivant le tutoriel sur http://wiki.openttd.org/"; }
@@ -52,7 +52,7 @@ Le résultat de cela est de dire à OpenTTD comment s'appelle votre IA, sa versi
 Squirrel:
 
  /* Informer le cœur que nous sommes une IA */
- RegisterAI(MyNewAI());
+ RegisterAI(MaNouvelleIA());
 
 C'est suffisant pour initialiser votre IA. Mais nous n'en sommes pas encore à la faire démarrer. Nous n'avons pas encore une vraie IA, seulement un morceau de code qui dit ce qu'est votre IA, et qui l'a écrite. Alors, faisons donc une classe qui sera notre IA.
 
@@ -60,12 +60,12 @@ C'est suffisant pour initialiser votre IA. Mais nous n'en sommes pas encore à l
 
 Pour cela, créez un fichier <code>main.nut</code> dans le même répertoire, et faites une classe qui étende <code>AIController</code>. Voyez [[fr/Development/Style de codage|Style de codage]] pour les recommandations de formatage.
 
- class MyNewAI extends AIController 
+ class MaNouvelleIA extends AIController 
  {
    function Start();
  }/
  
- function MyNewAI::Start()
+ function MaNouvelleIA::Start()
  {
    while (true) {
      AILog.Info("Je suis une toute nouvelle IA avec une fonction périodique appelé MaNouvelleIA et je suis au tic " + this.GetTick());
@@ -83,7 +83,7 @@ Sur Windows Vista, vous pouvez avoir besoin de lancer <code>openttd.exe</code> e
 Si OpenTTD ne tourne pas comme administrateur, les répertoires de l'IA seront invisibles à l'exécutable, et charger une IA provoquera une erreur "L'IA nommée 'XYZ' est inconnue ou non adaptée". 
 
 Si vous ouvrez la fenêtre de débogage de l'IA, qui se trouve sous l'icône du point d'interrogation, vous verrez une jolie ligne indiquant que nous sommes actifs. Vous pouvez aussi démarrer manuellement votre IA nouvellement créée en tapant la commande
- start_ai MyNewAI
+ start_ai MaNouvelleIA
 dans la console du jeu (ouverte par la touche '''`''')
 
 Si vous changez le code ailleurs que dans info.nut, vous pouvez utiliser la commande de console <code>restart</code> pour redémarrer le jeu depuis le début. Ou vous pouvez simplement utiliser le bouton "Recharger IA" dans la fenêtre de débogage de l'IA.
