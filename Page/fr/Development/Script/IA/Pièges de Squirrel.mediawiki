@@ -1,0 +1,88 @@
+[[Translation:en/Development/Script/Squirrel pitfalls]]
+{{fr/Traduction|en/Development/Script/Squirrel pitfalls|0}}
+
+
+{{fr/NonIA}}
+
+== require() ==
+
+To include files inside your <code>main.nut</code>, you can use <code>require()</code>. This function works relative from the current file, so it should be easy to use. But, there are several things you have to keep in mind:
+
+* It always includes the file in the global space. It isn't a code-include. So the file included has to be full code (rarely people will notice this, but it is important to know :))
+
+== Classes ==
+
+Make sure you initialize all your non-static class variables in the constructor. Just giving them a value when you declare them is not enough if you create multiple instances!! If you fail to initialize a variable in the constructor it might end up with a weird value, such as copying the value from another instance of the class. The box below shows a correct way to initialize variables. The important thing is that all variables get a value in the constructor. 
+
+ class Developer
+ {
+     name = null;
+     age  = null;
+     constructor() {
+         name = "Unknown Developer";
+         age  = 25;
+     }
+     function SetName(name);
+     // ...
+ }
+
+== Function declarations ==
+Also note that function declarations in a class happens ''outside'' the block belonging to the class. 
+ class Util{
+     function Util::GetMsg(){
+         return "Test";
+     }	
+ }
+will make the AI crash when loading, while 
+ class Util{
+     	
+ }
+ function Util::GetMsg(){
+    return "Test";
+ }
+
+will work as expected.
+
+== Squirrel lacks a way to mark methods as static or private ==
+
+In other object oriented languages you can limit how functions are called when you declare them. In squirrel the only difference between an instance function and a static function are the way you call them. In other languages you can also choose to make methods public or private. All methods in squirrel are public.
+
+There are two ways to call functions. You may call them from the '''instance''' or you may call them '''staticly'''. When you call a function from the instance you either preface the call with the the keyword '''this''' or you don't prefix it at all.
+
+The AIFoo.Valuate() methods always call your methods statically. So any custom valuators should be self contained.
+
+'''instance'''
+  function MyNewAI::Start()
+  {
+    this.MainLoop();
+    /* MainLoop(); would also work. '''this.''' is usually optional. */
+    local otherClass = MyOtherClass();
+    otherClass.SomeFunction(); // Calls the function with the instance method on another class.
+  }
+  
+  function MyNewAI::MainLoop()
+  {
+    while(true) { // Loop forever.
+      this.Sleep(10);
+    }
+  }
+  
+When you call the method from the instance, the method has all the variables and other information avialalble to this instance of the class. So the line this.Sleep(10) will work correctly, because AIController has the sleep method for your class. Remember your main class is an extension of AIController and so has all it's abilities as well as any you give it.
+
+In order to call a static instance you need to preface the method with the class name.
+
+'''static'''
+  function MyNewAI::Start()
+  {
+    MyNewAI.MainLoop();
+    MyOtherClass.SomeFunction(); // Calls the otherclass function staticly.
+  }
+  
+  function MyNewAI::MainLoop()
+  {
+    while(true) { // Loop forever.
+      AIController.Sleep(10); // "'''this'''" no longer exists in static context.
+    }
+  }
+  
+Remember that your functions can be called in either way. It's up to the caller how to use the function.
