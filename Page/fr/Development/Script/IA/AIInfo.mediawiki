@@ -1,157 +1,155 @@
 [[Translation:en/Development/Script/AIInfo]]
-{{fr/Traduction|en/Development/Script/AIInfo|0}}
 
 
 {{fr/NonIA}}
+'''info.nut''' est un fichier dans lequel vous indiquez à NonIA les informations de base de votre IA. C'était auparavant une partie de <code>main.nut</code>, mais il en a été séparé pour rendre le débogage plus facile ([[fr/Archive/Development/IA/Jalons de développement#mai-2008-main-nut-est-coupe-en-deux|voyez ici]] si les détails vous intéressent).
 
-'''info.nut''' is a file in which you tell NoAI basic things about your AI. It used to be part of <code>main.nut</code>, but it has been separated to make debugging easier ([[en/Archive/Development/AI Development milestones#20-may-2008-main-nut-is-split-in-two|see here]] if you're interested in details).
+Voyez aussi http://noai.openttd.org/docs/trunk/classAIInfo.html pour une meilleure description (et plus complète) de toutes les fonctions.
 
-See also http://noai.openttd.org/docs/trunk/classAIInfo.html for a better (and complete) description of all functions.
+== Structure de info.nut ==
 
-== info.nut structure ==
+La structure interne de <code>info.nut</code> est très simple et suit un modèle présenté ci-dessous.
 
-The internal structure of <code>info.nut</code> is very simple and follows a template presented below.
-
- class '''MyNewAI''' extends AIInfo 
+ class '''MaNouvelleIA''' extends AIInfo 
  {
-   function GetAuthor()        { return "Newbie AI Writer"; }
-   function GetName()          { return "MyNewAI"; }
-   function GetDescription()   { return "An example AI by following the wiki tutorial"; }
+   function GetAuthor()        { return "Auteur d'IA débutant"; }
+   function GetName()          { return "MaNouvelleIA"; }
+   function GetDescription()   { return "Un exemple d'IA en suivant le tutoriel du wiki"; }
    function GetVersion()       { return 1; }
    function MinVersionToLoad() { return 1; }
-   function GetDate()          { return "2007-03-17"; }
-   function GetShortName()     { return "MYAI"; }
-   function CreateInstance()   { return "MyNewAI"; }
+   function GetDate()          { return "17/03/2007"; }
+   function GetShortName()     { return "MonIA"; }
+   function CreateInstance()   { return "MaNouvelleIA"; }
    function GetAPIVersion()    { return "1.0"; }
  }
  
- /* Tell the core we are an AI */
- RegisterAI('''MyNewAI'''());
+ /* Indique au cœur que nous sommes une IA */
+ RegisterAI('''MaNouvelleIA'''());
 
-Where of course you should change the names however you like to call everything. Just don't forget the <code>RegisterAI()</code>, and don't forget to extend <code>AIInfo</code>. If something goes wrong, check if you did: <code>RegisterAI(MyNewAI())</code>. Mind the <code>()</code> after <code>MyNewAI</code>!
+où, bien entendu, vous devez changer les noms comme vous voulez appeler tout. N'oubliez simplement pas le <code>RegisterAI()</code>, ni d'étendre <code>AIInfo</code>. Si quelque chose se passe mal, vérifiez si vous avez bien mis: <code>RegisterAI(MaNouvelleAI())</code>. Vérifiez le <code>()</code> après le <code>MaNouvelleIA</code>!
 
-== Settings ==
+== Paramètres ==
 
-It is possible to allow users to change settings in your AI. The only requirement is that you tell them which settings. You can do this by altering your <code>info.nut</code> in the following way:
+Il est possible de permettre aux utilisateurs de modifier les paramètres dans votre IA. La seule obligation est que vous devez leur indiquer quels paramètres. Vous pouvez le faire en modifiant votre <code>info.nut</code> de la manière suivante:
 
- class '''MyNewAI''' extends AIInfo 
+ class '''MaNouvelleIA''' extends AIInfo 
  {
-   function GetAuthor()      { return "Newbie AI Writer"; }
-   function GetName()        { return "MyNewAI"; }
-   function GetDescription() { return "An example AI by following the tutorial at http://wiki.openttd.org/"; }
+   function GetAuthor()      { return "Auteur d'IA débutant"; }
+   function GetName()        { return "MaNouvelleIA"; }
+   function GetDescription() { return "Un exemple d'IA suivant le tutoriel sur http://wiki.openttd.org/"; }
    function GetVersion()     { return 1; }
    function MinVersionToLoad() { return 1; }
-   function GetDate()        { return "2007-03-17"; }
-   function GetShortName()   { return "MYAI"; }
-   function CreateInstance() { return "MyNewAI"; }
+   function GetDate()        { return "17/03/2007"; }
+   function GetShortName()   { return "MonIA"; }
+   function CreateInstance() { return "MaNouvelleIA"; }
    function GetAPIVersion()  { return "1.0"; }
    
    function GetSettings() 
    {
-     AddSetting({name = "NameOfSetting", description = "Description of setting", min_value = 0, max_value = 10, easy_value = 10, medium_value = 5, hard_value = 0, custom_value = 5, flags = 0});
-     AddLabels("NameOfSetting", {_0 = "It's off now", _10 = "Maximum"});
+     AddSetting({name = "NomDuParametre", description = "Description du paramètre", min_value = 0, max_value = 10, easy_value = 10, medium_value = 5, hard_value = 0, custom_value = 5, flags = 0});
+     AddLabels("NomDuParametre", {_0 = "C'est maintenant désactivé", _10 = "Maximum"});
    }
  }
  
- /* Tell the core we are an AI */
- RegisterAI('''MyNewAI'''());
+ /* Indiquer au cœur que nous sommes une IA */
+ RegisterAI('''MaNouvelleIA'''());
 
-The new lines of course are those about Settings. In SetSetting it is important to define all properties. If not, an error will be given. Now in the GUI on your AI there will be an option to alter NameOfSetting between the values of 0 and 10, or a preset value if your have a difficulty setting different than 'Custom'. [[en/Development/Script/TestAI]] also shows simple examples of using bool (on/off) settings.
+Les nouvelles lignes, bien entendu, sont celles concernant les paramètres. Dans SetSetting, il est important de définir toutes les propriétés. Sinon, une erreur sera renvoyée. Maintenant, dans une IHM de votre IA, il y aura une option pour modifier NomDuParametre entre les valeurs 0 à 10, avec une valeur prédéfinie si vous avez un paramètre de difficulté différent de 'Personnalisé'. [[fr/Development/Script/IA/TestAI|IA:TestAI]] montre aussi des exemples simples utilisant des paramètres booléen (on/off).
 
-Available parameters for AddSetting:
+Paramètres disponibles pour AddSetting:
 {|
 |-
-! Name
+! Nom
 ! Type
-! Required
+! Obligatoire
 ! Description
 |-
 | name
 | string
-| yes
-| The name of the setting which you reference in your AI in this.GetSetting(name) (member of AIController). The characters ',' and '=' are not allowed.
+| oui
+| Le nom du paramètre que vous référencez dans votre IA dans this.GetSetting(name) (membre de AIController). Les caractères ',' et '=' sont interdits.
 |-
 | description
 | string
-| yes
-| A description of what the setting does. Visible for the user in the AI Settings window.
+| oui
+| Une description de ce que fait le paramètre. Visible pour l'utilisateur dans la fenêtre des paramètres de l'IA.
 |-
 | min_value
 | integer
-| Only if flags doesn't contain AICONFIG_RANDOM.
-| The minimum value of the setting
+| Seulement si les drapeaux ne contiennent pas AICONFIG_RANDOM.
+| La valeur minimale du paramètre.
 |-
 | max_value
 | integer
-| Only if flags doesn't contain AICONFIG_RANDOM.
-| The maximum value of the setting.
+| Seulement si les drapeaux ne contiennent pas AICONFIG_RANDOM.
+| La valeur maximale du paramètre.
 |-
 | easy_value
 | integer
-| yes
-| The default value on the easy difficulty level.
+| oui
+| La valeur par défaut du niveau de difficulté facile.
 |-
 | medium_value
 | integer
-| yes
-| The default value on the medium difficulty level.
+| oui
+| La valeur par défaut du niveau de difficulté intermédiaire.
 |-
 | hard_value
 | integer
-| yes
-| The default value on the hard difficulty level.
+| oui
+| La valeur par défaut du niveau de difficulté difficile.
 |-
 | custom_value
 | integer
-| yes
-| The default value on the custom difficulty level.
+| oui
+| La valeur par défaut du niveau de difficulté personnalisé.
 |-
 | random_deviation
 | integer
-| no, forbidden if flags contain AICONFIG_RANDOM
-| When the game is started, the value for the setting will be randomized between user_specified_value - random_deviation and user_specified_value + random_deviation. 
+| non, interdit si les drapeaux contiennent AICONFIG_RANDOM
+| Quand le jeu est démarré, la valeur du paramètre sera choisie aléatoirement entre user_specified_value - random_deviation et user_specified_value + random_deviation. 
 |-
 | step_size
 | integer
-| no
-| The amount the value is changed for every time the user clicks one of the buttons.
+| non
+| L'incrément duquel la valeur est modifiée chaque fois que l'utilisateur clic sur un des boutons.
 |-
 | flags
 | bitset
-| yes
-| You can specify the following flags (combine via the binary or operator): AICONFIG_RANDOM, AICONFIG_BOOLEAN and AICONFIG_INGAME. See below for a description about what they do.
+| oui
+| Vous pouvez spécifier les drapeaux suivants (combinés avec l'opérateur ou binaire): AICONFIG_RANDOM, AICONFIG_BOOLEAN et AICONFIG_INGAME. Voyez ci-dessous pour une description de ce qu'ils font.
 |}
 
 
-=== Flags ===
+=== Drapeaux ===
 {|
 |-
-! Flag
+! Drapeau
 ! Description
 |-
 | AICONFIG_BOOLEAN
-| Makes the setting a boolean choice. If you set this flag, don't specify min_value or max_value. All of easy_value, medium_value, hard_value and custom_value should be either 0 or 1 (not false/true).
+| Fait du paramètre un choix booléen. Si vous positionnez ce drapeau, ne spécifiez pas min_value ou max_value. Toutes les valeurs de easy_value, medium_value, hard_value et custom_value doivent être 0 ou 1 (pas false/true).
 |-
 | AICONFIG_RANDOM
-| Users won't explicitly set the value, it'll get a random value between min_value and max_value.
+| Les utilisateurs ne fixeront pas explicitement la valeur, ils obtiendront une valeur aléatoire entre min_value et max_value.
 |-
 | AICONFIG_INGAME
-| Only settings with this flag set will be allowed to be changed in a running game.
+| Seuls les paramètres avec ce drapeau pourront être modifiés en cours de jeu.
 |}
 
-It's possible to combine two or more settings together. For example this makes a random boolean: flags = AICONFIG_BOOLEAN | AICONFIG_RANDOM
+Il est possible de combiner ensemble deux ou plus paramètres. Par exemple, cela produit un booléen aléatoire: flags = AICONFIG_BOOLEAN | AICONFIG_RANDOM
 
 
 === AddLabels ===
-AddLabels accepts two parameters, first is the name of the setting to define labels for, and second a table with a mapping from values to labels. As identifiers can't start with a digit, the first character is ignored (the underscore in the example). The rest of the identifier should be a number you want to define a label for. In case you don't define a label, the number is shown as number. Those labels are only for the users, in your AI you'll still get the numerical values if you use GetSetting().
+AddLabels accepte deux paramètres; le premier est le nom du paramètre pour lequel les libellés sont définis, et le second une table avec une correspondance entre valeurs et libellés. Comme les identifiants ne peuvent pas commencer par un chiffre, le premier caractère est ignoré (le souligné, dans l'exemple). Le reste de l'identifiant devrait être un nombre pour lequel vous définissez un libellé. Si jamais vous ne définissez aucun libellé, le nombre sera affiché comme tel. Ces libellés servent uniquement pour les utilisateurs; dans votre IA, vous n'aurez que les valeurs numériques, si vous utilisez GetSetting().
 
 
-=== Reading setting values ===
-Now inside your AI you can request the value of this setting, by doing:
+=== Lire les valeurs de paramètre ===
+Maintenant, dans votre IA, vous pouvez demander la valeur de ce paramètre, en écrivant:
 
- MyNewAI.GetSetting("NameOfSetting");
+ MaNouvelleIA.GetSetting("NomDuParametre");
 
-There are a few things to remember:
-* Settings never change during runtime. You set them before you start a game, and that is final. //Except setting with AICONFIG_INGAME.
-* Settings are always integers.
-* Changing your info.nut file while OpenTTD is running will cause the program NOT to notice that the values declared in your GetSettings() function have changed. You should restart the program (not just the game) for them to take effect.
+Il y a quelques choses à se souvenir:
+* Les paramètres ne changent jamais pendant l'exécution. Vous les fixez avant de démarrer une partie, et c'est tout. //Sauf si vous mettez AICONFIG_INGAME.
+* Les paramètres sont toujours des entiers.
+* Modifier votre fichier info.nut quand OpenTTD tourne fera que le programme ne remarquera PAS que les valeurs déclarées dans votre GetSettings() ont changé. Vous devez redémarrer le programme (pas seulement la partie) pour qu'ils prennent effet.
