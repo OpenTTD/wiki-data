@@ -1,0 +1,181 @@
+[[Translation:en/Development/Script/Save and Load]]
+{{fr/Traduction|en/Development/Script/Save and Load|0}}
+
+
+{{fr/NonIA}}
+
+== Save ==
+If you create a <code>Save()</code> function in your AI, you can store some data inside the savegame. The function should return a table with the information you want to store. You can only store:
+* integers
+* strings
+* arrays (max. 25 levels deep)
+* tables (max. 25 levels deep)
+* booleans
+* nulls
+
+Instances of classes can't be saved. Please note that this includes AIList, so if you want to store an AIList, you have to convert it to an array or table on save and convert it back on load.
+
+As soon as the users saves the game, the <code>Save()</code> function of your AI is called. This happens while your AI is still active doing what ever you made it do. For example, in the middle of a pathfinding, or maybe when you are changing an internal array. The point here is, that your AI won't notice it, besides the fact that the <code>Save()</code> is called for a moment. When you return from that function, your AI continues like nothing happen. Warning: if you change a variable that you also store, and want to make absolutely sure no race-conditions happen, do it right after a <code>Sleep()</code>. The chances of the Squirrel fair-scheduler kicking in just after a <code>Sleep()</code> are very slim, so you should be relative safe.
+
+'''Note:''' No other information is saved, so for example all pending events are lost as soon as the game is loaded. To circumvent this you can store all events (converted to allowed types) in the savegame yourself. However, the game will continue normally after the <code>Save()</code> function is called, so you also need to handle those events.
+
+== Load ==
+If a savegame with an AI in it is loaded, OpenTTD tries the following. As soon as one step succeeds, the sequence is stopped:
+* Try to load the exact same version of the same AI.
+* Try to load the latest version of the same AI that supports loading data from the saved version. (version of saved AI >= return value of MinVersionToLoad)
+* Load the latest version of the same AI.
+* Load a random AI.
+* Load the dummy AI.
+
+First the constructor of your AI is called, and after that your <code>Load()</code> function is called. If an AI didn't save any data, the <code>Load()</code> function won't be called.
+
+== What data to save? ==
+Of course what data you save exactly is up to you, but as a general rule you shouldn't save anything that can be easily detected by reading the map again. So you can store a mapping of truck station to industry, but storing just a station list is useless.
+
+== What you can't do in your Save() and Load() function ==
+Both the Save() and Load function() are called from within the main thread. This means that it is not possible to execute any command that builds / removes / changes something in the game. You can execute some API functions, but only those that fetch data. Please try to minimize the code in Save() and Load(), as the user has to wait for those functions everytime they save and load a game.
+
+== Handling of save versions ==
+When a game is saved, the name and version of each AI is saved. When OpenTTD loads a game it tries to find a version of the same AI that can load the game state from the version of the AI that was used in the save. By declaring <code>MinVersionToLoad()</code> in your info.nut and make it return the minimum version of your AI from which it can load the data.
+
+Additionally there is a version argument to Load() that tells the load function which version of your AI that was used to save the game state.
+
+== Example Save() / Load() code ==
+ /* info.nut */
+ class testai extends AIInfo
+ {
+   /* ... */
+ 
+   function GetVersion() { return 3; }
+ 
+   /* Accept to load games saved by version >= 2 of this AI */
+   function MinVersionToLoad() { return 2; } 
+ 
+   /* ... */
+ }
+
+ /* main.nut */
+ class testai extends AIController
+ {
+   constructor()
+   {
+     counter = 0;
+   }
+ 
+   counter = null;
+ };
+ 
+ function testai::Save()
+ {
+   local table = {counter_value = this.counter};
+   return table;
+ }
+ 
+ function testai::Load(version, data)
+ {
+   if (data.rawin("counter_value")) {
+     this.counter = data.rawget("counter_value");
+   }
+ }
+ 
+ function testai::Start()
+ {
+   while(true) {
+     AILog.Info("Tick " + this.counter);
+     this.Sleep(70);
+     this.counter++;
+   }
+ }
+
+
+== Savegame ids ==
+Since the various newgfx can change many of the different ID types used in the game, here is a list of ID types which you can/cant trust to be the same when the savegame is loaded.
+
+{| border="1"
+|-
+! ID type
+! Meaning
+! Store in savegames
+! Hardcode into AIs
+! Note
+|-
+| BridgeID
+| Type of bridge (ex. tubular)
+| [0]
+| No
+| Use the AIBridge::* function to find suitable bridge type.
+|-
+| CargoID
+| Type of cargo
+| [0]
+| No
+| You can filter the AICargoList using AICargo::CargoClass (ex. CC_PASSENGERS) or AICargo::TownEffect (ex. TE_PASSENGERS) to get the passenger cargoID
+|-
+| EngineID
+| Engine type
+| [0]
+| No
+| Use the AIEngine::* functions to find an engineID that suits your need.
+|-
+| GroupID
+| Vehicle group
+| Yes
+| ---
+| 
+|-
+| IndustryID
+| Specific industry somewhere on the map
+| Yes
+| ---
+| 
+|-
+| IndustryType
+| Type of industry, ex. coal mine
+| [0]
+| No
+| Use AIIndustryList_CargoAccepting and AIIndustryList_CargoProducing to find matching pairs.
+|-
+| SignID
+| A sign somewhere on the map
+| yes
+| ---
+| 
+|-
+| StationID
+| Specific station somewhere on the map
+| Yes
+| ---
+| 
+|-
+| SubsidyID
+| subsidy
+| Yes (but is reused when subsidy expires)
+| ---
+| 
+|-
+| TileIndex
+| A tile somewhere on map
+| Yes
+| ---
+| 
+|-
+| TownID
+| A town somewhere on the map
+| Yes
+| ---
+| 
+|-
+| VehicleID
+| Vehicle
+| yes
+| ---
+| 
+|-
+| WaypointID
+| Waypoint
+| somewhat
+| ---
+| When upgrading savegames from before r16909, so in effect from 0.7.x to 1.0.x or later, the IDs will change if there are stations in the game
+|}
+
+[0] These should be safe to store, but they can change when the newgrf config changes. Normally users shouldn't change it, so if your AI breaks because one of these changes, blame the user. Note that the newgrf config can also change during a game, and in that case there is nothing you can do if one of these IDs changes. (You could recompute the IDs everytime you use them, but that's very unpractical).
