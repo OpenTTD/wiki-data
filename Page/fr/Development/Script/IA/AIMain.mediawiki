@@ -1,53 +1,52 @@
 [[Translation:en/Development/Script/AIMain]]
-{{fr/Traduction|en/Development/Script/AIMain|0}}
 
 
 {{fr/NonIA}}
 
-'''main.nut''' is a required file for an AI along with [[en/Development/Script/AIInfo|info.nut]]. [[en/Development/Script/TestAI]] shows an example of a fully formed (but do nothing) main.nut.
+'''main.nut''' est un fichier requis pour une IA, ainsi que [[fr/Development/Script/IA/AIInfo|info.nut]]. [[fr/Development/Script/IA/TestAI|IA:TestAI]] fournit un exemple d'un main.nut correctement formé (mais qui ne fait rien).
 
-==main.nut structure==
-main.nut needs to hold the class the the AIController uses to start your AI. It's a squirrel class with as name the return value of your info.nut function CreateInstance.
+==Structure de main.nut==
+main.nut a besoin de détenir la classe que le AIController utilise pour démarrer votre IA. C'est une classe Squirrel avec comme nom la valeur renvoyée par la fonction CreateInstance de votre info.nut.
 
- function CreateInstance() { return "'''MyNewAI'''"; }
+ function CreateInstance() { return "'''MaNouvelleIA'''"; }
 
 
-If you had MyNewAI then your main.nut would need to declare a class of the same name. You also need to extend AI controller.
+Si vous avez MaNouvelleIA, alors votre main.nut devra déclarer une classe du même nom. Vous devez aussi étendre le contrôleur de l'IA.
 
- class '''MyNewAI''' extends AIController
+ class '''MaNouvelleAI''' extends AIController
  { 
    constructor()
    {
-     //constructor is a special, optional function that will be called as soon as your AI is instantiated.
-     //You can scan the map, get settings and set variables here, but you can't do anything that affects the game.
-     //Make sure your AI doesn't take too long or it'll be killed.
+     //constructor est une fonction optionnelle spéciale qui sera appelée dès que votre IA sera instanciée.
+     //Vous pouvez analyser la carte, récupérer et positionner des variables ici, mais vous ne pouvez rien faire qui affecte le jeu.
+     //Assurez-vous que votre IA ne prend pas trop de temps, ou elle sera tuée.
    }
  }
 
-==Required functions==
-The game will try to run some special functions in your AI, and will cause your AI to crash or complain if you don't have them. They are Start(), Save() and Load(). With the exception of Start() they can be empty until you implement the functionality.
+==Fonctions requises==
+Le jeu essayera de lancer certaines fonctions particulières dans votre IA, et la fera planter ou se plaindre si vous ne les avez pas fournies. Ce sont Start(), Save() et Load(). À l'exception de Start(), elles peuvent être vides jusqu'à ce que vous ayez implémenté la fonctionnalité.
 
-In squirrel you can declare a function two ways. Either inside the the class declaration, or outside. You may choose whichever you wish.
+Dans Squirrel, vous pouvez déclarer une fonction de deux manières: soit dans la déclaration de la classe, soit à l'extérieur. Vous pouvez choisir ce que vous préférez.
 
- class '''MyNewAI''' extends AIController
+ class '''MaNouvelleIA''' extends AIController
  {
    
    function Start()
    {
-     //This function is inside the class declaration.
+     //Cette fonction est à l'intérieur de la déclaration de la classe
    }
     
-   //These are optional prototypes. Notice the ; at the end rather than {}.
-   //Squirrel doesn't require it, but some programmers like to use them.
+   //Ce sont des prototypes optionnels. Notez le ; à la fin plutôt que {}.
+   //Squirrel n'en a pas besoin, mais certains programmeurs aiment les utiliser.
    function Save();
    function Load(version, data);
  }
  
- function MyNewAI::Save()
+ function MaNouvelleIA::Save()
  {
-    //This function is outside the class declaration and requires the name of the class so squirrel can assign it to the right place.
+    //Cette fonction est en dehors de la déclaration de la classe et nécessite le nom de la classe, pour que Squirrel puisse l'assigner au bon endroit.
  }
  
- function MyNewAI::Load(version, data)
+ function MaNouvelleIA::Load(version, data)
  {
  }
