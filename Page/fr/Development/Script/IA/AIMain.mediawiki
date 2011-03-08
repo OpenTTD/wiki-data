@@ -1,0 +1,53 @@
+[[Translation:en/Development/Script/AIMain]]
+{{fr/Traduction|en/Development/Script/AIMain|0}}
+
+
+{{fr/NonIA}}
+
+'''main.nut''' is a required file for an AI along with [[en/Development/Script/AIInfo|info.nut]]. [[en/Development/Script/TestAI]] shows an example of a fully formed (but do nothing) main.nut.
+
+==main.nut structure==
+main.nut needs to hold the class the the AIController uses to start your AI. It's a squirrel class with as name the return value of your info.nut function CreateInstance.
+
+ function CreateInstance() { return "'''MyNewAI'''"; }
+
+
+If you had MyNewAI then your main.nut would need to declare a class of the same name. You also need to extend AI controller.
+
+ class '''MyNewAI''' extends AIController
+ { 
+   constructor()
+   {
+     //constructor is a special, optional function that will be called as soon as your AI is instantiated.
+     //You can scan the map, get settings and set variables here, but you can't do anything that affects the game.
+     //Make sure your AI doesn't take too long or it'll be killed.
+   }
+ }
+
+==Required functions==
+The game will try to run some special functions in your AI, and will cause your AI to crash or complain if you don't have them. They are Start(), Save() and Load(). With the exception of Start() they can be empty until you implement the functionality.
+
+In squirrel you can declare a function two ways. Either inside the the class declaration, or outside. You may choose whichever you wish.
+
+ class '''MyNewAI''' extends AIController
+ {
+   
+   function Start()
+   {
+     //This function is inside the class declaration.
+   }
+    
+   //These are optional prototypes. Notice the ; at the end rather than {}.
+   //Squirrel doesn't require it, but some programmers like to use them.
+   function Save();
+   function Load(version, data);
+ }
+ 
+ function MyNewAI::Save()
+ {
+    //This function is outside the class declaration and requires the name of the class so squirrel can assign it to the right place.
+ }
+ 
+ function MyNewAI::Load(version, data)
+ {
+ }
