@@ -1,0 +1,157 @@
+[[Translation:en/Development/Script/AIInfo]]
+{{fr/Traduction|en/Development/Script/AIInfo|0}}
+
+
+{{fr/NonIA}}
+
+'''info.nut''' is a file in which you tell NoAI basic things about your AI. It used to be part of <code>main.nut</code>, but it has been separated to make debugging easier ([[en/Archive/Development/AI Development milestones#20-may-2008-main-nut-is-split-in-two|see here]] if you're interested in details).
+
+See also http://noai.openttd.org/docs/trunk/classAIInfo.html for a better (and complete) description of all functions.
+
+== info.nut structure ==
+
+The internal structure of <code>info.nut</code> is very simple and follows a template presented below.
+
+ class '''MyNewAI''' extends AIInfo 
+ {
+   function GetAuthor()        { return "Newbie AI Writer"; }
+   function GetName()          { return "MyNewAI"; }
+   function GetDescription()   { return "An example AI by following the wiki tutorial"; }
+   function GetVersion()       { return 1; }
+   function MinVersionToLoad() { return 1; }
+   function GetDate()          { return "2007-03-17"; }
+   function GetShortName()     { return "MYAI"; }
+   function CreateInstance()   { return "MyNewAI"; }
+   function GetAPIVersion()    { return "1.0"; }
+ }
+ 
+ /* Tell the core we are an AI */
+ RegisterAI('''MyNewAI'''());
+
+Where of course you should change the names however you like to call everything. Just don't forget the <code>RegisterAI()</code>, and don't forget to extend <code>AIInfo</code>. If something goes wrong, check if you did: <code>RegisterAI(MyNewAI())</code>. Mind the <code>()</code> after <code>MyNewAI</code>!
+
+== Settings ==
+
+It is possible to allow users to change settings in your AI. The only requirement is that you tell them which settings. You can do this by altering your <code>info.nut</code> in the following way:
+
+ class '''MyNewAI''' extends AIInfo 
+ {
+   function GetAuthor()      { return "Newbie AI Writer"; }
+   function GetName()        { return "MyNewAI"; }
+   function GetDescription() { return "An example AI by following the tutorial at http://wiki.openttd.org/"; }
+   function GetVersion()     { return 1; }
+   function MinVersionToLoad() { return 1; }
+   function GetDate()        { return "2007-03-17"; }
+   function GetShortName()   { return "MYAI"; }
+   function CreateInstance() { return "MyNewAI"; }
+   function GetAPIVersion()  { return "1.0"; }
+   
+   function GetSettings() 
+   {
+     AddSetting({name = "NameOfSetting", description = "Description of setting", min_value = 0, max_value = 10, easy_value = 10, medium_value = 5, hard_value = 0, custom_value = 5, flags = 0});
+     AddLabels("NameOfSetting", {_0 = "It's off now", _10 = "Maximum"});
+   }
+ }
+ 
+ /* Tell the core we are an AI */
+ RegisterAI('''MyNewAI'''());
+
+The new lines of course are those about Settings. In SetSetting it is important to define all properties. If not, an error will be given. Now in the GUI on your AI there will be an option to alter NameOfSetting between the values of 0 and 10, or a preset value if your have a difficulty setting different than 'Custom'. [[en/Development/Script/TestAI]] also shows simple examples of using bool (on/off) settings.
+
+Available parameters for AddSetting:
+{|
+|-
+! Name
+! Type
+! Required
+! Description
+|-
+| name
+| string
+| yes
+| The name of the setting which you reference in your AI in this.GetSetting(name) (member of AIController). The characters ',' and '=' are not allowed.
+|-
+| description
+| string
+| yes
+| A description of what the setting does. Visible for the user in the AI Settings window.
+|-
+| min_value
+| integer
+| Only if flags doesn't contain AICONFIG_RANDOM.
+| The minimum value of the setting
+|-
+| max_value
+| integer
+| Only if flags doesn't contain AICONFIG_RANDOM.
+| The maximum value of the setting.
+|-
+| easy_value
+| integer
+| yes
+| The default value on the easy difficulty level.
+|-
+| medium_value
+| integer
+| yes
+| The default value on the medium difficulty level.
+|-
+| hard_value
+| integer
+| yes
+| The default value on the hard difficulty level.
+|-
+| custom_value
+| integer
+| yes
+| The default value on the custom difficulty level.
+|-
+| random_deviation
+| integer
+| no, forbidden if flags contain AICONFIG_RANDOM
+| When the game is started, the value for the setting will be randomized between user_specified_value - random_deviation and user_specified_value + random_deviation. 
+|-
+| step_size
+| integer
+| no
+| The amount the value is changed for every time the user clicks one of the buttons.
+|-
+| flags
+| bitset
+| yes
+| You can specify the following flags (combine via the binary or operator): AICONFIG_RANDOM, AICONFIG_BOOLEAN and AICONFIG_INGAME. See below for a description about what they do.
+|}
+
+
+=== Flags ===
+{|
+|-
+! Flag
+! Description
+|-
+| AICONFIG_BOOLEAN
+| Makes the setting a boolean choice. If you set this flag, don't specify min_value or max_value. All of easy_value, medium_value, hard_value and custom_value should be either 0 or 1 (not false/true).
+|-
+| AICONFIG_RANDOM
+| Users won't explicitly set the value, it'll get a random value between min_value and max_value.
+|-
+| AICONFIG_INGAME
+| Only settings with this flag set will be allowed to be changed in a running game.
+|}
+
+It's possible to combine two or more settings together. For example this makes a random boolean: flags = AICONFIG_BOOLEAN | AICONFIG_RANDOM
+
+
+=== AddLabels ===
+AddLabels accepts two parameters, first is the name of the setting to define labels for, and second a table with a mapping from values to labels. As identifiers can't start with a digit, the first character is ignored (the underscore in the example). The rest of the identifier should be a number you want to define a label for. In case you don't define a label, the number is shown as number. Those labels are only for the users, in your AI you'll still get the numerical values if you use GetSetting().
+
+
+=== Reading setting values ===
+Now inside your AI you can request the value of this setting, by doing:
+
+ MyNewAI.GetSetting("NameOfSetting");
+
+There are a few things to remember:
+* Settings never change during runtime. You set them before you start a game, and that is final. //Except setting with AICONFIG_INGAME.
+* Settings are always integers.
+* Changing your info.nut file while OpenTTD is running will cause the program NOT to notice that the values declared in your GetSettings() function have changed. You should restart the program (not just the game) for them to take effect.
