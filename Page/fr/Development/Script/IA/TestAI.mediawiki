@@ -1,0 +1,108 @@
+[[Translation:en/Development/Script/TestAI]]
+{{fr/Traduction|en/Development/Script/TestAI|0}}
+
+
+{{fr/NonIA}}
+
+These files are a fully functioning but do-nothing AI to start as a base for new AIs.
+
+==Info.nut==
+  
+  class TestAI extends AIInfo 
+  {
+    function GetAuthor()      { return "Author Name"; }
+    function GetName()        { return "TestAI"; }
+    function GetDescription() { return "Testing AI"; }
+    function GetVersion()     { return 1; }
+    function GetDate()        { return "2009-07-29"; }
+    function CreateInstance() { return "TestAI"; }
+    function GetShortName()   { return "TEST"; }
+    
+    function GetSettings() 
+    {
+      AddSetting({name = "bool_setting",
+                  description = "a bool setting, default off", 
+                  easy_value = 0, 
+                  medium_value = 0, 
+                  hard_value = 0, 
+                  custom_value = 0, 
+                  flags = AICONFIG_BOOLEAN});
+                  
+      AddSetting({name = "bool2_setting", 
+                 description = "a bool setting, default on", 
+                 easy_value = 1, 
+                 medium_value = 1, 
+                 hard_value = 1, 
+                 custom_value = 1, 
+                 flags = AICONFIG_BOOLEAN});
+                 
+      AddSetting({name = "int_setting", 
+                  description = "an int setting", 
+                  easy_value = 30, 
+                  medium_value = 20, 
+                  hard_value = 10, 
+                  custom_value = 20, 
+                  flags = 0, 
+                  min_value = 1, 
+                  max_value = 100});    	
+    }
+  }
+  
+  RegisterAI(TestAI());
+
+==Main.nut==
+  
+  class TestAI extends AIController
+  {
+    constructor()
+    {
+    } 
+  }
+  
+  
+  function TestAI::Start()
+  {
+    AILog.Info("TestAI Started.");
+    SetCompanyName();
+   
+    //set a legal railtype. 
+    local types = AIRailTypeList();
+    AIRail.SetCurrentRailType(types.Begin());
+        
+    //Keep running. If Start() exits, the AI dies.
+    while (true)
+    {
+      this.Sleep(100);
+      AILog.Warning("TODO: Add functionality to the AI.");
+    }
+  }
+  
+  function TestAI::Stop()
+  {
+  }
+  
+  function TestAI::Save()
+  {
+    local table = {};	
+    //TODO: Add your save data to the table.
+    return table;
+  }
+  
+  function TestAI::Load(version, data)
+  {
+    AILog.Info(" Loaded");
+    //TODO: Add your loading routines.
+  }
+  
+  
+  function TestAI::SetCompanyName()
+  {
+    if(!AICompany.SetName("Testing AI")) {
+      local i = 2;
+      while(!AICompany.SetName("Testing AI #" + i)) {
+        i = i + 1;
+        if(i > 255) break;
+      }
+    }
+    AICompany.SetPresidentName("P. Resident");
+  }
