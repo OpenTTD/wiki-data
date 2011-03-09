@@ -1,52 +1,50 @@
 [[Translation:en/Development/Script/Basics]]
-{{fr/Traduction|en/Development/Script/Basics|0}}
 
 
 {{fr/NonIA}}
 
-We assume that you read the [[en/Development/Script/Introduction|Introduction]], which explains how to add an AI to OpenTTD. This page will explain how to add some simple things to make your AI do something. The result is in the Example AIs.
+Nous supposons que vous avez lu l'[[fr/Development/Script/IA/Introduction|introduction]], qui explique comment ajouter une IA à OpenTTD. Cette page expliquera comment ajouter quelques choses simples pour faire faire quelque chose à votre IA. Le résultat se trouve dans les AIs d'exemple.
 
-==Naming your company==
+==Nommer votre compagnie==
 
-Of course the first thing you want to do, is name your company. You want to promote yourself, won't you? To change your company name, you need to load up the AICompany class. In Squirrel all classes are pre-loaded, so you can use it directly.
+Bien entendu, la première chose que vous voudrez faire est de nommer votre compagnie. Vous voulez vous faire de la publicité, n'est-ce pas? Pour changer le nom de votre compagnie, vous devez charger la classe AICompany. Dans Squirrel, toutes les classes sont préchargées, donc vous pouvez les utiliser directement.
 
-Now let's change our company name. The function to do this, as the API tells us, is <code>SetName</code>. The parameter is a string. So we get:
+Maintenant, modifions le nom de notre compagnie. La fonction pour le faire, comme nous le dit l'API, est <code>SetName</code>. Le paramètre est une chaîne. Nous avons donc:
  
- function MyNewAI::Start()
+ function MaNouvelleIA::Start()
  {
-   AICompany.SetName("MyNewAI");
+   AICompany.SetName("MaNouvelleIA");
  }
  
-Now if you payed a bit of attention, you immediately notice that this goes against a rule you learn in the [[en/Development/Script/Introduction|Introduction]]: the <code>Start()</code> returns, therefore your AI dies. But, this is just for illustration, so it will do fine for now.
+Maintenant, si vous faites bien attention, vous aurez tout de suite remarqué que cela va à l'encontre d'une règle apprise dans l'[[fr/Development/Script/IA/Introduction|introduction]]: le <code>Start()</code> se termine, donc votre IA meurt. Mais c'est simplement une illustration, donc cela suffira pour le moment.
 
-Start OpenTTD, start a new map, and see how your AI now makes the company name change of the new player to ''MyNewAI''.
+Démarrez OpenTTD, lancez une nouvelle carte et voyez comment votre IA modifie maintenant le nom de la compagnie du nouveau joueur en ''MaNouvelleIA''.
 
-==Naming your company (advanced)==
+==Nommer votre compagnie (avancé)==
 
-But now what happens if your AI starts two times. You can't have two AIs with the same company-name. If you run it, you will see that the second name stays ''Unnamed''. That sucks. Lucky we can check the result of the function if it went okay. So let's extend it a bit, and check the result. If it fails, let's find ourselves an other name.
+Mais maintenant, que se passe-t-il si votre IA démarre deux fois. Vous ne pouvez pas avoir deux IA avec le même nom de compagnie. Si vous les lancez, vous verrez que le second nom reste à ''Non nommé''. Cela ne va pas. Heureusement, nous pouvons vérifier le résultat de la fonction voir s'il est OK. Améliorons donc un peu la fonction, et vérifions le résultat. S'il a échoué, trouvons un autre nom.
 
- function MyNewAI::Start()
+ function MaNouvelleIA::Start()
  {
-   if (!AICompany.SetName("MyNewAI")) {
+   if (!AICompany.SetName("MaNouvelleIA")) {
      local i = 2;
-     while (!AICompany.SetName("MyNewAI #" + i)) {
+     while (!AICompany.SetName("MaNouvelleIA #" + i)) {
        i = i + 1;
      }
    }
  }
 
-What happens here, is that if naming the AI to ''MyNewAI'' fails, it tries ''MyNewAI #2''. If that fails, it tries ''MyNewAI #3'', etc etc. At some point it should work, or rather, that is the idea. So there you have it, your first AI that does something ingame.
+Ce qui se passe là est que si le renommage de l'IA en ''MaNouvelleIA'' échoue, il essayera ''MaNouvelleIA #2''. Si cela échoue aussi, il essayera ''MaNouvelleIA #3'', etc. Au bout d'un moment, cela fonctionnera, du moisn c'est l'idée. Donc voilà, vous avez votre première IA qui fait quelque chose dans le cours du jeu.
 
-==Printing debug output==
+==Afficher des sorties de débogage==
 
-To print output to the [[en/Development/Script/Need To Know#logging-and-debug-panel|AI Debug Panel]], you can use <code>[http://noai.openttd.org/docs/trunk/classAILog.html AILog]</code>. These messages are also written to the console (<code>AILog.Info</code> with ai debug level 4 or higher, <code>AILog.Warning</code> with level 3 or higher and <code>AILog.Error</code> with level 1 or higher). Note that these functions only accept a string as parameter. If you want to print anything else, convert it to a string first. The easiest way to do that is appending an empty string, for example:
+Pour afficher une sortie dans la [[fr/Development/Script/IA/A savoir#trace-et-fenetre-de-debogage|fenêtre de débogage de l'IA]], vous pouvez utiliser <code>[http://noai.openttd.org/docs/trunk/classAILog.html AILog]</code>. Ces messages sont aussi écrits dans la console (<code>AILog.Info</code> avec niveau de débogage de l'IA à 4 ou plus, <code>AILog.Warning</code> avec niveau 3 ou plus et <code>AILog.Error</code> avec niveau 1 ou plus). Notez que ces fonctions n'acceptent qu'une chaîne en paramètre. Si vous voulez écrire autre chose, convertissez-le d'abord en chaîne. La manière la plus simple de le faire est d'ajouter une chaîne vide, par exemple:
 
- AILog.Info(some_integer + "");
+ AILog.Info(un_entier + "");
 
-==Event System==
+==Système d'événements==
 
-
-The event system is a simple poll system. You will need to poll the event-controller once in a while to see if there are any relevant events for you on the stack. Doing this is relative easy:
+Le système d'événements est un simple système de sondage. Vous devez sonder le contrôleur d'événements de temps en temps pour voir s'il y a des événements significatifs pour vous dans la pile. Le faire est assez facile:
 
  while (AIEventController.IsEventWaiting()) {
    local e = AIEventController.GetNextEvent();
@@ -54,16 +52,16 @@ The event system is a simple poll system. You will need to poll the event-contro
      case AIEvent.AI_ET_VEHICLE_CRASHED:
        local ec = AIEventVehicleCrashed.Convert(e);
        local v  = ec.GetVehicleID();
-       AILog.Info("We have a crashed vehicle (" + v + ")");
-       /* Handle the crashed vehicle */
+       AILog.Info("Nous avons un véhicule accidenté (" + v + ")");
+       /* Gestion du véhicule accidenté */
        break;
    }
  }
 
-==Now what?==
+==Et maintenant?==
 
-How to proceed next depends very much on what you want your AI to do. The best thing to do is to start browsing through the [http://noai.openttd.org/docs/ API]. We suggest to start with a road-vehicle-only AI. We know it is really boring, but you can really make a lot of money with them, if done correctly. Also, it is much easier to create and understand than trains are. Ships and aircraft are also very doable, but more boring than road-vehicles.
+Comment procéder ensuite dépend beaucoup de ce que vous voulez que fasse votre IA. La meilleure chose à faire est de commencer à regarder dans l'[http://noai.openttd.org/docs/ API]. Nous vous suggérons de commencer avec une IA pour véhicules routiers uniquement. Nous savons que c'est assez pénible, mais vous pouvez vraiment gagner beaucoup d'argent avec eux, en opérant correctement. De plus, il sont bien plus faciles à créer et à comprendre que les trains. Les navires et les avions sont aussi très faisables, mais moins intéressants que les véhicules routiers.
 
-For example, if you want to build road and road-stations, check <code>AIRoad</code> documentation. You will find the right functions there. For station information check <code>AIStation</code>. For vehicle-building and settings orders, check <code>AIVehicle</code> and <code>AIOrder</code>. Sounds all pretty logical, doesn't it?
+Par exemple, si vous voulez construire des routes et des gares routières, regardez la documentation de <code>AIRoad</code>. Vous y trouverez les bonnes fonctions. Pour l'information sur les stations, voyez <code>AIStation</code>. Pour la construction de véhicules et la fixation des ordres, voyez <code>AIVehicle</code> et <code>AIOrder</code>. Tout cela semble assez logique, non?
 
-Of course there are many things that make your life easier. There is for example a piece of code that queues all your commands in a big list and starts executing them on request all at once. Now if one fails, where it didn't before, it rolls everything back. This is very useful from time to time, as when planning a route it might have looked to be no problem to build it, but by the time a road piece is placed, it can be that an other company has taken the tile already. Such pieces of code makes handling those situations a bit easier. Other examples are pathfinders, and more of those things.
+Bien sûr, il y a beaucoup de choses qui vous facilitent la vie. Il y a par exemple un bout de code qui met en queue toutes vos commandes dans une grande liste et commence à les exécuter à la demande, toutes ensemble. Maintenant, si l'une échoue, là où ce n'avait pas encore été le cas, tout est annulé. C'est très utile de temps à autres, comme quand vous planifiez une route qui peut sembler ne pas poser problème à construire mais qui, au moment de vouloir placer une portion, trouve qu'une autre compagnie a déjà occupé la case. De telles portions de code facilitent la gestion de ce genre de situation. D'autres exemples sont les déterminations de chemin, et autres choses semblables.
