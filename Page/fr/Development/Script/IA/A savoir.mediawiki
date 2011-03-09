@@ -1,5 +1,5 @@
 [[Translation:en/Development/Script/Need To Know]]
-{{fr/Traduction|en/Development/Script/Need To Know|2}}
+{{fr/Traduction|en/Development/Script/Need To Know|40}}
 
 
 {{fr/NonIA}}
@@ -22,66 +22,66 @@ La liste des IA détectées par OpenTTD est également disponible via:
 
  ./openttd --help
 
-=== Loading and restarting AI's ===
+=== Charger et redémarrer des IAs ===
 
-All AIs are reloaded when starting a new game. There is no need to restart the game; abandoning the current level and starting again is usually the easiest method to restart the AI from a scratch map (try <code>newgame</code> from console), or loading a scenario setup to be the same each time. The AI Debug Window also allows restarting individual AIs.
+Toutes les IAs sont rechargées quand une nouvelle partie est lancée. Il n'y a pas besoin de redémarrer le jeu; abandonner le niveau courant et démarrer de nouveau est habituellement la méthode la plus facile pour redémarrer l'IA depuis une carte vierge (essayez <code>newgame</code> depuis la console), ou chargez un scénario paramétré pour être le même à chaque fois. La fenêtre de débogage de l'IA permet aussi de redémarrer les IAs individuellement.
 
-To load a specific scenario immediately, use:
+Pour charger un scénario spécifique immédiatement, utilisez:
 
  ./openttd -g relative/path/to/scenario.scn
 
-=== Logging and Debug Panel ===
+=== Trace et fenêtre de débogage ===
 
-AI Debug panel is accessible from the Land Area Information (red question mark) labelled "AI Debug Console". All outputs of <code>AILog.XXX()</code> go to here, and can be selected per AI. The AI can also be restarted here. When restarting, the company of that AI is removed (with all his property), and a new AI controlled by the same script (which is reloaded from disk) is started. So when changing the AI, it is enough to just hit the Reload button to get your new AI to work.
+La fenêtre de débogage de l'IA est accessible depuis l'information sur le terrain (point d'interrogation rouge) intitulé "Console de débogage de l'IA". Toutes les sorties de <code>AILog.XXX()</code> vont là, et peuvent être sélectionnées par IA. L'IA peut aussi être redémarrée ici. Lors de son redémarrage, la compagnie de cette IA est supprimée (avec toutes ses propriétés), et une nouvelle IA contrôlée par le même script (qui est rechargé depuis le disque) est démarrée. Donc, pour changer l'IA, il suffit simplement de cliquer sur le bouton Recharger pour que votre nouvelle IA fonctionne.
 
-[[File:en/Development/Script/Ai-debug-panel.png|frame|none|AI Debug Panel]]
+[[File:en/Development/Script/Ai-debug-panel.png|frame|none|Fenêtre de débogage de l'IA]]
 
-==== Break on log message ====
-{{en/Feature|1.1}}
-As of revision r19544 there has been added a few new controls at the bottom of the debug panel for breaking an AI when certain log messages come up. In order to use it you type a string into the text box and when your AI prints a log message that matches this string, the AI will be suspended after the AILog call and at the end of the current tick OpenTTD will be paused. When you hit the continue button or the regular pause button, your AI will continue to run. If you temporarily want to disable the matching without clearing the edit box you can use the small toggle button to the left of the edit box.
+==== Arrêt sur message de trace ====
+{{fr/Disponibilité|1.1}}
+Depuis la révision r19544, il a été ajouté certains contrôles supplémentaires en bas de la fenêtre de débogage pour arrêter une IA quand certains messages de trace surviennent. Pour les utiliser, vous devez taper une chaîne de caractères dans la zone de texte et, quand votre IA affiche un message de trace qui correspond à cette chaîne, l'IA sera suspendue après l'appel de AILog et, à la fin de ce tic, OpenTTD sera mis en pause. Quand vous appuyez sur le bouton Continuer ou sur le bouton de pause normal, votre IA continuera à fonctionner. Si vous voulez désactiver temporairement la correspondance sans vider la zone de texte, vous pouvez utiliser la petite case à cocher à gauche de la zone d'édition.
 
-To enable this feature you need to have the setting "gui.ai_developer_tools" enabled. To enable it you can open the in-game console and enter "set gui.ai_developer_tools 1".
+Pour activer cette fonctionnalité, vous devez avoir le paramètre "gui.ai_developer_tools" activé. Pour le faire, vous pouvez ouvrir la console du jeu et entrer "set gui.ai_developer_tools 1".
 
-[[File:en/Development/Script/AIDebug break on.png|frame|none|AI Debug Panel - break on string]]
+[[File:en/Development/Script/AIDebug break on.png|frame|none|Fenêtre de débogage de l'IA - arrêt sur chaîne]]
 
-==== Developer Console Usage ====
+==== Utilisation de la console pour le développeur ====
 
-The console is accessed using the ` key (next to "1") on the keyboard, and appears in the top part of the screen. This can be scrolled by using the Shift + Page Up/Down.
+La console peut être accédée par la touche ` (près de "1") du clavier, et elle apparaît en haut de l'écran. On peut la faire défiler avec Shift + Page Up/Down.
 
-To get a separate window (Windows Only) use the <code>-d</code> parameter by itself (use <code>-d ai=5</code> to get only AI information) on a shortcut:
+Pour avoir une fenêtre séparée (seulement sous Windows), utilisez le paramètre <code>-d</code> tout seul (utilisez <code>-d ai=5</code> pour avoir seulement l'information sur l'IA) avec un raccourci:
 
  ./openttd -d
 
-This provides this output (Windows Only):
+Cela produit cet affichage (uniquement sur Windows):
 
-[[File:en/Development/Script/Openttd -d.png|frame|none|Zuu's example of the developer console -d version outputting AI errors.]]
+[[File:en/Development/Script/Openttd -d.png|frame|none|Exemple de Zuu de la console de développement version -d affichant les erreurs de l'IA]]
 
-For linux, using <code>-d ai=5</code> will send all information to the stdout.
+Pour Linux, utiliser <code>-d ai=5</code> enverra toutes les informations sur stdout.
 
-==== Logging ====
+==== Tracer ====
 
-<code>AILog.XXX()</code> commands can be output to the developer console directly by:
+Les commandes <code>AILog.XXX()</code> peuvent être affichées directement dans la console du développeur par:
 
  ./openttd -d ai=5
  openttd.exe -d ai=5
 
-Or by inputting <code>debug_level ai=5</code> in the console.
+ou en entrant <code>debug_level ai=5</code> dans la console.
 
-== AI Fundamentals ==
+== B.a.ba de l'IA ==
 
 === GetTick() ===
 
-When your <code>Start()</code> is called for the first time, <code>GetTick()</code> always returns 1. It is not an important value. It is just meant to give an indication of time, as we always find it useful to know when an AI spit out a message (was it ages ago, or was it recent). This said, you of course want to know when its value is changed by the game:
+Quand votre <code>Start()</code> est appelé pour la première fois, <code>GetTick()</code> renvoie toujours 1. Sa seule utilité est de donner une indication du temps, car nous trouvons toujours utile de savoir quand une IA émet un message (était-ce il y a des lustres, ou tout récemment?). Ceci dit, vous voulez bien sûr savoir quand sa valeur est modifiée par le jeu.
 
-Of course it changes when you do <code>Sleep()</code>, and with the exact value you specified in the <code>Sleep()</code>. But it also changes when you execute a command. This has to do that in networking it takes time to do something, and as you want to know if something really build, we have to wait till we get a signal back from the server. Now to make your life easier, we made singleplayer and multiplayer simular: they both delay. In singleplayer this is always 1 tick, unless you configured it with <code>SetDelay()</code>. In multiplayer it is at least 1 tick, but depends on the server-configuration. If you set <code>SetDelay()</code> lower than the server-configuration, the server-configuration wins, and else <code>SetDelay()</code> does.
+Bien entendu, elle change quand vous appelez <code>Sleep()</code>, avec de la valeur exacte que vous avez spécifié dans <code>Sleep()</code>. Mais elle change aussi quand vous exécutez une commande. Cela est lié au fait qu'en réseau, cela prend du temps de faire quelque chose, et comme vous voulez savoir si quelque chose a vraiment été construit, vous devez attendre d'avoir un signal de retour du serveur. Maintenant, pour vous simplifier la vie, nous avons rendu identiques les version mono-joueur et multijoueurs: les deux attendent. En mono-joueur, c'est toujours de 1 tic, sauf si vous l'avez configuré avec <code>SetDelay()</code>. En multijoueurs, c'est au moins de 1 tic, mais cela dépend de la configuration du serveur. Si vous avez mis <code>SetDelay()</code> inférieur à sa valeur dans la configuration du serveur, c'est cette dernière qui gagnera, sinon ce sera <code>SetDelay()</code>.
 
-So what does this mean:
+Qu'est-ce que cela veut donc dire?
 
  GetTick() -> 3
  SetCompanyName()
- GetTick() -> 4 (or higher)
+ GetTick() -> 4 (ou plus)
 
-As you might notice, you can't use <code>GetTick()</code> for anything else but debugging. It isn't a good indicator of time, it isn't usable to do something every 10 ticks or something, nothing of that. You will need to make such a system yourself.
+Comme vous l'aurez remarqué, vous ne pouvez pas utiliser <code>GetTick()</code> pour autre chose que du débogage. Ce n'est pas un bon indicateur de temps, et il n'est pas utilisable pour faire quelque chose tous les 10 tics environ; pas du tout. Vous devrez faire un tel système par vous-mêmes.
 
 === Opcodes ===
 
