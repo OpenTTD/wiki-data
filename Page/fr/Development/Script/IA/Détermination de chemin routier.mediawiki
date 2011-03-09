@@ -1,87 +1,87 @@
 [[Translation:en/Development/Script/RoadPathfinder]]
-{{fr/Traduction|en/Development/Script/RoadPathfinder|0}}
 
 
 {{fr/NonIA}}
 
-== Benefits ==
+== Avantages ==
 
-If you've tried to build a road pathfinder yourself, you may have noticed it's hard to get it correctly. Mainly corners on foundations are a problem. Using the pathfinder from the library will solve that for you, so you don't have to do the hard work yourself.
+Si vous avez essayez de construire par vous-mêmes une détermination de chemin routier, vous avez remarqué qu'il était difficile de le faire correctement. Principalement, les angles des fondations sont un problème. Utiliser la détermination de chemin depuis la bibliothèque résoudra ce problème pour vous, afin que vous n'ayez pas à faire le travail vous-mêmes.
 
-== Initialization ==
+== Initialisation ==
 
-As with any library, before you can use it, you need to import it. You can do this by placing the following line at the top of your code.
+Comme avec ce genre de bibliothèque, avant de l'utiliser, vous devez l'importer. Vous pouvez le faire en plaçant la ligne suivante au début de votre code.
 
  import("pathfinder.road", "RoadPathFinder", 3);
 
-This imports the road pathfinder version 3 and names it <code>RoadPathFinder</code>. You can now instance it like any other class:
+Cela importe la détermination de chemin routier version 3 et l'appelle <code>RoadPathFinder</code>. Vous pouvez maintenant l'instancier comme toute autre classe:
 
  local pathfinder = RoadPathFinder();
 
-Now set what kind of road type you want to find a path for:
+Maintenant, fixez pour quel type de route vous voulez trouver un chemin:
 
  AIRoad.SetCurrentRoadType(AIRoad.ROADTYPE_ROAD);
 
-Before you start finding a route, you may want to set some parameters first. The available parameters are:
+Avant de commencer à rechercher un chemin, vous voudrez peut-être positionner quelques paramètres. Ceux qui sont disponibles sont:
 
 {| class="wikitable"
 |-
-! Name
-! Default value
-! Meaning
+! Nom
+! Valeur par défaut
+! Signification
 |-
 | cost.max_cost
 | 2000000000
-| The maximum cost for a route.
+| Le coût maximal pour une route.
 |-
 | cost.tile
 | 100
-| The cost for a single tile.
+| Le coût pour une seule case.
 |-
 | cost.no_existing_road
 | 40
-| The cost that is added to _cost_tile if no road exists yet.
+| Le coût ajouté à cost.tile si la route n'existe pas encore.
 |-
 | cost.turn
 | 100
-| The cost that is added to _cost_tile if the direction changes.
+| Le coût ajouté à cost.tile si la direction est modifiée.
 |-
 | cost.slope
 | 200
-| The extra cost if a road tile is sloped.
+| Le coût supplémentaire si une case de route est en pente.
 |-
 | cost.bridge_per_tile
 | 150
-| The cost per tile of a new bridge, this is added to _cost_tile.
+| Le coût par case d'un nouveau pont; il est ajouté à cost.tile.
 |-
 | cost.tunnel_per_tile
 | 120
-| The cost per tile of a new tunnel, this is added to _cost_tile.
+| Le coût par case d'un nouveau tunnel; il est ajouté à cost.tile.
 |-
 | cost.coast
 | 20
-| The extra cost for a coast tile.
+| Le coût supplémentaire d'une case côtière.
 |-
 | cost.max_bridge_length
 | 10
-| The maximum length of a bridge that will be build. Note that all existing bridges will be explored, regardless of their length.
+| La longueur maximale d'un pont qui peut être construite. Remarquez que tous les ponts existants seront explorés, quelle que soit leur longueur.
 |-
 | cost.max_tunnel_length
 | 20
-| The maximum length of a tunnel that will be build. Note that all existing tunnels will be explored, regardless of their length.
+| La longueur maximale d'un tunnel qui peut être construite. Remarquez que tous les tunnels existants seront explorés, quelle que soit leur longueur.
 |}
 
-To set a parameter, you just use:
+Pour positionner un paramètre, utilisez simplement:
 
  pathfinder.cost.tile = 100;
 
-== Planning a route ==
+== Planifier un trajet ==
 
-SO, now we know how to create an instance of the pathfinder and to set the cost functions, it's time to put that knowledge to some use. Let's plan our first road. First we need one (or more) source tile(s) and one (or more) goal tile(s). For now let's assume we already have those, as it's outside the scope of this page to explain how to get those. So say for example we want to build a road between tile_a and tile_b. First we call <code>InitializePath</code> on our pathfinder object:
+Donc, maintenant que nous savons comment créer une instance de détermination de chemin et paramétrer les fonctions de coût, il est temps de mettre cette connaissance en pratique. Planifions notre premier trajet. Tout d'abord, nous avons besoin d'une (ou plusieurs) case(s) de ressource et d'une (ou plusieurs) case(s) cible. Pour le moment, supposons que nous les connaissons déjà, car expliquer comment les obtenir dépasse le cadre de cette page. Disons donc, par exemple, que nous voulons construire une route entre case_a et case_b. Tout d'abord, nous appelons
+<code>InitializePath</code> sur notre objet de détermination de chemin:
 
- pathfinder.InitializePath([tile_a], [tile_b]);
+ pathfinder.InitializePath([case_a], [case_b]);
 
-The pathfinder expects an array of source tiles and an array of goal tiles, since we only have one source and one goal tile, we'll just create two arrays with one element each. Now the pathfinder is ready to find a path.
+La détermination de chemin attend un tableau de cases de départ et un tableau de cases de destination; comme nous n'avons qu'une case de départ et une de destination, nous créons simplement deux tableaux avec un seul élément pour chacun. Maintenant, la détermination de chemin est prête à trouver un chemin.
 
  local path = false;
  while (path == false) {
@@ -89,11 +89,11 @@ The pathfinder expects an array of source tiles and an array of goal tiles, sinc
    AIController.Sleep(1);
  }
 
-The parameter <code>FindPath</code> accepts is the number of iterations it should do before returning. 100 is just fine. Don't make that value too big, as you'll notice slowdowns in OpenTTD. The <code>AIController.Sleep(1);</code> line is really needed. <code>FindPath</code> returns false if it isn't finished with pathfinding. When it's done, it returns either the path it found or null to indicate no route exists.
+Le paramètre que <code>FindPath</code> accepte est le nombre d'itérations qu'il doit exécuter avant de répondre. 100 convient bien. Ne donnez pas une trop grande valeur, car vous noterez des ralentissements dans OpenTTD. La ligne <code>AIController.Sleep(1);</code> est vraiment nécessaire. <code>FindPath</code> renvoie false s'il n'a pas terminé avec la détermination de chemin. Une fois fini, il renvoie soit le chemin trouvé, ou null pour indiquer qu'aucune route n'existe.
 
-== Building the planned route ==
+== Construire la route planifiée ==
 
-Suppose the pathfinder returned a path, how do start building it? For a start, it's nice to know that <code>FindPath</code> returns an instance of the <code>AyStar.Path</code> class. To view the documentation, open <code>bin/ai/library/graph/aystar/main.nut</code>. Basically, it has three functions: <code>GetParent()</code>, <code>GetCost()</code> and <code>GetTile()</code>. <code>GetCost()</code> isn't useful for now, so we'll just use <code>GetParent()</code> and <code>GetTile()</code>. To build the route found by the pathfinder, we call <code>path.GetParent()</code> until it returns null. As the pathfinder can also return bridges / tunnels, we need to check the distance between the current node and the previous node. If that distance is more than 1, we should build a bridge / tunnel.
+Supposons que la détermination de chemin a renvoyé un trajet, comment commencer à le construire? Pour démarrer, il est intéressant de savoir que <code>FindPath</code> renvoie une instance de la classe <code>AyStar.Path</code>. Pour voir la documentation, ouvrez <code>bin/ai/library/graph/aystar/main.nut</code>. Sommairement, il comporte trois fonctions: <code>GetParent()</code>, <code>GetCost()</code> et <code>GetTile()</code>. <code>GetCost()</code> N'est pas utile pour le moment, donc nous n'utiliserons que <code>GetParent()</code> et <code>GetTile()</code>. Pour construire une route trouvée par la détermination de chemin, nous appelons <code>path.GetParent()</code> jusqu'à ce qu'il renvoie null. Comme la détermination de chemin renvoie aussi des ponts et des tunnels, nous devons vérifier la distance entre le nœud actuel et le précédent. Si cette distance est supérieure à 1, nous devons construire un pont ou un tunnel.
 
  while (path != null) {
    local par = path.GetParent();
@@ -101,24 +101,24 @@ Suppose the pathfinder returned a path, how do start building it? For a start, i
      local last_node = path.GetTile();
      if (AIMap.DistanceManhattan(path.GetTile(), par.GetTile()) == 1 ) {
        if (!AIRoad.BuildRoad(path.GetTile(), par.GetTile())) {
-         /* An error occured while building a piece of road. TODO: handle it. 
-          * Note that is can also be the case that the road was already build. */
+         /* Une erreur est survenue lors de la construction d'une portion de route. À FAIRE: la gérer.
+          * Notez que ce peut aussi être le cas si la route était déjà construite. */
        }
      } else {
-       /* Build a bridge or tunnel. */
+       /* Construire un pont ou un tunnel. */
        if (!AIBridge.IsBridgeTile(path.GetTile()) && !AITunnel.IsTunnelTile(path.GetTile())) {
-         /* If it was a road tile, demolish it first. Do this to work around expended roadbits. */
+         /* Si c'était une case de route, la démolit d'abord. À faire pour contourner des bouts de route utilisés. */
          if (AIRoad.IsRoadTile(path.GetTile())) AITile.DemolishTile(path.GetTile());
          if (AITunnel.GetOtherTunnelEnd(path.GetTile()) == par.GetTile()) {
            if (!AITunnel.BuildTunnel(AIVehicle.VT_ROAD, path.GetTile())) {
-             /* An error occured while building a tunnel. TODO: handle it. */
+             /* Une erreur s'est produite lors de la construction d'un tunnel. À FAIRE: la gérer. */
            }
          } else {
            local bridge_list = AIBridgeList_Length(AIMap.DistanceManhattan(path.GetTile(), par.GetTile()) + 1);
            bridge_list.Valuate(AIBridge.GetMaxSpeed);
            bridge_list.Sort(AIAbstractList.SORT_BY_VALUE, false);
            if (!AIBridge.BuildBridge(AIVehicle.VT_ROAD, bridge_list.Begin(), path.GetTile(), par.GetTile())) {
-             /* An error occured while building a bridge. TODO: handle it. */
+             /* Une erreur s'est produite lors de la construction d'un pont. À FAIRE: la gérer. */
            }
          }
        }
@@ -127,11 +127,11 @@ Suppose the pathfinder returned a path, how do start building it? For a start, i
    path = par;
  }
 
-This code loops over all the whole route. For every element, it checks whether it's already connected to the previous tile via road or via a bridge. If it's not connected it tries to build a road. Note that in a real AI you'll probably want to check if <code>AIRoad.BuildRoad</code> returns true, and if not restart pathfinding.
+Ce code boucle tout le long de la route. Pour chaque élément, il vérifie s'il est déjà connecté à la case précédente par route ou via un pont. S'il ne l'est pas, il tente de construire une route. Remarquez que dans une vraie IA, vous vérifierez probablement si <code>AIRoad.BuildRoad</code> renvoie true, et si non, vous relancerez la détermination de chemin.
 
-'''Note''': do not use parent as variable name for <code>GetParent</code>, it's a keyword, giving peculiar results.
+'''Note''': n'utilisez pas parent comme nom de variable pour <code>GetParent</code>, c'est un mot-clé, donnant des résultats étranges.
 
-== A sample AI ==
+== Une IA exemple ==
  import("pathfinder.road", "RoadPathFinder", 3);
  
  class SampleAI extends AIController {
@@ -139,33 +139,33 @@ This code loops over all the whole route. For every element, it checks whether i
  
  function SampleAI::Start()
  {
-   /* Get a list of all towns on the map. */
+   /* Obtient une liste de toutes les villes de la carte. */
    local townlist = AITownList();
  
-   /* Sort the list by population, highest population first. */
+   /* Trie la liste par population, les plus importantes en premier. */
    townlist.Valuate(AITown.GetPopulation);
    townlist.Sort(AIAbstractList.SORT_BY_VALUE, false);
  
-   /* Pick the two towns with the highest population. */
+   /* Choisit les deux villes avec la plus grande population. */
    local townid_a = townlist.Begin();
    local townid_b = townlist.Next();
  
-   /* Print the names of the towns we'll try to connect. */
-   AILog.Info("Going to connect " + AITown.GetName(townid_a) + " to " + AITown.GetName(townid_b));
+   /* Affiche le nom des villes que nous allons essayer de relier. */
+   AILog.Info("En train de relier " + AITown.GetName(townid_a) + " à " + AITown.GetName(townid_b));
  
-   /* Tell OpenTTD we want to build normal road (no tram tracks). */
+   /* Dit à OpenTTD que nous voulons construire une route normale (pas une voie de tramway). */
    AIRoad.SetCurrentRoadType(AIRoad.ROADTYPE_ROAD);
  
-   /* Create an instance of the pathfinder. */
+   /* Crée une instance de détermination de chemin. */
    local pathfinder = RoadPathFinder();
  
-   /* Set the cost for making a turn extreme high. */
+   /* Positionne le coût d'un virage très haut. */
    pathfinder.cost.turn = 5000;
  
-   /* Give the source and goal tiles to the pathfinder. */
+   /* Donne les cases de départ et de destination à la détermination de chemin. */
    pathfinder.InitializePath([AITown.GetLocation(townid_a)], [AITown.GetLocation(townid_b)]);
  
-   /* Try to find a path. */
+   /* Tente de trouver un trajet. */
    local path = false;
    while (path == false) {
      path = pathfinder.FindPath(100);
@@ -173,35 +173,35 @@ This code loops over all the whole route. For every element, it checks whether i
    }
  
    if (path == null) {
-     /* No path was found. */
-     AILog.Error("pathfinder.FindPath return null");
+     /* Pas de trajet trouvé. */
+     AILog.Error("pathfinder.FindPath a renvoyé null");
    }
  
-   /* If a path was found, build a road over it. */
+   /* Si un chemin a été trouvé, construit une route le long de celui-ci. */
    while (path != null) {
      local par = path.GetParent();
      if (par != null) {
        local last_node = path.GetTile();
        if (AIMap.DistanceManhattan(path.GetTile(), par.GetTile()) == 1 ) {
          if (!AIRoad.BuildRoad(path.GetTile(), par.GetTile())) {
-           /* An error occured while building a piece of road. TODO: handle it. 
-            * Note that is can also be the case that the road was already build. */
+           /* Une erreur s'est produite en construisant une portion de route. À FAIRE: la gérer. 
+            * Remarquez que ce peut être aussi le cas quand la route est déjà construite. */
          }
        } else {
-         /* Build a bridge or tunnel. */
+         /* Construit un pont ou un tunnel. */
          if (!AIBridge.IsBridgeTile(path.GetTile()) && !AITunnel.IsTunnelTile(path.GetTile())) {
-           /* If it was a road tile, demolish it first. Do this to work around expended roadbits. */
+           /* S'il y avait une case de route, la démolit d'abord. Faire ainsi contourne une portion de voie utilisée. */
            if (AIRoad.IsRoadTile(path.GetTile())) AITile.DemolishTile(path.GetTile());
            if (AITunnel.GetOtherTunnelEnd(path.GetTile()) == par.GetTile()) {
              if (!AITunnel.BuildTunnel(AIVehicle.VT_ROAD, path.GetTile())) {
-               /* An error occured while building a tunnel. TODO: handle it. */
+               /* Une erreur est survenue en construisant un tunnel. À FAIRE: la traiter. */
              }
            } else {
              local bridge_list = AIBridgeList_Length(AIMap.DistanceManhattan(path.GetTile(), par.GetTile()) + 1);
              bridge_list.Valuate(AIBridge.GetMaxSpeed);
              bridge_list.Sort(AIAbstractList.SORT_BY_VALUE, false);
              if (!AIBridge.BuildBridge(AIVehicle.VT_ROAD, bridge_list.Begin(), path.GetTile(), par.GetTile())) {
-               /* An error occured while building a bridge. TODO: handle it. */
+               /* Une erreur est survenue en construisant un pont. À FAIRE: la traiter. */
              }
            }
          }
@@ -209,7 +209,7 @@ This code loops over all the whole route. For every element, it checks whether i
      }
      path = par;
    }
-   AILog.Info("Done");
+   AILog.Info("Terminé");
  }
 
-Create an <code>info.nut</code> for this AI and give it a try. Play a bit with various cost, for example setting <code>pathfinder.cost.no_existing_road = pathfinder.cost.max_cost</code>. now the pathfinder will only find routes over already existing road. Not very useful if you want to build a new connection, but it can be nice if you want to check if a previously build connection is still OK.
+Créez un <code>info.nut</code> pour cette IA et essayez-la. Faites varier les différents coûts, par exemple en mettant <code>pathfinder.cost.no_existing_road = pathfinder.cost.max_cost</code>. Maintenant, la détermination de chemin ne trouvera que des routes sur des routes déjà existantes. Ce n'est pas très utile si vous voulez construire une nouvelle liaison, mais ce peut être pratique si vous voulez vérifier si une liaison précédemment construite est toujours OK.
