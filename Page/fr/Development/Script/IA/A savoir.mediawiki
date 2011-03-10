@@ -85,85 +85,85 @@ Comme vous l'aurez remarqué, vous ne pouvez pas utiliser <code>GetTick()</code>
 
 === Opcodes ===
 
-Remember back in the [[en/Development/Script/Introduction#your-first-ai|Introduction]] when we told you that the AI would be suspended after X opcodes? Well, that was an half-truth. To dwell a little in the details, an opcode is, basically, one squirrel instruction. The framework simply count the number of squirrel instructions your AI does and put it to sleep after a certain amount. What's insidious about this is that it is possible to call C++ code from within squirrel, which instructions aren't counted because, well, it's not squirrel. 
+Vous souvenez-vous, dans l'[[fr/Development/Script/IA/Introduction#votre-premiere-ia|introduction]], quand nous vous avons dit que l'IA serait suspendue après X opcodes? Bien, c'était une semi-vérité. Pour entrer un peu plus dans les détails, un opcode est, au fond, une instruction Squirrel. Le framework compte simplement le nombre d'instructions Squirrel que fait votre IA et la met en sommeil après un certain nombre. Ce qu'il y a d'insidieux avec cela est qu'il est possible d'appeler du code C++ depuis Squirrel, dont les instructions ne sont pas comptées puisque ce n'est pas du Squirrel.
 
-For example, if I were to play on a 2048x2048 map and make use of a Valuator to valuate all tiles on the map using a valuator written in C++, I would steal all the CPU resources and "freeze" the game for some time. (Thanks to [http://www.tt-forums.net/viewtopic.php?p=892576#p892576 Morloth] for the explanation and example!)
+Par exemple, si je joue sur une carte 2048x2048 et utilise un Valuator pour évaluer toutes les cases de la carte en utilisant un évaluateur écrit en C++, je volerai toutes les ressources CPU et "gèlerai" le jeu pendant un moment (merci à [http://www.tt-forums.net/viewtopic.php?p=892576#p892576 Morloth] pour l'explication et l'exemple!)
 
-== Game Mechanics ==
+== Mécanismes du jeu ==
 
-=== Map Coordinates ===
+=== Coordonnées de la carte ===
 
-[[File:en/Development/Script/Ai-placed-coordinate-of-airport.png|frame|right|The AI placed this airport, using the top right most coordinate, which is also it's returned location. The airport size is X=4, Y=3]]
+[[File:en/Development/Script/Ai-placed-coordinate-of-airport.png|frame|right|L'IA a placé cet aéroport en utilisant la coordonnée la plus en haut à droite, qui est aussi l'emplacement renvoyé. La taille de l'aéroport est X=4, Y=3]]
 
-Map (X, Y) coordinates are done from the top to the bottom - the top-most coordinate is (0,0), the bottom-most coordinate is (Max_X-1, Max_Y-1). X is increased by going SW, and Y increased by going SE. Any time a more than one tile dimension object is returned, it'll be the most top coordinate, tending towards the top right.
+Les coordonnées (X,Y) de la carte vont de haut en bas - la coordonnée la plus haute est (0,0), la plus basse (Max_X-1,Max_Y-1). X est incrémenté en allant au SO, et Y en allant au SE. Chaque fois qu'un objet de plus d'une case est renvoyé, ce sera sa plus haute coordonnée, la plus proche du bord haut droit.
 
-However, an AI cannot access all coordinates as tiles. The outside edge of the map is reserved as non-buildable tiles. These are tiles in which the X or Y value is either 0, Max_X-1 (if X), or Max_Y-1 (if Y). The API will treat tiles with these coordinates as invalid.
+Cependant, une IA ne peut accéder à toutes les coordonnées comme des cases. Le bord externe de la carte est réservé avec des cases non constructibles. Ce sont les cases pour lesquelles la valeur de X ou Y est soit 0, soit Max_X-1 (pour X) ou Max_Y-1 (pour Y). L'API traitera les cases avec ces coordonnées comme invalides.
 
-This behavior varies, however, if the freeform_edges option is enabled. If freeform_edges is turned off, then the upper two edges (those where X or Y is 0) become accessible.
+Ce comportement varie toutefois si l'option freeform_edges est activée. Si elle est désactivée, alors les deux bords supérieurs (ceux avec X ou Y à 0) deviennent accessibles.
 
-So with freeform_edges on, the top-most tile the AI can use is (1, 1). But with freeform_edges off, the top-most tile is (0, 0).
+Donc avec freeform_edges activée, la case la plus haute que l'IA peut utiliser est (1,1). Mais avec freeform_edges désactivée, cette case est (0,0).
 
-The bottom-most tile accessible to the AI is always (Max_X-2, Max_Y-2).
+La case la plus basse accessible à l'IA est toujours (Max_X-2,Max_Y-2).
 
-To get Max_X and Max_Y, the <code>AIMap.GetMapSizeX()</code> and <code>AIMap.GetMapSizeY()</code> functions can be used, respectively.
+Pour obtenir Max_X et Max_Y, les fonctions <code>AIMap.GetMapSizeX()</code> et <code>AIMap.GetMapSizeY()</code> peuvent être utilisées, respectivement.
 
-When using <code>AITile.IsBuildableRectangle</code> with [[en/Development/Script/Lists|Lists]], the list will contain those tiles where you can build an object of the size specified, where the returned tile is the one with the lowest X and Y value of the rectangle (or rather: the tile most North).
+En utilisant <code>AITile.IsBuildableRectangle</code> avec les [[fr/Development/Script/IA/Listes|listes]], la liste contiendra les cases où vous pouvez construire un objet de la taille spécifiée, où la case renvoyée est celle avec les valeurs de X et Y les plus basses du rectangle (dit autrement: la case la plus au nord).
 
-=== Distance Calculations ===
+=== Calculs de distance ===
 
-All in-game distances use [http://en.wikipedia.org/wiki/Taxicab_geometry Manhattan distance] calculations, so the distance between (3,3) and (5,5) calculated by the game is 4:
+Toutes les distances dans le jeu utilisent les calculs de [http://fr.wikipedia.org/wiki/Distance_de_Manhattan distance de Manhattan]; ainsi, la distance entre (3,3) et (5,5) calculée par le jeu est 4:
  abs(3-5)  + abs(3-5) = 4
-Use <code>AITile.GetDistanceManhattanToTile</code> to get this distance between tiles. <code>AITile.GetDistanceSquareToTile</code> is much less necessary, calculating the same distance as 8:
+Utilisez <code>AITile.GetDistanceManhattanToTile</code> pour obtenir cette distance entre cases. <code>AITile.GetDistanceSquareToTile</code> est moins utile, calculant la même distance comme 8:
  (3-5)^2 + (3-5)^2 = 8
 
-The distance might not be exactly what a "plane would fly", since planes, boats and trains with the correct tracks can move diagonally, lowering the direct distance taken between tiles. Buses always must move Manhattan distances however due to having no type of diagonal roads. For an AI, you'll nearly always want to use <code>AITile.GetDistanceManhattanToTile</code>, as that is the function OpenTTD uses internally for distance calculations.
+La distance peut ne pas être exactement ce qu'un "avion survolerait", car les avions, les bateaux et les trains avec les voies appropriées peuvent circuler en diagonale, réduisant la distance directe entre les cases. Les bus parcourent toujours les distances Manhattan, toutefois, du fait qu'il n'y a pas de routes en diagonale. Pour une IA, vous voudrez sans doute toujours utiliser <code>AITile.GetDistanceManhattanToTile</code>, car c'est la fonction que OpenTTD utilise en interne pour les calculs de distance.
 
-==== Tile Arithmetic ====
+==== Arithmétique des cases ====
 
-As part of various applications (e.g. pathfinding), an AI will need the ability to move around the map. Because of the way tile indices are represented, you can perform simple arithmetic on a tile index to find a new tile relative to its position. Adding or subtracting the result of <code>AIMap.GetTileIndex(x, y)</code> to a tile will yield the index of the tile ''x'' and ''y'' tiles from the original position.
+À l'intérieur de plusieurs applications (comme la détermination de chemin), une IA aura besoin de la possibilité de se déplacer sur la carte. Du fait de la manière de représenter les indices des cases, vous pouvez effectuer une arithmétique simple sur l'index de la case pour trouver une nouvelle case relativement à sa position. Ajouter ou soustraire le résultat de <code>AIMap.GetTileIndex(x, y)</code> à une case ramènera l'index de la case ''x'' et ''y'' depuis la position d'origine.
 
-For instance, the following code snippet will create a list of tiles directly adjacent to ''tile''...
+Par exemple, l'extrait de code suivant créera une liste de cases directement adjacentes à ''case''...
 
  local adjacent = AITileList();
- adjacent.AddTile(tile - AIMap.GetTileIndex(1,0));
- adjacent.AddTile(tile - AIMap.GetTileIndex(0,1));
- adjacent.AddTile(tile - AIMap.GetTileIndex(-1,0));
- adjacent.AddTile(tile - AIMap.GetTileIndex(0,-1));
+ adjacent.AddTile(case - AIMap.GetTileIndex(1,0));
+ adjacent.AddTile(case - AIMap.GetTileIndex(0,1));
+ adjacent.AddTile(case - AIMap.GetTileIndex(-1,0));
+ adjacent.AddTile(case - AIMap.GetTileIndex(0,-1));
 
-This snippet creates a list containing all tiles within an 11x11 square area centered around ''tile''...
+Cet extrait crée une liste contenant toutes les cases dans une zone carrée 11x11 centrée autour de ''case''...
 
  local area = AITileList();
- area.AddRectangle(tile - AIMap.GetTileIndex(5, 5), tile + AIMap.GetTileIndex(5, 5));
+ area.AddRectangle(case - AIMap.GetTileIndex(5, 5), tile + AIMap.GetTileIndex(5, 5));
 
-Because the Tile object in C++ is just an Integer, it's possible to wrap around the borders of the map using this trick. To avoid wrapping around the edge of the map, you should check the distance to the the new tile and makes sure it's within the distance you expect.
+Comme l'objet Tile en C++ est simplement un entier, il est possible d'envelopper les bords de la carte avec ce truc. Pour éviter d'englober le bord de la carte, vous devez vérifier la distance à la nouvelle case et vous assurer qu'elle reste dans la distance attendue.
 
-=== Cargos ===
+=== Cargaisons ===
 
-CargoID, like any ID, is an index. An index on its own means nothing, it is just a pointer to a value in an array, and in this case, a cargo-array. The main problem with Cargo, is that you can't trust a value to mean something in all cases. NewGRFs are very powerful, and allow changing of cargos in all kinds of way. Normally, CargoID 0 represents Passengers, but with a single NewGRF, this can be changed to, say, Coal. Now here is the tricky part of it all: no longer you can transport this cargo from and to towns. So, how to make sure your AI is compatible enough that it works in all cases?
+Le CargoID, comme tout ID, est un index. Un index en lui-même ne veut rien dire, c'est juste un pointeur vers une valeur dans un tableau, et dans ce cas-ci, un tableau de cargaisons. Le problème principal avec les cargaisons est que vous ne pouvez pas compter sur une valeur pour signifier toujours la même chose. Les NewGRFs sont très puissants, et permettent de modifier les cargaisons de toutes sortes de façons. Normalement, le CargoID 0 représente les passagers, mais avec un seul NewGRF, cela peut être changé en du charbon, par exemple. Alors, voici la conséquence délicate de cela: vous ne pouvez plus transporter cette cargaison entre villes. Donc, comment vous assurer que votre IA est suffisamment compatible et fonctionne dans tous les cas?
 
-Well, say you want to transport stuff from one town to the other town. Than you most likely don't care if it is passengers or mail, just the one which is giving you the most profit, right? Well, that is mail in this case, but how to find out?
+Eh bien, disons que vous voulez transporter quelque chose d'une ville vers une autre. Que vous ne vous préoccupez pas de savoir si c'est des passagers ou du courrier, simplement un qui vous donnera le plus grand profit, n'est-ce pas? Bien, dans ce cas, c'est le courrier, mais comment le savoir?
 
-First, make a cargo list:
+Tout d'abord, faisons une liste de cargaisons:
 
  local list = AICargoList();
- 
-Now filter what we want.. we want non-freight (short: mail, passengers, ... everything that doesn't go or goes to industry).
+
+Puis filtrons ce que nous voulons... nous ne voulons pas de fret (en court: du courrier, des passagers, etc. tout ce qui ne vient pas ou ne va pas aux industries).
 
  list.Valuate(AICargo.IsFreight);
  list.KeepValue(0);
 
-Next, we want the one that is most profitable for a given length (10 tiles in 2 days is what we use here, but use what ever value you want):
+Ensuite, nous en voulons une qui soit la plus profitable pour une distance donnée (10 cases en 2 jours est ce que nous utilisons ici, mais utilisez la valeur que vous voulez):
 
  list.Valuate(AICargo.GetCargoIncome, 10, 2);
 
-Now the best cargo to transport is the first entry of the list:
+Maintenant, la meilleure cargaison à transporter est la première entrée de la liste:
 
  local cargo = list.Begin();
 
-When using this method, you can get other types of cargo when loading certain NewGRFs. Nevertheless, there is always a cargo you can transport from and to towns, and there is always one that is most profitable. So it is not important if it is passengers or not. It doesn't matter what your AI transports as long as it makes profit (>=20k USD).
+En utilisant cette méthode, vous pouvez obtenir les autres types de cargaison en chargeant certains NewGRFs. Néanmoins, il y a toujours une cargaison que vous pouvez transporter entre villes, et il y en a toujours une qui est la plus profitable. Donc, que ce soient des passagers ou non importe peu. Ce que votre IA transporte n'est pas important, tant que cela génère du profit (>=20k$).
 
 
-Of course it is also possible to find a cargo based on the class of the cargo. Don't just use value '0' for passengers, it might not hold for all NewGRFs. What is safe to do, is find the cargo that belongs to <code>AICargo.CC_PASSENGERS</code>. To give a simple code snippet which illustrates this:
+Bien entendu, il est aussi possible de trouver une cargaison en se basant sur la classe de celle-ci. N'utilisez simplement pas la valeur '0' pour les passagers, elle pourrait ne pas être correcte pour tous les NewGRFs. Ce qui est correct est de trouver la cargaison appartenant à <code>AICargo.CC_PASSENGERS</code>. Voici un court fragment de code qui illustre cela:
 
  local list = AICargoList();
  local pass_cargo = -1;
@@ -173,24 +173,24 @@ Of course it is also possible to find a cargo based on the class of the cargo. D
      break;
    }
  }
- if (pass_cargo == -1) AILog.Error("Your game doesn't have any passengers cargo, and as we are a passenger only AI, we can't do anything");
+ if (pass_cargo == -1) AILog.Error("Votre partie n'a pas de cargaison passagers, et comme nous sommes une IA uniquement pour passagers, nous ne faisons rien");
 
-An alternative way:
+Une autre manière:
 
  local cargoList = AICargoList();
  cargoList.Valuate(AICargo.HasCargoClass, AICargo.CC_PASSENGERS);
  cargoList.KeepValue(1);
- if (cargoList.Count() == 0) AILog.Error("Your game doesn't have any passengers cargo, and as we are a passenger only AI, we can't do anything");
+ if (cargoList.Count() == 0) AILog.Error("Votre partie n'a pas de cargaison passagers, et comme nous sommes une IA uniquement pour passagers, nous ne faisons rien");
  local paxCargo = cargoList.Begin();
 
-At the end, either it gave an error, or pass_cargo is the value of the first cargo belonging to the <code>CC_PASSENGERS</code> class. More complex solutions are possible by using the Valuator and find that cargo belonging to the <code>CC_PASSENGERS</code> class that gives the most profit. Of course, without any NewGRFs this is always Passengers.
+À la fin, soit il renvoie une erreur, ou pass_cargo est la valeur de la première cargaison appartenant à la classe <code>CC_PASSENGERS</code>. Des solutions plus complexes sont possibles en utilisant le Valuator et en trouvant la cargaison appartenant à la classe <code>CC_PASSENGERS</code> qui génère le plus de profit. Bien entendyu, sans NewGRFs, ce sont toujours les passagers.
 
-==== Bus station or Truck station ====
+==== Station de bus ou de poids-lourds ====
 
-There is one simple way to find out if the cargo you want to transport should go to a bus station or a truck station. And it is the most obvious: if the cargo belongs to the <code>CC_PASSENGERS</code> class, it needs a bus station. All other cases need a truck station. So:
+Il n'y a qu'un moyen simple de savoir si la cargaison que vous voulez transporter doit aller à une station de bus ou de poids-lourds. Et c'est la plus étrange: si la cargaison appartient à la classe <code>CC_PASSENGERS</code>, elle a besoin d'une station de bus; dans tous les autres cas, ce sera une station de poids-lourds. Donc:
 
  local truck_station = !AICargo.HasCargoClass(cargo, AICargo.CC_PASSENGERS);
 
-=== Towns ===
+=== Villes ===
 
-If a town seed tile hasn't been destroyed (a ''very'' rare occurrence) the tile returned by <code>AITown.GetLocation()</code> is '''always''' a road tile. Note that not all road tiles in a town are guaranteed to be connected to the seed tile.
+Si la case d'origine de la ville a été détruite (une possibilité ''très'' rare), la case renvoyée par <code>AITown.GetLocation()</code> est '''toujours''' une case de route. Notez que toutes les cases de route dans une ville sont garanties être connectées à la case centrale.
