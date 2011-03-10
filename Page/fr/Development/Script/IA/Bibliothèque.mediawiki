@@ -1,16 +1,15 @@
 [[Translation:en/Development/Script/Library]]
-{{fr/Traduction|en/Development/Script/Library|0}}
 
 
 {{fr/NonIA}}
 
-= Libraries =
+= Bibliothèques =
 
-To avoid code-duplication, and every AI creator doing the same work over and over, there is the library system. There are, of course, two sides on this: creating a library, and using a library.
+Pour éviter la duplication de code, et que chaque créateur d'IA fasse encore et toujours le même travail, il y a le système de bibliothèques. Il y a, bien entendu, deux côtés à cela: créer une bibliothèque, et utiliser une bibliothèque.
 
-== Using Existing Libraries ==
+== Utiliser des bibliothèques existantes ==
 
-To use an existing library, you just have to load it into your AI. Doing this is very simple. The layout of the library directory (bin/ai/library/):
+Pour utiliser une bibliothèque existante, vous devez simplement la charger dans votre IA. Le faire est très simple. Le modèle du répertoire des bibliothèques est le suivant (bin/ai/library/):
 
  graph/
    aystar/
@@ -22,113 +21,113 @@ To use an existing library, you just have to load it into your AI. Doing this is
    priority_queue/
    fibonacci_heap/
 
-Say you want to use the [[en/Development/Script/Library#priority-queue|Priority Queue]], you simply do:
+Disons que vous voulez utiliser la [[fr/Development/Script/IA/Bibliothèque#file-de-priorites|file de priorités]], vous feriez simplement:
 
  import("queue.priority_queue", "PriorityQueue", 2);
 
-The first parameter is the category and the implementation, divided with a dot ('.'). The next parameter is the name the library you import will have, in this case <code>PriorityQueue</code>. It can be anything you like, as long as it doesn't exist yet. The last parameter is the version you expect the library to be. To get the current version of a library, open library.nut from the corresponding directory. 
+Le premier paramètre est la catégorie et l'implémentation, séparées par un point ('.'). Le paramètre suivant est le nom que la bibliothèque que vous importez prendra, dans ce cas <code>PriorityQueue</code>. Ce peut être ce que vous voulez, tant que cela n'existe pas déjà. Le dernier paramètre est la version de la bibliothèque que vous attendez. Pour obtenir la version actuelle de la bibliothèque, ouvrez library.nut depuis le répertoire correspondant.
 
-The version check is very important. If you expect version 1, but on some users computer the library is in version 2, your AI will refuse to load. This is a good thing, as a new version means something changed with the existing functions, and your AI will most likely act up if you would use it. This early problem detection system should avoid many conflicts in the future.
+La vérification de la version est très importante. Si vous attendez la version 1, mais que sur certaines machines des utilisateurs, la bibliothèque est en version 2, votre IA refusera de la charger. C'est une bonne chose, car une nouvelle version signifie que quelque chose a changé dans les fonctions existantes, et votre IA fera sans doute des siennes si vous voulez l'utiliser. Ce système de détection de problème précoce devrait éviter de nombreux conflits futurs.
 
-Now how to use the library? Simple:
+Maintenant, comment utiliser la bibliothèque? C'est simple:
 
  local pq = PriorityQueue();
  pq.Insert(2);
 
-Of course it depends on the library which parameters should be given to the constructor, and which functions exist. You'll have to open <code>queue/priority_queue/main.nut</code> to see all the documentation.
+Bien sûr, cela dépend de la bibliothèque dont les paramètres doivent être donnés au constructeur, et quelles fonctions existent. Vous devez ouvrir <code>queue/priority_queue/main.nut</code> pour voir toute la communication.
 
-== Creating a library ==
+== Créer une bibliothèque ==
 
-Creating a library is like creating an AI. You create a directory in a category in <code>bin/ai/library</code>, and you put in it a file called '<code>library.nut</code>'. Now this is almost identical with '<code>info.nut</code>', as you put in your AI directory, but instead of extending <code>AIInfo</code>, it extends <code>AILibrary</code>, and instead of calling <code>RegisterAI</code>, you need to call <code>RegisterLibrary</code>. All makes sense, not? An example:
+Créer une bibliothèque est comme créer une IA. Vous créez un répertoire dans une catégorie dans <code>bin/ai/library</code>, et y mettez un fichier appelé '<code>library.nut</code>'. Ensuite, c'est quasiment identique à '<code>info.nut</code>', comme vous l'avez mis dans le répertoire de votre IA, mais au lieu d'étendre <code>AIInfo</code>, il étend <code>AILibrary</code>, et au lieu d'appeler <code>RegisterAI</code>, vous devez appeler <code>RegisterLibrary</code>. Tout cela semble logique, non? Un exemple:
 
  class PriorityQueue extends AILibrary {
-   function GetAuthor()      { return "OpenTTD NoAI Developers Team"; }
-   function GetName()        { return "Priority Queue"; }
+   function GetAuthor()      { return "Équipe de développement NonIA de OpenTTD"; }
+   function GetName()        { return "File de priorités"; }
    function GetShortName()   { return "QUPQ"; }
-   function GetDescription() { return "An implementation of a Priority Queue"; }
+   function GetDescription() { return "Une implémentation de la file de priorité"; }
    function GetVersion()     { return 2; }
-   function GetDate()        { return "2008-06-10"; }
+   function GetDate()        { return "10/06/2008"; }
    function CreateInstance() { return "PriorityQueue"; }
    function GetCategory()    { return "Queue"; }
  }
  
  RegisterLibrary(PriorityQueue());
 
-Now what you need to do is to create a file called '<code>main.nut</code>'. It should contain a class you named at <code>CreateInstance()</code>, like in your AI. Then the same rules apply as an AI. <code>require()</code> works as you expect, and you can define your class how ever you like.
+Maintenant, ce que vous devez faire est créer un fichier appelé '<code>main.nut</code>'. Il doit contenir une classe comme vous l'avez appelée dans <code>CreateInstance()</code>, comme dans votre IA. Les mêmes règles s'appliquent donc que pour une IA. <code>require()</code> fonctionne comme attendu, et vous pouvez définir votre classe comme vous l'entendez.
 
-There are some things you can not do:
+Il y a certaines choses que vous ne pouvez pas faire:
 
-* Register 2 libraries in one <code>library.nut</code>
-* Define more than 1 class in the <code>main.nut</code> (or any required file). However, you can define sub-classes. Say you need an extra class in <code>PriorityQueue</code>. You can name it <code>PriorityQueue.Subclass</code>. To access it from within your main class, use <code>this.Subclass</code>. See <code>[[en/Development/Script/Library#aystar|graph.AyStar]]</code> for an example how it's done.
+* Enregistrer 2 bibliothèques dans un même <code>library.nut</code>
+* Définir plus d'une classe dans le <code>main.nut</code> (ou n'importe quel fichier requis). Cependant, vous pouvez définir des sous-classes. Disons que vous avez besoin d'une classe supplémentaire dans <code>PriorityQueue</code>. Vous pouvez l'appeler <code>PriorityQueue.Subclass</code>. Pour y accéder depuis votre classe principale, utilisez <code>this.Subclass</code>. Voyez <code>[[fr/Development/Script/IA/Bibliothèque#aystar|graph.AyStar]]</code> pour un exemple de la manière de faire cela.
 
-== Multiple libraries of different versions ==
+== Bibliothèques multiples en différentes versions ==
 
-It will happen to all of us that you have one AI using version 1 of a library, and an other using version 2. For example we take pathfinder.road. Now version 2 will be in ai/library/pathfinder/road, but where should you put version 1? For that we created a method:
+Il peut arriver à chacun de nous d'avoir une IA utilisant la version 1 d'une bibliothèque et une autre utilisant sa version 2. Par exemple, prenons pathfinder.road. Actuellement, la version 2 sera dans ai/library/pathfinder/road, mais où mettre la version 1? Pour cela, nous créons une méthode:
 
-In the directory-name of the library, everything behind any '.' (dot) is ignored. So you can call 'road' 'road.blabla', or 'road.2', it doesn't matter for the internals. Now this also allows multiple libraries of the same name, and different versions. For example, if you put version 1 of the pathfinder.road in 'pathfinder/road.1', and keep version 2 in 'pathfinder/road'. The system will load both, and based on your import line, pick one of them (or throws an error if the version you requested doesn't exist ;)).
+Dans le nom de répertoire de la bibliothèque, tout ce qui est derrière un '.' (point) est ignoré. Donc, vous pouvez appeler 'road' 'road.blabla', ou 'road.2', cela n'a pas d'importance en interne. Ainsi, cela permet d'avoir plusieurs bibliothèques de même nom et de versions différentes. Par exemple, si vous mettez la version 1 de pathfinder.road dans 'pathfinder/road.1', vous pouvez garder la version 2 dans 'pathfinder/road'. Le système chargera les deux, et selon votre ligne d'import, choisira l'une d'elles (ou lancera une erreur si la version demandée n'existe pas ;)).
 
-The collision system still works. So if you put version 2 in both 'pathfinder/road' and 'pathfinder/road.2', it will complain it found two equal libraries.
+Le système de collisions fonctionne toujours. Donc si vous mettez la version 2 à la fois dans 'pathfinder/road' et dans 'pathfinder/road.2', il se plaindra qu'il a trouvé deux bibliothèques identiques.
 
-= Standard libraries =
+= Bibliothèques standard =
 
-There are several libraries for common tasks bundled together with NoAI. These have been prepared by 'OpenTTD NoAI Developers Team'.
+Il y a plusieurs bibliothèques pour des tâches courantes qui sont livrées avec NonIA. Elles ont été préparées par 'l'équipe de développeurs NonIA de OpenTTD'.
 
-== Category: Graph ==
+== Catégorie: Graphes ==
 
 === AyStar ===
 
-This is an implementation of [http://en.wikipedia.org/wiki/A* AyStar pathfinding algorithm]. It solves graphs by finding the fastest route from one point to the other.
+C'est une implémentation de [http://en.wikipedia.org/wiki/A* l'algorithme de détermination de chemin AyStar]. Il résout des graphes en trouvant le chemin le plus rapide d'un point à un autre.
 
-'''Required libraries:''' <code>[[en/Development/Script/Library#binary-heap|queue.binary_heap]]</code>
+'''Bibliothèques requises:''' <code>[[fr/Development/Script/IA/Bibliothèque#pile-binaire|queue.binary_heap]]</code>
 
-'''Version History''':
+'''Historique des versions''':
 * aystar.1: r13461
 * aystar.2: r13463
 * aystar.3: r13496
-* aystar.4: current
+* aystar.4: actuel
 
-== Category: Pathfinder ==
+== Catégorie: Détermination de chemin ==
 
 === Road ===
 
-This is an implementation of a basic road pathfinder. You can use it to find the length of existing routes and / or to build new routes. Since version 3 building of tunnels / bridges is supported. For more information, see [[en/Development/Script/RoadPathfinder]]
+C'est une implémentation d'une détermination de chemin routier basique? Vous pouvez l'utiliser pour trouver la longueur de routes existantes et/ou construire de nouvelles routes. Depuis la version 3, la construction de tunnels et de ponts est supportée. Pour plus d'information, voyez [[fr/Development/Script/IA/Détermination de chemin routier|IA:Détermination de chemin routier]].
 
-'''Required libraries:''' <code>[[en/Development/Script/Library#aystar|graph.aystar]]</code>
+'''Bibliothèques requises:''' <code>[[fr/Development/Script/IA/Bibliothèque#aystar|graph.aystar]]</code>
 
-'''Version History''':
+'''Historique des versions''':
 * road.1: r13500
 * road.2: r13570
-* road.3: current
+* road.3: actuel
 
 === Rail ===
 
-This is an implementation of a basic rail pathfinder. You can use it to find a path for new railways. For more information, see [[en/Development/Script/RailPathfinder]]
+C'est une implémentation d'une détermination de chemin ferroviaire basique. Vous pouvez l'utiliser pour trouver un trajet pour une nouvelle voie ferrée. Pour plus d'information, voyez [[fr/Development/Script/IA/Détermination de chemin ferroviaire|IA:Détermination de chemin ferroviaire]].
 
-'''Required libraries:''' <code>[[en/Development/Script/Library#aystar|graph.aystar]]</code>
+'''Bibliothèques requises:''' <code>[[fr/Development/Script/IA/Bibliothèque#aystar|graph.aystar]]</code>
 
-'''Version History''':
+'''Historique des versions''':
 * rail.1: r14382
 
-== Category: Queue ==
+== Catégorie: File ==
 
-=== Binary Heap ===
+=== Pile binaire ===
 
-This is an implementation of [http://en.wikipedia.org/wiki/Binary_heap binary heap] data structure.
+C'est une implémentation d'une [http://en.wikipedia.org/wiki/Binary_heap pile binaire] de structures de données.
 
-'''Version History''':
-* binary_heap.1: current
+'''Historique des versions''':
+* binary_heap.1: actuel
 
-=== Priority Queue ===
+=== File de priorité ===
 
-This is an implementation of [http://en.wikipedia.org/wiki/Priority_queue priority queue] data structure.
+C'est une implémentation d'une [http://en.wikipedia.org/wiki/Priority_queue file prioritaire] de structures de données.
 
-'''Version History''':
+'''Historique des versions''':
 * priority_queue.1: r13440
 * priority_queue.2: r13447
 
-=== Fibonacci Heap ===
+=== Pile de Fibonacci ===
 
-This is an implementation of [http://en.wikipedia.org/wiki/Fibonacci_heap fibonacci heap] data structure.
+C'est une implémentation d'une [http://en.wikipedia.org/wiki/Fibonacci_heap pile de Fibonacci] de structures de données.
 
-'''Version History''':
+'''Historique des versions''':
 * Fibonacci_heap.1: 14380
