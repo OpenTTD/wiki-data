@@ -4,49 +4,49 @@
 
 {{fr/NonIA}}
 
-Lists are a basic part of the NoAI API. They allow fast and easy manipulation of all kinds of data. This page will explain in a simple matter how to use them and what you can expect from them.
+Les listes sont un élément de base de l'API NonIA. Elles permettent une manipulation rapide et facile de toutes sortes de données. Cette page expliquera de façon simple comment les utiliser et ce que vous pouvez en attendre.
 
-===Items / Values===
-An AIList is a set of item-value pairs. The item is usually the data you want to store in the list. For example town ids. The value is some information that is related to the item. For example you could have the town population as value.
+===Clés / Valeurs===
+Une AIList est un ensemble de couples clé-valeur. La clé est en général la donnée que vous voulez stocker dans la liste; par exemple, les identifiants de ville. La valeur est une information qui est relative à cette clé. Par exemple, vous pouvez avoir la population de la ville comme valeur.
 
-===Valuators===
-To filter, you can apply valuators on the list using <code><list>.Valuate(<valuator>)</code>, they change the value of the list entry accordingly.
-The first parameter for this function is the function you want to use to valuate the items in the list. It should accept at least one integer which will be set to the item, and should return an integer, which will become the value of the item. Additional parameters are possible, then you need to add them to the Valuator to. Example:
+===Évaluateurs===
+Pour filtrer, vous pouvez appliquer des évaluateurs sur la liste en utilisant <code><list>.Valuate(<valuator>)</code>; ils modifient la valeur de l'entrée de la liste en conséquence.
+Le premier paramètre de cette fonction est la fonction que vous voulez utiliser pour évaluer les clés de la liste. Elle doit accepter au moins un entier qui sera mis à la valeur de la clé, et renverra un entier qui deviendra la valeur de la clé. Des paramètres additionnels sont possibles; vous devrez alors les ajouter aussi à l'évaluateur. Exemple:
 
  list.Valuate(AIBridge.GetPrice, 5);
  list.Valuate(AIBridge.GetMaxLength);
  function MyVal(bridge_id, myparam)
  {
-    return myparam * bridge_id; // This is silly
+    return myparam * bridge_id; // C'est stupide
  }
  list.Valuate(MyVal, 12);
 
-After you have applied a valuator, you can modify (remove items, sort, etc.) the list using the functions found in the [http://noai.openttd.org/docs/trunk/classAIAbstractList.html API docs].
+Après avoir appliqué un évaluateur, vous pouvez modifier (supprimer des clés, trier, etc.) la liste en utilisant les fonctions trouvées dans les [http://noai.openttd.org/docs/trunk/classAIAbstractList.html docs de l'API].
 
-== Examples of lists ==
+== Exemples de listes ==
 === AIList() ===
 
-To start, <code>AIList()</code> is the most primary list we have. It doesn't depend in any way on the OpenTTD core. It is a simple list you can fill with items and make valuators for them. As <code>AITownList()</code> is a good example of a bit more complex <code>AIList()</code>, we will discuss that one rather then <code>AIList()</code>.
+Pour commencer, <code>AIList()</code> est la liste la plus basique dont nous disposons. Elle ne dépend en aucune manière du cœur de OpenTTD. C'est une liste simple que vous pouvez remplir avec des clés et faire des évaluateurs pour elles. Comme <code>AITownList()</code> est un bon exemple d'une <code>AIList()</code> un peu plus complexe, nous allons discuter de celle-ci plutôt que de <code>AIList()</code>.
 
 === AITownList() ===
 
-Of course you want to know which towns are in the map, and most likely: which town has to most population, and what the location is. For that we have <code>AITownList()</code>. If you create an instance of it, it immediately fills itself with all towns. You can walk them like this:
+Bien entendu, vous voudrez savoir quelles villes sont sur la carte, et plus vraisemblablement, quelles villes ont quelle population, et à quel endroit elles se situent. Pour cela, nous avons <code>AITownList()</code>. Si vous créez une instance de celle-ci, elle se remplira immédiatement avec toutes les villes. Vous pouvez les parcourir ainsi:
 
  foreach (town, value in townlist) { }
 
-This walks all the towns inside the list. Of course knowing the towns is only part of <code>AITownList()</code>, you can also make it find data for you. For example, we want to know all towns with population higher than 500. First we call a valuator that gets the population per town for us, and then we filter all the towns with a lower population than 500 out of the list. What is left, is a list of towns that have more than 500 people in them.
+Cela bouclera sur toutes les villes dans la liste. Bien entendu, connaître les villes n'est qu'une partie de <code>AITownList()</code>; vous pouvez aussi lui faire trouver des données pour vous. Par exemple, nous voulons connaître toutes les villes avec une population supérieure à 500. Tout d'abord, nous appelons un évaluateur qui récupère la population par ville pour nous, puis nous filtrons toutes les villes avec une population inférieure à 500 hors de la liste. Une fois ceci fait, nous avons une liste des villes qui contiennent plus de 500 personnes.
 
  townlist.Valuate(AITown.GetPopulation);
  townlist.KeepAboveValue(500);
 
-If you now would print the list, you will see only towns with population higher than 500. Of course you can now get the position of those towns by doing:
+Si vous voulez maintenant afficher la liste, vous ne verrez que les villes avec une population supérieure à 500. Bien sûr, vous pouvez obtenir la position de ces villes par:
 
  townlist.Valuate(AITown.GetLocation);
 
-The only thing this means, is that the population per town is lost, and replaced by the location.
+La seule chose que cela veut dire est que la population par ville est perdue, et est remplacée par son emplacement.
 
-AIList()s are automatically sorted. Normally this is down by value, descending (so highest first). You can change the sort order with the <code>Sort()</code> functions (see API documentation). You can see if a list is empty with <code>Empty()</code>, or find the amount of towns with <code>Count()</code>. For more details, see API documentation.
+Les AIList()s sont triées automatiquement. Normalement, cela est fait par valeur décroissante (la plus grande d'abord, donc). Vous pouvez modifier l'ordre de tri avec les fonctions <code>Sort()</code> (voir la documentation de l'API). Vous pouvez voir si une liste est vide avec <code>Empty()</code>, ou trouver le nombre de villes avec <code>Count()</code>. Pour plus de détails, voyez la documentation de l'API.
 
 === AITileList() ===
 
-Besides townlist, industrylist, and more of that, we also have a <code>AITileList()</code>. This is in fact the same as <code>AITownList()</code>, but it keeps track of tiles. You can add tiles to the list, and then, for example, see what the acceptance is for a certain cargo. Or filter away the non-buildable tiles. This means you can quickly find a good spot for a station of which you know will get a good amount of goods. Also you can ensure it connects to the town-road for example, with the <code>AIRoad.GetNeighbourRoadCount()</code> valuator.
+Outre la liste des villes, la liste des industries, et listes semblables, nous avons aussi une <code>AITileList()</code>. C'est en fait la même chose que <code>AITownList()</code>, mais elle garde trace des cases. Vous pouvez ajouter des cases à la liste puis, par exemple, voir leur acceptation pour une certaine cargaison; ou filtrer les cases non constructibles. Cela veut dire que vous pouvez rapidement trouver un bon emplacement pour une gare pour laquelle vous saurez pouvoir obtenir une bonne quantité de marchandises. Assurez-vous également qu'elle est connectée aux routes de la ville, par exemple, avec l'évaluateur <code>AIRoad.GetNeighbourRoadCount()</code>.
