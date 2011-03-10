@@ -1,32 +1,31 @@
 [[Translation:en/Development/Script/Trams]]
-{{fr/Traduction|en/Development/Script/Trams|0}}
 
 
 {{fr/NonIA}}
 
-Trams are, from the AI point of view, similar as it is for any player to road vehicles. When constructing something in AIRoad, you specify if you want to build road objects, or tram objects via AIRoad.SetCurrentRoadType. For example, to switch to Tram building:
+Les tramways sont, du point de vue de l'IA, similaires, comme pour tout autre joueur, aux véhicules routiers. En construisant quelque chose dans AIRoad, vous spécifiez si vous voulez construire des objets de route, ou des objets de tramway, via AIRoad.SetCurrentRoadType. Par exemple, pour basculer vers la construction de tramway:
 
  AIRoad.SetCurrentRoadType(AIRoad.ROADTYPE_TRAM);
 
-and conversly to switch back to road vehicules :
+et inversement, revenir aux véhicules routiers:
 
  AIRoad.SetCurrentRoadType(AIRoad.ROADTYPE_ROAD);
 
-Now if you do:
+Maintenant, si vous faites:
 
  AIRoad.BuildRoad(33412, 33413);
 
-At those tiles a tram track will be produced. As you might understand it is important to keep track in which mode you are, else you might be in for a surprise ;)
+Sur ces cases, une voie de tramway sera construite. Comme vous pouvez le comprendre, il est imprtant de garder trace du mode dans lequel vous êtes; sinon, vous pourriez avoir des surprises. ;)
 
-As you might expect, <code>AIEngine</code> and <code>AIVehicle</code> have a function: <code>GetRoadType</code>, which either returns <code>AIRoad.ROADTYPE_INVALID</code> if the object is not a road object, or else if it is a tram or road. So it is easy to find and select the engine or vehicle you want/like.
+Comme attendu, <code>AIEngine</code> et <code>AIVehicle</code> ont une fonction: <code>GetRoadType</code>, qui renvoie soit <code>AIRoad.ROADTYPE_INVALID</code> si l'objet n'est pas un objet de route, ou sinon si c'est un tramway ou une route. Il est donc facile de trouver et de choisir la locomotive ou le véhicule que vous voulez.
 
-<code>AIRoad</code> also has the ability to check of any tile if it is either a road-tile or a tram-tile. The same goes for <code>AIStation</code>. Use <code>HasRoadType</code> to check if the tile/station has a tile/station for either Road or Tram.
+<code>AIRoad</code> peut aussi vérifier si une case est soit une case de route, soit une case de tramway. C'est la même chose pour <code>AIStation</code>. Utilisez <code>HasRoadType</code> pour vérifier si la case/station est une case/station pour véhicule routier ou pour tramway.
 
 
-== WARNING ==
+== ATTENTION ==
 
-You have to be careful if you want to make an AI that supports trams. As you can see, it is a simple switch to go from road to tram, and game-wise there is not much difference between road vehicles and tram vehicles, besides the fact trams look cool! The problem with trams is, you need a separate grf for it to work. Not everyone has this grf. So it is possible that when you try:
+Vous devez faire attention si vous voulez faire une IA qui supporte les tramways. Comme vous pouvez le voir, il suffit d'une simple bascule pour passer des routes aux tramways, et en termes de jeu, il n'y a pas tellement de différence entre les véhicules routiers et les tramways, à part le fait que les tramways sont jolis! Le problème avec les tramways est que vous avez besoin d'un grf séparé pour les faire fonctionner. Tout le monde n'a pas ce grf; il est donc possible que quand vous essayez:
 
  AIRoad.IsRoadTypeAvailable(AIRoad.ROADTYPE_TRAM);
 
-On your computer it tells you: true, and on some other computer it tells you: false. So never make your AI depend on trams, and always make sure to check if trams are available before using them. Of course it is perfectly acceptable to fall back to road in case tram is not available. Nothing really changes.
+sur votre ordinateur, vous obteniez: true, et sur un autre: false. Donc, ne faites jamais dépendre votre IA des tramways, et assurez-vous de vérifier si les tramways sont disponibles avant de les utiliser. Bien entendu, il est parfaitement acceptable de se replier sur les routes si les tramways ne sont pas disponibles. Cela ne change rien dans les faits.
