@@ -1,37 +1,36 @@
 [[Translation:en/Development/Script/Last Error]]
-{{fr/Traduction|en/Development/Script/Last Error|0}}
 
 
 {{fr/NonIA}}
 
-OpenTTD is a realtime game, so no program can predict whether a certain planned action will fail or succeed until it has been executed. When letting AIs build bridges, vehicles, reroute aircraft chances are some of these commands will fail due to some reason or another. Aircraft can crash, more money may be required and other opponents might interfere with its plans. As of now NoAI can report whether a command has been executed successfully, however, if a command has failed it can't report why it has failed. This page is both a manual for AI writers as it provides coding guidelines for developers who want to help updating this feature and fixing bugs.
+OpenTTD est un jeu en temps réel; donc aucun programme ne peut prédire si une certaine action planifiée échouera ou non, jusqu'à ce qu'elle soit exécutée. En laissant l'IA construire des ponts, des véhicules, rediriger des avions, il y a des chances que ces commandes échouent pour une raison ou une autre. Les avions peuvent s'écraser, il peut y avoir besoin de plus d'argent, et d'autres concurrents peuvent interférer avec ces plans. Dorénavant, NonIA peut indiquer quand une commande a été exécutée avec succès; cependant, si une commande a échoué, il ne peut pas indiquer pourquoi. Cette page est un manuel à la fois pour les auteurs d'IA, car il fournit des directives de codage, et pour les développeurs qui veulent aider à améliorer cette fonctionnalité et corriger les erreurs.
 
 == Code ==
-Every error code in OpenTTD has its own ID (StringID) and is used to translate the error into one of the various languages to notify the user through a message on the GUI. In order to translate these errors we have to translate these StringIDs into error messages and expose them through the NoAI API. The last error message can be acquired by calling <code>AIError.GetLastError()</code>, and error messages can be checked by:
+Chaque code d'erreur dans OpenTTD a son propre ID (StringID) et est utilsié pour traduire l'erreur dans uns des diverses langues pour avertir l'utilisateur via un message sur l'IHM. Afin de traduire ces erreurs, nous devons traduire ces StringIDs en messages d'erreur et les exposer via l'API NonIA. Le dernier message d'erreur peut être obtenu en appelant <code>AIError.GetLastError()</code>, et els messgaes d'erreur vérifiés par:
 
  if (!AIAirport.BuildAirport(...)) {
    switch(AIError.GetLastError()) {
-     case AIError.ERR_NOT_ENOUGH_CASH: // Get some more change
+     case AIError.ERR_NOT_ENOUGH_CASH: // Obtenir un peu plus d'argent
        ...
        break;
-     case AIError.ERR_LOCAL_AUTHORITY_REFUSES: // Bribe!
+     case AIError.ERR_LOCAL_AUTHORITY_REFUSES: // Corrompre!
        ...
        break;
-     case AIError.ERR_LAND_SLOPED_WRONG: // Do some terraforming
+     case AIError.ERR_LAND_SLOPED_WRONG: // Aménager le terrain
        ...
        break;
      ...
      default:
-       AILog.Warning("Unhandled exception: " + AIError.GetLastErrorString());
+       AILog.Warning("Exception non gérée: " + AIError.GetLastErrorString());
        break;
    }
  }
 
-Internally error messages are mapped to both enum constants (like <code>AIError.ERR_NOT_ENOUGH_CASH</code>) and a string representation. The string representation can be acquired by calling <code>AIError.GetLastErrorString</code> and will match with the name of the enum constant, note that this is meant to be used for debug purposes only! The API documentation lists all errors per method that can occur by invoking it. There are however some exceptions, the following errors will not be listed as they apply to (nearly) all methods:
+En interne, les messages d'erreur correspondent à la fois à des constantes énumérées (comme <code>AIError.ERR_NOT_ENOUGH_CASH</code>) et à une représentation sous forme de chaîne. Celle-ci peut être obtenue en appelant <code>AIError.GetLastErrorString</code> et correspondra au nom de la constante énumérée; notez qu'elle n'est prévue que pour une utilisation dans un but de débogage! La documentation de l'API liste toutes les erreurs qui peuvent survenir, par méthode, lors de leur invocation. Il y a cependant quelques exceptions; les erreurs suivantes ne seront pas listées, car elles s'appliquent à (presque) toutes les méthodes:
 
-* <code>AIError.ERR_UNKNOWN</code>: There has been an error which hasn't been mapped to NoAI. This can either mean 2 things, there is no StringID for this error or we forgot to map it. In the latter case please file a bug report and tell us about it so we can fix it.
-* <code>AIError.ERR_PRECONDITION_FAILED</code>: You violated one of the preconditions of the method, no call to the underlaying system has been made.
-* <code>AIError.ERR_NEWGRF_SUPPLIED_ERROR</code>: This error is NewGRF specific and we're unable to trace it down and map it.
-* <code>AIError.ERR_NOT_ENOUGH_CASH</code>: You don't have enough money for the given action. This error is always checked for ''after'' other error conditions. This means that the operation would have succeed if there had been enough funds available.
+* <code>AIError.ERR_UNKNOWN</code>: Il y a eu une erreur qui n'a pas de correspondance dans NonIA. Cela peut vouloir dire deux choses: il n'y a pas de StringID pour cette erreur, ou bien nous avons oublié de lui donner une correspondance. Dans ce dernier cas, merci de soumettre un rapport de bogue et nous en parler pour que nous puissions le corriger.
+* <code>AIError.ERR_PRECONDITION_FAILED</code>: Vous avez violé une des préconditions de la méthode; aucun appel au système sous-jacent n'a été fait.
+* <code>AIError.ERR_NEWGRF_SUPPLIED_ERROR</code>: Cette erreur est spécifique à NewGRF et nous ne pouvons pas la tracer ni lui donner une correspondance.
+* <code>AIError.ERR_NOT_ENOUGH_CASH</code>: Vous n'avez pas assez d'argent pour l'action correspondante. Cette erreur est toujours vérifiée ''après'' les autres conditions d'erreur. Cela veut dire que l'opération aurait réussi si les fonds avaient été disponibles.
 
-The meaning of the other error messages can be looked up in the [http://noai.openttd.org/docs/ API].
+La signification des autres messages d'erreur peut être trouvée dans l'[http://noai.openttd.org/docs/ API].
