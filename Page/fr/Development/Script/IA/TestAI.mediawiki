@@ -1,20 +1,19 @@
 [[Translation:en/Development/Script/TestAI]]
-{{fr/Traduction|en/Development/Script/TestAI|0}}
 
 
 {{fr/NonIA}}
 
-These files are a fully functioning but do-nothing AI to start as a base for new AIs.
+Ces fichiers forment une IA fonctionnant parfaitement mais ne faisant rien, servant de base pour de nouvelles IAs.
 
 ==Info.nut==
   
   class TestAI extends AIInfo 
   {
-    function GetAuthor()      { return "Author Name"; }
+    function GetAuthor()      { return "Nom de l'auteur"; }
     function GetName()        { return "TestAI"; }
-    function GetDescription() { return "Testing AI"; }
+    function GetDescription() { return "IA de test"; }
     function GetVersion()     { return 1; }
-    function GetDate()        { return "2009-07-29"; }
+    function GetDate()        { return "29/07/2009"; }
     function CreateInstance() { return "TestAI"; }
     function GetShortName()   { return "TEST"; }
     
@@ -62,18 +61,18 @@ These files are a fully functioning but do-nothing AI to start as a base for new
   
   function TestAI::Start()
   {
-    AILog.Info("TestAI Started.");
+    AILog.Info("TestAI démarré.");
     SetCompanyName();
    
-    //set a legal railtype. 
+    //fixe un type de voie légal. 
     local types = AIRailTypeList();
     AIRail.SetCurrentRailType(types.Begin());
         
-    //Keep running. If Start() exits, the AI dies.
+    //Continue à tourner. Si Start() se termine, l'IA meurt.
     while (true)
     {
       this.Sleep(100);
-      AILog.Warning("TODO: Add functionality to the AI.");
+      AILog.Warning("TODO: Ajouter des fonctionnalités à l'IA.");
     }
   }
   
@@ -84,25 +83,25 @@ These files are a fully functioning but do-nothing AI to start as a base for new
   function TestAI::Save()
   {
     local table = {};	
-    //TODO: Add your save data to the table.
+    //TODO: Ajoutez vos données à sauvegarder dans la table.
     return table;
   }
   
   function TestAI::Load(version, data)
   {
-    AILog.Info(" Loaded");
-    //TODO: Add your loading routines.
+    AILog.Info(" chargé");
+    //TODO: Ajoutez vos routines de chargement.
   }
   
   
   function TestAI::SetCompanyName()
   {
-    if(!AICompany.SetName("Testing AI")) {
+    if(!AICompany.SetName("Test de l'IA")) {
       local i = 2;
-      while(!AICompany.SetName("Testing AI #" + i)) {
+      while(!AICompany.SetName("Teste l'IA #" + i)) {
         i = i + 1;
         if(i > 255) break;
       }
     }
-    AICompany.SetPresidentName("P. Resident");
+    AICompany.SetPresidentName("P. Résident");
   }
