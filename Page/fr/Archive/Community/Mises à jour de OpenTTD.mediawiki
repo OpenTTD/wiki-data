@@ -1,0 +1,105 @@
+[[Translation:en/Archive/Community/OpenTTD Updaters]]
+{{fr/Traduction|en/Archive/Community/OpenTTD Updaters|0}}
+
+
+The general idea of an an Updater is that it is a program that runs before openttd.exe which checks if there is a newer nightly available and if so it may ask the user if it wants to upgrade and if so it downloads the newer nightly and installs it. After the installation is done openttd.exe is executed and the game starts as normal. 
+
+For OpenTTD there exist more than one updating program. Some of them are listed below.
+
+
+== OpenTTD Updater ==
+OpenTTD Updater comes with an installer for easy installation. For more information please continue to [http://www.tt-forums.net/viewtopic.php?p=608777 this forum topic]. This tool has been discontinued and a replacement project is being started by the original developer - see [http://www.tt-forums.net/viewtopic.php?p=809662#p809662 this forum topic] for more information.
+
+== OpenTTD Auto Update ==
+=== 1.1 ===
+Features:
+* Unzip-installation (no installer)
+* All unnecessary dialogs can be disabled by ''don't show this dialog anymore'' check boxes
+* Slimed design, does not interfere with the user unless there is an update (and you can even make it upgrade without question if you wish)
+* Changes since last update are displayed. (but can be turned off)
+* Updates to latest trunk or version used by #openttdcoop public server.
+* Checks for updates of the program itself (only 1.1 and later)
+* Built using Delphi Win32, so no need for .Net
+* Small download size, less than 400 kB
+
+For further information and download please continue to [http://users.tt-forums.net/ottdau/ the website].
+
+=== 2.0 ===
+Features:
+* Updates to Last Stable, Last Stable (including pre-stable), Last Nightly, Last Cargodest, #openttdcoop PS, #openttdcoop ProZone, Dihedral AutoNightly Server, NewGRF Airports (Yexo), Custom (stable or nightly) server
+* Handles multiple OpenTTD installations through a single user interface
+* Support for GRF pack updates. (only those added to the server-side part of OpenTTDAutoUpdate2, so users can not add packs on their own) (#openttdcoop GRFPack is the only currently available GRF pack)
+* Show Change log before update
+* Change log can be filtered using filter strings (eg. find all changes by a specific developer or only NoAI changes)
+* Checks for updates of itself and can also update itself
+* Built using Delphi Win32, so no need for .Net
+* Unzip-installation (no installer)
+* Intro guide/wizard on first startup, also available in the help menu.
+* Proxy support
+
+For further information and download please continue to [http://users.tt-forums.net/ottdau/ the website].
+
+== AutoTTD ==
+
+AutoTTD is, somewhat similar to OpenTTD AU, an Updater for OpenTTD to be used with numerous servers. It is built in C# allowing for a somewhat portability to unix (which somebody can pick up as I do not use unix).
+
+AutoTTD takes a different approach, as it's main functionality is based upon the Master Server list, allowing you to browse that list and update your client accordingly. It will also let you know if there are any mismatches between NewGRFs so you can install those. Due to the touchy subject NewGRFs can get from time to time, AutoTTD will NOT installl those for you, however, it can (in the future) point you to places where you can look to get them.
+
+You can find out more about AutoTTD [http://www.tt-forums.net/viewtopic.php?f=29&t=43252 here]
+
+=== Supported servers ===
+
+Currently, AutoTTD is aware of the following servers:
+* Releases (0.6.3, 0.7.0 etc)
+* Nightlies
+* Head2Head (might not be 100%)
+* CargoDest Branch (also, far from 100%)
+
+=== NewGRFs ===
+
+AutoTTD, in it's current way, can identify a large amount of GRFs by their GRF ID's and their hash, identical to how the client identifies them. This allows AutoTTD to identify which NewGRFs you have installed, and if they match what the server wants... this will allow you to see whether you are missing some NewGRFs or not.
+
+In addition, AutoTTD queries the Content Server for the list of content currently in the database.. as said before, AutoTTD will NOT download any NewGRFs, but it CAN tell you if the NewGRFs the server uses are available for download.
+
+=== Limitations ===
+
+Seeing this is the first release, the app will come with some restrictions.
+
+* Favourites are loaded, but NO code is in place for users to edit their favourite list without editing xml files directly.
+* There is little to no validation to make it idiot-proof.. the app can and most likely WILL crash if you do funky stuff with it.
+* There is no extra code in place to inform the user of the success (or lack thereof) of certain processes.
+
+
+=== Requirements ===
+
+Until somebody ports this to unix the requirements will be as follows:
+a Windows pc running the .net framework version 2.0 or later
+
+
+=== Usage ===
+
+As mentioned in the Limitations section, no extra validation in place, so from time to time I might tell you to restart the app, this is to make sure invalid stuff gets ignored properly and won't crash your app.
+
+Start AutoTTD
+go to Tools->Options , and set your OpenTTD directory, and the current platform you are using (most users will probably use win32 for this, unless you are using 64bit Xp/Vista OR windows 95/98/ME .... in which case I doubt the app will actually work properly :shock: )
+Restart AutoTTD to have the changes take effect
+
+Pressing Refresh will reload both Master Server and your Favourite list (if you have any), Favourite Servers will show up bold, allowing you identify them easily., or you can click on the triangle to select what you want to reload.
+
+To update your client (granted you set the correct directory), select the server you wish to play on, if the update button is enabled you do not have the correct client version, and you can click Update to update it.. at which point you'll see the progress bar update, once it is done the Play button should be enabled and the Update button should be disabled.. guess what you have to do to play....
+
+To view extended information on NewGrfs, double-click the Yes behind NewGRFs, this will show you the GRF Ids and Hashes and the status of that NewGRF ... Available meaning you can download them through the Content Server, Installed meaning.. well.. you have it .. and Unavailable meaning it's not installed and not on the Content Server.
+
+
+== autostart ==
+Autostart is a small bash script written by Ammler which can update to the revision certain servers run. It is easily adopted for new servers. It is capable of retreiving the proper nightly or - if desired - obtain the sources and optionally then patch them with some (client side) patches.
+Get the scripts via svn from [http://svn.openttdcoop.org/tools/autostart] or download all files and folders as found there.
+
+== openttd_update ==
+''openttd_update'' is a small bash script which checks the latest nightly version available on the openttd server, downloads and extracts it. It also stores the version number, so later when you run the script it can check whether an update is required or not.
+For further information and download please visit the related forum [http://www.tt-forums.net/viewtopic.php?f=29&t=49672 topic].
+
+== Resources ==
+The idea with this section is to collect some pointers for resources that can be useful for someone interesting in writing a updater script or program.
+
+* To get information about official releases one can use [http://finger.openttd.org finger.openttd.org]
