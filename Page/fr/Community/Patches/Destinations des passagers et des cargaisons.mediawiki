@@ -1,0 +1,341 @@
+[[Translation:en/Community/Patches/Passenger and cargo destinations]]
+{{fr/Traduction|en/Community/Patches/Passenger and cargo destinations|0}}
+
+
+{{en/Note|Progress of this project has been paused since december 2008, there is a similar project [[en/Manual/Passenger and cargo distribution]] going on.}}
+{{en/Todo|Fill in missing section ''Destination Algorithm''.}}
+
+Support for [[en/Community/Patches/Passenger and cargo destinations]] in OpenTTD exists in the new cargo packets branch by [[en/Archive/Community/Users/Celestar]] and [[en/Archive/Community/Users/Peter1138]]. An explanation on how to download and install this branch is given in the [[en/Community/Patches/Passenger and cargo destinations#installation|Installation]] section of this page.
+
+== Overview ==
+[[File:en/Community/Patches/Example.png|thumb|Example city with long distance and local trains as well as an assortment of trams and buses]]
+
+[[en/Community/Patches/Passenger and cargo destinations]], or in short ''Cargodest'', is a system where cargo (this term includes passengers in the following) has a fixed destination to be delivered to, instead of the player deciding where to deliver it (by sending vehicles somewhere). This greatly increases the challenge and detail of the game and frankly, it's more fun and realistic as well. There have been a number of attempts at integrating this feature into OpenTTD and we're nearly there meanwhile.
+This page provides a short manual on how to use [[en/Community/Patches/Passenger and cargo destinations]], and a more detailed section on the technical side of its implementation in OpenTTD.
+
+
+{{en/Warning|Savegames which are created with this branch might no longer work in subsequent versions. They will for sure not work in trunk, even after cargodest has been merged into trunk<br>Also, please bear in mind that savegames from trunk might not work in the patched version}}
+
+{{en/Note|Please bear in mind that this is a feature which might not yet be stable. Read this page carefully because it shows what might work and what doesn't}}
+
+== Manual ==
+This section explains how to install and use [[en/Community/Patches/Passenger and cargo destinations]].
+
+=== Installation ===
+You can download a precompiled binary or source code [http://www.openttd.org/download-cargodest here]. Like any normal OpenTTD version, it needs the trg*.grf and sample.cat files to work, as described in the [[en/Archive/Manual/Installation FAQ#what-files-do-i-need-from-ttd|Installation FAQ]].
+
+If you want to obtain the newest source code from the mercurial repository, look in the section [[en/Community/Patches/Passenger and cargo destinations#obtaining-the-source-code|Obtaining the source code]].
+
+=== Usage ===
+CargoDest is easy enough to use: Once it is enabled in the Advanced Settings menu, the cargo will find its routes on its own. The Routing Network is built up using the orders of the vehicles. If you have two vehicles, one which goes from A to B and another from B to C, there will be (among others) cargo generated in A with C as its destination. That cargo at A will board '''''any''''' vehicle that goes to B (the ''transfer station''), unload there and then use '''''any''''' vehicle that goes to C. Any vehicle implies any vehicle going directly from A to B, vehicles with a stopover in D (meaning A-D-B) will not be used.
+
+{{en/Note|When your vehicles have Transfer orders, they will be ignored, the cargodest system handles it automatically. Transfer orders don't break anything, they're also not removed, they just act like any normal order does.}}
+
+=== New Advanced Settings ===
+Some settings were added to the ''Advanced Settings'' menu to tune [[en/Community/Patches/Passenger and cargo destinations]] to your liking.
+* Enable or disable the usage destinations for passengers, mail, valuables and other cargo individually in the ''Economy'' tab.
+* Select your preferred cargo view method for the station window in the ''Interface'' tab. You can still switch between those views during the game by CTRL-clicking in the station window.
+
+More details about the new settings can be found in the [[en/Community/Patches/Passenger and cargo destinations#configuring|Configuring]] section.
+
+=== New GUI ===
+Some changes were made to the user interface to help you finding out more about your routes.
+
+* The minimap got a new map overlay, see [[en/Community/Patches/Passenger and cargo destinations#minimap-route-network|Minimap Route Network]]
+* The station window has new options for displaying the waiting cargo, see [[en/Community/Patches/Passenger and cargo destinations#station-cargo-list|Station Cargo List]]
+* The vehicle detail window now shows the destination of its transported cargos under ''Total Cargo'', see [[en/Community/Patches/Passenger and cargo destinations#vehicle-cargo-list|Vehicle Cargo List]]
+
+== Detailed description ==
+In this section, the implementation of [[en/Community/Patches/Passenger and cargo destinations]] by Celestar and Peter is described in detail.
+
+=== Terms ===
+''Route Network'' is the representation of stations and orders in order to make cargo go from a Station A to a Station B. Route networks are stored in graphs (not graphics, graphs in the mathematical sense!) There exists one Route Network for each cargo type.
+
+''Vertex'' is the representation of a station in the graph. For this purpose, "Station" and "Vertex" are interchangeable. However each station is represented by one vertex per cargo type.
+
+''Edge'' is something that connects two vertices. If any vehicle has an order that causes it to load a specific cargo type at a station P and unload the same cargo type at station Q, a directed edge connects P to Q (but not necessarily Q to P).
+
+''Routed'' cargo is any kind of cargo that has one specific destination
+
+''Unrouted'' cargo is any kind of cargo that behaves like previously (i.e. can be transported to any station that accepts it)
+
+''Transit Station'' is a station where the vehicle stops, but the cargo remains in the vehicle and moves on
+
+''Transfer Station'' is a station where the vehicle stops and the cargo is unloaded to continue its trip on another vehicle
+
+''Terminal Station'' is the station where the cargo ultimately wishes to go to
+
+=== Features ===
+* Destinations are assigned by station size and distance
+* Destinations can be activated and deactivated in a running game
+* Independent settings for Passengers, Mail, Valuable-type cargo, and other cargo
+* Fast
+* Network-safe
+
+=== Limitations ===
+* Intermediate stops are not taken into account. For local trains, you'll have to set orders to each and every station it is supposed to go to. Concepts on how to overcome this are under consideration
+
+=== Items for version 2 ===
+This is stuff which will ''not'' be in the first incarnation of cargodest, no matter how much you bug us ;)
+* Symmetric cargo generation (Passengers and Mail), i.e. the same amount of passengers go from A to B as vice versa. This requires a rewrite of the cargo generation system and is currently not within the scope of the project. It's big enough as it is
+* Adjust cargo generation to network (if you only have one power station connected, you just get less coal than when you have five)
+* Distinguish between a transit and transfer station, so that cargo prefers to stay in the vehicle
+** Preview finished, test phase
+* Route load balancing (don't send everything via the cheapest route)
+* Full handling of conditional orders
+* MAYBE: Distance dependency depends on town size
+
+=== Known problems ===
+* The game asserts sometimes when switching from unrouted to routed cargo. This is because sometimes cargopackets get a destination that is their current position.
+
+=== Missing features ===
+* Modification of the vehicle detail window so that is shows the origins
+* New icon for the Route Network view of the map: Suggestion: [[File:en/Community/Patches/Minimaprouting.png]] Full quality TIF here: [http://www.fvfischer.de/minimaprouting.tif]
+
+=== Configuring ===
+
+A couple of new patches are available:
+
+{|
+|+ 
+! GUI Category || Patch !! Values !! Description
+|-
+| Interface
+| gui.default_cargo_view
+|
+* 0 = All sources and destinations (Full View)
+* 1 = Destinations only
+* 2 = Next hop only
+* 3 = Tree
+|
+What kind of listing to display in the station window by default
+|-
+| Economy
+|
+* economy.pax_dest_type
+* economy.mail_dest_type
+* economy.gold_dest_type
+* economy.other_dest_type
+| 
+* 0 = normal
+* 1 = (reserved)
+* 2 = destinations
+|
+Whether or not to use the new destination behaviour for various cargo types 
+|}
+
+Further options are available in the config file in the [rn] section:
+{|
+|+ 
+! Patch !! Default Values !! Description
+|-
+| 
+* aircraft_penalty_factor
+* train_penalty_factor
+* road_penalty_factor
+* ship_penalty_factor
+|
+* 1
+* 2
+* 3
+* 4
+|
+The "cost" of a route is the distance (Manhattan) times the vehicle penalty factor, which can be set from 1 to 10. The default settings will have cargo prefer the faster vehicle types
+|-
+| stopover_penalty
+| 25
+| This is the base cost of a route (that is added to the length-dependent part). The higher this value (from 1 to 1000), the more likely cargo will use direct trains over ones with stopover. This especially plays a role when there are routes on different vehicle types from A to B.
+|}
+
+=== Minimap Route Network ===
+[[File:en/Community/Patches/Paxdest-graph.png|thumb|An example of a graph showing the route network]]
+
+The minimap has recieved a new overlay called ''Route Network''. If you select this mode, you can view a visual representation of the route graph, where you can see exactly which stations (= nodes) are connected with (= have edges to) which for the selected cargo type(s). You can toggle each type of cargo at the bottom of the window individually, or use the ''Enable/Disable All'' buttons.
+
+Stations (nodes) are representated with squares in company color, their size indicating the amount of the selected cargo type(s) currently waiting at the station.
+Connections (edges) are shown as thin lines in the color of the cargo type they represent.
+
+{{en/-}}
+
+=== Station Cargo List ===
+{{en/Todo|replace outdated screenshots}}
+
+The Station Cargo List will be one of your main tools to work with. To ease network optimization,
+several different cargo views are available in the station view window:
+
+* [[en/Community/Patches/Passenger and cargo destinations#conventional-view|Conventional View]]
+* Detailed Views:
+** [[en/Community/Patches/Passenger and cargo destinations#full-view|Full View]]
+** [[en/Community/Patches/Passenger and cargo destinations#destination-view|Destination View]]
+** [[en/Community/Patches/Passenger and cargo destinations#nexthop-view|NextHop View]]
+** [[en/Community/Patches/Passenger and cargo destinations#tree-view|Tree View]]
+** [[en/Community/Patches/Passenger and cargo destinations#source-view|Source View]]
+
+You can expand the conventional view to a detailed view, which gives you more information about the waiting cargo's routing. It's possible to switch between the different detailed views by using the drop down box in the in station view. The view type can be set for each window individually, and the default view type (which will be selected each time you open a window) can be set in the advanced options.
+
+When using one of the detailed views, you can click on any station name mentioned in the window to move your main viewport there, or Ctrl-Click to open a new viewport on the station's location.
+
+[[File:en/Community/Patches/Svw retract.png|frame|conventional view]]
+==== Conventional View ====
+
+We all know this view from the early days of TTO, but it doesn't reveal much information except how much cargo we have for each type.
+
+The little "+" sign indicates that there is more information about this cargo type. This is available for routed and unrouted cargo, however, the unrouted cargo needs this by far not as badly as the routed stuff. Click on the "+" and you can be bombarded with loads of information.
+
+{{en/-}}
+[[File:en/Community/Patches/Svw full.png|frame|"full" view - Shows origin and destination for everything]]
+==== Full View ====
+This is possibly less useful a view but it's there nonetheless. It shows, for every piece of the selected cargo type, the origin and the destination. This is more for the detail-loving people among us than to really help optimizing your network.
+
+Yellow lines indicate cargo that transfers at this station (i.e. comes from somewhere else and goes one), while black lines show cargo that originated here (i.e. has never been transported before)
+
+The main problem with it is the sheer amount of entries you get even for a mid-sized station as the one displayed.
+
+The Full View can be sorted alphabetically (by destination) or by the amount of cargo.
+
+{{en/-}}
+[[File:en/Community/Patches/Svw destination.png|frame|"destination" view - Shows the ultimate destination of the cargo]]
+==== Destination View ====
+Here we go simple and straightforward again. We see all the destinations are currently "in use" along with the amount. However, we don't know how the cargo is attempting to get there.
+
+The Destination View can be sorted alphabetically or by the amount of cargo.
+
+{{en/-}}
+[[File:en/Community/Patches/Svw nexthop.png|frame|"nexthop" view - Shows the station the cargo wishes to go next, independent of the question whether the cargo will leave the vehicle there or not]]
+==== NextHop View ====
+We call this the NextHop view.
+
+The term NextHop refers to the station a piece of cargo will go to next. What is important to understand that the piece of cargo might '''not''' leave the vehicle at the NextHop, should the vehicle then continue to the following NextHop.
+
+This is quite helpful if you have a lot of cargo at a station and need to find out where you have to send your vehicles to transport them. The good thing about this view is that it's not very cluttered, since the number of NextHops is always rather limited, even for large stations.
+
+The NextHop View can be sorted alphabetically or by the amount of cargo.
+
+{{en/-}}
+[[File:en/Community/Patches/Svw tree.png|frame|"tree" view - Shows a logical tree where the cargo is going from the current station, includes information on how many units transfer or arrive at subsequent stations]]
+
+==== Tree View ====
+This view is possibly the most useful, if you get used to it. It shows a forward-tree of the cargo and its destinations (i.e. forward tree because this tree doesn't care about where the cargo comes from).
+
+Each level of indentation indicates an additional hop between the current station and the one displayed. So, the stations that are not indented are the NextHops. However, here we can see what amount of cargo actually uses the NextHop as a destination, and the number that uses it as a transfer point (including the ones staying on board). There, we see the NextHops from there, but only the amount from the current station (i.e. the one who the window belongs to), and so on.
+
+This can for example be helpful to determine where to introduce new non-stop services to, to reduce the number of Hops the cargo needs to take and reduce congestion at transfer points once they become saturated.
+
+Should there be a cargo for which no route can be found, it is shown in red in the Tree View along with a "no route found" remark.
+
+The Tree View cannot, at this point, be sorted.
+
+{{en/-}}
+
+=== Vehicle Cargo List ===
+
+To see the destinations of cargo a ''Train'' is currently transporting, click on the ''Total Cargo'' tab of the train details window.
+For other types of vehicles, this information is displayed directly in the details window.
+
+The sources of the cargo are not displayed (yet).
+
+=== Console ===
+
+There's a new console command called "rn" in the game, which has a number of subcommands:
+
+* These commands are used to obtain indices (cargo type and station index) we need for the other ones
+** lv: Lists all "vertices" of the routing network along with their indices (we'll need them later). You can define a filter by using "rn lv Foo". This will list only stations that start with "Foo" in their name.
+** lc: Lists all cargo types with their indices
+* These commands can be used to analyse your network:
+** le: Lists all outgoing edges of a station for a given cargotype. This needs the cargo type and the station in index form (to be obtained from 'lv' and 'lc'.
+** fr: Manually finds a route from one vertex to another. This needs one cargo type and two stations in index form
+* Debugging stuff:
+** rr: Resets the whole routing network and start from scratch. *Believe it or not, this is network safe on both server and client. You shouldn't need it anyway, it's in there for testing
+** dl: Shows the destination list. This dumps the cache that is stored for each GoodsEntry of each Station. It's only used for debugging purposes and it's output should be identical to the NextHop view of the station list. We see how many pieces of cargo go via what NextHop.
+
+== Technical details ==
+
+=== Obtaining the source code ===
+
+Available via [http://www.selenic.com/mercurial/wiki/ mercurial]:
+* [http://hg.openttd.org/developers/celestar/cargodest.hg/ Celestar] (svn r14691)
+
+
+So for example:
+
+    hg clone http://hg.openttd.org/developers/celestar/cargodest.hg/ cargodest-celestar
+
+===Unofficial patches===
+[http://www.tt-forums.net/viewtopic.php?p=772932#p772932 Against r15708 from Aali] HG Patch (-p1)
+
+==== Dependencies ====
+
+In addition to the normal libraries and such that OpenTTD trunk requires, you will need the development headers/libraries for [http://www.boost.org/ Boost] - specifically, the Boost Graph library. Both versions 1.34 and 1.35 should work.
+
+Under debian/ubuntu, this is provided via the libboost-graph-dev package, which also depends on the various other required portions of Boost.
+
+So for example:
+
+    sudo aptitude install libboost-graph-dev
+
+On Mac OSX these can be installed from [http://www.macports.org/ MacPorts]:
+
+    sudo port install boost
+
+For Windows installer try [http://www.boostpro.com/products/free/ Boostpro Computing]:
+
+==== Compiling ====
+
+The normal configure/make applies as well.
+
+    ./configure
+    make
+
+Note, however, that the ./configure script currently does not support/check the boost libraries, so you may need to run configure with
+    ./configure CFLAGS="-I/path/to/boost"
+instead, where /path/to/boost is the directory you installed the boost libraries to.
+
+=== Concept ===
+
+The basic idea of the implementation was to make the whole system as least intrusive as possible. The whole cargo handling system has been moved into a new base class, and the derived classes determine whether it is "routed" or "unrouted"
+
+Check the doxygen documentation of the tree for more info, everything is documented in there
+
+=== Adding Routes ===
+Routes are added to the Routing Graph when the corresponding orders are inserted in a vehicle's order list.
+
+Look at the following example:
+[[File:en/Community/Patches/Addroute.png|frame|center]]
+
+The first four orders don't add any route from one station to another, but they're there for some kind of realistic depot usage of the train.
+
+However, as order #5 is inserted, the routing system parses the new data and adds a new ''edge'' from Badinghead (Station <0>) to Senpool(<1>). It also adds an edge for the return trip. Both edges get a cost of 105, and are shown in the minimap.
+
+The route is added both for passengers and mail as it seems that the train can carry both types of cargo.
+
+
+=== Destination Algorithm ===
+
+(how OpenTTD picks destinations for cargos)
+
+=== Routing Algorithm ===
+
+Cargodest uses a [http://en.wikipedia.org/wiki/Shortest_path_problem shortest path] routing algorithm to find a route for the passengers and cargo to take. The distance between two stations is defined as the [http://en.wikipedia.org/wiki/Taxicab_geometry Manhattan distance] between them, multiplied by a (vehicle type-dependent) penalty factor, plus a stop-over penalty. The cost of the complete route is the sum of the costs of the needed stops. Only the route with the lowest cost is selected (i.e. cargo will never take the second-best route). All penalties are configurable (see above).
+
+==== Example ====
+
+From a [http://www.tt-forums.net/viewtopic.php?p=735200#p735200 post in tt-forums]:
+
+<blockquote>
+But I also have a question about this:
+Suppose I have 2 cities quite far away on the map. They are connected by train via some other train stations. but there are also 2 airports that have connection with the railway stations of these 2 cities. If I have a hovercraft service from the airport to the railway station, do passengers still prefer the airport then? I'm wondering because I've read that they prefer planes over trains over buses over ships? ''(OpenTTDHooligan)''
+</blockquote>
+
+
+Train from A1 stops at A2 and then goes to airport A3, flight to B1, take ship to B2, take non stop train to B3:
+
+#A1 -> A2: 50 tiles, cost 2 * 50 = 100
+#A2 -> A3: 20 tiles, cost 2 * 20 = 40
+#A3 -> B1: 200 tiles, cost 1 * 200 = 200
+#B1 -> B2: 20 tiles, cost 4 * 20 = 80
+#B2 -> B3: 20 tiles, cost 2 * 20 = 40
+#+ 5*25 for the stop-overs = 125
+
+The total route has a cost of 100+40+200+80+40+125 = 580
+
+Of the possible routes between A1 and B3 that with the minimum cost is taken. So, to answer the question above, it depends on how many stations the train stops at. If it went from A1->B3 non-stop and the distance was 250 tiles the cost would be 525 and thus considered cheaper than train+train+flight+ship+train.
