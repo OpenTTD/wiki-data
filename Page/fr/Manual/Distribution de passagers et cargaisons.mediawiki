@@ -1,0 +1,157 @@
+[[Translation:en/Manual/Passenger and cargo distribution]]
+
+
+{{fr/Avertissement|Les sauvegardes créées avec cette branche ne fonctionnent plus avec les versions à venir. Elles ne fonctionneront certainement pas dans le tronc principal, même si CargoDist y est finalement intégré.}}
+
+C'est donc la (n+1)ème tentative pour fournir des passagers et du fret avec des destinations et ainsi les amener là en utilisant les liens de transport existants aussi efficacement que possible. Plus de détails sur le problème peuvent être trouvés [[fr/Community/Patches/Destinations des passagers et des cargaisons|ici]]. Cependant, en contraste avec le projet CargoD'''e'''st, les problématiques de routage des cargaisons et de répartition des charges sur différents trajets sont vus ici comme inséparables, et donc résolus ensemble. De même, la définition d'une demande de transport est vue comme une précondition pour résoudre les problèmes ci-dessus et les traiter en premier.
+
+Le [http://www.tt-forums.net/viewtopic.php?f=33&t=41992&start=0 sujet du forum principal] a des informations supplémentaires, tout comme le sous-projet [http://www.tt-forums.net/viewtopic.php?f=33&t=32923 mini-carte avec zoom]. Des ajouts peuvent être trouvés sur mon [http://github.com/fonsinchen/openttd-cargodist/tree/patches espace de corrections], avec [http://github.com/fonsinchen/openttd-cargodist/tree/patches/current ce sous-répertoire] contenant toujours les dernières mises à jour et [http://github.com/fonsinchen/openttd-cargodist/raw/patches/current/TRUNK_VERSION.txt ce fichier] indiquant à quelle version du tronc ils s'appliquent. Vous devriez prendre les ajouts avec le préfixe "trunk-" si vous voulez les appliquer directement sur le tronc principal, ou ceux sans lui si vous voulez les appliquer les uns sur les autres.
+
+La ferme de compilation de OpenTTD construit des binaires de CargoDist pour différentes plateformes chaque nuit. Vous pouvez les télécharger sur http://bundles.openttdcoop.org/cargodist/.
+
+Vous pouvez aussi faire une extraction de mon arbre git. Il se trouve à git://github.com/fonsinchen/openttd-cargodist.git et contient des branches hiérarchiques nommées comme suit:
+
+      master
+        |
+        |\------------\----------\---------------\----------\
+        |             |          v               |          |
+        |             |    moving-average        |          |
+        |             |          v               |          v
+        |             |      capacities          |     reservation
+        |             |          v               |          |
+        |             v      components >>>      |          |
+        v          texteff       v               |          |
+  smallmap-zoom-in    |   <<< demands            v          |
+        |             |          v           multimap       |
+        |             |         mcf              |          |
+        |             |          v               |          |
+        |             |   flowmapping-core       |          |
+        |             |          |               |          |
+        |             \---------\|/--------------/----------/
+        |                        v
+        |                    cargomap
+        |                        |
+        |/----------------------/ \--------------\
+        v                                        v
+  smallmap-stats       >>> warning-sign    station-gui  supplyscale <<<
+        |                        |               |          |
+        \-----------------------\|/--------------/----------/
+                                 v
+                                cd
+
+Les branches correspondent principalement aux jalons mentionnés ci-dessous. ''master'' est une duplication du répertoire principal de openttd. ''cd'' regroupe toutes les branches. Donc, si v ous voulez la dernière version de tout, faites:
+
+ git clone git://github.com/fonsinchen/openttd-cargodist.git
+ git checkout origin/cd
+
+Bien entendu, vous pouvez aussi récupérer les jalons un à un et examiner chacun de façon indépendante. Chaque jalon devrait se compiler et fonctionner sans problème. Les jalons sont grossièrement définis comme suit:
+
+==Trace des capacités, des utilisations et des fournitures==
+
+La capacité de transport d'un lien entre une gare A et une gare B est la somme des capacités de tous les véhicules arrivant à B et venant de A. L'utilisation du lien est le nombre de marchandises réellement transportées de A vers B. La fourniture est la quantité de cargaison générée à une gare. Ces nombres sont calculés par type de cargaison et, afin de ne pas les laisser croître indéfiniment, une moyenne glissante est relevée sur une durée configurable. La moyenne glissante est calculée différemment pour la fourniture d'une part et la capacité et l'utilisation d'autre part. La capacité et l'utilisation sont modifiées linéairement quand elles tombent en dessous de la longueur de la moyenne glissante. Cela aide à nettoyer les liens obsolètes. Pour compenser cela, la capacité et l'utilisation reçoivent un coup de fouet quand ils sont accrus depuis une faible valeur de base. Ainsi, des augmentations faibles mais régulières de capacités et d'utilisation n'entraînent pas la perte de liens.
+
+==Graphe des liaisons et composants connectés==
+
+Les nœuds dans le graphe sont partitionnés en composants connectés. Ce n'est pas très utile en soi, mais sera nécessaire pour les étapes ultérieures. Le calcul des composants connectés ne fonctionne pas s'il y a beaucoup de véhicules qui visitent une station et n'y reviennent jamais. Ce comportement a été dévoilé par certaines IAs, mais le fixer n'est pas une priorité haute. Vous avez là une nouvelle page de paramètres: ''linkgraph''. Chaque fois qu'un composant connecté est calculé, une copie de ces paramètres est faite pour ce composant. Ces copies sont sauvegardées et chargées. Plus tard, un processus séparé sera créé pour le calcul de chaque composant et les paramètres au moment de sa création seront trimballés avec. Ainsi, tous les paramètres peuvent être modifiés en cours de jeu, et le modèle de mise en file reste sûr vis-à-vis du réseau. La première entrée dans les paramètres du graphe de liens est l'''intervalle de recalcul''. C'est le temps entre deux recalculs successifs du graphe de liens. Si vous l'augmentez, il consommera moins de puissance CPU. Si vous le diminuez, l'algorithme CargoDist tournera plus souvent, faisant un routage plus exact si vos trajets changent souvent.
+
+==Demande de transport==
+
+Une fonction de demande définit combien d'unités de cargaison '''devrait''' être transportée entre certains nœuds du graphe de liaisons. Elle ne dit pas combien d'unités de cargaison sont vraiment transportées, ni comment elles le sont. EN fait, au moins deux fonctions de ce genre sont nécessaires. Certaines cargaisons, les passagers et le courrier principalement, requièrent une fonction de demande symétrique, les autres une plutôt asymétrique.
+
+===Demande symétrique et asymétrique===
+
+La fonction symétrique doit avoir les propriétés suivantes:
+
+  pour toute paire de nœuds (i, j): demande(i, j) == demande(j, i)
+
+La fonction asymétrique doit plutôt avoir la propriété suivante:
+
+  pour toute paire de nœuds (i, j): demande(i, j) > 0 => demande(j, i) == 0
+
+En pratique, il est pratique d'avoir une fonction semi-symétrique qui soit modifiable par une option de configuration ''0 <= k <=1'' comme ceci:
+
+  pour toute paire de nœuds (i, j): demande(i, j) >= k * demande(j, i) >= k * k * demande(i, j) || demande(j, i) >= k * demande(i, j) >= k * k * demande(j, i)
+
+Pour ''k == 0'', c'est une fonction asymétrique, et pour ''k == 1'', c'est une fonction symétrique.
+
+De plus, la distance entre les nœuds doit jouer un rôle dans le calcul de la demande, et la somme de tous les ''demande(i, j)'' ne peut pas dépasser ''fournit(i)'' pour tout nœud ''i''.
+Donc, l'algorithme implémentant la fonction de demande génère une liste de nœuds fournissant une cargaison et une autre de nœuds en acceptant. Il boucle alors de façon répétée sur toutes les paires de nœud ''(depuis, vers)'' où ''depuis'' fournit et ''vers'' accepte. Pour chaque paire de ce type, il assigne une fraction de la fourniture à ''depuis'' comme ''demande'' entre ''depuis'' et ''vers'', jusqu'à ce qu'il ne reste aucune fourniture dans aucune station. Pourvu que ''k > 0'', il assigne aussi ''demande * k'' dans l'autre direction s'il y a assez de fourniture à ''vers'' et si ''from'' l'accepte aussi. Sinon, moins ou pas du tout de demande est généré dans la direction inverse. La taille de la fraction assignée dépend de:
+
+* La ''distance'' Manhattan entre les nœuds. 
+* Un paramètre de configuration de ''précision''. Plus la précision est haute, moins la demande est génére à chaque étape.
+
+Généralement, la formule est ''distanceMax / (distanceMax - distance) / précision'', où distanceMax est la somme des dimensions x et y de la carte.
+
+===Demande basée sur l'acceptation===
+
+Comme troisième option, il pourrait y avoir une fonction qui prend en compte la quantité acceptée (qui n'est pas appelée ''demande'', ici, de façon intentionnelle) par les stations. Son implémentation serait analogue aux fonctions de demande symétrique et asymétrique, mais les quantités acceptées devraient être connues. Un moyen de les déterminer serait de mesurer les marchandises consommées à la gare, tout comme la fourniture est la mesure des marchandises générées à la gare.
+
+===Configuration et sauvegarde/chargement===
+
+Vous pouvez modifier quelle fonction est utilisées pour quelle classe de cargaison dans les paramètres du graphe des liens. De plus, il y a une entrée ''non géré'' qui aboutira à ce qu'aucune demande ne soit calculée. L'influence de la taille de la station (''k'', seulement pour la fonction symétrique) et la distance (''l''), tout comme la précision, peuvent aussi être mis dans les paramètres du graphe des liens. Le calcul des demandes (tout comme les dernières parties de l'algorithme) a lieu par composant connecté, et dans un processus séparé pour chaque composant. Les processus travaillent tous sur leurs données propres et sont réunis dans le processus principal après une durée déterminée, pour copier leurs résultats. En sauvegardant l'état initial, les temps de jointure et les paramètres du graphe des liens de chaque processus en cours sont sauvegardés. Ainsi, les processus peuvent être démarrés dans un état valide lors du chargement d'une partie, ou en rejoignant un jeu en réseau.
+
+==Problème des flux multi-produits==
+
+Avec les demandes et les capacités connues, un problème avec les [http://en.wikipedia.org/wiki/Multi_commodity_flow flux multi-produits] est soulevé. Pour le résoudre, un algorithme inspiré de [http://www.cs.princeton.edu/~gk/papers/mincostflow.ps celui-ci] est utilisé. Le paramétrage du graphe des liens pour la précision souhaitée de la solution est réutilisé ici. Plus vous souhaitez une solution précise, plus la charge sur votre CPU sera lourde.
+
+L'algorithme calcule de façon répétée les meilleurs chemins pour chaque nœud vers chaque autre, dans le composant sur lequel il travaille, et ajoute à chaque chemin un flux de 1/précision de la demande non satisfaite entre les nœuds source et destination du chemin. Les meilleurs chemins sont calculés en utilisant l'[http://fr.wikipedia.org/wiki/Algorithme_de_Dijkstra de Dijkstra]. Le solveur MCF est découpé en deux passes.
+
+Dans la première passe, la qualité d'un bord est mesurée tout comme l'implication des distances Manhattan entre les stations. L'algorithme n'assignera des flux qu'aux chemins avec une capacité restante. Cela veut dire que les plus courts chemins seront saturés en premier, puis des chemins de plus en plus longs, et ainsi de suite, jusqu'à ce qu'il ne reste plus de demande ou que les capacités de tous les chemins utiles soient utilisées à leur pourcentage maximal. Le pourcentage maximal peut être configuré avec le paramètre du graphe de liens "saturation du chemin court". Après être arrivé dans cette situation, tous les cycles dans le graphe sont éliminés. Cela se fait en vérifiant, pour chaque nœud, par une recherche en profondeur d'abord, si les chemins partant de ce nœud forment un arbre et sinon, en réduisant les cycles détectés jusqu'à ce qu'au moins un des bords du flux soit à 0. Si des cycles ont été éliminés, la première passe est relancée, car la capacité libérée pourrait permettre davantage de chemins.
+
+La seconde passe est lancée s'il reste de la demande après la première passe, mais plus de capacité. Dans celle-ci, la qualité est mesurée comme la différence entre la capacité d'un bord et le flux qui lui est déjà assigné. L'algorithme est autorisé à sur-saturer les bords et à assigner plus de flux que de capacité. Cependant, il n'assigne des flux supplémentaires qu'aux chemins qui ont déjà été établis lors de la première passe. La seconde passe est exécutée jusqu'à ce qu'il ne reste plus de demande.
+
+Du fait de la vérification explicite des cycles lors de la première passe, et de ce que la seconde passe n'ajoute aucun nouveau chemin, le solveur MCF ne peut pas construire de chemins cycliques. Assigner toute la demande disponible est nécessaire pour garantir que la cargaison est vraiment envoyée quand le calculateur de demande a déterminé qu'elle doit partir, et pas seulement vers les destinations connectées par les meilleurs chemins.
+
+==Fonctionnalité centrale de correspondance des flux==
+
+La solution du problème des flux multi-produits est un ensemble de flux le long des bords du graphe de liens. Ces flux doivent être traduits en assignations de marchandises aux véhicules. Afin de le réaliser, une correspondance de flux est créée sur chaque nœud. Un exemple de correspondance de flux pourrait être:
+
+Pour 15 cargaisons arrivant à A depuis SOURCE, faire:
+*en livrer 5 à cette gare.
+*en envoyer 7 vers C
+*en envoyer 3 vers D
+
+Les nombres exacts sont déduits des fournitures et des tailles relatives des différents flux passant par un nœud. En plus de ces flux ''planifiés'', les ''vrais'' flux sont tracés. Dans l'exemple ci-dessus, la quantité de cargaison provenant de SOURCE qui a été envoyée vers C ou D ou consommée localement est tracée comme le ''vrai'' flux. Quand un nouveau paquet de cargaisons venant de SOURCE arrive, il est envoyé à la destination avec la plus grande différence entre les flux réels et planifiés. Ainsi, il n'est pas nécessaire de déterminer la destination pour chaque entité de cargaison à l'avance. Seuls les correspondances de flux pour chaque nœud doivent être connues pour orienter les cargaisons. Il n'est pas non plus nécessaire de diviser les paquets pour des raisons de CargoDist. Pour les vrais flux, encore, une moyenne glissante est prise, comme pour les capacités et les utilisations.
+
+[[File:en/Manual/Cargodist-station.png|frame|Image d'écran d'une IHM de station]]
+
+L'assignation d'un flux est calculée pour chaque gare depuis la forêt de chemins que l'algorithme MCF renvoie. C'est plutôt simple. Simplement, mettez à l'échelle tous les chemins par la fourniture de la station d'origine et insérez-les dans une structure de données intelligente qui retrouve le flux le plus insuffisamment pourvu en un temps constant.
+
+==Chargement des véhicules==
+'''Préface: Allez à "Configuration avancée -> Véhicules" et basculer sur "Les nouveaux ordres sont 'sans-arrêt' par défaut". Si vous voulez savoir pourquoi, lisez la suite.'''
+
+Cette partie inclut le chargement et le déchargement des véhicules selon les flux calculés précédemment. Il était inévitable de réécrire la plus grande partie du code de chargement des véhicules; il peut donc y avoir des bogues dedans. Toutefois, cette solution est plus facile à lire, à réutiliser et à déboguer que la précédente, dont la réécriture devrait être rentable au final.
+
+Un paquet de cargaison déchargé à une station choisit son prochain mouvement selon le flux pour son origine sauvegardé à la station. Quand un véhicule charge à une gare, il ne prendra en général qu'une cargaison attendant d'aller au prochain ''arrêt réel'' de sa liste d'ordres. Un ''arrêt réel'' est n'importe quel arrêt à une station où un véhicule peut charger ou décharger. Cela veut dire que les maintenances, les bouées et autres ordres ''via'', où les véhicules n'ont aucune chance de charger ou décharger, son exclus.
+
+Les ordres non déterministes sont gérés en se repliant sur le routage traditionnel. Un ordre non déterministe est soit un ordre sans sans la marque ''sans arrêt'', ou un ordre conditionnel où le prochain ''arrêt réel'' peut être évalué à au moins deux stations différentes. Souvenez-vous que, par exemple, sauter un ordre de maintenance si le véhicule n'en a pas besoin n'est donc pas un ordre non déterministe. Cependant, choisir la prochaine gare selon le pourcentage de chargement du véhicule l'est. Si un ordre suivant non déterministe est rencontré, le véhicule chargera toute cargaison disponible à la gare, sans tenir compte des destinations.
+
+Les cargaisons non gérées par CargoDist sont aussi transportées de manière traditionnelle. Les cargaisons voulant aller vers un lien non existant sont reroutées selon les autres flux pour sa station d'origine. Ce dernier cas se produit en supprimant des statistiques de liaison.
+
+Les modifications d'ordre comme "Pas de déchargement", "Décharger tout", "Transférer", "Pas de chargement", etc. font généralement ce qu'ils sont supposés faire en utilisant la distribution de cargaison. Cependant, comme le graphe de liens ne connaît pas les ordres, il suppose qu'il peut utiliser n'importe quel lien avec une capacité. Il prévoira donc aussi de charger la cargaison à envoyer avec ces véhicules qui refusent de charger la cargaison. De la même manière, il prévoira de transférer la cargaison à une gare où vous forcez la cargaison à être livrée. Cela veut dire que vous modifiez artificiellement les ratios entre cargaison envoyée et planifiée sur ces liens, ce qui fera que la correspondance de flux assignera encore plus de cargaison aux liens que vous tentez d'éviter. Il est donc suggéré de ne pas utiliser les modifications d'ordre avec la distribution de cargaison. Cela exclut "Chargement complet", qui est la seule modification d'ordres qui n'a aucun effet négatif sur la correspondance de flux.
+
+==IHM de station==
+L'IHM de station montre les sources, les prochaines étapes et les destinations estimées de la cargaison en attente, ainsi que celles des flux de cargaison planifiés et envoyés via ce nœud. Les destinations finales sont estimées selon les flux sauvegardés à chaque gare. N'espérez pas que chaque paquet de cargaison aille exactement à cet endroit, cependant. Comme expliqué ci-dessus, les paquets sont toujours routés sans être divisés, donc les nombres donnés dans l'IHM de la gare sont toujours un peu incorrects; mais sur le long terme, tout est bien envoyé aux bonnes destinations. Vous pouvez grouper les cargaisons par station d'origine, par prochaine étape et par destination, dans n'importe quel ordre. Vous pouvez aussi trier dans les groupes par la propriété que vous avez groupé par (''station'') ou la quantité de cargaison affichée (''quantité''). Les groupes peuvent être ouverts et fermés en cliquant sur les lignes respectives de l'affichage des cargaisons.
+
+==Zoom dans la petite carte==
+[[File:fr/Manual/Cargodist-smallmap-flow.png|frame|Capture d'écran de la petite carte avec des flux]]
+Afin d'améliorer la lisibilité de l'affichage des statistiques dans la petite carte, une fonction de grossissement a été ajoutée. En l'utilisant, vous pouvez non seulement diminuer pour avoir un aperçu de la petite carte, mais aussi zoomer pour avoir un affichage plus détaillé des statistiques des liaisons, par exemple dans un centre-ville.
+
+==Statistiques de la petite carte==
+Dans la petite carte, les flux réels et planifiés sur chaque liaison sont affichés. Vous pouvez choisir quelles statistiques vous voulez afficher en activant ou désactivant les boutons respectifs dans la légende. L'utilisation et la capacité sont comme avant, les flux réels et planifiés sont nouveaux. Le vrai flux est la quantité de cargaison déjà envoyée par la liaison. La différence entre flux utilisé et réel est la quantité de cargaison qui a été assignée au terminus du lien comme prochaine étape, mais n'est pas forcément encore arrivé là. Si l'utilisation est bien plus grande que le flux réel, la cargaison a été envoyée sur le lien de façon inattendue. Cela peut arriver s'il y a un problème dans la prédiction des flux de cargaison, à cause de modifications d'ordres.
+
+Vous pouvez afficher les statistiques soit comme des nombres (unités de cargaison par mois) ou comme des graphiques. Sous forme de nombre, les nombres sur la carte sont dans le même ordre que les entrées de la légende.
+
+==Cotes des gares externes==
+À faire
+
+==Optimisations==
+Le chargement des véhicules décrit ci-dessus s'est trouvé être très lent en utilisant les listes de cargaison de OpenTTD en stock. Cela est dû principalement au fait que pour trouver des paquets qui peuvent être chargés dans les véhicules, la liste doit être parcourue linéairement pour des paquets ayant exactement la même étape suivante que le véhicule en chargement. Avec beaucoup de cargaisons en attente, cela peut prendre du temps. Comme autre problème, la cargaison réservée pour les véhicules en chargement ne peut plus être sauvegardée comme un simple nombre, car un véhicule ne peut pas charger simplement encore un paquet. Afin de faire fonctionner de nouveau les réservations, des paquets spécifiques ont été réservés pour des véhicules spécifiques. Reconstruire ces listes de paquets réservés à chaque tour de chargement est coûteux. Pour résoudre ces problèmes, deux optimisations ont été introduites.
+
+===Listes de cargaison des stations triées par prochaine étape===
+Les listes de cargaison des stations sont triées par prochaine étape où veut aller un paquet. Ainsi, un véhicule en chargement n'a pas à chercher tous les paquets de la liste pour trouver ceux à charger, mais peut directement se reporter à la section de la liste où les paquets allant vers sa prochaine étape sont stockés. Comme avantage supplémentaire, la prochaine étape n'a plus à être sauvegardée dans le paquet, mais peut être déduite de son index dans la liste des paquets. Pour faire marcher cela, une carte multiple avec des quantités supplémentaires a dû être conçue. L'ordre des entrées avec des clés identiques doit être le même sur tous les quais afin d'éviter les désynchronisations. Malheureusement, la carte multiple C++ standard ne garantit pas cela.
+
+===Réservation explicite===
+Au lieu de reconstruire la liste des réservations à chaque tour de chargement, les cargaisons réservées sont conservées dans une liste séparée dans la liste des cargaisons d'un véhicule. Ainsi, la quantité de cargaison à rechercher à chaque tour de chargement est réduite et l'effort pour reconstruire ces réservations est économisé. Les listes de réservation sont sauvegardées dans les sauvegardes avec les autres listes habituelles de cargaison des véhicules.
+
+fonsinchen 22h39, 4 mars 2010 (UTC)
