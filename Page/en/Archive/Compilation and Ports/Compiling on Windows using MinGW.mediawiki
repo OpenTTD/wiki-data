@@ -84,7 +84,7 @@ In MSYS:
 tar xvfz libpng-1.5.1.tar.gz
 cd libpng-1.5.1
 mv INSTALL INSTALL.txt
-./configure --prefix=/mingw
+./configure
 make install
 cd ..</pre>
 
@@ -94,7 +94,7 @@ In MSYS:
 <pre>wget http://www.oberhumer.com/opensource/lzo/download/lzo-2.04.tar.gz
 tar xvfz lzo-2.04.tar.gz
 cd lzo-2.04
-./configure --bindir=/mingw/bin --includedir=/mingw/include --libdir=/mingw/lib --enable-static
+./configure --enable-static
 make install
 cd ..</pre>
 
@@ -104,7 +104,7 @@ In MSYS:
 <pre>wget http://sourceforge.net/projects/freetype/files/freetype2/2.4.4/freetype-2.4.4.tar.gz/download
 tar xvfz freetype-2.4.4.tar.gz
 cd freetype-2.4.4
-./configure --prefix=/mingw/ --enable-static
+./configure --enable-static
 make install
 cd ..</pre>
 
@@ -120,7 +120,7 @@ unzip pkg-config_0.23-3_win32.zip -d /mingw
 wget http://tukaani.org/xz/xz-5.0.1.tar.gz
 tar xvfz xz-5.0.1.tar.gz
 cd xz-5.0.1
-./configure --prefix=/mingw/ --enable-static --disable-threads
+./configure --enable-static --disable-threads
 make install
 cd ..</pre>
 
@@ -143,19 +143,9 @@ patch -p1 -i libicu_4_6_mingw32.diff
 wget http://devs.openttd.org/~terkhen/libicu/libicu_reduce_icudata_size.diff
 patch -p1 -i libicu_reduce_icudata_size.diff
 cd source
-./configure --prefix=/mingw/ --enable-static --disable-shared --disable-strict --disable-threads
+./configure --enable-static --disable-shared --disable-strict --disable-threads
 make install
 cd ../..</pre>
-
-==Compiling 1.0.x and previous versions==
-Compiling code from a revision earlier than [http://vcs.openttd.org/svn/changeset/19285/ r19285] (which includes any stable from 1.0.x downwards) requires an additional step to ensure that the installed libraries are detected by OpenTTD. In MSYS:
-
-<pre>mkdir /usr/include
-cp /mingw/include/zlib.h /usr/include/
-cp /mingw/lib/libz.a /usr/lib/
-mkdir /usr/include/lzo
-cp /mingw/include/lzo/lzo1x.h /usr/include/lzo/
-cp /mingw/lib/liblzo2.a /usr/lib/</pre>
 
 ==Getting the source code==
 Check the [[en/Development/FAQ development#how-can-i-obtain-the-source-code|development FAQ]] for different methods for obtaining the source. If you download it without using MSYS (for example downloading the source code from the website) don't forget to place it in your home folder (by default it is C:\MinGW\msys\1.0\home\<user_name>).
