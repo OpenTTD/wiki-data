@@ -1,52 +1,49 @@
 [[Translation:en/Manual/Negative income with feeder service]]
-{{fr/Traduction|en/Manual/Negative income with feeder service|0}}
 
-There are two different situations in [[en/Manual/Feeder service]]s where vehicles may show a negative income (sometimes a very huge amount) although they do an important job for the service. This page explains why that happens and how to avoid it.
+Il y a deux situations différentes avec les [[fr/Manual/Service d'approvisionnement|services d'approvisionnement]] dans lesquelles les véhicules peuvent afficher un revenu négatif (parfois d'un montant très élevé), bien qu'ils participent de façon importante à ce service. Cette page explique ce qui arrive et comment l'éviter.
 
 = Introduction =
-[[File:en/Manual/Feeder negative income.png|right|thumb|400px|A feeder service from a coal mine to a power plant.]]
-Consider the picture as the example network. The service transports coal from the mine at station A at the bottom left, through an intermediate station B, to the power plant at the top right using station C. The first part of the journey is done with a train, the second part by road vehicles. Admittedly the example is a pretty stupid way of delivering coal. It would have been much easier and faster to deliver the coal in a straight line by moving station B to the place of station C. However this is needed to show the point.
+[[File:en/Manual/Feeder negative income.png|right|thumb|400px|Un service d'approvisionnement d'une mine de charbon vers une centrale électrique]]
+Considérez l'image comme un exemple de réseau. Le service transporte du charbon depuis la mine à la station A en bas à gauche, via une station B intermédiaire, jusqu'à la centrale électrique en haut à droite utilisant la station C. La première partie du trajet est effectuée par un train, la seconde par des véhicules routiers. Il est vrai que cet exemple est une manière assez stupide de livrée le charbon. Il aurait été bien plus facile et rapide de livrer le charbon en ligne droite en mettant la station B à l'emplacement de la C. Cependant, cela servira d'exemple pour notre sujet.
 
-Both cases are differentiated by the way the cargo is exchanged at the intermediate station B.
-
-
-
-= Unload Order =
-When the train has the order to ''unload'' at B then it won't be paid. The road vehicles from B to C will get all the profit upon delivery at C. Thus the income of the train will be negative, unless it has another income along the way.
-
-Take care that the train should also have ''no loading'' set (for versions 0.7 and higher), otherwise, it will load the just unloaded coal back into the wagons, and bring it back to the coal mine (and you will not get paid for your efforts).
+Les deux cas sont différenciés par la manière dont la cargaison est échangée à la station intermédiaire B.
 
 
-= Transfer Order =
-Now the train has the order to ''transfer'' at B. This time the train will have a positive income, however the road vehicles exhibit a negative income. Let's see how this happened.
 
-The payment for all delivered cargo no matter how it gets to its destination is done by a fixed rule (see for all the detail on the [[en/Manual/Game Mechanics/Main Page#delivery-payment-rates|game mechanics]] page).
-Basically,
-* you get paid by the straight distance from source (the coal mine) to destination (the power plant), and
-* you get fined for slower delivery from source to destination.
+= Ordre de déchargement =
+Quand le train a l'ordre de ''Décharger'' à B, alors il ne sera pas payé. Les véhicules routiers de B vers C recevront tout le bénéfice lors de la livraison à C. Ainsi, le revenu du train restera négatif, sauf s'il a d'autres revenus sur son trajet.
 
-The game does not know where coal loaded into the train is going. When the train arrives at station B and transfers the coal, the game makes an estimate of how much you should get paid. It finds that 732 English pound is a fair amount, and assigns that to the train as virtual money.
-Next, three road vehicles take the coal, and deliver it to the power plant at station C. Here, the game detects that the coal is being delivered to its final destination. It computes the exact payment (about 711 pound) for delivering the cargo from the coal mine directly to the power plant, deducts the already given 732 pounds, and comes up 21 pound short. As a result, each of the road vehicles has to pay 7 pound.
-In other words, the vehicles get the bill for the (apparently) overestimated payment of the train.
+Faites attention que le train devrait avoir aussi ''pas de chargement'' positionné (pour les versions 0.7 et supérieures), sinon, il chargera simplement le charbon tout juste déchargé dans ses wagons, et le ramènera à la mine de charbon (et vous ne serez pas payé pour tous ces efforts).
 
 
-= Predicting negative income =
-A complicated multi-hop delivery is usually a good indication of negative income. If your vehicles make a detour, that is going to cost money.
+= Ordre de transfert =
+Maintenant, le train a l'ordre de ''transférer'' à B. Cette fois, le train aura un revenu positif, mais ce seront les véhicules routiers qui afficheront un revenu négatif. Voyons comment cela se produit.
 
-Another common case is the speed of delivery. The payment of the train is done with the same rules as the final payment. Since a train is much faster than a road vehicle, it gets less fine for slow delivery, that is, it gets more than it should given the average speed of the coal over the whole journey. The road vehicles also pay for their slow speed compared to the train.
+Le paiement pour toute la cargaison livrée, quelque soit le moyen par lequel elle est arrivée à destination, est fait via une règle fixe (voyez le détail sur la page des [[fr/Manual/Game Mechanics/Main Page#taux-de-paiement-des-livraisons|mécanismes du jeu]]).
+Sommairement,
+* vous êtes payé pour la distance en ligne droite depuis la source (la mine de charbon) jusqu'à la destination (la centrale électrique), et
+* vous êtes pénalisé pour une livraison plus lente de la source à la destination.
+
+Le jeu ne sait pas où le charbon chargé dans le train va. Quand le train arrive à la station B et transfère le charbon, le jeu fait une estimation de combien vous devriez être payé. Il estime que 732£ est un montant raisonnable, et l'assigne au train comme argent virtuel. Ensuite, trois véhicules chargent le charbon et le livrent à la centrale électrique à la station C. Là, le jeu détecte que le charbon a été livré à sa destination finale. Il calcule le paiement exact (environ 711£) pour avoir livré la cargaison depuis la mine de charbon directement à la centrale électrique, en déduit les 732£ déjà payées, et obtient un déficit de 21£. En conséquence, chacun des véhicules routiers doit payer 7£. En d'autres termes, les véhicules payent la facture pour le paiement (apparemment) surestimé du train.
 
 
-= Reducing or preventing negative income for vehicles in feeder systems =
-== Generally ==
-* Try to keep straight lines from the source to the destination. Not only is it faster, it also reduces the risk of vehicles for some part of the journey getting paid more than they should.
-* Try to keep the speed of all parts of the journey as equal as possible. Slower vehicles pay the price for the overestimated payments of the other parts.
+= Prédire un revenu négatif =
+Une livraison compliquée avec de multiples bonds est en général une bonne indication d'un revenu négatif. Si vos véhicules font un détour, cela va coûter de l'argent.
+
+Un autre cas fréquent est la vitesse de livraison. Le paiement du train est fait avec les mêmes règles que le paiement final. Comme un train est bien plus rapide qu'une véhicule routier, il sera moins pénalisé pour une livraison lente, c'est-à-dire qu'il obtiendra davantage que ce qu'il aurait obtenu avec la vitesse moyenne du charbon sur tout le trajet. Les véhicules routiers paient aussi pour leur faible vitesse par rapport au train.
 
 
-== Transfer Order case ==
-First of all, as explained above, the negative income is done to compensate for payments done earlier to you for the cargo at intermediate points in the feeder system.
-So while it looks a bit weird, you do get paid for all delivered cargo. There is no real need to worry about it.
+= Réduire ou prévenir un revenu négatif pour les véhicules dans un système d'approvisionnement =
+== De façon générale ==
+* Essayez de garder des lignes droites de la source à la destination. Non seulement c'est plus rapide, mais cela réduit aussi le risque que des véhicules, sur une partie du trajet, soient payés davantage qu'ils ne le devraient.
+* Essayez de conserver la même vitesse sur tout le trajet, autant que possible. Les véhicules les plus lents payent pour les paiements surestimés des autres.
 
-[[File:en/Manual/Feeder systems percentage.png|right|thumb|Advanced setting for reducing intermediate payments.]]
-If you are more happy with only yellow and green payments for all your vehicles, you can reduce or eliminate the negative income by changing an advanced setting. In the [[en/Archive/Manual/Settings/Advanced Settings/Economy|'Advanced Settings window', section 'Economy']], there is a "Percentage of leg profit to pay in feeder systems" setting. With it, you can reduce the amount of money that vehicles get at intermediate stations. As a result, there is more money left to pay at the end of the journey to the vehicle delivering the cargo at its final destination.
 
-Note that this is a global setting, all vehicles using transfer orders are affected by it.
+== Cas de l'ordre de transfert ==
+Tout d'abord, comme expliqué ci-dessus, le revenu négatif est fait pour compenser des paiements effectués par avance pour une cargaison à des points intermédiaires du système d'approvisionnement.
+Donc, bien que cela semble un peu étrange, vous serez payé pour toute cargaison livrée. Il n'y a pas vraiment besoin de s'inquiéter de cela.
+
+[[File:en/Manual/Feeder systems percentage.png|right|thumb|Paramètre avancé pour réduire les paiements intermédiaires]]
+Si vous n'êtes heureux qu'avec des paiements verts ou jaunes pour tous vos véhicules, vous pouvez réduire ou éliminer les revenus négatifs en modifiant une option avancée. Dans la [[fr/Archive/Manual/Settings/Options Avancées/Économie#pourcentage-du-profit-de-branche-a-payer-dans-les-systemes-multi-modaux|fenêtre 'Configuration avancée', section 'Économie']], il y a un paramètre "Pourcentage du profit de branche à payer dans les systèmes multi-modaux". Avec lui, vous pouvez réduire le montant touché par chaque véhicule aux stations intermédiaires. En conséquence, il y a davantage d'argent à toucher en fin de trajet, quand le véhicule livre la cargaison à sa destination finale.
+
+Notez qu'il s'agit d'un paramètre global; tous les véhicules utilisant l'ordre de transfert seront affectés par celui-ci.
