@@ -1,0 +1,133 @@
+[[Translation:en/Archive/Compilation and Ports/Nintendo DS]]
+
+{{fr/Archive/Compilation and Ports/Table des matières droite}}
+La travail sur le portage vers Nintendo DS a commencé en novembre 2007, et il est toujours dans ses premières phases de développement. Il est toutefois jouable et la version la plus récente peut être téléchargée depuis [[http://www.tt-forums.net/viewtopic.php?f=33&t=35306 se sujet du forum]].
+
+Ce portage est espéré être la première [[fr/Archive/Compilation and Ports/Version pour appareil portable|version pour appareil portable]] officiellement supportée.
+
+
+== Fonctionnalités ==
+
+* votre simulation de transport favorite à suivre!
+* interface contrôlée au stylet
+* Sauvegarder et charger des parties, même avec d'autres plateformes (Windows, Linux, ...)
+* jouer des cartes avec une taille jusqu'à 256x128
+* effets sonores stéréo
+
+== Installation ==
+# Téléchargez tous les fichiers du paquet tar: http://tt-forums.net/viewtopic.php?f=33&t=35306&st=0&sk=t&sd=a
+# Corrigez openttd.nds avec DLDI.
+## Récupérez dldi : http://chishm.drunkencoders.com/DLDI/downloads/dlditool-win32.zip 
+## IHM sur : http://chishm.drunkencoders.com/DLDI/downloads/dlditool-win32-gui.zip
+## Récupérez le fichier dldi pour votre carte : http://www.nbrew.nl/dldi-overzicht/
+## Corrigez avec l'IHM : dlditool32.exe
+## Utilisez l'auto-correction de votre carte flash.
+# Copiez openttd.nds, openttd.cfg et le répertoire openttd sur la racine de votre carte
+# Copiez les fichiers de données de Transport Tycoon depuis votre CD TTD d'origine dans openttd/data. Les fichiers suivants sont nécessaires:
+#* sample.cat
+#* trg1.grf
+#* trgc.grf
+#* trgh.grf
+#* trgi.grf
+#* trgt.grf
+# Commencez à jouer à OTTD sur votre DS!
+
+== Contrôles ==
+
+{|
+!Bouton!!Fonction
+|-
+|D-Pad||défilement
+|-
+|L||inverser les écrans
+|-
+|R||fermer toutes les fenêtres
+|-
+|A||afficher la console de débogage
+|-
+|B||afficher un rapport mémoire
+|}
+
+Note: Cette table se rapporte à la version Alpha 6.
+
+== Questions fréquemment posées ==
+Q: Comment puis-je éditer des cartes sur Alpha 6? Le bouton est sur l'écran du haut, et je ne peux les inverser!
+A: Vous pouvez utiliser un des boutons de côté pour inverser les écrans. Parfois, vous devrez maintenir le bouton pendant une seconde ou plus.
+
+== Captures d'écran ==
+Ces captures ont été prises de la version Alpha 6.
+
+[[File:en/Archive/Compilation and Ports/Nds-titlescreen.png]] [[File:en/Archive/Compilation and Ports/Nds-ingame.png]] [[File:en/Archive/Compilation and Ports/Nds-gui.png]]
+
+== Bogues connus ==
+
+* plantages aléatoires quand le jeu manque de mémoire
+* défauts graphiques (surtout pendant le défilement) car le blitter de la nDS doit être réécrit
+* défauts sur la mini-carte
+* essayer de créer des cartes plus grandes que 256x128 plante à cause d'une RAM insuffisante
+* la résolution de l'écran est trop petite et rend impossible le clic sur certaines fenêtres
+* quelques plantages aléatoires liés à Blipper.cpp
+
+== Liste des changements ==
+
+=== Alpha 6 ===
+
+* basée sur r12452 (rev1926 interne)
+* le portage NDS a une barre d'outils différente, plus adaptée au petit écran
+* pour un meilleur accès avec l'écran tactile, les barres d'outil ont été déplacées en bas de l'écran
+* un clavier à l'écran totalement personnalisable a été ajouté (cliquez sur un champ texte pour l'ouvrir)
+* un affichage de nouvelles sur l'écran inférieur a été ajouté
+* certaines fenêtres ont été adaptées pour l'écran NDS (davantage dans les versions futures):
+** menu d'introduction
+** menu de création d'une partie
+** mini-carte
+** fenêtre de construction d'un véhicule
+* lors de la construction de dépôts et de gares, seule une image de prévisualisation est affichée, que vous pouvez faire tourner en cliquant dessus
+* l'information sur les cargaisons acceptées lors de la construction d'une gare est affichée maintenant sous forme d'icônes
+* inverser les écrans (bouton de côté gauche L) n'inverse maintenant que les fenêtres
+* beaucoup de fenêtres (par ex. dialogues de confirmation) sont maintenant centrés sur l'écran du bas
+* la quantité de ram libre (en ko) est affichée au milieu de la barre de statut. Ce n'est qu'un changement temporaire pour aider à tracer une fuite mémoire
+* de plus, vous pouvez voir des informations sur la mémoire en appuyant sur le bouton B
+* utilisez toujours la nouvelle détermination de chemin (NPF). Celle du TTD d'origine plante à cause de récursions trop nombreuses
+* correction d'un défaut de l'écran de chargement
+
+=== Alpha 5 ===
+* basée sur r12083
+* Nouvelles fonctionnalités majeures: effets sonores stéréo! Les sons demandent de la mémoire en plus. Actuellement, 200ko peuvent être utilisés pour les échantillons sonores. Donc, les plantages dus au manque de mémoire (surtout sur les grosses cartes) peuvent être plus fréquents. La musique ne fonctionne pas encore car il manque la bibliothèque midi ARM7
+* les sons sont aussi joués pour les cases au bord de l'écran
+* les options de configuration et la configuration des ajouts sont maintenant sauvegardées
+* des messages d'erreur plus explicites quand les fichiers du jeu original sont absents
+* les captures d'écran au format BMP fonctionnent (normales et géantes); la console de débogage ne s'affichera pas sur une capture d'écran
+* ajout d'un écran de chargement et un de sortie
+* nettoyage du code pour correspondre à la structure de projet OpenTTD
+
+=== Alpha 4 ===
+* basée sur r11899
+* ajout d'une icône de démarrage et une description
+* la graine aléatoire fonctionne
+* chargement des sauvegardes du TTD original désactivé (256x256 est trop gros pour la DS)
+* appuyez sur A n'importe quand (même après un plantage) pour basculer la console
+* Corrigé: les trains peuvent maintenant charger et décharger
+* Corrigé: la fenêtre de dépôt routier (et similaires) ne plante plus
+* Corrigé: YAPF est maintenant complètement désactivé. Si le joueur l'active; ou s'il l'est dans une sauvegarde, un message d'erreur s'affichera et il sera désactivé
+* Corrigé: les parties sauvegardées avec des cartes plus grosses sont maintenant possibles. À cause de cela, les sauvegardes doivent être décompressées. Il reste que 256x128 est la plus grande carte possible, à cause des limites mémoire.
+* Mémoire de visualisation réduite. Les plantages par manque de mémoire disponible ne devraient plus être aussi fréquents.
+* Le jeu lance le menu de démarrage au départ
+* Ajout d'une version 128x64 de l'écran de titre d'une sauvegarde
+* Ajout d'une combinaison de touches pour le menu de triche
+* Quelques bogues non mentionnés ont dû être corrigés à cause d'améliorations générales
+
+=== Alpha 3 ===
+* basée sur r11844
+* les cartes jusqu'à 256x128 fonctionnent (mais la sauvegarde ne marche que jusqu'à 64x64, pour le moment)
+* sauvegarder et charger fonctionne
+* dans openttd.cfg, vous pouvez définir un chemin où sont stockées vos données
+* le temps de chargement est très réduit, de 45 secondes à 15
+* réécriture du blitter pour libérer 96ko de mémoire principale
+
+== Feuille de route ==
+Actuellement, les versions alpha suivantes sont planifiées pour la suite. Elles sont très susceptibles de changement.
+* Alpha 7 (Mémoire): des astuces pour rendre le portage plus efficace en mémoire et supporter les extensions de RAM Slot2. Il est possible que les cartes de taille standard (256x256) fonctionneront après cela
+* Alpha 8 (IHM): améliorations de l'IHM supplémentaires
+* Alpha 9 (Vitesse): optimisations de la vitesse
+* Alpha 10 (Réseau): jeu internet via le wifi
