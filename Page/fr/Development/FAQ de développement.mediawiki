@@ -1,5 +1,4 @@
 [[Translation:en/Development/FAQ development]]
-{{fr/Traduction|en/Development/FAQ development|70}}
 
 
 Cet article couvre les questions concernant le développement de OpenTTD, c.à.d. l'utilisation de SVN, le téléchargement des sources, le paramétrage des compilateurs, etc.
@@ -47,25 +46,27 @@ Cet article couvre les questions concernant le développement de OpenTTD, c.à.d
 :* Compilez OpenTTD sur [[fr/Compiler sur Mac|Mac OS X]]
 :* Compilez OpenTTD sur [[fr/Archive/Compilation and Ports/Compiler sur Solaris|Solaris]]
 
-====I had a problem compiling! What should I do?====
-:* This is not a compiling FAQ, try to ask your compiler vendor for help.
-====Why did the developers decide to use Subversion?====
-:* Subversion (SVN) was chosen over CVS because it is more advanced and easier to use. Also a lot of the developers don't like CVS any more now they know SVN.
-:* SVN was "chosen" over distributed version control systems (DVCS) like Bazaar, Darcs, git, Mercurial and SVK because at the time the choice had to be made none of these existed. GNU arch was one of the few DVCSes that existed but was difficult to learn and understand. Later on a versioning API for NewGRFs was made out of the SVN revision so migrating to a DVCS would remove that capability breaking lots of existing NewGRFs.
+====J'ai un problème de compilation. Que dois-je faire?====
+:* Ce n'est pas une FAQ de compilation. Essayez de demander de l'aide à votre fournisseur de compilateur.
 
-====What is the point of a version control system? Why don't they just upload the source code to an FTP directory?====
-:* Version control systems keep track of all the changes, when they were made and by who. If the developers later find out something they did was a mistake and broke something important they may have to rewrite it from scratch. With this they can just 'checkout' a revision from when it was working. It also allows the developers to add comments so they know what changes have been done.
-====How do I make a diff file to share my changes with other coders?====
-:* In Linux, use the command "svn diff > mypatch.diff" from the source directory to create a diff file.
-:* In Windows, you can do the same from the command prompt, or, if you have Tortoise SVN, right button in the source directory and press Create Patch. It will ask for a location and filename.
+====Pourquoi les développeurs ont-ils décidé d'utiliser Subversion?====
+:* Subversion (SVN) a été choisi par rapport à CVS car il est plus avancé et plus facile à utiliser. De plus, beaucoup de développeurs n'aiment plus autant CVS, depuis qu'ils connaissent SVN.
+:* SVN a été "choisi" sur un système de contrôle de version distribué (DVCS) comme Bazaar, Darcs, git, Mercurial et SVK parce que lorsque le choix a été fait, aucun de ceux-ci n'existait. GNU arch était un des quelques DVCS existants, mais il était difficile à apprendre et à comprendre. Plus tard, une API de versionnage pour les NewGRFs a été faite depuis la révision SVN; migrer vers  un DVCS supprimerait cette possibilité en cassant beaucoup de NewGRFs existants.
 
-====How to apply a patch?====
-It's usually best to apply patches to the revision stated by the patch creator.
+====Quelle est l'utilité d'un système de contrôle de version? Pourquoi ne pas simplement charger le code dans un répertoire FTP?====
+:* Les systèmes de contrôle de version gardent la trace de tous les changements, quand ils ont été faits et par qui. Si les développeurs se rendent compte plus tard que quelque chose qu'ils ont fait était une erreur et cassait quelque chose d'important, ils doivent alors le réécrire depuis rien. Avec ce système, ils peuvent simplement 'récupérer' une révision depuis là où elle fonctionnait. Cela permet aux développeurs d'ajouter des commentaires pour savoir quelles modifications ont été faites.
 
-Different version control systems use different ways of expressing changes. Currently, there are SVN type patches and HG/GIT type patches.
-To know what you have, open the patch file with a text editor, and look at the first few lines.
+====Comment faire un ficheir diff pour partager mes modifications avec les autres codeurs?====
+:* Sous Linux, utilisez la commande "svn diff > mypatch.diff" depuis le répertoire source pour créer un ficheir diff.
+:* Sous Windows, vous pouvez faire la même chose depuis l'invite de commande ou, si vous avez Tortoise SVN, cliquer avec le bouton droit sur le répertoire source et choisir Créer un patch. Cela vous demandera un emplacement et un nom de fichier.
 
-A SVN type patch starts like
+====Comment appliquer un ajout?====
+Il vaut en général mieux appliquer les ajouts à la révision de laquelle est parti le créateur de l'ajout.
+
+Différents systèmes de contrôle de version utilisent différents moyens pour exprimer les changements. Actuellement, il u a les ajouts de type SVN et ceux de type HG/GIT.
+Pour savoir ce que vous avez, ouvrez le fichier d'ajout avec un éditeur de texte et regardez les premières lignes.
+
+Un ajout de type SVN commence ainsi:
 <pre>
 Index: src/gfx.cpp
 ===================================================================
@@ -75,7 +76,7 @@ Index: src/gfx.cpp
 ...
 </pre>
 
-and a HG/GIT type patch starts like
+et un de type HG/GIT ainsi:
 <pre>
 diff --git a/src/gfx.cpp b/src/gfx.cpp
 --- a/src/gfx.cpp
@@ -83,15 +84,15 @@ diff --git a/src/gfx.cpp b/src/gfx.cpp
 @@ -641,14 +641,13 @@
 ...
 </pre>
-The crucial difference is the <code>a/</code> and <code>b/</code> additions at the lines starting with <code>---</code> and <code>+++</code>.
+La différence primordiale est les ajouts <code>a/</code> et <code>b/</code> des lignes commençant par <code>---</code> et <code>+++</code>.
 
 
-*'''Linux:''' Type the following line into a console (replace patch_name with the filename of the patch):
-:<code>patch -p0 < patch_name</code> (for SVN type patches). However, in some cases you might need <code>patch -p1 < patch_name</code> (for HG/GIT type patches).
+*'''Linux:''' Entrez la ligne suivante dans une console (remplacer nom_patch par le nom de fichier de l'ajout):
+:<code>patch -p0 < nom_patch</code> (pour les ajouts de type SVN). Cependant, parfois, vous aurez besoin de <code>patch -p1 < nom_patch</code> (pour les ajouts de type HG/GIT).
  
-*'''Windows:''' Make sure you have [http://tortoisesvn.tigris.org TortoiseSVN] installed.
-{{en/Warning| TortoiseSVN can only handle SVN type patches, it '''CANNOT''' handle HG/GIT type patches!!}}
-:Right-click on the folder with the OpenTTD source code, open the TortoiseSVN submenu and select 'Apply Patch...'. Browse to the patch file and select it. Then, right click on the 'File Patches' window and click on 'Patch All'. After you're done, close the TortoiseMerge window.
+*'''Windows:''' Assurez-vous d'avoir installé [http://tortoisesvn.tigris.org TortoiseSVN].
+{{fr/Avertissement| TortoiseSVN ne peut gérer que les ajouts de type SVN; il '''NE PEUT PAS''' traiter les ajouts de type HG/GIT!!}}
+:Faites un clic droit sur le répertoire contenant le code source de OpenTTD, ouvrez le sous-menu TortoiseSVN et choisissez 'Appliquer l'ajout...'. Naviguez jusqu'au fichier d'ajout et choisissez-le. Puis faites un clic droit sur la fenêtre 'Fichiers d'ajout' et cliquez sur 'Ajouter tout'. Une fois ceci fait, fermez la fenêtre de TortoiseMerge.
 
-[[Category:en/FAQs]]
-[[Category:en/Development]]
+[[Category:fr/FAQs]]
+[[Category:fr/Développement]]
