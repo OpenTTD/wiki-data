@@ -1,5 +1,5 @@
 [[Translation:en/Archive/Source/OpenTTDDevBlackBook/Format of langfiles]]
-{{fr/Traduction|en/Archive/Source/OpenTTDDevBlackBook/Format of langfiles|50}}
+{{fr/Traduction|en/Archive/Source/OpenTTDDevBlackBook/Format of langfiles|75}}
 
 == Modèle général ==
 
@@ -222,164 +222,165 @@ L'utilisation générique des cas est d'ajouter un point et le nom du cas à la 
 
 == Forme plurielle ==
 ==== Introduction ====
-In most languages singular and plural forms are a bit different.
-Every word may be divided into two parts - one part does not change in both singular and plural form, but the second part differs in singular and plural. Let's call them '''core''' and '''suffix'''.
+Dans la plupart des langues, les formes singulier et pluriel sont un peu différentes.
+Chaque mot peut être divisé en deux parties - une partie invariable entre les deux formes, et une seconde partie qui diffère entre les deux. Appelons-les '''cœur''' et '''suffixe'''.
 
-Let's take basic example in English language, which is basic because it has two forms: singular and plural.
+Prenons l'exemple de la langue française, qui est basique car elle a deux formes: singulier et pluriel.
 
-There is "'''1 train'''", but there are "'''2 trains'''".
+Il y a "'''1 train'''", mais il y a "'''2 trains'''".
 
-Now, let's divide this word into part that does not change and part that changes:
+Maintenant, divisons ce mot en une partie invariable et une qui change:
 
-*Core: "'''train'''"
-*Suffix for singular: ""
-*Suffix for plural: "'''s'''"
+*Cœur: "'''train'''"
+*Suffixe pour le singulier: ""
+*Suffixe pour le pluriel: "'''s'''"
 
-==== Writing the string ====
-As I said before, there are two forms in English language.
+==== Écrire la chaîne ====
+Comme dit ci-dessus, il y a deux formes dans la langue française.
 
-The basic structure for plural form in English is <pre>core{P suffix1 suffix2}</pre>where suffix1 is suffix for signular and suffix2 is suffix for plural.
+La structure de base pour la forme plurielle en français est <pre>cœur{P suffixe1 suffixe2}</pre> où suffixe1 est le suffixe pour le singulier et suffixe2 le suffixe pour le pluriel.
 
-Keep in mind, that plural forms work only if there is proper parameter in the string.
+Gardez à l'esprit que les formes plurielles ne fonctionnent que s'il y a le bon paramètre dans la chaîne.
 
-{COMMA} and {NUM}, along with other numeric params work well in determining plural form.
+{COMMA} et {NUM}, ainsi que les autres valeurs numériques, fonctionnent bien pour déterminer la forme plurielle.
 
-Let's make a string that displays number of lamps in the room. Form of "lamp" would depend on supplied amount via {NUM} parameter.
+Faisons une chaîne qui affiche le nombre de lampes d'une pièce. La forme de "lampe" dépendra de la quantité fournie via le paramètre {NUM}.
 
-==== Example ====
- STR_SENTENCE : I have {NUM} lamp{P "" s}
-Do you see the core? Yes, it is the word '''lamp'''.
+==== Exemple ====
+ STR_SENTENCE : J'ai {NUM} lampe{P "" s}
+Voyez-vous le cœur? Oui, c'est le mot '''lampe'''.
 
-Later you see '''{P'''. This is the indicator that suffixes will come next.
+Plus loin, vous voyez '''{P'''. C'est l'indicateur que les suffixes suivent.
 
-'''""''' means there is no suffix. OpenTTD needs to know that - If there is no suffix, just write two quotation marks. So this is the first suffix, which will be used when {NUM} is equal to 1
+'''""''' signifie qu'il n'y a pas de suffixe. OpenTTD doit le savoir. S'il n'y a pas de suffixe, écrives juste deux guillemets. C'est donc le premier suffixe, qui sera utilisé quand {NUM} vaudra 1
 
-'''s''' is the second suffix. This one will be displayed when {NUM} is bigger than 1.
+'''s''' est le second suffixe. C'est celui qui sera affiché quand {NUM} est plus grand que 1.
 
 
-Let's proceed to more advanced plural forms. Let's take '''mouse'''. Its plural form is '''mice'''.
+Voyons des formes de pluriel plus complexes. Prenons '''cheval'''. Sa forme plurielle est '''chevaux'''.
 
-First of all, imagine the sentence with different parameters.
-*1 - Mum, there is 1 mouse in the room!
-*3 - Mum, there are 3 mice in the room!
-*23 - Mum, there are 23 mice in the room!
-When you are ready, you can write the string.
- STR_SENTENCE : Mum, there {P 0 is are} {NUM} m{P ouse ice} in the room!
-As you may have noticed, the first '''{P''' contains an extra number before the suffixes. This is used to specify which parameter should be used to determine the plural form. When no number is given, the previous parameter is used, but in this case there is no previous parameter, that's why we need to specify it.
-{{en/Todo|check if it is not wrong}}
+Tout d'abord, imaginons la phrase avec différents paramètres.
+*1 - Maman, dans le pré broute 1 cheval!
+*3 - Maman, dans le pré broutent 3 chevaux!
+*23 - Maman, dans le pré broutent 23 chevaux!
+Quand vous êtes prêts, vous pouvez écrire la chaîne.
+ STR_SENTENCE : Maman, dans le pré brout{P 0 e ent} {NUM} chev{P al aux}!
+Comme vous l'aurez remarqué, le premier '''{P''' contient un nombre supplémentaire avant les suffixes. Il est utilisé pour spécifier quel paramètre devra être utilisé pour déterminer la forme plurielle. Quand aucun nombre n'est donné, le paramètre précédent est utilisé, mais dans ce cas, il n'y en a pas, c'est pourquoi nous devons le spécifier.
+{{fr/À faire|Vérifier si c'est juste}}
 
-==== String as number ====
+==== Chaîne comme nombre ====
 
-If the argument that affects a plural form is given as {STRING} then you need to use a special parameter for '''{P''':
- Flat area around industries: {ORANGE}{STRING} tile{P 0:1 "" s}
+Si l'argument qui affecte une forme plurielle est donné comme {STRING}, vous devez alors utiliser un paramètre spécial pour '''{P''':
+ Zone plane autour des industries: {ORANGE}{STRING} case{P 0:1 "" s}
 
-==== OpenTTD usage ====
+==== Utilisation dans OpenTTD ====
+Vous comprenez maintenant les bases des formes plurielles. Prenons un exemple de la traduction française
 Now you understand basics of plural forms. Let's take some example from English translation.
- STR_QUANTITY_LIVESTOCK : {COMMA} item{P "" s} of livestock
+ STR_QUANTITY_LIVESTOCK : {COMMA} tête{P "" s} de bétail
 
-This text is being displayed at stations when there is livestock cargo awaiting.
+Ce texte est affiché dans les gares quand il y a une cargaison de bétail qui attend.
 
-As you can see, {COMMA} parameter is given. Thanks to that parameter, we can change form of '''item'''.
-Let's see how the string would change when we change supplied parameter.
-*1 - 1 item of livestock
-*4 - 4 items of livestock
-*56 - 56 items of livestock
+Comme vous pouvez le voir, le paramètre {COMMA} est fourni. Grâce au paramètre, nous pouvons changer la forme de '''tête'''.
+Voyons comment la chaîne changera quand nous fournirons un paramètre.
+*1 - 1 tête de bétail
+*4 - 4 têtes de bétail
+*56 - 56 têtes de bétail
 
 
-Now let's take a look at string without given parameter.<pre>STR_WAGONS : Wagons</pre>No plural form may be applied here. Wagon{P "" s} will not work here.
+Regardons alors une chaîne sans paramètre fourni. <pre>STR_WAGONS : Wagons</pre> Aucune forme plurielle n'est applicable ici. Wagon{P "" s} ne fonctionnera pas.
 
-Why? Because there is no parameter given.
+Pourquoi? Parce qu'aucun paramètre n'est fourni.
 
-You can just leave this string as it is.
+Vous pouvez juste laisser cette chaîne telle quelle.
 
-==== Other plural types ====
-Find your language on '''List of plural-types''' table below. Languages are being groupped depending on behaviour of words with different amounts.
+==== Autres types de pluriel ====
+Trouvez votre langue dans la table '''Liste des types de pluriel'''. Les langues sont regroupées selon le comportement des mots avce des quantités différentes.
 
-Suffixes are being ordered ascending, with ''any other number'' at end:
+Les suffixes sont ordonnés de façon ascendante, avec ''tout autre nombre'' à la fin:
 
-*First suffix is always singular.
-*Second suffix may be for ''any other number'' (English), or depending on your language, for other numbers. For example in Polish language the second form applies for numbers that end with 2, 3 or 4, .but excluding -teen numbers.
-*If the second suffix was not for ''any other number'', the third one is for ''any other number''.
+*Le premier suffixe est toujours le singulier.
+*Le second suffixe peut être pour ''tout autre nombre'' (français), ou dépendre de votre langue, pour d'autres nombres. Par exemple, en polonais, la seconde forme d'applique aux nombres qui se terminent par 2, 3 ou 4, sauf ceux en -ze.
+*Si le second suffixe n'est pas pour ''tout autre nombre'', le troisième est pour ''tout autre nombre''.
 
-Let's take Polish language and invent some dummy string
+Prenons le polonais et inventons une chaîne de test
  STR_CARS : {NUM} aut{P o a ""}
-Now take a look at description above, and guess how would the string look for {NUM} equal to 1, 2, 5, 13, 23, 38?
-*1 auto (first suffix used)
-*2 auta (second suffix used - number ends with 2, 3 or 4)
-*5 aut  (third suffix used - ''any other number'')
-*13 aut (third suffix used - second suffix excludes -teen numbers)
-*23 auta (second suffix used - number ends with 2, 3 or 4)
-*38 aut (third suffix used - ''any other number'')
+Regardons alors la descrition ci-dessus, et devinons à quoi ressemblera la chaîne pour {NUM} égal à 1, 2, 5, 13, 23, 38?
+*1 auto (premier suffixe utilisé)
+*2 auta (second suffixe utilisé - nombre terminé par 2, 3 ou 4)
+*5 aut  (troisième suffixe utilisé - ''tout autre nombre'')
+*13 aut (troisième suffixe utilisé - le second suffixe exclut les nombres en -ze)
+*23 auta (second suffixe utilisé - le nombre se termine par 2, 3 ou 4)
+*38 aut (troisième suffixe utilisé - third suffix used - ''any other number'')
 
-== Genders ==
+== Genres ==
 ==== Introduction ====
-Some languages feature genders. Each noun (like factory, calculator, dragon) has its gender.
-Adjectives (green, new, beautiful) and sometimes verbs (to fall, to eat) are being affected by gender.
+Certaines langues ont des genres. Chaque nom (comme usine, calculateur, dragon) a son genre.
+Les adjectifs (vert, nouveau, beau) et parfois les verbes (tomber, manger) sont affectés par le genre.
 
-First of all, think of your language's gender.
-Then, open the Web Translator 2, go to "Manage" page of your language and check the dropdown list of genders. If there are no genders yet, hit "+" button and supply short forms of your genders ('''m f n''' for ''male female neutral'' is good).
+Tout d'abord, voyons les genres de votre langue.
+Ouvrez le WebTranslator3, allez dans la page "Gestion" de votre langue et vérifiez la liste déroulante des genres. S'il n'y en a pas, appuyez sur le bouton "+" et fournissez les formes courtes de vos genres ('''m f n''' pour ''masculin féminin neutre'' est correct).
 
-When you've done this, think of strings in OpenTTD that may require genders. News report that new industry is being founded is good, because industry is a noun and some words in the string should change depending on gender.
+Une fois ceci fait, pensez aux chaînes dans OpenTTD qui ont besoin du genre. Les rapports de journaux qu'une nouvelle industrie a été fondée sont corrects, car industrie est un nom et certains mots dans la chaîne peuvent changer selon le genre.
 
-==== Writing the string ====
-To set string's gender, insert {G=*} tag before first word of the string, where * is name of the gender you sent before.
+==== Écrire la chaîne ====
+Pour fixer le genre de la chaîne, insérez la marque {G=*} avant le premier mot de la chaîne, où * est le nom du genre donné auparavant.
 
-In the string that may change depending on genders, use {G suffix1 suffix2 suffix3} structure, where each suffix corresponds to the right gender (gender order is in the "Manage" section of your language, in the dropdown list)
+Dans la chaîne qui peut changer selon le genre, utilisez la structure {G suffixe1 suffixe2 suffixe3}, où chaque suffixe correspond au bon genre (l'ordre des genres est celui de la section "Gestion" de votre langue, dans la liste déroulante)
 
-==== Example ====
-I'll use The Latin language in examples, because it is well-known, and of course, uses genders.
+==== Exemple ====
+J'utiliserai la langue latine dans les exemples, car elle est bien connue et utilise, bien sûr, les genres.
 
-Latin language has three genders, we will call them '''m''', '''f''' and '''n'''.
+La langue latine a trois genres, que nous appellerons '''m''', '''f''' et '''n'''.
 
-Let's guess some nouns we will use in examples.
-*'''puteus''' m - ''a well, pit''
-*'''officina''' f - ''a workshop, factory''
-*'''forum''' n - - ''an open square, marketplace''
+Trouvons quelques noms que nous utiliserons dans les exemples.
+*'''puteus''' m - ''un puits''
+*'''officina''' f - ''une usine''
+*'''forum''' n - - ''une place ouverte''
 
-Let's take some adjective and find its core and suffixes:
+Prenons quelques adjectifs et trouvons leur cœur et leurs suffixes:
 
-'''magnus''', '''magna''', '''magnum''' - ''large'' (male, female, neutral)
+'''magnus''', '''magna''', '''magnum''' - ''large'' (masculin, féminin, neutre)
 
-As you can see, '''magn''' is the core, and suffixes are '''us''', '''a''' and '''um''' respectively for male, female and neutral gender.
+Comme vous le voyez, ''magn'' est le cœur, et les suffixes sont '''us''', '''a''' et '''um''' respectivement, pour les genres masculin, féminin et neutre.
 
 
-And this is how would the example string work:
+Et voici comment fonctionne la chaîne exemple:
 <pre>STR_WELL : {G=m}Puteus
 STR_FACTORY : {G=f}Officina
 STR_SQUARE : {G=n}Forum
 STR_IS_BIG : {STRING} magn{G us a um} est</pre>
-Do you imagine how will the result look like? Here is the answer:
+Pouvez-vous imaginer à quoi ressemblera le résultat? Voici la réponse:
 *Puteus magnus est
 *Officina magna est
 *Forum magnum est
-Again, as with plural form, if there is no suffix, write "". Use always as many suffixes as there are genders.
+De nouveau, comme avec les formes plurielles, s'il n'y a pas de suffixe, écrivez "". Utilisez toujours autant de suffixes qu'il y a de genres.
 
-==== Advanced use ====
-{G...} tag bases on gender of {STRING} after the tag.
-However, if you need to change suffix of a word which is after {STRING} (before tag), you have to write ID of string you want to retrieve gender from.
-This may sound clumsy, so let's take a look at example:
+==== Utilisation avancée ====
+La marque {G...} est basée sur le genre de la {STRING} après la marque.
+Cependant, si vous devez changer le suffixe d'un mot qui est avant {STRING} (avant la marque), vous devez écrire l'ID de la chaîne dont vous voulez retrouver le genre.
+Cela peut sembler lourd, donc jetons un œil à un exemple:
 
 <pre>{BLACK}{BIGFONT}Now{G y a e} {STRING} został{G "" a o} posadzon{G y a e} blisko {TOWN}!</pre>
-Second and third {G...} will not work, because there is no {STRING} after them to get gender from.
+Le deuxième et le troisième {G...} ne marcheront pas, car il n'y a pas de {STRING} après eux pour obtenir le genre.
 
-We want to retrieve gender from first (and the only one) {STRING} tag. First tag has ID=0, second tag has ID=1 and so on. Here is how to do that:
+Nous voulons retrouver le genre de la première (et seule) marque {STRING}. La première marque a ID=0, la deuxième ID=1, et ainsi de suite. Voici comment faire cela:
 
 <pre>{BLACK}{BIGFONT}Now{G y a e} {STRING} został{G 0 "" a o} posadzon{G 0 y a e} blisko {TOWN}!</pre>
-Adding IDs resolved the problem. The string works as expected.
+Ajouter les IDs résout le problème. La chaîne fonctionne comme attendu.
 
 
-What if there are more {STRING}s? ({{en/Todo|I'm not sure, please verify this}})
-In the following example we use two genders: male and female
+Et s'il y a plusieurs {STRING}s? ({{fr/À faire|Je ne suis pas sûr; à vérifier}})
+Dans l'exemple suivant, nous utilisons deux genres: masculin et féminin.
 
-<pre>Mis{G ter s} {STRING} is shocked by h{G 0 is er} grand{G 2 son daughter} who flamed mis{G ter s} {STRING} yesterday. The bad {G boy girl}'s name is {STRING}</pre>
-Now I'll explain why some {G...}'s have numbers and other do not:
-*First, fourth and fifth do '''not''' have number, because they fetch gender of next string (default behaviour)
-*Second and third do have number, because they fetch gender of a string that is not after the tag. We need to tell game engine which {STRING}'s gender we want to take. The first number is zero, because it's ID of first {STRING}. The next number is two, because it's ID of third {STRING}
+<pre>M{G onsieur adame} {STRING} est choqué{G 0 "" e} par s{G 0 on a} petit{G 2 "" e}-{G 2 fils fille} qui a insulté m{G onsieur adame} {STRING} hier. Le nom de c{G elui-ci elle-ci} est {STRING}</pre>
+Maintenant, je vais expliquer pourquoi certains {G...} ont des nombres et d'autres pas:
+*Le premier, sixième et septième n'ont '''pas'' de nombre car ils prennent le genre de la prochaine chaîne (comportement par défaut).
+*les 2 à 5 ont des nombres car ils prennent le genre d'une chaîne qui n'est pas après la marque. Nous devons dire au moteur du jeu de quelle {STRING} nous voulons le genre. Le premier nombre est 0 car c'est l'ID de la première {STRING}. Le suivant est 2 car c'est l'ID de la troisième {STRING}
 
-{{en/Todo|this section may be clumsy, feel free to improve it}}
+{{fr/À faire|Cette section peut être lourde; vous pouvez l'améliorer}}
 
-==== OpenTTD usage ====
-Yeah, {{en/Todo}} write it soon.
+==== Utilisation dans OpenTTD ====
+Oui, {{fr/À faire}} à écrire bientôt.
 
 == Pragmas ==
 
