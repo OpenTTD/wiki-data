@@ -5,28 +5,37 @@
 This page is intended as a theoretical treatment purely of carrying capacity. Junctions and networking are much more important. Disclaimer over, let's consider the various factors that affect your carrying capacity.
 
 ==Signal distance (SD)==
-This is a fairly obvious one. Widely-spaced signals will result in a lower carrying capacity. With an '''SD''' of one signal every N tiles, the minimum gap between two full-speed trains can never be less than N+1 (Figure 1). When trains are this close together, you have reached the theoretical maximum train density. In practice, reaching this density is impossible.
+This is a fairly obvious one. Widely-spaced signals will result in a lower carrying capacity. With an '''SD''' of one signal every N tiles, the minimum gap between two full-speed trains can never be less than N+1 (Figure 1). On diagonal track one signal every 2N "half tiles" or N "full tiles" the minimum gap cannot be less than 2N+1 "half tiles" or N+1/2 "full tiles". When trains are this close together, you have reached the theoretical maximum train density. In practice, reaching this density is impossible.
 [[File:en/Community/Pat Fig1.png|frame|none|Figure 1: Minimum train gap of five from a signal distance of four]]
 
-===So what signal distance should I use?===
-* Two tiles
-An '''SD''' of two gives a minimum gap of 3, and is the optimal practical solution. 
-
-*One tile
-An '''SD''' of one is fraught with problems. Even a track split causes a signalling gap. It would be possible to join angled rails with a signal gap of 1, but this would result in a considerable increase in build complexity.
-
-* Half tile
-Angled track is capable of double density signals. This may be of theoretical interest, or for shaving a few millimeters off a near-miss situation.
-
 [[File:en/Community/Pat Fig2.png|frame|right|Figure 2: Signalling gap inefficiency]]
-Whatever '''SD'''  you choose, one important consideration is consistency. The capacity of a track is determined by whichever individual signal gap is the largest. Thus, a track with one signal every two tiles, that has an anomalous one-off gap of three or four tiles, will suffer from greatly diminished capacity and can potentially jam and violate rule 1 (Figure 2).
+One important consideration is consistency. The capacity of a track is determined by whichever individual signal gap is the largest. Thus, a track with one signal every two tiles, that has an anomalous one-off gap of three or four tiles, will suffer from greatly diminished capacity and can potentially jam and violate rule 1 (Figure 2). Remember that this also holds for corners and splits/merges.
 
-In the openttd engine, trains move slower on angled track (thanks SmatZ!), and thus require an increased signal density to prevent bottlenecks - if using an autosignal setting of 2, you will need to manually increase the signal density on any angled rail you have to 1.<br style="clear:both;">
+===Diagonal track===
+
+In the openttd engine, trains move slower on angled track (thanks SmatZ!), and thus require an increased signal density to prevent bottlenecks. It is important that the train gap (not '''SD''') of straight and diagonal tracks is as simmilar as possible. Otherwise trains can jam either when going from straight to diagonal or from diagonal to straight track.
+
+A quick experiment showed that in the same time a train moves 2 tiles on straight track, an equally fast train moves about 3 "half tiles" on diagonal track. So if using a certain autosignal setting, you will probably need to manually increase the signal density on any angled rail you have.
+
+* An autosignal setting of 3 gives a minimum train gap of 4. This translates to a minimum diagonal train gap of 6 "half tiles", which can be acieved by placing signals with a distance of 5 "half tiles" (or by twice placing signals with an autosignal setting of 5).
+
+* An autosignal setting of 2 gives a minimum train gap of 3. This translates to a minimum diagonal train gap of 4.5 "half tiles". A diagonal train gap of 5 "half tiles" can be achieved by placing signals with a distance of 4 "half tiles" or with an autosognal setting of approximately 2. A diagonal train gap of 4 "half tiles" can be achieved by placing signals with a distance of 3 "half tiles" (or by twice placing signals with an autosignal setting of 3). Though this '''SD''' doesn't have a exact conterpart on diagonal track the deviation between straight and diagonal track is just 1/3 tile and the same autosignal setting can be used for straight and diagonal track.
+
+* An autosignal setting of 1 gives a minimum train gap of 2. This translates to a minimum diagonal train gap of 3 "half-tiles", which can be acieved by placing signals with a distance of 2 "half tiles" or with an autosignal setting of 1. Here the same autosignal setting is used for straight and diagonal track, too.
+
+===So what signal distance should I use?===
+* Two tiles <BR>A '''SD''' of two gives a minimum gap of 3, and is the optimal practical solution.
+
+*One tile <BR>A '''SD''' of one is fraught with problems. Even a track split causes a signalling gap. It would be possible to join angled rails with a signal gap of 1, but this would result in a considerable increase in build complexity.
+
+* Half tile <BR>Angled track is capable of double density signals. This may be of theoretical interest, or for shaving a few millimeters off a near-miss situation. The biggest flaw with a half tile SD is obviously that every straight piece of track will have a bigger SD.
+
+Whatever '''SD''' you choose, keep in mind that you have to be consistent. A network with '''SD''' of 2 and a signalling gap of 3 on a frequently used track can lead to jams. It might therefore have a lower capacity than a network with a consistent '''SD''' of 3! <br style="clear:both;">
 
 ==Train length (TL)==
-This is a double-edged sword. A longer train will increase the likelihood of incurring a realistic acceleration penalty, making construction more spread out and complex. However, a longer train length increases the maximum cargo capacity of your network. Note that when using engines that have a front and rear sections, the additional 1/2 tile taken up makes shorter train lengths even less favourable. 
+This is a double-edged sword. A longer train will increase the likelihood of incurring a realistic acceleration penalty, making construction more spread out and complex. However, a longer ''''TL''' increases the maximum cargo capacity of your network. Note that when using engines that have a front and rear sections, the additional 1/2 tile taken up makes shorter train lengths even less favourable. 
 
-Typical values of three to five tiles are normal, with four being a particular favourite for high-speed networks.
+For high-speed networks typical values of three to five tiles are normal, with four being a particular favourite, because on a track with a '''SD''' of 2 a line of '''TL'''-4 trains accelerating from standstill has a lower reaction time than trains with uneven '''TL'''.
 
 ==Quantifying carrying capacity==
 ===Train Density (TD)===
@@ -57,7 +66,7 @@ Since '''TL''' alters the carrying capacity of a line, comparing '''TD''' across
 Work on this unit is pending.
 
 =Making your network more efficient=
-Ok, so now that we've defined the parameters that we had already intuitively understood, how can we use them to improve our networks? The golden rule of network optimisation is that trains on the network never slow down. There are two possible parts of a network where this could happen, splits and merges.
+Ok, so now that we've defined the parameters that we had already intuitively understood, how can we use them to improve our networks? The golden rule number 1 of network optimisation is that trains on the network never slow down. There are two possible parts of a network where this could happen, splits and merges.
 
 ==Splits==
 For a track split, one must ensure that there is not a longer-than-normal signalling gap at the split point. This can be taken care of by careful or over-abundant signalling.
