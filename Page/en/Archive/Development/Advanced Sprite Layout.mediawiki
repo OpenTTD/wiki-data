@@ -23,12 +23,30 @@ To solve that burden it would be nice if register values could be added to certa
 
 = Proposal for new Action2 format =
 
-Industries/Houses/Airports/Objects:
+== Industries/Houses/Airports/Objects ==
  <Sprite-number> * <Length> 02 07/09/0F/11 <set-id>
                    <0x40 + num-sprites>
                    <groundsprite> <flags> [<register/value>]...
                    [<buildingsprite> (<xoffset> <yoffset> <zoffset> <xextent> <yextent> <zextent> <flags> [<register/value>]...)
                                    | (<xpixeloffset> <ypixeloffset> 80 <flags> [<register>]...) ]...
+The spritelayout defines fixed spritesets to use from the Action 1.
+The registers can be used to individually select sprites from the spritesets instead of always using the construction stage.
+The registers are evaluated and their values are saved when the Action 2 sprite layout is evaluated. Other callbacks called during drawing (like CB 1E) have no effect on the used values of the registers.
+
+== Stations ==
+ <Sprite-number> * <Length> 00 04 <num-props> <num-info> <id>
+                   20
+                   <0x40 + num-sprites>
+                   <groundsprite> <flags> [<register/value>]...
+                   [<buildingsprite> (<xoffset> <yoffset> <zoffset> <xextent> <yextent> <zextent> <flags> [<register/value>]...)
+                                   | (<xpixeloffset> <ypixeloffset> 80 <flags> [<register>]...) ]...
+Property 20 defines the spritelayout using the same format as the action 2 above. Setting property 20 overrides properties 09 and 0A and vice verse, just like setting properties 09 and/or 0A multiple times.
+The used Action 1 and the used spriteset is selected via an Action 1/2/3 chain and using the usual "loading stages" for "litte" or "lots of cargo". With similar means as Action 0 property 13 bit 0 multiple spritesets from different Action 1 can be used.
+
+The sprites and the registers in the spritelayout define which sprite to use from the selected spriteset.
+The registers are evaluated and their values are saved when the Action 2 responsible for a particular entry in the spritelayout is resolved.
+
+== Details ==
 
 <0x40 + num-sprite>:
 Number of sprites in the layout. Add 0x40 to identify the new format with register modifiers.
@@ -41,7 +59,7 @@ Number of sprites in the layout. Add 0x40 to identify the new format with regist
 || 0 || 0001 || Skip bounding box including child sprites || Skip sprite
 |-
 || 1 || 0002 
-| colspan="2" | Add offset to sprite, disable default usage of construction stage
+| colspan="2" | Add offset to sprite, disable default usage of construction stage or railtype-offset
 |-
 || 2 || 0004 
 | colspan="2" | Add offset to recoloursprite
@@ -66,9 +84,10 @@ Number of sprites in the layout. Add 0x40 to identify the new format with regist
 (*) The Action 1/2/3 chain is resolved multiple times, sprites can be part of different Action 1:
 :The associated value in <register/value> is the raw value (not a register!) to put into Variable 10 while resolving the sprites.
 :*Only valid for stations,
-:*only valid if the sprites are from an Action1,
-:*only allowed values currently 0-3.
-:If the bit is not set, then station property 13 bit 0 takes effect.
+:*only allowed values currently 0-3,
+:*even if the sprite is not from an Action 1, the value still defines which Action2 chains defines the values for the referenced registers.
+:*the register for "Add offset to recoloursprite" is defined by the Action 1/2/3 chain with Variable 10 as defined for the recolour sprite. (0 if not set explicitly)
+:*the other registers are defined by the Action 1/2/3 chain with Variable 10 as defined for the sprite. (if not explicitly set, then station property 13 bit 0 takes effect=.
 
 <register/value>:
 Temporary storage registers to add to the individual parts. The register values are considered signed.
