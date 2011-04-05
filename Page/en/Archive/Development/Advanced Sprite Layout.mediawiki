@@ -23,16 +23,12 @@ To solve that burden it would be nice if register values could be added to certa
 
 = Proposal for new Action2 format =
 
+Industries/Houses/Airports/Objects:
  <Sprite-number> * <Length> 02 07/09/0F/11 <set-id>
                    <0x40 + num-sprites>
-                   <groundsprite>
-                   [<buildingsprite> (<xoffset> <yoffset> <zoffset> <xextent> <yextent> <zextent> <flags> [<register>]...)
+                   <groundsprite> <flags> [<register/value>]...
+                   [<buildingsprite> (<xoffset> <yoffset> <zoffset> <xextent> <yextent> <zextent> <flags> [<register/value>]...)
                                    | (<xpixeloffset> <ypixeloffset> 80 <flags> [<register>]...) ]...
-
-Hint:
-You can set <groundsprite> to zero to not draw any sprite, and then use extended childsprite syntax for the (first) groundsprite.
-
-TODO with new format there could be <flags> for the groundsprite as well
 
 <0x40 + num-sprite>:
 Number of sprites in the layout. Add 0x40 to identify the new format with register modifiers.
@@ -40,7 +36,7 @@ Number of sprites in the layout. Add 0x40 to identify the new format with regist
 <flags>: Word value with these flags:
 {| border="1"
 |-
-! Bit !! Hex !! Parentsprite !! Childsprite
+! Bit !! Hex !! Parentsprite !! Groundsprite/Childsprite
 |-
 || 0 || 0001 || Skip bounding box including child sprites || Skip sprite
 |-
@@ -57,16 +53,31 @@ Number of sprites in the layout. Add 0x40 to identify the new format with regist
 |-
 || 5 || 0020 || Add offset for <zoffset> || Add offset for <ypixeloffset>
 |-
-|| 6..15 || 
+|| 6 || 0040
+| colspan="2" | Resolve sprite with Variable 10 set to a specific value (*)
+|-
+|| 7 || 0080
+| colspan="2" | Resolve recoloursprite with Variable 10 set to a specific value (*)
+|-
+|| 8..15 || 
 | colspan="2" | Reserved, should be zero. If the GRF sets unknown bits, it will be disabled.
 |-
 |}
+(*) The Action 1/2/3 chain is resolved multiple times, sprites can be part of different Action 1:
+:The associated value in <register/value> is the raw value (not a register!) to put into Variable 10 while resolving the sprites.
+:*Only valid for stations,
+:*only valid if the sprites are from an Action1,
+:*only allowed values currently 0-3.
+:If the bit is not set, then station property 13 bit 0 takes effect.
 
-<register>:
+<register/value>:
 Temporary storage registers to add to the individual parts. The register values are considered signed.
 The order of the registers is the same as the bits in <flags>. If a bit is not set, then no registers appears for it.
-Most bits require one register, but e.g. <xoffset> and <yoffset> can only be enabled together, using two registers. The "recolorsprite from Action 1" uses no register at all.
-Wrt. the "skip bounding box"-register: Set it to one to draw the sprite, and zero to skip it.
+Most bits require one register.
+*<xoffset> and <yoffset> can only be enabled together, using two registers,
+*the "skip bounding box"-register uses value 1 to draw the sprite, and 0 to skip it,
+*the "recolorsprite from Action 1" uses no register at all,
+*the Variable 10 values are not set via a register, but via a byte-constant.
 
 = Example =
 
