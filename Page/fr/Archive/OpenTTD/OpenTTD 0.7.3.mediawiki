@@ -1,0 +1,109 @@
+[[Translation:en/Archive/OpenTTD/OpenTTD 0.7.3]]
+{{fr/Traduction|en/Archive/OpenTTD/OpenTTD 0.7.3|0}}
+
+
+{{en/Archive/OpenTTD/NaviPrevNext|prev=en/Archive/OpenTTD/OpenTTD 0.7.2|next=en/Archive/OpenTTD/OpenTTD 0.7.4|date=2009-10-01}}
+
+You can get this release from [http://www.openttd.org/download-stable/0.7.3 openttd.org].
+
+==Major new features==
+
+* Bugfixes;
+* AI improvements;
+* Improved handling of missing or corrupt files;
+
+==Changelog==
+
+===0.7.3 (2009-10-01)===
+
+* Fix: [NewGRF] Crash when trying to build an industry that has no industry layout defined {{en/Flyspray|3233}} (r17638, r17633)
+
+===0.7.3-RC2 (2009-09-24)===
+
+* Update: Documentation about bug reporting and known bugs (r17554)
+* Fix: When a command did not fail in test run and failed in execution run, error message was not set. Affects only few commands (r17607)
+* Fix: [NewGRF] Crash when defining the same tile in a tile layout twice {{en/Flyspray|3218}} (r17605)
+* Fix: Vehicle image was not always updated when needed (r17594)
+* Fix: [NoAI] Could not query the size of small airports when they could not be build anymore {{en/Flyspray|3212}} (r17591)
+* Fix: Erroneous message about changing the difficulty level {{en/Flyspray|3220}} (r17588)
+* Fix: Assertion triggered when the second vehicle in a 101+ (or 11+ if mammoth trains is disabled) vehicle free wagon chain is an engine and the first vehicle is moved to another chain {{en/Flyspray|3208}} (r17576)
+* Fix: [NewGRF] Memory leak when viewing the NewGRF settings of a server (r17563)
+* Fix: [NewGRF] The NewGRF settings of (remote) network games did not get properly updated when the NewGRFs were rescanned causing reading of freed data {{en/Flyspray|2972}} (r17562)
+* Fix: [NewGRF] Close the "Add NewGRF" window when you close the "NewGRF Settings" window. The add window has a pointer to the settings which means that not deleting it would cause dereferencing an already freed pointer {{en/Flyspray|3206}} (r17559)
+* Fix: Vehicles waiting for their time table did not load anymore after their initial load was completed {{en/Flyspray|3201}} (r17551)
+* Fix: Aircraft were given an unfair advantage in station rating calculations (r17550)
+* Fix: [NewGRF] Sign extending of profit calculation did not work (r17546)
+* Fix: [NoAI] AIs had "infinite" time when running code from the global scope {{en/Flyspray|3202}} (r17545)
+* Fix: [NoAI] Crash when doing commands in the "global" scope {{en/Flyspray|3202}} (r17544)
+
+===0.7.3-RC1 (2009-09-13)===
+
+* Add: [NoAI] AITown::GetLastMonthTransportedPercentage and AIIndustry::GetLastMonthTransportedPercentage (r17294)
+* Add: [NoAI] AICompany::Get/Set PresidentGender (r17016)
+* Add: [NoAI] AIEngine::GetDesignDate (r17014)
+* Add: [NoAI] AIStation::GetConstructionDate (r17012)
+* Add: [NoAI] AIAbstractList::SORT_ASCENDING / SORT_DESCENDING (r17005)
+* Change: [NoAI] AITown::GetLastMonthProduction now returns the same value as AITown::GetMaxProduction (r17293)
+* Change: Mention the MD5 checksum of the original NewGRF in the 'saveload failed horribly'-error message and make it more clear that the filename is of the current NewGRF {{en/Flyspray|3139}} (r17267)
+* Change: Make overbuilding the front tile of a road station/depot with road consistent with overbuilding the front tile of tunnels/bridges {{en/Flyspray|2802}} (r17239)
+* Change: Improve error output on missing or corrupt files (r17238)
+* Change: [Unix] Only use colorized error output on interactive terminals (r17227)
+* Change: [NoAI] Crash an AI when it uses a DoCommand / Sleep instead of just printing an error message in the AI Debug Window {{en/Flyspray|2980}} (r17223)
+* Change: [NoAI] When the API requests a string as parameter allow every squirrel type and convert to a string {{en/Flyspray|3101}} (r17221)
+* Change: Make strgen warn if the translation uses STRINGn or RAW_STRING instead of STRING (r17137, r17129)
+* Change: [NoAI] Load the API before compiling an AI script so AIs can subclass API classes and use API constants as part of their own constants (r17043)
+* Change: Add notion of Ctrl+Click in the tooltip for Loan borrow/repay buttons {{en/Flyspray|3066}} (r16979)
+* Change: [MSVC] Make all language files depend on english.txt (r16975)
+* Change: There is no point in not randomising engine introduction-date before 1922. Instead disable the randomisation for the first two years after game-start, so you do not have to wait for the first engine (r16929)
+* Fix: [Squirrel] In some cases the call stack would not be cleaned up properly during crash handling. Occasionally this causes asserts to be triggered or crashes {{en/Flyspray|3189}} (r17515)
+* Fix: When loading GRFConfigs from ini file, validate them wrt. duplicate GRF IDs {{en/Flyspray|3197}} (r17510)
+* Fix: When building a part fails during cloning, sell what was already cloned instead of leaving it 'for free'. Also make cloning multiheaded trains possible with with 'max - 1' vehicles existing {{en/Flyspray|3196}} (r17509)
+* Fix: [NoAI] The wrong value was restored to SetAllowDoCommand possible resulting in an AI that was not allowed to do any actions (r17500)
+* Fix: Road vehicles could get lost when the prelimiary destination (for the pathfinder heuristics) is unreachable {{en/Flyspray|3188}} (r17491)
+* Fix: When building roads is not allowed for town, then do not build the initial piece either {{en/Flyspray|3173}} (r17444)
+* Fix: Destruction of depots did not remove any vehicle lists related to the depot, causing windows pointing to deleted depots and (thus) crashes {{en/Flyspray|3180}} (r17442)
+* Fix: Economy recession would never end when economy is set to Steady while in recession (r17426)
+* Fix: The index of orders loaded from old savegames was owerwritten with an unitialized value (r17419)
+* Fix: Incomplete check on validity of industry type when building industries (r17413)
+* Fix: [Squirrel] Guard against Squirrel stack overflows (r17403)
+* Fix: [NoAI] During every save a few slots on the Squirrel stack were leaked (r17402)
+* Fix: [NoAI] Several AITile::* functions did not check whether their parameters were valid (r17378)
+* Fix: Memory leak when trying to bankrupt the local company, other minor improvements of bankruptcy (r17342, r17341, r17340)
+* Fix: Not all non-ASCII characters were entered with escapes in the About window (r17309)
+* Fix: [NoAI] AIRail::RemoveRailTrack returned ERR_PRECONDITION_ERROR for road/rail-crossings (r17307)
+* Fix: [NoAI] Reloading an AI started a new AI in the first available company slot causing other AIs to be started {{en/Flyspray|3153}} (r17298)
+* Fix: [NoAI] AITown::GetLastMonthTransported did not work as documented at all, make it return what AITown::GetLastMonthProduction did (r17293)
+* Fix: Crash after upgrading base graphics set when opening the game options menu and you were using the upgraded set {{en/Flyspray|3147}} (r17291)
+* Fix: [Squirrel] Stack was not always cleared properly with tail recursion (r17284)
+* Fix: [Squirrel] Calling a function that has default parameters with not enough parameters can cause a crash (r17273)
+* Fix: Other tunnel end not shown if building rail tunnels and the first railtype is not available yet {{en/Flyspray|3141}} (r17251)
+* Fix: [NoAI] AIs that crashed during Save() were not killed as they should {{en/Flyspray|3134}} (r17231)
+* Fix: [NoAI] Do not assert when an AI uses AI*Mode objects incorrectly but crash the AI instead (r17230)
+* Fix: Remove the (deprecated since 2006) Encoding entry from the openttd.desktop file (r17226)
+* Fix: With time tables vehicles would stay in the 'loading' state after they have finished loading ( {{en/Flyspray|3129}}, {{en/Flyspray|3130}} ) (r17222)
+* Fix: Do not ignore white space changes (e.g. alignment fixes) in the exporter (r17220)
+* Fix: [NoAI] IsRoadTypeAvailable(GetCurrentRoadType()) was not a precondition for several AIRoad::* functions (r17203)
+* Fix: [NoAI] Do not say you are building a depot when you are actually building a station (API docs typo) (r17201)
+* Fix: Accept monthly production values in the scenario editor {{en/Flyspray|2406}} (r17198)
+* Fix: [Squirrel] FPE when an AI tried to do '% 0' (r17195)
+* Fix: [NoAI] Guard the valuator against 'external' modifications of the valuated list which could cause it to go into an infinite loop {{en/Flyspray|3124}} (r17193)
+* Fix: Do not return exit value of rm, but of the actual configure run (r17163)
+* Fix: A stuck train could free the reservation of another train if it was reversed or did crash (r17152)
+* Fix: A train entering a PBS section through a block signal could cause a train crash if another reservation ending at a safe tile was already present in the section {{en/Flyspray|3104}} (r17151)
+* Fix: Update vehicle position cache when the vehicle sprite changes {{en/Flyspray|3060}} (r17121)
+* Fix: Mark industry tiles dirty when trigger are triggered (r17118)
+* Fix: Squirrel_export.sh failed for some locales (r17109)
+* Fix: Make restart command work again and make the help show how it works and how it does not work {{en/Flyspray|3092}} (r17097)
+* Fix: News message about ordered refits failing was not very clear {{en/Flyspray|3091}} (r17096)
+* Fix: Crash when renaming some stations {{en/Flyspray|3082}} (r17078)
+* Fix: RPM spec file failed for CentOS; apparantly their rpmbuild is pickier or so {{en/Flyspray|3024}} (r17077)
+* Fix: [NewGRF] Mark house tiles dirty when triggers were triggered (r17047)
+* Fix: [NewGRF] Trigger house trigger 02 only for the north tile {{en/Flyspray|3085}} (r17046)
+* Fix: Graphical glitch with graph key {{en/Flyspray|3083}} (r17041)
+* Fix: '[bd]ash'-ism in configure {{en/Flyspray|3076}} (r17026)
+* Fix: Infinite recursion in content dependency checking {{en/Flyspray|3075}} (r17015)
+* Fix: Concatenating strings in Squirrel when non-ASCII strings were received from OpenTTD failed {{en/Flyspray|3074}} (r17013)
+* Fix: [NoAI] Documentation of AITile::LevelTiles was wrong (r17049)
+* Fix: [NoAI] AIBridge::GetPrice returned incorrect values (r16986)
+* Fix: Make it so that failing to generate many random towns in scenario editor returns a failing message {{en/Flyspray|3059}} (r16977)
+* Fix: The last manually added server would not be saved {{en/Flyspray|3062}} (r16981)
