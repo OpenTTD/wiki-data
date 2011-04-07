@@ -1,0 +1,77 @@
+[[Translation:en/Archive/OpenTTD/OpenTTD 0.6.2]]
+{{fr/Traduction|en/Archive/OpenTTD/OpenTTD 0.6.2|0}}
+
+
+{{en/Archive/OpenTTD/NaviPrevNext|prev=en/Archive/OpenTTD/OpenTTD 0.6.1|next=en/Archive/OpenTTD/OpenTTD 0.6.3|date=1 August 2008}}
+
+You can get releases from [http://sourceforge.net/project/showfiles.php?group_id=103924 SourceForge].
+
+
+==Major new features==
+* Undocumented features (aka bugs) removed
+* Documented previously undocumented features
+
+==Changelog==
+===0.6.2 (2008-08-01)===
+* Fix: Custom vehicle names from TTD(Patch) games were lost (r13884)
+* Fix: NewGRF Callback 10 (visual effect and powered wagons setting) and powered wagons operation were not performed for articulated wagons [FS#2167] (r13870)
+* Fix: In some cases the sprite cache could be filled with unremovable items [FS#2153] (r13869)
+* Fix: Return of wrong parent scope of (NewGRF) industry variables (r13868)
+* Fix: Loading of TTD(Patch) savegames from the command line did not work (r13859)
+* Fix: Buffer overflow for too long filename supplied as '-g' parameter (r13858)
+* Fix: Cargo type lookup was incorrect for NewGRF version 7 files without a translation table [FS#2157] (r13855)
+* Fix: GetTownByTile() is only valid for houses and roads (r13851)
+* Fix: Power, running cost and capacity of multiheaded engines were (too often) doubled in newspaper resp. offer window (r13844)
+* Fix: FreeType may return a bitmap glyph even if a grey-scale glyph was requested [FS#2152] (r13832)
+
+===0.6.2-RC2 (2008-07-26)===
+[http://www.tt-forums.net/viewtopic.php?f=29&t=38621 forum link]
+* Fix: Building through the wrong side of a drive through station was allowed [FS#2166] (r13822)
+* Fix: Check for vehicle length changes outside a depot (callback 0x11) and give a warning about that [FS#2150] (r13816)
+* Fix: Several minor memory leaks. They only happened once per game (r13809, 13810)
+* Fix: Checking for train waiting at other side of two-way signal was broken [FS#2162] (r13806)
+* Fix: Some revision checking code was unintentionally disabled (r13776)
+* Fix: Enforce the validity of a NetworkAction (chat packet) issued by a client (r13775)
+* Fix: Selecting non-full length vehicles in the depot gui would place the "mouse pointer" out of the center of the vehicle making it hard to "aim" [FS#2147] (r13759)
+* Fix: NewGRF rail continuation would always mark a tunnel on the same axis as connected, even when the tunnel faces the wrong direction (r13734)
+* Fix: Assumption that non-north tiles of a house do not have the 1x1 building bit set was flawed with some NewGRFs. This caused the amount of houses to differ, which causes the town radii to differ, which causes desyncs when towns are expanded (r13729)
+* Fix: Possible desync on the autorenew settings 20+ game years (i.e. 4.5+ hours) after a company was started (r13718)
+* Fix: Any player could construct new companies [FS#2144] (r13716)
+* Fix: Remove the unique_id from the message that a client has joined as it is only exposes the unique_id more than needed (r13714)
+* Fix: Possible crash on creating a network packet (r13713)
+* Fix: Enforce the length restrictions of company and president name in the commands too (r13712)
+
+===0.6.2-RC1 (2008-04-26)===
+[http://www.tt-forums.net/viewtopic.php?f=29&t=38471 forum link]
+* Fix: Possible buffer overflow in string truncation code (r13700)
+* Fix: Handle SETX(Y) properly when truncating a string instead of ignoring it and returning a too long string (r13699)
+* Fix: In some cases the (sound) mixer could overflow causing artefacts in the sound [FS#2120] (r13695)
+* Fix: Do not rely on .tar files always ending with a block of zeros (r13693)
+* Fix: Make sure a command is ran in the context of autoreplace or not (r13691)
+* Fix: In the case that elrails and 'realistic' acceleration are disabled all electrified engines would have no power on load, until the vehicle got turned around, loaded or got into a depot [FS#2102]
+* Fix: Saving TTD imported games in recession failed due to wrong (and unneeded) type conversions in the saveload code [FS#2131] (r13679)
+* Fix: Inactive companies from old (TTD) saves could be marked active in some cases, which then loads garbage in their statistics and such [FS#2126] (r13676)
+* Fix: Memory leak when NewGRFs got forcefully disabled and they defined GOTO labels (r13675)
+* Fix: Crash when drawing a non-real sprite caused by NewGRF interference [FS#2127] (r13674)
+* Fix: Desync when building electrified trains on a dedicated server that was started with electrification disabled [FS#2122] (r13673)
+* Fix: Bus/truck forgetting go-to-depot order when entering a non-drivethrough road stop [FS#2117] (r13664)
+* Fix: Server crashing when banning the rconning client (r13661)
+* Fix: Signals were not updated correctly when a player removed a non-existing track piece (r13626)
+* Fix: Crash when one tries to raise the nothern corner of MP_VOID tiles (i.e. the southern corner of the tiles on the southern map edge) in the scenario editor [FS#2106] (r13624)
+* Fix: Only the front of a RV would be considered when determining to what cargos a vehicle can be refitted instead of all cargos [FS#2109] (r13622)
+* Fix: If the first bridge can not be build for a given length, then none of the other bridges can. Effectively meaning that if someone replaces the first bridge with a bridge that be only 3 tiles longs then only other bridges that can be 3 tiles long will be buildable, but only if they are 3 tiles long [FS#2100] (r13611)
+* Fix: Signal states could be propagated through waypoints built in orthogonal axis (r13589)
+* Fix: [OSX] 10.5 failed to switch to fullscreen (r13584)
+* Fix: RVs continueing onto next DT station when they are build adjacent to them [FS#2040] (r13581)
+* Fix: Disable static NewGRFs when non-static NewGRFs query them in the context of network games. This makes it impossible for static NewGRFs to disable non-static NewGRFs and 'bad' things happening because the non-static NewGRF doesn't know about the static NewGRF (r13576)
+* Fix: Properly count number of non-north housetiles [FS#2083] (r13518)
+* Fix: Incorrect usage of strtoul (r13508)
+* Fix: Clear the memory for the new AI during the loading of a savegame so it does not try to execute commands generated in a different savegame, which could be resulting in the AI trying to give orders to stations that do not exist (r13505)
+* Fix: Drawing of zoomed out partial sprites could cause deadlocks or crashes (r13502)
+* Fix: First determine where to *exactly* build a house before asking a NewGRF whether the location is good instead of possibly moving the house a tile after the NewGRF said the location is good (r13489)
+* Fix: Track was not removed on company bankrupcy when there was a ship on lower halftile (r13488)
+* Fix: Let ships also navigate on half-tile sloped watery rail tiles (r13485)
+* Fix: Division by zero when one would press 'd' (skip order) when there's no order (r13409)
+* Fix: Do not crash when resolving vehicle sprite groups with zero sprites (r13397)
+* Fix: In the purchase list, CB36 for capacity was not called for the first part of rail and road vehicles (r13385)
+* Fix: Loading of very old OpenTTD savegames was broken (r13373)
