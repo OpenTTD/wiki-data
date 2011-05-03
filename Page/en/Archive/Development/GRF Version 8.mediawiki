@@ -1,0 +1,69 @@
+Some proposals for modifications of newgrf specs (grf version 8) to improve usability and extensibility
+Last changed: 2010-08-12
+
+1) Vehicle variable 42 field "cc":
+Currently: Untranslated cargo.
+Proposal: Translated cargo. The translation table of the grf the varaction2 belongs to will be used. 0xFF if the cargo is not part of it. (like var 47)
+Grf-Version: Does this need bumping? IMO no, as the current behaviour is not useable at all. The change would fit into version 7. OTOH (according to Dalestan) it is a change, so bump needed.
+
+2) 8 bit callbacks 10 - 14, 16 - 19, 1D, 20 - 21, 27, 36, 142, 14B - 14C:
+
+2a) Extent all callbacks to 15 bit results. I.e. enforce unused bits to be zeroed for future use.
+Grf-Version: Bump to version 8 would ensure compatibility with old grfs. But the bump is only useful, when the return values of new newgrfs would have to pass a range-check.
+
+2b) Remove the 0xFF?? downwards-compatibility stuff to support full 15 bit callbacks. (Dalestan's suggestion)
+Grf-Version: Bump needed.
+
+Special cases:
+2.1) Callback 16: Articulated vehicles
+Currently: Bit 0-6 ID, bit 7 reverse flag, 0xFF stop
+Proposal 1: Bit 0-13 ID, bit 14 reverse flag, 0x7FFF stop; 0x3F?? and 0x7F?? reserved (Note: 0x7FFF needs 2b))
+Proposal 2: Bit 0-6 ID, bit 7 reverse flag, 0xFF stop; 0x7E/0xFE use ID from register 0x100
+Grf-Version: Proposal 1 needs bump to version 8, proposal 2 not necessarily. (apart from general 8->15 bit bump)
+
+2.2) Callback 19: Vehicle cargo subtype display
+Currently OTTD: 0-0x3FF for texts, except special values 0x??FF
+Currently TTDP: 8 bit, i.e. texts 0-0xFE
+Proposal 1: Restrict the special value to 0x00FF
+Proposal 2: Change the special value to 0x400 (like cb 28)
+Grf-Version: IMO no bump needed for proposal 1, as other special values than 0x00FF are unlikely used. (apart from general 8->15 bit bump)
+
+2.3) Callback 1D: Can wagon be attached
+Currently OTTD: 0-0x3FF for texts, except special values 0x??FD - 0x??FF
+Currently TTDP: 8 bit, i.e. texts 0-0xFE
+Proposal 1: Restrict the special values to 0x00FD - 0x00FF
+Proposal 2: Change special values to 0x400-0x402 (like cb 28)
+Grf-Version: IMO no bump needed for proposal 1, as other special values than 0x00F? values are unlikely used. (apart from general 8->15 bit bump)
+
+2.4) Callback 31, 37: Start/stop check, Industry Cargo sub-type display
+Currently: 0-0x3FF for texts, except special values 0x??FF
+Proposal 1: restrict the special value to 0x00FF
+Proposal 2: Change the special value to 0x400 (like cb 28)
+Grf-Version: IMO no bump needed for proposal 1, as other special values than 0x00FF are unlikely used. (apart from general 8->15 bit bump)
+
+2.5) Callback 36: Change vehicle properties
+Currently: 8 or 15 bit depending on property
+Proposal: 15 bit, though not necessarily extending the allowed range. (apart from general 8->15 bit range check)
+
+3) Boolean callbacks: 13, 17, 18 (partly), 21, 22, 3B, 3C
+Currently: Return boolean, i.e. zero or non-zero.
+Proposal: Return 0 or 1. Other values reserved.
+Grf-Version: Needs bump to version 8
+
+3.1) Industry availability callback should return probability (same as the property).
+
+4) Callback 17: House construction check
+Currently: Called for one tile, which would be part of the house.
+Proposal: Always call for the north tile.
+Grf-Version: No bump needed.
+
+5) Specify used palette:
+Proposal 1: Append a byte at the end of Action8. 0 = don't care, 1 = dos, 2 = win. (0 is a nice default value) Optional for grf version < 8, mandatory for >= 8.
+Proposal 2: 0 = dos, 1 = win, 2 = don't care (like var 0D/8D). Optional for grf version < 8, mandatory for >= 8.
+Handle any non-specified palette as windows palette in order to 'honour' the fact that virtually all old NewGRFs use that - and it's tedious to configure that when always this setting will be needed.
+
+6) Maybe some grf version for compatible grfs?
+16 bit for incompatible version
+16 bit for compatible version
+
+7) No longer fallback stuff for basecost multipliers.
