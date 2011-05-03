@@ -1,18 +1,19 @@
 Some proposals for modifications of newgrf specs (grf version 8) to improve usability and extensibility
 
-==Vehicle variable 42 field "cc"==
+=Vehicle variable 42 field "cc"=
 Currently: Untranslated cargo.<br>
 Proposal: Translated cargo. The translation table of the grf the varaction2 belongs to will be used. 0xFF if the cargo is not part of it. (like var 47)<br>
 Grf-Version: Does this need bumping? IMO no, as the current behaviour is not useable at all. The change would fit into version 7. OTOH (according to Dalestan) it is a change, so bump needed.
 
-==8 bit callbacks 10 - 14, 16 - 19, 1D, 20 - 21, 27, 36, 142, 14B - 14C:==
+=8 bit callbacks 10 - 14, 16 - 19, 1D, 20 - 21, 27, 36, 142, 14B - 14C=
 
 Extent all callbacks to 15 bit results. I.e. enforce unused bits to be zeroed for future use.<br>
-Grf-Version: Bump to version 8 would ensure compatibility with old grfs. But the bump is only useful, when the return values of new newgrfs would have to pass a range-check.<br>
+Grf-Version: Bump to version 8 would ensure compatibility with old grfs. But the bump is only useful, when the return values of new newgrfs would have to pass a range-check.
+
+===Remove 0xFF?? callback results===
 Remove the 0xFF?? downwards-compatibility stuff to support full 15 bit callbacks. (Dalestan's suggestion)<br>
 Grf-Version: Bump needed.
 
-Special cases:
 ===Callback 16: Articulated vehicles===
 Currently: Bit 0-6 ID, bit 7 reverse flag, 0xFF stop<br>
 # Proposal: Bit 0-13 ID, bit 14 reverse flag, 0x7FFF stop; 0x3F?? and 0x7F?? reserved (Note: 0x7FFF needs 2b))
@@ -43,25 +44,25 @@ Grf-Version: IMO no bump needed for proposal 1, as other special values than 0x0
 Currently: 8 or 15 bit depending on property<br>
 Proposal: 15 bit, though not necessarily extending the allowed range. (apart from general 8->15 bit range check)
 
-==Boolean callbacks: 13, 17, 18 (partly), 21, 22, 3B, 3C==
+=Boolean callbacks: 13, 17, 18 (partly), 21, 22, 3B, 3C=
 Currently: Return boolean, i.e. zero or non-zero.<br>
 Proposal: Return 0 or 1. Other values reserved.<br>
 Grf-Version: Needs bump to version 8
 
 ===Industry availability callback should return probability (same as the property).===
 
-== Callback 17: House construction check==
+= Callback 17: House construction check=
 Currently: Called for one tile, which would be part of the house.<br>
 Proposal: Always call for the north tile.<br>
 Grf-Version: No bump needed.
 
-== Specify used palette:==
+= Specify used palette=
 # Proposal: Append a byte at the end of Action8. 0 = don't care, 1 = dos, 2 = win. (0 is a nice default value) Optional for grf version < 8, mandatory for >= 8.
 # Proposal: 0 = dos, 1 = win, 2 = don't care (like var 0D/8D). Optional for grf version < 8, mandatory for >= 8.
 Handle any non-specified palette as windows palette in order to 'honour' the fact that virtually all old NewGRFs use that - and it's tedious to configure that when always this setting will be needed.
 
-== Maybe some grf version for compatible grfs?==
+= Maybe some grf version for compatible grfs?=
 16 bit for incompatible version<br>
 16 bit for compatible version
 
-== No longer fallback stuff for basecost multipliers.==
+= No longer fallback stuff for basecost multipliers=
