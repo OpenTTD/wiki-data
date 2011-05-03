@@ -5,6 +5,15 @@ Currently: Untranslated cargo.<br>
 Proposal: Translated cargo. The translation table of the grf the varaction2 belongs to will be used. 0xFF if the cargo is not part of it. (like var 47)<br>
 Grf-Version: Does this need bumping? IMO no, as the current behaviour is not useable at all. The change would fit into version 7. OTOH (according to Dalestan) it is a change, so bump needed.
 
+=Vehicle property 15/10/0C "default cargo=
+Currently: Untranslated cargo.<br>
+Proposal: Translated cargo. If the specified cargo is not present, the first refittable will be used. It's the job of the GRF to check available cargos via action 7, and set other default cargos, if they are not fine with the "first refittable"-rule.
+
+=Introduce 32bit parameters for 60+x variables=
+This is possible via variable 7B, which one can use to put 32 bits into the accumulator and pass them to any 60+x variable. Esp. useful for vehicle variable 60<br>
+Grf-Version: No bump needed.<br>
+Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/40_32bit_parameter_esp_var60.diff 40_32bit_parameter_esp_var60.diff]
+
 =8 bit callbacks 10 - 14, 16 - 19, 1D, 20 - 21, 27, 36, 142, 14B - 14C=
 
 Extent all callbacks to 15 bit results. I.e. enforce unused bits to be zeroed for future use.<br>
@@ -12,13 +21,15 @@ Grf-Version: Bump to version 8 would ensure compatibility with old grfs. But the
 
 ===Remove 0xFF?? callback results===
 Remove the 0xFF?? downwards-compatibility stuff to support full 15 bit callbacks. (Dalestan's suggestion)<br>
-Grf-Version: Bump needed.
+Grf-Version: Bump needed.<br>
+Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/20_callback_result.diff 20_callback_result.diff]
 
 ===Callback 16: Articulated vehicles===
 Currently: Bit 0-6 ID, bit 7 reverse flag, 0xFF stop<br>
 # Proposal: Bit 0-13 ID, bit 14 reverse flag, 0x7FFF stop; 0x3F?? and 0x7F?? reserved (Note: 0x7FFF needs 2b))
-# Proposal: Bit 0-6 ID, bit 7 reverse flag, 0xFF stop; 0x7E/0xFE use ID from register 0x100<br>
-Grf-Version: Proposal 1 needs bump to version 8, proposal 2 not necessarily. (apart from general 8->15 bit bump)
+# Proposal: Bit 0-6 ID, bit 7 reverse flag, 0xFF stop; 0x7E/0xFE use ID from register 0x100
+Grf-Version: Proposal 1 needs bump to version 8, proposal 2 not necessarily. (apart from general 8->15 bit bump)<br>
+Implementation for proposal 1: [http://devs.openttd.org/~frosch/diffs/grfv8/30_articulated_cb.diff 30_articulated_cb.diff]
 
 ===Callback 19: Vehicle cargo subtype display===
 Currently OTTD: 0-0x3FF for texts, except special values 0x??FF<br>
@@ -42,7 +53,8 @@ Grf-Version: IMO no bump needed for proposal 1, as other special values than 0x0
 
 ===Callback 36: Change vehicle properties===
 Currently: 8 or 15 bit depending on property<br>
-Proposal: 15 bit, though not necessarily extending the allowed range. (apart from general 8->15 bit range check)
+Proposal: 15 bit, though not necessarily extending the allowed range. (apart from general 8->15 bit range check)<br>
+Implementation: This has always been the behaviour of the OTTD implementation. It works for several properties just fine (e.g. capacity), but bigger values also fail for some properties (e.g. aircraft speed).
 
 =Boolean callbacks: 13, 17, 18 (partly), 21, 22, 3B, 3C=
 Currently: Return boolean, i.e. zero or non-zero.<br>
@@ -54,15 +66,20 @@ Grf-Version: Needs bump to version 8
 = Callback 17: House construction check=
 Currently: Called for one tile, which would be part of the house.<br>
 Proposal: Always call for the north tile.<br>
-Grf-Version: No bump needed.
+Grf-Version: No bump needed.<br>
+Implementation: Already implemented in trunk long ago. 0.7-ish or so.
 
 = Specify used palette=
 # Proposal: Append a byte at the end of Action8. 0 = don't care, 1 = dos, 2 = win. (0 is a nice default value) Optional for grf version < 8, mandatory for >= 8.
 # Proposal: 0 = dos, 1 = win, 2 = don't care (like var 0D/8D). Optional for grf version < 8, mandatory for >= 8.
+Implementation: Goal was archived with Action 14.
+
 Handle any non-specified palette as windows palette in order to 'honour' the fact that virtually all old NewGRFs use that - and it's tedious to configure that when always this setting will be needed.
 
 = Maybe some grf version for compatible grfs?=
 16 bit for incompatible version<br>
-16 bit for compatible version
+16 bit for compatible version<br>
+Implementation: Goal was archived with Action 14.
 
 = No longer fallback stuff for basecost multipliers=
+Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/50_no_pricebase_fallback.diff 50_no_pricebase_fallback.diff]
