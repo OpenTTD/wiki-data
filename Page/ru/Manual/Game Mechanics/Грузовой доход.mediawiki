@@ -1,17 +1,22 @@
 [[Translation:en/Manual/Game Mechanics/Cargo income]]
 {{ru/Перевод|en/Manual/Game Mechanics/Cargo income|0}}
 
-==Overview==
+== Обзор ==
+
+Количество денег, получаемое за перевозку груза ([[en/Manual/Cargo]]), определяется четырьмя факторами: груз, количество, дистанция, время в пути. И рассчитывается как произведение стоимости груза, дистанции и фактора времени, определяемого днями в пути.
 
 The amount of money earned when delivering a [[en/Manual/Cargo]] is determined by four factors: cargo, amount, distance, and days in transit, and is the product of the cargo payment rate, amount of cargo, transit distance, and time factor determined by days in transit.
 
+До OpenTTD 1.0/r17437, транспортировка [[en/Manual/Base Set/Cargos/Valuables]] на дистанцию, меньшую чем 10 клеток не приносила никаких денег.
 Before OpenTTD 1.0/r17437, transporting [[en/Manual/Base Set/Cargos/Valuables]] a distance of fewer than 10 tiles yielded no money.
 
-The transit distance is measured as the [https://www.wikipedia.org/wiki/Manhattan distance manhattan distance] between the origin station and the destination station.
+Дистанция измеряется как Манхеттенское расстояние([https://www.wikipedia.org/wiki/Manhattan distance manhattan distance]), имеется ввиду сумма разницы координат станций по двум осям: 
 
-The time scaler penalizes slow transportation. Each cargo type has two numbers, days1 and days2, that determine the boundaries between "fast", "medium", and "slow".
+  d=abs(x1-x2)+abs(y1-y2).
 
-'''Note:''' In this page when spoken about 'days', in fact 2.5 days are meant. So if days_in_transit = 4, then you use 4 in the calculations that follow, but actually the cargo is already 10 days in transit.
+Фактор времени в пути пресекает медленную транспортировку. каждый тип груза имеет два значения дни1(days1) и дни2(days2), которые определяют границу между понятиями "быстро", "нормально", "медленно".
+
+'''На заметку:''' На этой странице, когда речь идет о "днях", на самом деле имеются 2.5 дня в игре. Например, если дни_в_пути=4, то вы используете 4 в приведенных формулах, хотя на самом деле груз уже 10 (4*2.5) дней в пути.
 
 <!--
 <math>
@@ -28,7 +33,10 @@ I(c,a,d,t)=c_\mathrm{Base} \cdot a \cdot d \cdot \max\left(31,
 
 Income(cargo, amount, distance, time) = cargo payment rate ...
 
-This function has the following form:
+где:
+Income - доход; cargo - груз; amount - количество груза; distance - дистанция; time - время перевозки.
+
+Эта функция выглядит так:
 
 [[File:en/Manual/Game Mechanics/Income vs time.png]]
 
