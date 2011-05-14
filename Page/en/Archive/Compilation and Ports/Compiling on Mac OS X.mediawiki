@@ -26,6 +26,12 @@ and optionally you want also:
 * [http://icu-project.org/ icu]
 * [http://en.softonic.com/mac/uninstallers-cleaners uninstall mac software]
 
+For getting the openttd source, you will need:
+* [http://subversion.apache.org/ subversion, invoked using svn]
+* [http://mercurial.selenic.com/ mercurial, invoked using hg]
+* [http://git-scm.com/ git, invoked using git]
+All of the above are installable using MacPorts, svn is installable using Fink.
+
 [http://www.libsdl.org/ SDL] and [http://fontconfig.org/ fontconfig] are not required on mac.
 
 On OSX 10.6.1 it may also be necessary to install:
@@ -55,13 +61,26 @@ At least in order to compile a ''static binary'' (for redistribution) but also f
 
 If you've gone through these steps you'll have watched your computer compile libraries for some time, but now you'll have installed all pre-requisites in order to be able to compile OpenTTD for yourself.
 
+====Getting the source====
+For SVN:
+ <code>svn checkout svn://svn.openttd.org/trunk<code>
+This will install OpenTTD in a folder called trunk.
+
+For HG:
+ <code>hg clone http://hg.openttd.org/openttd/trunk.hg/<code>
+This will install OpenTTD in a folder. (The name varies with every version.)
+
+For GIT:
+ <code>git clone git://git.openttd.org/openttd/trunk.git<code>
+This will install OpenTTD in a folder.
+
+{{en/Note| Please note that some of these have iconv as a dependency. That is nothing bad, but you'll end up with '''two iconv versions''' on your hard disc: one supplied by apple in /usr/lib and one installed by macports in /opt/local/lib. Those two are not compatible and define different symbols and are different versions. You can temporarily de-activate macport's libiconv ("sudo port deactivate libiconv") as otherwise you might end up in some situations with a linker failure (see [http://bugs.openttd.org/task/3313 FS 3313]). But this might render your version that relies on macport's version un-usable}}
+
 ====Some further notes on MacPorts====
 If you would like to compile binaries which you want to distribute to other people, you want to compile universal binaries. All macport packages mentioned above offer the option to be installed as universal libaries, but it has to be requested for each install:
  <code>sudo port install zlib +universal</code>
 
 It might be worth to risk a look at the [http://guide.macports.org/#using.port macports documentation]. If you need for one or another reason an old(er) library version, a short walk-through is [https://trac.macports.org/wiki/howto/InstallingOlderPort found here]
-
-{{en/Note| You might want to install further tools, e.g. mercurial or git also by means of macports. Mind that some of these have iconv as a dependency. That is nothing bad, but you'll end up with '''two iconv versions''' on your hard disc: one supplied by apple in /usr/lib and one installed by macports in /opt/local/lib. Those two are not compatible and define different symbols and are different versions. You can temporarily de-activate macport's libiconv ("sudo port deactivate libiconv") as otherwise you might end up in some situations with a linker failure (see [http://bugs.openttd.org/task/3313 FS 3313]). But this might render svn, mercurial or whatever relies on macport's version un-usable}}
 
 {{en/Note| There are issues with some gcc versions which are supplied by macports. Use one of the apple-supplied compilers if fails with illegal compiler arguments. You can switch the compiler being used using [http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/Xcode-2.5/man8/gcc_select.8.html gcc_select]}}
 
