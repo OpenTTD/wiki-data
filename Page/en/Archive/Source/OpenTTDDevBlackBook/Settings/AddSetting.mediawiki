@@ -69,84 +69,84 @@ You must define your string in the most appropriate one:
 	SettingEntry("my_bool_opt"),
 </pre>
 
-====settings.h====
-The last change you have to make determines the behavior of the Configure Patches window and exactly how your setting will be saved to [[en/Archive/Manual/Settings/Openttd.cfg]].  This is set with a line in [http://svn.openttd.org/trunk/src/table/settings.h settings.h].
+====settings.ini====
+The last change you have to make determines the behavior of the Configure Patches window and exactly how your setting will be saved to [[en/Archive/Manual/Settings/Openttd.cfg]].  This is set with an entry in [http://svn.openttd.org/trunk/src/table/settings.ini].
 
-While you only add a single line per setting that you make, it is fairly complicated. To give you an idea here is an example:
+While you only add a single entry per setting that you make, it is fairly complicated. To give you an idea here is an example:
 
-<pre>
-SDT_VAR(GameSettings, my_var_opt,SLE_UINT8,S, 0, 4, 1, 20, STR_CONFIG_SETTING_MY_VAR_OPT,NULL),
-SDT_BOOL(GameSettings, my_bool_opt, 0, 0, false, STR_CONFIG_SETTING_MY_BOOL_OPT, NULL),
-</pre>
+[SDT_VAR]
+ base     = GameSettings
+ var      = my_var_opt
+ type     = SLE_UINT8
+ from     = 161
+ to       = SL_MAX_VERSION
+ flags    = 0
+ guiflags = 0
+ def      = 100
+ min      = 10
+ max      = 100
+ interval = 5
+ str      = STR_CONFIG_SETTING_MY_VAR_OPT
+ proc     = NULL
 
-Of course you will have to place it in the appropriate order in _settings[] array (hopefully this will be fairly obvious).
+ [SDT_BOOL]
+ base     = GameSettings
+ var      = my_bool_opt
+ from     = 161
+ to       = SL_MAX_VERSION
+ flags    = 0
+ guiflags = 0
+ def      = true
+ str      = STR_CONFIG_SETTING_MY_BOOL_OPT
+ proc     = NULL
+
+Of course you will have to place it in the appropriate order in the settings.ini file (hopefully this will be fairly obvious).
 
 Following is a detailed explanation of what it all means:
 
 =====Patch Setting Types=====
-The format of the patch setting can be a bit hard to follow, but is quite straightforward.  These are the two standard types of settings
+The format of the patch setting can be a bit hard to follow, but is quite straightforward.  These are the two standard types of settings, i.e. SDT_BOOL and SDT_VAR
 
-<pre>
-SDT_BOOL( <settings group>, <varname>, <savewhereflags>, <gui flags>, <initial value>, <display string>, <onchange callback proc>),
-
---or--
-
-SDT_VAR( <settings group>, <varname>, <vardef>, <savewhereflags>, <gui flags>, <initial value>, <max value>, <min value>, <display string>, <onchange callback proc>),
-</pre>
-
-where:
-*<settings group> = GameSettings
-*<varname> = name_of_your_variable
-*<vardef> = data size for the variable - not required for BOOL, but can be a variety of sizes; SLE_UINT8, SLE_INT16, SLE_UINT32, etc. etc... pick what you need
-*<savewhereflags> - this is the most awkward to understand, and is quite cryptic. It can take the following values:
+*base: GameSettings
+*var: The variable name
+*type: data size for the variable - not required for BOOL, but can be a variety of sizes; SLE_UINT8, SLE_INT16, SLE_UINT32, etc.   etc... pick what you need
+*flags: this is the most awkward to understand, and is quite cryptic. It can take the following values:
 **0 (zero) = Default behavior: Save in save game and openttd.cfg.  Sync with Network (Only the server can set the option)
 **N = Do '''not''' sync with network. (Each player can set their own)
 **S = Do '''not''' save in save game (but save in openttd.cfg).  '''Also''' does '''not''' sync with network.  (Each player can set their own)
 **C = Do not save in openttd.cfg, but save in save game.
-*<gui flags> - Affects how the option is displayed
+*guiflags: Affects how the option is displayed
 **D0 = Disable option.  Grey out for now but leave in for future use?  Maybe for internal use only.
 **NC = No Commas.  Display numbers without any thousands separators.
 **MS = Multi-string.  Option displays various strings instead of numbers for settings.
 **NO = Network Only.  Setting only applies to network games
 **CR = Currency.  Number in string will be converted to proper currency.
-*<initial value>, <min>, <max> = obvious (either bool, or int32)
-*<display string> = the string used in the language file for the patch setting when displayed in the Patch Settings control panel. If you don't need to display it, just leave it as NULL.
-*<callback proc> = the procedure to call when the value is changed. Just leave this as NULL - safer that way.
+*def: default value (true or false for BOOL, any valid value for VAR)
+*min, max, interval: min value, max value and interval by which integer value increments/decrements when using the yellow arrows (only applicable to VAR, obviously) 
+*str: the string used in the language file for the patch setting when displayed in the Patch Settings control panel. If you don't need to display it, just leave it as NULL.
+*proc: the procedure to call when the value is changed. Just leave this as NULL - safer that way.
+*from, to: Range of OpenTTD versions for which the setting is valid (see below)
 
-=====SAVEGAME_VERSION & CONDVARs=====
+=====SAVEGAME_VERSION=====
 
-You have your saved patch variable, but if you add it straight, OTTD will expect to find it in every savegame. So there is an extra pair of entries available for CONDitional variables; ones only available for a range of savegame versions. The savegame version number is found near the start of [http://svn.openttd.org/trunk/src/saveload/saveload.cpp saveload.cpp].
+You have your saved patch variable, but if you add it straight, OTTD will expect to find it in every savegame. So there is an extra pair of entries available for conditional variables; ones only available for a range of savegame versions. The savegame version number is found near the start of [http://svn.openttd.org/trunk/src/saveload/saveload.cpp saveload.cpp].
 
-The format for conditional patch settings is:
-<pre>
-SDT_CONDBOOL( <settings group>, <varname>, <valid from>, <valid to>, <savewhereflags>, <gui flags>, <initial value>, <display string>, <onchange callback proc>),
-
---or--
-
-SDT_CONDVAR( <settings group>, <varname>, <vardef>, <valid from>, <valid to>, <savewhereflags>, <gui flags>, <initial value>, <min value>, <max value>, <display string>, <onchange callback proc>),
-</pre>
-
-
-When OTTD loads a data chunk, it compares the savegame version it was compiled with, with the savegame version in the savegame. By checking the <valid from> and <valid to> version numbers in the patch settings, it can see whether it supports the feature, and how to handle it.
+When OTTD loads a data chunk, it compares the savegame version it was compiled with, with the savegame version in the savegame. By checking the <from> and <to> version numbers in the patch settings, it can see whether it supports the feature, and how to handle it.
 
 This way, you can control whether your feature is saved, and if it is, whether that save is compatible with previous versions.
 
 '''Note:''' by just defining your saved variable in the patch settings, you automatically make saves with your OTTD incompatible with everybody else's. Also, unless you follow the procedure below, you will not be able to *load* normal OTTD games with your version either!
 
-This is where the savegame version, and COND vars save your bacon.
+This is where the savegame version, and conditional vars save your bacon.
 
-If the current trunk is at version 86, but you have a new feature that needs its settings vars saving, then ALWAYS increase the savegame version. This is known as a Savegame BUMP.
+If the current trunk is at version 160, but you have a new feature that needs its settings vars saving, then ALWAYS increase the savegame version. This is known as a Savegame BUMP.
 
 When a normal OTTD tries to load a savegame from your system, it will see the savegame bump, and gracefully say "sorry, i cant load that - its too new for me".
 
-However, to do the reverse - you loading older OTTD games - you need to identify your patch settings as "new in version XX" by using the <valid from> and <valid to> entries.
+However, to do the reverse - you loading older OTTD games - you need to identify your patch settings as "new in version XX" by using the <from> and <to> entries.
 
-So for our example; we BUMP the savegame to 87, and set our vars as CONDVAR or CONDBOOL, with a <valid from> of 87, and a <valid to> of SL_MAX_VERSION, which as you can guess means "from now on". 
+So for our example (see above): we BUMP the savegame to 161, and set our vars with a <from> of 161, and a <to> of SL_MAX_VERSION, which as you can guess means "from now on". 
 
-<pre>
-SDT_CONDVAR(GameSettings, my_var_opt, SLE_UINT8, 87, SL_MAX_VERSION, S, 0, 4, 1, 20, STR_CONFIG_SETTING_MY_VAR_OPT, NULL),
-SDT_CONDBOOL(GameSettings, my_bool_opt, 87, SL_MAX_VERSION, 0, 0, false, STR_CONFIG_SETTING_MY_BOOL_OPT, NULL),
-</pre>
 
 
 [[Category:en/Archive/Source/OpenTTDDevBlackBook|P]]
