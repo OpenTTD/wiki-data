@@ -1,0 +1,147 @@
+<noinclude>[[Translation:Template/en/Ambox]]</noinclude><!-- 
+      Wiki Ambox code adaptation
+
+--><noinclude></noinclude><includeonly><table style="{{#IF: {{{style|}}} | {{{style}}} | margin: 0px 10% 0px 10%; border: 1px solid #aaa; background:#fbfbfb}}"><tr>
+<td style="border-left: 10px solid {{#switch:{{{type|}}} 
+  | Löschen    =#b22222;
+  | Inhalt     =#f28500;
+  | Stil       =#f4c430;
+  | Bewegen    =#9932cc;
+  | Beschützt  =#bba;
+  | #Standard  =#1e90ff;
+}} padding: 2px 0 2px 0.5em;"><div style="width: 52px;">[[File:{{#if:{{{image|}}}
+  | {{{image}}}
+  | {{#switch:{{{type|}}}
+    | Löschen    =Deletion.png
+    | Inhalt     =Content.png
+    | Stil       =Edit-clear.png
+    | Bewegen    =Move.png
+    | Beschützt  =Protection.png
+    | #Standard  =Notice.png
+  }}
+}}|40px]]</div></td><td style="{{#IF: {{{text-style|}}} | {{{text-style}}} | border: none; padding: 0.25em 0.9em; width: 100%;}}"> {{{text|}}} </td>
+{{#if:{{{imageright|}}}
+<td style="padding: 2px 0.5em 2px 0;">No need at the moment</td>
+}}</tr></table><!-- 
+Detect and report usage with faulty [[Template:Ambox#Article message box types|"type"]] parameter:
+-->{{#switch:{{{type|}}}
+|            = <!--No type fed, is also valid input --> 
+| Löschen    =
+| Inhalt     = 
+| Stil       =
+| Bewegen    =
+| Beschützt  =
+| Notiz      =
+| #Standard  = <div style="text-align: center;">Dieses Infofenster benutzt einen Ungültigen "Typ={{{Typ|}}}" Parameter und muss in Ordnung gebracht werden.</div>[[Category:en/Wrong syntax]]
+}}</includeonly><noinclude>
+
+==Benutzung==
+Simple usage example:
+<pre>
+{{en/Ambox| text = Some text.}}
+</pre>
+{{en/Ambox| text = Some text.}}
+
+OR:
+<pre>
+{{en/Ambox| type = content
+| text = Warning Some text.
+}}
+</pre>
+{{en/Ambox| type = content | text = Warning - Some text.}}
+
+== Available List of parameters==
+<pre>
+{{ambox
+| type       = delete / content / style / notice / move / protected
+| image      = Picture.Png / Picture.Png|alt=Picture (if the parameter does not present, default type icon will be supplied)
+| text       = Text for a big box, for the top of articles.
+
+| style      = Different table style. (preferably should not be used)
+| text-style = same as the above for text.
+</pre>
+
+
+
+=== Article message box types ===
+
+The following examples use different '''type''' parameters but use no image parameters thus they use the default images for each type.
+
+
+{{en/Ambox| type  = delete
+| text  = type=<u>delete</u> – Deletion issues, such as {{en/S|en/Delete}}.
+}}
+{{en/Ambox| type  = content
+| text  = type=<u>content</u> – Content issues, such as {{en/S|en/Warning}}.
+}}
+{{en/Ambox| type  = style
+| text  = type=<u>style</u> – Style issues, such as {{en/S|en/Cleanup}}.
+}}
+{{en/Ambox| type  = notice
+| text  = type=<u>notice</u> – Article notices, such as {{en/S|en/Current}}.
+}}
+{{en/Ambox| type  = move
+| text  = type=<u>move</u> – Merge, split and transwiki proposals, such as {{en/S|en/Split}}.
+}}
+{{en/Ambox| type  = protected
+| text  = type=<u>protected</u> – Protection notices, such as {{en/S|en/Historical}}.
+}}
+
+=== Other images ===
+
+The default images shown above are mostly for convenience. In many cases it is more appropriate to use more specific images. These example use the '''image''' parameter to specify an image other than the default images.
+
+{{en/Ambox| type  = notice
+| image =en/Manual/OpenttdManual.png|alt= Openttd Manual
+| text  = Something Something Something 
+}}
+
+[[Category:en/Templates|A]][[Category:en/Message boxes|A]]
+</noinclude><!--
+
+  CSS if the option will become available
+
+/* Article message box styles */
+table.ambox {
+    margin: 0px 10%;   /* 10% = Will not overlap with other elements */
+    border: 1px solid #aaa; 
+    border-left: 10px solid #1e90ff;    /* Default "notice" blue */
+    background: #fbfbfb; 
+}
+table.ambox + table.ambox {   /* Single border between stacked boxes. */
+    margin-top: -1px;
+}
+.ambox th.mbox-text, 
+.ambox td.mbox-text {            /* The message body cell(s) */
+    padding: 0.25em 0.5em;       /* 0.5em left/right */
+}
+.ambox td.mbox-image {           /* The left image cell */
+    padding: 2px 0 2px 0.5em;    /* 0.5em left, 0px right */
+}
+.ambox td.mbox-imageright {      /* The right image cell */
+    padding: 2px 0.5em 2px 0;    /* 0px left, 0.5em right */
+}
+
+table.ambox-notice {
+    border-left: 10px solid #1e90ff;    /* Blue */
+}
+table.ambox-speedy {
+    border-left: 10px solid #b22222;    /* Red */
+    background: #fee;                   /* Pink */
+}
+table.ambox-delete {
+    border-left: 10px solid #b22222;    /* Red */
+}
+table.ambox-content {
+    border-left: 10px solid #f28500;    /* Orange */
+}
+table.ambox-style {
+    border-left: 10px solid #f4c430;    /* Yellow */
+}
+table.ambox-move {
+    border-left: 10px solid #9932cc;    /* Purple */
+}
+table.ambox-protection {
+    border-left: 10px solid #bba;       /* Gray-gold */
+}
+-->
