@@ -28,10 +28,10 @@ NOTE: This document does not cover how to create a new category.
 ==Adding a Patch Setting==
 There are several files that you need to edit in order to add a patch setting.  This section lists those files and tells you what you need to do to each.  For the most part, you have to look at the surrounding code to figure out where the most appropriate place for your new patch variable to go, but unless you have a radically new idea, there will probably be a place for you.
 
-====english.txt ( and language files)====
-First and foremost, you must add text entries into [http://svn.openttd.org/trunk/src/lang/english.txt english.txt].  If you speak another language, you may also add your entries into that file.  For any other languages, just leave them and somebody will eventually translate it for you.
+====english.txt (and language files)====
+First and foremost, you must add text entries into [http://svn.openttd.org/trunk/src/lang/english.txt english.txt] (all other language files are managed by the translators).  If you speak another language, you may also add your entries into that file in your patch.  For any other languages, just leave them and somebody will eventually translate it for you.
 
-Take a look at the link above to get a feel for the text file.  Any patch option strings should begin with the STR_CONFIG_PATCHES_ extension.  
+Take a look at the link above to get a feel for the text file.  Any patch option strings should begin with the STR_CONFIG_SETTING_ extension.  
 
 <pre>
 STR_CONFIG_SETTING_MY_VAR_OPT         :{LTBLUE}My variable option: {ORANGE}{STRING1} 
@@ -46,8 +46,8 @@ There are several structures that keep track of the current configuration. They 
 Find an appropriate structure for your patch setting and add a line similar to that shown here:
 
 <pre>
-	uint8 my_var_opt;	// *Describe what my_var_opt is about*
-	bool my_bool_opt;	// *Describe what my_bool_opt is about*
+	uint8 my_var_opt;	///< *Describe what my_var_opt is about*
+	bool my_bool_opt;	///< *Describe what my_bool_opt is about*
 </pre>
 
 ====settings_gui.cpp====
@@ -70,7 +70,7 @@ You must define your string in the most appropriate one:
 </pre>
 
 ====settings.ini====
-The last change you have to make determines the behavior of the Configure Patches window and exactly how your setting will be saved to [[en/Archive/Manual/Settings/Openttd.cfg]].  This is set with an entry in [http://svn.openttd.org/trunk/src/table/settings.ini settings.ini].
+The last change you have to make determines the behaviour of the Configure Patches window and exactly how your setting will be saved to [[en/Archive/Manual/Settings/Openttd.cfg]].  This is set with an entry in [http://svn.openttd.org/trunk/src/table/settings.ini settings.ini].
 
 While you only add a single entry per setting that you make, it is fairly complicated. To give you an idea here is an example:
 
@@ -111,7 +111,7 @@ The format of the patch setting can be a bit hard to follow, but is quite straig
 *var: The variable name
 *type: data size for the variable - not required for BOOL, but can be a variety of sizes; SLE_UINT8, SLE_INT16, SLE_UINT32, etc.   etc... pick what you need
 *flags: this is the most awkward to understand, and is quite cryptic. It can take the following values:
-**0 (zero) = Default behavior: Save in save game and openttd.cfg.  Sync with Network (Only the server can set the option)
+**0 (zero) = Default behaviour: Save in save game and openttd.cfg.  Sync with Network (Only the server can set the option)
 **N = Do '''not''' sync with network. (Each player can set their own)
 **S = Do '''not''' save in save game (but save in openttd.cfg).  '''Also''' does '''not''' sync with network.  (Each player can set their own)
 **C = Do not save in openttd.cfg, but save in save game.
