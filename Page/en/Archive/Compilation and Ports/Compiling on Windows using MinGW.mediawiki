@@ -7,9 +7,9 @@ This page contains guidelines for compiling OpenTTD for Win32 with '''MinGW'''.
 ==List of packages==
 This tutorial has been tested with the following versions of the required packages:
 
-* OpenTTD trunk at revision r22221.
-* [http://sourceforge.net/projects/mingw/files/Automated%20MinGW%20Installer/mingw-get-inst/mingw-get-inst-20110316/mingw-get-inst-20110316.exe/download mingw-get-inst-20110316]
-* [http://sourceforge.net/projects/win32svn/files/1.6.16/svn-win32-1.6.16.zip/download Subversion 1.6.16]
+* OpenTTD 1.1.x or trunk.
+* [http://sourceforge.net/projects/mingw/files/Automated%20MinGW%20Installer/mingw-get-inst/mingw-get-inst-20110530/mingw-get-inst-20110530.exe/download mingw-get-inst-20110530]
+* [http://sourceforge.net/projects/win32svn/files/1.6.16/svn-win32-1.6.17.zip/download Subversion 1.6.17]
 * [http://zlib.net/zlib-1.2.5.tar.gz zlib-1.2.5]
 * [http://sourceforge.net/projects/libpng/files/libpng15/1.5.2/libpng-1.5.2.tar.gz/download libpng-1.5.2]
 * [http://www.oberhumer.com/opensource/lzo/download/lzo-2.05.tar.gz lzo-2.05]
@@ -21,7 +21,7 @@ This tutorial has been tested with the following versions of the required packag
 * [http://download.icu-project.org/files/icu4c/4.6/icu4c-4_6-src.zip libicu-4.6]
 
 ==Installing MinGW and MSYS==
-#Download and run mingw-get-inst (download link above).
+#Download and run mingw-get-inst (the download link can be found in the previous section).
 #Select "Use pre-packaged repository catalogues".
 #Review and accept the License agreement.
 #Please note that MinGW should be installed to a directory path that doesn't contain any spaces. This method has been tested with a directory path of C:\MinGW.
@@ -29,7 +29,7 @@ This tutorial has been tested with the following versions of the required packag
 #Wait until every package has been downloaded and installation is finished.
 
 ==Setting up MSYS==
-Go to your msys folder (C:\MinGW\msys\1.0), open etc\fstab with a text editor (for example Notepad) and add the following line:
+Go to your msys folder (by default it is found at C:\MinGW\msys\1.0), open etc\fstab with a text editor (for example Notepad) and add the following line at the end of the file:
 <pre>C:\MinGW\   /usr/local</pre>
 On Windows 7 and Vista if you have UAC enabled, to let MSYS fully work you'll need additional steps. Go to your msys folder (C:\MinGW\msys\1.0), open msys.bat with a text editor (for example Notepad) and add the following line after @echo off:
 <pre>cd "C:\MinGW\msys\1.0"</pre>
@@ -58,9 +58,9 @@ If you get following error:
 ==Installing Subversion==
 In MSYS:
 
-<pre>wget http://sourceforge.net/projects/win32svn/files/1.6.16/svn-win32-1.6.16.zip/download
-unzip svn-win32-1.6.16.zip
-cd svn-win32-1.6.16
+<pre>wget http://sourceforge.net/projects/win32svn/files/1.6.17/svn-win32-1.6.17.zip/download
+unzip svn-win32-1.6.17.zip
+cd svn-win32-1.6.17
 mv bin/* /usr/local/bin/
 cd ..</pre>
 
@@ -105,7 +105,7 @@ make install
 cd ..</pre>
 
 ==Compiling xz==
-Liblzma (which is a part of xz) is required for compiling OpenTTD since [http://vcs.openttd.org/svn/changeset/21044/ r21044]. It also needs pkg-config. In MSYS:
+Liblzma (which is a part of xz) is required for compiling OpenTTD since [http://vcs.openttd.org/svn/changeset/21044/ r21044]. In MSYS:
 
 <pre>wget http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-runtime_0.18.1.1-2_win32.zip
 unzip gettext-runtime_0.18.1.1-2_win32.zip -d /mingw
@@ -147,7 +147,6 @@ cd ../..</pre>
 Check the [[en/Development/FAQ development#how-can-i-obtain-the-source-code|development FAQ]] for different methods for obtaining the source. If you download it without using MSYS (for example downloading the source code from the website) don't forget to place it in your home folder (by default it is C:\MinGW\msys\1.0\home\<user_name>).
 
 ==Compiling OpenTTD==
-If you cannot compile, don't panic. Sometimes it may be due to coding errors, but they should be reported on [http://bugs.openttd.org/ bugs.openttd.org], so they can be fixed.
 
 <ol><li>Start MSYS.</li>
 <li>Run:<pre>cd ~/<path_to_source>
