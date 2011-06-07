@@ -1,63 +1,63 @@
 [[Translation:en/Archive/OpenTTD/OpenTTD 1.1.1]]
-{{fr/Traduction|en/Archive/OpenTTD/OpenTTD 1.1.1|0}}
+{{fr/Traduction|en/Archive/OpenTTD/OpenTTD 1.1.1|40}}
 
 
-{{en/Archive/OpenTTD/NaviPrevNext|prev=en/Archive/OpenTTD/OpenTTD 1.1.0|next=en/Archive/Lists/Roadmap 1.2|date=2011-06-01}}
+{{fr/Archive/OpenTTD/Livraison|prec=fr/Archive/OpenTTD/OpenTTD 1.1.0|suiv=fr/Roadmap 1.2|date=01/06/2011}}
 
-You can get this release from [http://www.openttd.org/download-stable openttd.org].
+Vous pouvez obtenir cette version depuis [http://www.openttd.org/download-stable openttd.org].
 
-==Major new features==
+==Nouvelles fonctionnalités majeures==
 
-* Faster pathfinder
-* Show one digit of the fractional train length in the depot
-* Renamed "automatic orders" to "implicit orders" for more clarity
-* Bugfixes
+* Détermination de chemin plus rapide
+* Affiche un chiffre de la longueur fractionnelle du train dans le dépôt
+* "Ordres automatiques" renommés en "ordres implicites" pour plus de clarté
+* Corrections de bogues
 
-==Changelog==
+==Journal des changements==
 
-===1.1.1 (2011-06-01)===
+===1.1.1 (01/06/2011)===
 
-* Change: Automatic orders are better called implicit orders as no real order influencing path finding is added (r22474, r22473)
-* Fix: Only try to insert implicit orders for ground vehicles. Aircraft may reach unscheduled terminals when skipping orders {{en/Flyspray|4624}} (r22492)
+* Changement: Les ordres automatiques sont mieux appelés ordres implicites car aucun ordre réel influençant la détermination de chemin n'est ajoutée (r22474, r22473)
+* Correction: N'essayer d'insérer des ordres implicites que pour les véhicules terrestres. Les avions peuvent atteindre des terminaux non prévus en sautant des ordres {{en/Flyspray|4624}} (r22492)
 
-===1.1.1-RC1 (2011-05-15)===
+===1.1.1-RC1 (15/05/2011)===
 
-* Feature: [NewGRF] Allow to filter by town of the current industry when using industry variable 0x68 {{en/Flyspray|4591}} (r22434)
-* Change: Improve the speed of YAPF by tweaking hash tables size (r22351, r22350, r22348)
-* Change: Show one digit of the fractional train length in the depot (r22336, r22305, r22304, r22303)
-* Fix: When determining the executable path failed, the working directory was used instead, circumventing the not-home-directory check {{en/Flyspray|4613}} (r22465)
-* Fix: [Windows] Prevent a crash when launching OpenTTD with -d from a MSYS console {{en/Flyspray|4587}} (r22464)
-* Fix: Update the saveload window immediatelly after scanning a new directory, so queued events reach the window when already updated {{en/Flyspray|4615}} (r22463)
-* Fix: [NewGRF] The c and p parts of station vars 40, 41 and 49 were incorrect for large stations (r22455, r22286)
-* Fix: [NewGRF] Zero register 0x100 as specified before resolving custom station foundations (r22452)
-* Fix: Do not 'log' the NewGRFs in the screenshot when in the menu {{en/Flyspray|4610}} (r22450)
-* Fix: [NewGRF] When GRFs are disabled via Action E or due to GRM failure, also display an error in the GUI (r22444, r22443)
-* Fix: [NewGRF] Do not popup fatal NewGRF error messages in the intro screen. The GRFs are not going to be activated there anyway and the GRF settings GUI will not display the errors either (r22442)
-* Fix: Catenary was drawn incorrectly next to level crossings with foundations (r22437)
-* Fix: [NewGRF] Apply railtype property 12 (station graphics) also to station groundsprites from action 1 (r22436)
-* Fix: Git revision detection would return too much when tags are involved (r22435)
-* Fix: [NewGRF] When action14 specified different values for the palette, the values were OR-ed. Use the last set value instead (r22416)
-* Fix: [Network] Kicking yourself via remote console crashes the server {{en/Flyspray|4606}} (r22414)
-* Fix: [NewGRF] Make sure the action2 ID of a generic feature callback is valid (r22409)
-* Fix: Check the availability year of all houses, not just the NewGRF houses, when making sure that at least one is available onwards from year 0 {{en/Flyspray|4581}} (r22389, r22300, r22299)
-* Fix: When a game uses a lot of NewGRFs the buffer for storing that information in the PNG is too small (r22388)
-* Fix: Windows' recv seems to return 'graceful closed' before having passed the remaining buffer which causes OpenTTD to think all connections are 'incorrectly' terminated, i.e. without the 'I am leaving' packet from the client. So let the client wait a tiny bit after sending the 'I am leaving' packet and before gracefully closing the connection {{en/Flyspray|4601}} (r22387)
-* Fix: When the last AI company gets removed, the 'dead' state was not reset in the AI debug window {{en/Flyspray|4602}} (r22386)
-* Fix: No client error packet was sent to the admin bots {{en/Flyspray|4585}} (r22384)
-* Fix: Recolouring of silicon bridge was done incorrectly (r22380, r22379, r22378)
-* Fix: Crash when clicking a removed company in the vehicle list dropdowns {{en/Flyspray|4592}} (r22373)
-* Fix: Keep better accounting of the order in which clients joined; client cannot be starved from joining and they get shown the amount of clients waiting in front of them (r22372, r22370, r22369, r22368, r22367, r22366, r22365, r22364, r22363, r22362, r22361)
-* Fix: Make sure saving has completely and utterly finished before starting a new one. Otherwise you could start a save, which would be marked as done by the previous save stopping and then yet another save could be started... and that could create a deadlock {{en/Flyspray|4596}} (r22371)
-* Fix: Delete the client list popup when the client got removed (instead of previously selecting some other client) (r22360, r22359, r22358)
-* Fix: When inserting automatic orders, do not create consecutive duplicate orders (r22333, r22332, r22331, r22330, r22329, r22328, r22327)
-* Fix: Destinations of conditional orders were update incorrectly when deleting orders in front of the conditional orders, if the target order was the order just before of the conditional order (r22326)
-* Fix: Vehicles skipped orders when inserting automatic orders failed (r22324)
-* Fix: [NewGRF] When determining refittability use the cargo translation table of the GRF setting the refitmask instead of the GRF defining the action 3 (r22316)
-* Fix: Make road vehicles, ships and aircraft skip orders if they are leaving a depot and heading to the same one again; just like trains (r22309)
-* Fix: Waiting on a server could kick the client, or rather the client would kick itself due to an unexpected packet {{en/Flyspray|4574}} (r22308)
-* Fix: When drawing the town authority window, check whether the availability of the actions changed, and force a complete redraw in that case (r22307)
-* Fix: The 'freeform edges' setting could be enabled when there were buoys on the northern border {{en/Flyspray|4580}} (r22297)
-* Fix: Reset Window::scrolling_scrollbar when raising scrollbar buttons {{en/Flyspray|4571}} (r22294)
+* Fonctionnalité: [NewGRF] Permet de filtrer par ville de l'industrie courante en utilisant la variable d'industrie 0x68 {{en/Flyspray|4591}} (r22434)
+* Changement: Améliore la vitesse de YAPF en améliorant la taille des tables de hachage (r22351, r22350, r22348)
+* Changement: Affiche un chiffre de la longueur fractionnelle des trains dans le dépôt (r22336, r22305, r22304, r22303)
+* Corrigé: Quand la détermination du chemin de l'exécutable échouait, le répertoire de travail était utilisé à la place, contournant la vérification du répertoire autre que personnel {{en/Flyspray|4613}} (r22465)
+* Corrigé: [Windows] Évite un plantage en lançant OpenTTD avec -d depuis une console MSYS {{en/Flyspray|4587}} (r22464)
+* Corrigé: Met à jour la fenêtre de sauvegarde/chargement immédiatement après avoir analysé un nouveau répertoire, pour que les événements empilés atteignent la fenêtre déjà mise à jour {{en/Flyspray|4615}} (r22463)
+* Corrigé: [NewGRF] Les parties c et p des variables de station 40, 41 et 49 étaient incorrectes pour les grandes stations (r22455, r22286)
+* Corrigé: [NewGRF] Mettre à zéro le registre 0x100 comme spécifié avant de résoudre les fondations personnalisées de gare (r22452)
+* Corrigé: Ne pas 'tracer' les NewGRFs dans une capture d'écran quand on est dans le menu {{en/Flyspray|4610}} (r22450)
+* Corrigé: [NewGRF] Quand les GRFs sont désactivés via Action E ou à cause de plantages GRM, afficher aussi une erreur dans l'IHM (r22444, r22443)
+* Corrigé: [NewGRF] Ne pas faire surgir des messages d'erreur NewGRF fatals dans l'écran d'introduction. Les GRFs ne sont pas activés là quoi qu'il en soit, et l'IHM des paramètres GRF n'affichera pas non plus les erreurs (r22442)
+* Corrigé: Catenary was drawn incorrectly next to level crossings with foundations (r22437)
+* Corrigé: [NewGRF] Apply railtype property 12 (station graphics) also to station groundsprites from action 1 (r22436)
+* Corrigé: Git revision detection would return too much when tags are involved (r22435)
+* Corrigé: [NewGRF] When action14 specified different values for the palette, the values were OR-ed. Use the last set value instead (r22416)
+* Corrigé: [Network] Kicking yourself via remote console crashes the server {{en/Flyspray|4606}} (r22414)
+* Corrigé: [NewGRF] Make sure the action2 ID of a generic feature callback is valid (r22409)
+* Corrigé: Check the availability year of all houses, not just the NewGRF houses, when making sure that at least one is available onwards from year 0 {{en/Flyspray|4581}} (r22389, r22300, r22299)
+* Corrigé: When a game uses a lot of NewGRFs the buffer for storing that information in the PNG is too small (r22388)
+* Corrigé: Windows' recv seems to return 'graceful closed' before having passed the remaining buffer which causes OpenTTD to think all connections are 'incorrectly' terminated, i.e. without the 'I am leaving' packet from the client. So let the client wait a tiny bit after sending the 'I am leaving' packet and before gracefully closing the connection {{en/Flyspray|4601}} (r22387)
+* Corrigé: When the last AI company gets removed, the 'dead' state was not reset in the AI debug window {{en/Flyspray|4602}} (r22386)
+* Corrigé: No client error packet was sent to the admin bots {{en/Flyspray|4585}} (r22384)
+* Corrigé: Recolouring of silicon bridge was done incorrectly (r22380, r22379, r22378)
+* Corrigé: Crash when clicking a removed company in the vehicle list dropdowns {{en/Flyspray|4592}} (r22373)
+* Corrigé: Keep better accounting of the order in which clients joined; client cannot be starved from joining and they get shown the amount of clients waiting in front of them (r22372, r22370, r22369, r22368, r22367, r22366, r22365, r22364, r22363, r22362, r22361)
+* Corrigé: Make sure saving has completely and utterly finished before starting a new one. Otherwise you could start a save, which would be marked as done by the previous save stopping and then yet another save could be started... and that could create a deadlock {{en/Flyspray|4596}} (r22371)
+* Corrigé: Delete the client list popup when the client got removed (instead of previously selecting some other client) (r22360, r22359, r22358)
+* Corrigé: When inserting automatic orders, do not create consecutive duplicate orders (r22333, r22332, r22331, r22330, r22329, r22328, r22327)
+* Corrigé: Destinations of conditional orders were update incorrectly when deleting orders in front of the conditional orders, if the target order was the order just before of the conditional order (r22326)
+* Corrigé: Vehicles skipped orders when inserting automatic orders failed (r22324)
+* Corrigé: [NewGRF] When determining refittability use the cargo translation table of the GRF setting the refitmask instead of the GRF defining the action 3 (r22316)
+* Corrigé: Make road vehicles, ships and aircraft skip orders if they are leaving a depot and heading to the same one again; just like trains (r22309)
+* Corrigé: Waiting on a server could kick the client, or rather the client would kick itself due to an unexpected packet {{en/Flyspray|4574}} (r22308)
+* Corrigé: When drawing the town authority window, check whether the availability of the actions changed, and force a complete redraw in that case (r22307)
+* Corrigé: The 'freeform edges' setting could be enabled when there were buoys on the northern border {{en/Flyspray|4580}} (r22297)
+* Corrigé: Reset Window::scrolling_scrollbar when raising scrollbar buttons {{en/Flyspray|4571}} (r22294)
 
 ==See Also==
 
