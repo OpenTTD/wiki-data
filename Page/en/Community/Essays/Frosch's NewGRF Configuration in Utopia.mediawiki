@@ -1,0 +1,90 @@
+= Earth =
+== Configuring NewGRFs ==
+When a player wants to pick a set of NewGRF for his game, (s)he encounters several problems which you can currently only solve with experience.
+* You cannot see warning/errors/deactivation of GRFs before starting an actual game.
+* You cannot see what GRF provides what game entities.
+* You cannot tell whether the GRFs conflict in some trivial way, like
+** certain cargos not being carried by any vehicles,
+** cargos being produced while noone accepts them,
+** cargos being required while noone produces them.
+* Other GRF conflicts.
+
+== Changing NewGRFs in game ==
+When changing GRFs in game there are some additional issues:
+* You cannot tell what stuff gets added or removed.
+* You cannot tell what stuff is removed, but is actually required as there are instances of it on the map.
+* You cannot tell what stuff is changed in an incompatible way.
+
+= Utopia =
+== Configuring NewGRFs ==
+Now, let's forget how the configuration works today; instead ask how it would work in Utopia?
+* Players can already see what key features a GRF provides when choosing it from a list (automatically generated from the GRF content, not Action14 or similar), like
+** industries,
+** cargos,
+** trains,
+** road vehicles,
+** trams,
+** landscape,
+** ...
+* Players can open some window which displays details on the GRF, which items it provides, already in the main menu when selecting NewGRFs.
+* Players see errors/warnings already when configuring the NewGRFs, they cannot start a game when a GRF would be disabled. This includes warnings depending on GRF parameters.
+* Players can see compatibility warnings, like
+** Towns need food in this climate, but there is no production chain producing it.
+** There are no train vehicles available transporting "milk".
+** There are no aircraft available in the starting year of your game.
+** The last helicopter will expire around 2040.
+** Set A provides new cargos, but set B is not compatible to any new cargos (it lacks a cargo translation table).
+** Set A and B both provide conflicting cargo definitions.
+** Both set A and B provide an industry called 'Power plant".
+** ...
+
+== Configuring NewGRFs ==
+How would Utopians deal with changing NewGRFs in game?
+* They can see a summary of what is going to be added/changed/removed.
+* They can see problems before applying the changes to the game.
+* They can freely add additional GRFs, as long as they only provide additonal stuff. (That is already present GRFs do not conditionally removing stuff either.)
+* They can remove GRFs which provide nothing that is being used. (Including stuff of other GRFs, which might get conditionally disabled.)
+* They can replace GRFs with newer versions of the same GRF, which states to be compatible.
+* They can change GRF parameters, which the GRF states to be changeable in game.
+* They can remove GRFs which provide stuff present on the map, when they accept all of the present items to be automatically removed from the map.
+
+= Borrowing stuff from Utopia =
+== Current limitations ==
+Currently OpenTTD can only load and activate a single NewGRF configuration (which is btw. also the reason, NewGRFs do not work in the intro game).
+This is due to a lot of stuff being stored in global variables resp. NewGRF loading accessing global variables:
+* There is only one pool for Engines, IndustrySpecs, SpriteGroups, Station classes, ...
+* There is only one OverrideManager for industries, engines, ...
+* Action 6/7/9/D can access variables of the game state (e.g. current year).
+* Sprites are directly loaded into the sprite cache.
+* There is even some kind of global pool for opened files.
+
+If this would be proper C++, every spec loaded from a GRF would be a member of a NewGRF configuration class.
+A gamestate would then reference an instance of this class, and retrieve all specs from it.
+The class would also provide a strict interface between the specs and the game state, such as "current year".
+However, this does not include interaction with items on the map. This shall only be about the stuff required to load some NewGRFs,
+not to run the game.
+
+So, what would need review / moving to some more strict interface?
+* Pools for Specs may not be global variables.
+* Overridemaangers may not be global variables.
+* Action 6/7/9/D variables have to use some interface.
+* Variables available in the "purchase lists" of vehicles, industries, objects need to use some interface.
+* The fios and spritecache stuff needs to handle temporary loading/unloading of GRFs.
+* ... yet unknown stuff ...
+
+== What would be archievable ==
+These changes would allow to test-activate the new NewGRF configuration in the main menu before starting a game
+resp. in-game before applying it to the current game.
+* Displaying Action B stuff in advance, including "feedback" when editing NewGRF parameters.
+* Access to "purchase lists" of vehicles/industries resp. general lists of available stuff without an actual game. The lists could display everything, or on a per GRF basis.
+* Detection of obvious compatiblity issues (as listed above in the Utopia section). (This could also be done with current OpenTTD, but only when starting a game)
+
+== What would not be archievable ==
+Checking for stuff being added or removed is considerable easy. A lot harder are changes to already existing stuff.
+* Changes to vehicle length, while they are on the track.
+* Railtype compatibility changes, while there are vehicles on the track.
+* Industries producing different cargos resp. general changes in cargo acceptance.
+* ...
+
+== Summary ==
+This is very hard, and a hell lot of work. But, it can be done in small steps. There should be no big step / transition somewhere in the process.
