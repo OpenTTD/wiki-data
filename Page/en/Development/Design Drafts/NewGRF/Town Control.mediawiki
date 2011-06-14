@@ -137,12 +137,4 @@ That is if one Grf returns "callback failed", the next Grf is tried. If all call
 |}
 
 == Persistent storage ==
-Adding persistant storage to towns allows some strange features of NewGRFs, as basically everything (stations, houses, industries, objects)
-has access to the town, so there can be inter-object communication within a town's influence (not global).
-However NewGRF should not conflict when accessing this storage, so every GrfID should have its own storage (allocated on first access).
-OTOH some multi-NewGRFs sets like ECS might want to access this storage across NewGRFs, resp use some master GRF.
-
-Possible ways to archieve this:
-# Reading the persistent storage requires to put the GrfID in register 100. A value of 0 means the current GRF.
-# A action 0 property sets the GrfID to use for town access. That is, a Grf can only access data from a single GRF, which would be some master GRF in case of ECS-like sets. (Note, that the master GRF does not need to be present itself.)
-# A action 0 property sets up to 16 GrfIDs (ID 0 to 15, not a single property value for all). The Grf can then access up to 256 persistent registers, where the upper nibble is a index into the list of GrfIDs and the lower nibble is the actual register.
+Persistent storage for towns has been implemented. See http://newgrf-specs.tt-wiki.net/wiki/Storages#Persistent_storage_accessed_by_GRFID
