@@ -1,0 +1,56 @@
+==Common problems==
+===Reusing sprites===
+Action 2 can always only reference sprites from one spriteset.
+So, if multiple action2 want to use some common sprites (e.g. groundsprites),
+* all sprites need to be put in a single Action 1,
+* the sprites need to be duplicated accross the GRF or
+* the sprites need to be put in GRM-allocated Action A sprites.
+All three solutions are bad in some way.
+For stations there is another way around the issue: Sprties can be resolved using multiple Action 1-2-3 chains.
+But for features using Action 2 spritelayouts (houses, industry tiles, airport tiles, objects) that is not possible.
+
+===Spritesets with different amount of sprites===
+Every spriteset in an Action 1 has the same amount of sprites. If a spriteset needs more sprites than other sets, all other sets need to be extended
+with dummy sprites.
+
+==Suggestion for new Action 1 format==
+The idea is to allow referencing spritesets from different Action 1 in all Action 2.
+To achieve that a index for the <tt><first-spriteset></tt> to define is appended to Action 1. The new format is
+is indicated by setting the highest bit of <feature>.
+
+ <sprite-number> * <length> 01 <0x80 + feature> <num-sets> <num-ent> <first-spriteset>
+
+{| border="1" |-
+!Element!!Size!!Description
+|-
+|<sprite-number>||dec||A sequential sprite number
+|-
+|<length>||dec||The total number of bytes used in this action
+|-
+|01||B||Defines action 01
+|-
+|<0x80 + feature>||B||The feature that following sprites should be used for, plus bit 7 for the new format.
+|-
+|<num-sets>||B||The number of sprite sets you have (one sprite set is one vehicle/station/ship etc)
+|-
+|<num-ent>||B*||The number of views the sprite has
+|-
+|<first-spriteset>||B*||The first spriteset to define.
+|}
+
+'''TODO'''
+* Is it a terrible idea to use bit 7 of <tt><feature></tt> for the new format?
+* Shall the new format enforce not mixing Action 1 of different features? (this might actually be a disadvantage for common ground sprites)
+
+The Action 1 must be followed by a consist of <tt>num-sets * num-ent</tt> RealSprites.
+These sprite then define the spritesets <tt>first-spriteset</tt> to <tt>first-spriteset + num-sets - 1</tt>.
+If an earlier Action 1 loaded different spritesets they remain valid.
+
+So it is possible to define spritesets 23..25 in one Action 1, define spritesets 0..5 in another Action 1. An Action 2 can then access sets 0..5 and 23..25.
+Later another Action 1 can redefine spritesets 2..3, and following Action 2 could access spritesets 0..1, 2..3, 4, 23..25 from various Action 1.
+
+While all spritesets defined with a single Action 1 have the same amount of sprites for each spriteset, different Action 1 may define different spritesets with different amounts of sprites.
+
+==OpenTTD implementation details==
+* TileLayoutSpriteGroup can no longer store "num_building_stages" in a single member.
+* Add a std::map<> to newgrf.cpp and put ResultSpriteGroups into it when parsing Action 1.
