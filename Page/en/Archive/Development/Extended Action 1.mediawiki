@@ -15,11 +15,27 @@ with dummy sprites.
 
 ==Suggestion for new Action 1 format==
 The idea is to allow referencing spritesets from different Action 1 in all Action 2.
-To achieve that a index for the <tt><first-spriteset></tt> to define is appended to Action 1. The new format is
-is indicated by setting the highest bit of <feature>.
+To achieve that a index for the <tt><first-spriteset></tt> to define is appended to Action 1.
+That way one Action1 defines the spritesets <tt>first-spriteset</tt> to <tt>first-spriteset + num-sets - 1</tt>.
+If an earlier Action 1 loaded different spritesets they remain valid.
 
- <sprite-number> * <length> 01 <0x80 + feature> <num-sets> <num-ent> <first-spriteset>
+So it is possible to define spritesets 23..25 in one Action 1, define spritesets 0..5 in another Action 1. An Action 2 can then access sets 0..5 and 23..25.
+Later another Action 1 can redefine spritesets 2..3, and following Action 2 could access spritesets 0..1, 2..3, 4, 23..25 from various Action 1.
 
+While all spritesets defined with a single Action 1 have the same amount of sprites for each spriteset, different Action 1 may define different spritesets with different amounts of sprites.
+
+*Format proposal 1:
+:This format uses bit 7 of <feature> to indicate the new format.
+:<pre><sprite-number> * <length> 01 <0x80 + feature> <num-sets> <num-ent> <first-spriteset></pre>
+: Using the feature to indicate the format, is something which is done nowhere else. While there is general processing of the feature byte in e.g. TTDPatch, this is not the case for Action1.
+
+*Format proposal 2:
+:Use "regular num-sets"==0 to indicate he new format, then append a separate new num-sets.
+:<pre><sprite-number> * <length> 01 <feature> 00 <first-spriteset> <num-sets> <num-ent></pre>
+: While num-ent==0 is valid and needed in various cases, num-sets==0 was not valid and thus not useful up to now.
+
+In both cases num-sets is an extended byte in the format.
+ 
 {| border="1" |-
 !Element!!Size!!Description
 |-
@@ -29,7 +45,7 @@ is indicated by setting the highest bit of <feature>.
 |-
 |01||B||Defines action 01
 |-
-|<0x80 + feature>||B||The feature that following sprites should be used for, plus bit 7 for the new format.
+|<feature>||B||The feature that following sprites should be used for.
 |-
 |<num-sets>||B*||The number of sprite sets you have (one sprite set is one vehicle/station/ship etc)
 |-
@@ -37,19 +53,10 @@ is indicated by setting the highest bit of <feature>.
 |-
 |<first-spriteset>||B*||The first spriteset to define.
 |}
+The Action 1 must be followed by a consist of <tt>num-sets * num-ent</tt> RealSprites.
 
 '''TODO'''
-* Is it a terrible idea to use bit 7 of <tt><feature></tt> for the new format?
 * Shall the new format enforce not mixing Action 1 of different features? (this might actually be a disadvantage for common ground sprites)
-
-The Action 1 must be followed by a consist of <tt>num-sets * num-ent</tt> RealSprites.
-These sprite then define the spritesets <tt>first-spriteset</tt> to <tt>first-spriteset + num-sets - 1</tt>.
-If an earlier Action 1 loaded different spritesets they remain valid.
-
-So it is possible to define spritesets 23..25 in one Action 1, define spritesets 0..5 in another Action 1. An Action 2 can then access sets 0..5 and 23..25.
-Later another Action 1 can redefine spritesets 2..3, and following Action 2 could access spritesets 0..1, 2..3, 4, 23..25 from various Action 1.
-
-While all spritesets defined with a single Action 1 have the same amount of sprites for each spriteset, different Action 1 may define different spritesets with different amounts of sprites.
 
 ==OpenTTD implementation details==
 * TileLayoutSpriteGroup can no longer store "num_building_stages" in a single member.
