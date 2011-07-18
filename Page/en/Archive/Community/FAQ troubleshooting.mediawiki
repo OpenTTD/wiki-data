@@ -105,9 +105,17 @@ OpenTTD can cause iTunes to crash. This is due to iTunes not being compatible wi
 This may also correct issues with other programs that crash randomly when OpenTTD launches, if the issue of 256 colors also affects it.
 
 == My User Interface is too small to read ==
-The default font is part of the graphics set you're using, for languages with non-latin letters a fallback font is selected automatically from the fonts available on your system.
+The default font is part of the base graphics set you're using, for languages with non-latin letters a fallback font is selected automatically from the fonts available on your system.
 
-To use a different font quit OpenTTD and modify the following settings in your ''[[en/Archive/Manual/Settings/Openttd.cfg]]'' file:
+To use a different font quit OpenTTD and modify the ''small_font'', ''medium_font'', ''large_font'', ''small_size'', ''medium_size'' and ''large_size'' settings in your ''[[en/Archive/Manual/Settings/Openttd.cfg]]'' file. Here you may set a different font face and size for each of the three font types available in OpenTTD. 
+
+You can set any font face available on your system. What face and size works best for you, is a matter of trial-and-error. Note that you must change both the font and size entries for your changes to have any effect (however you can change for instance only the small font by setting ''small_font'' and ''small_size'' while keeping medium and large fonts from your base graphics set).
+
+See also: [[en/Archive/Manual/Settings/Unicode]]
+
+=== Linux ===
+For Linux, you must set the font settings to an actual path of a font file that exists on your system, for example:
+
 <pre>
 small_font = /usr/share/X11/fonts/100dpi/courB10-ISO8859-1.pcf.gz
 medium_font = /usr/share/X11/fonts/100dpi/courB14-ISO8859-1.pcf.gz
@@ -116,36 +124,57 @@ small_size = 10
 medium_size = 14
 large_size = 18
 </pre>
-'''You must change both the size entries and the font names'''. The above may work at a Linux system (change the paths to files that actually exist).
-Windows users can just write the name of the typeface if it is installed. Se below. This works in windows 7. 
+
+The above values are just a demonstration of how to change it. The suggested values have not been chosen with care. If you have better values, please update this section.
+
+=== Windows ===
+Windows users can set just the name of a font face installed on the system; no need to use the path to a font file.
 
 <pre>
-small_font = Arial Unicode MS
-medium_font = Arial Unicode MS
-large_font = Arial Unicode MS
-small_size = 9
+small_font = Arial
+medium_font = Tahoma Bold
+large_font = Times New Roman
+small_size = 11
 medium_size = 12
-large_size = 18
+large_size = 20
 </pre>
-Note: The above values are just a demonstration of how to change it. The suggested values have not been chosen with care. If you have better values, please update this section.
 
-See also: [[en/Archive/Manual/Settings/Unicode]]
+The example above gives you larger fonts while keeping the spirit of the original TTD font types.
+
+== The User Interface buttons are too small ==
+TTD was designed for 640x480 screen size in a time monitors were around 12" diagonal. This is a resolution of about 67 dpi. Now you went ahead and bought this 21" fullHD screen with a resolution of over 100 dpi. In other words, the individual pixels are smaller while a button still uses the same amount of pixels. As a result, there fits more on your screen, but everything is smaller than in 1995. So before you blame OpenTTD for having too small buttons, you should first blame yourself in screen purchase choice, then read on what you can do to fix this.
+
+Here are some suggestions:
 
 
-_________________________________________________
+'''Throw out the screen'''
 
-A workaround to this problem for Windows 7 users can be found here: [http://www.tt-forums.net/viewtopic.php?uid=36464&f=29&t=51506&start=0] (OpenTTD zoom on large monitor with Windows 7 magnifier).
+Yes, the best solution is to get a screen with a proper dpi size. That way the graphics remain crisp and not only the buttons, but all parts of the game, will increase in size. But this is probably not what you wanted to hear, did you? Read on, as some more serious suggestions will follow.
 
-If you have a large LCD monitor (recommended over 22") you might want to see the game window on entire screen with large text, all without losing quality and without running on fullscreen on lower resolution. This can be done quickly if you have Windows 7, using the Magnifier tool (I don't know about Vista but on Windows XP the magnifier tool is different and it can't be used like that).
 
-- Start the game window and set it at 640x480 (windowed mode).
+'''Change screen resolution'''
 
-- Start Win7 Magnifier from Ease of Access and set it at 200% (this will virtually double all pixels).
+This is probably the easiest fix with reasonable results. If you lower your screen resolution, everything gets bigger. In case of that fullHD screen, instead of 1920x1080 set something lower, like 1280x720.
 
-- Using magnifier on "Follow mouse pointer" mode, drag your game window to the screen.
+If you play the game in fullscreen, you can make this change from the [[en/Manual/Game options window]] dialog and then this setting will only affect OpenTTD. If you play in windowed mode, you need to change this from your operating system, which will affect your whole computing experience, so you might want to change it back when you're done playing OpenTTD.
 
-- To keep the magnified area on a fixed position, uncheck from options "Follow mouse pointer" and check "Have magnifier follow the text insertion point". Now drag your game window and stretch it to fit your screen (see the attachement - my 22" LCD with 1680x1050 resolution). OpenTTD will remember the last used window size, so, you need to do this only once.
+Note that modern flatscreen panels are designed for one specific resolution. Setting anything lower will inevitably result in graphics that are a bit blurry and that is something you'll have to live with. The only exception is if you can set a resolution of exactly half the design resolution, so for instance instead of 1920x1080 you set 810x540. In that case, every original pixel can now use exactly four pixes, keeping your graphics nice and crisp.
 
-- This is it. You can minimize now the magnifier and when you need to bring it back use ALT+TAB.
+
+'''Use the BigGUI NewGRF'''
+
+In the [[en/Manual/Online content]] you can find a [[en/Manual/NewGRF]] named ''OpenGFX+ BigGUI''. This NewGRF provides a "double size GUI for high resolution screens, dodgy old ball mice and touch screens with fat fingers". It is designed to be used with the OpenGFX base graphics set, but can also be used with the original TTD base graphics. It will give you buttons that are four times as big and because you don't have to lower the screen resolution, the graphics will remain nice and crisp. A drawback is that the landscape, vehicles, industries etc. keeps it's original size.
+
+
+'''Use a magnifier'''
+If you don't want to lower the screen resolution, don't want to play full screen and don't want to use the BigGUI, you can use a magnifier tool. This allows you to increase the game's size without losing quality. The instructions below are for Windows 7; similar solutions might or might not be available for other operating systems.
+
+* Start the game window and set it at 640x480 (windowed mode).
+* Start Win7 Magnifier from Ease of Access and set it at 200% (this will essentially double all pixels).
+* Using magnifier on "Follow mouse pointer" mode, drag your game window to the screen.
+* To keep the magnified area on a fixed position, uncheck from options "Follow mouse pointer" and check "Have magnifier follow the text insertion point". Now drag your game window and stretch it to fit your screen ([http://www.tt-forums.net/download/file.php?id=137680 example on 1680x1050]). OpenTTD will remember the last used window size, so, you need to do this only once.
+* This is it. You can minimize now the magnifier and when you need to bring it back use ALT+TAB.
+
+[http://www.tt-forums.net/viewtopic.php?uid=36464&f=29&t=51506&start=0 source]
 
 [[Category:en/FAQs]]
