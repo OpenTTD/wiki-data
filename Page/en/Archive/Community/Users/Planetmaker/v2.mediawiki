@@ -1,0 +1,81 @@
+Rought sketch of ideas for a future OpenTTD 2.0
+
+== goal / script framework: definiable via *some* interface ==
+* events:
+** trigger action on certain conditions (date, town sizes, <item> becoming available,...)
+*** build / destruct <item> (town, industry, landscaping, objects, roads, canals, rivers)
+*** declare goal reached (see further down)
+*** start new / close company
+*** modify money
+** goals definable by
+*** <best value> reached at a certain date
+*** <something> reached (first)
+** goals:
+*** money
+*** cargo transported (different ones / amount one / all)
+*** towns or industries serviced
+*** town or global population (town 'ownership' by most cargo units transported there?)
+*** number of profitable vehicles (or other conditions on vehicles)
+*** advanced: custom-scripted? Using / extending existing interface (admin port, NoAI API, NewGRF interface?)
+
+== scenarios reworked ==
+* allow definition independent of NewGRFs:
+** keep town position and size (maybe also house category)
+** keep industry positions and type
+** keep roads, rivers, canals
+** keep heightmap
+* suggested NewGRFs (by grfID, update to latest version automatically)
+== scenario editor reworked ==
+* allow using it in multiplayer
+* allow (re)configuration of NewGRFs and re-generate items (towns, industries) as necessary (see scenarios reworked)
+* allow to change climate without using a cheat
+* advanced: allow to change map size?
+* allow to import savegames without fuzz
+** allow to change NewGRFs as defined by scenarios reworked
+
+== GUI:==
+* font and font size selection
+* GUI scale setting (normal, zoom*X (x=1,2,3,4 like currently zoom settings)
+** possibly use something like http://scale2x.sourceforge.net/index.html
+* allow NewGRFs (and base sets) to define sprites also for other zoom levels than 1 explicitly
+* enable / disable 32bpp directly from GUI, similar to NewGRFs / base sets, integrate them in bananas
+* grids yes/no
+* rework main menu(s):
+** title menu
+*** new game
+****  AI settings
+**** NewGRF settings
+**** Adv. Settings with difficulty(?) presets
+**** Map settings
+*** Join Network game
+*** Scenario editor
+*** High scores
+*** GUI Settings
+**** base sets
+**** font
+**** size / scale
+**** language
+**** ... (from adv. settings / GUI)
+*** Online updates
+**** game itself
+**** content download
+*** Quit
+
+== Vehicle management: ==
+* allow share and manage orders / colour / name / ... via groups
+* vehicle templates(?) for building and replacement
+* unify autorenew and autoreplace. It's confusing to have both (maybe make autorenew just the default for replacement rules)
+
+== Cargo destinations ==
+* cargos which want to go *somewhere* specific (either distribution or destinations)
+
+== NewGRF-support for all kind of stations ==
+* road stations and sea ports with state machines
+* NewGRF capability for sea ports and road stations
+
+== Terrain ==
+* advanced map access / transparency, which enables also sub-ways
+* more heighlevels and also sea levels (sub-sea-surface future buildings anyone?)
+* map generation:
+** generation of rivers
+** placement of NewObjects?
