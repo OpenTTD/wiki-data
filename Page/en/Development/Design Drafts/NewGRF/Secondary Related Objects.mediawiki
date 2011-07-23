@@ -1,0 +1,67 @@
+== Introduction ==
+VariationalAction2 can access variables of the primary object and of an related object.
+However, in some cases there are more than 2 objects of interest. This page collects which additional objects are useful
+and suggests to extent VarAct2 with additional access types.
+
+Note, that RandomAction2 does not need extending. Random bits can be read via variable 5F in VarAct2, which would also work for the additional access types.
+Rerandomisation does only work for the primary object (type 80). In other words: Types 83 and 84 are total crap. RandomAction2 type 83 provides nothing, which VarAct2 cannot do better. Type 84 provides nothing,
+which couldn't be done with some 60+x variable better (though argueable there is no such variable).
+
+== Secondary related features ==
+
+{| border="1" |-
+! Feature / Primary object !! 2nd object (related object) !! 3rd object (grand-related object) !! 4th object !! 5th object (callback/trigger related object)
+|-
+| Vehicles || Front engine || '''Next engine in front (engine providing livery override)''' || '''First articulated part''' || '''Station vehicle is loading at'''
+|-
+| Stations || Town of station || || || '''Vehicle triggering something'''
+|-
+| Canals || || || ||
+|-
+| ''Bridges'' || ''Town of bridge'' || || || '''''Vehicle triggering something'''''
+|-
+| Houses || Town of house || || ||
+|-
+| Industry tiles || Industry || '''Town of industry''' || '''Station/Airport of industry''' ||
+|-
+| Industries || Town of industry || || '''Station/Airport of industry''' ||
+|-
+| Airports || Town of airport || || '''Industry of station''' || '''Vehicle triggering something'''
+|-
+| Signals || || || ||
+|-
+| Objects || Town of object || || ||
+|-
+| Railtype || || || ||
+|-
+| Airport tiles || '''Airport/Station''' || '''Town of airport''' || '''Industry of airport''' || '''Vehicle triggering something'''
+|-
+| Towns || Nearest city || || ||
+|}
+New stuff is shown bold. Bridges are shown in italics, as they have no VarAct2 at all currently.
+
+* The 3rd object is usually the 2nd related object of the 2nd related object (but not e.g. for vehicles).
+* The 4th object is just something. :p
+* The 5th object is specific to a particular callback and related to the trigger which caused the callback. That is, the feature of the 5th object can vary between different callbacks of the same primary feature. It is only accessible in certain contexts.
+
+== VarAct2 access types ==
+{| border="1" |-
+! !! Primary object !! 2nd object (related object) !! 3rd object !! 4th object !! 5th object
+|-
+! B
+| 81 || 82 || 90 || 91 || 92
+|-
+! W 
+| 85 || 86 || 94 || 95 || 96
+|-
+! D 
+| 89 || 8A || 98 || 99 || 9A
+|}
+
+Types 80 to 83 historically got their meaning by just numbering them in the order they were added to TTDPatch.
+
+When word and dword access got added, the types 85, 86, 89 and 8A were defined using the existing types 81 and 82 and putting the "size" in the bits 2 and 3.
+
+Later 84 was just filled in the first free spot.
+
+The intention behind the new types is to extent the schema of 81 and 82. The access size is again put in bits 2 and 3. The "object" is encoded in bits 0, 1 and 4.
