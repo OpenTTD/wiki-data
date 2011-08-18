@@ -1,57 +1,78 @@
 [[Translation:en/Manual/Dedicated server]]
 
-[[File:en/Manual/Dedicated server.png|right|frame|Věnovaný server v okně]]A '''dedicated server''' je OpenTTD síťová hra [[en/Manual/Server]] Který ti může v pozadi volně běžet. Nesmíš ho ale omylem vypnout. Dobré je přes večer přepnout pc do režimu spánku. Tímto zabráníte smazání hesel u všech společností.
+[[File:en/Manual/Dedicated server.png|right|frame|Dedicated server window]]A '''dedicated server''' is a OpenTTD network game [[en/Manual/Server]] that does not have a local client taking part in the game. A dedicated server can run in the background on a computer.
 
-==Spuštění serveru==
-Nejprve musíš najlépe na ploše vytvořit zástupce. Přidat mu parametr "-D". (openttd.exe" -D)
+==Starting a dedicated server==
+Run the OpenTTD executable using the {{en/C|-D|}} (capital D!) [[en/Manual/Command line]] option. 
 
-===Ve Windowsech===
-První metoda:
-*Vytvoř zástupce na {{en/C|openttd.exe|}}
-*Pravým tlačítkem klikni na toho zástupce a dej vlasnosti
-*Přidej {{en/-D|}} do řádku (openttd.exe" -D)
-*Dej na použít
-*Spust zástupce
-
-===V Linuxu===
-* Běh {{en/C| OpenTTD-D |}} v terminálu. Pokud se připojujete na server pomocí SSH a chcete hru spustit, když odhlásit, měli byste použít [http://www.gnu.org/software/screen/ GNU Screen] nebo [http://dtach.sourceforge. net / dtach].
-
-Můžete také spustit openttd s-f. To znamená, že proces bude probíhat na pozadí, ale konzola bude avaible. Všechny výstup bude zaslán soubor openttd.log. Můžete si zobrazit log s ocasem: tail-f openttd.log sledovat události. (Toto bylo přeloženo přes google překládač)
-
-==Nastavení a nakonfigurování serveru==
-Jsou k dispozici 3 možností jak nastavit možnosti hry:
-*Spust hru pro jednoho hráče, nastav nastavení dle libosti a vypni hru.
-*Použíj konzoli (tlačíto pod ESC) a přímo ve hře více hráčů nastav pomocí konzolových příkazů. (Pouze pro zkušenější uživatele)
-*Změn [[en/Archive/Manual/Settings/Openttd.cfg]] soubor ručně.
-Možné aplikace: [http://www.tt-forums.net/viewtopic.php?f=29&t=33967 Web Interface]
+===In Windows===
+Method 1:
+*Create a shortcut to {{en/C|openttd.exe|}}
+*Right-click on the shortcut and click Properties
+*Add {{en/C|-D|}} onto the end of the Target line
+*Click Apply
+*Run the shortcut
 
 
-Změň síťové nastavení v sekci "Network" [[en/Archive/Manual/Settings/Openttd.cfg]]:
-*Nastav [[en/Archive/Manual/Settings/Lan internet]] na 0.
-*Změň [[en/Archive/Manual/Settings/Server name]] na název tvýho serveru, 
-*Nastav [[en/Archive/Manual/Settings/Server advertise]] na "true", aby bylo možno najít server listě [[en/Server list]]
-*Pokud máte více síťových rozhraní, ujistěte se, že jste nastavili [[en/Archive/Manual/Settings/Server bind ip]].
-*Pokuď máte pc za routerem, musíš na sebe nasměrovat přislušný port, který používá OpenTTD (3979) [[en/Archive/Manual/Settings/Server port]] ( TCP a UDP)
+Method 2:
+*On the start menu click Run
+*Enter: {{en/C|"c:\(path to openttd)\openttd.exe" -D|}}
+*Click OK
 
-==Kontrolování serveru přes rcon (Vzdálený admin)==
+===In Linux===
+*Run {{en/C|openttd -D|}} in a terminal. If you are connecting to the server via SSH and would like the game to run when you logout you should use [http://www.gnu.org/software/screen/ GNU Screen] or [http://dtach.sourceforge.net/ dtach].
+
+You can also start openttd with -f option. It means that the process will run in the background, but no console will be avaible. All output will be sent to the file openttd.log. You can display the log with tail : tail -f openttd.log to follow events.
+
+===In OS/2===
+*Run the {{en/C|dedicated.cmd|}} file. If you run {{en/C|openttd -D|}}, you will not see a console window and will be unable to provide commands to the program.
+
+===In Mac OS X===
+*Open Terminal.
+*cd into the directory with OpenTTD
+*type cd OpenTTD.app/Contents/MacOS/
+*type ./openttd -D
+*OpenTTD should start up in Dedicated Server.
+
+==Configuring the server==
+There are 3 ways to change the game options:
+*Launch a single player game, change the settings, and close the game.
+*Use the [[en/Manual/Console#server-commands|console commands]] to control the server while it is running.
+*Edit the [[en/Archive/Manual/Settings/Openttd.cfg]] file manually. See [[en/Archive/Manual/Settings/Diff custom]] for some help.
+Available Tools: [http://www.tt-forums.net/viewtopic.php?f=29&t=33967 Web Interface]
+
+
+Change the network settings in the Network section of [[en/Archive/Manual/Settings/Openttd.cfg]]:
+*Set [[en/Archive/Manual/Settings/Lan internet]] to 0.
+*Change [[en/Archive/Manual/Settings/Server name]] so you can identify the server, 
+*Set [[en/Archive/Manual/Settings/Server advertise]] to true, so it will be visible on the [[en/Server list]]
+*If you have multiple network interfaces make sure you set [[en/Archive/Manual/Settings/Server bind ip]].
+*If you are behind a router, make sure that you forward the port specified by [[en/Archive/Manual/Settings/Server port]] (both TCP and UDP)
+
+==Controlling the server with rcon==
 Configure the dedicated server to accept [[en/Manual/Console#server-commands|rcon]] commands:
-*Ve věnovaném serveru napiš {{en/C|rcon_pw <password>|}}. 
-:Příklad: {{en/C|rcon_pw 12345|}}
+*In the dedicated server window, type {{en/C|rcon_pw <password>|}}. 
+:Example: {{en/C|rcon_pw x8na7f|}}
 
 
-Připojení na server jako klient:
-*Normálně spust OpenTTD.
-*Najdi svůj server ve vyhledávačí a připoj se na něj.
-*Otevří konzoli (~ klávesa).
-*Napiš {{en/C|rcon <password> "<command>"|}}. 
-:Příklad: {{en/C|rcon 12345 "kick 5"|}}
+Connect to the server as a client:
+*Launch OpenTTD normally.
+*Find your server on the multiplayer list and connect to it.
+*Open the console (~ key).
+*Type {{en/C|rcon <password> "<command>"|}}. 
+:Example: {{en/C|rcon x8na7f "kick 5"|}}
 
-==Nahrávání hry==
-*Zároveň můžeš nahrávat na server uložené hry a scénáře {{en/C|-g "<názevsouboru>"|}}, Nastavení parametru
-:Příklad: {{en/C|openttd.exe -D -g "scenario/echo.scn"|}}.
+==Loading a game==
+In the dedicated server window (or with rcon):
+*Type {{en/C|ls|}} to list the files of the current directory, a number will be beside each one, which represents {{en/C|<number>|}} below.
+*Type {{en/C|cd <number>|}} to go to that directory.
+*Type {{en/C|load <number>|}} to load that file.
 
-==Jedna věc (NEpoužívat!)==
-*[[en/Archive/Manual/Settings/Autoclean companies|Autoclean companies]]   Pro upřesnění, co se stane, když se hráč odhlásí v průběhu hry, a společnost se stane neaktivní
+*You can also load savegames and scenarios with the {{en/C|-g "<filename>"|}}, command line option. 
+:Example: {{en/C|openttd.exe -D -g "scenario/echo.scn"|}}.
 
-[[en/Kategorie/Více Hráčů]]
-[[en/Kategorie/Tutorial]]
+==See also==
+*[[en/Archive/Manual/Settings/Autoclean companies|Autoclean companies]]   in order to specify what happens when a player logs off during a game and a company becomes inactive
+
+[[Category:en/Manual/Multiplayer]]
+[[Category:en/Manual/Tutorial]]
