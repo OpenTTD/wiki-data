@@ -155,6 +155,7 @@ enum SomeEnumeration {
 * Opening curly bracket '''{''' stays on the first line, closing curly bracket '''}''' gets a line to itself (except for the '''}''' preceding an '''else''', which should be on the same line as the '''else''').
 * When only a single statement is contained, the brackets can be omitted. In this case, put the single statement on the same line as the preceding keyword ('''if''', '''while''', etc.). Note that this is only allowed for if statements without an '''else''' clause.
 * All fall throughs must be documented, using a FALL THROUGH comment.
+* The NOT_REACHED() macro can be used in default constructs that should never be reached.
 * Unconditional loops are written with '''for (;;) {'''
 
 <pre>
@@ -196,6 +197,9 @@ switch (a) {
 		DoIt();
 		break;
 	}
+
+	default:
+		NOT_REACHED();
 }
 
 for (int i = 0; i < 10; i++) {
