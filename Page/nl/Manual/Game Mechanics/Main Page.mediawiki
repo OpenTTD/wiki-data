@@ -6,7 +6,7 @@ Here you can find information about how OpenTTD calculates in-game figures.
 
 You always wanted to know how the station-rating was built up? How goods-distribution works? Here you can find it!
 
-==Company rating==
+==Bedrijfsrangorde==
 
 Each part of the company rating is a linear function, ie. earning 50% of the target for a component will give 50% of the points allocated for that component. Where components involve monetary amounts, these are converted to the currency of the current game; internally these amounts are stored as the pound amount.
 
@@ -137,14 +137,14 @@ Every 2.5 days station ratings are computed; ratings can't change by more than 2
 
 '''Note:'''  The exact formula can be seen under "[http://vcs.openttd.org/svn/browser/trunk/src/station_cmd.cpp#L2983 UpdateStationRating()]" in station_cmd.cpp.
 
-==Cargo delivery to stations==
+==Vrachtlevering aan stations==
 During each cycle of 2.5 days for each cargo type of the delivering industry a maximum of 2 stations can get cargo assigned. If there are more than 2 possible stations with the same maximum rating value for the current cargo type then it depends on internal ordering of the stations which ones get the cargo.
 
 If there's only one possible station then the delivered amount is: produced_amount * station_rating_in_percent, rounded up to the next integer value.
 
 For two possible stations the calculation is more complex. First the rating in points of station 2 is divided by 2 for the further local calculations. The amount available to station 1 is calculated as follows: (station_rating_in_points1 * (amount + 1)) / (station_rating_in_points1 + station_rating_in_points2); for similar ratings this is about 2/3 of the production, it increases for larger differences. The result is subject to the same calculation as in the single station case. This is delivered to station 1. If station 1 doesn't get the full amount available to it then that part won't be transported at all. The remaining amount of the production, if any, is subject to the same calculation as in the single station case and delivered to station 2.
 
-==Local authority rating==
+==Lokale overheid rangorde==
 Ratings limit some player actions; they start at +500 and can change based on some actions.
 
 Currently you can exploit the game by clearing ~200 trees and then replanting them.  This sets the rating to -1000 (the minimum), and then raises it to 220.
@@ -210,7 +210,7 @@ A player has a rating of -300, (Very Poor), 2 active stations and 1 unactive sta
 
 Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
 
-==Industry production==
+==Industrie productie==
 Here is how the game determines how much cargo an industry produces per month.  This table lists possible starting productions governed by the  [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|smooth economy]] patch.  Production is a multiple of 8 or 9 (sometimes 10 with forests).
 
 {| {{en/Wikitable}}
@@ -268,7 +268,7 @@ Here is how the game determines how much cargo an industry produces per month.  
 |Sugar Mine||Sugar||40 to 128
 |}
 
-===Production change===
+===Productie wijziging===
 Each month the game randomly changes some industry productions.
 ====Default / TTD-like Economy Rules====
 For 256x256 tile maps there is one change per month possible (only 1 industry changes). Number scales nicely with map size since the introduction of "Daily production changes" function in trunk (r14332). 
@@ -301,7 +301,7 @@ To make things simple, let's look what are the chances for 256x256 maps (max. 1 
 ** Poor service: '''5.56%''' that 1 possible change per month is an increase and '''11.12%''' that 1 possible change per month is a decrease.
 ** Good service: '''11.12%''' that 1 possible change per month is an increase and '''5.56%''' that 1 possible change per month is a decrease.
 
-====Smooth Economy Rules====
+====Geleidelijke economie regels====
 :''Distinguish [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|Smooth economy]] (advanced setting) and [[en/Archive/Manual/Settings/Difficulty|Steady economy]] (difficulty setting)''
 
 *The chance for a production change each month is '''4.5%''', i.e. 4.5% of producing industries from industry list change production.
@@ -323,7 +323,7 @@ To make things simple, let's look what are the chances for 256x256 maps (max. 1 
 **Industries with with very low productions, (ie. 12-40 tonnes per month) will have higher changes.
 **Primary industries produce cargo 8 or 9 times (10 times possible for forests) a month. Monthly production is an industries 'base value' multiplied times 8 or 9 (or 10 for higher productions forests).  For example, the base value for a coal mine is 15 tons, so the monthly production is 120 or 135 tons. This base value is capped at 255, so the maximum possible monthly production for any industry is 2040 or 2295 (or 2550 - again - forest).[http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
 
-====Examples====
+====Voorbeelden====
 If a coal mine has 70% of its output transported, there is a '''3%''' chance (4.5% * 67%) of a production increase from 3-23% and a '''1.5%''' chance (4.5% * 33%) of a production decrease from 3-23% (but 13% on average).
 
 (1 + (0.03 - 0.015) * 0.13) ^12 - 1 = 0.0237 or '''2.37%'''
@@ -351,7 +351,7 @@ For more responsiveness from industries, adapt the number of wagons to industry 
 
 '''Note:'''  The exact formula can be seen under "[http://vcs.openttd.org/svn/browser/trunk/src/industry_cmd.cpp#L2373 ChangeIndustryProduction()]" in industry_cmd.cpp.
 
-==Afleverbetalingsratio==
+==Afleverbetalings rangorde==
 The amount you get paid for delivering cargo is based on 4 factors: the amount of cargo you deliver, the value of the cargo, the distance you deliver it, and how on-time you deliver it.
 
 {| {{en/Wikitable}}
@@ -463,13 +463,13 @@ A tile is, for vehicle speed purposes 664.|216| km-ish, 668 km or 415 miles long
 Now assume a vehicle going 1 km-ish/hour: (1 * 16 * 256) / (74 * 2) * 24 = 664.|216|.
 
 
-==== Aircraft ====
+==== Vliegtuigen ====
 *By default aircraft fly at a quarter of their listed speed (this can be changed in advanced settings).
 *Aircraft acceleration varies per aircraft, between 144 km-ish/h/day and 400 km-ish/h/day.
 *Broken down planes fly at 320 km-ish/h.
 *Airport taxi speed is 150 km-ish/h.
 
-==== Road Vehicles ====
+==== Wegvoertuigen ====
 *Road vehicles accelerate at 37 km-ish/h/day.
 *Road vehicles go around corners at half their max speed.
 *Road vehicles accelerate an additional 74 km-ish/h/day downhill.
@@ -477,7 +477,7 @@ Now assume a vehicle going 1 km-ish/hour: (1 * 16 * 256) / (74 * 2) * 24 = 664.|
 
 (Note: This does not apply when using the improved road vehicle acceleration model.)
 
-==== Ships ====
+==== Schepen ====
 *Ships accelerate at 37 km-ish/h/day.
 *A "stopped" ship resumes its last speed instantly.
 
@@ -597,7 +597,7 @@ Now assume a vehicle going 1 km-ish/hour: (1 * 16 * 256) / (74 * 2) * 24 = 664.|
 *Speed limits only apply when all of the turns occur within the length of the train:
 [[File:en/Manual/Game Mechanics/Speed-limits.png]]
 
-''See also: [[en/Archive/Manual/Settings/Realistic acceleration]] and [[en/Community/Corners]].''
+''Zie ook: [[nl/Archive/Manual/Settings/Realistische acceleratie|Realistische acceleratie]] en [[nl/Community/Bochten|Bochten]].''
 
 See aircraft_cmd.c, roadveh_cmd.c, ship_cmd.c, train_cmd.c, vechicle.c for code.
 
