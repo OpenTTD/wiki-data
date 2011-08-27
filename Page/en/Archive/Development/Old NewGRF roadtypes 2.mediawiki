@@ -93,7 +93,7 @@ Note: This feature is not currently available in Openttd.
 
 In NFO, road type IDs will be GRF local, with an ID to label mapping. Therefore to modify an existing road type, specify its label in property 08. To create a new road type, again just specify its label in property 08. This way there is no need for complex GRM mechanisms to allocate IDs. If a label 'clashes' with another GRF, then one GRF will end up modifying the properties instead of creating a new road type.
 
-When a new road type is created, it is populated with the information from the first road type, except that the compatible and powered list contain only the rail type being created. However, no default values should be assumed, as the first road type may have been modified.
+When a new road type is created, it is populated with the information from the first road type, except that the compatible and powered list contain only the road type being created. However, no default values should be assumed, as the first road type may have been modified.
 
 ''' Comments '''
 
@@ -104,7 +104,7 @@ These are globally unique four-letter identifiers for specific road types (analo
 {| class="wikitable
 |-
 !'''Label'''
-!'''Rail Type'''
+!'''road Type'''
 |-
 |ROAD 
 | Normal Road
@@ -143,7 +143,7 @@ String ID for road type shown in autoreplace window.
 
 StringID to use for showing texts of the type "We have invented a new &lt;road type&gt; vehicle".
 
-''' Compatible rail type list (0E) '''
+''' Compatible road type list (0E) '''
 
 List of road types on which vehicles of this road type can run.
 
@@ -151,7 +151,7 @@ The format is:
 
 <pre>0E &lt;nvar&gt; (&lt;road type label&gt;){n}</pre>
 
-That is you give the number of compatible rail types in a single byte followed by a list of that length of road type labels. A road type is automatically compatible (and powered) with itself, so you don't need to list the current road type.
+That is you give the number of compatible road types in a single byte followed by a list of that length of road type labels. A road type is automatically compatible (and powered) with itself, so you don't need to list the current road type.
 
 Note that these properties apply to vehicles of this road type, not the road itself. If you want vehicles of other road types to be able to run on your road types, you must set the compatible road types property for each road type. Setting these properties behaves always incremental, so you only need to the set additional bits for each other road type, you cannot remove compatibility/poweredness once it is set (by some other grf).
 
@@ -163,7 +163,7 @@ Same format as for property 0E above.
 
 ''' Road type flags (10) '''
 
-Flags to define properties related to the rail type:
+Flags to define properties related to the road type:
 
 {| class="wikitable"
 |-
@@ -173,12 +173,12 @@ Flags to define properties related to the rail type:
 |-
 |0
 |1
-|Draw catenary for this rail
+|Draw catenary for this road
 |-
 
 ''' Curve Speed advantage multiplier (11) '''
 
-This property sets the multiplier to the curve speed advantage which all trains running on this track type get. The base curve speed advantage is given by the multiplication of the value of this property with the base speed advantage - which depends on the curve length in wagons:
+This property sets the multiplier to the curve speed advantage which all vehicles running on this track type get. The base curve speed advantage is given by the multiplication of the value of this property with the base speed advantage - which depends on the curve length in wagons:
 
 {| class="wikitable"
 |-
@@ -225,15 +225,15 @@ This property sets the multiplier to the curve speed advantage which all trains 
 | 115
 |}
 
-"Curve length" is the average number of wagons of the train between turns. However, very sharp turns (values 0 and 1) are not averaged out in longer trains.
+"Curve length" is the average number of wagons of the vehicle between turns. However, very sharp turns (values 0 and 1) are not averaged out in longer vehicles.
 
-The maximum speed for a train in a curve is defined by "base speed advantage" * (2 + "property 11"). Tilting trains get an additional bonus of 20% to this value.
+The maximum speed for a vehicle in a curve is defined by "base speed advantage" * (2 + "property 11"). Tilting vehicles get an additional bonus of 20% to this value.
 
-For the default rail types this property is 0 for normal rail and electrified rail, 1 for monorail, and 2 for maglev.
+For the default road types this property is 0 for normal road and electrified road, 1 for monoroad, and 2 for maglev.
 
 ''' Station (and depot) graphics (12) '''
 
-This property defines the default graphics for the stations. If no depot sprites are defined, this also defines at the same time the depot sprites to be used. There are three kind of default stations (and depots), usually associated with rail, monorail and maglev tracks. Valid values are:
+This property defines the default graphics for the stations. If no depot sprites are defined, this also defines at the same time the depot sprites to be used. There are three kind of default stations (and depots), usually associated with road, monoroad and maglev tracks. Valid values are:
 
 {| class="wikitable"
 |-
@@ -241,10 +241,10 @@ This property defines the default graphics for the stations. If no depot sprites
 !'''Meaning'''
 |-
 |0
-|Normal Rail
+|Normal road
 |-
 |1
-|Monorail
+|Monoroad
 |-
 |2
 |Maglev
@@ -264,16 +264,16 @@ This property defines the acceleration model used. Valid values range from 0 to 
 !'''Meaning'''
 |-
 |0
-|Normal Rail
+|Normal road
 |-
 |1
-|Monorail
+|Monoroad
 |-
 |2
 |Maglev
 |}
 
-There is currently no difference between normal rail and monorail.
+There is currently no difference between normal road and monoroad.
 
 ''' Map colour (16) '''
 
@@ -281,25 +281,25 @@ This property defines the colour this track type is drawn in the minimap view. T
 
 ''' Introduction date (17) '''
 
-This property defines the long date formatted introduction date of this rail type. With this property set the rail type will be introduced at (or after) this date when all of the introduction required rail types are available to the company of the player, or whenever a vehicle using this rail type gets introduced whichever is first.
+This property defines the long date formatted introduction date of this road type. With this property set the road type will be introduced at (or after) this date when all of the introduction required road types are available to the company of the player, or whenever a vehicle using this road type gets introduced whichever is first.
 
-''' Introduction required rail type list (18) '''
+''' Introduction required road type list (18) '''
 
-List of rail types on that need to be available to the company of the player for this rail type to be introduced at (or after) the introduction date. This limit does not apply when the rail type is introduced by the introduction of a vehicle.
+List of road types on that need to be available to the company of the player for this road type to be introduced at (or after) the introduction date. This limit does not apply when the road type is introduced by the introduction of a vehicle.
 
 Same format as for property 0E above.
 
-This can, for example, be used to introduce a third rail with catenary track type when both third rail and catenary rail types are available.
+This can, for example, be used to introduce a third road with catenary track type when both third road and catenary road types are available.
 
-''' Introduced rail type list (19) '''
+''' Introduced road type list (19) '''
 
-List of rail types that get introduced when this rail type is introduced. For example, to make sure that when a fast rail type is introduced the slow variant exists.
+List of road types that get introduced when this road type is introduced. For example, to make sure that when a fast road type is introduced the slow variant exists.
 
 Same format as for property 0E above.
 
 ''' Sort order (1A) '''
 
-Property for influencing the sort order of the drop down lists with rail types. Default values are as follows:
+Property for influencing the sort order of the drop down lists with road types. Default values are as follows:
 
 {| class="wikitable"
 |-
@@ -307,27 +307,27 @@ Property for influencing the sort order of the drop down lists with rail types. 
 !'''Meaning'''
 |-
 |07
-|Normal Rail
+|Normal road
 |-
 |17
-|Electrified Rail
+|Electrified road
 |-
 |27
-|Monorail
+|Monoroad
 |-
 |37
 |Maglev
 |-
 |n7
-|Railtype #n
+|roadtype #n
 |}
 
-Thus the rail type that (internally) gets index 8 will get a default value of 87. These defaults are to keep the ordering when this property is not supported as they were.
+Thus the road type that (internally) gets index 8 will get a default value of 87. These defaults are to keep the ordering when this property is not supported as they were.
 
 
 == Action 3 Cargo Types ==
 
-Roadtypes are currently unavailable in OpenTTD. As with railtypes, its action 3 will re-use the 'cargo'-type definition in order to assign the type of graphics defined by the associated set-ID:
+Roadtypes are currently unavailable in OpenTTD. As with roadtypes, its action 3 will re-use the 'cargo'-type definition in order to assign the type of graphics defined by the associated set-ID:
 
 {| class="wikitable"
 |-
