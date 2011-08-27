@@ -25,3 +25,14 @@ This approach doesn't increase memory usage in an extreme way. Only tiles that a
 * This allows bridges and tunnels to actually be useful constructs
 ** Signals can be built because they are actual tiles instead of faked 'scenery'
 * This facilitates building underground in other ways (having underground subways, having underground tracks for a station, etc.)
+
+== Details ==
+
+* Store an extra layer 'pool', this is a construct that is abstracted behind a class with public functions to gather information from it
+** The pool can be kept using linked lists, or a dynamic array, etc.
+** Need a fast function to index the tiles by tile location (x,y)
+* Tile processing loop processes normal map array normally, then runs on a list of tiles in the extra pools, just as if it was a normal map array
+* Drawing loop draws underground pool first, then normal map array, then above ground pool
+** Layers can be disabled same as any other transparency
+** Underground can be viewed alone by just drawing the underground tile pool
+* Tunnel and bridge entrances/exits get changed from wormhole entrances to triggers signalling a vehicle should be switched to being on another tile pool (underground for tunnels, aboveground for bridge)
