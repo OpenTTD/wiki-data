@@ -1,119 +1,95 @@
-== NewGRF Road Types Specification ==
+= NewGRF Road Types Specification =
 
-'''Action 0 properties for rail types'''
-
-= Action 0 - Properties for rail types =
+== Action 0 - Properties for rail types ==
 
 Defining properties of rail types.
 
 Note: This feature is only available in OpenTTD &gt; r18969
 
-== Properties ==
+''' Properties '''
 
 {| class="wikitable"
 |-
 !'''Number'''
-!'''Version'''
 !'''Size'''
 !'''Description'''
 |-
 |08
-|{{en/Ottdp|1.0}}
 |4*B
 |Rail type label
 |-
 |09
-|{{en/Ottdp|1.0}}
 |W
 |StringID: Build rail toolbar caption
 |-
 |0A
-|{{en/Ottdp|1.0}}
 |W
 |StringID: Rail construction dropdown text
 |-
 |0B
-|{{en/Ottdp|1.0}}
 |W
 |StringID: Build vehicle window caption
 |-
 |0C
-|{{en/Ottdp|1.0}}
 |W
 |StringID: Autoreplace text
 |-
 |0D
-|{{en/Ottdp|1.0}}
 |W
 |StringID: New engine text
 |-
 |0E
-|{{en/Ottdp|1.0}}
 |B n*D 
 |Compatible rail type list
 |-
 |0F
-|{{en/Ottdp|1.0}}
 |B n*D 
 |Powered rail type list
 |-
 |10
-|{{en/Ottdp|1.0}}
 |B
 |Rail type flags
 |-
 |11
-|{{en/Ottdp|1.0}}
 |B
 |Curve speed advantage multiplier
 |-
 |12
-|{{en/Ottdp|1.0}}
 |B
 |Station (and depot) graphics
 |-
 |13
-|{{en/Ottdp|1.0}}
-|W <ref>In r18969 to 19306 this property was byte-sized.</ref>
+|W 
 |Construction costs
 |-
 |14
-|{{en/Ottdp|1.0}}
 |W
 |Speed limit
 |-
 |15
-|{{en/Ottdp|1.0}}
 |B
 |Acceleration model
 |-
 |16
-|{{en/Ottdp|1.0|no|ottdrev=r19307}}
 |B
 |Minimap colour
 |-
 |17
-|{{en/Ottdp|1.1|no|ottdrev=r21842}}
 |D
 |Introduction date
 |-
 |18
-|{{en/Ottdp|1.1|no|ottdrev=r21842}}
 |B n*D 
 |Introduction required rail type list
 |-
 |19
-|{{en/Ottdp|1.1|no|ottdrev=r21841}}
 |B n*D 
 |Introduced rail type list
 |-
 |1A
-|{{en/Ottdp|1.1|no|ottdrev=r21866}}
 |B
 |Sort order
 |}
-
-<references />
 
 In NFO, rail type IDs will be GRF local, with an ID to label mapping. Therefore to modify an existing rail type, specify its label in property 08. To create a new rail type, again just specify its label in property 08. This way there is no need for complex GRM mechanisms to allocate IDs. If a label 'clashes' with another GRF, then one GRF will end up modifying the properties instead of creating a new rail type.
 
@@ -147,33 +123,33 @@ Rail type sets may use up to 16 railtypes and have to specify their own [[en/Rai
 
 See also [[en/Action0GeneralVariables#rail-type-translation-table-12|Rail Type Translation Table]] for further info.
 
-== Build rail toolbar caption (09) ==
+''' Build rail toolbar caption (09) '''
 
 String ID of the name of the rail type as shown in the toolbar caption.
 
 OpenTTD before r20342 and 1.0.3 require the string to start with the white control code. Later versions of OpenTTD will automatically default to white.
 
-== Rail construction dropdown text (0A) ==
+''' Rail construction dropdown text (0A) '''
 
 String ID for text in the dropdown of all rail types.
 
 This string must never start with a colour control code.
 
-== Build vehicle window caption (0B) ==
+''' Build vehicle window caption (0B) '''
 
 String ID for build vehicle window caption.
 
 OpenTTD before r20342 and 1.0.3 require the string to start with the white control code. Later versions of OpenTTD will automatically default to white.
 
-== Autoreplace text (0C) ==
+''' Autoreplace text (0C) '''
 
 String ID for rail type shown in autoreplace window.
 
-== New engines (0D) ==
+''' New engines (0D) '''
 
 StringID to use for showing texts of the type "We have invented a new &lt;rail type&gt; engine".
 
-== Compatible rail type list (0E) ==
+''' Compatible rail type list (0E) '''
 
 List of rail types on which trains of this rail type can run, even though they might not be powered. E.g. wagons/engines of "eletrified rail"-type are also compatible to "normal rail" and "third rail" type, but they are not powered (there need to be an other powered engine in the consist to move the train).
 
@@ -185,13 +161,13 @@ That is you give the number of compatible rail types in a single byte followed b
 
 Note that these properties apply to trains of this rail type, not the track. If you want trains of other rail types to be able to run on your rail types, you must set the compatible rail types property for each rail type. Setting these properties behaves always incremental, so you only need to the set additional bits for each other rail type, you cannot remove compatibility/poweredness once it is set (by some other grf).
 
-== Powered rail type list (0F) ==
+''' Powered rail type list (0F) '''
 
 List of rail types on which trains of this rail type are powered. E.g. engines of "normal rail"-type are powered on "electrified rail"- and "third-rail"-type as well.
 
 Same format as for property 0E above.
 
-== Rail type flags (10) ==
+''' Rail type flags (10) '''
 
 Flags to define properties related to the rail type:
 
@@ -199,21 +175,18 @@ Flags to define properties related to the rail type:
 |-
 !'''Bit'''
 !'''Value'''
-!'''Version'''
 !'''Meaning'''
 |-
 |0
 |1
-||{{en/Ottdp|1.0}}
 |Draw catenary for this rail
 |-
 |1
 |2
-||{{en/Ottdp|1.1|no|ottdrev=r20049}}
 |Disallow level crossings for this rail
 |}
 
-== Curve Speed advantage multiplier (11) ==
+''' Curve Speed advantage multiplier (11) '''
 
 This property sets the multiplier to the curve speed advantage which all trains running on this track type get. The base curve speed advantage is given by the multiplication of the value of this property with the base speed advantage - which depends on the curve length in wagons:
 
@@ -268,7 +241,7 @@ The maximum speed for a train in a curve is defined by "base speed advantage" * 
 
 For the default rail types this property is 0 for normal rail and electrified rail, 1 for monorail, and 2 for maglev.
 
-== Station (and depot) graphics (12) ==
+''' Station (and depot) graphics (12) '''
 
 This property defines the default graphics for the stations. If no depot sprites are defined, this also defines at the same time the depot sprites to be used. There are three kind of default stations (and depots), usually associated with rail, monorail and maglev tracks. Valid values are:
 
@@ -287,11 +260,11 @@ This property defines the default graphics for the stations. If no depot sprites
 |Maglev
 |}
 
-== Speed limit (14) ==
+''' Speed limit (14) '''
 
 Speed limit in mph*1.6 (approx. km/h). Set to "0" for no limit at all.
 
-== Acceleration model (15) ==
+''' Acceleration model (15) '''
 
 This property defines the acceleration model used. Valid values range from 0 to 2:
 
@@ -312,15 +285,15 @@ This property defines the acceleration model used. Valid values range from 0 to 
 
 There is currently no difference between normal rail and monorail.
 
-== Map colour (16) ==
+''' Map colour (16) '''
 
 This property defines the colour this track type is drawn in the minimap view. The byte value specifies the colour entry in the [[en/PalettesAndCoordinates|DOS palette]].
 
-== Introduction date (17) ==
+''' Introduction date (17) '''
 
 This property defines the long date formatted introduction date of this rail type. With this property set the rail type will be introduced at (or after) this date when all of the introduction required rail types are available to the company of the player, or whenever a vehicle using this rail type gets introduced whichever is first.
 
-== Introduction required rail type list (18) ==
+''' Introduction required rail type list (18) '''
 
 List of rail types on that need to be available to the company of the player for this rail type to be introduced at (or after) the introduction date. This limit does not apply when the rail type is introduced by the introduction of a vehicle.
 
@@ -328,13 +301,13 @@ Same format as for property 0E above.
 
 This can, for example, be used to introduce a third rail with catenary track type when both third rail and catenary rail types are available.
 
-== Introduced rail type list (19) ==
+''' Introduced rail type list (19) '''
 
 List of rail types that get introduced when this rail type is introduced. For example, to make sure that when a fast rail type is introduced the slow variant exists.
 
 Same format as for property 0E above.
 
-== Sort order (1A) ==
+''' Sort order (1A) '''
 
 Property for influencing the sort order of the drop down lists with rail types. Default values are as follows:
 
@@ -361,11 +334,8 @@ Property for influencing the sort order of the drop down lists with rail types. 
 
 Thus the rail type that (internally) gets index 8 will get a default value of 87. These defaults are to keep the ordering when this property is not supported as they were.
 
-= Example =
 
-To be written
-
-'''Action 3 Cargo Types'''
+== Action 3 Cargo Types ==
 
 Roadtypes are currently unavailable in OpenTTD. As with railtypes, its action 3 will re-use the 'cargo'-type definition in order to assign the type of graphics defined by the associated set-ID:
 
