@@ -1,10 +1,10 @@
 = NewGRF Road Types Specification =
 
-== Action 0 - Properties for rail types ==
+== Action 0 - Properties for road types ==
 
-Defining properties of rail types.
+Defining properties of road types.
 
-Note: This feature is only available in OpenTTD &gt; r18969
+Note: This feature is not currently available in Openttd.
 
 ''' Properties '''
 
@@ -16,15 +16,15 @@ Note: This feature is only available in OpenTTD &gt; r18969
 |-
 |08
 |4*B
-|Rail type label
+|Road type label
 |-
 |09
 |W
-|StringID: Build rail toolbar caption
+|StringID: Build road toolbar caption
 |-
 |0A
 |W
-|StringID: Rail construction dropdown text
+|StringID: Road construction dropdown text
 |-
 |0B
 |W
@@ -36,19 +36,19 @@ Note: This feature is only available in OpenTTD &gt; r18969
 |-
 |0D
 |W
-|StringID: New engine text
+|StringID: New vehicle text
 |-
 |0E
 |B n*D 
-|Compatible rail type list
+|Compatible road/tramway type list
 |-
 |0F
 |B n*D 
-|Powered rail type list
+|Powered road/tramway type list
 |-
 |10
 |B
-|Rail type flags
+|Road type flags
 |-
 |11
 |B
@@ -80,58 +80,52 @@ Note: This feature is only available in OpenTTD &gt; r18969
 |-
 |18
 |B n*D 
-|Introduction required rail type list
+|Introduction required road/tramway type list
 |-
 |19
 |B n*D 
-|Introduced rail type list
+|Introduced road type list
 |-
 |1A
 |B
 |Sort order
 |}
 
-In NFO, rail type IDs will be GRF local, with an ID to label mapping. Therefore to modify an existing rail type, specify its label in property 08. To create a new rail type, again just specify its label in property 08. This way there is no need for complex GRM mechanisms to allocate IDs. If a label 'clashes' with another GRF, then one GRF will end up modifying the properties instead of creating a new rail type.
+In NFO, road type IDs will be GRF local, with an ID to label mapping. Therefore to modify an existing road type, specify its label in property 08. To create a new road type, again just specify its label in property 08. This way there is no need for complex GRM mechanisms to allocate IDs. If a label 'clashes' with another GRF, then one GRF will end up modifying the properties instead of creating a new road type.
 
-When a new rail type is created, it is populated with the information from the first rail type, except that the compatible and powered list contain only the rail type being created. However, no default values should be assumed, as the first rail type may have been modified.
+When a new road type is created, it is populated with the information from the first road type, except that the compatible and powered list contain only the rail type being created. However, no default values should be assumed, as the first road type may have been modified.
 
-== Comments ==
+''' Comments '''
 
-== Rail type label (08) ==
+''' Road type label (08) '''
 
-These are globally unique four-letter identifiers for specific rail types (analoguous to [[en/Action0Cargos#cargo-label-17|cargo labels]]), used to make various rail types accessible from train vehicle grfs. Reserved labels for default rail types are:
+These are globally unique four-letter identifiers for specific road types (analoguous to [[en/Action0Cargos#cargo-label-17|cargo labels]]), used to make various road types accessible from road vehicle grfs. Reserved labels for default road types are:
 
 {| class="wikitable
 |-
 !'''Label'''
 !'''Rail Type'''
 |-
-|RAIL 
-| Normal Rail
+|ROAD 
+| Normal Road
 |-
-|ELRL 
-| Electrified Rail
+|TRAM 
+| Electrified Tramway
 |-
-|MONO 
-| Mono Rail
-|-
-|MGLV 
-| Maglev Rail
-|}
 
-Rail type sets may use up to 16 railtypes and have to specify their own [[en/RailtypeLabels|labels]].
+Road type sets may use up to 16 roadtypes and have to specify their own [[en/RoadtypeLabels|labels]].
 
-See also [[en/Action0GeneralVariables#rail-type-translation-table-12|Rail Type Translation Table]] for further info.
+See also [[en/Action0GeneralVariables#road-type-translation-table-12|Road Type Translation Table]] for further info.
 
-''' Build rail toolbar caption (09) '''
+''' Build road toolbar caption (09) '''
 
-String ID of the name of the rail type as shown in the toolbar caption.
+String ID of the name of the road type as shown in the toolbar caption.
 
 OpenTTD before r20342 and 1.0.3 require the string to start with the white control code. Later versions of OpenTTD will automatically default to white.
 
-''' Rail construction dropdown text (0A) '''
+''' Road construction dropdown text (0A) '''
 
-String ID for text in the dropdown of all rail types.
+String ID for text in the dropdown of all road types.
 
 This string must never start with a colour control code.
 
@@ -143,31 +137,31 @@ OpenTTD before r20342 and 1.0.3 require the string to start with the white contr
 
 ''' Autoreplace text (0C) '''
 
-String ID for rail type shown in autoreplace window.
+String ID for road type shown in autoreplace window.
 
-''' New engines (0D) '''
+''' New vehicles (0D) '''
 
-StringID to use for showing texts of the type "We have invented a new &lt;rail type&gt; engine".
+StringID to use for showing texts of the type "We have invented a new &lt;road type&gt; vehicle".
 
 ''' Compatible rail type list (0E) '''
 
-List of rail types on which trains of this rail type can run, even though they might not be powered. E.g. wagons/engines of "eletrified rail"-type are also compatible to "normal rail" and "third rail" type, but they are not powered (there need to be an other powered engine in the consist to move the train).
+List of road types on which vehicles of this road type can run.
 
 The format is:
 
-<pre>0E &lt;nvar&gt; (&lt;rail type label&gt;){n}</pre>
+<pre>0E &lt;nvar&gt; (&lt;road type label&gt;){n}</pre>
 
-That is you give the number of compatible rail types in a single byte followed by a list of that length of rail type labels. A rail type is automatically compatible (and powered) with itself, so you don't need to list the current rail type.
+That is you give the number of compatible rail types in a single byte followed by a list of that length of road type labels. A road type is automatically compatible (and powered) with itself, so you don't need to list the current road type.
 
-Note that these properties apply to trains of this rail type, not the track. If you want trains of other rail types to be able to run on your rail types, you must set the compatible rail types property for each rail type. Setting these properties behaves always incremental, so you only need to the set additional bits for each other rail type, you cannot remove compatibility/poweredness once it is set (by some other grf).
+Note that these properties apply to vehicles of this road type, not the road itself. If you want vehicles of other road types to be able to run on your road types, you must set the compatible road types property for each road type. Setting these properties behaves always incremental, so you only need to the set additional bits for each other road type, you cannot remove compatibility/poweredness once it is set (by some other grf).
 
-''' Powered rail type list (0F) '''
+''' Powered road type list (0F) '''
 
-List of rail types on which trains of this rail type are powered. E.g. engines of "normal rail"-type are powered on "electrified rail"- and "third-rail"-type as well.
+List of road types on which vehicles of this road type are powered. E.g. vehicles of "normal tramway"-type are powered on "electrified tramway"-type as well.
 
 Same format as for property 0E above.
 
-''' Rail type flags (10) '''
+''' Road type flags (10) '''
 
 Flags to define properties related to the rail type:
 
@@ -181,10 +175,6 @@ Flags to define properties related to the rail type:
 |1
 |Draw catenary for this rail
 |-
-|1
-|2
-|Disallow level crossings for this rail
-|}
 
 ''' Curve Speed advantage multiplier (11) '''
 
