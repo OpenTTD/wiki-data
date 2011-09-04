@@ -4,10 +4,9 @@
 
 Hier vind je informatie over hoe OpenTTD de cijfers in het spel berekent.
 
-Wilde je altijd al weten hoe de stationsrangorde tot stand komt? Hoe de goederendistributie werkt? Hier kun je dat vinden!
+Wilde je altijd al weten hoe de stationswaardering tot stand komt? Hoe de goederendistributie werkt? Hier kun je dat vinden!
 
 ==Bedrijfswaardering==
-
 Elk deel van de bedrijfsbeoordeling is een lineaire functie, m.a.w. 50% verdienen van het doel van een component geeft je 50% van de punten die zijn vastgelegd voor die component. Waar componenten een monetair bedrag inhouden, worden deze geconverteerd naar de valuta van het huidige spel; intern worden deze bedragen opgeslagen als het bedrag in ponden.
 
 {| {{en/Wikitable}}
@@ -41,7 +40,7 @@ Elk deel van de bedrijfsbeoordeling is een lineaire functie, m.a.w. 50% verdiene
 |- style="background:#efefef"
 !colspan="2"|Bedrijfscompetitie waarderingstabel
 |- style="background:#efefef"
-!Rangorde!!Titel
+!Waardering!!Titel
 |-
 |0 tot 127||Ingenieur
 |-
@@ -66,7 +65,7 @@ Elk deel van de bedrijfsbeoordeling is een lineaire functie, m.a.w. 50% verdiene
 |- style="background:#efefef"
 !colspan="2"|2050 Hoge score waardering
 |-
-!Rangorde!!Titel
+!Waardering!!Titel
 |-
 |0 tot 319||Zakenman
 |-
@@ -85,11 +84,11 @@ Elk deel van de bedrijfsbeoordeling is een lineaire functie, m.a.w. 50% verdiene
 </td></tr></table>
 
 ==Stationswaardering==
-Deze sectie toont de factoren die effect hebben op de rangorde van een station. Alle berekeningen worden separaat gedaan voor elke vrachtsoort.
+Deze sectie toont de factoren die effect hebben op de waardering van een station. Alle berekeningen worden separaat gedaan voor elke vrachtsoort.
 
 {| {{en/Wikitable}}
 |- style="background:#efefef"
-!Factor!!Conditie!!Waarderingspunten!!Waarderings %
+!Factor!!Conditie!!Waarderingspunten!!Waarderingspercentage
 |-
 | Max snelheid van laatste voertuig dat het station binnenkomt || boven 85 km/h (52 mph)|| (Snelheid (km/h) - 85) / 4 || 0% tot 17%
 |-
@@ -99,7 +98,7 @@ Deze sectie toont de factoren die effect hebben op de rangorde van een station. 
 |-
 | 0 || 33 || 13%
 |-
-|rowspan="4"|Dagen sinds laatste vracht is opgepikt <br> Vermenigvuldig dagen in "condition" kolom met 4 als laatste voertuig een schip was.<br><small>(Opmerking: als een voertuig gereed was op vracht op te pikken, maar er was geen vracht aanwezig, wordt dit toch beschouwd als het oppikken van een vracht.)</small>|| 32,5 to 52,5 || 25 || 10%
+|rowspan="4"|Dagen sinds laatste vracht is opgepikt <br> Vermenigvuldig dagen in "conditie" kolom met 4 als laatste voertuig een schip was.<br><small>(Opmerking: als een voertuig gereed was op vracht op te pikken, maar er was geen vracht aanwezig, wordt dit toch beschouwd als het oppikken van een vracht.)</small>|| 32,5 to 52,5 || 25 || 10%
 |-
 | 17,5 tot 32,5 || 50 || 20%
 |-
@@ -107,7 +106,7 @@ Deze sectie toont de factoren die effect hebben op de rangorde van een station. 
 |-
 | minder dan 10 || 130 || 51%
 |-
-|rowspan="6"|Eenheden vracht die staan te wachten op een station || Meer dan 1.500 || -90 || -35%
+|rowspan="6"|Eenheden vracht die staan te wachten op een station|| Meer dan 1.500 || -90 || -35%
 |-
 | 1.001 tot 1.500 || -35 || -14%
 |-
@@ -131,16 +130,16 @@ Deze sectie toont de factoren die effect hebben op de rangorde van een station. 
 |-
 |Verongelukte trein||Station binnen 30 tegels van het ongeluk ||-160|| -63%
 |}
-Deel het totaal aantal punten door 255 om de percentagerangorde te krijgen. Het maximaal haalbare is 100%. Advertentie campagnes geven een directe, tijdelijke injectie aan de rangorde van nabijgelegen stations. De injectie zal geleidelijk wegvallen in de berekende rangorde.
+Deel het totaal aantal punten door 255 om de percentagewaardering te krijgen. Het maximaal haalbare is 100%. Advertentie campagnes geven een directe, tijdelijke injectie aan de waardering van nabijgelegen stations. De injectie zal geleidelijk wegvallen in de berekende rangorde.
 
-Elke 2,5 dag worden de stationsrangorde berekent; rangordes kunnen veranderen met meer dan 2 punten per cyclus.
+Elke 2,5 dag worden de stationswaardering berekent; waarderingen kunnen veranderen met meer dan 2 punten per cyclus.
 
 '''Merk op:''' De exacte formule kan worden gevonden op "[http://vcs.openttd.org/svn/browser/trunk/src/station_cmd.cpp#L2983 UpdateStationRating()]" in station_cmd.cpp.
 
 ==Vrachtlevering aan stations==
-Gedurende elke cyclus van 2,5 dagen worden voor elke vrachtsoort voor de toeleverende industrie maximaal 2 stations aangewezen als ontvanger van deze vracht. Als er meer dan 2 mogelijke stations zijn met dezelfde rangorde t.o.v. de waarde van de huidige vrachtsoort, dan hangt het af van de interne volgorde van de stations welke de vracht krijgt.
+Gedurende elke cyclus van 2,5 dagen worden voor elke vrachtsoort voor de toeleverende industrie maximaal 2 stations aangewezen als ontvanger van deze vracht. Als er meer dan 2 mogelijke stations zijn met dezelfde waardering t.o.v. de waarde van de huidige vrachtsoort, dan hangt het af van de interne volgorde van de stations welke de vracht krijgt.
 
-Als er slechts een mogelijk station is dan is het totaal aan af te leveren vracht: geproduceerde hoeveelheid * stationsrangorde in procenten, afgerond op hele waarden naar boven.
+Als er slechts een mogelijk station is dan is het totaal aan af te leveren vracht: geproduceerde hoeveelheid * stationswaardering in procenten, afgerond op hele waarden naar boven.
 
 Voor de twee mogelijke stations is de berekening complexer. Eerst wordt de rangorde van station 2 gedeeld door 2 voor verder lokale berekeningen. Het aantal beschikbaar voor station 1 wordt als volgt berekend: ''(stationsrangorde in punten 1 * (hoeveelheid + 1)) / (stationsrangorde in punten 1 + stationsrangorde in punten 2)''; voor gelijksoortige rangorde is dit ongeveer 2/3 van de productie, het wordt groter bij grotere verschillen. Het resultaat is onderwerp van dezelfde berekening als bij een enkel station. Dit is afgeleverd aan station 1. Als station 1 niet de volledige beschikbare hoeveelheid ontvangt, dan wordt dat deel in het geheel niet getransporteerd. De overblijvende hoeveelheid van de productie, als die er is, is onderwerp van dezelfde berekening als bij een enkel station en aflevering aan station 2.
 
