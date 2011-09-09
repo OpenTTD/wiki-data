@@ -1,0 +1,52 @@
+[[Translation:en/Archive/Manual/Yet Another Pathfinder]]
+{{es/Traducción|en/Archive/Manual/Yet Another Pathfinder|0}}
+{{en/Expand|configuration}}
+
+'''Yet Another Pathfinder (YAPF)''' is the latest software algorithm used by [[en/Manual/Main Page]] to control vehicle movement.
+
+YAPF is the third attempt at creating a pathfinder algorithm for OpenTTD. The first new algorithm was [[en/Archive/Manual/Settings/New train pathfinding|New Train Pathfinding (NTP)]], which only works on trains. The second was [[en/Archive/Manual/Settings/New global pathfinding|New global Pathfinding (NPF)]], which works on all vehicles and is quite intelligent, but bogs down the system after many vehicles have been built. The goal of YAPF is to provide the power and flexibility of NPF while at the same time being very optimized, relieving the CPU load.
+
+The remainder of this article is meant for developers.
+
+== Improvements over NPF ==
+
+According to a [http://www.tt-forums.net/viewtopic.php?t=32774 forum post by KUDr], there are 3 major improvements in YAPF compared to NPF:
+
+*NPF creates a node for each tile while YAPF extends the node by following the tile/trackdir until something important (station, waypoint, choice, etc.) is seen. This node extension is called a "segment".
+*YAPF caches its segments - begin/end tile/trackdir, cost, last signal tile/trackdir, etc.
+*YAPF has a much more complex structure - it is template based to allow the compiler to optimize calls between YAPF modules by inlining.
+
+These improvements increase the performance of YAPF over NPF but also make the code more complex and harder to understand.
+
+== Tuning ==
+Several options of YAPF can be tuned up. I will not describe all of them because they are clear what they do.<br>
+There are 4 options (3 actually) that are quite mysterious:<br>
+rail_look_ahead_max_signals = 10<br>
+rail_look_ahead_signal_p0 = 500<br>
+rail_look_ahead_signal_p1 = -100<br>
+rail_look_ahead_signal_p2 = 5<br>
+<br>
+First one checks how many signals YAPF have look ahead of our train. The next options are used to calculate penalty array using following formula, where the parameter "i" is the value of the rail_look_ahead_max_signals :<br>
+p=p0 + p1*i + p2*i*i<br>
+So, we have following array of signal penalties for the specified number in rail_look_ahead_max_signals as result:<br>
+p[]={500,405,320,245,180,125,80,45,20,5}
+<br>
+Now some examples.<br>
+For (the first) 3 signals: Red,Red,Red: penalty=500+405+320=1225<br>
+For (the first) 4 signals: Red,Green,Red,Green: penalty=500+0+320+0=820<br>
+<br>
+The final cost will be added to path cost. This can help to reduce traffic jams when we have some trains blocking a way (4 semaphores ahead) and we have alternate way.<br>
+<br>
+This is internal YAPF stuff and is not supposed to be tuned really. Developer put a lot of effort to calculate right values into p0,p1,p2.<br>
+The only tunable value is p1 penalty. Fine value range is from -100 to -90. If you go outside that range, penalty array will have weird values and trains would start to go not as you expect.<br>
+If you want more agresive load balancing go for p1=-90 and you will get following array:<br>
+p[]={500,415,340,275,220,175,140,115,100,95}<br>
+
+== Dependent Projects ==
+Pathfinding is very important part of OpenTTD, and introducing a new pathfinder means extensive changes in the code. This was the reason, why development of some new features had been put on hold, until YAPF was finished. As YAPF is now fully introduced, these projects may again be developed.
+
+=== Speed Signs ===
+There was a modest project to control which trains go on which tracks based on their speed, [http://www.tt-forums.net/viewtopic.php?t=24187 Speed Signs]. So far this project hasn't been picked up after implementing YAPF. Other patches that allow player to control train pathfinding can be found in [http://www.tt-forums.net/viewforum.php?f=33 development forums].
+
+[[Category:en/Manual/Settings & Preferences]]
+[[Category:en/Manual/Vehicles]]
