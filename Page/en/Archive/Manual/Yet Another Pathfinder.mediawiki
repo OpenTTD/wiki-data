@@ -3,12 +3,21 @@
 
 '''Yet Another Pathfinder (YAPF)''' is the latest software algorithm used by [[en/Manual/Main Page]] to control vehicle movement.
 
+== Description ==
+
 YAPF is the third attempt at creating a pathfinder algorithm for OpenTTD. The first new algorithm was [[en/Archive/Manual/Settings/New train pathfinding|New Train Pathfinding (NTP)]], which only works on trains. The second was [[en/Archive/Manual/Settings/New global pathfinding|New global Pathfinding (NPF)]], which works on all vehicles and is quite intelligent, but bogs down the system after many vehicles have been built. The goal of YAPF is to provide the power and flexibility of NPF while at the same time being very optimized, relieving the CPU load.
 
+== Configuration options ==
+{{en/Expand|Expand the configuration}}
+
+== See Also ==
+* [[en/Archive/Manual/Settings/New train pathfinding]]
+* [[en/Archive/Manual/Settings/New global pathfinding]]
+
+== Notes ==
 {{en/Note|The remainder of this article is meant for developers.}}
 
-== Improvements over NPF ==
-
+=== Improvements over NPF ===
 According to a [http://www.tt-forums.net/viewtopic.php?t=32774 forum post by KUDr], there are 3 major improvements in YAPF compared to NPF:
 
 *NPF creates a node for each tile while YAPF extends the node by following the tile/trackdir until something important (station, waypoint, choice, etc.) is seen. This node extension is called a "segment".
@@ -17,8 +26,7 @@ According to a [http://www.tt-forums.net/viewtopic.php?t=32774 forum post by KUD
 
 These improvements increase the performance of YAPF over NPF but also make the code more complex and harder to understand.
 
-== Tuning ==
-{{en/Expand|Expand the configuration}}
+=== Tuning ===
 Several options of YAPF can be tuned up. I will not describe all of them because they are clear what they do.<br>
 There are 4 options (3 actually) that are quite mysterious:
 
@@ -50,10 +58,10 @@ If you want more agresive load balancing go for p1=-90 and you will get followin
 
 p[]={500,415,340,275,220,175,140,115,100,95}
 
-== Dependent Projects ==
+=== Dependent Projects ===
 Pathfinding is very important part of OpenTTD, and introducing a new pathfinder means extensive changes in the code. This was the reason, why development of some new features had been put on hold, until YAPF was finished. As YAPF is now fully introduced, these projects may again be developed.
 
-=== Speed Signs ===
+==== Speed Signs ====
 There was a modest project to control which trains go on which tracks based on their speed, [http://www.tt-forums.net/viewtopic.php?t=24187 Speed Signs]. So far this project hasn't been picked up after implementing YAPF. Other patches that allow player to control train pathfinding can be found in [http://www.tt-forums.net/viewforum.php?f=33 development forums].
 
 [[Category:en/Manual/Settings & Preferences]]
