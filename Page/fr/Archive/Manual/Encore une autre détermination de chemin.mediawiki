@@ -18,28 +18,38 @@ Selon un [http://www.tt-forums.net/viewtopic.php?t=32774 billet du forum par KUD
 Ces améliorations accroissent la performance de YAPF par rapport à NPF mais rendent aussi le code plus complexe et difficile à comprendre.
 
 == Réglages ==
-Plusieurs options de YAPF peuvent être réglées. Je ne les décrirai aps toutes parce que ce qu'elles font est clair.<br>
-Il y a 4 options (en fait 3) qui sont assez mystérieuses:<br>
+Plusieurs options de YAPF peuvent être réglées. Je ne les décrirai aps toutes parce que ce qu'elles font est clair.
+
+Il y a 4 options (en fait 3) qui sont assez mystérieuses:
+
 rail_look_ahead_max_signals = 10<br>
 rail_look_ahead_signal_p0 = 500<br>
 rail_look_ahead_signal_p1 = -100<br>
 rail_look_ahead_signal_p2 = 5<br>
-<br>
-La première vérifie combien de signaux YAPF doit rechercher en avant de notre train. Les options suivantes sont utilisées pour calculer un tableau de pénalités en utilisant la formule suivante, où le paramètre "i" est la valeur de rail_look_ahead_max_signals :<br>
-p=p0 + p1*i + p2*i*i<br>
-Donc, nous avons le tableau de pénalités de signaux suivant pour le nombre spécifié dans rail_look_ahead_max_signals comme résultat:<br>
+
+La première vérifie combien de signaux YAPF doit rechercher en avant de notre train. Les options suivantes sont utilisées pour calculer un tableau de pénalités en utilisant la formule suivante, où le paramètre "i" est la valeur de rail_look_ahead_max_signals :
+
+p=p0 + p1*i + p2*i*i
+
+Donc, nous avons le tableau de pénalités de signaux suivant pour le nombre spécifié dans rail_look_ahead_max_signals comme résultat:
+
 p[]={500,405,320,245,180,125,80,45,20,5}
-<br>
-Maintenant, quelques exemples.<br>
-Pour (les premiers) 3 signaux: Rouge,Rouge,Rouge: pénalité=500+405+320=1225<br>
-Pour (les premiers) 4 signaux: Rouge,Vert,Rouge,Vert: pénalité=500+0+320+0=820<br>
-<br>
-Le coût final sera ajouté au coût du chemin. Cela peut aider à réduire les embouteillages quand nous avons des trains bloquant un chemin (4 sémaphores à l'avance) et que nous avons un autre chemin.<br>
-<br>
-Ceci relève des affaires internes de YAPF et n'est pas supposé être véritablement réglé. Les développeurs ont fait de gros efforts pour calculer les bonnes valeurs dans p0,p1,p2.<br>
-La seule valeur paramétrable est la pénalité pl. L'éventail des valeurs convenables va de -100 à -90. Si vous sortez de cet intervalle, le tableau de pénalités aura des valeurs bizarres et des trains pourraient commencer à aller là où vous ne les attendez pas.<br>
-Si vous voulez une répartition plus agressive, essayez p1=-90 et vous obtiendrez le tableau suivant:<br>
-p[]={500,415,340,275,220,175,140,115,100,95}<br>
+
+Maintenant, quelques exemples.
+
+Pour (les premiers) 3 signaux: Rouge,Rouge,Rouge: pénalité=500+405+320=1225
+
+Pour (les premiers) 4 signaux: Rouge,Vert,Rouge,Vert: pénalité=500+0+320+0=820
+
+Le coût final sera ajouté au coût du chemin. Cela peut aider à réduire les embouteillages quand nous avons des trains bloquant un chemin (4 sémaphores à l'avance) et que nous avons un autre chemin.
+
+Ceci relève des affaires internes de YAPF et n'est pas supposé être véritablement réglé. Les développeurs ont fait de gros efforts pour calculer les bonnes valeurs dans p0,p1,p2.
+
+La seule valeur paramétrable est la pénalité pl. L'éventail des valeurs convenables va de -100 à -90. Si vous sortez de cet intervalle, le tableau de pénalités aura des valeurs bizarres et des trains pourraient commencer à aller là où vous ne les attendez pas.
+
+Si vous voulez une répartition plus agressive, essayez p1=-90 et vous obtiendrez le tableau suivant:
+
+p[]={500,415,340,275,220,175,140,115,100,95}
 
 == Projets dépendants ==
 La détermination de chemin est une part très importante de OpenTTD, et introduire une nouvelle détermination signifie des changements massifs dans le code. C'était la raison pour laquelle le développement de certaines fonctionnalités nouvelles a été suspendu jusqu'à ce que YAPF soit terminé. Maintenant que YAPF est achevé, ces projets pourraient reprendre.
