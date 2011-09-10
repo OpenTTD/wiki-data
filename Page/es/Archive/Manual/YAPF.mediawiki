@@ -1,5 +1,5 @@
 [[Translation:en/Archive/Manual/Yet Another Pathfinder]]
-{{es/Traducción|en/Archive/Manual/Yet Another Pathfinder|20}}
+{{es/Traducción|en/Archive/Manual/Yet Another Pathfinder|70}}
 {{es/Ampliar|Configuración}}
 El '''YAPF''' ('''Yet Another Pathfinder''', traducido: ''"Sin embargo otro buscador de rutas"'') es el nombre que recibe el algoritmo más reciente que utiliza el software de [[es/Manual/Main Page|OpenTTD]] para controlar el movimiento de los vehículos.
 
@@ -9,41 +9,39 @@ El segundo fue el [[es/Archive/Manual/Settings/NPF|NPF]] (''New global Pathfindi
 
 El resto de este artículo está pensado para desarrolladores.
 
-{{es/Pendiente de traducción}}
+== Mejoras respecto NPF ==
+Según un un [http://www.tt-forums.net/viewtopic.php?t=32774 mensaje en el foro de KUDr]], hay tres grandes mejoras en YAPF respecto a NPF:
+*NPF crea un nodo para cada casilla, mientras que YAPF extiende este nodo siguiendo las casillas y la dirección de la vía hasta encontrarse con algo importante (una estación, un punto de ruta, una bifurcación, etc). Esta prolongación del nodo se denomina "segmento".
+*YAPF almacena estos segmentos: casilla y dirección de la vía inicial o final, coste, casilla y dirección de la casilla con la última señal, etc.
+*YAPF tiene una estructura mucho más compleja: basada en modelos que permiten al compilador optimizar las llamadas entre módulos YAPF en línea.
 
-== Improvements over NPF ==
+Estas mejoras aumentan el rendimiento de YAPF respecto NPF, pero por otro lado hacen el código más complejo y difícil de entender.
 
-According to a [http://www.tt-forums.net/viewtopic.php?t=32774 forum post by KUDr], there are 3 major improvements in YAPF compared to NPF:
+== Ajustes ==
+Varias opciones de YAPF se pueden ajustar. No voy a describirlas todas, puesto que la función de algunas está bastante clara.
 
-*NPF creates a node for each tile while YAPF extends the node by following the tile/trackdir until something important (station, waypoint, choice, etc.) is seen. This node extension is called a "segment".
-*YAPF caches its segments - begin/end tile/trackdir, cost, last signal tile/trackdir, etc.
-*YAPF has a much more complex structure - it is template based to allow the compiler to optimize calls between YAPF modules by inlining.
-
-These improvements increase the performance of YAPF over NPF but also make the code more complex and harder to understand.
-
-== Tuning ==
-Several options of YAPF can be tuned up. I will not describe all of them because they are clear what they do.
-
-There are 4 options (3 actually) that are quite mysterious:
+Hay 4 opciones (en realidad 3) que parecen bastante misteriosas:
 
 rail_look_ahead_max_signals = 10<br>
 rail_look_ahead_signal_p0 = 500<br>
 rail_look_ahead_signal_p1 = -100<br>
 rail_look_ahead_signal_p2 = 5<br>
 
-First one checks how many signals YAPF have look ahead of our train. The next options are used to calculate penalty array using following formula, where the parameter "i" is the value of the rail_look_ahead_max_signals:
+La primera comprueba cuántas señales futuras debe controlar YAPF para nuestro tren. Las siguientes opciones sirven para calcular una tabla de penalizaciones con la fórmula siguiente, en la que el parámetro "i" es el valor que tiene "rail_look_ahead_max_signals":
 
 p=p0 + p1*i + p2*i*i
 
-So, we have following array of signal penalties for the specified number in rail_look_ahead_max_signals as result:
+Así pues, obtendremos la siguiente tabla de penalizaciones de señales para el número especificado en "rail_look_ahead_max_signals":
 
 p[]={500,405,320,245,180,125,80,45,20,5}
 
-Now some examples.
+Veamos algunos ejemplos más:
 
-For (the first) 3 signals: Red,Red,Red: penalty=500+405+320=1225
+Para (las primeras) 3 señales: Rojo,Rojo,Rojo: penalización=500+405+320=1225
 
-For (the first) 4 signals: Red,Green,Red,Green: penalty=500+0+320+0=820
+Para (las primeras) 4 señales: Rojo,Verde,Rojo,Verde: penalización=500+0+320+0=820
+
+{{es/Pendiente de traducción}}
 
 The final cost will be added to path cost. This can help to reduce traffic jams when we have some trains blocking a way (4 semaphores ahead) and we have alternate way.
 
