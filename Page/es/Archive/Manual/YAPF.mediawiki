@@ -1,5 +1,4 @@
 [[Translation:en/Archive/Manual/Yet Another Pathfinder]]
-{{es/Traducción|en/Archive/Manual/Yet Another Pathfinder|70}}
 
 El '''YAPF''' ('''Yet Another Pathfinder''', traducido: ''"Sin embargo otro buscador de rutas"'') es el nombre que recibe el algoritmo más reciente que utiliza el software de [[es/Manual/Main Page|OpenTTD]] para controlar el movimiento de los vehículos.
 
@@ -10,7 +9,7 @@ El segundo fue el [[es/Archive/Manual/Settings/NPF|NPF]] (''New global Pathfindi
 {{es/Nota|El resto de este artículo está pensado para desarrolladores.}}
 
 == Mejoras respecto NPF ==
-Según un un [http://www.tt-forums.net/viewtopic.php?t=32774 mensaje en el foro de KUDr]], hay tres grandes mejoras en YAPF respecto a NPF:
+Según un [http://www.tt-forums.net/viewtopic.php?t=32774 mensaje en el foro de KUDr], hay tres grandes mejoras en YAPF respecto a NPF:
 *NPF crea un nodo para cada casilla, mientras que YAPF extiende este nodo siguiendo las casillas y la dirección de la vía hasta encontrarse con algo importante (una estación, un punto de ruta, una bifurcación, etc). Esta prolongación del nodo se denomina "segmento".
 *YAPF almacena estos segmentos: casilla y dirección de la vía inicial o final, coste, casilla y dirección de la casilla con la última señal, etc.
 *YAPF tiene una estructura mucho más compleja: basada en modelos que permiten al compilador optimizar las llamadas entre módulos YAPF en línea.
@@ -19,7 +18,7 @@ Estas mejoras aumentan el rendimiento de YAPF respecto NPF, pero por otro lado h
 
 == Ajustes ==
 {{es/Ampliar|Debería desarrollarse la configuración}}
-Varias opciones de YAPF se pueden ajustar. No voy a describirlas todas, puesto que la función de algunas está bastante clara.
+Varias opciones de YAPF se pueden ajustar. No vamos a describirlas todas, puesto que la función de algunas está bastante clara.
 
 Hay 4 opciones (en realidad 3) que parecen bastante misteriosas:
 
@@ -42,23 +41,21 @@ Para (las primeras) 3 señales: Rojo,Rojo,Rojo: penalización=500+405+320=1225
 
 Para (las primeras) 4 señales: Rojo,Verde,Rojo,Verde: penalización=500+0+320+0=820
 
-{{es/Pendiente de traducción}}
+El coste final se añadirá al coste de la ruta. De esta manera se puede ayudar a reducir los atascos de tráfico cuando tenemos algunos trenes bloqueando un camino (a 4 semáforos más adelante) y tenemos un camino alternativo.
 
-The final cost will be added to path cost. This can help to reduce traffic jams when we have some trains blocking a way (4 semaphores ahead) and we have alternate way.
+Estamos hablando de ajustes internos del YAPF y se supone que no deben modificarse. Los desarrolladores han hecho un gran esfuerzo para calcular unos buenos valores para p0, p1, p2.
 
-This is internal YAPF stuff and is not supposed to be tuned really. Developer put a lot of effort to calculate right values into p0,p1,p2.
+El único valor que merece la pena ajustar es p1. El rango de valores adecuado esta entre -100 y -90. Si te sales fuera de este rango, la tabla de penalizaciones adquiere valores extraños y los trenes empiezan a funcionar de manera inesperada.
 
-The only tunable value is p1 penalty. Fine value range is from -100 to -90. If you go outside that range, penalty array will have weird values and trains would start to go not as you expect.
-
-If you want more agresive load balancing go for p1=-90 and you will get following array:
+Si desea un equilibrio de cargas más agresivo establezca p1=-90 y obtendrá la siguiente tabla:
 
 p[]={500,415,340,275,220,175,140,115,100,95}
 
-== Dependent Projects ==
-Pathfinding is very important part of OpenTTD, and introducing a new pathfinder means extensive changes in the code. This was the reason, why development of some new features had been put on hold, until YAPF was finished. As YAPF is now fully introduced, these projects may again be developed.
+== Proyectos dependientes ==
+La búsqueda de rutas es una parte muy importante de OpenTTD, y la introducción de un nuevo Pathfinder significa grandes cambios en el código. Esta fue la razón, por la que el desarrollo de algunas nuevas características quedó en suspenso, hasta que YAPF fué terminado. Como YAPF está totalmente concluido, estos proyectos pueden ser desarrollados de nuevo.
 
-=== Speed Signs ===
-There was a modest project to control which trains go on which tracks based on their speed, [http://www.tt-forums.net/viewtopic.php?t=24187 Speed Signs]. So far this project hasn't been picked up after implementing YAPF. Other patches that allow player to control train pathfinding can be found in [http://www.tt-forums.net/viewforum.php?f=33 development forums].
+=== Señales de velocidad===
+Había un proyecto modesto para controlar qué trenes van sobre qué vías dependiendo de su velocidad: [[es/Señales de velocidad|Señales de velocidad]]. Hasta ahora este proyecto no se ha retomado después de finalizar YAPF. Otros proyectos que permiten que el jugador controle el buscador de rutas para trenes se pueden encontrar en los [http://www.tt-forums.net/viewforum.php?f=33 foros sobre desarrollo].
 
 [[Category:es/Manual/Configuración y preferencias]]
 [[Category:es/Manual/Vehículos]]
