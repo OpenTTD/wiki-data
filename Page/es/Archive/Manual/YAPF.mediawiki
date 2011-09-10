@@ -22,28 +22,38 @@ According to a [http://www.tt-forums.net/viewtopic.php?t=32774 forum post by KUD
 These improvements increase the performance of YAPF over NPF but also make the code more complex and harder to understand.
 
 == Tuning ==
-Several options of YAPF can be tuned up. I will not describe all of them because they are clear what they do.<br>
-There are 4 options (3 actually) that are quite mysterious:<br>
+Several options of YAPF can be tuned up. I will not describe all of them because they are clear what they do.
+
+There are 4 options (3 actually) that are quite mysterious:
+
 rail_look_ahead_max_signals = 10<br>
 rail_look_ahead_signal_p0 = 500<br>
 rail_look_ahead_signal_p1 = -100<br>
 rail_look_ahead_signal_p2 = 5<br>
-<br>
-First one checks how many signals YAPF have look ahead of our train. The next options are used to calculate penalty array using following formula, where the parameter "i" is the value of the rail_look_ahead_max_signals :<br>
-p=p0 + p1*i + p2*i*i<br>
-So, we have following array of signal penalties for the specified number in rail_look_ahead_max_signals as result:<br>
+
+First one checks how many signals YAPF have look ahead of our train. The next options are used to calculate penalty array using following formula, where the parameter "i" is the value of the rail_look_ahead_max_signals:
+
+p=p0 + p1*i + p2*i*i
+
+So, we have following array of signal penalties for the specified number in rail_look_ahead_max_signals as result:
+
 p[]={500,405,320,245,180,125,80,45,20,5}
-<br>
-Now some examples.<br>
-For (the first) 3 signals: Red,Red,Red: penalty=500+405+320=1225<br>
-For (the first) 4 signals: Red,Green,Red,Green: penalty=500+0+320+0=820<br>
-<br>
-The final cost will be added to path cost. This can help to reduce traffic jams when we have some trains blocking a way (4 semaphores ahead) and we have alternate way.<br>
-<br>
-This is internal YAPF stuff and is not supposed to be tuned really. Developer put a lot of effort to calculate right values into p0,p1,p2.<br>
-The only tunable value is p1 penalty. Fine value range is from -100 to -90. If you go outside that range, penalty array will have weird values and trains would start to go not as you expect.<br>
-If you want more agresive load balancing go for p1=-90 and you will get following array:<br>
-p[]={500,415,340,275,220,175,140,115,100,95}<br>
+
+Now some examples.
+
+For (the first) 3 signals: Red,Red,Red: penalty=500+405+320=1225
+
+For (the first) 4 signals: Red,Green,Red,Green: penalty=500+0+320+0=820
+
+The final cost will be added to path cost. This can help to reduce traffic jams when we have some trains blocking a way (4 semaphores ahead) and we have alternate way.
+
+This is internal YAPF stuff and is not supposed to be tuned really. Developer put a lot of effort to calculate right values into p0,p1,p2.
+
+The only tunable value is p1 penalty. Fine value range is from -100 to -90. If you go outside that range, penalty array will have weird values and trains would start to go not as you expect.
+
+If you want more agresive load balancing go for p1=-90 and you will get following array:
+
+p[]={500,415,340,275,220,175,140,115,100,95}
 
 == Dependent Projects ==
 Pathfinding is very important part of OpenTTD, and introducing a new pathfinder means extensive changes in the code. This was the reason, why development of some new features had been put on hold, until YAPF was finished. As YAPF is now fully introduced, these projects may again be developed.
