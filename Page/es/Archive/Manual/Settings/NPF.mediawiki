@@ -1,0 +1,70 @@
+[[Translation:en/Archive/Manual/Settings/New global pathfinding]]
+{{es/Traducción|en/Archive/Manual/Settings/New global pathfinding|0}}
+
+A [[en/Archive/Manual/Settings/Advanced Settings|setting]] that uses a completely different pathfinding algorithm for all [[en/Manual/Vehicles|vehicles]].
+
+'''NPF is superseded by [[en/Archive/Manual/Yet Another Pathfinder]] for all purposes.'''
+
+== Description ==
+The '''New global PathFinder''' (NPF) works for all vehicles. However, it has now been fully superceded by [[en/Archive/Manual/Yet Another Pathfinder|Yet Another Pathfinder (YAPF)]], so you should use that instead.
+
+NPF used an A* algorithm to find its route. However, on extremely complex railway networks it could be CPU-consuming, so on older machines (and big maps with lots of trains), it might sometimes lower performance.
+
+===Configuration Options===
+
+NPF has the following set of configuration options:
+{|
+|'''npf_max_search_nodes'''||The maximum amount of search nodes a single NPF run should take. This limit should make sure performance stays at acceptable levels at the cost of no longer giving guaranteed optimal results. This will probably be fixed in a more sophisticated way some time soon.
+|-
+|'''npf_rail_firstred_penalty'''||The penalty for when the first signal is red (and it is not an exit or combo signal)
+|-
+|'''npf_rail_firstred_exit_penalty'''||The penalty for when the first signal is red (and it is an exit or combo signal)
+|-
+|'''npf_rail_lastred_penalty'''||The penalty for when the last signal is red
+|-
+|'''npf_rail_station_penalty'''||The penalty for rail station tiles 
+|-
+|'''npf_rail_slope_penalty'''||The penalty for sloping upwards on rail
+|-
+|'''npf_rail_curve_penalty'''||The penalty for curves on rail
+|-
+|'''npf_rail_depot_reverse_penalty'''||The penalty for reversing in depots
+|-
+|'''npf_buoy_penalty'''||The penalty for going over (through) a buoy
+|-
+|'''npf_water_curve_penalty'''||The penalty for curves for boats
+|}
+
+== Use ==
+
+This feature is disabled by default. You can enable this patch through the [[en/Archive/Manual/Settings/Configuring patches/Vehicles|configure patches -> vehicles]] window or use the following syntax in [[en/Archive/Manual/Settings/Openttd.cfg]]:
+<pre>
+[patches]
+new_pathfinding_all = true
+</pre>
+
+The configuration options may only be changed in [[en/Archive/Manual/Settings/Openttd.cfg]]:
+
+<pre>
+[patches]
+npf_max_search_nodes = 10000
+npf_rail_firstred_penalty = 1000
+npf_rail_firstred_exit_penalty = 10000
+npf_rail_lastred_penalty = 1000
+npf_rail_station_penalty = 100
+npf_rail_slope_penalty = 100
+npf_rail_curve_penalty = 1
+npf_rail_depot_reverse_penalty = 5000
+npf_buoy_penalty = 200
+npf_water_curve_penalty = 25
+</pre>
+
+== Notes ==
+
+The algorithm is pretty amazing compared to the old system. Because of the penalty for red signals, it's quite easy to build simple load-balancing systems in some cases, especially in front of stations. Take care however when modifying tracks: if there is no path, the trains will try to get as close to the target station as possible and can get very lost doing so.
+
+== See Also ==
+*[[en/Archive/Manual/Yet Another Pathfinder]] (YAPF)
+
+[[Category:es/Manual/Configuración y preferencias]]
+[[Category:es/Manual/Vehículos]]
