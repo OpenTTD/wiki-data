@@ -4,43 +4,42 @@
 
 {{nl/Verlopen|''maart 2011'', specifiek de afbeeldingen.}}
 
-Nu een andere '''r'''outege'''b'''aseerde '''s'''ignalering (RBS) patch (of kortweg YAPP) is een routegebaseerde signalering (RBS) patch ontwikkeld door Michi_cc, dat is opgenomen in de OpenTTD romp in r13926. De eerste stabiele release waarin deze functies is opgenomen is [[en/Archive/OpenTTD/OpenTTD 0.7.0]].
+Nu een andere '''r'''outege'''b'''aseerde '''s'''ignalering (RBS) patch (of kortweg YAPP) is een routegebaseerde signalerings (RBS) patch ontwikkeld door Michi_cc, dat is opgenomen in de OpenTTD romp in r13926. De eerste stabiele release waarin deze functies is opgenomen is [[en/Archive/OpenTTD/OpenTTD 0.7.0]].
 
-YAPP implementeert een realistisch signaleringssysteem, gelijk aan [[en/Archive/Community/Realistic Path Based Signalling|Tekky's proposed PBS system]], maar zonder het realistische twee-richtingen dubbelspoor. Het is niet gerelateerd aan het [[en/Archive/Manual/Path Based Signaling (old)|oude RBS systeem van OpenTTD]].
+YAPP implementeert een realistisch signaleringssysteem, gelijk aan [[en/Archive/Community/Realistic Path Based Signalling|Tekky's voorgestelde RBS systeem]], maar zonder het realistische twee-richtingen dubbelspoor. Het is niet gerelateerd aan het [[en/Archive/Manual/Path Based Signaling (old)|oude RBS systeem van OpenTTD]].
 
 ==Functies==
-* Works with NPF and YAPF.
-* Implements a signal system similar to [[en/Archive/Community/Realistic Path Based Signalling|Tekky's proposed PBS system]] (without realistic bi-directional double track).
-* Is fully backwards compatible, the old block signals and the new path signals can be used in parallel.
-* Can highlight the reserved paths.
+* Werkt met NPF en YAPF.
+* Implementeert een seinsysteem gelijk aan [[en/Archive/Community/Realistic Path Based Signalling|Tekky's voorgestelde RBS systeem]] (zonder het realistische twee-richtingen dubbelspoor).
+* Is volledig terug uitwisselbaar, de oude blokseinen en de nieuwe routeseinen kunnen naast elkaar worden gebruiktl.
+* Kan het gereserveerde spoor markeren.
 
 ==Tutorial==
 ===De basis===
-This paragraph covers the basic features of YAPP, and should get you going on using it.
+Deze paragraaf beslaat de basis functies van YAPP, en zou je moetn helpen bij het gebruik.
 
 ====De seinen====
-[[File:en/Manual/Yapp signalgui.png|frame|right|Twee nieuwe seintypes in de [[nl/Manual/Seinselectie interface|seinselectie interface]].]]YAPP adds two new signal types to the game. These signals enable trains to reserve a path through a signal block before entering the block. If another train wants to enter the block, and succeeds in reserving a path through the block, both trains can use one signal block at the same time.
+[[File:en/Manual/Yapp signalgui.png|frame|right|Twee nieuwe seintypes in de [[nl/Manual/Seinselectie interface|seinselectie interface]].]]YAPP voegt twee nieuwe seinen toe aan het spel. Deze seinen stellen treinen in staat een routre te reserveren voorbij een seinblok voordat de trein dit blok binnenrijdt. Als een andere trein dit blok wil binnenrijden, en erin slaagt een route door dit blok te reserveren, kunnen beide treinen een seinblok gebruiken op hetzelfde moment.
 
-
-As mentioned before, there are two signal types, available in the [[nl/Manual/Seinselectie interface|seinselectie interface]]. The first type is the basic path signal. There are two things you should know about this signal:
-* Place it only where trains can stop and wait safely without blocking junctions and other things.
-* Trains can pass through this signal from the back side.
+Zoals hiervoor aangegeven zijn er twee seintypes beschikbaar in de [[nl/Manual/Seinselectie interface|seinselectie interface]]. Het eerste type is het basis routesein. Er zijn twee dingen die je moet weten over dit sein:
+* Plaats het alleen daar waar treinen kunnen stoppen en veilig wachten zonder een kruising of andere dingen te blokkeren.
+* Treinen kunnen dit sein ook van achteren passeren.
 [[File:en/Manual/Yapp pbssignal.png|frame|right||RS]]Dit sein wordt een ''routesein (RS)'' genoemd.
 
 
-There are also two things you should know about the second signal type:
-* Place it only where trains can stop and wait safely without blocking junctions and other things.
-* Trains can pass through this signal from one direction.
+Er zijn ook twee dingen die je moet weten over het tweede seintype:
+* Plaats het alleen daar waar treinen kunnen stoppen veilig wachten zonder kruisingen en adere dingen te blokkeren.
+* Treinen kunnen dit sein maar van een kant passeren.
 [[File:en/Manual/Yapp onewaypbssignal.png|frame|right|1R RS]]Dit sein wordt een ''eenrichtingsroutesein (1R RS)'' genoemd.
 
 
-Most of the times it will be sufficient to use a default path signal, as passing a signal from the back is penalised by the pathfinder, however, one-way path signals might be useful in certain specific cases.
+Meestal zal het voldoende zijn om een standaard routesein te gebruiken, omdat een sein passeren van achteren wordt afgestrafd door de routevinder, echter eenrichtingsrouteseinen kunnen bruikbaar zijn in specifieke gevallen.
 
 
-The two new signal types behave a bit different than standard OpenTTD signal types. The path signals are red by default, and will only show green as soon as a train can reserve a path to the next safe waiting position on its route. Safe waiting positions are - by definition - in front of signals, depots and track ends. The back of a path signal is not considered a safe waiting position, and therefore paths are reserved through these signals.
+De twee nieuwe seintypes gedragen zich iets anders dan de standaard OpenTTD seintypes. De routeseinen staan standaard op rood, en gaan alleen op groen zodar een trein een route kan reserveren naar de volgende veilige wachtpositie op zijn route. Veilige wachtposities zijn - per definitie - voor seinen, in depots en spooreinden. de achterkant van een routesein wordt niet beschouwd als een veilige wachtpositie, en daarom wordt de route gereserveerd voorbij deze seinen.
 
-Because the front of every signal is defined as a safe waiting position, you would normally not want to place a signal immediately behind a junction, only in front of a junction. This is because it is only safe for a train to wait in front of a junction. It is not safe for a a train to wait at a signal immediately after a junction before the whole train has cleared the junction, as it would be blocking the junction while waiting, as illustrated in the example below. This is a major advantage against standard OpenTTD signals, where you had to place signals before and after junctions, which caused trains to block junctions while waiting.
-[[File:en/Manual/Yapp unsafewaitinglocation.png|frame|center|The signal indicated by the arrow is an unsafe waiting location, as the train in the junction now blocks the otherwise free path of the train coming from the top. There's a second unsafe waiting location in this picture. Can you find it?]]
+Omdat de voorkant van elk sein is gedefinieerd als een veilige wachtpositie, wil je normaal gesporken geen sein plaatsen direct na een kruising, alleen voor de kruising. Dit omdat het alleen veilig wachten is voor een trein voor de kruising. Het is niet veilig voor een trein om te wachten direct na een kruising als niet de hele trein de kruising heeft vrij gemaakt, omdat hij dan de kruising zou blokkeren terwijl hij staat te wachten, zoals te zien is in het voorbeeld hieronder. Dit is een belangrijk voordeel ten opzichte van standaard OpenTTD seinen, waarbij je seinen voor en na de kruising moet plaatsen, wat de oorzaak is van blokkerende treinen op de kruising.
+[[File:en/Manual/Yapp unsafewaitinglocation.png|frame|center|Het sein dat is aangeduid met een pijl is een onveilige wachtpositie, omdat de trein op de kruising nu de anders vrije route voor de trein die van de bovenzijde komt, blokkeert. Er is een tweede onveilige wachtpositie in deze afbeelding. Kun je die ook vinden?]]
 
 ====Patch opties====
 [[File:en/Manual/Yapp patch-options.png|frame|right|YAPP Patch options]]YAPP adds three patch options to the game.
