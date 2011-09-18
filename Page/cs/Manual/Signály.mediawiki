@@ -138,34 +138,34 @@ Viz příklady a obrázky.
 Máme zde Y odbočku kde jsou tři semafory.
 Vlak přijíždí a chce jet do leva po trati. Obyčejné návěstidlo mu to nedovolí, protože je úsek obsazen (i když trať je do leva volná).
 {{en/-}}
-[[File:en/Manual/Multiples standard.png|frame|right|With two additional block signals, the''Y'' has been split into three blocks: right arm, left arm and junction]]
+[[File:en/Manual/Multiples standard.png|frame|right|Y odbočka kdy za odbočkou jsou hned další obyčejné návěstidla na obě strany]]
 Řešením je rozdělit tento úsek na menší úseky přidáním semaforu hned za křížení.
 {{en/-}}
-[[File:en/Manual/Chemin.png|frame|right|Y block between a ''Dokonalejší (PBS) návěstidlo'' a dvě ''obyčejné návěstidla'']]
+[[File:en/Manual/Chemin.png|frame|right|Y odbočka a ''Dokonalejší (PBS) návěstidlo'' a dvě ''obyčejné návěstidla'']]
 Naopak, pokud použijeme Dokonalejší (PBS) návěstidlo tak vlak může jet do leva protože je tam volná kolej až k návěstidlu, do prava nemůže tam je vlak. Není třeba rozdělovat úsek do menších úseků (tj. není potřeba návěstidla za křížení).
 {{en/-}}
-There are two things you should know about this signal:
-* Place it only where trains can stop and wait without blocking junctions ;
-* This signal only works in one direction. In the other direction, it is either ignored or considered a one-way signal, depending on the signal path (see below).
+Dvě věci by jste měly vědět o tomto návěstidle:
+* Je vhodné tam kde nechceme blokovat křížení tratí
+* Návěstidlo funguje pouze v jednom směru. V opačném směru, je buď ignorován nebo považován za jednosměrné návěstidlo v závislosti na výběru Dokonalejšího (PBS) návěstidla (viz níže)
 [[File:en/Manual/Yapp pbssignal.png|frame|left|PS]]
 * '''Dokonalejší (PBS) návěstidlo''': vlaky mohou projíždět tento signál ze zadní strany.
 {{en/-}}
 [[File:en/Manual/Yapp onewaypbssignal.png|frame|left|1W PS]]
 * '''Dokonalejší (PBS) jednosměrné návěstidlo''': vlak '''neprojede''' toto návěstidlo z druhé strany .
 {{en/-}}
-Most of the time it will be sufficient to use a default Path signal, as passing a signal from the back is penalised by the pathfinder, however, one-way Path signals might be useful in certain specific cases.
+Většinu času to bude stačit použít výchozí cestu signálu, jako předávání signálu zezadu se trestá pathfinder, však může být jednosměrná cesta signály mohou být užitečné v některých specifických případech.
 
-The two new signal types behave a bit differently than standard OpenTTD signal types. The Path signals are red by default, and will only show green as soon as a train can reserve a path to the next safe waiting position on its route. Safe waiting positions are - by definition - in front of signals, depots and track ends. The back of a Path signal is not considered a safe waiting position, and therefore paths are reserved through these signals.
+Dva nové typy signálů se chovají trochu jinak než standardní typy signálů OpenTTD.Cesta signály jsou červené ve výchozím nastavení a zobrazí pouze zelené, jakmile vlak můžete rezervovat cestu k další bezpečné pozici čeká na jeho cestě. Bezpečné čekání pozice jsou - podle definice - před signálů, skladů a sledování cílů.Zpět cesty signálu není považován za bezpečný čekání pozici, a proto cesty jsou vyhrazeny těmito signály.
 
-Because the front of every signal is defined as a safe waiting position, you would normally not want to place a signal immediately behind a junction, only in front of a junction. This is because it is only safe for a train to wait in front of a junction. It is not safe for a a train to wait at a signal immediately after a junction before the whole train has cleared the junction, as it would be blocking the junction while waiting, as illustrated in the example below. This is a major advantage against standard OpenTTD signals, where you had to place signals before and after junctions, which caused trains to block junctions while waiting.
-<div style="width:50%;float:left;">[[File:en/Manual/Yapp unsafewaitinglocation.png|frame|center|'''Bad''': The signal indicated by the arrow is a bad waiting location, as the train in the junction now blocks the otherwise free path of the train coming from the top. There's a second bad waiting location in this picture. Can you find it?]]</div>
-<div style="width:50%;float:left;">[[File:en/Manual/Yappgoodexample.png|frame|center|'''Good''': Here there is enough space after the juction for a train to wait. As long as this space is unavailable, the next train will wait before the junction rather than blocking it. This allows the train coming from the top to proceed.]]</div>
+Vzhledem k tomu, před každým signálu je definován jako bezpečný čeká pozici, ve které je obvykle se chcete umístit signál hned za křižovatkou, jen v přední části křižovatky. To proto, že to je jen bezpečné vlak čekat před křižovatkou. Není to bezpečné pro AA vlak čekat na signál ihned po křižovatku před celým vlakem schválila křižovatce, jak to bude blokovat křižovatce při čekání, jak je znázorněno v následujícím příkladu. To je velká výhoda proti standardním signálem OpenTTD, kde jste museli umístit signálů před a po křižovatky, který způsobil vlaky blokovat křižovatkách při čekání.
+<div style="width:50%;float:left;">[[File:en/Manual/Yapp unsafewaitinglocation.png|frame|center|'''Špatně''': Signál šipky, je špatné umístění čeká, jak vlak v křižovatce stojí v cestě jinak volné cestě vlakem z vrcholu. Je tu druhá špatná čeká místo v obrázku. Najdete ho?]]</div>
+<div style="width:50%;float:left;">[[File:en/Manual/Yappgoodexample.png|frame|center|'''Správně''': Tady je dost místa po juction na vlak čekat. Tak dlouho, jak tento prostor není k dispozici, budou další vlak čekat před křižovatkou než byl zablokován. To umožňuje, že vlak přijíždí z vrcholu pokračovat.]]</div>
 <div style="clear:left;"></div>
 
 
 
-This is one other example of what you can do with those path signals. This works far better than using pre-signals because you can have two trains leaving the station at the same time AND share the same depot (there is no way to make it with pre-signals, because of the block share). In this case there are one-way path signals for trains leaving the station, and simple path signal for trains leaving the depot.
-[[File:en/Manual/Pathsignal station exit.png|frame|center|Two exit station. Note that the signals in front of the depot are not required, as depots have built-in signals. However, path signals in front of depots like this give trains leaving the depot priority over trains wanting to enter the depot.]]
+To je jeden další příklad toho, co můžete dělat s těmi signály cestou. To funguje mnohem lepší než pre-signály, protože můžete mít dva vlaky výstupu z metra se ve stejnou dobu a stejné sklad (není tam žádný způsob, jak to s pre-signály, protože bloku podíl). V tomto případě je jednosměrná cesta signálu pro vlaky výstupu z metra a jednoduchou cestu signálu pro vlaky opustit depo.
+[[File:en/Manual/Pathsignal station exit.png|frame|center|Dva výstupní stanice. Všimněte si, že signály v přední části skladu, nejsou zapotřebí, protože sklady jsou vestavěné signály. Nicméně, cesta signálu před skladů takhle dát vlaky odchodu z depa přednost před vlaky, které chtějí vstoupit do depa.]]
 
 
 ====Advanced Settings====
