@@ -2,144 +2,148 @@
 {{pl/Tłumaczenie|oryg. = en/Manual/Railway construction
 |z     = en
 |Postępy = 0}}
-{{pl/Manual/Spis treści}}
+{{en/Manual/Navigation}}
+'''Railway Stations''' are the core component of any railway network. They allow any and all goods to be loaded and unloaded onto [[en/Manual/Trains]]. For your network, it is best to have your station off the main line so there is no unnecessary traffic passes through them causing delays for trains using the station.
 
-=Carrying capacity of your network=
-This page is intended as a theoretical treatment purely of carrying capacity. Junctions and networking are much more important. Disclaimer over, let's consider the various factors that affect your carrying capacity.
 
-==Signal distance (SD)==
-This is a fairly obvious one. Widely-spaced signals will result in a lower carrying capacity. With an '''SD''' of one signal every N tiles, the minimum gap between two full-speed trains can never be less than N+1 (Figure 1). On diagonal track one signal every 2N "half tiles" or N "full tiles" the minimum gap cannot be less than 2N+1 "half tiles" or N+1/2 "full tiles". When trains are this close together, you have reached the theoretical maximum train density. In practice, reaching this density is impossible.
-[[File:en/Community/Pat Fig1.png|frame|none|Figure 1: Minimum train gap of five from a signal distance of four]]
+==Basic stations==
+The following stations are easy to build and will work quite decently if only being serviced by a handful of trains. When the traffic density increases, you might want to try an [[en/Manual/Railway station#advanced-stations|advanced station]] layout.
 
-[[File:en/Community/Pat Fig2.png|frame|right|Figure 2: Signalling gap inefficiency]]
-One important consideration is consistency. The capacity of a track is determined by whichever individual signal gap is the largest. Thus, a track with one signal every two tiles, that has an anomalous one-off gap of three or four tiles, will suffer from greatly diminished capacity and can potentially jam and violate rule 1 (Figure 2). Remember that this also holds for corners and splits/merges.
+===Terminus===
+These stations are the end of a railway line. Trains leave the same side they entered, and thus might block or be blocked by trains coming from or going to the station. They are often used for small and simple stations or when the available space does not permit building a ro-ro-station.
+[[File:en/Manual/Terminus.png|center|frame|Simple terminus stations: the left one is using [[en/Manual/Signals#block-signals|block signals]], the right one [[en/Manual/Signals#path-signals|path signals]].]]
 
-===Diagonal track===
+===Ro-Ro===
+Ro-Ro stands for Roll-On, Roll-Off (or Roll In, Roll Out, depending who you ask) - trains enter the bottom end of station and exit the other end. Trains entering the station do not have to wait for trains leaving. This is great for medium amounts of traffic. Without [[en/Manual/Signals]], it's no good for high-traffic stations (e.g., stations serving factories), because once all platforms are full, the train waits at the two way signal for the platform closest to the entrance. This can lead to gridlock if the blocking train has full load orders and is waiting for another train to drop off raw material [[en/Manual/Cargo]].
+[[File:en/Manual/Ro-ro1.png|center|frame|RoRo-stations with 2 platforms, the left one using block signals, the right one using path signals. You could leave out the two straight track tiles in the front of the right one, but they also have a purpose as braking space.]]
 
-In OpenTTD, trains move slower on angled track (thanks SmatZ!), and thus require an increased signal density to prevent bottlenecks. It is important that the train gap (not '''SD''') of straight and diagonal tracks is as similar as possible. Otherwise trains can jam either when going from straight to diagonal or from diagonal to straight track.
+===Drive-thru station===
+A basic station which trains can either stop at or pass by. It includes waiting areas for trains departing or joining the main-line, note this is equal to the length of the station and assists in reducing or nullifying the slow-down caused by trains entering the station from the main-line as well as leaving space for trains to wait, without blocking the main-line, should all station slots in a given direction be occupied
 
-A quick experiment showed that in the same time a train moves 2 tiles on straight track, an equally fast train moves about 3 "half tiles" on diagonal track. So if using a certain autosignal setting, you will probably need to manually increase the signal density on any angled rail you have.
+[[File:en/Manual/Drive thru.png|center|frame]]
 
-The following examples have been created under the assumption that the length of the train also changes on diagonal track. This seems to be true for only some NewGRFs! (Iirc, it is true for the JapanSet and wrong for the default trains.)
+===Combined terminus- and roro-station===
+It is also possible to build stations which serve both as terminus and roro-stations. However, the difficulty option "Train reversing" must be set to "At end of lines and at stations" in order for them to work. Trains can enter the station from both directions, and can leave in both directions, too.
 
-* An autosignal setting of 3 gives a minimum train gap of 4. This translates to a minimum diagonal train gap of 6 "half tiles", which can be achieved by placing signals with a distance of 5 "half tiles" (or by twice placing signals with an autosignal setting of 5).
+While the setup using path signals will work very well, the one using block signals will lead to trains getting stuck. This will happen if two trains coming from opposite directions pass the entry-signal almost simultaneously and want to enter the same platform. The first train will be able to enter it, while the second train will be stuck in front of a red exit-signal. Therefore you should try to avoid the block-signal setup or only use it for stations with very low traffic.
+[[File:en/Manual/Two-way-roro-station.png|center|frame|Combined terminus- and roro-station, the right one using block signals, the one at the left using path signals.]]
 
-* An autosignal setting of 2 gives a minimum train gap of 3. This translates to a minimum diagonal train gap of 4.5 "half tiles". A diagonal train gap of 5 "half tiles" can be achieved by placing signals with a distance of 4 "half tiles" or with an autosignal setting of approximately 2. A diagonal train gap of 4 "half tiles" can be achieved by placing signals with a distance of 3 "half tiles" (or by twice placing signals with an autosignal setting of 3). Though this '''SD''' doesn't have a exact counterpart on diagonal track the deviation between straight and diagonal track is just 1/3 tile and the same autosignal setting can be used for straight and diagonal track.
+===Bag station===
+If there is no space to build a rail from both ends of the station, but the station is not the end station, a bag station is useful too. Train will enter the station, turn around and then go out the station and continue in the original direction.
 
-* An autosignal setting of 1 gives a minimum train gap of 2. This translates to a minimum diagonal train gap of 3 "half-tiles", which can be achieved by placing signals with a distance of 2 "half tiles" or with an autosignal setting of 1. Here the same autosignal setting is used for straight and diagonal track, too.
+A bag station can not be built on a line with a heavy traffic because there can be only one train in each direction, and other trains have to wait before the station. This can be solved with the waiting bay, but it will not be good anymore. The trains have to slow down when entering or leaving the station too.
+[[File:en/Manual/Polany.jpeg|center|frame|Bag station, original mainline is on the top.]]
 
-===So what signal distance should I use?===
-* Two tiles <BR>A '''SD''' of two gives a minimum gap of 3, and is the optimal practical solution.
+==Advanced stations==
+For larger train networks, the above stations probably won't be able to handle all of the trains assigned to them.  You will need more advanced track layouts and signals.
 
-*One tile <BR>A '''SD''' of one is fraught with problems. Even a track split causes a signalling gap. It would be possible to join angled rails with a signal gap of 1, but this would result in a considerable increase in build complexity.
+What happens when a third train arrives at one of the above stations? It sees both two-way signals are red, so it just picks the closest one and waits for the light to change. If the other platform empties while the third train is waiting, the platform will stay empty.
 
-* Half tile <BR>Angled track is capable of double density signals. This may be of theoretical interest, or for shaving a few millimeters off a near-miss situation. The biggest flaw with a half tile SD is obviously that every straight piece of track will have a bigger SD.
+What about the queues that form as trains line up to enter a station?  These lines can stretch far, and can even hold up your entire train network!
 
-Whatever '''SD''' you choose, keep in mind that you have to be consistent. A network with '''SD''' of 2 and a signalling gap of 3 on a frequently used track can lead to jams. It might therefore have a lower capacity than a network with a consistent '''SD''' of 3! <br style="clear:both;">
+===Pre-signals===
+Stations with [[en/Manual/Signals#pre-signals|pre-signals]] make arriving trains wait outside the station until there is a free platform.
+[[File:en/Manual/Presignalstation.png|center|frame|Pre-signal station]]
 
-==Train length (TL)==
-This is a double-edged sword. A longer train will increase the likelihood of incurring a realistic acceleration penalty, making construction more spread out and complex. However, a longer ''''TL''' increases the maximum cargo capacity of your network. Note that when using engines that have a front and rear sections, the additional 1/2 tile taken up makes shorter train lengths even less favourable. 
+===Waiting bay===
+A good solution to hold a queue of trains waiting to enter a station is a multi-line waiting bay.  If the station is full, an arriving train picks the closest empty track in the waiting bay.  When a spot opens in the station, one of the waiting trains will move in.  Make sure a train can fit between the signals.  The pre-signals are optional; they help if your waiting bay fills up too!
+[[File:en/Manual/Waitingbay.png|center|frame|Waiting bay for up to 4 6-wagon trains]]
 
-For high-speed networks typical values of three to five tiles are normal, with four being a particular favourite, because on a track with a '''SD''' of 2 a line of '''TL'''-4 trains accelerating from standstill has a lower reaction time than trains with uneven '''TL'''.
+===Loop around===
+Instead of using pre-signals, you can build a loop around track. When a train enters the station and sees all the two way signals are red (platforms are full) except the loop around track, it will take the loop around track. It loops around and around, waiting for a free platform. A problem with this system is other arriving trains can steal the free platform while the first train is looping around. Remember to make the loop big enough to fit at least your longest train.
+[[File:en/Manual/Loop.png|center|frame|Loop for overflow control]]
 
-==Quantifying carrying capacity==
-===Train Density (TD)===
-Your network will carry a certain number of trains, and assuming you have a standardised train length, we can define some metrics. The '''Train Density (TD)''' for a track is given in units of trains per thousand tiles, and can be calculated by counting the number of trains on that track and dividing by the length of the track.
+===Escape depot===
+Another way of controlling station overflow is an "escape depot." Place a depot in the two-way/one-way signal set up at the entrance. Depots automatically have a (traditional) bi-directional signal in them so behave just like a loop around track. Escape depots, unlike loops, have an unlimited capacity. 
 
-Typical measured values for an unoptimized network of 4-tile trains are a '''TD''' of 25 (trains per 1000 tiles).
+The best layout has a depot at both ends of the station entrance. (This will reduce the time required to cross a large station)
 
-The maximum '''TD''' before traffic jams become self-propagating can be measured by permitting a queue of trains to accelerate from a halt and then measuring the train-train distance when all trains have reached full speed, and using the formula 
+[[File:en/Manual/Escapedepot.png|center|frame|Escape depots for overflow control (this example works only with pf.yapf.rail_firstred_twoway_eol set to true, which is not default setting anymore)]]
 
-'''1000 / (TL + train gap)'''
+===Long exits===
+Normally, when two trains leave a station at once, one must stop and give way to the other. This leaves one train half in the station and half out, making that platform unusable to any other trains trying to enter the station. Long exits allow the train to pull out of the station completely before it hits the red signal. This frees up the platform for another train entering the station. Note the length of the exit track, a 10-car train can fit neatly between the signals.
+[[File:en/Manual/Longexit.png|center|frame|Long exits overflow control]]
 
-This '''critical TD''' depends on the power and number of the engines, the weight of the train, the top speed, the '''SD''' and the length of the train. Because this critical density incorporates information about acceleration and time to reach top speed, it can also tell you about the practical maximum capacity of your network. For example, using trains with a lower top speed actually makes it easier to have a dense network. The average train-train gap is much smaller for rail than for monorail or maglev. Slow doesn't mean better, however, as the reduced line density will be more than compensated for by quick turnaround times.
+===Long exits, prioritized===
+Getting [[en/Archive/Manual/Settings/Mammoth trains]] to exit a busy Ro-Ro station in a timely fashion can be challenging. By using pre-signals you can prioritize exit tracks to allow trains on faster tracks to depart sooner. In the image below a lower priority is assigned to the topmost 5 exits (since they'll block the return track longer) and the exit at the bottom (since trains accelarate slower on the sharp bend). This works because the low priority exits will wait for the exit signal to clear (that is, when a train passes the 2nd signal on the return track). The other tracks will depart when a train passes the 1st signal as usual. 
+[[File:en/Manual/Priorityexit.png|center|frame|Long exits with priority signals]]
 
-For example, a fully-laden 4-tile [[en/Manual/Base Set/Trains/Lev4 'Chimaera'|Chimaera]] (top-end [[en/Manual/Base Set/MagLev]]) was found to have a train-train distance of 12, giving critical density of 1000/16 or 62.5. Repeating the previous example but using the electric rail [[en/Manual/Base Set/Trains/T.I.M.]] gives a train-train distance of only 6, and a critical density of 100. 
+===Long entrances===
+If you play with [[en/Archive/Manual/Settings/Realistic acceleration]], faster trains slow down a good bit before stopping in a station.  This can delay the next train from entering.  Adding a few track sections in front of the station can help with this.
+[[File:en/Manual/Longentrance.png|center|frame|Long entrance for realistic acceleration patch]]
 
-It is possible to run a network at higher than the critical density, but it is ill-advised.
+===Double entrance===
+This is a type of design used for stations that handle a huge number of trains, such as the stations servicing factories or food processing plants. Trains coming from one place can use loading bays meant for other trains if need be.  Be sure to use pre-signals.
+[[File:en/Manual/Doubleentrance.png|center|frame|Double entrance. Those 4 platforms are divided into 2 groups with each handling 1 entry track. The [[en/Manual/Signals#combo-signals|combo-signal]] inbetween the junctions allows the trains from both entries entering the platforms simultaneously without interfering each other, but reserving the way for trains to cross-over to the other group when no platform is available on its group.]]
+[[File:en/Manual/DoubleEntrance2.png|center|frame|Faster double entrance, avoiding sharp bends (for trainlength <=5)]]
 
-===Theoretical Maximum Train Density===
-Simply put, this is the train density if your network is entirely filled with trains at the minimum distance between each other. You will never reach this. 
+===Feeder bays===
+If your rail network has large trains going long distances, it can be very cost effective to "feed" their loading station with more cargo from nearby industries.  Because the longer distance the cargo travels, the more you get paid.  In the pictured station, there are 4 bays for small trains to transfer coal from nearby mines.  Large trains then deliver the coal to a far away power station. 
 
-This is given by ''' 1000 / (TL + SD + 1) '''
+[[File:en/Manual/Feederstation.png|center|frame|Station with 4 feeders]]
 
-For example, 4-tile trains and a signal distance of 2 will give a theoretical maximum train density of 140.
+===Prioritised drive-thru stations===
 
-==Carrying Capacity (CC)==
-Since '''TL''' alters the carrying capacity of a line, comparing '''TD''' across different '''TL''' is meaningless. In order to compare efficiency figures between different personal preferences, we need a new metric. This new metric will simply be a measure of how many units of cargo your network is transporting per year, per track. It will be directly proportional to the average quantity of cargo per track tile, and also to how fast this cargo is moving.
+These stations are in the middle of a line and trains can pass them by without using up valuable platforms. Signalling makes a crucial difference here - you can give priority to the mainline trains or the stopping trains with them.
 
-<pre>
-CC_day = TC / ( TL + TD ) * v_travel
-CC_day = TC / ( TL + TD ) * v_kmh * 74*2/16/256*1.00584
-CC_day = TC / ( TL + TD ) * v_mph * 74*2/16/256/1.6
-</pre>
+This station gives priority to trains leaving the station.
+[[File:en/Manual/Station priority.png|center|thumb|700px|Priority to station]]
 
-'''CC_day''' = carrying capacity [in cargo units per day] is how much cargo can cross each tile in one day. This amount of cargo can be fed to the start of the line and delivered at the end of the line.
+This station gives priority to trains passing the station by.
+[[File:en/Manual/Mainline priority.png|center|thumb|700px|Priority to mainline. Changes are marked with red circle.]]
 
-'''TC''' = train capacity [in cargo units], how much cargo one train can carry.
+===Ro-Ro Terminus===
+====Principle====
+This style of station is a mix between the Ro-Ro and Terminus styles.  In essence, it takes a terminus station and makes it possible for a train to leave its platform without disrupting the traffic flow entering the station.  It can be used to upgrade a terminus style station and improve station efficiency.  Modifications upon this design could increase the number of platforms to handle a larger number of trains at once.  The example has been pre-signaled for greater efficiency. 
+[[File:en/Manual/Alternative RoRoTerminus.png|center|frame|A mix between the Ro-Ro and the Terminus stations]]
+This build allows trains to enter and exit station simultaneously. However, it takes a bit more space than ordinary terminus.
 
-'''v_travel''' = speed [in tiles/day], '''v_kmh''' = speed [in km/h] and '''v_mph''' = speed [in mph] is the speed of the train.
+====Variations====
+[[File:en/Manual/Advanced Terminus Station.png|center|thumb|550px|Advanced 2-bay terminus stations, the top one using block signals, the bottom one using path signals]]
 
-'''TG''' = train gap [in tiles]. For track layouts which don't inject trains to form a high-density-stream this is the critical train gap.
+[[File:en/Manual/Adv terminus 4tr.png|center|thumb|550px|Advanced 4 bay station]]
 
-'''TL''' = trainlength [in tiles].
+[[File:ro/Manual/Ro.png|center|thumb|550px|Some variations of same idea]]
 
-The [[en/Manual/Base Set/Trains/Lev4 'Chimaera'|Chimaera]] from the above example has a carrying capacity of
-<pre>CC_day=47*6*402/16*0,0056=40 Passengers/day 
-or 
-CC_day=27*6*402/16*0,0056=23 Bags of Valuables/day</pre>
-The [[en/Manual/Base Set/Trains/T.I.M.]]  from the above example has a carrying capacity of
-<pre>CC_day=40*6*150/10*0,0056=20 Passengers/day 
-or 
-CC_day=20*6*150/10*0,0056=10 Bags of Valuables/day</pre>
+====Giant Ro-Ro terminus====
 
-Work on this unit is pending.
+It's of course possible to increase the number of platforms of a Ro-Ro terminus station. You can go as far as you want as long as there's enough space.
+[[File:en/Manual/Epicterminus.png|center|thumb|550px|Advanced 10 bay station]]
 
-=Making your network more efficient=
-Ok, so now that we've defined the parameters that we had already intuitively understood, how can we use them to improve our networks? The golden rule number 1 of network optimisation is that trains on the network never slow down. There are two possible parts of a network where this could happen, splits and merges.
+Below is a little more efficient design, with two tracks each sharing an entry and exit line. It consumes half as much space while nearly not decreasing the capacity. It is important that the directions are not switched: Else trains would have to climb up when entering the track, blocking the crossing unneccessarily long.
+[[File:en/Manual/Sharedepicterminus.png|center|thumb|550px|Light advanced 10 bay station]]
 
-==Splits==
-For a track split, one must ensure that there is not a longer-than-normal signalling gap at the split point. This can be taken care of by careful or over-abundant signalling.
+Here bridges instead of tunnels
+[[File:en/Manual/8 platform station.png|center|frame|A high-capacity Ro-Ro Terminus mix]]
 
-==Merges==
-Merges present us with a unique problem. For a trivial merge, trains on the mainline could potentially be stopped by a sideline train. There is already a body of work on [http://www.openttdcoop.org/wiki/Priorities Priorities] by our colleagues in the cooperative circuit. A perusal of this link should familiarise you with the principles of priority merges.
+This station continues on that design, but with separate two pairs of separate entry/exit tracks.
+[[File:en/Efficient Terminus.png|center|frame|An even higher capacity Ro-Ro Terminus mix]]
 
-Consider a typical non-junction merge, at the exit of a pickup station. A tightly-packed optimised stream of trains enters the station, but because of differences in loading times, this order is disrupted on the station exit, and you end up with two tracks of loosely-packed trains. One of these lines, designated the main line, will have, on average, train-train gaps large enough to fit a third train into. Simply connecting the two lines together will not work, and a priority merge is required.
+This is a huge Ro-Ro terminus for very busy lines. There are 2 tracks inbound, 2 tracks outbound and 4 train can enter and exit at the same time (2 enter and 2 exit).
+[[File:en/Manual/Compact terminus.jpeg|center|frame|A very high-capacity Ro-Ro Terminus mix]]
 
-Note that, because trains that drop off cargo always spend the same length of time at a platform, it is possible to dematerialise and reassemble a tightly packed stream of trains, even one above the critical density! (Figure 3)
-[[File:en/Community/Diamond Stream.png|thumb|800px|none|Figure 3: Dropoff with stream reassembly]]
+===Advanced Combined Terminus- and Roro-Station===
+As with a standard ro-ro station, trains enter at one end of station and exit on the other end, thus trains entering the station do not have to wait for trains leaving. This station is designed so that non-stop trains can pass through the station without unnecessarily blocking empty platforms from trains that need to stop at the station. It can serve as a terminus station without the need to reverse train direction. It includes escape depots so it can endure heavy traffic even if there is no space to add additional platforms. This station design is an efficient trade-off between the fast advanced terminus types and saving precious building space.
 
-A first-pass merge using a priority block will reduce the traffic ratio from 1:1 to about 3:1 in favour of the main track (Figure 4). Adding a second priority merge straight after the first one would be a futile gesture, since trains on both lines would continue at the same speed and the mainline train would simply claim priority again. Introducing a delay by a loop of track, followed by a second priority merge, will reduce the sideline to a mere trickle of trains and will have filled in most of the available slots on the mainline. Existing solutions would involve a pre-acceleration track, however a cyclotron eliminates the need to lose momentum.
-[[File:en/Community/Priority Merge.png|frame|none|Figure 4: Priority merge]]
+[[File:en/Manual/Advanced ro-ro terminus.png|center|thumb|550px|A 4 bay advanced combined terminus- and roro-station designed for heavy traffic in small building spaces.]]
 
-===Cyclotrons===
-Consider a sideline that loops back on itself after a failed priority merge. A train in this loop would continue to re-test the mainline for entry conditions, once every 8 * '''TL'' tiles until it found a space large enough to merge with the main line. After the cyclotron was empty, the next waiting train could pre-accelerate and be injected into the cyclotron, ready to continue the cycle. This system has some flaws, however, as it has a capacity of one train and there will be many missed opportunities due to the train being in the wrong position in the accelerator. ''[Broken link to Simple Cyclotron removed.]'' Junctions are a large and well-trodden area of openttd; I have restricted myself to unbranched feeder structures. You will find that a highly-optimised stream of trains does NOT weather a junction well.
+===Roundabout station===
+Can handle a huge amount of small trains.
 
-Refinements to the cyclotron are possible. There is enough space on the track loop to contain two trains, and a system of priority signals will enable a second train to optionally enter the cyclotron. With two trains in the cyclotron, there will be a doubled chance of entering a slot on the mainline. In order to prevent a traffic jam inside the cyclotron (which would be disasterous), some delay tweaking is necessary, but the end result is exceedingly useful.
+[[File:en/Manual/Roundabout station.png|center|thumb|700px|A double roundabout station]]
 
-The injection delay assumes that the second injected train is accelerating from standstill, and there is a small chance that second train has in fact chanced upon the cyclotron entrance at full speed. In this case, the timing will be wrong and the second train will almost certainly cause a jam within the cyclotron (and consequently on the main line). This can be compensated for by some additional signalling to filter out full-speed trains. The filtered out full-speed trains can either be diverted onto a second loop, or simply drained of momentum by a signal. 
+==NewGRF Stations==
+[[File:en/Manual/Newstationsgui.png|right]][[en/Manual/NewGRF]] Stations, or newstations, are available after you have activated a Newstations grf file. You will then have access to a new station-building GUI.
 
-A cyclotron incorporating all the optimisations discussed, and some additional fixes, is shown in Figure 5.
-[[File:en/Community/Junctionary/Cyclotron Full.png|thumb|800px|none|Figure 5: full-featured cyclotron]]
+The new GUI has a drop down box of station groups. Each group has a number of station tiles to choose from. Select a station tile and it will be previewed in the orientation boxes. Some newstation tiles do not allow trains to enter for the effect of full buildings or buffer stops. Be aware when placing newstation tiles that some tiles do not allow more than so many tracks or squares. The numbers not allowed will be greyed out and you cannot build this size. Some newstations sets offer more visual effects than others. For example, in Michael Blunck's newstations, passengers will gather on station platforms as the waiting cargo increases. 
 
-''[Broken link to a savegame removed.]''
+If the station set contains newgrf waypoints, the Waypoint GUI will open upon selecting it. You will have full previews of every waypoint possible for you to build. Most waypoints have introduction and obsoletion dates, in which waypoint styles will be replaced by newer versions. However, any waypoints you have already built will not automatically changed, allowing for variation on your networks. 
 
-Editor's note: Whilst I would like to defend my cyclotron refinements, experimentation has proven that pre-acceleration is a more robust system. The two have been combined in the savegame linked previously.
-{{en/Feature|0.7}}
+Newstations behave the same as normal stations; the only difference is the non-track tiles that block trains.
+[[File:en/Manual/NewGRFstation.png|center|frame|NewGRF farm station]]
 
-===Parallel cyclotrons===
-An attempt to minimize the drawbacks of the full featured cyclotron leads to parallel, small, 1-train cyclotrons. In this design, an array of cyclotrons, each handling one train, may be fed simultaneously. They may have different loop size in order to prevent synchronization between the cycling trains, giving more chance to find a slot in the flow of the main line. Each loop still needs it own acceleration lane so the trains enter the loop at full speed. If a train happened to enter the loop at low speed, it would get a chance to join the main line at non-max speed and cause a possibly large traffic jam.
+==See Also==
+*[[en/Community/Junctionary/Advanced signalling examples]]
 
-Figure 6 shows a parallel cyclotron with two loops.
-[[File:en/Community/Junctionary/Parallel Cyclotron.png|thumb|800px|none|Figure 6: Parallel cyclotron]]
-
-A savegame with the example given in Figure 6 is available [http://gbizzotto.free.fr/parallel_cyclotron.sav Here] (one of the GRF files used in this savegame is not available for download at the moment) (version 0.7 or higher required to open).
-
-Advantages over the full featured cyclotron:
-* Can handle more than two trains
-* Faster fail-and-retry pace
-* No need to synchronize the looping trains
-* Easier to build and remember
-
-Drawbacks:
-* Bigger when using more than one loop
+[[Category:en/Manual/Construction]]
+[[Category:en/Manual/Railways]]
