@@ -1,26 +1,29 @@
 [[Translation:en/Archive/Source/OpenTTDDevBlackBook/Map/SaveGame]]
 {{en/Warning|The following information has not been confirmed for accuracy and may not be correct}}
 
-== File Format ==
-Their are 3 types of file formats in open ttd.
-Bytes 0 - 4 are in plain text and represent the type of file load that will take place.
-Bytes 5 - 8 are the version number for the save/load handler represented in Little-Endian byte order.
+== Savegame File Format ==
+Savegame files (including scenario files) consist of an 8-byte header followed by the actual savegame data in a compressed or plain form. Four types of file formats are supported by OpenTTD so far.
 
+=== Header ===
 
-=== OTTD ===
+{|
+| '''Offset''' || '''Size''' || '''Description'''
+|-
+| 0 || 4 bytes || Savegame format tag in plain text (see below)
+|-
+| 4 || uint32 || Savegame version in big endian format (currently it's SAVEGAME_VERSION * 0x10000)
+|}
 
-lzo
+=== Savegame Format Tag ===
 
-<pre>saveload=>tag = 0x4454544f</pre>
-
-=== OTTN ===
-
-none
-
-<pre>saveload=>tag = 0x4e54544f</pre>
-
-=== OTTZ ===
-
-Zlib
-
-<pre>saveload=>tag = 0x5a54544f</pre>
+{|
+| '''Tag''' || '''Savegame body format'''
+|-
+| OTTD || Data compressed using LZO
+|-
+| OTTN || Plain data
+|-
+| OTTZ || Data compressed using Zlib
+|-
+| OTTX || Data compressed using LZMA
+|}
