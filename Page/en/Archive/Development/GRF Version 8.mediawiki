@@ -123,6 +123,59 @@ Proposal: The unused bits will be checked for being zero; else an error message 
 Grf-Version: No bump needed.<br>
 Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/110_check_callback_results.diff 110_check_callback_results.diff]
 
+== Revise height variables ==
+There are two units for height in TTD. "Pixels" and "heightlevels". One heightlevel has 8 pixels.
+Various variables report heights in one of those units to NewGRFs. In most cases using 8 bits.
+Many of these variables will break when more-height-levels (more than 16 height levels; up to 256) are added. There is no way around breaking existing NewGRFs in this case. Just like GRFs have to use GRF version 7 to correctly support new cargos, they will have to use GRF version 8 to support more-height-levels.
+
+=== Stuff which remains unchanged and will continue to work ===
+* Spritelayouts: Height of bounding boxes is defined in pixels (7 bit unsigned).
+* Object property 16 "building height" (8 bit): Keeps on using heightlevels as unit.
+* Vehicle variable 62 "Z difference" (8 bit signed): Keeps on using pixels.
+* Canal variable 80 "height above ground" (8 bit): Keeps on using heighlevels.
+
+=== Stuff which remains unchanged, will somewhat break with more heightlevels, and will remain unfixed/unchanged ===
+* Vehicle variable 9E "Z position" (8 bit unsigned): Keeps on using pixels. Will be silently extended to 32 bit in OpenTTD.
+* Signal variable 60 "Height" (5 bit; not supported by OpenTTD): Will break for more heightlevels.
+
+=== Stuff that changes behaviour in GRF version 8 ===
+==== Action 0 snow line height table ====
+Currently: Pixels, 0x10 - 0x88<br/>
+Proposal: 0x00 - 0xFE (automatically scaled to maximum height level), 0xFF for 'no snow'.<br/>
+Grf-Version: Bump needed.<br/>
+Implementation:
+
+==== Snow line variables ====
+* Variable 17/97 "Fixes snow line height" (not supported by OpenTTD)
+* Variable 20/A0 "Current snow line height"
+Currently: Pixels, 0xFF for 'no snow'<br/>
+Proposal: Height levels, 0xFF for 'no snow'<br/>
+Grf-Version: Bump needed.<br/>
+Implementation:
+
+==== Other height variables ====
+* Vehicle variabel 44 "aircraft altitude"
+* Nearby tile info variables of all features (e.g. industry tile variable 60)
+* Callback 28 variable 8A
+Currently: Pixels<br/>
+Proposal: Height levels<br/>
+Grf-Version: Bump needed.<br/>
+Implementation:
+
+==== Callback 144 (not supported by OpenTTD) ====
+Currently: Heightlevel of north corner, 4 bit. (will break for more-height-levels)<br/>
+Proposal: Complete new format for var10: xTHHRRtt
+* x:  reserved
+* HH: height of lowest corner in heightlevels
+* RR: 8 random bits
+* tt: various flags: bit 0-2 terrain type; 3-4 water class
+This format is also more consistent with the nearby land info variables.
+
+==== New Action D patch/settings variables 14 "Maximum height level" ====
+Proposal: Maximal allowed height level; currently fixed at 15<br/>
+Grf-Version: No bump needed.<br/>
+Implementation:
+
 == Old proposals, which are already archieved by different means ==
 
 === Callback 17: House construction check ===
