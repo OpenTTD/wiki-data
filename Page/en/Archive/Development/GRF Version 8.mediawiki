@@ -51,7 +51,7 @@ Implementation for proposal 1: [http://devs.openttd.org/~frosch/diffs/grfv8/30_a
 
 ==== Callback 22: Industry availability ====
 Currently: Zero to allow construction, non-zero to disallow.
-# Proposal: Return probability (like property 18); 0000 to disallow; 0001 - 00FF for probability, 0100 to allow with probability from property 22.
+# Proposal: Return probability (like property 18); 0x00 to disallow; 0x01 - 0xFF for probability, 0x100 to allow with probability from property 22.
 Grf-Version: Bump needed.<br>
 Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/90_industryprob.diff 90_industryprob.diff]
 
@@ -103,15 +103,14 @@ These callbacks can return D0xx texts:
 * CB 156: Airport layout name
 * CB 157: Objects Land slope check
 
-Currently: Most of the callbacks return 0000 to 03FF for D0xx texts, 0400 for "default behavior" and other values above 0400 for special stuff.<br>
+Currently: Most of the callbacks return 0x00 to 0x3FF for D0xx texts, 0x400 for "default behavior" and other values above 0x400 for special stuff.<br>
 Proposal: Make all callbacks behave like that.<br>
 Grf-Version: Bump needed.<br>
 Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/65_D0xx_cbs.diff 65_D0xx_cbs.diff]
 
 === Other callbacks with limited range ===
 The following callbacks do not use all 15 bits for their results:
-* CB 20: Length of animation frame
-* CB 27/142/154/15A: Length of animation frame
+* CB 20/27/142/154/15A: Length of animation frame
 * CB 24: Custom station layout
 * CB 32: 32-day callback
 * CB 14A: Decide industry color
