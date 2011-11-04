@@ -142,6 +142,7 @@ Many of these variables will break when more-height-levels (more than 16 height 
 ==== Action 0 snow line height table ====
 Currently: Pixels, 0x10 - 0x88<br/>
 Proposal: 0x00 - 0xFE (automatically scaled to maximum height level), 0xFF for 'no snow'.<br/>
+Behaviour with more-height-levels and GRF version < 8: Values are scaled automatically. Keeps working.<br/>
 Grf-Version: Bump needed.<br/>
 Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/130_snowlinetable.diff 130_snowlinetable.diff]
 
@@ -150,6 +151,7 @@ Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/130_snowlinetable.d
 * Variable 20/A0 "Current snow line height"
 Currently: Pixels, 0xFF for 'no snow'<br/>
 Proposal: Height levels, 0xFF for 'no snow'<br/>
+Behaviour with more-height-levels and GRF version < 8: Values become bigger than 0xFF in some cases. Might break some GRFs; some GRFs might continue to work.<br/>
 Grf-Version: Bump needed.<br/>
 Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/140_snowvariables.diff 140_snowvariables.diff]
 
@@ -158,6 +160,7 @@ Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/140_snowvariables.d
 * Callback 28 variable 8A
 Currently: Pixels<br/>
 Proposal: Height levels<br/>
+Behaviour with more-height-levels and GRF version < 8: Values become bigger than 0xFF in some cases. Might break some GRFs; some GRFs might continue to work.<br/>
 Grf-Version: Bump needed.<br/>
 Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/150_nearbyheight.diff 150_nearbyheight.diff]
 
@@ -165,6 +168,7 @@ Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/150_nearbyheight.di
 ==== Vehicle variable 44 "aircraft altitude" ====
 Currently: Pixels, 8 bit<br/>
 Proposal: Pixels, 12 bit<br/>
+Behaviour with more-height-levels and GRF version < 8: Values become bigger than 0xFF in some cases. Might break some GRFs; some GRFs might continue to work.<br/>
 Grf-Version: No bump needed.<br/>
 Implementation: (empty diff)
 
