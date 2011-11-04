@@ -1,78 +1,137 @@
 Some proposals for modifications of newgrf specs (grf version 8) to improve usability and extensibility
 
-=Vehicle variable 42 field "cc"=
+==Vehicle variable 42 field "cc"==
 Currently: Untranslated cargo.<br>
 Proposal: Translated cargo. The translation table of the grf the varaction2 belongs to will be used. 0xFF if the cargo is not part of it. (like var 47)<br>
-Grf-Version: Does this need bumping? IMO no, as the current behaviour is not useable at all. The change would fit into version 7. OTOH (according to Dalestan) it is a change, so bump needed.
+Grf-Version: Does this need bumping? IMO no, as the current behaviour is not useable at all. The change would fit into version 7. OTOH (according to Dalestan) it is a change, so bump needed.<br>
+Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/70_translated_var42.diff 70_translated_var42.diff]
 
-=Vehicle property 15/10/0C "default cargo"=
+==Vehicle property 15/10/0C "default cargo"==
+=== Default cargo ===
 Currently: Untranslated cargo.<br>
-Proposal: Translated cargo. If the specified cargo is not present, the first refittable will be used. It's the job of the GRF to check available cargos via action 7, and set other default cargos, if they are not fine with the "first refittable"-rule.
+Proposal: Translated cargo. If the specified cargo is not present, the first refittable will be used. It's the job of the GRF to check available cargos via action 7, and set other default cargos, if they are not fine with the "first refittable"-rule.<br>
+Note: If the vehicle is refittable, the default cargo must be one of the refittable cargos; else the the "first refittable"-rule applies.<br>
+Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/82_translate_default_cargo.diff 82_translate_default_cargo.diff]
 
-=Introduce 32bit parameters for 60+x variables=
+=== First refittable ===
+Currently: First refittable cargoslot is picked. (That means "lowest number of untranslated cargo)<br>
+Proposal: Use first refittable cargo wrt. the GRFs cargo translation table. (nitpick: the CTT of the GRF providing the refit mask)<br>
+Grf-Version: Changed behaviour of existing GRFs, so bump needed.<br>
+Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/86_first_refittable_from_ctt.diff 86_first_refittable_from_ctt.diff]
+
+==Introduce 32bit parameters for 60+x variables==
 This is possible via variable 7B, which one can use to put 32 bits into the accumulator and pass them to any 60+x variable. Esp. useful for vehicle variable 60<br>
 Grf-Version: No bump needed.<br>
 Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/40_32bit_parameter_esp_var60.diff 40_32bit_parameter_esp_var60.diff]
 
-=8 bit callbacks 10 - 14, 16 - 19, 1D, 20 - 21, 27, 36, 142, 14B - 14C=
+== No longer fallback stuff for basecost multipliers==
+Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/50_no_pricebase_fallback.diff 50_no_pricebase_fallback.diff]
 
-Extent all callbacks to 15 bit results. I.e. enforce unused bits to be zeroed for future use.<br>
-Grf-Version: Bump to version 8 would ensure compatibility with old grfs. But the bump is only useful, when the return values of new newgrfs would have to pass a range-check.
-
-===Remove 0xFF?? callback results===
+==Remove 0xFF?? callback results==
 Remove the 0xFF?? downwards-compatibility stuff to support full 15 bit callbacks. (Dalestan's suggestion)<br>
 Grf-Version: Bump needed.<br>
 Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/20_callback_result.diff 20_callback_result.diff]
 
-===Callback 16: Articulated vehicles===
-Currently: Bit 0-6 ID, bit 7 reverse flag, 0xFF stop<br>
+== Revise all callback and their allowed result values ==
+
+Goals:
+* Make all callbacks return 15 bit. No 8 bit callbacks.
+* Make boolean callbacks return 0 to 1 instead of zero or non-zero. That way more return values with different meanings can be added later.
+* Check all callback results, whether their values are known/valid. Display an error to the user if not. (This is basically to enforce the previous goal.)
+
+=== Complete different callback results ===
+
+==== Callback 16: Articulated vehicles ====
+Currently: Bit 0-6 ID, bit 7 reverse flag, 0xFF stop
 # Proposal: Bit 0-13 ID, bit 14 reverse flag, 0x7FFF stop; 0x3F?? and 0x7F?? reserved (Note: 0x7FFF needs 2b))
 # Proposal: Bit 0-6 ID, bit 7 reverse flag, 0xFF stop; 0x7E/0xFE use ID from register 0x100
 Grf-Version: Proposal 1 needs bump to version 8, proposal 2 not necessarily. (apart from general 8->15 bit bump)<br>
 Implementation for proposal 1: [http://devs.openttd.org/~frosch/diffs/grfv8/30_articulated_cb.diff 30_articulated_cb.diff]
 
-===Callback 19: Vehicle cargo subtype display===
-Currently OTTD: 0-0x3FF for texts, except special values 0x??FF<br>
-Currently TTDP: 8 bit, i.e. texts 0-0xFE<br>
-Proposal 1: Restrict the special value to 0x00FF<br>
-Proposal 2: Change the special value to 0x400 (like cb 28)<br>
-Grf-Version: IMO no bump needed for proposal 1, as other special values than 0x00FF are unlikely used. (apart from general 8->15 bit bump)
+==== Callback 22: Industry availability ====
+Currently: Zero to allow construction, non-zero to disallow.
+# Proposal: Return probability (like property 18); 0000 to disallow; 0001 - 00FF for probability, 0100 to allow with probability from property 22.
+Grf-Version: Bump needed.<br>
+Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/90_industryprob.diff 90_industryprob.diff]
 
-===Callback 1D: Can wagon be attached===
-Currently OTTD: 0-0x3FF for texts, except special values 0x??FD - 0x??FF<br>
-Currently TTDP: 8 bit, i.e. texts 0-0xFE<br>
-Proposal 1: Restrict the special values to 0x00FD - 0x00FF<br>
-Proposal 2: Change special values to 0x400-0x402 (like cb 28)<br>
-Grf-Version: IMO no bump needed for proposal 1, as other special values than 0x00F? values are unlikely used. (apart from general 8->15 bit bump)
 
-===Callback 31, 37: Start/stop check, Industry Cargo sub-type display===
-Currently: 0-0x3FF for texts, except special values 0x??FF<br>
-Proposal 1: restrict the special value to 0x00FF<br>
-Proposal 2: Change the special value to 0x400 (like cb 28)<br>
-Grf-Version: IMO no bump needed for proposal 1, as other special values than 0x00FF are unlikely used. (apart from general 8->15 bit bump)
+=== Deprecation of callbacks ===
+The callbacks
+* 10: Visual effect and wagon power
+* 11: Wagon length
+* 12: Load amount
+are no longer called in grf version 8.
+* Callback 36 is called instead
+* Callback 36 is not called for grf version < 8.
+* The callback flags for callback 10, 11 and 12 have no meaning anymore.
 
-===Callback 36: Change vehicle properties===
-Currently: 8 or 15 bit depending on property<br>
-Proposal: 15 bit, though not necessarily extending the allowed range. (apart from general 8->15 bit range check)<br>
-Implementation: This has always been the behaviour of the OTTD implementation. It works for several properties just fine (e.g. capacity), but bigger values also fail for some properties (e.g. aircraft speed).
+Grf-Version: Bump needed.
 
-=Callbacks 10, 11, 12=
-Merge callbacks 10,11,12 into callback 36 and deprecate the callback flags of them.
+=== Boolean results ===
+These callback return boolean results:
+* CB 13: Station availability
+* CB 17: House construction check
+* CB 18: AI construction/purchase selection (partly)
+* CB 21: Trigger building destruction
+* <strike>CB 22: Industry availability (see above)</strike>
+* CB 30/14E/150: Decide drawing default foundations
+* CB 3B: Control special industry effect
+* CB 3C/14F/15D: Disable autosloping
+* CB 3D: Opt out of accepting cargo
+* CB 143: Protect building conditionally
 
-=Boolean callbacks: 13, 17, 18 (partly), 21, 22, 3B, 3C=
-Currently: Return boolean, i.e. zero or non-zero.<br>
-Proposal: Return 0 or 1. Other values reserved.<br>
-Grf-Version: Needs bump to version 8
+Currently: Most callbacks return zero or non-zero. Some return 0 or 1.<br>
+Proposal: All callback shall return 0 or 1. Other values are considered reserved and trigger error messages when used.<br>
+Grf-Version: Bump needed.<br>
+Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/110_check_callback_results.diff 110_check_callback_results.diff]
 
-===Industry availability callback should return probability (same as the property).===
+=== Callbacks returning D0xx texts ===
+These callbacks can return D0xx texts:
+* CB 19: Cargo sub-type display
+* CB 1D: Can wagon be attached
+* CB 23: Additional text in purchase screen
+* CB 28: Industry location permissibility
+* CB 2F: Custom shape check
+* CB 31: Start/stop check
+* CB 37: Cargo sub-type display
+* CB 38/15C: Show additional text in fund window
+* CB 3A: Show additional text in industry window
+* CB 149: Land slope check
+* CB 14D: Customized building name
+* CB 155: Extra information about airport layout in the build gui
+* CB 156: Airport layout name
+* CB 157: Objects Land slope check
 
-= Callback 17: House construction check=
+Currently: Most of the callbacks return 0000 to 03FF for D0xx texts, 0400 for "default behavior" and other values above 0400 for special stuff.<br>
+Proposal: Make all callbacks behave like that.<br>
+Grf-Version: Bump needed.<br>
+Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/65_D0xx_cbs.diff 65_D0xx_cbs.diff]
+
+=== Other callbacks with limited range ===
+The following callbacks do not use all 15 bits for their results:
+* CB 20: Length of animation frame
+* CB 27/142/154/15A: Length of animation frame
+* CB 24: Custom station layout
+* CB 32: 32-day callback
+* CB 14A: Decide industry color
+* CB 14B: Decide input cargo types
+* CB 14C: Decide output cargo types
+* CB 15B: Decide colour of building
+
+Proposal: The unused bits will be checked for being zero; else an error message is displayed to the user.<br>
+Grf-Version: No bump needed.<br>
+Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/110_check_callback_results.diff 110_check_callback_results.diff]
+
+
+== Old proposals, which are already archieved by different means ==
+
+=== Callback 17: House construction check ===
 Currently: Called for one tile, which would be part of the house.<br>
 Proposal: Always call for the north tile.<br>
 Grf-Version: No bump needed.<br>
 Implementation: Already implemented in trunk long ago. 0.7-ish or so.
 
-= Specify used palette=
+=== Specify used palette ===
 # Proposal: Append a byte at the end of Action8. 0 = don't care, 1 = dos, 2 = win. (0 is a nice default value) Optional for grf version < 8, mandatory for >= 8.
 # Proposal: 0 = dos, 1 = win, 2 = don't care (like var 0D/8D). Optional for grf version < 8, mandatory for >= 8.
 Implementation: Goal was archived with Action 14.
@@ -80,10 +139,7 @@ Implementation: Goal was archived with Action 14.
 Handle any non-specified palette as windows palette in order to 'honour' the fact that virtually all old NewGRFs use that - and it's tedious to configure that when always this setting will be needed.<br>
 Implementation: Advanced setting in trunk.
 
-= Maybe some grf version for compatible grfs?=
+=== Maybe some grf version for compatible grfs? ===
 16 bit for incompatible version<br>
 16 bit for compatible version<br>
 Implementation: Goal was archived with Action 14.
-
-= No longer fallback stuff for basecost multipliers=
-Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/50_no_pricebase_fallback.diff 50_no_pricebase_fallback.diff]
