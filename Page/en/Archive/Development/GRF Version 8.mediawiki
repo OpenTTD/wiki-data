@@ -134,6 +134,8 @@ Many of these variables will break when more-height-levels (more than 16 height 
 === Stuff which remains unchanged and will continue to work ===
 * Spritelayouts: Height of bounding boxes is defined in pixels (7 bit unsigned).
 * Object property 16 "building height" (8 bit): Keeps on using heightlevels as unit.
+* Vehicle variable 44 "aircraft altitude" (8 bit): Keeps on using pixels as unit. Values bigger than 0xFF are clamped to 0xFF.
+:Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/154_var44.diff 154_var44.diff]
 * Vehicle variable 62 "Z difference" (8 bit signed): Keeps on using pixels.
 * Canal variable 80 "height above ground" (8 bit): Keeps on using heighlevels.
 
@@ -168,12 +170,6 @@ Grf-Version: Bump needed.<br/>
 Implementation: 
 [http://devs.openttd.org/~frosch/diffs/grfv8/150_nearbyheight.diff 150_nearbyheight.diff]
 [http://devs.openttd.org/~frosch/diffs/grfv8/152_cb28.diff 152_cb28.diff]
-
-==== Vehicle variable 44 "aircraft altitude" ====
-Unchanged: Pixels, 8 bit<br/>
-Behaviour with more-height-levels: Values bigger than 0xFF are clamped to 0xFF.<br/>
-Implementation:
-[http://devs.openttd.org/~frosch/diffs/grfv8/154_var44.diff 154_var44.diff]
 
 ==== Callback 144 ====
 Currently: Heightlevel of north corner, 4 bit. (will break for more-height-levels)<br/>
