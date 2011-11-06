@@ -154,7 +154,7 @@ Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/130_snowlinetable.d
 * Variable 20/A0 "Current snow line height"
 Currently: Pixels, 0xFF for 'no snow'<br/>
 Proposal: Height levels, 0xFF for 'no snow'<br/>
-Behaviour with more-height-levels and GRF version < 8: Values become bigger than 0xFF in some cases. Might break some GRFs; some GRFs might continue to work.<br/>
+Behaviour with more-height-levels and GRF version < 8: Values bigger than 0xFE get clamped. GRFs are likely to continue working for up to 32 height levels, but will likely break when more are used.<br/>
 Grf-Version: Bump needed.<br/>
 Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/140_snowvariables.diff 140_snowvariables.diff]
 
@@ -163,16 +163,17 @@ Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/140_snowvariables.d
 * Callback 28 variable 8A
 Currently: Pixels<br/>
 Proposal: Height levels<br/>
-Behaviour with more-height-levels and GRF version < 8: Values become bigger than 0xFF in some cases resp. are masked to 8 bits. Might break some GRFs; some GRFs might continue to work.<br/>
+Behaviour with more-height-levels and GRF version < 8: Values bigger than 0xFF are clamped to 0xFF. GRFs are likely to continue working for up to 32 height levels, but will likely break when more are used.<br/>
 Grf-Version: Bump needed.<br/>
-Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/150_nearbyheight.diff 150_nearbyheight.diff]
+Implementation: 
+[http://devs.openttd.org/~frosch/diffs/grfv8/150_nearbyheight.diff 150_nearbyheight.diff]
+[http://devs.openttd.org/~frosch/diffs/grfv8/152_cb28.diff 152_cb28.diff]
 
 ==== Vehicle variable 44 "aircraft altitude" ====
-Currently: Pixels, 8 bit<br/>
-Proposal: Pixels, 12 bit<br/>
-Behaviour with more-height-levels and GRF version < 8: Values become bigger than 0xFF in some cases. Might break some GRFs; some GRFs might continue to work.<br/>
-Grf-Version: No bump needed.<br/>
-Implementation: (empty diff)
+Unchanged: Pixels, 8 bit<br/>
+Behaviour with more-height-levels: Values bigger than 0xFF are clamped to 0xFF.<br/>
+Implementation:
+[http://devs.openttd.org/~frosch/diffs/grfv8/154_var44.diff 154_var44.diff]
 
 ==== Callback 144 ====
 Currently: Heightlevel of north corner, 4 bit. (will break for more-height-levels)<br/>
@@ -182,7 +183,9 @@ Proposal: Complete new format for var10: xTHHRRtt
 * HH: height of lowest corner in heightlevels
 * RR: 8 random bits
 * tt: various flags: bit 0-2 terrain type; 3-4 water class
-This format is also more consistent with the nearby land info variables.
+This format is also more consistent with the nearby land info variables.<br/>
+Implementation:
+[http://devs.openttd.org/~frosch/diffs/grfv8/156_cb144.diff 156_cb144.diff]
 
 ==== New Action D patch/settings variables 14 "Maximum height level" ====
 Proposal: Maximal allowed height level; currently fixed at 15<br/>
