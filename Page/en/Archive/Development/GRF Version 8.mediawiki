@@ -129,7 +129,9 @@ Implementation: [http://devs.openttd.org/~frosch/diffs/grfv8/110_check_callback_
 == Revise height variables ==
 There are two units for height in TTD. "Pixels" and "heightlevels". One heightlevel has 8 pixels.
 Various variables report heights in one of those units to NewGRFs. In most cases using 8 bits.
-Many of these variables will break when more-height-levels (more than 16 height levels; up to 256) are added. There is no way around breaking existing NewGRFs in this case. Just like GRFs have to use GRF version 7 to correctly support new cargos, they will have to use GRF version 8 to support more-height-levels.
+Many of these variables will break when more-height-levels (more than 16 height levels; up to 256) are added. There is no way around breaking existing NewGRFs in this case.
+
+The goal of GRF version 8 is here to allow NewGRFs handle more heightlevels. Various variables are changed to return heighlevels instead of pixels. (Simliar as GRF version 7 changes many variables to return translated cargobits instead of cargo slots.)
 
 === Stuff which remains unchanged and will continue to work ===
 * Spritelayouts: Height of bounding boxes is defined in pixels (7 bit unsigned).
