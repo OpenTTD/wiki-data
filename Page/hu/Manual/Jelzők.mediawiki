@@ -87,24 +87,27 @@ Ha egy vonat rossz irányból érkezik egy egyirányú jelzőhöz, azonnal megfo
 {{en/-}}
 
 ===Előjelzők===
-[[File:en/Manual/Station no pre-signals.png|frame|right|A problem - the left train may leave first.]]
-[[File:en/Manual/Station with pre-signals.png|frame|right|Solve the problem using presignals]]
-The image on the top right shows a setup where entry to a station is controlled using ordinary signals.  When at least one platform is empty, this works well, as an incoming train is always directed to a free platform.  However, consider what happens when all platforms are full, as in the screenshot.  All branches are showing red, so the incoming train picks the easiest path - straight on.  But suppose the train on the platform to the right is going to be in the station for some time.  Meanwhile, the train on the left leaves.  The incoming train has committed itself to a platform and is stuck waiting for a train to depart even though there is now an empty platform available!  We need to stop that incoming train before the track splits so that it picks the empty platform when a train leaves. For this, we need to use '''pre-signals'''.
+[[File:en/Manual/Station no pre-signals.png|frame|right|Probléma: lehet, hogy a bal oldali vonat előbb hagyja el az állomást]]
+[[File:en/Manual/Station with pre-signals.png|frame|right|Oldd meg a problémát előjelzők használatával]]
 
-Pre-signals are signals that decide on which colour to show, not only by the status of the track immediately beyond, but also by the status of other pre-signals further down the line.  Specifically, an entry pre-signal shows a green light if, and only if, there is a green exit from the block behind it.  You, as the planner, need to identify which signals are to be the pre-signals and which are to identify exits.
-{{en/-}}
-====Entry Pre-jelzők====
-[[File:en/Manual/Entry presignal.png|left|60px]]An '''entry presignal''' shows green as long as there is at least one green exit signal on the following section of track.  Otherwise it shows red.  This prevents trains from entering the signal block until there is an available exit. Note that depots have a built-in two way signal (it works as an entry pre-signal in a pre-signal set).
+A jobb felső képen olyan elrendezés látható, amelyben az állomást a szokásos jelzők ellenőrzik. Amikor legalább egy vágány üres, jól működik, mert a jelzők az érkező vonatot mindig szabad vágányra irányítják. De gondolj bele, mi történik, ha minden vágány foglalt, mint a képernyőmentésen. Minden ág vöröset mutat, úgyhogy az érkező vonat a legegyszerűbb utat választja: az egyenest. De tegyük fel, hogy a jobb oldali vonat még mindig az állomáson időzik, miközben a bal oldali vonat elmegy. Az érkező vonat már irányt választott, és arra vár, hogy a másik vonat elinduljon, pedig van egy használható üres vágány! Tehát meg kell állítanunk az érkező vonatot még az elágazás előtt, így akkor fog üres vágányt választani, amikor egy vonat elmegy. Ezért érdemes ''előjelzőket'' használnunk.
 
-If there are no signals designated as exits behind the entry pre-signal, it behaves as a normal signal.  This is convenient for bi-directional presignals where only one direction needs presignal functionality.
+Az előjelzők színe nem csak a közvetlenül mögöttük található pályaszakasz állapotán múlik, hanem a vonalon odébb található további előjelzők állásán is. Pontosabban: egy bejárati előjelző akkor mutat zöldet, és csakis akkor, ha van egy zöld kijárati jelző a mögötte lévő szakaszon. Vasúttervezőként fel kell ismerned, melyek az előjelzők, és melyek számítanak kijárati jelzőnek.
+
 {{en/-}}
-====Exit-jelzők====
-[[File:en/Manual/Exit presignal.png|60px|left]]An '''exit signal''' behaves in the same way as a normal block signal but is necessary to trigger the correct colour on entry and combo pre-signals.
+====Bejárati előjelzők====
+[[File:en/Manual/Entry presignal.png|left|60px]]Egy '''bejárati előjelző''' mindaddig zöldet mutat, amíg legalább egy zöld kijárati jelző van a következő pályarészen. Ellenkező esetben vöröset mutat. Ez megelőzi, hogy a vonatok a következő jelzőszakaszba lépjenek, mielőtt használható kijárat adódna. Jó tudni, hogy a vasúti járműtelepek beépített kétirányú jelzővel rendelkeznek (előjelző-összeállításban bejárati előjelzőként működik).
+
+A bejárati előjelzők, ha nincs mögöttük kijárati jelző, normál jelzőként viselkednek. Ez jól jön a kétirányú előjelzőknél, ahol csak az egyik irányban szükséges előjelzőként működniük.
+
+{{en/-}}
+====Kijárati jelzők====
+[[File:en/Manual/Exit presignal.png|60px|left]]A '''kijárati jelzők''' normál jelzőként viselkednek, de szükség van rájuk a bejárati és a kombinált előjelzők megfelelő színének kiváltása miatt.
 {{en/-}}
 
-====Combo-jelzők====
-[[File:en/Manual/Station with pre-signals2.png|frame|right|Station with 1 entry pre-signal, 2 combo-signals, and 4 exit-signals]]
-[[File:en/Manual/Combo presignal.png|60px|left]]There is a third type of presignal called the '''combo signal''' and simply acts as both an entry and exit signal.  This allows you to build large "trees" of presignals as shown on the right.
+====Kombinált jelzők====
+[[File:en/Manual/Station with pre-signals2.png|frame|right|Állomás egy bejárati előjelzővel, két kombinált jelzővel, és négy kijárati jelzővel]]
+[[File:en/Manual/Combo presignal.png|60px|left]] A '''kombinált jelzőnek''' nevezett harmadik előjelző-típus egyszerűen működik: bejárati és kijárati jelzőként is. Lehetővé teszi, hogy nagy "fákat" építs előjelzőkből, amint az jobbra is látható.
 {{en/-}}
 ====Pre-jelzők építése====
 To build a pre-signal select the appropriate button in [[#signal-interface|signal selection toolbar]].
