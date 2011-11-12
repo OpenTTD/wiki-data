@@ -125,36 +125,40 @@ Előjelző építéséhez válaszd a megfelelő gombot a [[#a-jelzok-kezelofelul
 
 ==Útvonaljelzők ==
 [[File:en/Manual/Yapp signalgui.png|frame|right|Two new signal types in the [[en/Manual/Signal GUI]].]]
-There are two new signal types. These signals enable trains to reserve a path through a block until the next signal, before entering the block. If another train wants to enter the block, and succeeds in reserving a path through the block, the path signal authorize the train to enter the block, even if another track of the block is used at the same time.
+A játékban két új jelzőtípus van. Ezek a jelzők azt engedik meg a vonatoknak, hogy egy útvonalat legfoglaljanak egy szakaszon át, egészen a következő jelzőig, még mielőtt a szakaszba érnének. Ha egy másik vonat akar a szakaszra hajtani, és sikerül lefoglalnia az útvonalat a szakaszon, az útvonaljelző engedélyezi a vonat szakaszba lépését akkor is, ha a szakasz egy másik pályája ugyanakkor használatban van.
 {{en/-}}
-[[File:en/Manual/Signal bloc.png|frame|right|Y block between three ''block signals'']]
-Here is an example as illustration 
+[[File:en/Manual/Signal bloc.png|frame|right|Y-szakasz három ''szakaszjelző'' közt]]
+Vegyünk egy példát. 
 
-We have here a Y block between three signals.
-The right track is used by a train. A train arrives from the lower track and wants to go to the left track. A standard block signal considers that all the block is occupied (even if the left track is free).
-{{en/-}}
-[[File:en/Manual/Multiples standard.png|frame|right|With two additional block signals, the''Y'' has been split into three blocks: right arm, left arm and junction]]
-A solution is to split this block into smaller blocks by adding signals after the junction.
-{{en/-}}
-[[File:en/Manual/Chemin.png|frame|right|Y block between a ''path signal'' and two ''block signals'']]
-On the contrary, the path signal authorizes the train coming from the bottom to enter the Y block, as the path it tries to reserve is free (the left track). No need to split the block into smaller blocks (i.e. no need for signals after the junction).
-{{en/-}}
-There are two things you should know about this signal:
-* Place it only where trains can stop and wait without blocking junctions ;
-* This signal only works in one direction. In the other direction, it is either ignored or considered a one-way signal, depending on the signal path (see below).
-[[File:en/Manual/Yapp pbssignal.png|frame|left|PS]]
-* '''Path Signal''': trains can pass through this signal from the back side.
-{{en/-}}
-[[File:en/Manual/Yapp onewaypbssignal.png|frame|left|1W PS]]
-* '''One-way Path Signal''': trains can '''not''' pass through this signal from the back side.
-{{en/-}}
-Most of the time it will be sufficient to use a default Path signal, as passing a signal from the back is penalised by the pathfinder, however, one-way Path signals might be useful in certain specific cases.
+Van egy Y-szakaszunk három jelző közt.
+A jobb pályát vonat használja. Vonat érkezik az alsó pályán és a bal pályára akar menni. A szokásos szakaszjelző a szakaszt foglaltnak jelzi (még ha a bal pálya szabad is).
 
-The two new signal types behave a bit differently than standard OpenTTD signal types. The Path signals are red by default, and will only show green as soon as a train can reserve a path to the next safe waiting position on its route. Safe waiting positions are - by definition - in front of signals, depots and track ends. The back of a Path signal is not considered a safe waiting position, and therefore paths are reserved through these signals.
+{{en/-}}
+[[File:en/Manual/Multiples standard.png|frame|right|Két további szakaszjelzővel az ''Y''-t három szakaszra bontottuk: jobb ág, bal ág, elágazás]]
+Egyfajta megoldás, ha a szakaszt kisebb szakaszokra bontjuk az elágazás után telepített jelzőkkel.{{en/-}}
+[[File:en/Manual/Chemin.png|frame|right|Y-szakasz egy ''útvonaljelző'' és két ''szakaszjelző'' közt]]
 
-Because the front of every signal is defined as a safe waiting position, you would normally not want to place a signal immediately behind a junction, only in front of a junction. This is because it is only safe for a train to wait in front of a junction. It is not safe for a a train to wait at a signal immediately after a junction before the whole train has cleared the junction, as it would be blocking the junction while waiting, as illustrated in the example below. This is a major advantage against standard OpenTTD signals, where you had to place signals before and after junctions, which caused trains to block junctions while waiting.
-<div style="width:50%;float:left;">[[File:en/Manual/Yapp unsafewaitinglocation.png|frame|center|'''Bad''': The signal indicated by the arrow is a bad waiting location, as the train in the junction now blocks the otherwise free path of the train coming from the top. There's a second bad waiting location in this picture. Can you find it?]]</div>
-<div style="width:50%;float:left;">[[File:en/Manual/Yappgoodexample.png|frame|center|'''Good''': Here there is enough space after the juction for a train to wait. As long as this space is unavailable, the next train will wait before the junction rather than blocking it. This allows the train coming from the top to proceed.]]</div>
+Ezzel szemben az útvonaljelző engedélyezi az Y-ba alulról érkező vonat belépését, amint az ág, amit próbál lefoglalni (a bal ág) szabaddá válik. Nincs szükség arra, hogy a szakaszt kisebb szakaszokra osszuk, tehát nincs szükség jelzőkre az elágazás után.
+{{en/-}}
+Két dolgot kell tudni erről a jelzőről:
+* Csak olyan helyre tegyük, ahol a vonatok megállhatnak és várakozhatnak anélkül, hogy elágazás forgalmát megakaszthatnák.
+* Ez a  jelző csak egy irányban működik. A másik irányban vagy figyelmen kívül marad, vagy számításba jön, a jelző útvonalától függően (lásd lentebb).
+
+
+[[File:en/Manual/Yapp pbssignal.png|frame|left|]]
+* '''Irányjelző''' (PS, PBS): a hátulról érkező vonatok áthaladhatnak rajta.
+{{en/-}}
+[[File:en/Manual/Yapp onewaypbssignal.png|frame|left|]]
+* '''Egyirányú irányjelző''' (1PS, 1PBS): a hátulról érkező vonatok '''nem''' haladhatnak át ezen a jelzőn.
+{{en/-}}
+A legtöbb esetben elég az alap irányjelzőt (útvonaljelzőt) használni, mert az útvonalkereső a jelzőn hátulról történő áthaladást bünteti, de az egyirányú irányjelzők is hasznosak lehetnek bizonyos esetekben.
+
+A két új jelzőtípus kicsit eltérően viselkedik a szokásos OpenTTD-s jelzőkhöz képest: az útvonaljelzők alapértelmezés szerint vörösek, és csak abban a pillanatban mutatnak zöldet, amikor egy vonat éppen lefoglalja az útvonalat a következő biztonságos várakozóhelyéig. Biztonságos várakozóhelyek (definiciójuk szerint) jelzők előtt, járműtelepen és pályavégeken vannak. Az útvonaljelző mögötti pályaszakasz nem minősül biztonságos várakozóhelynek, emiatt kerül sor az útvonalak lefoglalására ezeken a jelzőkön át.
+
+Miután minden jelző eleje biztonságos várakozóhelynek számít, általában nem akarsz jelzőt közvetlenül az elágazás után elhelyezni, hanem csak a kereszteződés előtt. Ez azért van, mert csak a kereszteződés előtt biztonságos a vonatnak várakoznia: a vonatnak nem biztonságos várakoznia azelőtt, hogy teljes hosszában a kereszteződést elhagyta volna, mert amíg várakozik, megakaszthatja a kereszteződés forgalmát, amint az alábbi példán látható. Az útvonaljelzőknek ez a fő előnye a szokásos OpenTTD-s jelzőkkel szemben, mert utóbbiak használatakor jelzőt kell a kereszteződés előtt és után elhelyezned, ami viszont azzal jár, hogy a vonatok, amíg várakoznak, megállítják a kereszteződés forgalmát.
+<div style="width:50%;float:left;">[[File:en/Manual/Yapp unsafewaitinglocation.png|frame|center|'''Rossz''': a nyíllal jelölt jelző rossz várakozóhely, mert a vonat a kereszteződésben most elállja a fentről érkező vonat egyébként szabad útvonalát. Van ezen a képen egy másik rossz várakozóhely is. Megtalálod?]]</div>
+<div style="width:50%;float:left;">[[File:en/Manual/Yappgoodexample.png|frame|center|'''Jó''': A kereszteződés után itt elég hely van ahhoz, hogy egy vonat várakozzon. A következő vonat mindaddig, amíg ez a hely nem vehető igénybe, inkább a kereszteződés előtt fog várakozni, mintsem elállná azt. Ez lehetővé teszi a fentről érkező vonat továbbhaladását.
+]]</div>
 <div style="clear:left;"></div>
 
 
