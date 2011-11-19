@@ -27,14 +27,13 @@ Locale file 'en_GB.txt':
 
 
 ==Conversion into OTTD string format==
-All substrings are translated to STRING5. So, there is a limit of 5 parameters per substring, but the actual number of parameters must not be known.
+All substrings are translated to STRING5. So, there is a limit of 5 parameters per substring, but the actual number of parameters does not need to be known.
 However, this does also not allow sub-substrings.
 
 English is the master language. That is, every translated string must appear in 'en_GB.txt' or 'en.txt', or they are taken as rawstring, which are not translated, and cannot take any parameters.
 When the script is started on the server, the master language is loaded, and every string key gets assigned a unique number. Also every string parameter key is assigned an actual parameter number (considering all substring as STRING5).
 
 When clients join, they request the translations for a specific language. The server then sends the mapping between the text IDs and the translations. The string parameters are already resolved at this point, so the clients do not need to know the keys of the parameters.
-
 
 ==Setting of texts==
 No texts are stored in the savegame. So, the script must set all texts in its 'load' function. When clients join the already set texts are synced to them.
