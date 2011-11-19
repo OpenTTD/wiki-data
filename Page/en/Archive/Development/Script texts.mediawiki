@@ -1,0 +1,49 @@
+==API functions==
+*GoalCompany.SetObjectives(companyid, text);
+:Set the text of the "objectives" window. 'companyid' can be a specific company, or ALL_COMPANIES.
+*GoalTown.SetText(townid, companyid, text);     
+:Set a text to display in the GUI of town 'townid'. Either only visible for a single company, or ALL_COMPANIES.
+
+Arguments:
+* 'text' is a struct, with at least one member 'str'.
+* 'str' is a key into the locale file, which contains the actual text.
+* The struct can have further members for string parameters.
+* Parameters specifying a substring use a substruct of 'text', which has again a 'str' member for the actual text key.
+
+Every key combination (companyid, townid) has only one text. Setting an empty text ("") clears the text.
+(So you can display one text for all companies in the town gui, and one for each company.)
+
+While some strings are only visible for a single company, they are not 'secret', i.e. get transferred to all clients.
+
+==Example==
+ text.str = "STR_TOWN_TEXT";
+ text.company = company_id;
+ text.goal.str = 'STR_GOAL_GROW';
+ text.goal.target = 1000;
+
+Locale file 'en_GB.txt':
+ STR_TOWN_TEXT: This town is claimed by {COMPANY company}.{}Current goal: {STRING goal}
+ STR_GOAL_GROW: Grow this town to a population of {COMMA target}
+
+
+==Conversion into OTTD string format==
+All substrings are translated to STRING5. So, there is a limit of 5 parameters per substring, but the actual number of parameters must not be known.
+However, this does also not allow sub-substrings.
+
+English is the master language. That is, every translated string must appear in 'en_GB.txt' or 'en.txt', or they are taken as rawstring, which are not translated, and cannot take any parameters.
+When the script is started on the server, the master language is loaded, and every string key gets assigned a unique number. Also every string parameter key is assigned an actual parameter number (considering all substring as STRING5).
+
+When clients join, they request the translations for a specific language. The server then sends the mapping between the text IDs and the translations. The string parameters are already resolved at this point, so the clients do not need to know the keys of the parameters.
+
+
+==Setting of texts==
+No texts are stored in the savegame. So, the script must set all texts in its 'load' function. When clients join the already set texts are synced to them.
+To sync a text to a client a new packet type is used, as the command packets are too short (and the texts actually are no commands anyway; they do not affect the gameplay).
+
+A text package contains the destination of the string (town gui/objectives, company, ...), the ID of the text, and the parameters.
+The parameters are already associated to the specific DParams. Rawstring parameters are directly included into the package.
+
+The clients look up the text IDs in the locale they received. They validate the parameter types (valid company IDs etc.), and can then display the texts.
+If the locale is not yet received (e.g. it was changed on the client), then the texts are received and stored, but not displayed.
+
+The clients delete strings, if parameters become invalid, e.g. if referenced company IDs become invalid etc.
