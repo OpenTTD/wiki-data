@@ -9,43 +9,42 @@ Ez az oldal a vasúthálózat terhelhetőségének tisztán elméleti kezelésé
 
 Ez egy eléggé nyilvánvaló tényező. A túl nagy távolságra elhelyezett jelzők kisebb terhelhetőséget eredményeznek. 
 
-Ha a jelzőtávolság N mezőnyi, a legkisebb távolság két teljes sebességű vonat közt sosem lehet kevesebb, mint N+1 (1. ábra). Átlós pályán az első jelzőtől minden 2N "félmezőnyit" vagy N "teljes mezőnyit" számítva a legkisebb követési távolság sosem lehet kisebb, mint 2N+1 "félmező", vagy N+0,5 "egész mező".  Amikor a vonatok ilyen közel kerülnek egymáshoz, akkor elérted a pálya elméleti maximális vonatsűrűségét. A gyakorlatban ezt a sűrűséget elérni lehetetlen.
+Könnyen belátható az is (lásd. 1. ábra), hogy ha a jelzőtávolság N mezőnyi, a legkisebb távolság két teljes sebességű vonat közt sosem lehet kevesebb, mint N+1. Átlós pályán az első jelzőtől minden 2N "félmezőnyit" vagy N "teljes mezőnyit" számítva a legkisebb követési távolság sosem lehet kisebb, mint 2N+1 "félmező", vagy N+0,5 "egész mező".  Amikor a vonatok ilyen közel kerülnek egymáshoz, akkor elérted a pálya elméleti maximális vonatsűrűségét. A gyakorlatban ezt a sűrűséget elérni lehetetlen.
 
 [[File:en/Community/Pat Fig1.png|frame|none|1. ábra: A legkisebb követési távolság négyes jelzőtávolság esetén]]
 
 [[File:en/Community/Pat Fig2.png|frame|right|Figure 2: Hatástalan jelzőtávolság]]
 Az egyik fontos szempont az összhang. Egy pálya kapacitását az határozza meg, hogy melyik jelzőtávolság a legnagyobb. Így egy kétmezőnként jelzőzött pálya, amelyen van egy egyszeri rendhagyó három-vagy négymezős jelzőtávolság, jelentősen csökkent kapacitástól fog szenvedni és valószínűleg torlódást fog okozni (2. ábra). 
-
+{{en/-}}
 ===Az átlós sín===
-(A fordító vallomása: több helyen nem értettem, úgyhogy hálás lennék, ha javítaná, aki jobban érti. Miután a terepet négyzetrácsok tagolják, a következő rész megértését könnyítheti, ha feleleveníted geometriai alapismereteidet, és szem előtt tartod a négyzet oldala és átlója közti arányszámot)
+[[File:en/Community/Tiles.png|frame|right|A képen lent: 1-es jelzősűrűség átlós, majd egyenes pályán. A képen fent: maximális ("félmezős") jelzősűrűség ferde pályán]][[File:en/Community/Pythagoras.png|frame|right|A Pitagorasz-tétel az OpenTTD-ben]]
 
 Az OpenTTD-ben a vonatok lassabban haladnak ferde pályán (hála SmatZ-nek), ez pedig megnövelt jelzősűrűséget igényel a torlódások elkerülése végett. Fontos, hogy a vonatok legkisebb követési távolsága (nem azonos a jelzőtávolsággal) egyenes és átlós pályán annyira azonosak, amennyire csak lehetséges. Egyébiránt a vonatok torlódhatnak, amikor egyenesről átlós szakaszra, vagy átlósról egyenesre térnek.
 
 Egy gyors kísérlet bemutatta, hogy amíg egy vonat egyenes sínen két mezőnyit halad, ugyanannyi idő alatt egy ugyanolyan sebességű vonat kb. 3 "félmezőnyit" fut átlós pályán. Így automatikus jelzőelhelyezés használata során valószínűleg meg kell növelned a jelzősűrűséget minden átlós pályádon.
 
-A következő példák arra a feltételezésre alapozva születtek, hogy a vonatok hossza is változik átlós pályán. De ez csak néhány NewGRF-re igaz! (Ha minden igaz, ez érvényes a JapanSet-re, de nem érvényes az alapértelmezett vonatokra).
+A következő példák arra a feltételezésre alapozva születtek, hogy a vonatok hossza is változik átlós pályán. De ez csak néhány NewGRF-re igaz! (Ha minden igaz, ez érvényes a JapanSet-re, de nem érvényes az alapértelmezett vonatokra). 
 
-* 3-as automatikus jelzősűrűséggel telepített jelzősornál a legkisebb vonattávolság 4. Ez átlós pálya esetén 6 "félmezőnyi" követési távolságot jelent, amit 5 "félmezőnyi" jelzőtávolsággal lehet elérni.
+* 3-as automatikus jelzősűrűséggel telepített jelzősornál a legkisebb vonattávolság 4. Ez átlós pálya esetén 6 "félmezőnyi" követési távolságot jelent, amit 5 "félmezőnyi" jelzőtávolsággal lehet elérni. 
 
-* Egy 2-esre állított automatikus jelzősor esetében a legkisebb vonattávolság 3. Átlós pályára átszámítva a legkisebb követési távolság 4,5 "félmezőnyi". Egy átlós 5 félmezőnyi vonattávolság négy "félmezőnként" elhelyezett jelzőkkel érhető el, vagy egy nagyjából 2-esre állított automatikus jelzősorral.
-Egy átlós négy "félmezőnyi" vonattávolság három "félmezőnként" elhelyezett jelzővel érhető el (vagy egy automatikus 3-as jelzősor kétszeres elhelyezésével). Bár ennek a jelzőtávolságnak  átlós pályán nincs pontos megfelelője, az egyenes és átlós pálya közti eltérés csak 1/3 mező, és ugyanaz az automatikus jelzőtávolság használható az egyenes és az átlós pályán.
+* Egy 2-esre állított automatikus jelzősor esetében a legkisebb vonattávolság 3. Átlós pályára átszámítva a legkisebb követési távolság 4,5 "félmezőnyi". Egy átlós 5 félmezőnyi vonattávolság négy "félmezőnként" elhelyezett jelzőkkel érhető el, vagy egy nagyjából 2-esre állított automatikus jelzősorral. Egy átlós négy "félmezőnyi" vonattávolság három "félmezőnként" elhelyezett jelzővel érhető el (vagy egy automatikus 3-as jelzősor kétszeres elhelyezésével). Bár ennek a jelzőtávolságnak  átlós pályán nincs pontos megfelelője, az egyenes és átlós pálya közti eltérés csak 1/3 mező, és ugyanaz az automatikus jelzőtávolság használható az egyenes és az átlós pályán.
 
 * Az 1-esre állított automatikus jelzőtelepítővel épített jelzősor 2-es követési távolságot eredményez. Ez átlós pályán 3 "félmezőnyi" követési távolságot jelent, ami 2 "félmezőnként" elhelyezett jelzőkkel, vagy 1-esre állított automatikus jelzősor-építéssel érhető el. Itt tehát az egyenes és az átlós automatikus jelzősor-használat azonos.
-
+{{en/-}}
 
 ===Tehát mekkora jelzőtávolságot használjunk?===
-* Két mezőnyi jelzőtávolság:<BR>A 2-es jelzőtávolság 3-as követési távolságot eredményez, ez pedig optimális gyakorlati megoldás.
+* '''Két mezőnyi jelzőtávolság:'''<BR>A 2-es jelzőtávolság 3-as követési távolságot eredményez, ez pedig optimális gyakorlati megoldás.
 
-*Egy mező <BR>Az 1-es jelzőtávolság tele van problémákkal. Még egy egyszerű elágazás is jelzőhézagot okoz. Ferde pályák csatlakoztatása lehetséges lenne ugyan 1-es jelzőtávolság mellett, de ez jelentősen bonyolulttá tenné az építkezést.
+*'''Egy mező:''' <BR>Az 1-es jelzőtávolság tele van problémákkal. Még egy egyszerű elágazás is jelzőhézagot okoz. Ferde pályák csatlakoztatása lehetséges lenne ugyan 1-es jelzőtávolság mellett, de ez jelentősen bonyolulttá tenné az építkezést.
 
-* Fél mező <BR>A ferde pálya alkalmas dupla sűrűségű jelzőtelepítésre. Elméleti érdeklődése számot tarthat, vagy néhány milliméter levágásával járhat. A legnagyobb hiba természetesen az a félmezős jelzőtávolsággal, hogy a pálya minden egyenes részének nagyobb a jelzőtávolsága.
+*'''Fél mező:''' <BR>A ferde pálya alkalmas dupla sűrűségű jelzőtelepítésre. Elméleti érdeklődése számot tarthat, vagy néhány milliméter levágásával járhat. A legnagyobb hiba természetesen az a félmezős jelzőtávolsággal, hogy a pálya minden egyenes részének nagyobb a jelzőtávolsága.
 
 Bármilyen jelzőtávolságot is válasszunk, legyünk következetesek. Egy nagy kihasználtságú pályán a 2-es jelzőtávolság gyakori torlódásokhoz vezethet. Talán ezért is kisebb a kapacitása, mint egy 3-as jelzősűrűségű pályának!<br style="clear:both;">
 
-==A vonat hossza (TL)==
+==A vonat hossza==
 A vonathossz kétélű fegyver. A hosszú vonat hátránya, hogy a valós gyorsulást elnyújtja, bonyolult és kiterjedt építkezést von maga után. Ugyanakkor a nagyobb vonathossz megnöveli a vasúthálózat maximális rakományszállítási kapacitását. Meg kell jegyezni, hogy az első és hátsó résszel rendelkező mozdonyok esetében az elfoglalt további fél mező miatt a vonathossz is kedvezőtlenebb.  
 
-Nagysebességű hálózaton a tipikus három-öt mezőnyi érték normális. Bár a 4-es vonathosszt is többen kedvelik, mert 2-es jelzőtávolság esetén álló helyzetből rövidebb reakcióidővel gyorsulnak más vonathosszokhoz képest.
+Nagysebességű hálózaton a tipikus három-öt mezőnyi érték normális. Bár a 4-es vonathosszt is többen kedvelik, mert 2-es jelzőtávolság esetén álló helyzetből rövidebb reakcióidővel gyorsulnak más vonatokhoz képest.
 
 ==Quantifying carrying capacity==
 ===Train Density (TD)===
