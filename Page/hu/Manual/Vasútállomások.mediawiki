@@ -36,39 +36,46 @@ Ha nincs hely, hogy az állomás mindkét végén vasutat építsünk, de az ál
 Erős forgalmú vonalakon zsákállomást nem érdemes építeni, mert minden irányban csak egy vonat lehet, és a többi vonatnak várnia kell az állomás előtt. Ez a probléma [[hu/Manual/Vasútállomások#varakozoobol|várakozóöböllel]] enyhíthető, de igazi megoldást nem jelent. 
 [[File:en/Manual/Polany.jpeg|center|frame|Zsákállomás. Fent az eredeti fővonal látható.]]
 
-==Advanced stations==
-For larger train networks, the above stations probably won't be able to handle all of the trains assigned to them.  You will need more advanced track layouts and signals.
+==Fejlett állomások==
+Nagyobb vasúti hálózatokon a fenti állomások valószínűleg nem lesznek képesek az összes, számukra kijelölt vonatot kezelni, így fejlettebb pályafelépítésre és jelzőrendszerre lehet szükséged.
 
-What happens when a third train arrives at one of the above stations? It sees both two-way signals are red, so it just picks the closest one and waits for the light to change. If the other platform empties while the third train is waiting, the platform will stay empty.
+Mi történik, ha egy harmadik vonat érkezik egyhez a fenti állomások közül? A vonat mindegyik kétirányú jelzőt vörösnek látja, így a közelebb esőt választja és vár, hogy a jelzőfény váltson. Ha eközben a másik vágány üressé válik, üres is marad.
 
-What about the queues that form as trains line up to enter a station?  These lines can stretch far, and can even hold up your entire train network!
+És mi van azoknak az állomásnál behajtásra sorakozó vonatokkal? Ezek a sorok messzire elnyúlhatnak, és akár az egész hálózatodat feltarthatják!
 
-===Pre-signals===
-Stations with [[en/Manual/Signals#pre-signals|pre-signals]] make arriving trains wait outside the station until there is a free platform.
-[[File:en/Manual/Presignalstation.png|center|frame|Pre-signal station]]
+===Előjelzők===
+[[File:en/Manual/Presignalstation.png|left|frame|Előjelzős állomás]]
+Az [[hu/Manual/Jelzők#elojelzok|előjelzők]] az érkező vonatokat az állomáson kívül várakoztatják, amíg szabad vágány nem adódik.
+{{en/-}}
+===Várakozóöböl===
+[[File:en/Manual/Waitingbay.png|right|frame|Várakozóöböl 4-6 vagonból álló vonatok számára]]
+A többvonalas várakozóöböl jó megoldás a behajtó vonatok sorának várakoztatására. Ha az állomás tele van, az érkező vonat a várakozóöböl legközelebbi üres pályáját foglalja el. Ha az állomáson üres vágány adódik, a várakozó vonatok egyike bemegy. 
 
-===Waiting bay===
-A good solution to hold a queue of trains waiting to enter a station is a multi-line waiting bay.  If the station is full, an arriving train picks the closest empty track in the waiting bay.  When a spot opens in the station, one of the waiting trains will move in.  Make sure a train can fit between the signals.  The pre-signals are optional; they help if your waiting bay fills up too!
-[[File:en/Manual/Waitingbay.png|center|frame|Waiting bay for up to 4 6-wagon trains]]
+Várakozóöböl építésekor győződj meg arról, hogy a vonatok elférnek a jelzők közt. Az előjelzők használata nem kötelező, de hasznosak, ha a várakozóöblöd is telített lesz!
+{{en/-}}
+===Várakozókör===
+[[File:en/Manual/Loop.png|left|frame|Körpálya a túlterhelés ellenőrzésére]]
+Előjelzők használata helyett várakozókört is építhetsz. Ha egy vonat lép be az állomásra és azt látja, hogy minden kétirányú jelző vörös (a vágányok tele vannak) a körpálya kivételével, várakozókört tesz az állomás előtt. Köröz, köröz, szabad vágányra várva. A gond ezzel a rendszerrel, hogy egy másik érkező vonat ellophatja a szabaddá váló vágányt, amíg az első vonat köröz. Ezzel együtt ne felejtsd a kört elég nagyra építeni ahhoz, hogy a leghosszabb vonatod is elférjen benne.
+{{en/-}}
+===Menekülődepó===
+[[File:en/Manual/Escapedepot.png|right|frame|Menekülődepó a túlterhelés ellenőrzésére]]Egy másik lehetőség az állomás túlterhelésének ellenőrzésére a "menekülődepó". Helyezz el egy járműtelepet 
+Another way of controlling station overflow is an "escape depot." Helyezz el egy járműtelepet az állomás bejáratánál a kétirányú és az egyirányú jelzők közé. A járműtelepeknek beépített (hagyományos) kétirányú jelzőjük van, és pont úgy viselkednek, mint egy körözőpálya. A menekülődepók kapacitása nem korlátozott, szemben a körözőpályákkal. 
 
-===Loop around===
-Instead of using pre-signals, you can build a loop around track. When a train enters the station and sees all the two way signals are red (platforms are full) except the loop around track, it will take the loop around track. It loops around and around, waiting for a free platform. A problem with this system is other arriving trains can steal the free platform while the first train is looping around. Remember to make the loop big enough to fit at least your longest train.
-[[File:en/Manual/Loop.png|center|frame|Loop for overflow control]]
+Szükséges megjegyezni, hogy  a megoldás akkor működőképes, ha az [[hu/Archive/Manual/Settings/Openttd.cfg|openttd.cfg]] fájl ''pf.yapf.rail_firstred_twoway_eol'' sorában az egyenlőségjel után ''true'' szerepel. Ez korábban alapértelmezett beállítás volt, most nem az.
 
-===Escape depot===
-Another way of controlling station overflow is an "escape depot." Place a depot in the two-way/one-way signal set up at the entrance. Depots automatically have a (traditional) bi-directional signal in them so behave just like a loop around track. Escape depots, unlike loops, have an unlimited capacity. 
+Célszerű, ha az állomás mindegyik, bejáratként szolgáló végében menekülődepót helyezünk el (Ez nagyobb állomáson lerövidíti az áthaladás szükséges idejét).
+{{en/-}}
+===Hosszú kijáratok===
+[[File:en/Manual/Longexit.png|left|frame|Long exits overflow control]]
+Rendszerint, ha két vonat hagyja el egyszerre az állomást, az egyiknek meg kell állnia és utat kell engednie a másiknak. Emiatt az egyik vonat félig-meddig az állomáson lesz, így a vágányát egy harmadik, az állomásra bejáró vonat nem tudja használni. A hosszú kijáratok hagyják a vonatokat az állomásról teljesen kihúzni, mielőtt a vörös jelzőt elérné. Ez a megoldás felszabadítja a vágányt az állomásra behajtó vonatok számára. Megjegyzendő a kijárat hossza: úgy érdemes megépíteni, hogy egy tíz kocsiból álló vonat elférjen a jelzők közt.
+{{en/-}}
+===Hosszú kijáratok elsőbbséggel===
+[[File:en/Manual/Priorityexit.png|right|frame|Long exits with priority signals]]
+[[hu/Archive/Manual/Settings/Óriásvonatok|Óriásvonatok]] kijárása egy forgalmas Ro-Ro állomásról időben is kihívást jelent. Előjelzők használatával elsőbbséget tudsz biztosítani a gyorsabb pályán a gyorsabb indulás érdekében. Az alábbi képen a legfelső öt vágány alacsonyabb prioritást kapott (miután úgyis hosszabb ideig foglalják el a pályát), és a kijárat a kép alján (mivel a vonatok éles kanyarban lassabban közlekednek).
 
-The best layout has a depot at both ends of the station entrance. (This will reduce the time required to cross a large station)
+Ez azért működik, mert az alacsony prioritású kijáratok a kijárati jelző szabad jelzésére várnak, vagyis, arra, hogy a vonatok elhagyják a kijárat második jelzőjét. A többi kijáraton a vonatok akkor mennek ki, amikor, mint rendesen, egy vonat elhagyja az első jelzőt.
+{{en/-}}
 
-[[File:en/Manual/Escapedepot.png|center|frame|Escape depots for overflow control (this example works only with pf.yapf.rail_firstred_twoway_eol set to true, which is not default setting anymore)]]
-
-===Long exits===
-Normally, when two trains leave a station at once, one must stop and give way to the other. This leaves one train half in the station and half out, making that platform unusable to any other trains trying to enter the station. Long exits allow the train to pull out of the station completely before it hits the red signal. This frees up the platform for another train entering the station. Note the length of the exit track, a 10-car train can fit neatly between the signals.
-[[File:en/Manual/Longexit.png|center|frame|Long exits overflow control]]
-
-===Long exits, prioritized===
-Getting [[en/Archive/Manual/Settings/Mammoth trains]] to exit a busy Ro-Ro station in a timely fashion can be challenging. By using pre-signals you can prioritize exit tracks to allow trains on faster tracks to depart sooner. In the image below a lower priority is assigned to the topmost 5 exits (since they'll block the return track longer) and the exit at the bottom (since trains accelarate slower on the sharp bend). This works because the low priority exits will wait for the exit signal to clear (that is, when a train passes the 2nd signal on the return track). The other tracks will depart when a train passes the 1st signal as usual. 
-[[File:en/Manual/Priorityexit.png|center|frame|Long exits with priority signals]]
 
 ===Long entrances===
 If you play with [[en/Archive/Manual/Settings/Realistic acceleration]], faster trains slow down a good bit before stopping in a station.  This can delay the next train from entering.  Adding a few track sections in front of the station can help with this.
