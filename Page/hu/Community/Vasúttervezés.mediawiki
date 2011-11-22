@@ -104,19 +104,21 @@ CC_day=20*6*150/10*0,0056=10 csomag értéktárgy/nap</pre>
 
 A szerzők ezen a részen dolgoznak még.
 
-=Making your network more efficient=
-Ok, so now that we've defined the parameters that we had already intuitively understood, how can we use them to improve our networks? The golden rule number 1 of network optimisation is that trains on the network never slow down. There are two possible parts of a network where this could happen, splits and merges.
+=Hálózatod hatékonyabbá tétele=
+Most, hogy számokban is kifejeztük azt, amit korábban ösztönösen is megértettünk, hogyan használhatjuk tudásunkat a hálózatunk fejlesztésére? A hálózatoptimalizálás legfőbb aranyszabálya, hogy a vonatok a hálózatban soha ne lassítsanak le. Ennek pedig két lehetséges helye van: a pályaosztás, és a pályegyesítés.
 
-==Splits==
-For a track split, one must ensure that there is not a longer-than-normal signalling gap at the split point. This can be taken care of by careful or over-abundant signalling.
+==Pálya kettéosztása==
+A pálya osztásakor győződj meg arról, hogy a normálisnál hosszabb jelzőtávolság nincs az osztópontnál. Ez körültekintő, vagy túlzó jelzőtelepítéssel kivitelezhető.
 
-==Merges==
-Merges present us with a unique problem. For a trivial merge, trains on the mainline could potentially be stopped by a sideline train. There is already a body of work on [http://www.openttdcoop.org/wiki/Priorities Priorities] by our colleagues in the cooperative circuit. A perusal of this link should familiarise you with the principles of priority merges.
+==Pályaegyesítések==
 
-Consider a typical non-junction merge, at the exit of a pickup station. A tightly-packed optimised stream of trains enters the station, but because of differences in loading times, this order is disrupted on the station exit, and you end up with two tracks of loosely-packed trains. One of these lines, designated the main line, will have, on average, train-train gaps large enough to fit a third train into. Simply connecting the two lines together will not work, and a priority merge is required.
+A pályaegyesítés sajátos problémával szembesít minket. Egy átlagos pályaegyesítésnél a fővonal forgalmát megállíthatja egy szárnyvonali vonat. Társaink már műhelymunkával dolgoznak ezen az [http://www.openttdcoop.org/wiki/Priorities elsőbbség] témakörében. Ha a linket követed, megismerkedhetsz a pályaegyesítés elsőbbségi alapelveivel.
 
-Note that, because trains that drop off cargo always spend the same length of time at a platform, it is possible to dematerialise and reassemble a tightly packed stream of trains, even one above the critical density! (Figure 3)
-[[File:en/Community/Diamond Stream.png|thumb|800px|none|Figure 3: Dropoff with stream reassembly]]
+Vegyünk például egy tipikus, nem csomóponti pályaegyesítést, egy berakó állomás kijáratánál. 
+
+Egy optimalizált, szoros rendben érkező vonatsor lép be az állomásra, de a berakási idő eltérései miatt ez a rend megborul az állomás végén, és lazább rendben távozó vonatokat kapsz eredményül a kilépésnél két pályán. Ezek közül az egyik vonal a fővonalra csatlakozik, amelyen az átlagos vonatkövetési távolság elég nagy ahhoz, hogy beférjen egy harmadik vonat is. A két vonal egyszerű összekapcsolása nem fog működni, elsőbbségi pályaegyesítés szükséges.
+
+Megjegyzendő, hogy miután a kirakodó vonatok mindig azonos időt töltenek a vágánynál, a vonatok szoros rendjének kialakítása lehetséges, akár a kritikus sűrűség felett is! (3. ábra)[[File:en/Community/Diamond Stream.png|thumb|800px|none|3. ábra: Kirakodóállomás az ágak összegyűjtésével]]
 
 A first-pass merge using a priority block will reduce the traffic ratio from 1:1 to about 3:1 in favour of the main track (Figure 4). Adding a second priority merge straight after the first one would be a futile gesture, since trains on both lines would continue at the same speed and the mainline train would simply claim priority again. Introducing a delay by a loop of track, followed by a second priority merge, will reduce the sideline to a mere trickle of trains and will have filled in most of the available slots on the mainline. Existing solutions would involve a pre-acceleration track, however a cyclotron eliminates the need to lose momentum.
 [[File:en/Community/Priority Merge.png|frame|none|Figure 4: Priority merge]]
