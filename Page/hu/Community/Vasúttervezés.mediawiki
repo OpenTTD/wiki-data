@@ -45,28 +45,30 @@ A vonathossz kétélű fegyver. A hosszú vonat hátránya, hogy a valós gyorsu
 
 Nagysebességű hálózaton a tipikus három-öt mezőnyi érték normális. Bár a 4-es vonathosszt is többen kedvelik, mert 2-es jelzőtávolság esetén álló helyzetből rövidebb reakcióidővel gyorsulnak más vonatokhoz képest.
 
-==Quantifying carrying capacity==
-===Train Density (TD)===
-Your network will carry a certain number of trains, and assuming you have a standardised train length, we can define some metrics. The '''Train Density (TD)''' for a track is given in units of trains per thousand tiles, and can be calculated by counting the number of trains on that track and dividing by the length of the track.
+==A terhelhetőség kifejezése számokban==
+===Vonatsűrűség (VS)===
+Hálózatod a vonatok meghatározott számát képes elbírni, és a vonatok azonos hosszát feltételezve meg tudunk néhány képletet határozni.
+Egy pálya '''vonatsűrűsége''' az ezer mezőre jutó vonatok számát fejezi ki, és úgy számítható ki, hogy a pályán közlekedő vonatok számát elosztjuk a pálya hosszával.
 
-Typical measured values for an unoptimized network of 4-tile trains are a '''TD''' of 25 (trains per 1000 tiles).
+A nem optimalizált hálózaton mért tipikus érték négymezőnyi hosszú vonatokra 25 '''VS''' (azaz: 25 vonat 1000 mezőn).
 
-The maximum '''TD''' before traffic jams become self-propagating can be measured by permitting a queue of trains to accelerate from a halt and then measuring the train-train distance when all trains have reached full speed, and using the formula 
+A legmagasabb '''VS''' mérhető a torlódások elszaporodása előtt, úgy, hogy engedjük a vonatokat álló helyzetből felgyorsulni, 
+aztán megmérjük a vonatok közti távolságot, amikor minden vonat elérte a teljes sebességet, és a következő képletet használjuk:
 
-'''1000 / (TL + train gap)'''
+'''1000 / (VS + követési távolság)'''
 
-This '''critical TD''' depends on the power and number of the engines, the weight of the train, the top speed, the '''SD''' and the length of the train. Because this critical density incorporates information about acceleration and time to reach top speed, it can also tell you about the practical maximum capacity of your network. For example, using trains with a lower top speed actually makes it easier to have a dense network. The average train-train gap is much smaller for rail than for monorail or maglev. Slow doesn't mean better, however, as the reduced line density will be more than compensated for by quick turnaround times.
+Ez a '''kritikus vonatsűrűség''' függ a mozdonyok számától és vonóerejétől, a vonat tömegétől, a csúcssebességtől, a jelzőtávolságtól és a vonat hosszától. Miután ez a kritikus vonatsűrűség információkat tartalmaz a gyorsulásról és a csúcssebesség eléréséről, a hálózatod maximális kapacitásáról is adatot tartalmaz. Például az alacsonyabb csúcssebességű vonatok használatával a hálózat könnyebben telitetté válik. Az átlagos követési távolság normál vasút esetében sokkal kisebb, mint egysínű vasút vagy MagLev esetén. A lassú nem jelent egyúttal jobbat is, viszont keveset mondunk, ha azt mondjuk, hogy a csökkentett vonalsűrűség ellensúlyozza a gyors haladást.
 
-For example, a fully-laden 4-tile [[en/Manual/Base Set/Trains/Lev4 'Chimaera'|Chimaera]] (top-end [[en/Manual/Base Set/MagLev]]) was found to have a train-train distance of 12, giving critical density of 1000/16 or 62.5. Repeating the previous example but using the electric rail [[en/Manual/Base Set/Trains/T.I.M.]] gives a train-train distance of only 6, and a critical density of 100. 
+Például úgy tapasztaltuk, hogy egy teljes teherrel közlekedő [[hu/Lev4 'Chimaera'|Chimaera]] (vagyis a csúcs-[[hu/MagLev|MagLev]]) vonat-vonat távolsága 12, a kritikus vonatsűrűség értékét 1000/16-tal, vagyis 62,5-del adta eredményül. Ezt a példát megismételtük [[hu/Manual/Base Set/Trains/T.I.M.|T.I.M.]] mozdonnyal villamosított pályán, ami mindössze 6-os vonat-vonat távolságot eredményezett, és 100-as kritikus vonatsűrűséget.
 
-It is possible to run a network at higher than the critical density, but it is ill-advised.
+Lehet ugyan a kritikus sűrűség felett is hálózatot üzemeltetni, csak éppen meggondolatlanság.
 
-===Theoretical Maximum Train Density===
-Simply put, this is the train density if your network is entirely filled with trains at the minimum distance between each other. You will never reach this. 
+===Az elméleti maximális vonatsűrűség===
+Egyszerűen fogalmazva: ez a teljesen telített hálózat vonatsűrűsége, a vonatok közti legkisebb távolság esetén. Elérni sosem fogod, de beszéljünk róla. 
 
-This is given by ''' 1000 / (TL + SD + 1) '''
+Képlete: ''' 1000 / (VH + JT + 1) '''
 
-For example, 4-tile trains and a signal distance of 2 will give a theoretical maximum train density of 140.
+Például négy mezős hosszúságú vonatok és 2-es jelzőtávolság az elméleti legmagasabb vonatsűrűség 140-es értékét eredményezi.
 
 ==Carrying Capacity (CC)==
 Since '''TL''' alters the carrying capacity of a line, comparing '''TD''' across different '''TL''' is meaningless. In order to compare efficiency figures between different personal preferences, we need a new metric. This new metric will simply be a measure of how many units of cargo your network is transporting per year, per track. It will be directly proportional to the average quantity of cargo per track tile, and also to how fast this cargo is moving.
