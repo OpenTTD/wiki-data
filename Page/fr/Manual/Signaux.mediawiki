@@ -127,7 +127,7 @@ Un point important à noter, avec les signaux dépendants, est qu'un signal de s
 
 ==Signaux de chemin ==
 [[File:fr/Manual/Yapp signalgui.png|frame|right|Deux nouveaux signaux dans l'[[fr/Manual/Interface de sélection des signaux|interface des signaux]].]]
-Il y a deux nouveaux types de signal. Ils permettent aux trains de réserver une voie jusqu'au signal suivant avant d'entrer dans le bloc. Si un autre train veut entrer dans le bloc, et réussit à y réserver une voie, le signal autorise le train à entrer dans le bloc, même si une autre voie du bloc est occupée.
+Il y a deux nouveaux types de signal. Ils permettent aux trains de réserver une voie jusqu'au signal suivant avant d'entrer dans le bloc (qui peut être composé de plusieurs voies). Si un autre train veut alors entrer dans le même bloc et réussit à y réserver une voie libre — une ''autre'' voie que celle empruntée par le premier train —, le signal l'y autorisera et le laissera entrer aussi.
 {{en/-}}
 [[File:en/Manual/Signal bloc.png|frame|right|bloc en Y délimité par trois ''signaux de bloc'' standard]]
 Voici un exemple d'illustration. 
@@ -136,37 +136,37 @@ Ici nous avons un bloc sous forme de Y entre trois signaux.
 La branche droite est occupée par un train. Un train arrive de la branche du bas et veut aller vers la branche de gauche. Si nous mettons un signal de bloc standard, il considère que le bloc est occupé (même si la voie est libre pour aller à gauche). 
 {{en/-}}
 [[File:en/Manual/Multiples standard.png|frame|right|le ''Y'' a été fractionné en trois blocs : branche droite, branche gauche et jonction en ajoutant deux ''signaux de blocs'' supplémentaires]]
-Il faudrait donc fractionner ce bloc en plusieurs petits blocs en ajoutant des signaux après la jonction.
+Il faudrait donc — toujours dans le modèle standard — fractionner ce bloc en plusieurs petits blocs, en ajoutant des signaux après la jonction.
 {{en/-}}
 [[File:en/Manual/Chemin.png|frame|right|bloc en Y délimité par un ''signal de chemin'' et deux ''signaux de bloc'' standards]]
 À l'inverse, le ''signal de chemin'' autorise le train venant du bas à pénétrer dans le bloc en Y car la voie de son itinéraire (la branche de gauche) est libre. Nul besoin de fractionner le bloc en plusieurs petits blocs (pas besoin de signaux après la jonction).
 {{en/-}}
 Il y a deux choses à savoir à propos de ce signal :
-* Placez le uniquement là ou les trains peuvent attendre sans bloquer de jonction ;
+* placez-le uniquement là où les trains peuvent attendre sans bloquer de jonction ;
 * Ce signal ne fonctionne que dans un sens. Dans l'autre sens, il est soit ignoré, soit considéré comme un sens interdit selon le type de ''signal de chemin''(voir ci-dessous).
 
 [[File:en/Manual/Yapp pbssignal.png|frame|left|<-->]]
-* '''Signal de chemin''' : Les trains peuvent traverser ce signal dans le sens inverse.
+* '''Signal de chemin''' : Les trains peuvent passer ce signal en sens inverse.
 {{en/-}}
 [[File:en/Manual/Yapp onewaypbssignal.png|frame|left|-->]]
-* '''Signal de chemin à sens unique''' : les trains ne peuvent pas traverser ce signal dans le sens inverse.
+* '''Signal de chemin à sens unique''' : les trains ne peuvent pas passer ce signal en sens inverse.
 {{en/-}}
-La plupart du temps, un ''signal de chemin'' standard sera suffisant, car passer par dans le sens opposé à un ''signal de chemin'' sera autant que possible évité lors de la recherche d'itinéraire. Cependant, les ''signaux de chemin'' à sens unique peuvent être utiles dans certains cas.
+La plupart du temps, un ''signal de chemin'' standard sera suffisant, car passer un ''signal de chemin'' en sens inverse sera autant que possible évité lors de la recherche d'itinéraire. Mais les ''signaux de chemin'' à sens unique peuvent toutefois être utiles dans certains cas.
 
-Comme vu dans l'illustration ci-dessus, ces deux nouveaux signaux se comportent un peu différemment des signaux standards d'openTTD. Les ''signaux de chemin'' sont rouges par défaut, et ne deviendront vert que si, au moment ou un train rencontre ce signal (dans le ''bon'' sens), ce train peut alors réserver une voie vers la prochaine aire d'attente sécurisée de son itinéraire. Les aires d'attentes sécurisées sont - par définition - en face des signaux, des dépôts et en fin de ligne. L'arrière d'un ''signal de chemin'' n'est pas considérée comme une aire d'attente sécurisée, donc les voies sont réservés jusqu'au prochain signal.
+Comme vu dans l'illustration ci-dessus, ces deux nouveaux signaux se comportent un peu différemment des signaux standards d'openTTD. Les ''signaux de chemin'' sont rouges par défaut et ne deviendront vert que si, au moment où un train approche de ce signal (dans le ''bon'' sens), il peut réserver une voie vers la prochaine aire d'attente sécurisée de son itinéraire. Les aires d'attentes sécurisées sont — par définition — au pied des signaux, les dépôts et en fin de ligne. L'arrière d'un ''signal de chemin'' n'est pas considérée comme une aire d'attente sécurisée, donc les voies sont réservés jusqu'au prochain signal.
 
-Comme la zone en face d'un signal est considéré comme une aire d'attente sécurisée, vous ne devriez normalement pas placer de ''signal de chemin'' immédiatement après une jonction, seulement avant une jonction. Ceci parce qu'il est seulement sécurisé pour un train d'attendre devant une jonction, tandis qu'attendre immédiatement après, càd avant que la rame complète ait dégagé la jonction, risque de bloquer la jonction (ainsi qu'on peut le voir dans la copie d'écran ci-dessous). C'est un avantage majeur, par rapports aux signaux standards d'OpenTTD, où vous devez placer des signaux avant et après les jonctions, ce bloque celles-ci lorsqu'il y a un train en attente.
+Comme la zone au pied d'un signal est considérée comme une aire d'attente sécurisée, vous ne devriez normalement pas placer de ''signal de chemin'' immédiatement après une jonction, mais seulement avant celle-ci. En effet, un train à l'arrêt avant une jonction maintient celle-ci dégagée pour les autres trains qui croiseraient à ce moment-là, alors qu'un signal placé immédiatement après une jonction force le train arrêté à son pied à ''stationner'' sur la jonction, bloquant celle-ci pour les autres trains (ainsi qu'on peut le voir dans la copie d'écran ci-dessous). C'est un ''avantage majeur'' par rapports aux signaux standards d'OpenTTD que vous devez placer avant et après les jonctions, ce qui entraîne le stationnement des trains sur celles-ci. Les ''signaux de chemin'' permettent d'éviter ce problème.
 [[File:en/Manual/Yapp unsafewaitinglocation.png|frame|center|Le signal indiqué par une flèche est une mauvaise aire d'attente, car le train sur la jonction bloque les autres voies libres pour le train venant du haut. Il y a une deuxième mauvaise aire d'attente dans ce dessin. Saurez-vous la trouver ?]]
 
 ====Paramètres avancés====
 [[File:fr/Manual/Yapp patch-options.png|frame|right|Options avancées]]
-Il y a trois nouvelles [[fr/Archive/Manual/Settings/Options avancées|options avancés]] relatives aux ''signaux de chemin'':
+Il y a trois nouvelles [[fr/Archive/Manual/Settings/Options avancées|options avancées]] relatives aux ''signaux de chemin'' :
 {{en/-}}
-*Une des options est de '''surligner les voies réservées'''. Cette option est pratique pour résoudre les problèmes au niveau des jonctions signalisées, car vous pouvez voir quelles sont les voies que le train a réservé après la jonction.
+*une des options permet de '''surligner les voies réservées'''. Cette option est pratique pour résoudre les problèmes au niveau des jonctions signalisées, car vous pouvez voir quelles sont les voies que le train a réservées après la jonction.
 
-Les deux autres options contrôlent la façon dont les outils de signaux doivent se comporter:
-*Vous pouvez paramétrer le '''type de signal qui sera construit par défaut''' en
-*Vous pouvez paramétrer les '''types de signaux de remplacement autorisés''' en cliquant avec Ctrl appuyé sur un signal existant.
+Les deux autres options contrôlent la façon dont les outils de signaux doivent se comporter :
+*vous pouvez paramétrer le '''type de signal qui sera construit par défaut''', et
+*vous pouvez paramétrer les '''types de signaux de remplacement autorisés''' en cliquant avec Ctrl appuyé sur un signal existant.
 
 Il y a quelques options supplémentaires relatives aux signaux, qui ne sont pas accessibles dans la fenêtre des options avancées. Ces options sont présentées (et il est expliqué comment les activer) dans l'article ''[[fr/Archive/Manual/Settings/Signalisation du réseau ferroviaire/options et fonctionnalités avancées|Signalisation du réseau ferroviaire : options et fonctionnalités avancées]]''.
 
@@ -175,7 +175,7 @@ Ci-dessous quelques exemples de réseaux ferroviaires qui utilisent le ''signal 
 
 ====Jonction basique====
 Ceci est une jonction basique avec un trafic plus élevé.
-[[File:en/Manual/Yapp basicjunction.png|frame|center|Jonction basique pour des trains avec une longeur maximum de trois cases. Remarquez l'utilisations de signaux normaux sur la voie courante.]]
+[[File:en/Manual/Yapp basicjunction.png|frame|center|Jonction basique pour des trains avec une longueur maximum de trois cases. Remarquez l'utilisation de signaux normaux sur la voie courante.]]
 
 ====Gare basique à deux quais====
 Avec cet agencement de gare, les trains peuvent utiliser les deux quais en venant de chaque direction.
