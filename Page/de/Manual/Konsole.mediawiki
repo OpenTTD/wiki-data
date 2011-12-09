@@ -1,0 +1,394 @@
+[[Translation:en/Manual/Console]]
+{{de/Übersetzung|en/Konsole|15}}{{en/-}}{{en/Manual/Navigation}}
+{|
+|- valign="top"
+| style="background:none; border:0px" | Die '''Konsole''' lässt dich im den Chatverlauf im [[en/Manual/Multiplayer]] sehen und Befehle im [https://www.wikipedia.org/wiki/DOS DOS]-Stil in [[en/Manual/Main Page]] ausführen. Die Meisten Befehle werden dazu benutzt, Multiplayer-[[en/Manual/Server]] zu konfigurieren.
+
+__TOC__
+| style="background:none; border:0px"|
+[[File:en/Manual/Console.png|none|frame|The OpenTTD Console]]
+|}
+
+==Benutzen der Konsole==
+Öffne die Konsole durch Drücken mit der Zirkumflex-Taste (^), links neben der '1' (zweimal drücken). <!-- Eventuell noch Zusatzinformationen zu nicht deutschen Tastaturen? -->  <!--There is also a "Toggle Console" option in the help menu.--><br />
+Nachdem die Konsole geöffnet wurde, gib einen Befehl, wie zum Beispiel "help" ein, und drücke die Eingabetaste<!-- Enter? -->. 
+
+Tipps:
+* Scrolle durch die Konsole mit [Umschalt] + [NACH-OBEN-TASTE/NACH-UNTEN-TASTE] or [Umschalt] + [Bild ↑/Bild ↓].
+* Scrolle durch die vorherigen Eingaben mit den Pfeiltasten.
+* Mache die Konsole mit [STRG] + [Eingabe] größer.
+* Füge Text von der Zwischenablage mit der normalen [STRG] + V Kombination ein.
+
+==Konsolenbefehle==
+Hier ist eine Liste mit allen verfügbaren Befehlen in OpenTTD. Eckige Klammern ([]) kennzeichnen optionale Angaben. Ein senkrechter Strich (|) heißt "oder". Die Liste ist nach der Zweckmäßigkeit der Befehle geordnet, wobei die nützlichsten ganz oben stehen.  Diese Liste ist auch in [[en/Manual/Console Commands|alphabetischer Reihenfolge (en)]] verfügbar.
+Achte darauf, das die Anführungszeichen auch in die Konsole geschieben werden sollten!
+
+===Hilfebefehle===
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Befehl
+!Beschreibung
+|-
+|help [<item>]
+|Zeige die Konsolenhilfe an. Um Hilfe zu einem speziellen Befehl oder einer Variable zu bekommen, gib <item> an.
+|-
+|list_cmds [<filter>]
+|Gibt alle verfügbaren Befehle aus, optional nur die, die mit <filter> beginnen.
+|-
+|list_vars [<filter>]
+|Gibt alle registrierten Variablen aus, optional nur die, die mit <filter> beginnen.
+|-
+|list_aliases
+|List all available [[en/Manual/Console Aliases|aliases]].
+|-
+|list_patches
+|Gibt alle [[de/Archive/Manual/Settings/Erweiterte Einstellungen|erweiterten Einstellungen]] aus.
+|}
+
+===Spielbefehle===
+Diese Befehle funktionieren sowohl in Singleplayer als auch auf Servern.
+
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Command
+!Description
+|-
+|newgame
+|Startet ein neues Spiel
+|-
+|restart
+|Startet das selbe Spiel von vorne.
+|-
+|connect <host>
+|Verbinde zu einen Netzwerspiel, das auf <host> läuft. Nicht für Server verfügbar.
+|-
+|reconnect
+|Verbindet zum Server, auf dem du zum letzten Mal gespielt hast. ''(Eingeführt in r17466, nur in Version 1.0 oder später)''
+|-
+|save <nowiki><Nummer | Datei></nowiki>
+|Speichert das aktuelle Spiel in <Nummer> oder <Datei>.
+|-
+|load <nowiki><Nummer | Datei></nowiki>
+|Lädt einen Spielstand aus <Nummer> oder <Datei>.
+|-
+|part
+|Verlasse das laufende Spiel und kehre zum Menü zurück. Nicht für Server verfügbar.
+|-
+|exit / quit
+|Verlasse das Spiel.
+|}
+
+===Multiplayerbefehle===
+Diese Befehle werden dafür benutzt, einen Multiplayer-[[en/Manual/Server]] laufen zu lassen. Einige Befehle funktionieren auch für den verbundenen Client.
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Befehl
+!Bescheibung
+!width="90"|Clients
+|-
+|kick <nowiki><ip | client-id></nowiki>
+|Kicke den Client mit IP <ip> oder der Id <client-id>.
+|Nein
+|-
+|ban <nowiki><ip | client-id></nowiki>
+|Banne den Client mit IP <ip> oder der Id <client-id>.
+|Nein
+|-
+|unban <ip>
+|Lösche den Bann von <ip>.
+|Nein
+|-
+|banlist
+|Liste alle gebannten Clients auf.
+|Nein
+|-
+|[[en/Archive/Manual/Reset Company|reset_company]] <company-id>
+|Lösche die mit <company-id> gekennzeichnete Firma.
+|Nein
+|-
+|pause
+|Pausiere eine Netzwerkspiel.
+|Nein
+|-
+|unpause
+|Entferne die Pause für ein Netzwerspiel.
+|Nein
+|-
+|clients
+|Gibt die Client-Id, den Namen, die Firmen-Id und die IP-Addresse jedes Clients aus.
+|Ja
+|-
+|companies
+|Zeige eine Liste aller Spieler mit deren Attributen, zum Beispiel Firmenname, Kredithöhe, Anzahl der Fahrzeuge, usw., aus.
+|Nein
+|-
+|status
+|Frage die Statusinformationen aller gerade verbundenen Clients ab.
+|Nein
+|-
+|server_info
+|Zeige die aktuellen und maximalen Client/Spieler-Limits.
+|Nein
+|-
+|say "<msg>"
+|Sende die Nachricht <msg> an alle Spieler.
+|Ja
+|-
+|say_client <client-id> "<msg>"
+|Sende die Nachricht <msg> an den mit <client-id> gekennzeichneten Client.
+|Ja
+|-
+|say_player <player-id> "<msg>"
+|Sende eine Nachricht <msg> an den mit <player-id> gekennzeichneten Spieler.
+|Yes
+|-
+|rcon <password> "<command>"
+|Execute <command> on the server authenticated by <password> while connected as a client. The password must be set in advance locally on the server with by "rcon_pw <password>".
+|Yes
+|-
+|join <company-id> [<password>]
+|Join a company, <password> is only needed if the company you want to join is password protected
+|Yes
+|-
+|spectate
+|alias to join 255
+|Yes
+|-
+|move <client-id> <company-id>
+|move a client to any company, use company-id of 255 to move the client to spectators
+|No
+|-
+|client_name <client-id> <name>
+|Rename a client's username, this is useful if a client e.g. joins with an offensive username
+|No
+|-
+|list_ai
+|List of available ai's on server
+|Yes
+|-
+|start_ai <ai>
+|Start an available ai
+|No
+|-
+|stop_ai <company-id>
+|Stop an existing AI, the company will get completely purged from the map afterwards
+|No
+|}
+
+===File handling commands===
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Command
+!Description
+|-
+|cd <nowiki><directory | number></nowiki>
+|Change the working directory to <directory> or <number>.
+|-
+|ls / dir
+|List files of current directory.
+|-
+|pwd
+|Print out the current working directory.
+|-
+|rm <nowiki><number | file></nowiki>
+|Remove a savegame by name or index.
+|}
+
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Command
+!Description
+|-
+|script <file>
+|Record a [[en/Archive/Manual/Scripts|script]] to the file named <file>.
+|-
+|exec <script> <?>
+|Executes a local script file.
+|-
+|return
+|Stop executing a running script.
+|}
+
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Command
+!Description
+|-
+|content update
+|Updates the list of available online content.
+|-
+|content upgrade
+|Select all files which are upgrades (of locally existing files) 
+|-
+|content select (ID / all)
+|Select item by ID or select all
+|-
+|content unselect (ID / all)
+|Unselect item by ID or unselect all
+|-
+|content state
+|Show the state (selected / unselected) of all items
+|-
+|content download
+|Download all selected online content
+|}
+
+===Other commands===
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Command
+!Description
+|-
+|screenshot <nowiki>[big | nocon]</nowiki>
+|Takes a screenshot. 'big' makes a screenshot of the whole map. 'nocon' hides the console for a normal screenshot.
+|-
+|alias <name> <command> 
+|Create an [[en/Manual/Console Aliases|alias]] named <name> bound to <command>.
+|-
+|set <setting_name> [<newvalue>]
+|Get and set the setting from the console. If <newvalue> is ommitted 
+the current value is printed. See [[en/Archive/Manual/Settings/Console Settings|Console Settings]] for a listing of all available settings.
+|-
+|dump_vars
+|Print all known variables and their values.
+|-
+|getseed
+|Returns the seed used to create the game, for randomly generated games.  The seed can be used to reproduce the same starting map.
+|-
+|scrollto <tile>
+|Scroll to the tile numbered <tile>; accepts hexadecimal (prexifed with 0x) and decimal values. Use the land area information tool to get the number of a specific tile.
+|-
+|clear
+|Clears the console screen.
+|-
+|echo <text>
+|Print out <text> on the console.
+|-
+|echoc <color> <text>
+|Print out <text> in color <color>. <color> is a number between 0 and 255.
+|-
+|info_cmd <command>
+|Show technical information on the command <commmand>.
+|-
+|info_var <variable>
+|Show technical information on the variable <variable>.
+|-
+|debug_level [<level>]
+|Get / set the debugging levels of different parts of the game.
+|-
+|resetengines
+|Resets all use-age and availability of engines.
+|}
+
+==Variables==
+Here is a list of [https://www.wikipedia.org/wiki/variable variables] available in OpenTTD. See the value of a variable by typing '''''set''''' ''variablename''. Change the value by typing '''''set''''' ''variablename'' followed by the new value. Set [https://www.wikipedia.org/wiki/Boolean_data_type boolean] variables with 'on' or 'off'. Reset a text variable to empty by using * as new value.
+
+===Server variables===
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Variable
+!Description
+!width="90"|Default value
+|-
+|[[en/Archive/Manual/Settings/Autoclean companies|autoclean_companies]]
+|Automatically shut down inactive companies to free them up for other players. Customize with 'autoclean_(un)protected' and 'autoclean_novehicles'
+|off
+|-
+|[[en/Archive/Manual/Settings/Autoclean protected|autoclean_protected]]
+|Automatically remove the password from an inactive company after the given amount of months.
+|36
+|-
+|[[en/Archive/Manual/Settings/Autoclean unprotected|autoclean_unprotected]]
+|Automatically shut down inactive companies after the given amount of months.
+|12
+|-
+|[[en/Archive/Manual/Settings/Autoclean novehicles|autoclean_novehicles]]
+|Automatically shut down companies without vehicles after the given amount of months.
+|0
+|-
+|max_clients
+|Maximum number of players allowed on the server
+|10
+|-
+|max_companies
+|Maximum number of companies allowed in the game
+|8
+|-
+|max_join_time
+|Maximum amount of time (ticks) a client is allowed to join
+|500
+|-
+|max_spectators
+|Maximum number of spectators allowed on the server
+|10
+|-
+|min_active_clients
+|Automatically pause the game when the number of active players is less than this amount.
+|0
+|-
+|net_frame_freq
+|Number of frames before a command will be (visibly) executed
+|1
+|-
+|net_sync_freq
+|Number of frames to check if the game is still in sync
+|100
+|-
+|pause_on_join
+|Set if the server should pause gameplay while a client is joining. This might help slow users.
+|on
+|-
+|rcon_pw
+|Remote connection password, used to modify a server while connected as a client. Use '*' to disable rcon.
+|
+|-
+|restart_game_year
+|Auto-restart the server when Jan 1st of the set year is reached. Use '0' to disable this.
+|0
+|-
+|server_advertise
+|Set if the server will advertise to the master server and show up there.
+|on
+|-
+|server_ip
+|IP that the server binds to. Changes take effect the next time you start a server.  Use 'all' or '0.0.0.0' to bind to any IP.
+|0.0.0.0
+|-
+|server_name
+|Name of the server for multiplayer.
+|
+|-
+|server_port
+|Server port number; change this if your firewall interferes. Changes take effect the next time you start a server.
+|3979 (TCP & UDP)
+|-
+|server_password
+|Server password to protect your server; only clients with the password can join. Use '*' to clear the password.
+|
+|}
+
+===Other variables===
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Variable
+!Description
+!width="90"|Default value
+|-
+|name
+|Your name for multiplayer
+|Player
+|-
+|company_pw
+|Your company password; only clients with the password can join. Use '*' to clear the password.
+|
+|-
+|developer
+|Redirect debugging output from the console/command line to the ingame console (value '2').
+|1
+|}
+
+===Pathfinder variables===
+See [[en/Archive/Manual/Yet Another Pathfinder]] for YAPF tuning variables.
+
+[[Category:en/Manual/Console]]
+[[Category:en/Manual/Multiplayer]]
