@@ -50,19 +50,21 @@ Please refer to the [http://mxcl.github.com/homebrew/ Homebrew website] for inst
 Before installing any libraries, make sure you have access to the latest ports by updating the local repository:
  <code>sudo port selfupdate</code>
 
-Install ''libpng'' and possibly ''libiconv'' (the required ''zlib'' will be installed as dependency automatically). For lzma to be detected by the OpenTTD configure script, "pkgconfig" must also be added.
+{{en/Note|If you want to compile universal binaries to distribute, add " +universal" at the end of each line.}} 
+(Everything will need to be compiled first, so have patience.)
+
+Install ''libpng'', ''liblzma'', ''pkgconfig'' (required for lzma detection), ''lzo2'' and possibly ''libiconv'' (the required ''zlib'' will be installed as dependency automatically). 
  <code>sudo port install libpng
  sudo port install liblzma
  sudo port install pkgconfig
+ sudo port install lzo2
  sudo port install libiconv</code>
-You will be asked to confirm required additional packages (like ''libz'', zip libraries) as well.
+
 
 At least in order to compile a ''static binary'' (for redistribution), but also for your convenience, you might want these as well:
  <code>sudo port install fontconfig
  sudo port install freetype
  sudo port install icu</code>
-
-If you've gone through these steps you'll have watched your computer compile libraries for some time, but now you'll have installed all prerequisites for compiling OpenTTD for yourself.
 
 ====Getting the source====
 For SVN:
@@ -77,18 +79,14 @@ For GIT:
  <code>git clone git://git.openttd.org/openttd/trunk.git</code>
 This will install OpenTTD in a folder.
 
-{{en/Note| Please note that some of these have iconv as a dependency. That is nothing bad, but you'll end up with '''two iconv versions''' on your hard disc: one supplied by apple in /usr/lib and one installed by macports in /opt/local/lib. Those two are not compatible and define different symbols and are different versions. You can temporarily de-activate macport's libiconv ("sudo port deactivate libiconv") as otherwise you might end up in some situations with a linker failure (see [http://bugs.openttd.org/task/3313 FS 3313]). But this might render your version that relies on macport's version un-usable}}
+{{en/Note| Some of these have iconv as a dependency. That means you'll end up with '''two iconv versions''' on your hard disc: one supplied by apple in /usr/lib and one installed by macports in /opt/local/lib. Those two are not compatible and define different symbols and are different versions. You can temporarily deactivate macport's libiconv ("sudo port deactivate libiconv") as otherwise you might end up in some situations with a linker failure (see [http://bugs.openttd.org/task/3313 FS 3313]). But this might render your version that relies on macport's version unusable}}
 
 ====Some further notes on MacPorts====
-If you would like to compile binaries which you want to distribute to other people, you want to compile universal binaries. All macport packages mentioned above offer the option to be installed as universal libaries, but it has to be requested for each install:
- <code>sudo port install zlib +universal</code>
 
 It might be worth to risk a look at the [http://guide.macports.org/#using.port macports documentation]. If you need for one or another reason an old(er) library version, a short walk-through is [https://trac.macports.org/wiki/howto/InstallingOlderPort found here]
 
 {{en/Note| There are issues with some gcc versions which are supplied by macports. Use one of the apple-supplied compilers if fails with illegal compiler arguments. You can switch the compiler being used using [http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/Xcode-2.5/man8/gcc_select.8.html gcc_select]}}
 
-If you wish to install lzo2 use:
- <code>sudo port install lzo2</code>
 
 Fun fact: if you have installed yourself libraries and build them for other architectures than x86_64 i386 ppc and ppc64 it might fail. Those four seem to be accepted, but macports might bitch, if others are found like ppc970.
 
