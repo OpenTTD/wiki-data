@@ -165,8 +165,6 @@ Now you need to make a "working copy" of the source with your new svn client. To
 You can also choose as specific revision to download by adding '''-r#####''' after ''svn checkout''.
 
 = Compiling the source =
-Because the makefile system is rewritten, this section is divided into two parts. Pick the one fitting for the source you have
-==Compiling the trunk/nightly builds==
 For those just wanting a working copy for themselves, enter the following into a terminal window:
  <code>cd ~/Downloads/directory_containing_downloaded_sources
  ./configure
@@ -212,45 +210,5 @@ Compiling a universal binary is done by adding <code>--enable-universal</code> t
 This is all if your system is set up correctly. Make will then compile for intel, PPC and PPC970 (optimized for this particular CPU. Apple renamed it to G5), so setting G5 flags and such shouldn't be needed. Static is also enabled by default as it's assumed that the binary is to be moved to another computer.
 
 For this to work, you will need universal libraries. For more info, read [[en/Archive/Compilation and Ports/Universal libraries]]
-
-==Compiling OpenTTD 0.5.x or earlier (or revisions before 7759)==
-To compile the source, you should use the terminal to go into your working copy and write
- <code>make</code>
-OpenTTD will now compile. If this way OpenTTD fails to link, try:
- <code>make CC=gcc-3.3</code>
-
-If this still fails, try:
- <code>make bundle</code>
-Then, start the Application in the /bundle folder instead of the /bin folder.
-
-This can happen if you got libraries compiled for OSX 10.3.x and you are using OSX 10.4.x. To solve this the right way, replace the library with one compiled for OSX 10.4. It will take longer than using GCC 3.3 though.
-
-If you want to move the application you just compiled to another computer, you need to either install ''sdl'' (and ''libpng'' if you used it) on that computer too or compile statically. Apple recommends against static compilations, but I think it beats installing the libs if you just want to play the game.
-
-===Compiling statically===
-To compile statically, you need to edit makefile.config to do so. You can do this in any text editor (including Developer tools/Xcode). Find the line, which says
-<code>STATIC:=</code>
-and change it to
-<code>STATIC:=1</code>
-
-makefile.config are generated when running make, so it will not be generated before the first time you run make. To set it the first time you  compile, run
-<code>make STATIC:=1</code>
-
-Note: if you change anything in makefile.config, you should run
-<code>make clean</code>
-to make sure you get rid of anything compiled using the old setup
-
-You are now ready to play after you added the grf files from winTTD
-
-===Compiling universal binaries===
-'''Needs at least Xcode 2.1 and OSX 10.4'''''
-
-To compile universal binaries, make sure that you got the right crosscompilers installed from Xcode (default is 10.4u for i386 part and 10.3.9 for PPC part. This can be changed from Makefile.config)
-then type:
- <code>make UNIVERSAL_BINARY:=1</code>
-Replace UNIVERSAL_BINARY with TRIPLE_BINARY if you want G5 optimised code on top of the normal universal binary.
-If you do not add a target argument to make, then it will optimise for the CPU it compiles on, which should always be the best choice unless you plan to move the binary to another computer.
-
-'''Note:''' you need to have universal libraries (at the time of writing, this applies to ''libpng'' only) if you want to make universal binaries. If you use the default settings in OpenTTD, then you need to make a static library (libpng.a) that contains code for i386 based on the 10.4u sdk and the ppc based part needs to be based on the 10.3.9 sdk.
 
 [[Category:en/Development/Compiling OpenTTD]]
