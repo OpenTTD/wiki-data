@@ -138,16 +138,16 @@ If there's only one possible station then the delivered amount is: produced_amou
 
 For two possible stations the calculation is more complex. First the rating in points of station 2 is divided by 2 for the further local calculations. The amount available to station 1 is calculated as follows: (station_rating_in_points1 * (amount + 1)) / (station_rating_in_points1 + station_rating_in_points2); for simmilar ratings this is about 2/3 of the production, it increases for larger differences. The result is subject to the same calculation as in the single station case. This is delivered to station 1. If station 1 doesn't get the full amount available to it then that part won't be transported at all. The remaining amount of the production, if any, is subject to the same calculation as in the single station case and delivered to station 2.
 
-==Local authority rating==
-Ratings limit some player actions; they start at +500 and can change based on some actions.
+==Отношение в городе==
+Отношение властей к вам ограничивает некоторые Ваши действия; в начале игры ваш рейтинг в каждом городе +500, и при этом вы можете его изменить при помощи определённых действий.
 
-Currently you can exploit the game by clearing ~200 trees and then replanting them.  This sets the rating to -1000 (the minimum), and then raises it to 220.
+а текущий момент Вы можете использовать механику игры, уничтожив около 200 деревьев, а затем восстановив их.  Это установит рейтинг -1000 (минимум), а затем поднимет его до 220.
 
 <table width="100%">
 <tr><td style="background:none; border:0px">
 {| border="1" cellpadding="5"
 |-
-!Rating points!!Rating
+!Очки рейтинга!!Рейтинг
 |-
 | -1000 to -400 || Appalling
 |-
@@ -168,41 +168,41 @@ Currently you can exploit the game by clearing ~200 trees and then replanting th
 </td><td style="background:none; border:0px">
 {| border="1" cellpadding="5"
 |-
-!Player action!!Required rating!!Effect on rating
+!Действие игрока!!Требуемый рейтинг!!Эффект от рейтинга
 |-
-|Build a station|| -200 || n/a
+|Построить станцию|| -200 || n/a
 |-
-|Destroy an 'edge' piece of road|| 16 / 64 / 112 ||-18, down to -100.
+|Уничтожить 'крайнюю' часть дороги|| 16 / 64 / 112 ||-18, до -100.
 |-
-|Destroy an 'inner' piece of road|| 16 / 64 / 112 ||-50, down to -100.
+|Уничтожить 'внутреннюю' часть дороги|| 16 / 64 / 112 ||-50, до -100.
 |-
-|Destroy a city tunnel or bridge|| 144 / 208 / 400 ||-250, down to 0.
+|Уничтожить городской туннель или мост|| 144 / 208 / 400 ||-250, до 0.
 |-
-|Destroy building|| 40 to 300 ||-40 to -300
+|Уничтожить здание|| от 40 до 300 || от -40 до -300
 |-
-|Plant tree on clear square|| n/a ||+7, up to 220.
+|Посадить дерево на чистой клетке|| n/a ||+7, до 220.
 |-
-|Clear a tile with trees|| n/a ||-35
+|Очистить клетку от дерева|| n/a ||-35
 |-
-|Successful bribe|| n/a ||+200, up to 800.
+|Успешно совершенная взятка|| n/a ||+200, до 800.
 |-
-|Unsuccessful bribe|| n/a ||Set to -50.
+|Неудачно совешенная взятка|| n/a ||Устанавливается значение -50.
 |}
-Required rating is listed for the settings Permissive / Neutral / Hostile of<br>the [[en/Archive/Manual/Settings/Difficulty]] option ''City council attitude towards area restructuring''.
+Требуемый рейтинг выбирается в зависимости от  Permissive / Neutral / Hostile <br> уровня сложности ([[en/Archive/Manual/Settings/Difficulty]] ''City council attitude towards area restructuring'').
 </td></tr></table>
 
-Each month players' ratings automatically change:
-* Rating goes up by 5 if it is less than 200.
-* Rating goes up by 12 for each station that has transferred cargo in the last 50 days.
-* Rating goes down by 15 for each station that has not transferred cargo in the last 50 days.
+Ежемесячно рейтинг игрока меняется:
+* Увеличивается на  5, если он меньше 200.
+* Увеличивается на 12 за каждую станцию, на которую был доставлен груз в течении последних 50-и дней.
+*Уменшьшается на 15 за каждую станцию, на котороую не был доставлен груз в течении последних 50-и дней.
 
 
-'''Example:'''<br>
-A player has a rating of -300, (Very Poor), 2 active stations and 1 unactive station at a town.<br>
-5pts + 2 * 12pts - 15pts = 14pts points gain per month.<br>
-(-200 - -300)pts / 14pts/mo = 8 months before the town will let him build another station.
+'''Пример:'''<br>
+У игрока рейтинг -300, (Very Poor), 2 активных станции и 1 неактивная станция в городе.<br>
+5pts + 2 * 12pts - 15pts = 14pts очков получает игрок в месяц.<br>
+(-200 - -300)pts / 14pts/mo = 8 месяцев потребуется для того, чтобы город позволили построить ещё одну станцию.
 
-Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
+Исходный код для расчета рейтинга находятся в town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
 
 ==Industry production==
 Here is how the game determines how much cargo an industry produces per month.  This table lists possible starting productions governed by the  [[en/Archive/Manual/Settings/Configuring patches/Economy#enable-smooth-economy|smooth economy]] patch.  Production is a multiple of 8 or 9 (sometimes 10 with forests).
