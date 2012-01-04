@@ -346,104 +346,103 @@ To make things simple, let's look what are the chances for 256x256 maps (max. 1 
 
 '''Примечание:'''  Точную формулу можно посмотреть в функции "[http://vcs.openttd.org/svn/browser/trunk/src/industry_cmd.cpp#L2151 ChangeIndustryProduction()]" в industry_cmd.cpp.
 
-==Delivery payment rates==
-The amount you get paid for delivering cargo is based on 4 factors: the amount of cargo you deliver, the value of the cargo, the distance you deliver it, and how on-time you deliver it.
+==Расценки за доставку груза==
+Сумма, которую вам заплатят за доставку груза, зависит от 4 парамертров: количество груза, которое было доставлено, ценности груза, преодоленной дистанции и времени доставки.
 
 {| border="1" cellpadding="4"
-!Cargo!!Units!!Early Delivery<br> Time (days)!!Late Delivery<br> Time (days)!!Initial cargo <br> payment (pounds)
+!Груз!!Ед. изм.!!Раннее время<br> доставки (дни)!!Позднее время<br> доставки (дни)!!Начальная плата <br> за груз(фунты)
 |-
-|Passengers|| ||Immediate||24||£39
+|Пассажиры|| ||Немедленно||24||£39
 |-
-|Valuables||Bags||1||32||£91
+|Драгоценности||Мешки||1||32||£91
 |-
-|Livestock||Items||4||18||£53
+|Скот||Головы||4||18||£53
 |-
-|Grain||Tons||4||40||£58
+|Зерно||Тонны||4||40||£58
 |-
-|Goods||Crates||5||28||£75
+|Товары||Ящики||5||28||£75
 |-
-|Coal||Tons||7||None||£72
+|Уголь||Тонны||7||Нет||£72
 |-
-|Steel||Tons||7||None||£69
+|Сталь||Тонны||7||Нет||£69
 |-
-|Iron Ore||Tons||9||None||£62
+|Железная руда||Тонны||9||Нет||£62
 |-
-|Wood||Tons||15||None||£61
+|Древесина||Тонны||15||Нет||£61
 |-
-|Oil||Kiloliters||25||None||£54
+|Нефть||Килолитры||25||Нет||£54
 |-
-|Mail||Bags||20||90||£55
+|Почта||Мешки||20||90||£55
 |-
-!colspan="5" align="center"|Arctic specific
+!colspan="5" align="center"|Особенности в Арктическом климате
 |-
-|Wheat||Tons||4||40||£58
+|Пшеница||Тонны||4||40||£58
 |-
-|Paper||Tons||7||60||£66
+|Бумага||Тонны||7||60||£66
 |-
-|Gold||Bags||10||40||£71
+|Золото||Мешки||10||40||£71
 |-
-|Food||Tons||Immediate||30||£69
+|Продукты||Тонны||Немедленно||30||£69
 |-
-!colspan="5" align="center"|Tropical specific
+!colspan="5" align="center"|Особенности в Тропическом климате
 |-
-|Rubber||Kiloliters||2||20||£54
+|Каучук||Килолитры||2||20||£54
 |-
-|Fruit||Tons||Immediate||15||£51
+|Фрукты||Тонны||Немедленно||15||£51
 |-
-|Maize||Tons||4||40||£53
+|Кукуруза||Тонны||4||40||£53
 |-
-|Tropical Wood||Tons||15||None||£97
+|Тропическая древесина||Тонны||15||Нет||£97
 |-
-|Copper Ore||Tons||12||None||£59
+|Медная руда||Тонны||12||Нет||£59
 |-
-|Water||Kiloliters||20||80||£57
+|Вода||Килолитры||20||80||£57
 |-
-|Diamonds||Bags||10||None||£71
+|Алмазы||Мешки||10||Нет||£71
 |-
-!colspan="5" align="center"|Toyland specific
+!colspan="5" align="center"|Особенности в Игрушечном мире
 |-
-|Sugar||Tons||20||None||£54
+|Сахар||Тонны||20||Нет||£54
 |-
-|Toys|| ||25||None||£68
+|Игрушки|| ||25||Нет||£68
 |-
-|Batteries|| ||2||30||£53
+|Батарейки|| ||2||30||£53
 |-
-|Candy||Tons||8||40||£75
+|Сладости||Тонны||8||40||£75
 |-
 |Toffee||Tons||14||60||£58
 |-
-|Cola||Kiloliters||5||75||£59
+|Кола||Килолитры||5||75||£59
 |-
 |Cotton Candy||Tons||10||25||£61
 |-
-|Bubbles|| ||20||80||£62
+|Пузырьки|| ||20||80||£62
 |-
 |Plastic||Kiloliters||30||None||£54
 |-
-|Fizzy Drinks|| ||30||50||£76
+|Газировка|| ||30||50||£76
 |}
 
-Initial cargo payment values are for delivering 100 pieces of cargo 1 tile.  Payment goes up with inflation as the game progresses.
+Начальная плата за груз - это плата за доставку 100 единиц груза на расстояние в 1 клетку. Плата растет вместе с инфляцией с развитием игры.
+
+Штрафы за позднюю доставку:
+*За каждый день просрочки после Раннего времени доставки штраф составляет 0,4%
+*За каждый день просрочки после Позднего времени доставки штраф составляет дополнительные 0,4%
+*Максимально возможный штраф 88%
 
 
-Late delivery penalties:
-*For each day after the Early Delivery time that you deliver the cargo, you are penalized 0.4%.
-*For each day after the Late Delivery time that you deliver the cargo, you are penalized an additional 0.4%.
-*Maximum penalty is 88%.
+'''Примеры''' (без учета инфляции):<br>
+Доставка 20 000 литров нефти на расстояние в 20 клеток в течении 10 дней:<br>
+2 * £54 * 20 sq. * 100% = £2 160
+
+Доставка 100 мешков почты на расстояние 100 клеток за 100 дней:<br>
+£55 * 100 sq. * (1 - 80*0.004 - 10*0.004) = £3 520
 
 
-'''Examples''' (no inflation):<br>
-Deliver 200,000 liters of oil 20 squares in 10 days:<br>
-2 * £54 * 20 squares * 100% = £2160
-
-Deliver 100 bags of mail 100 squares in 100 days:<br>
-£55 * 100 squares * (1 - 80*0.004 - 10*0.004) = £3520
-
-
-'''Notes:'''
-* The exact formula is much more complicated and slightly more accurate, due to rounding error when converting from larger discrete values.  See economy.cpp (GetTransportedGoodsIncome) and [[en/Manual/Game Mechanics/Cargo income]].
-
-* Distance is measured between the name-labeled tiles of the stations, not from the industries or by vehicle distance traveled.  It is computed by adding the differences in x and y tiles, not straight-line distance.
+'''Примечания:'''
+*Точная формула куда более сложная и слегка более точная из-за ошибки округления при преобразовании больших дискретных значений.
+См. economy.cpp (GetTransportedGoodsIncome) и [[ru/Manual/Game Mechanics/Грузовой доход|Грузовой доход]].
+*Расстояние измеряется между клетками, имеющими название станции, а не между предприятиями или расстояние, которое прошло транспортное средство. Оно считается как сумма разностей x- и y-координат клеток, а не по прямой.
 
 ==Vehicle speeds==
 The game has many rules to make vehicles move fairly realistically.  A vehicle travelling at 100 mph (160kph) will cross 5.6 tiles per day.
