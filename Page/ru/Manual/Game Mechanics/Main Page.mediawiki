@@ -1,5 +1,5 @@
 [[Translation:en/Manual/Game Mechanics/Main Page]]
-{{ru/Перевод|en/Manual/Game Mechanics/Main Page|0}}
+{{ru/Перевод|en/Manual/Game Mechanics/Main Page|50}}
 {{ru/Manual/Оглавление}}
 
 Данный раздел содержит информацию о методе расчета игровых параметров в OpenTTD.
@@ -11,28 +11,32 @@
 Каждая часть рейтинга игрока является линейной функцией, например достижение цели по компоненту рейтинга на 50% дает соответственно 50% очков положенных за компонент рейтинга. Компоненты рейтинга выраженные в денежном эквиваленте конвертируются в валюту текущей игры. Изначально в игре они хранятся в фунтах.
 
 {| border="1"
-! Component !! Target !! Points (min) !! Points (max)
+! Компонент!! Цель !! Очков (минимум) !! Очков (максимум)
 |-
-|Vehicle count||>=120||0 points for 0 vehicles||100 points for at least 120 vehicles
+|Количество транспортных средств (ТС)||>=120||0 очков за 0 ТС||100 очков за 120 ТС (и более)
 |-
-|Number of station parts player owns||>=80||0 points for 0 parts||100 points for at least 80 parts
+|Количество станций у игрока||>=80||0 очков за 0 штук||100 очков за 80 штук (и более)
 |-
-|Minimum profit of vehicles at least two years old||>=£10,000||0 points for loss or £0||100 points for at least £10,000
+|Минимальная прибыль от ТС за последние два года||>=£10 000(>=500 000 руб.)||0 очков если убыток или £0 (0 руб.)||100 очков за £10 000 (500 000 руб.) (и более)
 |-
-|Minimum monthly revenue earned in past 3 years||>=£50k||0 points for £0||50 points for at least £50k
+|Минимальный доход, полученный в течение последних трех лет||>=£50k (>=2,5m руб.)||0 очков за £0 (0 руб.)||50 очков за £50k (2,5m руб.) (и более)
 |-
-|Maximum monthly revenue earned in past 3 years||>=£100k||0 points for £0||100 points for at least £100k
+|Максимальный доход, полученный в течение последних трех лет||>=£100k (>=5m руб.)||0 очков за £0 (0 руб.)||100 очков за £100k (5m руб.) (и более)
 |-
-|Units of cargo delivered in past year||>=40,000||0 points for 0 units||400 points for at least 40,000 units
+|Единиц груза доставлено в прошлом году||>=40 000||0 очков за 0 единиц||400 очков за 40 000 (и более) единиц
 |-
-|Number of types of cargo delivered in past quarter||>=8||0 points for 0 cargo-types||50 points for at least 8 cargo-types
+|Количество типов груза, доставленных в прошлом квартале||>=8||0 очков за 0 типов груза||50 очков за 8 (и более) типов груза
 |-
-|Current cash in bank||>=£10m||0 points for £0||50 points for at least £10m
+|Количество денег на банковском счету||>=£10m (500m руб.) ||0 очков за £0 (0 руб.)||50 очков за £10m (500m руб.) (и более)
 |-
-|Current loan from bank||£0||0 points for >£250k||50 points for £0
+|Текущий займ в банке||£0||0 очков за >£250k (>12,5m руб.)||50 очков за £0 (0 руб.)
 |-
-! Totals !!!! 0 points !! 1000 points
+! Итого !!!! 0 очков !! 1000 очков
 |}
+'''Примечания: '''
+10k = 10 000
+
+10m = 10 000k = 10 000 000
 
 <table>
 <tr><td style="background:none; border:0px">
@@ -81,62 +85,63 @@
 |}
 </td></tr></table>
 
-==Station rating==
-This section shows the factors that affect the station rating. All calculations are done separately for each cargo type.
+==Рейтинг станций==
+Этот раздел показывает, какие факторы влияют на рейтинг станций. Все вычисления производятся раздельно для каждого типа груза.
 
 {| border="1" cellpadding="5"
-!Factor!!Condition!!Rating points!!Rating %
+!Фактор!!Условие!!Очков рейтинга!!Рейтинг, %
 |-
-| Max speed of last vehicle entering station || Above 85 km/h (52 mph)|| (Speed (km/h) - 85) / 4 || 0% to 17%
+| Максимальная скорость последнего транспортного средства, въехавшего на станцию || Около 85 км/ч (52 миль/ч)|| (Скорость (км/ч) - 85) / 4 || от 0% до 17%
 |-
-|rowspan="3"|Age in years of last vehicle entering station || 2 || 10|| 4%
+|rowspan="3"|Возраст в годах последнего транспортного средства, въезвашего на станцию || 2 || 10|| 4%
 |-
 | 1 || 20 || 8%
 |-
 | 0 || 33 || 13%
 |-
-|rowspan="4"|Days since last cargo pickup <br> Multiply days in "Condition" column by 4 if last vehicle was a ship.<br><small>(Note: If a vehicle was ready to pick up a cargo but there was no cargo, it is regarded as a cargo pickup anyhow)</small>|| 32,5 to 52,5 || 25 || 10%
+|rowspan="4"|Количество дней с момента, когда последний раз забирался груз. <br> В случае, если транспортным средством является корабль, то количество дней в колонке "Условие" надо умножить на 4.<br><small>(Примечание: Если транспортное средство было в состоянии забрать груз, но самого груза на станции не было, то считается, тем не менее, что груз был забран.)</small>|| от 32,5 до 52,5 || 25 || 10%
 |-
-| 17,5 to 32,5 || 50 || 20%
+| от 17,5 до 32,5 || 50 || 20%
 |-
-| 10 to 17,5  || 95 || 37%
+| от 10 до 17,5  || 95 || 37%
 |-
-| less than 10 || 130 || 51%
+| меньше 10 || 130 || 51%
 |-
-|rowspan="6"|Units of cargo waiting at station || More than 1500 || -90 || -35%
+|rowspan="6"|Единиц груза, ожидающего на станции|| Более 1500 || -90 || -35%
 |-
-| 1001 to 1500 || -35 || -14%
+|от 1001 до 1500 || -35 || -14%
 |-
-| 601 to 1000 || 0 || 0%
+|от 601 до 1000 || 0 || 0%
 |-
-| 301 to 600 || 10 || 4%
+|от 301 до 600 || 10 || 4%
 |-
-| 101 to 300 || 30 || 12%
+|от 101 до 300 || 30 || 12%
 |-
-| less than 100 || 40 || 16%
+| меньше 100 || 40 || 16%
 |-
-|Statue in town of station||Built||26|| 10%
+|Статую в городе, которому принадлежит станция||Построить статую||26|| 10%
 |-
-|Small advertising campaign||Station within 10 tiles of town center||+64|| +25%
+|Маленькая рекламная компания||Станция находится в пределах 10 клеток от центра города||+64|| +25%
 |-
-|Medium advertising campaign||Station within 15 tiles of town center||+112|| +44%
+|Средняя рекламная компания||Станция находится в пределах 15 клеток от центра города||+112|| +44%
 |-
-|Large advertising campaign||Station within 20 tiles of town center||+160|| +63%
+|Большая рекламная компания||Станция находится в пределах 20 клеток от центра города||+160|| +63%
 |-
-|Road vehicle crashed||Station within 22 tiles of crash ||-160|| -63%
+|Транспортное средство попало в аварию||Станция находится в пределах 22 клеток от места аварии||-160|| -63%
 |-
-|Train crashed||Station within 30 tiles of crash ||-160|| -63%
+|Поезд попал в аварию||Станция находится в пределах 30 клеток от места аварии||-160|| -63%
 |}
-Divide the total rating points by 255 to get the percent rating.  The maximum possible rating is 100%.  Advertising campaigns give an instant, temporary boost to ratings of nearby stations. The boost will gradually fall down to the calculated rating.
+Для определения рейтинга в процентах, надо разделить количество очков рейтинка на 255. Максимально возможный рейтинг 100%. Рекламные компании дают мгновенное, но временное повышение рейтинга ближайших станций. Затем рейтинг постепенно снижается до расчетного значения.
 
-Every 2.5 days station ratings are computed; ratings can't change by more than 2 points per cycle.
+Рейтинг станций считается каждые 2,5 дня, при этом рейтинг не может быт изменен более, чем на 2 очка за цикл.
 
-==Cargo delivery to stations==
-During each cycle of 2.5 days for each cargo type of the delivering industry a maximum of 2 stations can get cargo assigned. If there are more than 2 possible stations with the same maximum rating value for the current cargo type then it depends on internal ordering of the stations which ones get the cargo.
+==Доставка груза на станцию==
+В данной статье речь идет о том, как станция забирает груз с ближайших предприятий.
+В течение каждого цикла (2,5 дня) для каждого типа груза предприятия-поставщика(delivering industry) можно передать груз максимум двум станциям. Если число станций, принимающих груз и имеющих одинаковое значение рейтинга для каждого типа груза, больше 2, приоритет зависит от внутреннего порядка станций, принимающих груз.
 
-If there's only one possible station then the delivered amount is: produced_amount * station_rating_in_percent, rounded up to the next integer value.
+Если принимает только одна станция, то количество доставленного груза определяется как: количество_произведенного_груза * рейтинг_станции_в_процентах, округленное вверх до целочисленного значения.
 
-For two possible stations the calculation is more complex. First the rating in points of station 2 is divided by 2 for the further local calculations. The amount available to station 1 is calculated as follows: (station_rating_in_points1 * (amount + 1)) / (station_rating_in_points1 + station_rating_in_points2); for simmilar ratings this is about 2/3 of the production, it increases for larger differences. The result is subject to the same calculation as in the single station case. This is delivered to station 1. If station 1 doesn't get the full amount available to it then that part won't be transported at all. The remaining amount of the production, if any, is subject to the same calculation as in the single station case and delivered to station 2.
+Если принимающих станций две, то вычисления более сложные. Сначала очки рейтинга станции 2 делятся на 2 для последующих местных вычислений. Число, доступное для станции 1, вычисляется следующим образом: (рейтинг_станции1_в_очках * (количество_произведенного_груза + 1))/(рейтинг_станции1_в_очках + рейтинг_станции2_в_очках); при одинаковом рейтинге число будет равняться примерно 2/3, оно увеличивается для усиления различий. Результат вычислений справедлив и в случае одной станции. Вот столько будет доставлено на станцию 1. Если станция 1 не сможет забрать весь доступный для неё груз, то недостающая часть вообще не будет перевезена. Для оставшейся части продукции, если она вообще отсалась, выполняются те же правила расчета, что и для одной единственной станции. Столько и получит станция 2.
 
 ==Отношение в городе==
 Отношение властей к вам ограничивает некоторые Ваши действия; в начале игры ваш рейтинг в каждом городе +500, и при этом вы можете его изменить при помощи определённых действий.
@@ -149,28 +154,28 @@ For two possible stations the calculation is more complex. First the rating in p
 |-
 !Очки рейтинга!!Рейтинг
 |-
-| -1000 to -400 || Appalling
+| -1000 to -400 ||Ужасное (Appalling)
 |-
-| -399 to -200 || Very Poor
+| -399 to -200 || Очень плохое (Very Poor)
 |-
-| -199 to 0 || Poor
+| -199 to 0 || Плохое (Poor)
 |-
-| 0 to 200 || Mediocre
+| 0 to 200 || Посредственное (Mediocre)
 |-
-| 201 to 400 || Good
+| 201 to 400 || Хорошее (Good)
 |-
-| 401 to 600 || Very Good
+| 401 to 600 || Очень хорошее (Very Good)
 |-
-| 601 to 800 || Excellent
+| 601 to 800 || Отличное (Excellent)
 |-
-| 801 to 1000 || Outstanding
+| 801 to 1000 || Великолепное (Outstanding)
 |}
 </td><td style="background:none; border:0px">
 {| border="1" cellpadding="5"
 |-
 !Действие игрока!!Требуемый рейтинг!!Эффект от рейтинга
 |-
-|Построить станцию|| -200 || n/a
+|Построить станцию|| -200 || нет
 |-
 |Уничтожить 'крайнюю' часть дороги|| 16 / 64 / 112 ||-18, до -100.
 |-
@@ -182,13 +187,13 @@ For two possible stations the calculation is more complex. First the rating in p
 |-
 |Посадить дерево на чистой клетке|| n/a ||+7, до 220.
 |-
-|Очистить клетку от дерева|| n/a ||-35
+|Очистить клетку от дерева|| нет ||-35
 |-
-|Успешно совершенная взятка|| n/a ||+200, до 800.
+|Успешно совершенная взятка|| нет ||+200, до 800.
 |-
-|Неудачно совешенная взятка|| n/a ||Устанавливается значение -50.
+|Неудачно совешенная взятка|| нет ||Устанавливается значение -50.
 |}
-Требуемый рейтинг выбирается в зависимости от  Permissive / Neutral / Hostile <br> уровня сложности ([[en/Archive/Manual/Settings/Difficulty]]) в меню ''City council attitude towards area restructuring''.
+Требуемый рейтинг выбирается в зависимости от  Permissive / Neutral / Hostile <br> [[ru/Archive/Manual/Settings/Сложность| уровня сложности]] в меню ''City council attitude towards area restructuring''.
 </td></tr></table>
 
 Ежемесячно рейтинг игрока меняется:
@@ -198,51 +203,52 @@ For two possible stations the calculation is more complex. First the rating in p
 
 
 '''Пример:'''<br>
-У игрока рейтинг -300, (Very Poor), 2 активных станции и 1 неактивная станция в городе.<br>
+У игрока рейтинг -300, Очень плохо(Very Poor), 2 активных станции и 1 неактивная станция в городе.<br>
 5pts + 2 * 12pts - 15pts = 14pts очков получает игрок в месяц.<br>
 (-200 - -300)pts / 14pts/mo = 8 месяцев потребуется для того, чтобы город позволили построить ещё одну станцию.
 
 Исходный код для расчета рейтинга находятся в town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
 
-==Industry production==
-Here is how the game determines how much cargo an industry produces per month.  This table lists possible starting productions governed by the  [[en/Archive/Manual/Settings/Configuring patches/Economy#enable-smooth-economy|smooth economy]] patch.  Production is a multiple of 8 or 9 (sometimes 10 with forests).
+==Производство на предприятиях==
+В данном разделе показано, каким образом предприятия производят продукцию ежемесячно. В этой таблица отображено начальное производительность, при использовании [[en/Archive/Manual/Settings/Configuring patches/Economy#enable-smooth-economy|патча плавной экономики]].  Производительрость умнажается на 8 или 9 (иногда 10 для леса).
 
 {| border="1" cellpadding="4"
-!Raw Material Industry!!Produced Cargo!!Initial production range
+!Сырьевое предприятие!!Производимый груз!!Начальная производительность
 |-
-|Coal Mine||Coal||56 to 176
+|Угольная шахта||Уголь||от 56 до 176
 |-
-|Forest||Wood||48 to 152
+|Лес||Древесина||от 48 ло 152
 |-
-|Oil Rig||Oil||56 to 176
+|Нефтяная Вышка||Нефть||от 56 до 176
 |-
-|Farm||Grain and Livestock||40 to 112
+|ферма||Зерно и Скот||от 40 до 112
 |-
-|Copper Mine||Copper Ore||56 to 112
+|Медная шахта||Медная руда||от 56 до 112
 |-
-|Oil Well||Oil||48 to 152
+|Нефтянная скважина||Нефть||от 48 до 152
 |-
-|Iron Mine||Iron Ore||40 to 112
+|Шахта железной руды||Железная руда||от 40 до 112
 |-
-|Bank||Valuables||24 to 64
-|-
-|colspan="5"|
-|-
-|Gold Mine||Gold||24 to 80
+|Банк||Драгоценности||от 24 до 64
 |-
 |colspan="5"|
 |-
-|Diamond Mine||Diamonds||24 to 80
+|Золотая шахта||Золото||от 24 до 80
 |-
-|Fruit Plantation||Fruit||40 to 112
+|colspan="5"|
 |-
-|Rubber Plantation||Rubber||40 to 112
+|Алмазные копи||Алмазы||от 24 до 80
 |-
-|Water Supply||Water||48 to 152
+|Фруктовая плантация||Фрукты||от 40 до 112
 |-
-|Farm||Maize||40 to 128
+|Каучуковая плантация||Каучук||от 40 до 112
 |-
-|Lumber Mill||Wood||180 or 225 (if trees available)
+|Насосная станция||Вода||от 48 до 152
+|-
+|Ферма||Кукуруза||от 40 до 128
+|-
+|Лесопилка||Древесина||180 или 225
+(если поблизости есть деревья)
 |-
 |colspan="5"|
 |-
@@ -261,8 +267,8 @@ Here is how the game determines how much cargo an industry produces per month.  
 |Sugar Mine||Sugar||40 to 128
 |}
 
-===Production change===
-Each month the game randomly changes some industry productions.
+===Изменения производительности===
+Ежемесячно производительность случайно выбранного предприятия изменяется.
 ====Default / TTD-like Economy Rules====
 For 256x256 tile maps there is one change per month possible (only 1 industry changes). Number scales nicely with map size since the introduction of "Daily production changes" function in trunk (r14332). 
 
@@ -310,33 +316,35 @@ To make things simple, let's look what are the chances for 256x256 maps (max. 1 
 **Предприятие с низким уровнем производства (12-40 в месяц) имеют более высокие шансы на изменение производительности.
 **Промышленность производит продукцию 8 или 9 раз (10 для леса) в месяц. Месячная производительность расчитывается как произведение базового значения производства на частоту выгрузки: например, для угольной шахты при базовом занчении 15 проиводительность составит 120 или 135 тонн в месяц. Базовое значение может увеличиваться до 255, тем самым увеличивая месячную производительность до 2040 или 2295 (2550 для леса) тонн.[http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
 
-====Examples====
-If a coal mine has 70% of its output transported, there is a '''3%''' chance (4.5% * 67%) of a production increase from 3-23% and a '''1.5%''' chance (4.5% * 33%) of a production decrease from 3-23% (but 13% on average).
+====Примеры====
+Если для угольной шахты 70% произведенной продукции перевезено, то есть вероятность '''3%''' (4.5% * 67%), что производительность шахты увеличится на 3-23% и '''1.5%'''  (4.5% * 33%), что производительность уменьшится на 3-23% (13% в среднем).
 
-(1 + (0.03 - 0.015) * 0.13) ^12 - 1 = 0.0237 or '''2.37%'''
+(1 + (0.03 - 0.015) * 0.13) ^12 - 1 = 0.0237 или '''2.37%'''
 
-The coal mine will grow an average of 2.37% after the first year<br>
-(1.0237 ^20) - 1 = 59.6% after twenty years<br>
-(1.0237 ^50) - 1 = 321.8% or '''3.22x''' after fifty years<br>
-(1.0237 ^100) - 1 = '''10.35x''' after one hundred years<br>
-
-
-For an industry with rating of more than 80%, there is a '''3.75%''' chance of increase and '''0.75%''' chance of decrease:<br>
-(1 + (.0375 - 0.0075) * .13) ^12 - 1 = 0.0478 or '''4.78%'''
-
-The industry will grow approximately 4.78% after first year<br>
-(1.0478 ^20) - 1 = '''2.54x''' after twenty years<br>
-(1.0478 ^50) - 1 = '''10.32x''' after fifty years<br>
-(1.0478 ^100) - 1 = '''106.62x''' after one hundred years<br>
-
-For good service, it takes '''29.6 years''' on average '''to double'''; with excellent service, it takes '''14.8 years'''. If in the game's time a day is 2.36 seconds, then the '''doubling time''' with good service is '''7.1 hours'''; with excellent service, the doubling time is '''3.6 hours'''. For production to go from near bottom of 100 to near maximum of 2100 takes '''130 years''' with good service and '''65 years''' with excellent service.
-
-However, in game you will find industries changing their production rate very randomly. It must be stressed the above examples are only true when observing many industries over the long-term; individual industries may greatly deviate from these averages. Statistically speaking, 6 out of 10 industries will not go from 100 to 2100 even with the best service during 65 years. About 1 out of 9 industries will even lower their production when being served at 60-80% cargo transported for 50 years. 
-
-For more responsiveness from industries, adapt the number of wagons to industry production (for the lowest production, you should use two wagons). [Full Load] orders are usually used for such cargo trains.
+Таким образом, мат. ожидание роста шахты 2.37% после первого года<br>
+(1.0237 ^20) - 1 = 59.6% после 20-ти лет<br>
+(1.0237 ^50) - 1 = 321.8% или '''3.22x''' после 50-ти лет<br>
+(1.0237 ^100) - 1 = '''10.35x''' посла 100 лет<br>
 
 
-'''Note:'''  The exact formula can be seen under "[http://vcs.openttd.org/svn/browser/trunk/src/industry_cmd.cpp#L2151 ChangeIndustryProduction()]" in industry_cmd.cpp.
+Для предприятий с количеством вывезенного груза 80%, вероятность увеличения проивзодства '''3.75%''', а вероятность уменьшения производства '''0.75%'''. Таким образом<br>
+(1 + (.0375 - 0.0075) * .13) ^12 - 1 = 0.0478 или '''4.78%'''
+
+Мат. ожидание роста предприятия приблизительно 4.78% после первого года<br>
+(1.0478 ^20) - 1 = '''2.54x''' после 20-ти лет<br>
+(1.0478 ^50) - 1 = '''10.32x''' после 50-ти лет<br>
+(1.0478 ^100) - 1 = '''106.62x''' после 100 лет<br>
+
+Примечание: мат. ожидание - величина, характеризующая усредненный рост производства. Для более подробной информации см. ''Теория вероятностей''.
+
+Если уровень обслуживания хорош, то в среднем, за каждые '''29.6 лет''' предприятие будет '''удваивать''' производительность; Если уровень обслуживание просто превосходный, то это займет'''14.8 лет'''. Если игровой день длится 2.36 секунд, до '''Период удвоение''' при хорошем обслуживании составляет '''7.1 часа'''; при великолепном он составляет '''3.6 часа'''. Для того, чтобы производительность увеличилась с околоминимальных значений в 100 единиц до околомаксимальных значений в  2100 единиц, требуется '''130 лет''' при хорошем обслуживании и '''65 лет''' при замечательном обслуживании.
+
+Однако, производительность в игре меняется случайно. Следует подчеркнуть, что вышеприведенный пример соответствует действительности если наблюдать за множеством предприятий в течении достаточно большого количества времени. Развитие одной индустрии может сильно отличаться от средних значений. Строго говоря, 6 из 10 предприятий не вырастут за 65 лет со 100 до 2100 даже при идеальном обслуживании. Примерно 1 из 9 предприятий за 50 лет даже уменьшит свою производительность несмотря на уровень обслуживания 60-80%.
+
+Для большей отзывчивости предприятий, следует адаптировать количество вагонов в зависимости от производительности предпиятия (для самой низкой производительности надо использовать 2 вагона). Полная загрузка используется обычно для таких грузовых поездов
+
+
+'''Примечание:'''  Точную формулу можно посмотреть в функции "[http://vcs.openttd.org/svn/browser/trunk/src/industry_cmd.cpp#L2151 ChangeIndustryProduction()]" в industry_cmd.cpp.
 
 ==Delivery payment rates==
 The amount you get paid for delivering cargo is based on 4 factors: the amount of cargo you deliver, the value of the cargo, the distance you deliver it, and how on-time you deliver it.
