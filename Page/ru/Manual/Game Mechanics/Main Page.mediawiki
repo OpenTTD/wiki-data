@@ -444,42 +444,42 @@ To make things simple, let's look what are the chances for 256x256 maps (max. 1 
 См. economy.cpp (GetTransportedGoodsIncome) и [[ru/Manual/Game Mechanics/Грузовой доход|Грузовой доход]].
 *Расстояние измеряется между клетками, имеющими название станции, а не между предприятиями или расстояние, которое прошло транспортное средство. Оно считается как сумма разностей x- и y-координат клеток, а не по прямой.
 
-==Vehicle speeds==
-The game has many rules to make vehicles move fairly realistically.  A vehicle travelling at 100 mph (160kph) will cross 5.6 tiles per day.
+==Скорость траспорта==
+В игре достаточно много правил для того, чтобы движение траспорта было максимально реалистичным. Транспортное средство, движущееся со скоростью 160 км/ч (100 миль/ч) пересекает 5,6 клетки в день.
 
-This means that for vehicle speed purposes, a tile is 429 miles (686km) on a side!
+Это значит, исходя из значения скорости, ширина клетки составляет 686 км (429 миль).
 
 
-==== Aircraft ====
-*By default aircraft fly at a quarter of their listed speed (this can be changed in advanced settings).
-*Aircraft accelerate at about 200 km/h/day. It varies per aircraft.
-*Broken down planes fly at 345 km/h.
-*Airport taxi speed is 154 km/h.
+==== Воздушные суда ====
+*По умолчанию воздушные судна движутся с четвертью от их отображенной скорости (это можно изменить в настройках).
+*Ускорение воздушных судов составляет примерно 200 км/ч/день. Для каждого воздушного судна значения различны.
+*Сломанные самолеты движутся со скоростью  345 км/ч.
+*Скорость аэротакси 154 км/ч.
 
-==== Road Vehicles ====
-*Road vehicles accelerate at 37 km/h/day.
-*Road vehicles go around corners at half their max speed
-*Road vehicles accelerate an additional 74 km/h/day downhill.
-*When going uphill, road vehicles slow down 10% 4 times per tile.  This balances out with acceleration at 34 km/h for all road vehicles.
+==== Колесный транспорт ====
+*Ускорение колесного транспорта составляет 37 км/ч/день.
+*Колесный транспорт проходит повороты на половине их максимальной скорости
+*При спуске со склона ускорение увеличивается доплонительно на 74 км/ч/день.
+*При подъеме на склон, ТС замедляется на 10% 4 раза в каждой клетке. Это уравновешивается ускорением 34 км/ч для всех транспортных средств.
 
-(Note: This does not apply when using the improved road vehicle acceleration model.)
+(Примечание: Это неприменимо, если используется улучшенная модель ускорении колесного транспорта.)
 
-==== Ships ====
-*Ships accelerate at 37km/h/day.
-*A "stopped" ship resumes its last speed instantly.
+==== Корабли ====
+*Ускорение кораблей составляет 37 км/ч/день.
+*Остановленный корабль возобновляет свое движение со старой скоростью сразу же.
 
-==== Trains ==== 
-(with the [[en/Archive/Manual/Settings/Realistic acceleration|realistic train acceleration patch]])<br>
-*Trains are not affected going up or down hills if they are powerful enough.
-*Trains are limited to entering and exiting a depot at 61km/h.
-*Trains can make one 45° turn without slowing down.
-*When making two or more 45° turns in the same direction, the max speed is limited as follows:
+==== Поезда ==== 
+(с [[en/Archive/Manual/Settings/Realistic acceleration|патчем реалистичного ускорения поезда (англ.)]])<br>
+*Поезда не могут переехать холмы, если у них не хватает мощности.
+*У поездов есть ограничение на въезд и выезд из депо в 61км/ч.
+*Поезда могут преодолеть один поворот в 45° без снижения скорости.
+*Когда поезд проходит два или больше 45° поворотов в одном направлении, то максимальная скорость ограниченна следующими значениями:
 {| border="1" cellpadding="4"
-!rowspan=2|Tiles between <br>double bend!!colspan=3|Max speed (km/h)
+!rowspan=2|Клеток между <br>двумя поворотами!!colspan=3|Макс. скорость (км/ч)
 |-
-!Railroad!!Monorail!!Maglev
+!Железная дорога!!Монорельс!!Магнитопланы
 |-
-|0 (90° turn)||61||91||121
+|0 (поворот на 90°)||61||91||121
 |-
 |1||88||132||176
 |-
@@ -505,16 +505,16 @@ This means that for vehicle speed purposes, a tile is 429 miles (686km) on a sid
 |-
 |12+||231||346||461
 |}
-*Train acceleration and max speed are affected by engine power, current speed, total train mass, and track incline.
-*Non-Maglev train acceleration = 37 *(0.55 * Power / Speed - 1.3 * Mass + 60 * #cars + 0.0035 * Mass * Speed + 0.24 * Speed^2 - 60 * Mass of cars on uphill slope + 60 * Mass of cars on downhill slope) / Mass (km/h/day)
-*Maglev train Acceleration = 37 * (0.022 * Power - 0.24 * Speed^2 - 60 * Mass of cars on uphill slope + 60 * Mass of cars on downhill slope) / Mass (km/h/day)
-*Braking is twice acceleration except when entering a depot or a station.
-*Speed limits only apply when all of the turns occur within the length of the train:
+*Ускорение поезда и его максимальная скорость зависит от мощности локомотива, текущей скорости, общей массы поезда и уклона пути.
+*Ускорение немагнитных поездов = 37 *(0.55 * Мощность / Скорость - 1.3 * Масса + 60 * число_вагонов + 0.0035 * Масса * Скорость + 0.24 * Скорость^2 - 60 * Масса_вагонов_на_восходящем_склоне + 60 * Масса_вагонов_на_нисходящем_склоне) / Масса (км/ч/день)
+*Ускорение магнитных поездов = 37 *(0.55 * Мощность - 0.24 * Скорость^2 - 60 * Масса_вагонов_на_восходящем_склоне + 60 * Масса_вагонов_на_нисходящем_склоне) / Масса (км/ч/день)
+*Замедление в два раза выше ускорения за исключением въезда в депо или на станцию.
+*Ограничение скорости применяется только в случае, когда все повороты находятся в пределах длины поезда:
 [[File:en/Manual/Game Mechanics/Speed-limits.png]]
 
-''See also: [[en/Archive/Manual/Settings/Realistic acceleration]] and [[en/Community/Corners]].''
+''См. также: [[en/Archive/Manual/Settings/Realistic acceleration]] and [[en/Community/Corners]].''
 
-See aircraft_cmd.c, roadveh_cmd.c, ship_cmd.c, train_cmd.c, vechicle.c for code.
+См. исходный код в aircraft_cmd.c, roadveh_cmd.c, ship_cmd.c, train_cmd.c, vechicle.c.
 
 [[Category:ru/Manual/Игровой процесс]]
 [[Category:ru/Разработка]]
