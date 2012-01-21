@@ -16,33 +16,33 @@ You can also pull from my git tree. It's located at git://github.com/fonsinchen/
 
 The "cd" branch is frequently rebased on trunk and contains the following milestones, conveniently arranged as commits:
 
-==Tracking capacities, usages and supplies==
+==Moving averages==
 
-The transport capacity of the link between station A and station B is the sum of the capacities of all vehicles arriving at B and coming from A. The usage of the link is the number of goods actually transported from A to B. The supply is the amount of cargo generated at a station. These numbers are calculated per cargo type and in order to not let them grow infinitely a moving average is taken over a configurable time. The moving average is calculated differently for supply on the one hand and capacity and usage on the other. Capacity and usage are scaled linearly when dropping below the moving average length. This helps cleaning up stale links. To compensate, capacity and usage get a boost when being increased from a small base value. Like this small but regular increases to capacities and usages don't lead to loss of links.
+A general framework for creating moving averages of different lengths over fluctuating values. In general things are added to the moving average at random times and the moving average is decreased at fixed times by a fixed share, depending on its length.
 
-==Link graph and connected components==
+==Record capacities of links==
 
-The nodes in the graph are partitioned into connected components. This isn't very useful on its own, but will be needed for further steps. The computation of connected components doesn't work if there are a lot of vehicles that visit a station and never come back to that station. This behaviour has been shown by certain AIs, but fixing isn't a high priority. You get a new settings page here: ''linkgraph''. Every time a connected component is calculated a copy of these settings is made for this component. These copies are saved and loaded. Later on a seperate thread will be created for the calculation of each component and the settings at the time of the creation will be carried around. Like this all settings can be changed during the game and the threading model stays network-safe. The first entry in the link graph settings is ''recalculation interval''. This is the time between subsequent recalculations of the link graph. If you increase it, it will take less CPU power. If you decrease it, the cargodist algorithm will run more often, resulting in a more accurate routing if your routes change often.
+The transport capacity of the link between station A and station B is the sum of the capacities of all vehicles arriving at B and coming from A. The usage of the link is the number of goods actually transported from A to B. The supply is the amount of cargo generated at a station. These numbers are calculated per cargo type and in order to not let them grow infinitely a moving average is taken. The moving average is calculated differently for supply on the one hand and capacity and usage on the other. Capacity and usage are scaled linearly when dropping below the moving average length. A separate counter is used to determine the timeout of links. When a link isn't serviced before the timeout hits it is removed. Otherwise the timeout is reset. Timeout and moving average length are based on the manhattan distance between the end points of the link. Longer links are more tolerant against infrequent service.
 
-==Transport demand==
+==Basic linkgraph==
 
-A demand function defines how many units of cargo '''should''' be transported between certain nodes in the link graph. It doesn't say how many units of cargo are actually transported, nor how they are transported. Actually at least two such functions are needed. Certain cargos, passengers and mail mostly, require a symmetric demand function, others a roughly antisymmetric one.
+A link graph is created from stations as nodes and edges signifying transport capacities. The nodes in the graph are partitioned into connected components. You get a new settings page here: ''linkgraph''. Every time a connected component is calculated a copy of these settings is made for this component. These copies are saved and loaded. Later on a seperate thread is created for calculations on each component and the settings at the time of the creation are be carried around. Like this all settings can be changed during the game and the threading model stays network-safe. The first entry in the link graph settings is ''recalculation interval''. This is the time between subsequent recalculations of the link graph. If you increase it, the calculations will take less CPU power. If you decrease it, the cargodist algorithm will run more often, resulting in a more accurate routing and less routing delay if your routes change often.
 
-===Symmetric and antisymmetric demand===
+==Demand calculation for linkgraph==
 
-The symmetric function should have the following property:
+A demand function defines how many units of cargo '''should''' be transported between certain nodes in the link graph. It doesn't say how many units of cargo are actually transported, nor how they are transported. Actually two such functions are used. Certain cargos, passengers and mail mostly, require a symmetric demand function, others an asymmetric one.
+
+===Symmetric and asymmetric demand===
+
+The symmetric function has (roughly) the following property:
 
   for all pairs of nodes (i, j): demand(i, j) == demand(j, i)
 
-The antisymmetric one should have the following property instead:
-
-  for all pairs of nodes (i, j): demand(i, j) > 0 => demand(j, i) == 0
-
-In practice it is convenient to have a semi-symmetric function which is modifiable by a configuration option ''0 <= k <=1'' like this:
+This means the same demand is generated in both directions between any two nodes. The asymmetric one doesn't state anything about the relation between forward and backward demand. In practice it is convenient to have a semi-symmetric function which is modifiable by a configuration option ''0 <= k <=1'' like this:
 
   for all pairs of nodes (i, j): demand(i, j) >= k * demand(j, i) >= k * k * demand(i, j) || demand(j, i) >= k * demand(i, j) >= k * k * demand(j, i)
 
-For ''k == 0'' this is the antisymmetric function and for ''k == 1'' it's the symmetric function.
+For ''k == 0'' this is the asymmetric function and for ''k == 1'' it's the symmetric function.
 
 Furthermore the distance between the nodes should play a role in the demand calculation and the sum of all ''demand(i, j)'' cannot be higher than ''supply(i)'' for any node ''i''.
 Thus the algorithm implementing the demand function generates a list of nodes supplying cargo and another one of nodes accepting cargo. It then repeatedly loops over all pairs of nodes ''(from, to)'' where ''from'' supplies and ''to'' accepts. For each such pair it assigns a fraction of the supply at ''from'' as ''demand'' between ''from'' and ''to'' until no supply is left at any station. Provided that ''k > 0'' it also assignes ''demand * k'' in the other direction if there is enough supply at ''to'' and ''from'' also accepts. Otherwise less or no demand is generated in the forward direction. The size of the assigned fraction depends on:
@@ -52,19 +52,15 @@ Thus the algorithm implementing the demand function generates a list of nodes su
 
 Generally the formula is ''maxDistance / (maxDistance - distance) / accuracy'' where maxDistance is the the sum of the x- and y-dimensions of the map.
 
-===Acceptance-based demand===
-
-As a third option there could be a function that takes the quantity of acceptance (intentionally not called ''demand'' here) of stations into account. Implementation would be analog to the symmetric and antisymmetric demand functions, but the quantities of acceptance would need to be known. One way to determine them could be a measurement of consumed goods at the station, just like the supply is a measurement of generated goods at a station.
-
 ===Configuration and save/load===
 
-You can change which function is used for which cargo class in the link graph settings. Additionally there is an entry ''unhandled'' which will result in no demands being calculated. The influences of station size (''k'', only for symmetric) and distance (''l'') as well as the accuracy can also be set in the link graph settings. The calculation of the demands (as well as later parts of the algorimth) takes place per connected component and in a seperate thread for each component. The threads all work on their own data and are joined with the main thread after defined intervals for copying the results. When saving the starting state, joining time and link graph settings of each running thread are saved. Like this the threads can be started in a valid state when loading a game or joining a network game.
+You can change which function is used for which cargo class in the link graph settings. Additionally there is an entry ''manual'' which will result in no demands being calculated. The influences of station size (''k'', only for symmetric) and distance (''l'') as well as the accuracy can also be set in the link graph settings. The calculation of the demands (as well as later parts of the algorithm) takes place per connected component and in a seperate thread for each component. The threads all work on their own data and are joined with the main thread after defined intervals for copying the results. When saving the starting state, joining time and link graph settings of each running thread are saved. Like this the threads can be started in a valid state when loading a game or joining a network game.
 
-==Multi-commodity flow problem==
+==MCF solver for linkgraph==
 
 With the demands and capacities known a [http://en.wikipedia.org/wiki/Multi_commodity_flow multi commodity flow] problem is defined. To solve it an algorithm inspired by [http://www.cs.princeton.edu/~gk/papers/mincostflow.ps this one] is used. The link graph setting for the desired accuracy of the solution is reused here. The more accurate you want the solution the heavier the toll on your CPU.
 
-The algorithm repeatedly calculates the best paths from any node to any other in the component it is working on and adds to every path a flow of 1/accuracy of the unsatisfied demand between the path's source and destination nodes. Best paths are calculated using [http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm Dijkstra's algorithm]. The MCF solver is split in two passes.
+The algorithm repeatedly calculates the best paths from any node to any other in the component it is working on and adds to every path a flow of ''1/accuracy'' of the unsatisfied demand between the path's source and destination nodes. Best paths are calculated using [http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm Dijkstra's algorithm]. The MCF solver is split in two passes.
 
 In the first pass the quality of an edge is measured as the the manhattan distances between the stations involved. The algorithm will only assign flows to paths with capacity left. This means first all shortest paths are saturated, then increasingly longer paths and so on until either no demand is left or the capacities of all useful paths are used up to a maximum percentage. The maximum percentage can be configured with the "short path saturation" link graph setting. After running into this situation all cycles in the graph are eliminated. This is done by checking for each node via depth-first-search if the paths departing from this node form a tree and otherwise reducing the detected cycles until at least one edge's flow is 0. If any cycles have been eliminated the first pass is started again as the freed capacity could allow for more paths.
 
@@ -72,7 +68,7 @@ The second pass is run if demand is left after the first pass, but no capacity. 
 
 Because of the explicit cycle check of the first pass and the fact that the second pass doesn't add any new paths the MCF solver cannot build cyclic paths. Assigning all available demand is necessary in order to guarantee that cargo is actually sent where the demand calculator has determined it to go and not only to the destinations connected by the best paths.
 
-==Flow mapping core functionality==
+==Flow mapper for linkgraph==
 
 The solution of the multi commodity flow problem is a set of flows along the edges of the link graph. These flows have to be translated into assignments of goods to vehicles. In order to do that at each node a flow mapping is created. An example for a flow mapping could be:
 
@@ -81,47 +77,64 @@ For 15 cargo arriving at A from SOURCE do:
 * send 7 to C
 * send 3 to D
 
-The actual numbers are deduced from the supplies and the relative sizes of the different flows passing a node. In addition to those ''planned'' flows, the ''real'' flows are tracked. In the example above the amount of cargo originating from SOURCE that has been sent to C or D or consumed locally is tracked as ''real'' flow. When a new cargo packet from SOURCE shows up it is sent to the destination with the greatest difference between real and planned flow. Like this it is not necessary to determine the destination for each cargo entity in advance. Only the flow mappings for each node need to be known in order to route cargo. It is also never necessary to split packets for cargodist reasons. For the real flows again a moving average is taken, like for the capacities and usages.
+The actual numbers are deduced from the supplies and the relative sizes of the different flows passing a node. By using those ratios it is not necessary to determine the destination for each cargo entity in advance. Only the flow mappings for each node need to be known in order to route cargo. It is also never necessary to split packets for cargodist reasons.
 
 [[File:en/Manual/Cargodist-station.png|frame|Screenshot of station GUI]]
 
-The assignment of flow is calculated for each station from the path forest the MCF algorithm returns. This is rather easy. Simply scale all paths by the supply of the origin station and insert them into a clever data structure that retrieves the most underprovisioned flow in constant time.
+The assignment of flow is calculated for each station from the path forest the MCF algorithm returns. This is rather easy. Simply scale all paths by the supply of the origin station and insert them into a clever data structure that retrieves flows with probabilities equivalent to their relative sizes.
 
-==Vehicle loading==
-'''Preface: Go to "Advanced Settings -> Vehicles" and switch on "New orders are non-stop by default". If you want to know why, read on.'''
+==Allow vehicle transfer and profit text effects to be displayed at the same time==
 
-This part includes loading and unloading vehicles according to the flows calculated above. It was unavoidable to rewrite much of the vehicle loading code, so there might still be bugs in it. Yet, this solution is easier to read, reuse and debug than the previous one, so the rewrite should pay for itself eventually.
+We are going transfer and unload cargo from one vehicle at the same station. In order to visualize that the text effects for profit and transfer shares are slightly extended.
 
-A cargo packet unloaded at a station selects its next hop according to the flow for its origin saved at the station. When a vehicle loads at a station it will generally only take cargo wanting to go to the next ''real stop'' in its order list. A ''real stop'' is any stop at a station where a vehicle can load or unload. This means servicing, buoys or other ''via'' orders where the vehicles has no chance of loading or unloading are excluded.
+==Multimap implementation with guaranteed order between equal keys==
 
-Nondeterministic orders are handled by falling back to traditional routing. A nondeterministic order is either an order without the ''non-stop'' flag or a conditional order where the next ''real stop'' can evaluate to at least two different stations. Mind that for example skipping a servicing order if the vehicle doesn't need servicing is thus not a nondeterministic order. However, choosing the next station according to the load percentage of the vehicle is. If a nondeterministic next order is encountered the vehicle will load any cargo available at the station, without caring for destinations.
+To make the vehicle loading by plan (see below) work a multimap with some additional guarantees had to be designed. The order of entries with equal keys needs to be the same on all platforms in order to provide for network-stable sorting of cargo packets and avoid desyncs. Unfortunately the standard C++ multimap doesn't guarantee this.
 
-Cargo not handled by cargodist is also routed traditionally. Cargo wanting to go over a nonexistant link is rerouted according to the other flows for its source station. The latter case is detected when deleting link statistics.
+==Reserve cargo for loading vehicles in distinct lists and thus don't recount it in every loading round==
 
-Order modifications such as "no unloading", "unload all", "transfer", "no loading", etc generally do what they are supposed to when using cargo distribution. However, as the link graph doesn't know about orders it assumes it can use any link with a capacity. It will thus also plan cargo to be sent with those vehicles that decline loading cargo. In the same way it will plan cargo to be transferred at a station where you force cargo to be delivered. This means you artificially change the ratios between sent and planned cargo on those links, which will make the flow mapping assign even more cargo to the links you are trying to avoid. It is thus suggested to not use order modifications together with cargo distribution. This excludes "full load", which is the only order modification that doesn't have any bad effects on the flow mapping.
+The cargo reserved for loading vehicles can't be saved as a simple number anymore because a vehicle can't load just any packet anymore. In order to make reservations work again specific packets have to be reserved for specific vehicles. Rebuilding those lists of reserved packets in each loading round is costly. So instead of rebuilding the reservation list in each loading round reserved cargo is kept in a seperate list inside the vehicle cargo list. Like this the amount of cargo to be searched in each loading round is reduced and the effort of rebuilding the reservations is spared. Reservation lists are saved in the savegames along with the normal vehicle cargo lists.
 
-==Station GUI==
-The station GUI shows the sources, next hops and estimated destinations of the cargo waiting as well as those of the planned and sent cargo flows through this node. Final destinations are estimated according to the flows saved at each station. Don't expect each packet of cargo to go exactly that way, though. As explained above, packets are always routed without splitting them, so the numbers given in the station GUI are always a little incorrect, but in the long run everything is still sent to their proper destinations. You can group the cargo by source station, next hop and destination in any order. Also you can sort within the groups by the property you group by (''station'') or the amount of cargo displayed (''amount''). Groups can be opened and collapsed by clicking on the respective lines in the cargo display.
+==Save the station and cargo a StationCargoList belongs to in the list==
 
-==Smallmap Zoom In==
+Another bit of convenience as we are going to refer to the station a lot from the StationCargoList.
+
+==Load and unload cargo according to plan given by linkgraph==
+
+This part includes loading and unloading vehicles according to the flows calculated above. A cargo packet unloaded at a station selects its next hop according to the flow for its origin saved at the station. When a vehicle loads at a station it will generally only take cargo wanting to go to the next ''real stop'' in its order list. A ''real stop'' is any stop at a station where a vehicle can load or unload. This means servicing, buoys or other ''via'' orders where the vehicles has no chance of loading or unloading are excluded.
+
+Nondeterministic orders are handled by guessing the most probable next stop. A nondeterministic order is a conditional order where the next ''real stop'' can evaluate to at least two different stations. Mind that for example skipping a servicing order if the vehicle doesn't need servicing is thus not a nondeterministic order. However, choosing the next station according to the load percentage of the vehicle is. If a nondeterministic next order is encountered the condition is evaluated immediately and the outcome is used to determine which cargo to be load. There is one exception: Orders depending on load percentage are not evaluated while loading but rather a coin is flipped. Determining which cargo to load there is basically an undecidable problem and thus we just load anything.
+
+Cargo not handled by cargodist is also "traditionally". Cargo wanting to go over a nonexistant link is rerouted according to the other flows for its source station. The latter case is detected when deleting link statistics.
+
+Station cargo lists are sorted by the next hop a packet wants to travel to. Like this a loading vehicle doesn't have to search all packets in the list for loadable ones but can directly refer to the section of the list where packets travelling to its next stop reside. As an added benefit the next hop doesn't have to be saved inside the packet but can be inferred from its index in the packet map.
+
+Order modifications such as "no unloading", "unload all", "transfer", "no loading", etc generally do what they are supposed to when using cargo distribution. However, as the link graph doesn't know about orders it assumes it can use any link with a capacity. It will thus also plan cargo to be sent with those vehicles that decline loading cargo. In the same way it will plan cargo to be transferred at a station where you force cargo to be delivered. This means you artificially change the ratios between sent and planned cargo on those links. This excludes "full load", which is the only order modification that doesn't have any bad effects on the flow mapping. Work is being done to properly support the other modifications.
+
+==Abstract implementation of linkgraph overlay for GUI==
+
+A visualization of links, capacities, supplies and usages as overlay over any window. The links are shown color coded with their saturation from white ("unused") over green ("saturated") and yellow to red ("overloaded").
 [[File:fr/Manual/Cargodist-smallmap-flow.png|frame|Screenshot of smallmap with flows]]
-In order to increase the readability of the statistics display in the smallmap a zoom in function has been added. Using it you can not only zoom out for overview in the smallmap, but also zoom in to get a more detailed display of the link statistics, for example in a town center.
 
-==Smallmap Stats==
-In the smallmap the planned and real flows over each link are shown. You can choose which stats you should be shown by enabling or disabling the respective buttons in the legend. Usage and capacity are like above, real flow and planned flow are new. Real flow is the amount of cargo already sent along the link. The difference between usage and real flow is the amount of cargo which has been assigned the remote end of the link as next hop, but hasn't necessarily arrived there yet. If the usage is considerable larger than the real flow, cargo has been sent along the link unexpectedly. This can happen if there are problems predicting the flow of cargo due to order modifications. 
+==Legend for linkgraph overlay==
 
-You can either have the stats shown in numbers (units of cargo per month) or as graphs. If shown as numbers the numbers in the map are in the same order as the legend entries.
+A window to select for which companies and cargoes you want to see a link graph overlay.
 
-==External Station Ratings==
-tbd
+==Linkgraph overlay over main viewport==
 
-==Optimizations==
-The vehicle loading described above proved to be very slow when using the stock OpenTTD cargo lists. This is mainly because in order to find packets that could be loaded into vehicles the list has to be searched linearly for packets with the same next hop as the loading vehicle. With a lot of cargo waiting this can take a lot of time. As a second problem the cargo reserved for loading vehicles couldn't be saved as a simple number anymore because a vehicle couldn't load just any packet anymore. In order to make reservations work again specific packets had to be reserved for specific vehicles. Rebuilding those lists of reserved packets in each loading round is costly. To resolve these problems two optimizations have been introduced.
+A linkgraph overlay over the main viewport, configurable by a legend which can be opened from the "map" menu.
 
-===Station Cargolists sorted by next hop===
-Station cargo lists are sorted by the next hop a packet wants to travel to. Like this a loading vehicle doesn't have to search all packets in the list for loadable ones but can directly refer to the section of the list where packets travelling to its next stop reside. As an added benefit the next hop doesn't have to be saved inside the packet anymore but can be inferred from its index in the packet map. To make this work a multimap with some additional guarantees had to be designed. The order of entries with equal keys needs to be the same on all platforms in order to avoid desyncs. Unfortunately the standard C++ multimap doesn't guarantee this.
+==Refactor the smallmap to prepare for linkgraph overlay==
 
-===Explicit Reservation===
-Instead of rebuilding the reservation list in each loading round reserved cargo is kept in a seperate list inside the vehicle cargo list. Like this the amount of cargo to be searched in each loading round is reduced and the effort of rebuilding the reservations is spared. Reservation lists are saved in the savegames along with the normal vehicle cargo lists.
+Quite frankly, the smallmap was a mess before...
 
-fonsinchen 22:39, 4 March 2010 (UTC)
+==Linkgraph overlay for smallmap==
+
+In the smallmap the planned and real flows over each link are shown. You can choose which stats you should be shown by enabling or disabling the respective buttons in the legend.
+
+==Consider cargo waiting at other stations for rating at the origin station==
+
+In stock OpenTTD station ratings are calculated based on cargo waiting at the same station. This is a problem in cargodist as quite often cargo from a station A is waiting at a station B for transport to a station C. This situation needs to reflected in the station rating from A so that less cargo is generated if some downstream link is overloaded. So this change considers cargo from station A waiting at other stations for the rating at station A.
+
+==Show cargo by next hops and final destinations in the station GUI==
+The station GUI shows the sources, next hops and estimated destinations of the cargo waiting as well as those of the planned cargo flows through the station. Final destinations are estimated according to the flows saved at each station. Don't expect each packet of cargo to go exactly that way, though. As explained above, packets are always routed without splitting them, so the numbers given in the station GUI are always a little incorrect, but in the long run everything is still sent to their proper destinations. You can group the cargo by source station, next hop and destination in any order. Also you can sort within the groups by the property you group by (''station'') or the amount of cargo displayed (''amount''). Groups can be opened and collapsed by clicking on the respective lines in the cargo display.
