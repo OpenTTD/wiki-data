@@ -3,48 +3,18 @@
 
 {{en/Warning|Savegames which are created with this branch might no longer work in subsequent versions. They will for sure not work in trunk, even if Cargodist is ever merged into trunk.}}
 
-So this is the (n+1)th attempt to provide passengers and freight with destinations and then getting them there using the existing transport links as efficiently as possible. Further details on the problem can be found [[en/Community/Patches/Passenger and cargo destinations|here]]. However, in contrast to the cargod'''e'''st project the problems of routing cargo and balancing loads on different routes are seen as inseperable here and thus solved together. Also the definition of transportation demand is seen as precondition to solving above problems and handled first. 
+So this is the (n+1)th attempt to provide passengers and freight with destinations and then getting them there using the existing transport links as efficiently as possible. Further details on the problem can be found [[en/Community/Patches/Passenger and cargo destinations|here]]. However, in contrast to the cargod'''e'''st project the problems of routing cargo and balancing loads on different routes are seen as inseperable here and thus solved together. Also the definition of transportation demand is seen as precondition to solving above problems and handled first. The main differences to YACD are that Cargodist a, only considers reachable destinations, not the whole map and b, precomputes the whole routing scheme in separate threads for performance reasons.
 
-The [http://www.tt-forums.net/viewtopic.php?f=33&t=41992&start=0 main forum topic] has some more information, as well as the subproject [http://www.tt-forums.net/viewtopic.php?f=33&t=32923 zoomable smallmap]. Patches can be found in my [http://github.com/fonsinchen/openttd-cargodist/tree/patches patch space], with [http://github.com/fonsinchen/openttd-cargodist/tree/patches/current this subdirectory] always containing the latest updates and [http://github.com/fonsinchen/openttd-cargodist/raw/patches/current/TRUNK_VERSION.txt this file] telling which trunk version they apply to. You should pick the patches with the prefix "trunk-" if you want to apply them directly on top of trunk or those without if you want to apply them on top of each other.
+The [http://www.tt-forums.net/viewtopic.php?f=33&t=41992&start=0 main forum topic] has some more information.
 
 The openttd compile farm builds binaries of cargodist for various platforms every night. You can download them at http://bundles.openttdcoop.org/cargodist/.
 
-You can also pull from my git tree. It's located at git://github.com/fonsinchen/openttd-cargodist.git and contains hierarchical branches named as follows:
-
-      master
-        |
-        |\------------\----------\---------------\----------\
-        |             |          v               |          |
-        |             |    moving-average        |          |
-        |             |          v               |          v
-        |             |      capacities          |     reservation
-        |             |          v               |          |
-        |             v      components >>>      |          |
-        v          texteff       v               |          |
-  smallmap-zoom-in    |   <<< demands            v          |
-        |             |          v           multimap       |
-        |             |         mcf              |          |
-        |             |          v               |          |
-        |             |   flowmapping-core       |          |
-        |             |          |               |          |
-        |             \---------\|/--------------/----------/
-        |                        v
-        |                    cargomap
-        |                        |
-        |/----------------------/ \--------------\
-        v                                        v
-  smallmap-stats       >>> warning-sign    station-gui  supplyscale <<<
-        |                        |               |          |
-        \-----------------------\|/--------------/----------/
-                                 v
-                                cd
-
-The branches mostly correspond to the milestones mentioned below. ''master'' is a clone of the main openttd repository. ''cd'' merges all branches. So if you want the latest version of everything, do:
+You can also pull from my git tree. It's located at git://github.com/fonsinchen/openttd-cargodist.git and the relevant branch is "cd". So if you want the latest version of everything, do:
 
  git clone git://github.com/fonsinchen/openttd-cargodist.git
  git checkout origin/cd
 
-Of course you can also pull the milestones one by one and examine each one independently. Each milestone should compile and run cleanly. The mile stones are roughly as follows:
+The "cd" branch is frequently rebased on trunk and contains the following milestones, conveniently arranged as commits:
 
 ==Tracking capacities, usages and supplies==
 
