@@ -79,8 +79,6 @@ For 15 cargo arriving at A from SOURCE do:
 
 The actual numbers are deduced from the supplies and the relative sizes of the different flows passing a node. By using those ratios it is not necessary to determine the destination for each cargo entity in advance. Only the flow mappings for each node need to be known in order to route cargo. It is also never necessary to split packets for cargodist reasons.
 
-[[File:en/Manual/Cargodist-station.png|frame|Screenshot of station GUI]]
-
 The assignment of flow is calculated for each station from the path forest the MCF algorithm returns. This is rather easy. Simply scale all paths by the supply of the origin station and insert them into a clever data structure that retrieves flows with probabilities equivalent to their relative sizes.
 
 ==Allow vehicle transfer and profit text effects to be displayed at the same time==
@@ -111,10 +109,11 @@ Station cargo lists are sorted by the next hop a packet wants to travel to. Like
 
 Order modifications such as "no unloading", "unload all", "transfer", "no loading", etc generally do what they are supposed to when using cargo distribution. However, as the link graph doesn't know about orders it assumes it can use any link with a capacity. It will thus also plan cargo to be sent with those vehicles that decline loading cargo. In the same way it will plan cargo to be transferred at a station where you force cargo to be delivered. This means you artificially change the ratios between sent and planned cargo on those links. This excludes "full load", which is the only order modification that doesn't have any bad effects on the flow mapping. Work is being done to properly support the other modifications.
 
+[[File:en/Manual/Cargodist-overlays.png|frame|Screenshot of linkgraph overlays]]
+
 ==Abstract implementation of linkgraph overlay for GUI==
 
 A visualization of links, capacities, supplies and usages as overlay over any window. The links are shown color coded with their saturation from white ("unused") over green ("saturated") and yellow to red ("overloaded").
-[[File:en/Manual/Cargodist-overlays.png|frame|Screenshot of linkgraph overlays]]
 
 ==Legend for linkgraph overlay==
 
@@ -129,6 +128,7 @@ A linkgraph overlay over the main viewport, configurable by a legend which can b
 Quite frankly, the smallmap was a mess before...
 
 ==Linkgraph overlay for smallmap==
+[[File:en/Manual/Cargodist-station.png|frame|Screenshot of station GUI]]
 
 In the smallmap the planned and real flows over each link are shown. You can choose which stats you should be shown by enabling or disabling the respective buttons in the legend.
 
