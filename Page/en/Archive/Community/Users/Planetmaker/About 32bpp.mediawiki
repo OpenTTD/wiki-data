@@ -40,7 +40,19 @@ Those locations are identified by distinct properties of landscape, nature and a
 = OpenTTD side =
 
 == Current state ==
-To date OpenTTD does support sprites for all zoom levels and for both 8bpp and 32bpp. Optionally a 32bpp sprite can be followed by an additional mask sprite of the exact same dimensions. In that case the mask sprite provides a colour from the 8bpp palette to be drawn on that place of the 32bpp sprite (index 0 = transparent and the 32bpp sprite will be drawn there) while the 32bpp sprite then only defines alpha channel and intensity.
+To date OpenTTD does support sprites for all zoom levels and for both 8bpp and 32bpp.
+
+{|
+! Name !! Precondition !! Description
+|-
+|8bpp normal ||   || normal zoom (always required)
+|-
+|8bpp zoom-out<br>8bpp zoom-in||  8bpp normal  || Sprites for other zoom levels than the default in 8bpp (8x, 4x, 2x zoom-out and 4x, 2x zoom-in ("extra zoom")
+|-
+|32bpp (all versions) || 8bpp normal || Available in all zoom levels: normal zoom, 8x, 4x, 2x zoom-out and 2x, 4x zoom-in ("extra-zoom")
+|-
+|mask || following on 32bpp || The mask sprite must have the exact same dimensions as the preceeding 32bpp sprite. In this case the mask sprite provides a colour from the 8bpp palette to be drawn on that place of the 32bpp sprite (index 0 = transparent and the 32bpp sprite will be drawn there) while the 32bpp sprite then only defines alpha channel and intensity.
+|}
 
 Sprites can be provided for the normal zoom, for 8x, 4x and 2x zoomed out and 2x and 4x zoomed-in state.
 
