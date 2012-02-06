@@ -3,40 +3,31 @@
 
 ''« Назад к [[ru/Development/NewGRF/Main Page|разработке графики]]''
 
-{| width="100%"
-|-
-|colspan="2" style="background-color: #f1f2fe; border: 1px solid #c7c8fe; margin: 0; padding: 1em 1em 0em 1em;"|
-
-<div style="margin:1em;padding:1em;border:1px solid #c7c8fe;background:#E7EBFF;">
-<font size="3">'''Разработка 32 битной графики: о чём этот проект?'''</font>
-
 Начиная с 2004 года были попытки модернизировать графику игры с помощью увеличения глубины цвета и детализации изображений. Этот проект получил название '''Разработка 32 битной графики''', соответсвенно глубине цвета новых спрайтов.
-</div>
 
-|-
-|width="50%" style="background-color: #E7EBFF; border: 1px solid #c7c8fe; margin: 0; padding: 1em 1em 0em 1em;" valign="top"|
+==О развитии проекта==
 
-<div style="margin:1em;padding:1em;border:1px solid #c7c8fe;background:#f1f2fe;">
-<font size="3">'''О развитии проекта'''</font>
+[[File:en/Archive/Old 32bpp/8bpp opengfx normalzoom.jpeg|thumb|right|Скриншот игры в 8 битном графическом режиме с нормальным приближением.]]
+[[File:en/Archive/Old 32bpp/32bpp normalzoom.jpeg|thumb|right|Скриншот игры в 32 битном графическом режиме с нормальным приближением.]]
+[[File:en/Archive/Old 32bpp/32bpp fullzoom.jpeg|thumb|right|Скриншот игры в 32 битном графическом режиме с максимальным приближением.]]
 
-Обычно художники создают свою графику в основном в средах 3D-моделирования, с помощью которых, в конце творческого процесса, конвертируют 3D-модели в 2D спрайты, которые и отображаются в игре. Отображение этих [https://www.wikipedia.org/wiki/Portable Network Graphics PNG]-спрайтов в игре требуют внесения значительных изменений в графическом движке игры.
+В основном, художники создают свою графику в средах 3D-моделирования, с помощью которых, в конце творческого процесса, конвертируют 3D-модели в 2D спрайты, которые и отображаются в игре. Отображение этих [https://www.wikipedia.org/wiki/Portable Network Graphics PNG]-спрайтов в игре требуют внесения значительных изменений в графическом движке игры.
 
-Некоторые вопросы, касающиеся функциональности 32 битной графики, до сих пор остаются спорными - одним из них является вопрос об уровнях масштабирования: должна ли игра поддерживать только максимальный уровень масштабирования оригинальной игры, или несколько уровней сразу.
+Для некоторых процесс происходит иначе. Например, наземные клетки сразу рисуются двумерными, не моделируются. Для художника ПО может состоять только из одного фоторедактора, такого как GIMP.
 
-Для получения дополнительной информации о создании 32 битной графики см. [[en/Archive/Old 32bpp/32bit Graphics Development Documentation|документацию по разработке 32 битной графики]].</div>
+"Рисование" предмета и преобразование его в спрайт это только часть процесса. После этого наступает "кодирование". Спрайту нужно дать некоторые метаданные для того, чтобы он работал в игре. От художника зависит будет ли он сам этим заниматься, или кто-то другой это сделает.
 
-<div style="margin:1em;padding:1em;border:1px solid #c7c8fe;background:#f1f2fe;">
-<font size="3">'''Обычное приближение и полное приближение'''</font>
+В конце концов, законченная часть помещается в центральное место для всех 32 битных графических частей. Оттуда она добавляется к нашему базовому набору графики, или, если это самостоятельный пакет, из него можно сделать NewGRF, который игроки могут скачивать с онлайн-контента в самой игре.
 
-В настоящее время игра официально поддерживает то же самое количество уровней увеличения масштаба изображения для 8 и 32 битной графики. Текущие сборки товарища GeekToo поддерживают 2 экстра уровня приближения. Официальные сборки поддерживают ''32 битное обычное пиближение'''. Для дополнительных уровней приближения ''[[en/32битное экстра приближение|32битное полное приближение]]'''.
+Для получения дополнительной информации о создании 32 битной графики см. [[en/Archive/Old 32bpp/32bit Graphics Development Documentation|документацию по разработке 32 битной графики]].
 
-There has traditionally been a gap between these two builds when it comes to graphics development, but these days it is recommended for an artist to render sprites for both builds, as the extra work required is perceived by some to be worth the possibility of 32bpp extra zoom becoming included in the official builds.
+==Normal zoom and full zoom==
 
-Full zoom level allows for much greater detail in the finished product, but this can only be considered eye candy, as playability at such close proximity to the ground becomes questionable.
-</div>
+There used to be a gap between zoom levels when it comes to graphics development. People would render extra-zoom or normal zoom only. These days OpenTTD supports all of it out of the box, so it makes sense for an artist to render distinct sprites for the three closest levels of zoom.
 
-<div style="margin:1em;padding:1em;border:1px solid #c7c8fe;background:#f1f2fe;">
-<font size="3">'''Project organization'''</font>
+Full zoom level allows for much greater detail in the finished product, but the artist must take care not to make the sprite look busy or unclear at normal zoom levels.
+
+==Project organization==
 
 Artists are free to work on whatever item they desire, but it is recommended that they first [[en/Archive/Old 32bpp/32bpp graphics development tracker|check the normal]] and [[en/Archive/Old 32bpp/32bpp graphics development tracker (extra zoom)|full zoom progress trackers]] here at the wiki for items that haven't been rendered in 32bpp.
 
@@ -47,32 +38,12 @@ New graphics, engine features, bug reports, suggestions and other discussion tak
 Sprites can also be downloaded individually via links at the progress trackers.
 
 When an item is completed, it is primarily the artist's responsibility to keep progress trackers up to date and notify distributors of the existence of their new content. There are volunteers working these administrative tasks but it is in the best interest of the project for the artist to do this themselves if they can.
-</div>
 
-<div style="margin:1em;padding:1em;border:1px solid #c7c8fe;background:#f1f2fe;">
-<font size="3">'''Not a 3D modeler? You can still contribute'''</font>
+==Not a 3D modeler? You can still contribute==
 
 There are a few of ways to contribute to the project besides making 3D models and rendering them. Namely, administrative tasks here at the wiki (progress trackers, etc.), testing graphics and giving feedback, improving the 32bpp graphics engine by means of programming and "coding graphics".
 
 Coding graphics means inputting correct pixel offsets for the sprites so that they line up properly in the game world. This is not difficult and we use a tool called [[en/Archive/Old 32bpp/PNGCodec]] for the coding. It is a slightly time consuming and repetitive business, which is why we need contributions there every now and then.
-</div>
-
-|width="50%" style="background-color: #E7EBFF; border: 1px solid #c7c8fe; margin: 0; padding: 1em 1em 0em 1em;" valign="top"|
-
-<div style="margin:1em;padding:1em;border:1px solid #c7c8fe;background:#f1f2fe;">
-[[File:en/Archive/Old 32bpp/8bpp opengfx normalzoom.jpeg|400px|center]]
-''Скриншот игры в 8 битном графическом режиме с максимальным приближением.'' 
-
-[[File:en/Archive/Old 32bpp/32bpp normalzoom.jpeg|400px|center]]
-''Скриншот игры в 32 битном графическом режиме с нормальным(равноценно максимальному в 8-ми битном режиме) приближением.'' 
-
-[[File:en/Archive/Old 32bpp/32bpp fullzoom.jpeg|400px|center]]
-''Скриншот игры в 32 битном графическом режиме с максимальным приближением.'' 
-
-</div>
-
-|-
-|}
 
 
 {{en/Archive/Old 32bpp/Navbox Graphics Development}}
