@@ -1,28 +1,15 @@
 [[Translation:en/Manual/Convert rail]]
-{{ru/Перевод|en/Manual/Convert rail|1}}
+{{ru/Необходимо сделать|поправить ссылки после перевода соответствующих страниц}}
 
-The [[File:en/Manual/Convert rail.png]] '''convert rail''' button will activate a drag-and-drop tool that allows you to convert one type of rail to another (rail -> monorail -> maglev). This tool can be used on [[en/Manual/Building tracks|rail]], [[ru/Manual/Строительство депо|depots]], [[en/Manual/Stations]] and [[ru/Manual/Контрольные точки]].
+Кнопка [[File:en/Manual/Convert rail.png]] '''реконструкции ж/д полотна''' активирует drag-and-drop инструмент, который позволяет конвертировать один тип рельсов в другой (рельс -> монорельс -> маглев). Этот инструмент можно применять к [[en/Manual/Building tracks|рельсам]], [[ru/Manual/Строительство депо|депо]], [[en/Manual/Stations|станциям]] и [[ru/Manual/Контрольные точки|контрольным точкам]].
 
-Trains you already have running should be sent to the depot and then [[en/Manual/Sell entire train|destroyed completely]].
-
-Only empty depots can be converted.
-
-Tip: To save time converting a train with lots of orders from one railtype to another, send your train to a depot of the old type and [[en/Manual/Sell entire train|dismantle your train]]. While the depot window is still open, convert the depot to the new railtype, and the next train you build will have all the orders of your previous train. The depot window must remain open throughout this operation. Note that you can only convert one train at a time using this method, but you may also convert the depot back to the old railtype so you can convert another train using the same depot.
+Поезда, которые вы уже используете, нужно направить в депо и заменить. Если конвертировать рельсы, по которым едут поезда, в другой тип рельсов, то эти поезда остановятся, и потребуется конвертировать рельсы обратно, чтобы они поехали снова.
 
 ===0.5.0 и более поздняя===
 
 С появлением электрифицированных железных дорог в r4152 инструмент ''Преобразовать тип рельсов'' предлагает четвертый вариант, позволяющий преобразовывать обычные пути в электрифицированные пути.
 
 Такое преобразование не требует немедленной замены паровозов и тепловозов, они свободно могут двигаться по электрифицированным путям. Электровозы же не смогут пройти по неэлектрифицированным участкам путей.
-
-== Easier converting of trains ==
-For this method you have to compile from source, because a line of code must be commented out.
-You have to find the file rail_cmd.c and open it in an editor. Find the function
- CommandCost CmdConvertRail(TileIndex tile, DoCommandFlag flags, uint32 p1, uint32 p2, const char *text)
-and change the third line of code from
- if (!IsCompatibleRail(type, totype) && !EnsureNoVehicleOnGround(tile)) continue;
-to
- //if (!IsCompatibleRail(type, totype) && !EnsureNoVehicleOnGround(tile)) continue;
 
 Теперь можно преобразовывать депо, даже если в нем есть поезда. Вам нужно будет уничтожить старый поезд и построить новый электрифицированный. Он автоматически будет иметь те же задания, что и старый. Имейте в виду, существует возможность преобразования путей под поездами и такие поезда не смогут продолжить движение.
 
