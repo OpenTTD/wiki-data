@@ -1,16 +1,12 @@
 
-
-
 Meist ist es sinnvoll, den '''Abstand von Fahrzeugen''', die eine gemeinsame Route/Strecke bedienen, gleichmäßig zu halten.
 
 == Vorteile eines Konstanten Abstands ==
-
 * Wenn der Abstand zwischen zwei abholenden Fahrzeugen geringer ist, sammelt sich ein geringerer Vorrat an der Station. Die Fracht-Wertung einer Station hängt auch davon ab, wann zuletzt ein Fahrzeug dort eingeladen hat. Das heißt, wenn Fahrzeuge eine Station in nicht zu großen Abständen besuchen, bleibt die Wertung stabil auf einem hohen Level/Niveau.
 * Wenn der Abstand zwischen Fahrzeugen möglichst gleichmäßig ist, lässt sich leichter erkennen, ob weitere Fahrzeuge benötigt werden. Ein großer Vorrat an der Station kann dann nicht den Grund haben, dass zuletzt eine große Lücke zwischen den Fahrzeugen war. Man muss also den Vorrat weniger lang beobachten.
 * Wenn die Fahrzeuge einer Route in kurzem Abstand aufeinander folgend ihre Reise beginnen, können sie im Netzwerk leichter größere Staus verursachen.
 
 == Wie "Bunching" entsteht ==
-
 Wenn Fahrzeuge ungleichmäßig auf die Route aufgeteilt sind, kommt es vor, dass es Fahrzeuge gibt, die einen kleineren oder größeren Abstand zum vorausfahrenden Fahrzeug haben. Die späten (/frühen) Fahrzeuge kommen an Stationen an, wenn sich dort mehr (/weniger) Fracht gesammelt hat, und laden dadurch länger (/kürzer) auf (und laden auch mehr (/weniger) Frcht ab). Der Abstand zum Vordermann wird dadurch noch länger (/kürzer). Auf lange Sicht bilden sich Gruppen von Fahrzeugen.
 
 == Lösungs-Methoden ==
@@ -28,14 +24,14 @@ Was eine perfekte Lösungs-Methode leisten sollte:
 |DB = (ohne Farplan)
 |ORDERSPECIAL = 
 |BUNCHING_R = 0||BUNCHING_TXT = Auf lange Sicht "klumpen" die Fahrzeuge stark zusammen.
-|WAITING = Fahrzeuge bleiben nur so lange an einer Station, wie zum Beladen nötig.
+|WAITING = Belade-Stationen: nicht länger als nötig. Auslade-Stationen: nicht länger als nötig.
 |ADJ_TRAVEL = 
 |ADJ_NVEHICLES = 
 |ADJ_LOADING = 
 |ADJ_BIGSTATION =
 |OVERTAKING_R = 2||OVERTAKING_TXT = Überholen ist problemlos möglich.
 |NVEHICLES_R = 2||NVEHICLES_TXT = Mehr Fahrzeuge verbessern den Transport.
-|FEATURESPECIAL = Ist definitiv die einfachste Methode, mit dem Problem umzugehen, wahrscheinlich aber eine der schlechteren. Genau genommen kann man auch recht gut mit unregelmäßig ankommenden Fahrzeugen leben, vor allem bei Routen, die von mehr als genug Fahrzeugen bedient werden.
+|FEATURESPECIAL = * Ist definitiv die einfachste Methode, mit dem Problem umzugehen, wahrscheinlich aber eine der schlechteren. Genau genommen kann man auch recht gut mit unregelmäßig ankommenden Fahrzeugen leben, vor allem bei Routen, die von mehr als genug Fahrzeugen bedient werden.
 }}
 === "Voll laden" für einen Auftrag ===
 {{Page:en/Archive/Community/Users/Pystro/Template/Spacing out vehicles|L1A = (Voll laden einer Fracht)/(Voll laden jeder Fracht) ||L1B = ''(darf keinen Timer bekommen!)''
@@ -44,23 +40,23 @@ Was eine perfekte Lösungs-Methode leisten sollte:
 |DB = (ohne Farplan)
 |ORDERSPECIAL = 
 |BUNCHING_R = 1||BUNCHING_TXT = Bei langen Routen können die Fahrzeuge an den letzten Stops vor dem "voll laden"-Auftrag sehr ungleichmäßig ankommen.
-|WAITING = Die Fahrzeuge bleiben länger an der "voll laden"-Station und fahren voll ab.
+|WAITING = "Voll laden"-Station: bis 100%. Andere Belade-Stationen: nicht länger als nötig. Auslade-Stationen: nicht länger als nötig.
 |ADJ_TRAVEL = 
 |ADJ_NVEHICLES = 
 |ADJ_LOADING = 
 |ADJ_BIGSTATION = Der "Voll laden"-Auftrag muss der Station gegeben werden, die die meißte Fracht generiert (oder der letzten Station in dem Zweig, der insgesamt die meißte Fracht generiert).
 |OVERTAKING_R = 2||OVERTAKING_TXT = Überholen ist problemlos möglich.
 |NVEHICLES_R = 0||NVEHICLES_TXT = Mehr Fahrzeuge verbessern den Transport nicht. Nur möglich, wenn man ein Ausweich-Depot zum Warten zur Verfügung stellt.
-|FEATURESPECIAL = Eine der einfachen Möglichkeiten, die Fahrzeuge fast perfekt gleichmäßig abfahren zu lassen. Dürfte die Beliebteste sein.
+|FEATURESPECIAL = * Eine der einfachen Möglichkeiten, die Fahrzeuge fast perfekt gleichmäßig abfahren zu lassen. Dürfte die Beliebteste sein.
 }}
 === "Warte-Timer" ===
 "Warte-Timer" bedeutet Fahrplan nur für Stationen.
 {{Page:en/Archive/Community/Users/Pystro/Template/Spacing out vehicles|LA = (Lade, wenn verfügbar) ||LB = und X Ticks/Tage lang bleiben
 |UA = (Entlade, falls akzeptiert) ||UB = und Y Ticks/Tage lang bleiben
 |DB = (ohne Farplan)
-|ORDERSPECIAL = Gute Zeiten sind 5-10 Tage oder 370-740 Ticks. Die Zeit zum Abladen (Y) kann auch bis auf 1 Tick gekürzt werden, wenn dafür das nächste Beladen (X) verlängert wird.
+|ORDERSPECIAL = * Gute Zeiten sind 5-10 Tage oder 370-740 Ticks. Die Zeit zum Abladen (Y) kann auch bis auf 1 Tick gekürzt werden, wenn dafür das nächste Beladen (X) verlängert wird.
 |BUNCHING_R = 1||BUNCHING_TXT = Die Summe der Ein- und Entladezeiten wird für alle Züge gleich gehalten. Die "Verklumpung" der Fahrzeuge ist zufällig/chaotisch und hat nicht das Bestreben, sich zu verschlimmern.
-|WAITING = Die Fahrzeuge bleiben etwas länger an den Stationen und fahren weniger wahrscheinlich leer ab.
+|WAITING = Belade-Stationen: etwas länger (weniger wahrscheinlich leer). Auslade-Stationen: eventuell nicht länger als nötig.
 |ADJ_TRAVEL = 
 |ADJ_NVEHICLES = 
 |ADJ_LOADING = Die Wartezeit sollte am besten (manuell) an die durchschnittliche Ladezeit angepasst werden. Alternativ funktioniert die Ladezeit zum zügigen Einladen einer vollen Ladung sicher, lässt Fahrzeuge aber an kleinen Stationen zu lange warten.
@@ -78,13 +74,12 @@ Was eine perfekte Lösungs-Methode leisten sollte:
 * Wenn Fahrzeuge vor der "voll laden"-Station eine Verspätung haben (festgestellt haben, dass sie aufholen müssen), werden sie das nach der "voll laden"-Station nochmal korrigieren, obwohl sie bereits den gleichen Abstand haben. Die Station davor sollte also einen ausreichenden Warte-Timer haben.
 * Bei einer Punkt-zu-Punkt Route will man oft, dass die Fahrzeuge die Entladestation nicht zu lange blockieren. Deren Timer zu reduzieren ist nicht möglich, weil die Fahrzeuge das nicht aufholen können. Daher ist es besser, dieser keinen Warte-Timer zu geben und [[#voll-laden-fur-einen-auftrag|"Voll laden" für einen Auftrag]] oder [[#warte-timer-mit-langer-wartezeit-an-einigen-einlade-stationen|"Warte-Timer" mit langer Wartezeit an einigen Einlade-Stationen]] zu nutzen.
 |BUNCHING_R = 2||BUNCHING_TXT = Die Summe der Ein- und Entladezeiten wird für alle Züge gleich gehalten. Ungleichmäßige Ankünfte, die sich durch verlängerte Fahrtzeiten (z.B. Pannen oder Wartungen) ergeben, werden an der "voll laden"-Station konstant auf einen gleichmäßigen Abstand gebracht.
-|WAITING = Die Fahrzeuge bleiben länger an der "voll laden"-Station und fahren nicht leer ab und die Fahrzeuge bleiben etwas länger an den anderen Stationen 
-und fahren weniger wahrscheinlich leer ab.
+|WAITING = "Voll laden"-Station: bis 100%. Andere Belade-Stationen: etwas länger (weniger wahrscheinlich leer). Auslade-Stationen: eventuell nicht länger als nötig.
 |ADJ_TRAVEL = 
 |ADJ_NVEHICLES = 
 |ADJ_LOADING = Die Wartezeit sollte am besten (manuell) an die durchschnittliche Ladezeit angepasst werden. Alternativ funktioniert die Ladezeit zum zügigen Einladen einer vollen Ladung sicher, lässt Fahrzeuge aber an kleinen Stationen zu lange warten.
 |ADJ_BIGSTATION = Der "Voll laden"-Auftrag muss der Station gegeben werden, die die meißte Fracht generiert (siehe auch [[#voll-laden-fur-einen-auftrag|"Voll laden"]]). Wenn sich die Situation ändert, muss man die Aufträge (manuell) anpassen.
-|OVERTAKING_R = 1||OVERTAKING_TXT = Überholen ist möglich.
+|OVERTAKING_R = 2||OVERTAKING_TXT = Überholen ist möglich. An der "Voll laden"-Station problemlos möglich.
 |NVEHICLES_R = 0||NVEHICLES_TXT = Mehr Fahrzeuge verbessern den Transport nicht. Nur möglich, wenn man ein Ausweich-Depot zum Warten zur Verfügung stellt.
 |FEATURESPECIAL = * Etwas schwerer einzustellen.
 * Mein Favorit, um die Fahrzeuge fast perfekt gleichmäßig abfahren zu lassen und gleichmäßig zu halten.
@@ -94,17 +89,16 @@ und fahren weniger wahrscheinlich leer ab.
 |LA = (Lade, wenn verfügbar) ||LB = und Y Ticks/Tage lang bleiben
 |UA = (Entlade, falls akzeptiert) ||UB = und Z Ticks/Tage lang bleiben
 |DB = (ohne Farplan)
-|ORDERSPECIAL =
-* Die Wartezeit an lang-laden-Stationen (XXX) sollte so bemessen sein, dass die Station zu etwa 100% belegt ist. Fahrzeuge, die zu früh an einer dieser Stationen ankommen, müssen dann warten, bevor sie die Station betreten können. Wenn die Station von mehreren Routen bedient wird, sollten deshalb alle Gruppen von lange wartenden Fahrzeuge eigene Plattformen zugewiesen bekommen.
+|ORDERSPECIAL =* Die Wartezeit an lang-laden-Stationen (XXX) sollte so bemessen sein, dass die Station zu etwa 100% belegt ist. Fahrzeuge, die zu früh an einer dieser Stationen ankommen, müssen dann warten, bevor sie die Station betreten können. Wenn die Station von mehreren Routen bedient wird, sollte deshalb jede Gruppe von lange wartenden Fahrzeugen (eine) eigene Plattform(en) zugewiesen bekommen.
 * Gute Zeit fürs kurze Laden (Y) siehe [[#warte-timer|"Warte-Timer"]].
 * Wenn Fahrzeuge vor der lang-laden-Station eine Verspätung haben, werden sie das bei der Wartezeit in dieser Station nochmal korrigieren, obwohl sie bereits beim Betreten den gleichen Abstand haben. Die Station davor sollte also einen ausreichenden Warte-Timer haben.
 |BUNCHING_R = 2||BUNCHING_TXT = Die Summe der Ein- und Entladezeiten wird für alle Züge gleich gehalten. Ungleichmäßige Ankünfte, die sich durch verlängerte Fahrtzeiten (z.B. Pannen oder Wartungen) ergeben, werden an der lange-laden-Station auf einen fast gleichmäßigen Mindestabstand gebracht.
-|WAITING = Die Fahrzeuge warten möglicherweise zu lange an den lange-laden-Stationen. Die Fahrzeuge bleiben etwas länger an den kurz-laden-Stationen und durchgehend an den lange-laden-Stationen und fahren weniger wahrscheinlich leer ab.
+|WAITING = Lange-laden-Stationen: durchgehend, aber eventuell zu lange (weniger wahrscheinlich leer). Andere Belade-Stationen: etwas länger (weniger wahrscheinlich leer). Auslade-Stationen: eventuell nicht länger als nötig.
 |ADJ_TRAVEL = 
 |ADJ_NVEHICLES = Wenn man mehr Fahrzeuge zur Verfügung stellt, sollte man die Wartezeit verringern. Es funktioniert aber auch ohne, nur dass man dann die maximal transportierbare Frachtmenge nicht erhöht.
 |ADJ_LOADING = Die kurze Wartezeit sollte am besten (manuell) an die durchschnittliche Ladezeit angepasst werden. Die Ladezeit zum zügigen Einladen einer vollen Ladung funktioniert sicher, lässt Fahrzeuge aber an kleinen Stationen zu lange warten.
 |ADJ_BIGSTATION = 
-|OVERTAKING_R = 1||OVERTAKING_TXT = Überholen ist möglich. An den lange-warten-Stationen problemlos möglich.
+|OVERTAKING_R = 2||OVERTAKING_TXT = Überholen ist möglich. An den lange-warten-Stationen problemlos möglich.
 |NVEHICLES_R = 2||NVEHICLES_TXT = Die Anzahl der Fahrzeuge kann deutlich größer sein als nötig. Wenn man die Wartezeit (XXX) anpasst, verbessern sie den Transport, sonst warten sie vor der Station. Letzteres ist vor allem sinnvoll, wenn man ein Ausweich-Depot zum Warten zur Verfügung gestellt hat.
 |FEATURESPECIAL =* Funktioniert nicht für Schiffe. Funktioniert etwas schlechter für Haltepunkte auf Straßen, denn sobald dort das hintere Fahrzeug die Station verlässt, betreten mindestens 2 wartende Fahrzeuge gleichzeitig die Station und verlassen sie dann auch gleichzeitig.
 * Scheint eine der besten Methoden zu sein (noch nicht getestet).
@@ -113,17 +107,17 @@ und fahren weniger wahrscheinlich leer ab.
 {{Page:en/Archive/Community/Users/Pystro/Template/Spacing out vehicles|LA = (Lade, wenn verfügbar) ||LB = und X Ticks/Tage lang bleiben
 |UA = (Entlade, falls akzeptiert) ||UB = und Y Ticks/Tage lang bleiben
 |DB = für Z Tage/Ticks
-|ORDERSPECIAL = Lässt sich gut durch "Erfassen" mit manuellen Korrekturen einstellen. Eine gute Wartezeit sind 5-10 Tage oder 370-740 Ticks. Zeitreserve sollte auf den Wegen eingeplant werden, die das Fahrzeug leer zurücklegt, dann wartet es fast nur an Belade-Stationen.
+|ORDERSPECIAL =* Lässt sich gut durch "Erfassen" mit manuellen Korrekturen einstellen. Eine gute Wartezeit sind 5-10 Tage oder 370-740 Ticks. Zeitreserve sollte auf den Wegen eingeplant werden, die das Fahrzeug leer zurücklegt oder an Belade-Stationen, dann wartet es fast nur an Belade-Stationen.
 |BUNCHING_R = 1||BUNCHING_TXT = Die komplette Fartzeit wird für alle Züge gleich gehalten, der Abstand muss aber (manuell) eingestellt werden und zwar jedes mal, wenn sich etwas ändert.
-|WAITING = Die Fahrzeuge bleiben deutlich länger an den Stationen und fahren weniger wahrscheinlich leer ab.
+|WAITING = Belade-Stationen: deutlich länger (weniger wahrscheinlich leer). Auslade-Stationen: eventuell nicht länger als nötig.
 |ADJ_TRAVEL = Fahrplan ist stark abhängig von der Fahrtzeit.
 |ADJ_NVEHICLES = Fahrzeuge müssen komplett neu verteilt werden, selbst wenn man nur eins hinzufügt.
 |ADJ_LOADING = Wenn sich die Beladezeit ändert, kann man meist ohne Änderungen auskommen, vor allem bei genug Reserven.
 |ADJ_BIGSTATION = 
 |OVERTAKING_R = 0||OVERTAKING_TXT = Überholen wird rückgängig gemacht.
 |NVEHICLES_R = 2||NVEHICLES_TXT = Mehr Fahrzeuge verbessern den Transport.
-|FEATURESPECIAL = Schwer einzustellen. Muss ''sehr, sehr'' oft angepasst werden.
-Hält den Fahrzeugabstand nicht mit bedingten Aufträgen.
+|FEATURESPECIAL =* Schwer einzustellen. Muss ''sehr, sehr'' oft angepasst werden.
+* Hält den Fahrzeugabstand nicht mit bedingten Aufträgen.
 }}
 === Kompletter Fahrplan, mit "voll laden" für eine Station ===
 {{Page:en/Archive/Community/Users/Pystro/Template/Spacing out vehicles|L1A = (Voll laden einer Fracht)/(Voll laden jeder Fracht) ||L1B = ''(darf keinen Timer bekommen!)''
@@ -133,7 +127,7 @@ Hält den Fahrzeugabstand nicht mit bedingten Aufträgen.
 |ORDERSPECIAL =* Erstellen: siehe [[#kompletter-fahrplan|Kompletter Fahrplan]].
 * Wenn Fahrzeuge vor der "voll laden"-Station eine Verspätung haben, werden sie diese nach der "voll laden"-Station nochmal korrigieren, obwohl sie bereits den gleichen Abstand haben. Daher sollte vor dieser Station die Verspätung der Züge möglicht gleichmäßig sein. Es bietet sich an, eine Dummy-Station (oder einen Wegpunkt?) direkt davor einzufügen, wo die Fahrzeuge ihre Verfrühung abwarten können und die letzte Wegstrecke nicht zu timen.
 |BUNCHING_R = 2||BUNCHING_TXT = Die komplette Fartzeit wird für alle Züge gleich gehalten, der Abstand stellt sich an der "voll laden"-Station automatisch ein.
-|WAITING = Die Fahrzeuge bleiben länger an der "voll laden"-Station und fahren nicht leer ab und die Fahrzeuge bleiben deutlich länger an den anderen Stationen und fahren weniger wahrscheinlich leer ab.
+|WAITING = "Voll laden"-Station: bis 100%. Andere Belade-Stationen: deutlich länger (weniger wahrscheinlich leer). Auslade-Stationen: eventuell nicht länger als nötig.
 |ADJ_TRAVEL = Fahrplan ist stark abhängig von der Fahrtzeit.
 |ADJ_NVEHICLES = 
 |ADJ_LOADING = Wenn sich die Beladezeit ändert, kann man meist ohne Änderungen auskommen, vor allem bei genug Reserven.
@@ -141,16 +135,15 @@ Hält den Fahrzeugabstand nicht mit bedingten Aufträgen.
 |OVERTAKING_R = 0||OVERTAKING_TXT = Überholen wird rückgängig gemacht und ist nur in der "voll laden"-Station möglich.
 |NVEHICLES_R = 0||NVEHICLES_TXT = Mehr Fahrzeuge verbessern den Transport nicht. Nur möglich, wenn man ein Ausweich-Depot zum Warten zur Verfügung stellt.
 |FEATURESPECIAL =* Schwer einzustellen. Muss oft geändert werden.
-* Funktioniert nicht mit bedingten Aufträgen.
+* Hält den Fahrzeugabstand nicht mit bedingten Aufträgen.
 }}
 === Wartezeiten durch bedingte Aufträge ===
 {{Page:en/Archive/Community/Users/Pystro/Template/Spacing out vehicles|LA = (Lade, wenn verfügbar) <BR/> "Überspringe den nächsten Auftrag", wenn Ladezustand (Prozent) größer X ist <BR/> Farhe ohne Halt zu ... (''Dummy-Auftrag'') ||LB = ''(eventuell für den Dummy-Auftrag)''
 |UA = (Entlade, falls akzeptiert) ||UB = ''(möglich, aber nicht nötig)''
 |DB = (ohne Farplan)
-|ORDERSPECIAL = Der Dummy-Auftrag sollte das Fahrzeug um etwa 2-4 mal die Zeit aufhalten, die es beim Beladen schneller war als ein volles Beladen. 
+|ORDERSPECIAL =* Der Dummy-Auftrag sollte das Fahrzeug um etwa 2-4 mal die Zeit aufhalten, die es beim Beladen schneller war als ein volles Beladen. 
 * Ein möglicher Dummy-Auftrag ist der Besuch eines Depots. Dies stellt auch sicher, dass verfrühte Fahrzeuge gut gewartet werden. Es sollte dann aber mindestens einen Depot-Auftrag geben, zu dem alle Fahrzeuge gezwungen werden.
-* Ein anderer möglicher Dummy-Auftrag ist das (eventuell mehrmalige) Wenden in der soeben besuchten Station (mit "[Am Ende]", "Wenden in Stationen" aktiviert und für Züge einem um 1 Feld zu langen Bahnhof). Der Sprung sollte dabei nicht auf ''den selben'' Auftrag zurück führen, weil das Fahrzeug sonst so lange bleibt, bis es mindestens 1% geladen hat.
-*'''Beispiel''':
+* Ein anderer möglicher Dummy-Auftrag ist das (eventuell mehrmalige) Wenden in der soeben besuchten Station (mit "[Am Ende]", "Wenden in Stationen" aktiviert und für Züge einem um 1 Feld zu langen Bahnhof). Der Sprung sollte dabei nicht auf ''den selben'' Auftrag zurück führen, weil das Fahrzeug sonst so lange bleibt, bis es mindestens 1% geladen hat. '''Beispiel''':
 *: 1: Fahre zu Bremen Süd [Am Anfang] (Lade, wenn verfügbar)
 *: 2: Springe zu Auftrag 10, wenn Ladezustand (Prozent) größer 80
 *: 3: Fahre zu Bremen Süd [Am Ende] (Lade, wenn verfügbar)
@@ -162,7 +155,7 @@ Hält den Fahrzeugabstand nicht mit bedingten Aufträgen.
 *: 9: Fahre zu Bremen Süd [Am Ende] (Lade, wenn verfügbar)
 *: 10: Fahre zu München Nord (Entlade, falls akzeptiert)
 |BUNCHING_R = 1||BUNCHING_TXT = Die Dummy-Aufträge sorgen dafür, dass Fahrzeuge, die verfrüht sind, (weil sie beim Beladen zu schnell waren und beim Entladen auch schneller sein werden) "bestraft" werden, wodurch dem Verklumpungs-Mechanismus entgegen gewirkt wird.
-|WAITING = Die Fahrzeuge bleiben nicht länger an den Stationen als nötig. Je nach Dummy-Auftrag warten sie an anderer Stelle.
+|WAITING = Belade-Stationen: Ob die Fahrzeuge länger an den Stationen bleiben, oder an anderer Stelle warten, hängt vom Dummy-Auftrag ab. Auslade-Stationen: nicht länger als nötig.
 |ADJ_TRAVEL = 
 |ADJ_NVEHICLES = 
 |ADJ_LOADING = Die Wirkung der "Strafen" ist stark davon abhängig, dass die Ladezustands-Grenzen an die Frachtmenge angepasst werden. Es macht z.B. wenig Sinn, an einer Station mit hohem Frachtaufkommen nur auf >10% Beladung zu vergleichen, weil man dadurch nicht die verspäteten Fahrzeuge von den verfrühten unterscheiden kann.
@@ -178,10 +171,9 @@ Hält den Fahrzeugabstand nicht mit bedingten Aufträgen.
 |UA = (Entlade, falls akzeptiert) ||UB = ''(möglich, aber nicht nötig)''
 |DB = (ohne Farplan)
 |ORDERSPECIAL =* Siehe [[#wartezeiten-durch-bedingte-auftrage|Wartezeiten durch bedingte Aufträge]].
-*................
-|BUNCHING_R = ?||BUNCHING_TXT = Die Dummy-Aufträge sorgen dafür, dass Fahrzeuge, die verfrüht sind, (weil sie beim Beladen zu schnell waren und beim Entladen auch schneller sein werden) "bestraft" werden, wodurch dem Verklumpungs-Mechanismus entgegen gewirkt wird.
-................
-|WAITING = Die Fahrzeuge bleiben nicht länger an den Stationen als nötig. Je nach Dummy-Auftrag warten sie an anderer Stelle.
+* Beim Kombinieren von bedingten "Strafen" mit "Voll laden" muss nichts (zusätzliches) beachtet werden. (Im Gegensatz zum Kombinieren von Fahrplänen mit "Voll laden")
+|BUNCHING_R = 2||BUNCHING_TXT = Ungleichmäßige Ankünfte werden an der "Voll laden"-Station auf einen gleichmäßigen Abstand gebracht. Die Dummy-Aufträge sorgen dafür, dass Fahrzeuge, die sich in einer Runde verfrühen, (weil sie beim Beladen zu schnell waren und beim Entladen auch schneller sein werden) "bestraft" werden, wodurch (vor allem bei langen Routen) dem Verklumpungs-Mechanismus entgegen gewirkt wird. 
+|WAITING = "Voll laden"-Station: bis 100%. Andere Belade-Stationen: Ob die Fahrzeuge länger an den anderen Stationen bleiben, oder an anderer Stelle warten, hängt vom Dummy-Auftrag ab. Auslade-Stationen: nicht länger als nötig.
 |ADJ_TRAVEL = 
 |ADJ_NVEHICLES = 
 |ADJ_LOADING = Die Wirkung der "Strafen" ist stark davon abhängig, dass die Ladezustands-Grenzen an die Frachtmenge angepasst werden. Es macht z.B. wenig Sinn, an einer Station mit hohem Frachtaufkommen nur auf >10% Beladung zu vergleichen, weil man dadurch nicht die verspäteten Fahrzeuge von den verfrühten unterscheiden kann.
