@@ -1,0 +1,122 @@
+[[Translation:en/Archive/Manual/Settings/Advanced Settings/Economy]]
+{{ru/Перевод|en/Archive/Manual/Settings/Advanced Settings/Economy|0}}
+{{ru/Archive/Manual/Settings/Расширенные настройки}}
+
+==Advanced Settings window: Economy section==
+The Economy section allows you to set various options related to the game's economy model. The purpose of the available settings is explained below. For each setting, the respective variable from the [[en/Archive/Manual/Settings/Openttd.cfg|config file]] is listed as well, together with it's possible values.
+{| align="center"
+|- valign="top"
+|__TOC__
+|[[File:en/Archive/Manual/Settings/Advset economy.png|frame|none|thumb|The Economy section of the Advanced Settings window (1.0.1)]]
+|}
+
+===<u>Towns</u>===
+====Allow bribing of the local authority====
+{{en/Feature|Old|align="right"|text=(since 0.3.0)}}
+Allows you to [[en/Archive/Manual/Settings/Bribe authority|bribe the local authority]] so that they increase your rating, if you are caught though you will be fined and won’t be able to bribe them for a while.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy] bribe = <true|false>)
+
+====Allow buying exclusive transport rights====
+{{en/Feature|0.6|align="right"|text=(since 0.6.0)}}
+Allows you to disable the purchase of exclusive transport rights in towns. Useful (to disable?) in multiplayer games.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy]exclusive_rights = <true|false>)
+
+====Road layout for new towns====
+{{en/Feature|0.6|align="right"|text=(since 0.6.0)}}
+Select how towns should build their roads. You can choose between the original algorithm, an improved algorithm, a 2x2 grid, a 3x3 grid or random. The random setting picks one of the four option randomly for each town. This option has been renamed from [[en/Archive/Manual/Settings/Configuring patches/Economy#select-town-road-layout|Select town road layout]] in 0.6.3.
+:''Possible Settings:'' <span style="color:#00693E">'''original'''</span>, <span style="color:#00693E">'''better roads'''</span>, <span style="color:#00693E">'''2x2 grid'''</span>, <span style="color:#00693E">'''3x3 grid'''</span> or <span style="color:#00693E">'''random'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy] town_layout = <0-4>)
+
+====Towns are allowed to build roads====
+{{en/Feature|0.7|align="right"|text=(since 0.7.0)}}
+When disabled, towns don't build roads by themselves. In order for towns to grow, you have to provide the roads yourself (somewhat like SimCity, but without the zoning and stuff).
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy] allow_town_roads = <true|false>)
+
+====Founding towns in game====
+{{en/Feature|1.0|align="right"|text=(since 1.0.0)}}
+Allows you to found a town during the game. You can configure whether to use the road layout used by other towns in the game, or to choose the road layout yourself.
+:''Possible Settings:'' <span style="color:#00693E">'''forbidden'''</span>, <span style="color:#00693E">'''allowed'''</span> or <span style="color:#00693E">'''allowed, custom town layout'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy] found_town = <0-2>)
+
+====[[en/Archive/Manual/Settings/Remove absurd road-elements during the road construction|Remove absurd road-elements during the road construction]]====
+{{en/Feature|0.6|align="right"|text=(since 0.6.0)}}
+Enable if towns should remove useless pieces of road to clean up dead ends.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy] mod_road_rebuild = <true|false>)
+
+====Town growth speed====
+{{en/Feature|0.6|align="right"|text=(since 0.6.0)}}
+Select how fast towns should grow. You can also completely disable town growth.
+:''Possible Settings:'' <span style="color:red">'''None'''</span>, <span style="color:#00693E">'''Slow'''</span>, <span style="color:#00693E">'''Normal'''</span>, <span style="color:#00693E">'''Fast'''</span> or <span style="color:#00693E">'''Very fast'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy] town_growth_rate = <0-4>)
+
+====Proportion of towns that will become cities====
+{{en/Feature|0.6|align="right"|text=(since 0.6.0)}}
+Set how many of the towns will become [[en/Manual/Towns|cities]]. Cities are larger towns which are allowed to grow faster (see also next setting).
+:''Possible Settings:'' <span style="color:red">'''None'''</span> or <span style="color:#00693E">'''1 in 1'''</span> to <span style="color:#00693E">'''1 in 255'''</span>
+:If you want every town to be a city use 1, 0 will result in no cities at all.
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy] larger_towns = <0-255>)
+This setting only applies when founding a new town while generating a new random map; in the Scenario editor you specifiy explicitly if you want a town or a city.
+
+====Initial city size multiplier====
+{{en/Feature|0.6|align="right"|text=(since 0.6.0)}}
+Set how much larger a newly founded city is compared to a town.
+:''Possible Settings:'' <span style="color:#00693E">'''1'''</span> to <span style="color:#00693E">'''10'''</span>
+:If you set it to 5 then a city will be 5 times larger than a town.
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy] initial_city_size = <1-10>)
+This setting is used only when founding a new city. That only happens when creating a new random map or when using the [[en/Manual/Scenario editor]].
+----
+===<u>Industries</u>===
+====Manual primary industry construction method====
+{{en/Feature|0.6|align="right"|text=(since 0.6.0)}}
+Allows you to [[en/Archive/Manual/Settings/Build raw material industries|construct industries]] that produce raw materials as well as industries that use them. None: cannot fund new primary industries. As other industries: can fund new primary industries. Prospecting: can fund new primary industries for same prices as secondary industries, but the industry will appear at a random place on the map, or may not appear at all.
+:''Possible Settings:'' <span style="color:red">'''none'''</span>, <span style="color:#00693E">'''as other industries'''</span> or <span style="color:#00693E">'''prospecting'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([construction] raw_industry_construction = <0-2>)
+
+====Allow multiple similar industries per town====
+{{en/Feature|Old|align="right"|text=(since 0.2.0)}}
+A town can have [[en/Archive/Manual/Settings/Multiple industries per town|more than one item of a type of industry]].
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy] multiple_industry_per_town = <true|false>)
+
+====Max distance from edge for Oil Refineries====
+{{en/Feature|0.5|align="right"|text=(since 0.5.0)}}
+This option determines the maximum allowed distance (in tiles) from the edge of the map for an Oil Refinery.
+This option has been moved from [[en/Archive/Manual/Settings/Configuring patches/Construction#max-distance-from-edge-for-oil-refineries|Construction section]] in 0.7.0.
+:''Possible Settings:'' <span style="color:#00693E">'''12'''</span> to <span style="color:#00693E">'''48'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([game_creation] oil_refinery_limit = <12-48>)
+{{en/-}}
+----
+===Inflation===
+{{en/Feature|Old|align="right"|text=(since 0.3.4)}}
+Controls whether [[en/Archive/Manual/Settings/Disable inflation|inflation is on or off]]. If inflation is on, the prices of everything will increase as you progress. To balance this increase, the maximum loan available to you will increase every few years.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy] inflation = <true|false>)
+
+===Enable smooth economy (more, smaller changes)===
+{{en/Feature|Old|align="right"|text=(since 0.3.3)}}
+[[en/Archive/Manual/Settings/Smooth economy|Changes in production]] will happen more frequently and by smaller percentages.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy] smooth_economy = <true|false>)
+
+===Percentage of leg profit to pay in feeder systems===
+{{en/Feature|1.0|align="right"|text=(since 1.0.0)}}
+This setting controls how much the vehicles are paid when transferring cargo. If this setting is lower, the transferring vehicle(s) will get less and the final vehicle will get more, and vice versa. This can be used to avoid [[en/Manual/Negative income with feeder service]]s.
+:''Possible Settings:'' <span style="color:red">'''0%'''</span> to <span style="color:#00693E">'''100%'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy] feeder_payment_share = <0-100>)
+
+==In previous versions==
+===Industries of the same type can be built close to each other===
+{{en/Feature|-1.0|align="right"|text=(since 0.2.0 to 1.0.0)}}
+Industries of the same type can be [[en/Archive/Manual/Settings/Same industries close|built close to each]] other with this patch on, it could cause problems though as you may end up with ten industries of one type in one small area of your map.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([economy] same_industry_close = <true|false>)
+{{en/-}}
+===See also===
+*'''For 0.3.0 to 0.6.3''' - See [[en/Archive/Manual/Settings/Configuring patches]] for information of how to change settings.
+*'''For 0.2.0 and 0.2.1''' - See [[en/Archive/Manual/Settings/Configuring patches in 0.2.0]].
+
+[[Category:en/Manual/Settings & Preferences]]
