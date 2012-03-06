@@ -1,0 +1,268 @@
+[[Translation:en/Archive/Manual/Settings/Advanced Settings/Vehicles]]
+{{ru/Перевод|en/Archive/Manual/Settings/Advanced Settings/Vehicles|0}}
+{{ru/Archive/Manual/Settings/Расширенные настройки}}
+
+==Advanced Settings window: Vehicle section==
+The Vehicles section allows you to set various options related to trains, road vehicles, aircraft and ships. The purpose of the available settings is explained below. For each setting, the respective variable from the [[en/Archive/Manual/Settings/Openttd.cfg|config file]] is listed with it's possible values.
+{| align="center"
+|- valign="top"
+|__TOC__
+|[[File:en/Archive/Manual/Settings/Advset vehicles.png|frame|left|The Vehicles section of the Advanced Settings window (1.0.1)]]
+|}
+
+===<u>Routing</u>===
+====Pathfinder for trains====
+{{en/Feature|0.6|align="right"|text=(since 0.6.0)}}
+Select the pathfinding algorithm for trains. [[en/Archive/Manual/Yet Another Pathfinder]] is the default and recommended setting, but you can still select the older pathfinders.
+:''Possible Settings:'' <span style="color:#00693E">'''NPF'''</span> or <span style="color:#00693E">'''YAPF'''</span> <span style="color:blue">(Recommended)</span>
+:''In [[en/Archive/Manual/Settings/Openttd.cfg]] config file:'' ([pf] pathfinder_for_trains = <0-2>)
+{{en/-}}
+====Forbid trains and ships from making 90&deg; turns====
+{{en/Feature|Old|align="right"|text=(since 0.4.0)}}
+Disallows trains and ships from making sharp 90 degree turns. The NPF or YAPF pathfinder for trains needs to be enabled for this option to work for trains.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([pf] forbid_90_deg = <true|false>)
+{{en/-}}
+====Pathfinder for road vehicles====
+{{en/Feature|0.6|align="right"|text=(since 0.6.0)}}
+Select the pathfinding algorithm for road vehicles. [[en/Archive/Manual/Yet Another Pathfinder]] is the default and recommended setting, but you can still select the older pathfinders.
+:''Possible Settings:'' <span style="color:#00693E">'''NPF'''</span> or <span style="color:#00693E">'''YAPF'''</span> <span style="color:blue">(Recommended)</span>
+:''In Openttd.cfg config file:'' ([pf] pathfinder_for_roadvehs = <0-2>)
+{{en/-}}
+====Road vehicle queueing (with quantum effects)====
+{{en/Feature|Old|align="right"|text=(since 0.2.0)}}
+Trucks and buses [[en/Archive/Manual/Settings/Road vehicle queueing|queue up]] at a busy station rather than turning around.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([pf] roadveh_queue = <true|false>)
+{{en/-}}
+====Pathfinder for ships====
+{{en/Feature|0.6|align="right"|text=(since 0.6.0)}}
+Select the pathfinding algorithm for ships. The original is the default and recommended setting, but you can select newer pathfinder. YAPF for ships has the advantage of not having to use buoys for long distances, but has serious performance issues when using a large number of ships (i.e. more than ten).
+:''Possible Settings:'' <span style="color:#00693E">'''Original'''</span> <span style="color:blue">(Recommended)</span>, <span style="color:#00693E">'''NPF'''</span> or <span style="color:#00693E">'''YAPF'''</span> <span style="color:red">(Not recommended)</span>
+:''In Openttd.cfg config file:'' ([pf] pathfinder_for_ships = <0-2>)
+{{en/-}}
+----
+===<u>Autorenew</u>===
+Are you sick of replacing all your vehicles with the same model once every twenty years? Let this setting take care of that for you. When you enable it, vehicles will automatically be replaced. With the following settings you can define the autorenew as you like. (If you want to replace them with a different model, you should use [[en/Manual/Replace vehicles]] instead.)
+
+{{en/Note|If the vehicle does not enter a service depot, it will not be renewed. You will not get a 'vehicle is getting old' warning!}}
+
+====Autorenew vehicle when it gets old====
+{{en/Feature|Old|align="right"|text=(since 0.3.3)}}
+Vehicles are automatically replaced when they get old, provided that the same vehicle type is still available for purchase.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([company] engine_renew = <true|false>)
+{{en/-}}
+====Autorenew when vehicle is ... months before/after max age====
+{{en/Feature|Old|align="right"|text=(since 0.3.4)}}
+If autorenew is enabled, a vehicle is automatically renewed the next time it enters a service depot when its age reaches the set amount of months before or after its maximum age.
+:''Possible Settings:'' <span style="color:red">'''-12'''</span> to <span style="color:#00693E">'''12'''</span>
+:* <span style="color:red">-12</span> means that the vehicle is replaced 12 months before it gets old.
+:* <span style="color:#00693E">+12</span> means that the vehicle is replaced 12 months after it gets old.
+:''In Openttd.cfg config file:'' ([company] engine_renew_months = <num_val>)
+{{en/-}}
+====Autorenew minimum needed money for renew====
+{{en/Feature|Old|align="right"|text=(since 0.3.4)}}
+If autorenew is enabled and a vehicle is going to be replaced, the amount money of the player has needs to be more than this value plus the cost of the new vehicle.
+
+If the value is, for example, £200,000, a new vehicle costs £10,000 and you have £205,000, the vehicle will not be replaced. Instead, you will get a warning that autorenew has failed on that vehicle.
+:''Possible Settings:'' <span style="color:red">'''£0'''</span> to <span style="color:#00693E">'''£4,000,000''' ($8,000,000)</span>
+:''In Openttd.cfg config file:'' ([company] engine_renew_money = <0-2000000>)
+{{en/-}}
+----
+
+===<u>Servicing</u>===
+====Service intervals are in percents====
+{{en/Feature|Old|align="right"|text=(since 0.3.4)}}
+When this switch is on the service intervals are considered to be in percents of the max. reliability rather than days. For example, if an engine has the max reliability of 80% and you set the service interval to 10% then it will go to depot at 72%.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] servint_ispercent = <true|false>)
+{{en/-}}
+====Default service interval for trains====
+{{en/Feature|Old|align="right"|text=(since 0.3.2)}}
+The default service interval when a new [[en/Archive/Manual/Settings/Service interval trains|train]] is built.
+:''Possible Settings:'' <span style="color:red">'''disabled'''</span> or <span style="color:#00693E">'''15 days/%'''</span> to <span style="color:#00693E">'''800 days/%'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] servint_trains = <0, 5-800)
+{{en/-}}
+====Default service interval for road vehicles====
+{{en/Feature|Old|align="right"|text=(since 0.3.2)}}
+The default service interval when a new [[en/Archive/Manual/Settings/Service interval road vehicles|road vehicle]] is built.
+:''Possible Settings:'' <span style="color:red">'''disabled'''</span> or <span style="color:#00693E">'''15 days/%'''</span> to <span style="color:#00693E">'''800 days/%'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] servint_roadveh = <0, 5-800)
+{{en/-}}
+====Default service interval for ships====
+{{en/Feature|Old|align="right"|text=(since 0.3.2)}}
+The default service interval when a new [[en/Archive/Manual/Settings/Service interval ships|ship]] is built.
+:''Possible Settings:'' <span style="color:red">'''disabled'''</span> or <span style="color:#00693E">'''15 days/%'''</span> to <span style="color:#00693E">'''800 days/%'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] servint_ships = <0, 5-800)
+{{en/-}}
+====Default service interval for aircraft====
+{{en/Feature|Old|align="right"|text=(since 0.3.2)}}
+The default service interval when a new [[en/Archive/Manual/Settings/Service interval aircraft|aircraft]] is built.
+:''Possible Settings:'' <span style="color:red">'''disabled'''</span> or <span style="color:#00693E">'''15 days/%'''</span> to <span style="color:#00693E">'''800 days/%'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] servint_aircraft = <0, 5-800)
+{{en/-}}
+====Disable servicing when breakdowns set to none====
+{{en/Feature|Old|align="right"|text=(since 0.3.6)}}
+If you have breakdowns set to none and have this switch on, your vehicles will never go to the depot for a service.
+Even if this setting is enabled, vehicles will still go to depot for auto-renewal and/or replacement if those settings are activated.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([order] no_servicing_if_no_breakdowns = <true|false>)
+{{en/-}}
+====Service helicopters at helipads automatically====
+{{en/Feature|Old|align="right"|text=(since 0.3.3)}}
+When enabled, helicopters will be serviced automatically each time they arrive at a helipad. This way, you don't need to have some airport along the helicopter's route for it to service. In previous versions this  was located in [[en/Archive/Manual/Settings/Configuring patches/Stations#service-helicopters-at-helipads|Stations section]].
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([order] serviceathelipad = <true|false>)
+{{en/-}}
+----
+
+===<u>Trains</u>===
+====Train acceleration model====
+{{en/Feature|0.7|align="right"|text=(since 0.7.0)}}
+Select the default or a more [[en/Archive/Manual/Settings/Realistic acceleration]] calculation for trains. With this setting set to ''realistic'', trains will travel faster up hill, but slower through tight corners.
+This option has been renamed from [[en/Archive/Manual/Settings/Configuring patches/Vehicles#enable-realistic-acceleration-for-trains|Enable realistic acceleration for trains]].
+:''Possible Settings:'' <span style="color:#00693E">'''Original'''</span> or <span style="color:#00693E">'''Realistic'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] train_acceleration_model = <0-1>)
+{{en/-}}
+====Slope steepness for trains====
+{{en/Feature|1.0|align="right"|text=(since 1.0.0)}}
+Sets the steepness of slopes, trains will slow down more on slopes if this setting is set to a higher value. It only applies if the [[en/Archive/Manual/Settings/Realistic acceleration]] model is selected.
+:''Possible Settings:'' <span style="color:red">'''0%'''</span> to <span style="color:#00693E">'''10%'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] train_slope_steepness = <0-10>)
+{{en/-}}
+====Enable building very long trains====
+{{en/Feature period|0.2|1.0|align="right"|text=(0.2.0 to 1.0.5) (replaced with Maximum Train Length)}}
+You can build extremely long trains, aka [[en/Archive/Manual/Settings/Mammoth trains]].
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] mammoth_trains = <true|false>)
+{{en/-}}
+
+====Maximum train length====
+{{en/Feature|1.1|align="right"|text=(since 1.1.0)}}
+Specifies the maximal allowed length of a train in tiles. This replaces the old [[en/Archive/Manual/Settings/Mammoth trains]] setting.
+:''Possible Settings:'' <span style="color:green">'''1 tile'''</span> to <span style="color:green">'''64 tiles'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] max_train_length = <1-64>)
+{{en/-}}
+
+====Warn if train is lost====
+{{en/Feature|0.5|align="right"|text=(since 0.5.0)}}
+A train will be [[en/Archive/Manual/Settings/Train is lost warning|reported lost]] if it cannot find a route to the station it is currently heading to.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([gui] lost_train_warn = <true|false>)
+{{en/-}}
+====Enable wagon speed limits====
+{{en/Feature|Old|align="right"|text=(since 0.4.5)}}
+Some [[en/Manual/NewGRF]]'s have wagon speed limits to make them more realistic, this option will enable/disable them.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] wagon_speed_limits = <true|false>)
+{{en/-}}
+====Disable electric rails====
+{{en/Feature|0.5|align="right"|text=(since 0.5.0)}}
+Disables electrified railways. The electric trains will run on normal tracks when this setting is active and electrified railways are not available for purchase.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] disable_elrails = <true|false>)
+{{en/-}}
+====Weight multiplier for freight to simulate heavy trains====
+{{en/Feature|0.5|align="right"|text=(since 0.5.0)}}
+The weight of freight trains is multiplied by the multiplier set here to simulate very heavy trains for more realism.
+:''Possible Settings:'' <span style="color:#00693E">'''1'''</span> to <span style="color:#00693E">'''255'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] freight_trains = <1-255>)
+{{en/-}}
+====New train orders stop by default at the ... of the platform====
+{{en/Feature|1.0|align="right"|text=(since 1.0.0)}}
+Configure whether new orders will tell trains to stop at the near end, the middle or the far end of the platform by default. Later you can set these individually after the creation of orders.
+:''Possible Settings:'' <span style="color:#00693E">'''near end'''</span>, <span style="color:#00693E">'''middle'''</span> or <span style="color:#00693E">'''far end'''</span>
+:''In Openttd.cfg config file:'' ([gui] stop_location = <0-2>)
+{{en/-}}
+----
+
+===Allow goto depot orders===
+{{en/Feature|Old|align="right"|text=(since 0.2.0)}}
+All vehicles can have a [[en/Archive/Manual/Settings/Allow goto depot orders|depot in their schedule]].
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([order] gotodepot = <true|false>)
+{{en/-}}
+===New orders are 'non-stop' by default===
+{{en/Feature|0.7|align="right"|text=(since 0.7.0)}}
+With this setting enabled, all newly assigned orders will be made '[[en/Archive/Manual/Non-stop]]' by default. With a non-stop order, vehicles will only stop at the station assigned in the order and will not halt at intermediate stations on its route not assigned as order.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([gui] new_nonstop = <true|false>)
+{{en/-}}
+===Review vehicle's orders===
+{{en/Feature|Old|align="right"|text=(since 0.3.4)}}
+Enable the option to [[en/Archive/Manual/Settings/Order review system|review the orders]] of vehicles periodically for invalid orders and other oddities.
+This option may be enabled for all vehicles, disabled for stopped vehicles, or disabled altogether.
+:''Possible Settings:'' <span style="color:red">'''no'''</span>, <span style="color:#00693E">'''yes, but exclude stopped vehicles'''</span> or <span style="color:#00693E">'''of all vehicles'''</span>
+:''In Openttd.cfg config file:'' ([gui] order_review_system = <0-2>)
+{{en/-}}
+===Warn if a vehicle's income is negative===
+{{en/Feature|0.7|align="right"|text=(since 0.7.0)}}
+If a vehicle's [[en/Archive/Manual/Settings/Train income warning|income is negative]] it will be reported in a news message. Use the [[en/Manual/Orders#transfer|transfer]] option in the vehicles order window if you want to set up a [[en/Manual/Feeder service]].
+This option has been renamed from [[en/Archive/Manual/Settings/Configuring patches/Vehicles#warn-if-a-train-s-income-is-negative|Warn if a train's income is negative]] in 0.7.0.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([gui] vehicle_income_warn = <true|false>)
+{{en/-}}
+===Vehicles never expire===
+{{en/Feature|Old|align="right"|text=(since 0.3.4)}}
+Old vehicles will stay in the vehicle list for you to choose and [[en/Archive/Manual/Settings/Never expire vehicles|never become obsolete]], so you can now run a Kirby with a Chiamera next to it! When enabling this setting in a running game, vehicles already disappeared from the list will not come back for purchase.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] never_expire_vehicles = <true|false>)
+{{en/-}}
+
+===Max trains per player===
+{{en/Feature|Old|align="right"|text=(since 0.3.2)}}
+Set the amount of [[en/Archive/Manual/Settings/Max trains|trains]] that a player can have.
+:''Possible Settings:'' <span style="color:red">'''0'''</span> to <span style="color:#00693E">'''5,000'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] max_trains = <0-5000>)
+{{en/-}}
+===Max road vehicles per player===
+{{en/Feature|Old|align="right"|text=(since 0.3.2)}}
+Set the amount of [[en/Archive/Manual/Settings/Max road vehicles|road vehicles]] that a player can have.
+:''Possible Settings:'' <span style="color:red">'''0'''</span> to <span style="color:#00693E">'''5,000'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] max_roadveh = <0-5000>)
+{{en/-}}
+===Max aircraft per player===
+{{en/Feature|Old|align="right"|text=(since 0.3.2)}}
+Set the amount of [[en/Archive/Manual/Settings/Max aircraft|aircraft]] that a player can have.
+:''Possible Settings:'' <span style="color:red">'''0'''</span> to <span style="color:#00693E">'''5,000'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] max_aircraft = <0-5000>)
+{{en/-}}
+===Max ships per player===
+{{en/Feature|Old|align="right"|text=(since 0.3.2)}}
+Set the amount of [[en/Archive/Manual/Settings/Max ships|ships]] that a player can have.
+:''Possible Settings:'' <span style="color:red">'''0'''</span> to <span style="color:#00693E">'''5,000'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] max_ships = <0-5000>)
+{{en/-}}
+===Plane speed factor===
+{{en/Feature|0.6|align="right"|text=(since 0.6.0)}}
+Set the speed of aircraft in relation to rail, road and water vehicles. In plain TTD, the aircraft traveled at 1/4th of ground speed.
+:''Possible Settings:'' <span style="color:#00693E">'''1/1'''</span> to <span style="color:#00693E">'''1/4'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] plane_speed = <1-4>)
+{{en/-}}
+===Number of plane crashes===
+{{en/Feature|1.0|align="right"|text=(since 1.0.0)}}
+Set the probability of plane crashes. They can be disabled if this setting is set to 'none'.
+:''Possible Settings:'' <span style="color:red">'''none'''</span>, <span style="color:#00693E">'''reduced'''</span> or <span style="color:#00693E">'''normal'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] plane_crashes = <0-2>) 
+{{en/-}}
+
+===Enable timetabling for vehicles===
+{{en/Feature|0.6|align="right"|text=(since 0.6.0)}}
+Allows you to use [[en/Manual/Timetable]]s for vehicles.
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([order] timetabling = <true|false>) 
+{{en/-}}
+===Enable multiple NewGRF engine sets===
+{{en/Feature|0.7|align="right"|text=(since 0.7.0)}}
+When enabled, this ''[[en/Archive/Manual/Settings/Settings/Dynamic Engines]]'' feature allows multiple [[en/Manual/NewGRF]] vehicle sets to exist side-by-side. Without this feature, the maximum number of different vehicles is severely limited and vehicle sets of the same type will overwrite each others vehicles and functions. Note: using multiple vehicle sets side-by-side might result in very high or very low purchase and running costs for vehicles. Mixing wagons and trains from different train sets might result in graphical errors. 
+:''Possible Settings:'' <span style="color:green">'''On'''</span> or <span style="color:red">'''Off'''</span>
+:''In Openttd.cfg config file:'' ([vehicle] dynamic_engines = <true|false>)
+{{en/-}}
+
+==In previous versions==
+===See also===
+*'''For 0.3.0 to 0.6.3''' - See [[en/Archive/Manual/Settings/Configuring patches]] for information of how to change settings.
+*'''For 0.2.0 and 0.2.1''' - See [[en/Archive/Manual/Settings/Configuring patches in 0.2.0]].
+
+[[Category:en/Manual/Settings & Preferences]]
