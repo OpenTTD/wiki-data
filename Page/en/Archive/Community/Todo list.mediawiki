@@ -1,15 +1,73 @@
-Below is a list of issues which came up, gave rise to some discussion but have not yet seen any (final) implementation. The purpose of this page is to gather arguments on the issues so that not everything has to be iterated over and over.
+== What's this? ==
+This page contains a list of available tasks. This list is composed by OpenTTD developers considering
+a single criterion: '''The tasks require no detailed knowledge of the OpenTTD source code.'''
+As such this list aims for people who want to get involved with the development of OpenTTD.
 
-*NewGRF things:
-**NewGRF version8 changes: [http://devs.openttd.org/~frosch/texts/grf_version8.txt frosch's collection of thoughts]
-**Industry farm tiles [http://devs.openttd.org/~frosch/texts/farmtiles.txt frosch's collection (again)] and [http://devs.openttd.org/~frosch/diffs/customisablefarmtiles.diff patch (23. May 2010) (r19773)]
-**StaticGRF information: [http://devs.openttd.org/~frosch/texts/StaticGRFInfo.txt frosch's collection (again)]
-**Variable translation table: [http://devs.openttd.org/~frosch/texts/vartranstable.txt frosch's collection (again)]
+Naturally this list differs vastly from the list of [[en/Archive/Community/Requested features|feature requests composed by players]].
+* Most of the player's suggestion actually require deep knowledge of the OpenTTD internals, and are not suitable at all to start with.
+* This list contains various small features which are usually not listed by players, since players are usually posting on the forums to discuss a feature; resp. a feature request only becomes popular if it is being discussed. However, some items on this list here are so trivial, that there is nothing to discuss :)
 
-*[[en/Development/Design Drafts/GUI re-arrangement]]
-----
+Before you start working on some item:
+* Check the history of this page, when it was updated last, to get an idea about how outdated this is :)
+* Ask on [[en/Development/IRC channel]] about the status of specific items resp. some update of the list.
 
 
-See also [[en/Development/Doing an OpenTTD release]]
+== Coding tasks ==
 
-[[Category:en/Archive]]
+=== OSX related ===
+This section lists tasks, which require knowledge about the OSX APIs, but not so much about OpenTTD.
+* {{en/Flyspray|4744}} - [OSX 10.7] Fullscreen mode crashes and won't compile
+* {{en/Flyspray|4847}} - [OSX] No support for bootstrap downloading
+* [http://bugs.openttd.org/index.php?string=OSX&project=1&type%5b%5d=1&status%5b%5d=open&do=index All the other OSX specific bugs :)]
+
+=== Easy ===
+This section lists small tasks which require no advanced coding skills and no big effort of time.
+* Readme/license/changelog viewer for basesets.
+* Readme/license/changelog viewer in content download window (for downloaded stuff only).
+* Display date of files in save/load GUI.
+* Add pending newsitems to the crashlog.
+* Add text filter to saveload GUI. (similar to NewGRF GUI)
+* {{en/Flyspray|5078}} - [NOAI] API lack "vehicle is old"-event.
+
+=== Medium ===
+This section lists medium tasks which require moderate coding skill and/or medium effort of time.
+* Translatable AI/GS options.
+* Accept/deny buttons in station's cargo list. (to start accepting cargo while no vehicle has arrived yet, or to deny acceptance after a vehicle had arrived once)
+* Button in the order GUI to hide automatic orders. (only GUI, no gameplay effect)
+* Add a font configuration window to the game options. (involves OS specific code)
+
+These tasks might depend on each other:
+* Include md5sum in NewGRF presets; actually store them using GRFID and md5sum instead of paths.
+* "Upgrade" button to replace all NewGRFs in a preset with the newest version.
+* Save the parameters of NewGRF and scripts for the next time, when they are removed from the NewGRF/script settings.
+
+These tasks might depend on each other as well:
+* Add unique keys to savegames (when starting a game or scenario), and check these when overwriting a savegame. (Ask for confirmation when overwriting a savegame with different key.)
+* Save GUI settings savegame specific (not in the savegame, but on every client; identified by some key of the savegame)
+* Add filters to the build vehicle GUI. (filter based on reliability; resp. explicitly exclude vehicles which the player does not want to see anymore; this might be a company setting synchronised over all clients, or a client-specific GUI setting)
+
+=== Hard ===
+The items in this list either require good coding skills and/or bigger investment of time.
+* Map preview when loading heightmaps. And some sliders or similiar to adapt the range of heightlevels being used. (Maybe allow setting 3 control points like brightness/contrast/gamma in image processing)
+
+
+== Non-coding tasks ==
+This section lists tasks which require no coding skills.
+
+=== All-time tasks ===
+These tasks are never done and require constant effort (amount choosen by yourself).
+* [http://translator.openttd.org/status Translations]: [http://www.openttd.org/development How to get involved.]
+* [[en/Archive/Community/Village Pump|Improve the Wiki]]. (But consider that some out-dated stuff may not be worth updating, but rather should be deleted.)
+* Third-party projects also require translators and other non-coding help. Check out the {{en/Forum|NoAI/NoGo|forum=65}} and {{en/Forum|NewGRF|forum=26}} development forums.
+
+=== GUI / settings redesign ===
+This a very huge / hard task, which requires no coding skills but nevertheless a good knowledge about OpenTTD (from a player's point of view).
+
+* Redesign the intro menu.
+* Redesign the process of starting a new game.
+* Redesign the settings GUIs (difficulty settings, game settings, advanced settings, news settings, music settings, newgrf settings, script settings, mapgen settings)
+** A window for game creation where you select everything that cannot change in game (mapgen settings, certain difficulty settings, NewGRF settings)
+** A window for non-game related settings (screen resolution, languages, etc... maybe a subset of the current game options)
+** A window for detailed settings.
+* Either drop difficulty settings and highscore completely, or redesign how "difficulty profiles" could be specified. (Something like NewGRF presets, but for "some" settings; basically a difficulty setting should specify for every gameplay setting a fixed value or "any value allowed".)
+* See also [[en/Development/Design Drafts/GUI re-arrangement]].
