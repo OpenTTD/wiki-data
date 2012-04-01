@@ -1,5 +1,5 @@
 [[Translation:en/Manual/Game Mechanics/Main Page]]
-{{nl/Vertaling|en/Manual/Game Mechanics/Main Page|20}}
+{{nl/Vertaling|en/Manual/Game Mechanics/Main Page|100|tekst=Sommige gedeelten zijn slecht vertaald vanwege hun complexiteit en zijn becommentarieerd in het Engels. Als je niveau goed is kun je helpen bij het vertalen van wat er nog ontbreekt.}}
 {{nl/Manual/Inhoudsopgave}}
 
 Hier vind je informatie over hoe OpenTTD de cijfers in het spel berekent.
@@ -299,54 +299,53 @@ Om de dingen eenvoudig te houden, laten we eens kijken wat de veranderingen zijn
 ** Goede service: '''11.12%''' dat 1 mogelijke verandering per maand een verhoging is en '''5.56%''' dat 1 mogelijke kans per maand een verlaging is.
 
 ====Geleidelijke economie regels====
-:''Distinguish [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|Smooth economy]] (advanced setting) and [[en/Archive/Manual/Settings/Difficulty|Steady economy]] (difficulty setting)''
+:''Maak onderscheid tussen [[nl/Archive/Manual/Settings/Geavanceerde instellingen/Economie#vloeiende-economie-inschakelen-meer-kleinere-veranderingen|vloeiende economie]] en  [[nl/Archive/Manual/Settings/Moeilijkheidsgraad|stabiele economie]]''
 
-*The chance for a production change each month is '''4.5%''', i.e. 4.5% of producing industries from industry list change production.
+*De kans op een productiewijziging per maand is '''4,5%''' ofwel 4,5% van de producerende industrieën uit de list wijzigen de producie.
 
+*Wanneer een productiewijziging zich voordoet voor een industrie die:
+** slecht of niet (minder dan 60% van de vracht wordt vervoerd) wordt bediend is er: '''33%''' kans op verhoging en '''67%''' kans op verlaging.
+** goed (meer dan 60% van de vracht wordt vervoerd) wordt bediend is er: '''67%''' kans op verhoging en '''33%''' kans op verlaging.
+** zeer goed (meer dan 80% van de vracht wordt vervoerd) wordt bediend is er: '''83%''' kans op verhoging en '''17%''' kans op verlaging.
 
-*If a production change does occur:
-** For an industry that has poor or no service (less than 60% of its cargo is transported): '''33%''' chance of increase, '''67%''' chance of decrease
-** For an industry that has good (greater than 60%) service: '''67%''' chance of increase, '''33%''' chance of decrease
-** For an industry that has excellent (greater than 80%) service: '''83%''' chance of increase, '''17%''' chance of decrease
-
-
-*These two are multiplied together, i.e. 4.5% * 33% = 1.5%:
+*Deze twee worden met elkaar vermenigvuldigd, bijv. 4,5% * 33% = 1,5%:
+** Slechte service: '''1,5%''' naar verhoging en '''3,0%''' voor verlaging.
+** Goede service: '''3,0%''' naar verhoging en '''1,5%''' voor verlaging.
+** Zeer goede service: '''3,75%''' naar verhoging en '''0,75%''' voor verlaging.
+<!--*These two are multiplied together, i.e. 4.5% * 33% = 1.5%:
 ** Poor service: '''1.5%''' to increase and '''3.0%''' to decrease
 ** Good service: '''3.0%''' to increase and '''1.5%''' to decrease
 ** Excellent service: '''3.75%''' to increase and '''0.75%''' to decrease
+Weet niet zeker of het zo goed is vertaald, daarom originele tekst laten staan.-->
 
-
-*With the [[en/Archive/Manual/Settings/Smooth economy]] option enabled, production changes per month are between 3 and 23%
-**Industries with with very low productions, (ie. 12-40 tonnes per month) will have higher changes.
-**Primary industries produce cargo 8 or 9 times (10 times possible for forests) a month. Monthly production is an industries 'base value' multiplied times 8 or 9 (or 10 for higher productions forests).  For example, the base value for a coal mine is 15 tons, so the monthly production is 120 or 135 tons. This base value is capped at 255, so the maximum possible monthly production for any industry is 2040 or 2295 (or 2550 - again - forest).[http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
+*Met de [[nl/Archive/Manual/Settings/Geavanceerde instellingen/Economie#vloeiende-economie-inschakelen-meer-kleinere-veranderingen|vloeiende economie]] optie ingeschakeld zijn de productiewijzigingen per maand tussen 3% en 23%.
+**Industrieën met zeer lage productie (zo'n 12-40 ton per maand) hebben grotere kansen.
+**Primaire industrieën produceren 8 of 9 keer (10 keer is voor bos mogelijk) per maand. Maandelijkse productie kan worden berekend door de 'basisproductie' te vermenigvuldigen met het aantal keer per maand. Bijvoorbeeld: de basisproductie van een kolenmijn is 15 ton, de maandelijkse productie is dus 120 of 135 ton. De basisproductie is gemaximeerd op 255 dus is de maximale maandelijkse productie voor iedere industrie 2040 of 2295 (of 2550 voor bos). {{en/Forum|Bron|topic=163733}}
 
 ====Voorbeelden====
-If a coal mine has 70% of its output transported, there is a '''3%''' chance (4.5% * 67%) of a production increase from 3-23% and a '''1.5%''' chance (4.5% * 33%) of a production decrease from 3-23% (but 13% on average).
+Wanneer de productie van een kolenmijn voor 70% is getransporteerd is er een kans van '''3%''' (4,5% * 67) op een verhoging van de productie met 3-23% en een kans van '''1,5%''' (4,5% * 33%) op een verlaging van de productie met 3-23% (met een gemiddelde van 13%):<br>
+(1 + (0,03 - 0,015) * 0,13) ^12 - 1 = 0,0237 of '''2,37%'''
 
-(1 + (0.03 - 0.015) * 0.13) ^12 - 1 = 0.0237 or '''2.37%'''
+De kolenmijn groeit met een gemiddelde van 2,37% na het eerste jaar<br>
+(1.0237 ^20) - 1 = 59.6% na twintig jaar<br>
+(1.0237 ^50) - 1 = 321.8% or '''3.22x''' na vijftig jaar<br>
+(1.0237 ^100) - 1 = '''10.35x''' na honderd jaar<br>
 
-The coal mine will grow an average of 2.37% after the first year<br>
-(1.0237 ^20) - 1 = 59.6% after twenty years<br>
-(1.0237 ^50) - 1 = 321.8% or '''3.22x''' after fifty years<br>
-(1.0237 ^100) - 1 = '''10.35x''' after one hundred years<br>
+Wanneer de productie van een kolenmijn voor 80% is getransporteerd is er een kans van '''3.75%''' op een verhoging van de productie en een kans van '''0.75%''' op een verlaging van de productie:<br>
+(1 + (.0375 - 0.0075) * .13) ^12 - 1 = 0.0478 of '''4.78%'''
 
+De industrie groeit naar verwachting 4,78% na het eerste jaar<br>
+(1.0478 ^20) - 1 = '''2.54x''' na twintig jaar<br>
+(1.0478 ^50) - 1 = '''10.32x''' na vijftig jaar<br>
+(1.0478 ^100) - 1 = '''106.62x''' na honderd jaar<br>
 
-For an industry with rating of more than 80%, there is a '''3.75%''' chance of increase and '''0.75%''' chance of decrease:<br>
-(1 + (.0375 - 0.0075) * .13) ^12 - 1 = 0.0478 or '''4.78%'''
+Met een goede bediening kost het gemiddeld '''29,6 jaar''' om te '''verdubbelen'''; met een zeer goede bediening kost het '''14,8 jaar'''. Wanneer in het spel een dag 2,36 seconden is de '''verdubbeltijd''' met een goede bediening '''7,1 uur'''; met zeer goede bediening de '''verdubbeltijd''' is '''3,6 uur'''. Om de productie te laten stijgen van bijna niets (100) naar bij het maximum (2100) duurt '''130 jaar''' met een goede bediening en '''65 jaar''' met een zeer goed bediening.
 
-The industry will grow approximately 4.78% after first year<br>
-(1.0478 ^20) - 1 = '''2.54x''' after twenty years<br>
-(1.0478 ^50) - 1 = '''10.32x''' after fifty years<br>
-(1.0478 ^100) - 1 = '''106.62x''' after one hundred years<br>
+In het spel echter zal de productie van industrieen zeer wisselend zijn. Bovenstaande voorbeelden zijn alleen geldig wanneer vele industrieen worden bestudeerd gedurende lange termijn; individuele industrieen kunnen grote afwijkingen vertonen van deze gemiddelden. Statistisch gezien zullen 6 op 10 industrieën niet binnen 65 jaar van 100 naar 2100 gaan en ongeveer bij 1 op 9 industrieën zal de productie zelfs dalen wanneer ze worden bediend op 60-80% over een periode van 50 jaar.
 
-For good service, it takes '''29.6 years''' on average '''to double'''; with excellent service, it takes '''14.8 years'''. If in the game's time a day is 2.36 seconds, then the '''doubling time''' with good service is '''7.1 hours'''; with excellent service, the doubling time is '''3.6 hours'''. For production to go from near bottom of 100 to near maximum of 2100 takes '''130 years''' with good service and '''65 years''' with excellent service.
+Voor een groter aanbod van de industrieën moet het aantal wagons worden aangepast op de productie (voor de laagste productie moeten twee wagons worden gebruikt). Voor dit soort vrachttreinen wordt gewoonlijk de order [Alle vracht volladen] gebruikt.
 
-However, in game you will find industries changing their production rate very randomly. It must be stressed the above examples are only true when observing many industries over the long-term; individual industries may greatly deviate from these averages. Statistically speaking, 6 out of 10 industries will not go from 100 to 2100 even with the best service during 65 years. About 1 out of 9 industries will even lower their production when being served at 60-80% cargo transported for 50 years. 
-
-For more responsiveness from industries, adapt the number of wagons to industry production (for the lowest production, you should use two wagons). [Full Load] orders are usually used for such cargo trains.
-
-
-'''Note:'''  The exact formula can be seen under "[http://vcs.openttd.org/svn/browser/trunk/src/industry_cmd.cpp#L2373 ChangeIndustryProduction()]" in industry_cmd.cpp.
+'''Opmerking:''' De exacte formule kan worden gevonden in [http://vcs.openttd.org/svn/browser/trunk/src/industry_cmd.cpp#L2440 industry_cmd.cpp] in de functie "ChangeIndustryProduction()".
 
 ==Betalingstarieven bij aflevering==
 De hoeveelheid die je betaald krijgt voor levering van de vracht is gebaseerd op 4 factoren: de hoeveelheid vracht die je aflevert, de waarde van de vracht, de afstand waarover wordt geleverd en hoeveel op tijd wordt geleverd.
@@ -425,80 +424,77 @@ De hoeveelheid die je betaald krijgt voor levering van de vracht is gebaseerd op
 |-
 |[[nl/Manual/Base Set/Cargos/Frisdrank|Frisdrank]]||-||30||50||£76
 |}
+Betaling van goederen is voor afleveren van 100 stuks over 1 landtegel. De betaling gaat omhoog met de inflatie als het spel vordert.
 
-Initial cargo payment values are for delivering 100 pieces of cargo 1 tile.  Payment goes up with inflation as the game progresses.
+Boetes voor te laat afleveren:
+*Voor iedere dag na de vroege aflevertijd wordt een boete van 0,4% in rekening gebracht.
+*Voor iedere dag na de late aflevertijd wordt een extra boete van 0,4% in rekening gebracht.
+*Maximale boete is 88%.
 
+'''Voorbeelden''' (geen inflatie):<br>
+Lever 200.000 liter olie 20 landtegels verder af in 10 dagen:<br>
+2 * £54 * 20 landtegels * 100% = £2160
 
-Late delivery penalties:
-*For each day after the Early Delivery time that you deliver the cargo, you are penalized 0.4%.
-*For each day after the Late Delivery time that you deliver the cargo, you are penalized an additional 0.4%.
-*Maximum penalty is 88%.
-
-
-'''Examples''' (no inflation):<br>
-Deliver 200,000 liters of oil 20 squares in 10 days:<br>
-2 * £54 * 20 squares * 100% = £2160
-
-Deliver 100 bags of mail 100 squares in 100 days:<br>
-£55 * 100 squares * (1 - 80*0.004 - 10*0.004) = £3520
+Lever 100 zakken post 100 landtegels verder af in 100 dagen:<br>
+£55 * 100 landtegels * (1 - 80*0.004 - 10*0.004) = £3520
 
 
-'''Notes:'''
-* The exact formula is much more complicated and slightly more accurate, due to rounding error when converting from larger discrete values.  See economy.cpp (GetTransportedGoodsIncome) and [[en/Manual/Game Mechanics/Cargo income]].
+'''Opmerkingen:'''
+* De exacte formule is veel gecompliceerder en iets nauwkeuriger door de afrondingsfout bij het omzetten van grotere afzonderlijke waarden. Zie
+[http://vcs.openttd.org/svn/browser/trunk/src/economy.cpp#L881 economy.cpp] "GetTransportedGoodsIncome()" and [[nl/Manual/Game Mechanics/Vrachtinkomsten]].
 
-* Distance is measured between the name-labeled tiles of the stations, not from the industries or by vehicle distance traveled.  It is computed by adding the differences in x and y tiles, not straight-line distance.
+* Afstand wordt gemeten tussen de gelabelde delen van stations, niet tussen industrieën of voor de afstand die het voertuig heeft overbrugd. De x en y coördinaten worden bij elkaar opgeteld en berekend en niet de hemelsbrede afstand.
 
 ==Voertuigsnelheden==
-Internally OpenTTD works with an unit called "km-ish/h", which is equal to "mph/1.6". 
-The conversion factor from km-ish/h to km/h is 1.00584, and the conversion factor from km-ish/h to mph is 1.6.
+OpenTTD werkt intern met een eenheid genoemd "km-achtig/uur", dit is gelijk aan "mph/1.6".
+De conversiefactor van km-achtig/uur naar km/uur is 1.00584, en de conversiefactor van km-achtig/uur naar mph is 1.6.
 
-A tile is, for vehicle speed purposes 664.|216| km-ish, 668 km or 415 miles long. This is based on the following facts: 
-*A tile has 16 sub locations per X/Y axis.
-*A vehicle has stores remainder of tile movement in a byte called subspeed, thus has 256 different values.
-*The vehicle's (raw) speed is added to subspeed. The resulting number is divided by 256, the remainder is stored in subspeed and the vehicle is moved quotient sub locations forward. For trains and aircraft the raw speed is in km-ish/h, for road vehicles/ships in 0.5 km-ish/h. For trains and aircraft this step is done twice a tick, whereas ships and road vehicles do it once a tick.
-*A day contains 74 ticks, and takes 24 hours.
-Now assume a vehicle going 1 km-ish/hour: (1 * 16 * 256) / (74 * 2) * 24 = 664.|216|.
-
+Een landtegel is, voor het meten van voertuigsnelheden, 664,|216| km-achtig, 668 km of 415 mijl lang. Dit is gebaseerd op de volgende feiten:
+*Een landtegel heeft 16 deellocaties per X/Y-as.
+*Een voertuig heeft een opslaggeheugen voor landtegelbeweging in een byte: deelsnelheid genoemd en heeft daarom 256 verschillende waarden.
+*De (ruwe) snelheid van een voertuig wordt toegevoegd aan deelsnelheid. De resulterende waarde wordt gedeeld door 256, het geheugen wordt opgeslagen in deelsnelheid en het voertuig wordt een het aantal deellocaties verplaatst die overeenkomt met de uitkomst van die deling. Voor treinen en vliegtuigen is de ruwe snelheid in km-achtig/uur, voor wegvoertuigen en schepen in 0,5 km-achtig/uur. Voor treinen en vliegtuigen wordt dit twee keer per tik uitgevoerd, waar dit voor wegvoertuigen en schepen slechts een keer per tik wordt gedaan.
+*Een dag bestaat uit 74 tikken en duurt 24 uur.
+Stel nu voor dat een voertuig 1km-achtig/uur gaat: (1 * 16 * 256) / (74 * 2) * 24 = 664,|216|.
 
 ==== Vliegtuigen ====
-*By default aircraft fly at a quarter of their listed speed (this can be changed in advanced settings).
-*Aircraft acceleration varies per aircraft, between 144 km-ish/h/day and 400 km-ish/h/day.
-*Broken down planes fly at 320 km-ish/h.
-*Airport taxi speed is 150 km-ish/h.
+*Standaard vliegt een vliegtuig op een kwart van de vermelde snelheid (dit kan worden gewijzigd in de geavanceerde instellingen).
+*Vliegtuigversnelling varieert per vliegtuig, tussen 144 km-achtig/uur/dag en 400 km-achtig/uur/dag.
+*Defecte vliegtuigen vliegen 320 km-achtig/uur.
+*Taxisnelheid van vliegtuigen is 150 km-achtig/uur.
 
 ==== Wegvoertuigen ====
-*Road vehicles accelerate at 37 km-ish/h/day.
-*Road vehicles go around corners at half their max speed.
-*Road vehicles accelerate an additional 74 km-ish/h/day downhill.
-*When going uphill, road vehicles slow down 10% 4 times per tile.  This balances out with acceleration at 34-ish km/h for all road vehicles.
+*Wegvoertuigen versnellen met 37 km-achtig/uur/dag.
+*Door de bocht rijden wegvoertuigen op halve snelheid.
+*Heuvelafwaarts versnellen wegvoertuigen extra met 74 km-achtig/uur/dag.
+*Heuvelopwaarts vertragen wegvoertuigen 10%, 4 keer per landtegel. Dit wordt verrekend met de acceleratie van 34 km-achtig/uur voor alle wegvoertuigen.
 
-(Note: This does not apply when using the improved road vehicle acceleration model.)
+(Opmerking: Dit geldt niet wanneer het verbeterde wegvoertuigen versnellingsmodel wordt gebruikt.)
 
 ==== Schepen ====
-*Ships accelerate at 37 km-ish/h/day.
-*A "stopped" ship resumes its last speed instantly.
+*Schepen versnellen met 37 km-achtig/uur/dag.
+*Een schip dat "gestopt" is hervat de laatste snelheid onmiddellijk.
 
 ==== Treinen ==== 
-(with the [[en/Archive/Manual/Settings/Realistic acceleration|realistic train acceleration patch]])<br>
-*Trains are not affected going up or down hills if they are powerful enough.
-*Trains are limited to entering and exiting a depot at 61km/h.
-*Trains can make one 45° turn without slowing down.
-*When making two or more 45° turns in the same direction, the max speed is limited as follows:
+(met de [[nl/Archive/Manual/Settings/Realistische acceleratie|realistische treinacceleratie instelling]])<br>
+*Treinen worden niet door heuvels beïnvloed wanneer ze sterk genoeg zijn.
+*Treinen mogen niet sneller dan 61km/uur bij het binnen- en buitengaan van het depot.
+*Treinen kunnen een bocht van 45° maken zonder te vertragen.
+*Bij twee of meer bochten van 45° in dezelfde richting wordt de maximumsnelheid als volgt:
 
-{| style="margin: 1em 1em 1em 0;"    <!-- begin nested tables -->
+{| style="margin: 1em 1em 1em 0;"    <!-- begin geneste tabel -->
 |-
 
-|    <!-- metric -->
+|    <!-- metrisch -->
 {| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #efefff;"
 |-
-!rowspan=2  style="background:#efefef"  | Half tiles between <br>double bend
-!colspan=3  style="background:#dfdfff"  | Max speed (km/h)
+!rowspan=2  style="background:#efefef"  | Halve landtegels tussen<br>dubbele buiging
+!colspan=3  style="background:#dfdfff"  | Maximale snelheid (km/h)
 |-
-!   style="background:#dfdfff"      | Railroad
+!   style="background:#dfdfff"      | Normaal spoor
 !   style="background:#dfdfff"      | Monorail
-!   style="background:#dfdfff"      | Maglev
+!   style="background:#dfdfff"      | Mag-Lev
 |-
-| style="background:#f8f8ff"    | 0 (90° turn)  
+| style="background:#f8f8ff"    | 0 (90° bocht)  
 |    61||91||121
 |-
 | style="background:#f8f8ff"    | 1
@@ -538,45 +534,35 @@ Now assume a vehicle going 1 km-ish/hour: (1 * 16 * 256) / (74 * 2) * 24 = 664.|
 |    231||346||461
 |}
 
-|    <!-- imperial -->
+|    <!-- Engels -->
 {| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #ffefef;"
 |-
-!rowspan=2  style="background:#efefef"  | Tiles
-!colspan=3  style="background:#efdfdf"  | Max speed (mi/h)
+!rowspan=2  style="background:#efefef"  | Landtegels
+!colspan=3  style="background:#efdfdf"  | Max. snelheid (mi/h)
 |-
-!   style="background:#efdfdf"      | Railroad
+!   style="background:#efdfdf"      | Normaal spoor
 !   style="background:#efdfdf"      | Monorail
-!   style="background:#efdfdf"      | Maglev
+!   style="background:#efdfdf"      | Mag-Lev
 |-
-| style="background:#f8f8ff"    | 0
-|     37|| 56|| 75 
+| style="background:#f8f8ff"    | 0||     37|| 56|| 75 
 |-
-| style="background:#f8f8ff"    | 1
-|     54|| 82||109 
+| style="background:#f8f8ff"    | 1||     54|| 82||109 
 |-
-| style="background:#f8f8ff"    | 2
-|     68||103||137 
+| style="background:#f8f8ff"    | 2||     68||103||137 
 |-
-| style="background:#f8f8ff"    | 3
-|     82||123||164 
+| style="background:#f8f8ff"    | 3||     82||123||164 
 |-
-| style="background:#f8f8ff"    | 4
-|     93||140||187 
+| style="background:#f8f8ff"    | 4||     93||140||187 
 |-
-| style="background:#f8f8ff"    | 5
-|    104||156||208 
+| style="background:#f8f8ff"    | 5||    104||156||208 
 |-
-| style="background:#f8f8ff"    | 6
-|    113||170||226 
+| style="background:#f8f8ff"    | 6||    113||170||226 
 |-
-| style="background:#f8f8ff"    | 7
-|    121||182||243 
+| style="background:#f8f8ff"    | 7||    121||182||243 
 |-
-| style="background:#f8f8ff"    | 8
-|    128||192||256 
+| style="background:#f8f8ff"    | 8||    128||192||256 
 |-
-| style="background:#f8f8ff"    | 9
-|    134||201||268 
+| style="background:#f8f8ff"    | 9||    134||201||268 
 |-
 | style="background:#f8f8ff"    | 10    ||138||207||276 
 |-
@@ -585,18 +571,16 @@ Now assume a vehicle going 1 km-ish/hour: (1 * 16 * 256) / (74 * 2) * 24 = 664.|
 | style="background:#f8f8ff"    | 12+   ||143||214||286 
 |}
 
-|}  <!-- end nested tables -->
-
-*Train acceleration and max speed are affected by engine power, current speed, total train mass, and track incline.
-*Non-Maglev train acceleration = 37 *(0.55 * Power / Speed - 1.3 * Mass + 60 * #cars + 0.0035 * Mass * Speed + 0.24 * Speed^2 - 60 * Mass of cars on uphill slope + 60 * Mass of cars on downhill slope) / Mass (km/h/day)
-*Maglev train Acceleration = 37 * (0.022 * Power - 0.24 * Speed^2 - 60 * Mass of cars on uphill slope + 60 * Mass of cars on downhill slope) / Mass (km/h/day)
-*Braking is twice acceleration except when entering a depot or a station.
-*Speed limits only apply when all of the turns occur within the length of the train:
+|}  <!-- einde geneste tabellen -->
+*Versnelling en maximumsnelheid van treinen wordt beinvloed door de kracht van de motor, de huidige snelheid, het totale treingewicht en de helling van de rails.
+*Niet-Mag-Lev treinversnelling =37 * (0,55 * kracht / snelheid - 1,3 * gewicht + 60 * aantal wagons * gewicht * snelheid + 0,24 * snelheid^2 - 60 * gewicht van wagons die heuvel-op gaan + 60 * gewicht van wagons die heuvel-af gaan) /gewicht (km/uur/dag)
+*Mag-Lev treinversnelling = 37 * (0.022 * kracht - 0.24 * snelheid^2 - 60 * gewicht van wagons die heuvel-op gaan + 60 * gewicht van wagons die heuvel-af gaan) / gewicht (km/uur/dag)
+*Afremmen gaat net zo snel als versnelling * 2, behalve wanneer een depot of station wordt binnengegaan.
+*Snelheidslimieten zijn alleen geldig wanneer alle bochten zich binnen de lengte van de trein bevinden:
 [[File:en/Manual/Game Mechanics/Speed-limits.png]]
 
 ''Zie ook: [[nl/Archive/Manual/Settings/Realistische acceleratie|Realistische acceleratie]] en [[nl/Community/Bochten|Bochten]].''
 
-See aircraft_cmd.c, roadveh_cmd.c, ship_cmd.c, train_cmd.c, vechicle.c for code.
-
+''Zie ook: [http://vcs.openttd.org/svn/browser/trunk/src/aircraft_cmd.cpp aircraft_cmd.cpp] [http://vcs.openttd.org/svn/browser/trunk/src/ship_cmd.cpp ship_cmd.cpp] [http://vcs.openttd.org/svn/browser/trunk/src/train_cmd.cpp train_cmd.cpp] [http://vcs.openttd.org/svn/browser/trunk/src/vehicle.cpp vehicle.cpp] for code.''
 [[Category:nl/Manual/Spelen]]
 [[Category:nl/Ontwikkelingen]]
