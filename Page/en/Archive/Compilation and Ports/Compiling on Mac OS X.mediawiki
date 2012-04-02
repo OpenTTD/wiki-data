@@ -203,6 +203,30 @@ Note: the makefile dependencies has to be set up correctly for this to work. Whi
 
 If it comes to frequent compiles, it might be worth to look for alternative compilers. Newer OSX bring also llvm-gcc binaries which offer a speed gain during compilation for the cost of a bit slower binaries. In order to activate the set the environment variables CC=/Developer/usr/bin/llvm-gcc and CXX=/Developer/usr/bin/llvm-g++
 
+====When compiling fails====
+
+* If you get a linker error like the following,
+
+ <code>[SRC] Linking openttd
+ Undefined symbols for architecture x86_64:
+ "_BZ2_bzDecompressInit", referenced from:
+ _FT_Stream_OpenBzip2 in libfreetype.a(ftbzip2.o)
+ _ft_bzip2_stream_io in libfreetype.a(ftbzip2.o)
+ "_BZ2_bzDecompressEnd", referenced from:
+ _ft_bzip2_stream_io in libfreetype.a(ftbzip2.o)
+ _ft_bzip2_stream_close in libfreetype.a(ftbzip2.o)
+ "_BZ2_bzDecompress", referenced from:
+ _ft_bzip2_file_fill_output in libfreetype.a(ftbzip2.o)
+ ld: symbol(s) not found for architecture x86_64
+ collect2: ld returned 1 exit status
+ make[1]: *** [openttd] Error 1
+ make: *** [all] Error 1
+</code>
+
+try downgrading <code>freetype</code>. For example, if you are using macports, you can achieve this by executing
+
+ <code>sudo port activate freetype @<version number></code>
+
 ===Compiling universal binaries===
 Compiling a universal binary is done by adding <code>--enable-universal</code> to configure:
  <code>./configure --enable-universal</code>
