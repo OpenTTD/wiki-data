@@ -1,68 +1,66 @@
 [[Translation:en/Archive/Compilation and Ports/Compiling on GNU∕Linux and 🟉BSD]]
 [[Category:ru/Development/Компиляция OpenTTD]]
-{{ru/Перевод|en/Archive/Compilation and Ports/Compiling on GNU∕Linux and 🟉BSD|0}}
+{{ru/Перевод|en/Archive/Compilation and Ports/Compiling on GNU∕Linux and 🟉BSD|99}}
 
-Краткое руководство для начала работы разработкой OpenTTD в ОС Linux и в других Un*x-подобных системах. Для получения помощи по компиляции на различных платформах, присоединяйтесь к [irc://irc.oftc.net/openttd.compile #openttd] на OFTC
+Настоящее руководство содержит информацию, которая будет полезна пользователям ОС Linux и других Unix-подобных, желающим принять участие в разработке OpenTTD. Для получения помощи по компиляции на различных платформах зайдите на канал [irc://irc.oftc.net/openttd.compile #openttd] на OFTC.
 
-==Required software==
+==Необходимое ПО==
 
-Most packages that are required for development (Like GCC) should already be installed on your box. You will require these packages in addition to GCC, make and the usual build tools.
-Beside those, OpenTTD requires the SDL development libraries to be installed. Optionally, but extremely recommended is install zlib development files, which compresses savegames (not having this doesn't just make your games bigger, but also makes you unable to load compressed savegames or join network games with compression, ie all network games).
-Lastly, OpenTTD can use the libpng development files to produce screenshots in PNG instead of BMP.
+Большинство необходимых для разработки пакетов (типа GCC), скорее всего, уже присутствуют в вашей системе. Помимо них, OpenTTD нуждается в SDL. Также очень желательно иметь zlib, liblzo2 и/или liblzma (используется для сжатия и открытия сжатых файлов сохраненных игр). Наконец, OpenTTD может использовать libpng для сохранения скриншотов в формате PNG вместо BMP. Все упомянутые библиотеки должны быть установлены в варианте для разработки, если ваш дистрибутив делает такое различие.
 
-Furthermore, if you want to be as up to date as you can be, you should install the subversion client to access the latest code in our subversion repository.
+Если вы желаете иметь доступ к самому свежему коду, вам также понадобится клиент subversion.
 
 === Mandriva ===
-(tested on Mandriva 2009 Spring)
+(проверено на Mandriva 2009 Spring)
 
-* gcc (required)
-* gcc-c++ (required)
-* libSDL-devel (required)
-* zlib1-devel (recommended, for savegame compression) 
-* libpng-devel (optional, for PNG screenshots) 
-* subversion (optional, for getting the latest source) 
-* patch (optional, for patching)
-* patchutils (optional, for patch creating)
+* gcc (требуется)
+* gcc-c++ (требуется)
+* libSDL-devel (требуется)
+* zlib1-devel (желательно, для сжатия и открытия сжатых сохраненок) 
+* libpng-devel (желательно, для сохранения скриншотов в формате PNG)
+* subversion (опционально, для доступа к свежему коду)
+* patch (опционально, для накладывания патчей)
+* patchutils (опционально, для создания патчей)
 
-Or enter the command:
+Для установки перечисленного можно выполнить команду:
  <code>urpmi gcc gcc-c++ libsdl-devel zlib1-devel subversion patch patchutils</code>
 
-=== Debian and Ubuntu ===
-* build-essential (for compilers)
-* libsdl1.2-dev (required)
-* dpatch (required for at least 0.4.8)
-* zlib1g-dev (recommended, for savegame compression)
-* liblzo2-dev (recommended, for savegame compression)
-* liblzma-dev (recommended, for savegame compression)
-* libpng12-dev (optional, for PNG screenshots)
-* subversion (optional, for getting the latest source)
-* timidity (optional, for playing the music)
-* libsdl1.2debian-pulseaudio (required for Ubuntu 9.04 and higher, see also {{en/Flyspray|3294}})
+=== Debian и Ubuntu ===
+* build-essential (тулчейн)
+* libsdl1.2-dev (требуется)
+* dpatch (требуется, не ниже 0.4.8)
+* zlib1g-dev (желательно, для сжатия сохраненок Zlib)
+* liblzo2-dev (желательно, для сжатия сохраненок LZO)
+* liblzma-dev (желательно, для сжатия сохраненок LZMA)
+* libpng12-dev (желательно, для сохранения скриншотов в формате PNG)
+* subversion (опционально, для доступа к свежему коду)
+* timidity (опционально, для проигрывания MIDI-мелодий)
+* libsdl1.2debian-pulseaudio (требуется для Ubuntu 9.04 и новее, см. также {{en/Flyspray|3294}})
 
-Or enter the command:
+Для установки перечисленного выполните команду:
  <code>sudo apt-get install build-essential libsdl1.2-dev subversion zlib1g-dev liblzo2-dev timidity dpatch liblzma-dev</code>
-And for Ubuntu 9.04 and higher:
+В Ubuntu 9.04 или новее выполните также:
  <code>sudo apt-get install libsdl1.2debian-pulseaudio</code>
 
-In at least one instance the package "libsdl1.2debian-all" was required for a full installation with a PowerPC build of Debian.  Without this package, only the dedicated server would compile. [http://www.tt-forums.net/viewtopic.php?f=31&t=37680]
+Как минимум, в одном случае для полной установки на сборке Debian под PowerPC потребовался пакет "libsdl1.2debian-all". Без установки данного пакета собирался лишь выделенный сервер. [http://www.tt-forums.net/viewtopic.php?f=31&t=37680]
 
 === Fedora === 
-(tested on FC6 and Fedora 7, 8 & 11)
+(проверено на FC6, Fedora 7, 8 & 11)
 * gcc
 * gcc-c++
 * SDL-devel
 * zlib-devel
-* subversion (optional, for getting the latest source)
-* timidity++ (optional, for soundtrack)
-* esound (optional, for soundtrack)
+* subversion (опционально, для доступа к свежему коду)
+* timidity++ (опционально, для проигрывания музыки)
+* esound (опционально, для проигрывания музыки)
 
-Alternatively, if you have yum installed, issue the following command as root:
-* <code>$ yum install gcc gcc-c++ SDL-devel zlib-devel subversion timidity++ esound -y</code>
+Если у вас установлен yum, выполните из-под рута следующую команду:
+ <code>$ yum install gcc gcc-c++ SDL-devel zlib-devel subversion timidity++ esound -y</code>
 
 
 
 === openSUSE 11.3 ===
-Use YaST to download:
+Используйте YaST, чтобы установить:
 * gcc-c++
 * SDL-devel
 * zlib-devel
@@ -73,136 +71,136 @@ Use YaST to download:
 * subversion
 * timidity
 
-You can use the command-line tool `zypper' as well:
-* <code>$ zypper install gcc-c++ SDL-devel zlib-devel libpng-devel libicu-devel lzo-devel freetype2-devel subversion timidity</code>
+Также можно использовать консольную утилиту `zypper':
+ <code>$ zypper install gcc-c++ SDL-devel zlib-devel libpng-devel libicu-devel lzo-devel freetype2-devel subversion timidity</code>
 
 === Gentoo ===
 
-As root run
-<code>$ emerge --onlydeps -av openttd</code>
-and it will install all the OpenTTD dependencies.
+Из-под рута выполните:
+ <code>$ emerge -avo openttd</code>
+Это приведет к установке всех зависимостей OpenTTD, но без самого OpenTTD.
 
-If you want to use the most current version (aka TRUNK/SVN), run the following, again as root:
- emerge subversion
+Если вы желаете работать с самой свежей версией исходников (т.н. TRUNK/SVN), выполните из-под рута следующую команду:
+ <code>$ emerge subversion</code>
 
 === Arch Linux ===
 
-As root run:
- pacman -S openttd
-It will install OpenTTD and all the dependencies. Free graphics set (openttd-opengfx) and free soundset (openttd-opensfx) are also available in the official repositories.
+Из-под рута выполните:
+ <code>$ pacman -S openttd</code>
+Это приведет к установке OpenTTD и всех его зависимостей. В официальных репозиториях также доступны свободные наборы графики (openttd-opengfx) и звуков (openttd-opensfx).
 
-Openttd-beta, openttd-svn and openttd-32bpp PKGBUILDs are available in the [http://aur.archlinux.org/packages.php?O=0&K=openttd AUR].
+PKGBUILD'ы для Openttd-beta, openttd-svn и openttd-32bpp доступны в [http://aur.archlinux.org/packages.php?O=0&K=openttd AUR].
 
 === FreeBSD ===
 
-To fetch, compile and install all necessary dependencies, as root run:
+Чтобы скачать, собрать и установить все необходимые зависимости, выполните из-под рута:
  
-<code>cd /usr/ports/games/openttd && make depends clean </code>
+ <code>$ cd /usr/ports/games/openttd && make depends clean</code>
 
-If you are going to compile OpenTTD from subversion then again, as root run:
+Если вы собираетесь брать OpenTTD из subversion, также выполните из-под рута следующую команду:
 
-<code> cd /usr/ports/devel/subversion && make install clean </code>
+ <code>$ cd /usr/ports/devel/subversion && make install clean</code>
 
 === NetBSD ===
 
-To fetch, compile and install all necessary dependencies run:
+Чтобы скачать, собрать и установить все необходимые зависимости, выполните:
 
-<code>cd /usr/pkgsrc/games/openttd && make depends clean</code>
+ <code>$ cd /usr/pkgsrc/games/openttd && make depends clean</code>
 
-If you are going to compile OpenTTD from subversion then again run:
+Если вы собираетесь брать OpenTTD из subversion, также выполните:
 
-<code> cd /usr/pkgsrc/devel/subversion-base && make install clean</code>
+ <code>$ cd /usr/pkgsrc/devel/subversion-base && make install clean</code>
 
-You should be asked for the root password once the code is compiled and ready for installation.
+После сборки пакетов перед их установкой вам нужно будет ввести пароль root.
 
 
-== Getting the source ==
-=== Releases ===
-You can download the .tar.gz source files from the [http://www.openttd.org/download-stable OpenTTD website]. Extracting tarball will give you a directory called openttd-<version>, where <version> is the version you downloaded. Enter this directory, and you're ready to proceed to step 3.
+== Получение исходников ==
+=== Релизы ===
+Вы можете скачать исходники в виде архивов .tar.gz на [http://www.openttd.org/download-stable веб-сайте OpenTTD]. После распаковки архива вы получите директорию с названием openttd-<версия>, где <версия> &mdash; скачанная вами версия исходников. Войдите в эту директорию и переходите к шагу&nbsp;3.
 
-=== Nightly builds ===
-Similar to the release option above, you can download the latest source snapshot (made every day at 1900 GMT) from the [http://www.openttd.org/download-trunk OpenTTD website]. Unpack and enter the directory in which it is unpacked. Now, proceed to step 3.
+=== Ночные сборки ===
+Как и в случае релизов, свежий снимок исходников (который создается ежедневно в 19:00&nbsp;GMT) можно взять на [http://www.openttd.org/download-trunk веб-сайте OpenTTD]. Распакуйте архив и зайдите в директорию с исходниками. Переходите к шагу&nbsp;3.
 
-=== Most current version (aka Trunk/SVN) ===
-The most current version of the official code is stored in our subversion repository. Subversion makes it easy to track various versions and provides an easily shareable single location for our code. For you as a user this means you can quickly get the newest sourcecode.
+=== Самая свежая версия (т.н. Trunk/SVN) ===
+Самая свежая версия официальных исходников хранится в репозитории subversion. Subversion упрощает отслеживание различных версий и предоставляет в общее пользование единое пространство для хранение кода. Для вас, как пользователя, это означает быстрый доступ к самой свежей версии исходного кода.
 
-==== Initial download ====
+==== Первичная загрузка ====
 
-To obtain the source code from the subversion server type:
+Чтобы получить исходники с сервера subversion, выполните следующую команду:
 
-<code>$ svn checkout svn://svn.openttd.org/trunk openttd</code>
+ <code>$ svn checkout svn://svn.openttd.org/trunk openttd</code>
 
-from command line to dump the code into the directory <code>openttd/</code>. We will refer to this directory as you "working copy" from now on. Also, all svn commands given from now on assume your working directory is the <code>openttd/</code> directory.
+Это поместит код в директорию <code>openttd/</code>. Отныне эту директорию мы будем называть вашей "рабочей копией". Кроме того, мы теперь будем предполагать, что все команды svn вы отдаете, находясь в директории <code>openttd/</code>.
 
-You can now skip to step 3 if you just want to compile the latest version.
+Если вы просто желаете собрать самую свежую версию OpenTTD, можете переходить к шагу&nbsp;3.
 
-==== Updating ====
+==== Обновление ====
 
-If you have previously downloaded the code and a new version is available (iow, new revisions have been committed), you can update your working copy to the latest version. Inside your working copy run the following:
+Если вы уже ранее скачали код и стала доступна новая его версия (иначе говоря, появились новые ревизии), вы можете обновить свою рабочую копию. Для этого, находясь внутри нее, выполните:
 
-<code>$ svn update</code>
+ <code>$ svn update</code>
 
-Also, if you have made any local changes to the source, these will be preserved and merged with changes in svn. If a conflict between the changes occurs, it will be flagged as conflicted (Marked "C" in <code>svn status</code>) (still preserving your local changes). For more information about resolving conflicts, look at the SVN Book at [http://subversion.tigris.org].
+Если вы подправили код в своей рабочей копии, ваши правки сохранятся и будут совмещены со свежими "официальными" изменениями. В случае конфликта правок о нем будет сообщено (пометки "C" в выводе <code>svn status</code>), при этом все равно сохраняются локальные изменения. За информацией о разрешении таких конфликтов обратитесь к [http://svnbook.red-bean.com/index.ru.html SVN Book].
 
-====Creating a patch file====
+====Создание файла-патча====
 
-If you have made changes to your source that you want to share or upload as a patch, you can ask svn to generate a diff file.
-The command
+Если вы внесли изменения в исходный код и желаете ими поделиться, вы можете заставить svn сгенерировать файл diff.
+Команда
 
-<code>$ svn diff > mypatch.diff</code>
+ <code>$ svn diff > mypatch.diff</code>
 
-creates a diff file (also referred to as "patch") which you can submit to the developers to share your improvements.
+создает файл diff (также известный как "патч"), который вы можете затем отправить разработчикам.
 
-====Reverting====
+====Откат изменений====
 
-You can undo changes to a file with:
+Можно отменить внесенные в файл изменения, выполнив следующую команду:
 
 <code>$svn revert filename</code>
 
-or to your entire working directory with:
+То же можно проделать и со всем деревом директорий проекта:
 
-<code>$svn revert -R .</code>
+ <code>$svn revert -R .</code>
 
-==== Applying a patch ====
+==== Наложение патча ====
 
-To apply a patch (diff file) to the source code, update your source code to the patch file's revision. Let's say the patch file has been made on r1234. You can see this in the first lines of the patch:
+Чтобы применить патч (файл diff) на исходный код, сначала обновите его до версии, для которой предназначается патч. Допустим, патч был сделан к версии r1234. Это можно увидеть в первых строках патч-файла:
 <code>
  Index: foo.c
  ===================================================================
  --- foo.c (revision 1234)
  +++ foo.c (working copy)
- </code>
-To update your source code to r1234, type
+</code>
+Чтобы обновить код в своей рабочей копии до ревизии r1234, выполните:
 
-<code>$ svn update -r 1234</code>
+ <code>$ svn update -r 1234</code>
 
-Then you're ready to merge the patch file
+Теперь вы готовы применить патч:
 
-<code>$ patch -p0 < mydiff.diff</code>
+ <code>$ patch -p0 < mydiff.diff</code>
 
-Now (optionally) update the source code to the newest revision with
+Затем (опционально) обновите код до последней версии:
 
-<code>$ svn update</code>
+ <code>$ svn update</code>
 
-If this produces conflicts (files marked with "C"), tough luck, the patch doesn't work for the latest revision (you can always revert and retry the patching, skipping this last step and playing an older version).
+Если в итоге возникают конфликты (файлы отмечены символом "C"), то это значит, что патч не годится для последней ревизии (в принципе, вам ничто не мешает откатиться, снова наложить патч и использовать старую пропатченную ревизию).
 
-== Compiling and running ==
+== Сборка и запуск ==
 
-Compile OpenTTD with:
+Для сборки OpenTTD сначала выполните:
 
-<code>$ ./configure</code>
+ <code>$ ./configure</code>
 
-This will create a Makefile, then:
+Будет создан Makefile. Затем запустите сборку:
 
-<code>$ make</code>
+ <code>$ make</code>
 
-If you have changed files or updated your source, this will only recompile modified code.
+Если вы внесли изменения в исходники или обновили код с сервера subversion, перекомпилированы будут лишь измененные файлы.
 
-== Optional original TTD data files ==
+== Оригинальные файлы данных TTD (опционально) ==
 
-Copy the GRF files from Transport Tycoon Deluxe to the <code>data/</code> directory:
+Скопируйте файлы GRF от Transport Tycoon Deluxe в директорию <code>data/</code>:
 
-'''Windows version'''
+'''Версия TTD для Windows'''
 *sample.cat
 *trg1r.grf
 *trgcr.grf
@@ -210,7 +208,7 @@ Copy the GRF files from Transport Tycoon Deluxe to the <code>data/</code> direct
 *trgir.grf
 *trgtr.grf
 
-'''DOS version'''
+'''Версия TTD для DOS'''
 *SAMPLE.CAT
 *TRG1.GRF
 *TRGC.GRF
@@ -218,59 +216,65 @@ Copy the GRF files from Transport Tycoon Deluxe to the <code>data/</code> direct
 *TRGI.GRF
 *TRGT.GRF
 
-== Running ==
-You can run openttd with:
+== Запуск ==
+Запустить OpenTTD можно следующим образом:
 
-<code>$ cd bin</code>
+<code>
+ $ cd bin
+ $ ./openttd
+</code>
 
-<code>$ ./openttd</code>
-
-The <code>cd</code> command brings you to the <code>bin</code> directory, where the <code>openttd</code> program has been put. Inside that directory, start the program.
+Команда <code>cd</code> сменит рабочую директорию на <code>bin</code>, в которой находится исполняемый файл <code>openttd</code>. Вторая команда, собственно, запустит OpenTTD.
 
 
-Also, you can install the game in <code>/usr/local/</code> or somewhere else, but this is mainly for packagers. This requires some more in-depth knowledge about installing software and OpenTTD, so look in the Makefile for hints.
+Кроме того, вы можете установить игру в <code>/usr/local/</code> или куда-нибудь еще, но это больше касается создателей пакетов. Это требует знания некоторых особенностей установки ПО и OpenTTD в частности; полезную информацию вы можете найти в Makefile.
 
-== Playing the soundtrack==
+== Музыка в игре ==
 
-If you want the original TTD music you need to copy the whole <code>gm/</code> directory. Additionally the TiMidity program is required:
+Если вы желаете слушать оригинальную музыку TTD, скопируйте всю директорию <code>gm/</code>. Кроме того, вам понадобится TiMidity.
 
-In Debian/Ubuntu
+=== Debian/Ubuntu ===
 
-Download "timidity & freepats"
+Установите timidity и freepats
 
- sudo apt-get install timidity freepats
+ <code>$ sudo apt-get install timidity freepats</code>
 
-Start "System Setting" then click on the "Sound System" select the "Hardware" tab, click on the "Select the Midi Device"
-the Select the "Timidity port 0 - Alsa device" (tip: it may be different just search for timidity) then click the "apply" button.
+{{en/Todo|Указать, к какой версии Gnome применимо дальнейшее (и при каких дополнительных условиях), а также правильно перевести названия меню и т.п.}}
+Если вы пользуетесь Gnome, откройте окно "Параметры системы", кликните по иконке "Звук" и перейдите на вкладку "Оборудование", затем кликните по "Select the Midi Device"
+и выберите "Timidity port 0 - Alsa device" (может называть иначе, но слово timidity там будет), после чего кликните по кнопке "Применить".
 
-In Fedora
+=== Fedora ===
 
-Install timidity++ 
+Сначала установите timidity++ 
 
- yum install timidity++ 
+ <code>$ yum install timidity++</code>
 
-Timidity wants to talk to ESD, so you will need to "enable software sound mixing (ESD)" (System &rarr; Preferences &rarr; Sound).
+{{en/Todo|Для какой рабочей среды это и для каких версий? Перевести названия меню в соответствии с их переводом в первоисточнике.}}
 
-To run OpenTTD with music support type
+Timidity должна взаимодействовать с ESD, так что понадобится "enable software sound mixing (ESD)" (System &rarr; Preferences &rarr; Sound).
 
-<code>$ ./openttd -m extmidi</code>
+=== Запуск OpenTTD с музыкой ===
 
-== Debian package ==
-You should be able to build a Debian package from the latest source using the supplied debian directory. You can replace step 3 by this. This Debian directory is, conforming to OpenTTD standards, put inside the <code>os/</code> directory and needs to be moved a level up first:
+Для запуска OpenTTD с поддержкой музыки выполните:
 
-<code>$ mv os/debian .</code>
+ <code>$ ./openttd -m extmidi</code>
 
-After that, use normal debian tools to build the package:
+== Создания пакета Debian ==
+Вы можете создать пакет Debian из свежих исходников, используя прилагающуюся директорию <code>debian</code>. Вы также можете проделать описанные здесь действия вместо шага&nbsp;3. В соответствии со стандартами OpenTTD, эта директория размещается в директории <code>os/</code> и сначала должна быть перемещена на уровень выше:
 
-<code>$ dpkg-buildpackage -rfakeroot -uc -us</code>
+ <code>$ mv os/debian .</code>
 
-Installing can then be done by executing (as root):
-<code>$ dpkg -i ../openttd-<version>_<something>.deb</code>
+После этого для сборки пакета используйте стандартный инструментарий Debian:
 
-You now have OpenTTD installed. 
+ <code>$ dpkg-buildpackage -rfakeroot -uc -us</code>
 
-In step 3 you need to copy the datafiles to <code>/usr/share/games/openttd/data</code>, since they are not included in the .deb due to licensing issues.
+Для установки выполните из-под рута следующее:
+ <code>$ dpkg -i ../openttd-<version>_<something>.deb</code>
 
-Instead of running OpenTTD as <code>$ ./openttd</code>, you can just type <code>$ openttd</code> to start it.
+Все, OpenTTD установлен.
 
-In step 5, you need to copy the music files from the gm directory into <code>/usr/share/games/openttd</code>.
+На шаге&nbsp;3 вы должны будете скопировать файлы данных в директорию <code>/usr/share/games/openttd/data</code>, т.к. они не включаются в пакет .deb по лицензионным соображениям.
+
+Для запуска OpenTTD вместо <code>$ ./openttd</code> вы теперь можете просто ввести <code>$ openttd</code>.
+
+На шаге&nbsp;6 вам нужно будет скопировать файлы с музыкой из директории gm в директорию <code>/usr/share/games/openttd</code>.
