@@ -1,0 +1,27 @@
+Script Communication Protocol (SCP) is a draft work to create a protocol for AIs and Goal scripts to communicate.
+
+== Transfer method ==
+The idea is that AI and Goal scripts communicate using signs placed in a pre-defined tile of the map (possible a corner). For now we will refer to this as the 'communication tile'. 
+
+An AI that want to query the NoGo something place a sign at the communication tile. The NoGo will periodically scan the signs of all companies to see if there are any signs on the communication tile and process those. If a question from a company is found, a response sign will be created using that company ID so that the AI of that company can read it.
+
+== Simple version ==
+* bit to tell if sender is AI / NoGo
+* query/message id
+* query data
+
+== Complex version ==
+=== Data transport frame ===
+A sign can hold 31(?) bytes of data.
+
+Each sign is divided into these fields:
+* sender company ID
+* target company ID (would allow NoGo to route messages AI <-> AI)
+* frame id (if we want to allow transport of more than 28 or 29 bytes)
+* data
+
+In OpenTTD there can be 15 companies, so four bytes is enough for the company ID and still allow one value for the NoGo identity. Though, if a transfer protocol with multiple frame support is used. It might be better to use a half or full byte for company ID in case that limit is raised in future without breaking AI<->NoGo communication.
+
+=== Data protocol ===
+* Query = Id of question/message
+* Data = additional data for the question/message encoded as a byte sequence.
