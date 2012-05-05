@@ -18,10 +18,33 @@ So what Bob does is that he publishes a list of commands that his Economy GS sup
 Example:
 
 '''Command Set: Bobs Economy Set'''<br/>
-GS.'''GetEconomy()''' -> '''(economy)''' // economy: a integer enum (0 = growth, 1 = stale, 2 = depression)<br/>
-GS.'''GetPresdent()''' -> '''(name, age)''' // name: a string. age: an integer<br/>
+{|border="1"  class="wikitable sortable"
+! scope="col" | Command name
+! scope="col" class="unsortable"| AI->GS parameters
+! scope="col" class="unsortable"| GS->AI parameters
+! scope="col" class="unsortable"| comment
+|-
+|GetEconomy
+|()
+|(economy)
+| economy = integer enum(0 = growth, 1 = stale, 2 = depression)
+|-
+|GetPresident
+|()
+|(name, age)
+|name = a string giving the name of the president of the OpenTTD country; age = an integer giving the age of the president
+|-
+|ProposeNewIndustry
+|(type, location)
+|(grant)
+|type = industry type id, location = tile index, grant = 1 if new industry was constructed and 0 if not.
+|-
+|}
 
-This means that an AI may issue the command GetPresindent with zero parameters to the Game Script. In response it will get two data values. name and age which will appear at index 0 and 1. The name response will be a string and the age response will be an integer.
+This means that an AI may issue the command GetPresindent with zero parameters to the Game Script. In response it will get two data values. name and age which will appear at index 0 and 1. The name response will be a string and the age response will be an integer. The ProposeNewIndustry command takes two parameters in the query from the AI to the GS that must appear in the given order and responds with 0 or 1. 
+
+==== Extra data ====
+In general it is recommended that AIs and GSs are written such that if extra data is sent that is not handled, that should just be ignored. That allows the GS to in future add new parameters/responses to the end without having to create a new command set for every small addition. All command sets and commands that the GS supports is transmitted to the AI at the handshaking process, and there is also a limit of maximum 255 commands in total. So save creating new command sets for when complete re-designs or breaking of API is required.
 
 === Source ===
 Source code can be found here: http://dev.openttdcoop.org/projects/scriptlib-scp
