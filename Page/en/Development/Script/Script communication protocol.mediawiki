@@ -1,29 +1,17 @@
-Script Communication Protocol (SCP) is a draft work to create a protocol for AIs and Goal scripts to communicate.
+Script Communication Protocol (SCP) a protocol for AIs and Game Scripts to communicate with each other. 
 
-{{en/Note|This draft is not exactly what have been [http://dev.openttdcoop.org/projects/scriptlib-scp implemented]}}
+== Introduction ==
+The idea is that AI and Goal scripts communicate using signs placed in a pre-defined tile in one of the map corners. For now we will refer to this as the 'communication tile'. 
 
-== Transfer method ==
-The idea is that AI and Goal scripts communicate using signs placed in a pre-defined tile of the map (possible a corner). For now we will refer to this as the 'communication tile'. 
+An AI that want to query the Game Script something, place a sign at the communication tile. The NoGo will periodically scan the signs of all companies to see if there are any signs on the communication tile and process those. If a question from a company is found, a response sign will be created using that company ID so that the AI of that company can read it.
 
-An AI that want to query the NoGo something place a sign at the communication tile. The NoGo will periodically scan the signs of all companies to see if there are any signs on the communication tile and process those. If a question from a company is found, a response sign will be created using that company ID so that the AI of that company can read it.
+== SCP Library ==
+To ease the usage of this protocol, there is a AI and GS library that allows sending commands between Game Scripts and AIs and handling all the low-level stuff of encoding the data into signs and decoding the signs.
 
-== Simple version ==
-* bit to tell if sender is AI / NoGo
-* query/message id
-* query data
 
-== Complex version ==
-=== Data transport frame ===
-A sign can hold 31(?) bytes of data.
+=== Command Sets ===
+Todo - explain command sets
 
-Each sign is divided into these fields:
-* sender company ID
-* target company ID (would allow NoGo to route messages AI <-> AI)
-* frame id (if we want to allow transport of more than 28 or 29 bytes)
-* data (a unit of data according to the data-protocol below)
 
-In OpenTTD there can be 15 companies, so four bytes is enough for the company ID and still allow one value for the NoGo identity. Though, if a transfer protocol with multiple frame support is used. It might be better to use a half or full byte for company ID in case that limit is raised in future without breaking AI<->NoGo communication.
-
-=== Data protocol ===
-* Query = Id of question/message
-* Data = additional data for the question/message encoded as a byte sequence.
+=== Source ===
+Source code can be found here: http://dev.openttdcoop.org/projects/scriptlib-scp
