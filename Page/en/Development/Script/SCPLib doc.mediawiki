@@ -41,6 +41,9 @@ Send a query to a companyID (could be an AI or anyone)
 |-
 |_CompanyID
 |company ID of the company to send the command to
+|-
+|...
+|data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
 |}
 
 =='''SCPLib::QueryServer'''(_usingCommand, _usingSet, ...)==
@@ -54,6 +57,9 @@ Send a query to the server
 |-
 |_usingSet
 |a string with the command set where the command using_command belongs to
+|-
+|...
+|data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
 |}
 
 =='''SCPLib::TellCompany'''(_usingCommand, _usingSet, _CompanyID, ...)==
@@ -72,6 +78,9 @@ expecting to get an answer.
 |-
 |_CompanyID
 |company ID of the company to send the command to
+|-
+|...
+|data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
 |}
 
 =='''SCPLib::TellServer'''(_usingCommand, _usingSet, ...)==
@@ -87,6 +96,9 @@ expecting to get an answer.
 |-
 |_usingSet
 |a string with the command set where the command using_command belongs to
+|-
+|...
+|data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
 |}
 
 =='''SCPLib::Answer'''(message, ...)==
@@ -97,6 +109,9 @@ Send an answer to a previous query, it will be sent to who has made the query to
 |-
 |message
 |pass the message instance that you got as parameter to your callback function
+|-
+|...
+|data to be sent along with the command. The data end up as Data[0], Data[1], .. etc. on the receiver end.
 |}
 
 =='''SCPLib::CanSpeakWith'''(companyID = 16)==
@@ -169,57 +184,4 @@ The communication tile is where the signs used to communicate are placed. You ca
 |-
 |''result''
 |the tile that is use as the Communication Tile
-|}
-
-=Callback function=
-Several functions accept a callback function which is called when a command is received from a remote AI/Game Script. The callback function should follow this specification:
-
-=='''MyClass.MyCallback'''(message, self)==
-# Note that you can not use ''this'' inside your callback. Instead use the ''self'' parameter as a this-pointer. 
-# If you wish to respond to the sender, you can do that by calling SCPLib.Answer.
-{|border="0" padding="4" class="wikitable"
-!scope="col" |
-!scope="col" |
-|-
-|message
-|a Message instance. Here you find information about command, data, sender etc.
-|-
-|self
-|the instance that you registered together with the callback function
-|-
-|''result''
-|void
-|}
-
-
-=Message=
-
-Members (no functions, only variables):
-{|border="1" padding="4" class="wikitable"
-!scope="col" | Member
-!scope="col" | Description
-|-
-|PoolID
-|internal use only
-|-
-|MessageID
-|internal use only
-|-
-|Command
-|a string with the command that was received
-|-
-|CommandSet
-|a string with the command set that the command belongs to
-|-
-|SenderID
-|the company ID of the sender. If the sender is the GameScript, the sender ID is 16.
-|-
-|ReceiverID
-|the company ID of the receiver. If the receiver is the GameScript, the receiver ID is 16.
-|-
-|Type	
-|internal use only
-|-
-|Data	
-|A list with the data that was sent by the sender. First data is found at Data[0], second at Data[1], etc.
 |}
