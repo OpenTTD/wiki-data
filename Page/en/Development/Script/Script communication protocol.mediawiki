@@ -65,32 +65,125 @@ In this section the public interface of the library is documented.
 ====Main class - SCPLib====
 Note that you must create an instance of SCPLib and use that to call the member functions.
 
-'''SCPLib.AddCommand'''(name, command_set, [self], [callback])<br/>
-name = a string with the name of the command<br/>
-command_set = a string with the name of the command set<br/>
-self = optional pointer to an instance of the class where the callback function belongs to.<br/>
-callback = pointer to callback function<br/>
 
-'''SCPLib.QueryCompany'''(using_command, using_set, company_id, ...)<br/>
+'''SCPLib::AddCommand'''(_Name, _CommandSet, self, _loopback=null)<br/>
+Add a command
 {|border="0" padding="4" class="wikitable"
 !scope="col" |
 !scope="col" |
 |-
-|using_command
-|string with the command to send
+|_Name
+|a string with the name of the command
 |-
-|command_set
-|a string with the command set where the command using_command belongs to
+|_CommandSet
+|a string with the name of the command set
 |-
-|company_id
-|company ID of the company to send the command to.
+|self
+|optional pointer to an instance of the class where the callback function belongs to. In most cases you'll probably pass 'this' as this parameter.
 |-
-|... 
-|data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
+|_loopback
+|pointer to callback function
+|-
+|result
+|void
 |}
 
-'''SCPLib.QueryServer'''(using_command, using_set, ...)<br/>
-Allows AIs to send commands to a GameScript without passing the company ID of the GameScript. See QueryCompany for more info.<br/>
+'''SCPLib::QueryCompany'''(_usingCommand, _usingSet, _CompanyID, ...)<br/>
+Send a query to a companyID (could be an AI or anyone)
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|_usingCommand
+|string with the command to send
+|-
+|_usingSet
+|a string with the command set where the command using_command belongs to
+|-
+|_CompanyID
+|company ID of the company to send the command to
+|}
+
+'''SCPLib::QueryServer'''(_usingCommand, _usingSet, ...)<br/>
+Send a query to the server
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|_usingCommand
+|string with the command to send
+|-
+|_usingSet
+|a string with the command set where the command using_command belongs to
+|}
+
+'''SCPLib::TellCompany'''(_usingCommand, _usingSet, _CompanyID, ...)<br/>
+Tell something a companyID (could be an AI or anyone).
+No answer is needed
+
+'''SCPLib::TellServer'''(_usingCommand, _usingSet, ...)<br/>
+Send a query to the server
+No answer is needed
+
+'''SCPLib::Answer'''(message, ...)<br/>
+Send an answer to a previous query, it will be sent to who has made the query to you.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|message
+|pass the message instance that you got as parameter to your callback function
+|}
+
+'''SCPLib::CanSpeakWith'''(companyID = 16)<br/>
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|companyID
+|ID of company to speak with. Defaults to 16 (Game Script)
+|-
+|result
+|true if we could speak with that company ID, otherwise false
+|}
+
+'''SCPLib::Check'''()<br/>
+Must be include a call to this function in the main loop. This function scanns for incomming communication signs and if there is any incomming messages the registred callback functions are called.
+
+'''SCPLib::SetAIAIProtocol'''(enable)<br/>
+enable or disable AIAI protocol
+
+'''SCPLib::GetAIAIProtocol'''()<br/>
+return 1/0 if AIAI protocol is enable
+
+'''SCPLib::SCPLogging_Error'''(enable)<br/>
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|enable
+|true to enable SCP loggin error only in console
+|}
+
+'''SCPLib::SCPLogging_Info'''(enable)<br/>
+If you wish help us debugging what's going on, enabling this one should help us, your console will get more noise
+This also force error logging if enable.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|enable
+|true to enable SCP loggin info in console
+|}
+
+'''SCPLib::SCPGetCommunicationTile'''()<br/>
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|result
+|the tile that is use as the Communication Tile
+|}
 
 === Source ===
 Source code can be found here: http://dev.openttdcoop.org/projects/scriptlib-scp
