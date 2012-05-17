@@ -1,0 +1,121 @@
+=SCPLib - Main class=
+Note that you must create an instance of SCPLib and use that to call the member functions. 
+
+=='''SCPLib::AddCommand'''(_Name, _CommandSet, self, _loopback=null)==
+Add a command
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|_Name
+|a string with the name of the command
+|-
+|_CommandSet
+|a string with the name of the command set
+|-
+|self
+|optional pointer to an instance of the class where the callback function belongs to. In most cases you'll probably pass 'this' as this parameter.
+|-
+|_loopback
+|pointer to callback function
+|-
+|result
+|void
+|}
+
+=='''SCPLib::QueryCompany'''(_usingCommand, _usingSet, _CompanyID, ...)==
+Send a query to a companyID (could be an AI or anyone)
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|_usingCommand
+|string with the command to send
+|-
+|_usingSet
+|a string with the command set where the command using_command belongs to
+|-
+|_CompanyID
+|company ID of the company to send the command to
+|}
+
+=='''SCPLib::QueryServer'''(_usingCommand, _usingSet, ...)==
+Send a query to the server
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|_usingCommand
+|string with the command to send
+|-
+|_usingSet
+|a string with the command set where the command using_command belongs to
+|}
+
+=='''SCPLib::TellCompany'''(_usingCommand, _usingSet, _CompanyID, ...)==
+Tell something a companyID (could be an AI or anyone).
+No answer is needed
+
+=='''SCPLib::TellServer'''(_usingCommand, _usingSet, ...)==
+Send a query to the server
+No answer is needed
+
+=='''SCPLib::Answer'''(message, ...)==
+Send an answer to a previous query, it will be sent to who has made the query to you.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|message
+|pass the message instance that you got as parameter to your callback function
+|}
+
+=='''SCPLib::CanSpeakWith'''(companyID = 16)==
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|companyID
+|ID of company to speak with. Defaults to 16 (Game Script)
+|-
+|result
+|true if we could speak with that company ID, otherwise false
+|}
+
+=='''SCPLib::Check'''()==
+Must be include a call to this function in the main loop. This function scanns for incomming communication signs and if there is any incomming messages the registred callback functions are called.
+
+=='''SCPLib::SetAIAIProtocol'''(enable)==
+enable or disable AIAI protocol
+
+=='''SCPLib::GetAIAIProtocol'''()==
+return 1/0 if AIAI protocol is enable
+
+=='''SCPLib::SCPLogging_Error'''(enable)==
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|enable
+|true to enable SCP loggin error only in console
+|}
+
+=='''SCPLib::SCPLogging_Info'''(enable)==
+If you wish help us debugging what's going on, enabling this one should help us, your console will get more noise
+This also force error logging if enable.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|enable
+|true to enable SCP loggin info in console
+|}
+
+=='''SCPLib::SCPGetCommunicationTile'''()==
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|result
+|the tile that is use as the Communication Tile
+|}
