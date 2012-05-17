@@ -60,5 +60,23 @@ The NewPresident command is a bit different, it is not asked by the AI. Instead 
 === Extra data ===
 In general it is recommended that AIs and GSs are written such that if extra data is sent at the back which is not handled, that data should just be ignored. That allows the GS to in future add new parameters/responses to the end without having to create a new command set for every small addition. All command sets and commands that the GS supports is transmitted to the AI at the handshaking process, and there is also a limit of maximum 255 commands in total. So save creating new command sets for when complete re-designs or breaking of API is required.
 
+=== Documentation ===
+In this section the public interface of the library is documented.
+====Main class - SCPLib====
+Note that you must create an instance of SCPLib and use that to call the member functions.
+
+'''SCPLib.AddCommand'''(name, command_set, [self], [callback])
+ name = a string with the name of the command
+ command_set = a string with the name of the command set
+ self = optional pointer to an instance of the class where the callback function belongs to.
+ callback = pointer to callback function
+
+'''SCPLib.QueryCompany'''(using_command, using_set, company_id, ...)
+ using_command = a string with the command to send
+ command_set = a string with the command set where the command using_command belongs to
+ company_id = company ID of the company to send the command to.
+ 
+ additional parameters = data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
+
 === Source ===
 Source code can be found here: http://dev.openttdcoop.org/projects/scriptlib-scp
