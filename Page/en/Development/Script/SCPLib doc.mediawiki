@@ -59,11 +59,36 @@ Send a query to the server
 
 =='''SCPLib::TellCompany'''(_usingCommand, _usingSet, _CompanyID, ...)==
 Tell something a companyID (could be an AI or anyone).
-No answer is needed
+By using Tell* instead of Query*, we tell the receiver of this message that we are not
+expecting to get an answer.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|_usingCommand
+|string with the command to send
+|-
+|_usingSet
+|a string with the command set where the command using_command belongs to
+|-
+|_CompanyID
+|company ID of the company to send the command to
+|}
 
 =='''SCPLib::TellServer'''(_usingCommand, _usingSet, ...)==
 Send a query to the server
-No answer is needed
+By using Tell* instead of Query*, we tell the receiver of this message that we are not
+expecting to get an answer.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|_usingCommand
+|string with the command to send
+|-
+|_usingSet
+|a string with the command set where the command using_command belongs to
+|}
 
 =='''SCPLib::Answer'''(message, ...)==
 Send an answer to a previous query, it will be sent to who has made the query to you.
@@ -88,13 +113,33 @@ Send an answer to a previous query, it will be sent to who has made the query to
 |}
 
 =='''SCPLib::Check'''()==
-Must be include a call to this function in the main loop. This function scanns for incomming communication signs and if there is any incomming messages the registred callback functions are called.
+You must include a call to this function in the main loop. This function scanns for incomming communication signs and if there is any incomming messages the registred callback functions are called.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|''result''
+|void
+|}
 
 =='''SCPLib::SetAIAIProtocol'''(enable)==
-enable or disable AIAI protocol
+Enable or disable AIAI protocol
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|enable
+|boolean or 1/0 to tell if AIAI protocol should be enabled or not
+|}
 
 =='''SCPLib::GetAIAIProtocol'''()==
-return 1/0 if AIAI protocol is enable
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|''result''
+|1 if AIAI protocol is enabled, otherwise 0
+|}
 
 =='''SCPLib::SCPLogging_Error'''(enable)==
 {|border="0" padding="4" class="wikitable"
@@ -106,8 +151,9 @@ return 1/0 if AIAI protocol is enable
 |}
 
 =='''SCPLib::SCPLogging_Info'''(enable)==
-If you wish help us debugging what's going on, enabling this one should help us, your console will get more noise
-This also force error logging if enable.
+If you wish help us debugging what's going on, enabling this one should
+help us, your console will get more noise. This also force error logging
+if enabled.
 {|border="0" padding="4" class="wikitable"
 !scope="col" |
 !scope="col" |
@@ -117,6 +163,7 @@ This also force error logging if enable.
 |}
 
 =='''SCPLib::SCPGetCommunicationTile'''()==
+The communication tile is where the signs used to communicate are placed. You can use this function to ignore all signs on this tile if you use signs for some other purposes.
 {|border="0" padding="4" class="wikitable"
 !scope="col" |
 !scope="col" |
