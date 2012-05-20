@@ -209,9 +209,13 @@ Several functions accept a callback function which is called when a command is r
 
 =Message=
 
-Members (no functions, only variables):
+The Message class contains several useful variables. While in general you should not need to read member variables of SCP, the Message class is an exception. All members can be regarded as public although you should not change them yourself, only read them.
+
+Message also contains a few helper functions. These are used to ease access of Data entries without having to check for all possible things that could go wrong yourself. 
+
+The variables are listened here:
 {|border="1" padding="4" class="wikitable"
-!scope="col" | Member
+!scope="col" | Member variable
 !scope="col" | Description
 |-
 |PoolID
@@ -237,4 +241,64 @@ Members (no functions, only variables):
 |-
 |Data	
 |A list with the data that was sent by the sender. First data is found at Data[0], second at Data[1], etc.
+|}
+
+=='''Message::GetData'''(index)==
+Get data at the index position in Data. If Data doesn't exist or the index is invalid, null is returned.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|index
+|position in the Data array to grab
+|-
+|''result''
+|Data[index] if it exist, otherwise null
+|}
+
+=='''Message::GetIntData'''(index)==
+Get integer data at the index position in Data. If Data doesn't exist or the
+index is invalid, null is returned. If data exist, but is not of the type
+integer, null will be returned.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|index
+|position in the Data array to grab
+|-
+|''result''
+|Data[index] if it exist and is of the type integer, otherwise null
+|}
+
+=='''Message::GetStringData'''(index)==
+Get string data at the index position in Data. If Data doesn't exist or the
+index is invalid, null is returned. If data exist, but is not of the type
+string, null will be returned.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|index
+|position in the Data array to grab
+|-
+|''result''
+|Data[index] if it exist and is of the type integer, otherwise null
+|}
+
+=='''Message::GetBoolData'''(index)==
+Get bool data at the index position in Data. If Data doesn't exist or the
+index is invalid, null is returned. If data exist, but is not of the type
+integer, null will be returned. Yes, it is not a typo. Bools are transmitted
+as integers, however this function does check that the received integer is
+0 or 1, otherwise null is returned as well.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|index
+|position in the Data array to grab
+|-
+|''result''
+|Data[index] if it exist and is of the type integer and is 0 or 1, otherwise null
 |}
