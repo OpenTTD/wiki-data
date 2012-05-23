@@ -20,39 +20,65 @@ This section lists tasks, which require knowledge about the OSX APIs, but not so
 * {{en/Flyspray|4847}} - [OSX] No support for bootstrap downloading
 * [http://bugs.openttd.org/index.php?string=OSX&project=1&type%5b%5d=1&status%5b%5d=open&do=index All the other OSX specific bugs :)]
 
+
 === Easy ===
 This section lists small tasks which require no advanced coding skills and no big effort of time.
 * Readme/licence/changelog viewer in content download window (for downloaded stuff only).
+*: Similar buttons as in the NewGRF, AI or game settings windows.
 * Display date of files in save/load GUI.
+*: You can sort the filelist by modification date, but you cannot see it in the list.
 * Add pending newsitems to the crashlog.
+*: News messages are a client side thing, so they are not stored in savegames (not even in singleplayer). However, news can tell a bit about what happended recently in a game, so it might be useful to have this information in the crash.log (it's not in crash.sav). Just make sure that the textprocessing involved with the news does not cause crashes while writing the crashlog :p
 * Add text filter to load savegame/scenario/heightmap GUI. (similar to NewGRF GUI; wrt. "save" see "hard tasks")
+*: Add an editbox to enter a search term which the filelist is then filtered on. (Probably only considering the filename; reading the summary of eachs save would take too long)
 * {{en/Flyspray|5078}} - [NOAI] API lack "vehicle is old"-event.
 * {{en/Flyspray|2064}}, {{en/Flyspray|1640}} - Increase usability of vehicle replacement window. (not necessarily every item in the list)
 * Change the "give money to" function that money is donated to the company and not a specific player
+*: The entities that operate in OpenTTD are companies which might be controlled by multiple players. As such it is weird that you give money to a client via the clientlist, instead of to a company via the company GUI.
 
 === Medium ===
 This section lists medium tasks which require moderate coding skill and/or medium effort of time.
 * {{en/Flyspray|5018}} - Readme/licence/changelog viewer for OpenTTD itself. (likely requires OS/packaging specific code)
+*: There are in-game text-file viewers for readmes, licences and changelogs of NewGRFs, AIs and other content stuff. OpenTTD also has these three files, but there is currently no way to display them in-game. The hard part about this task is however, that the location of these files are quite unknown. Some linux distributions might even store them only compressed, and thus unreadable for OpenTTD. So for linux this would basically need a build-time "configure" option to specify the location of those files, which may then not be compressed (the latter would be a task for the package maintainer of the distributions).
 * Translatable AI/GS options.
+*: NewGRFs and scripts can define settings which the user can adjust. While NewGRFs can localise these, scripts currently can only provide on language, i.e. usually English. For Game Scripts there is already a method to provide localised texts for in-game stuff like news or extra information in town windows. There should be a similar method (from the script point of view) to translate settings.
 * Accept/deny buttons in station's cargo list. (to start accepting cargo while no vehicle has arrived yet, or to deny acceptance after a vehicle had arrived once)
+*: This has several use case:
+*:* You can start acceptance of cargo before the first vehicle arrives.
+*:* You can start acceptance of cargo in the case that all your vehicles use autorefit, in which case they do not trigger acceptance unless they are already refitted to the right cargo.
+*:* You can stop acceptance if a vehicle accidentially arrived at your station.
+*:* You can deny acceptance without having to set all orders of all vehicles to "no load" at the station. (esp. useful if you play a [http://wiki.openttdcoop.org/Self-regulating_Network self-regulating] style with vehicles without orders)
+*: This deprecates the old "select_goods" setting. It might make sense to turn this setting into a client-side setting for the default-acceptance of new stations. (similar was done with other old settings at some point)
+*: Also this should not mess too much with cargo rating of stations, so as a first step the "if (_settings_game.order.selectgoods && st->goods[type].last_speed == 0) continue;"-hack in station_cmd.cpp would need replacement with something better. (i.e. acceptance should be a separate variable, no special value of some rating-related variable)
 * Add a font configuration window to the game options. (involves OS specific code)
+*: Currently it is very hard for the average user to configure fonts for OpenTTD, though this is kind of a must-task on todays high-resolution screens. So there should be some in-game method.
 * {{en/Flyspray|3852}} - Add text filter to server list.
+*: The list of servers is quite long. While adding lots of filters for various server properties would likely be quite cumbersome to use, a single editbox might provide a lot of filter options if it consideres various description texts of servers. (e.g. "arctic 256x256" would find arctic 256x256 maps, but also servers with the name "arctic")
 
 These tasks might depend on each other:
 * Include md5sum in NewGRF presets; actually store them using GRFID and md5sum instead of paths.
+*: Paths are only valid as long as they exist. If they are gone, you have no information about what they ever were about. GRFIDs stay forever :p
 * {{en/Flyspray|3925}} - "Upgrade" button to replace all NewGRFs in a preset with the newest version.
+*: I.e. replace every GRF in the list with those with the same GRFID and the newest version.
 * Save the parameters of NewGRF (including palette) and scripts for the next time, when they are removed from the NewGRF/script settings.
+*: I.e. save a mapping of GRFID+md5sum to palette+parameters.
 
 These tasks might depend on each other as well:
 * Add unique keys to savegames (when starting a game or scenario), and check these when overwriting a savegame. (Ask for confirmation when overwriting a savegame with different key.)
+*: How used are you to just double-click the top entry in the save list when saving a game? And how often did you overwrite your previous nicely finished game with your just freshly started one? :p
 * Save GUI settings savegame specific (not in the savegame, but on every client; identified by some key of the savegame)
+*: Window sizes, filter states, selected railtype, .... maybe even opened windows and positions.
 * Add filters to the build vehicle GUI. (filter based on reliability; resp. explicitly exclude vehicles which the player does not want to see anymore; this might be a company setting synchronised over all clients, or a client-specific GUI setting)
+*: Many players play with "vehicles never retire" because they want to keep building their favorite engines independent of more advanced technology. But at the same time they face the issue that NewGRFs provide sometimes hundreds of vehicles and the purchase list becomes unbrowsable. A nice solution for everyone would be, if the player can remove or readd engines just him/herself it the list becomes too long. If this becomes a company setting it would be part of the save, if this becomes a client-side setting it should probably saved with the methods of the tasks just before.
 
 === Hard ===
 The items in this list either require good coding skills and/or bigger investment of time.
 * Add text filter to save savegame/scenario/heightmap GUIs. (requires support for multiple edit boxes in a single window)
-* Button in the order GUI to hide automatic orders. (only GUI, no gameplay effect)
+*: This task is here only for consistency with the load GUI task above. But actually I have no idea why you would want to filter the savelist on which save to overwrite... hmmm
+* Button in the order GUI to hide implicit orders. (only GUI, no gameplay effect)
+*: Implicit orders are somewhat a prerequisite for cargo destinations. But they make interaction with the orders list sometimes quite hard if there are a lot implicit orders. So, there should be a toggle-switch in the orders GUI to hide them. However, there is more to consider when hiding orders... Currently orders are numbered in the GUI including implcit orders. Changing the numbering when toggling would be confusing, and skipping numbers while hiding implicit orders would be confusing as well. So, maybe real orders should be numbered 1, 2, 3, and the implcit orders between them should be numbered 1.1, 1.2, 1.3, ... 2.1, 2.2 ... 
 * Map preview when loading heightmaps. And some sliders or similiar to adapt the range of heightlevels being used. (Maybe allow setting 3 control points like brightness/contrast/gamma in image processing)
+*: If you start a game from a heightmap you can only guess how the result may turn out. You might try multiple times while changing the "map rotation" setting or even start your imaging program to adjust breightness/contrast. It would be much nicer if this could be done in-game, esp. wrt. the rotation thingie.
 
 == Non-coding tasks ==
 This section lists tasks which require no coding skills.
