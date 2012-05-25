@@ -57,7 +57,7 @@ This section lists medium tasks which require moderate coding skill and/or mediu
 * {{en/Flyspray|3852}} - Add text filter to server list.
 *: The list of servers is quite long. While adding lots of filters for various server properties would likely be quite cumbersome to use, a single editbox might provide a lot of filter options if it consideres various description texts of servers. (e.g. "arctic 256x256" would find arctic 256x256 maps, but also servers with the name "arctic")
 
-These tasks might depend on each other:
+'''These tasks might depend on each other:'''
 * Include md5sum in NewGRF presets; actually store them using GRFID and md5sum instead of paths.
 *: Paths are only valid as long as they exist. If they are gone, you have no information about what they ever were about. GRFIDs stay forever :p
 * {{en/Flyspray|3925}} - "Upgrade" button to replace all NewGRFs in a preset with the newest version.
@@ -65,11 +65,14 @@ These tasks might depend on each other:
 * Save the parameters of NewGRF (including palette) and scripts for the next time, when they are removed from the NewGRF/script settings.
 *: I.e. save a mapping of GRFID+md5sum to palette+parameters.
 
-These tasks might depend on each other as well:
+'''These tasks might depend on each other as well:'''
 * Add unique keys to savegames (when starting a game or scenario), and check these when overwriting a savegame. (Ask for confirmation when overwriting a savegame with different key.)
 *: How used are you to just double-click the top entry in the save list when saving a game? And how often did you overwrite your previous nicely finished game with your just freshly started one? :p
 * Save GUI settings savegame specific (not in the savegame, but on every client; identified by some key of the savegame)
 *: Window sizes, filter states, selected railtype, .... maybe even opened windows and positions.
+*: However, this likely needs some more thoughts wrt. singleplayer and multiplayer:
+*:* In multiplayer you want to store settings between leaving and rejoining. While the "Game-ID" would not change, the game might already have advanced in time.
+*:* In singleplayer you might load the latest or an older savegame of the same game. The "Game-ID" would be the same in both cases, but it does not make sense to share the storage of window positions for both saves.
 * Add filters to the build vehicle GUI. (filter based on reliability; resp. explicitly exclude vehicles which the player does not want to see anymore; this might be a company setting synchronised over all clients, or a client-specific GUI setting)
 *: Many players play with "vehicles never retire" because they want to keep building their favorite engines independent of more advanced technology. But at the same time they face the issue that NewGRFs provide sometimes hundreds of vehicles and the purchase list becomes unbrowsable. A nice solution for everyone would be, if the player can remove or readd engines just him/herself it the list becomes too long. If this becomes a company setting it would be part of the save, if this becomes a client-side setting it should probably saved with the methods of the tasks just before.
 
