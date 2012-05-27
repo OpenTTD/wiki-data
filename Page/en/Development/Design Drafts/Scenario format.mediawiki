@@ -14,7 +14,7 @@ An extended heightmap is composed of the following parts:
 
 ==Metadata file==
 
-The metadata file must be called "metadata.txt". Each layer has its own section in this file. The [height_layer] section is compulsory, since all extended heightmaps must have a height layer. Other layers are optional. Each layer section must have a file property that indicates which file contains the layer date. Some layers can also have extra properties.
+The metadata file must be called "metadata.txt". Each layer has its own section in this file. The [height_layer] section is compulsory, since all extended heightmaps must have a height layer. Other layers are optional. Each layer section can have a file property that indicates which file contains the layer date if not included, a default file name will be used. Some layers can also have extra properties.
 
 The [object_files] section is optional as there are no obligatory object files. It lists all object files used by the extended heightmap and the text file that contains their data.
 
@@ -37,13 +37,13 @@ tunnelbridge_file=extra_road_data.txt</pre>
 
 ==Layers==
 
-Each layer stores information for each one of the points in the map in PNG format. Scalable layers are those that can be scaled to valid map sizes without a critical loss of information. Extended heightmap that include only scalable layers can have layers of any size, and they will be scaled when the game is generated.Since they contain position information, object files are treated as non scalable layers in this regard.
+Each layer stores information for each one of the points in the map in PNG format. Scalable layers are those that can be scaled to valid map sizes without a critical loss of information. Extended heightmap that include only scalable layers can have layers of any size, and they will be scaled when the game is generated .Since they contain position information, object files are treated as non scalable layers in this regard.
 
 If an extended heightmap contains one or more non scalable layers, all layers must have the same size, and it must be a valid OpenTTD map size. If these conditions are not fulfilled, OpenTTD will not be able to load the extended heightmap. The different types of layers are described below.
 
 ===Height layer===
 
-Height layers are 8 bit grayscale images that describe the height of each point of the map as a number in the [0, 255] interval. Height layer size is scalable. OpenTTD will also scale the height information depending on the optional fields of the height layer metadata section.
+The default file name for the height layer is "height.png". Height layers are 8 bit grayscale images that describe the height of each point of the map as a number in the [0, 255] interval. Height layer size is scalable. OpenTTD will also scale the height information depending on the optional fields of the height layer metadata section.
 
 * min_desired_height: Indicates the minimum height of the resulting OpenTTD map. If set above 0, the map will have no sea at all. This value must be in the [0, 15] range. This field is optional, with a default value of 0.
 
@@ -55,7 +55,7 @@ Height layers are 8 bit grayscale images that describe the height of each point 
 
 ===Water layer===
 
-Water layers are paletted PNG images which indicate the presence or abscense of water in each tile. If a water layer is not present, OpenTTD will assume that all tiles with a resulting height of zero are sea. If the water layer is present, OpenTTD will only mark as sea those tiles indicated in the water layer (Issue: OpenTTD will flood any tiles with a height of zero in the border of the map). The water layer is scalable.
+The default file name for the water layer is "water.png". Water layers are paletted PNG images which indicate the presence or abscense of water in each tile. If a water layer is not present, OpenTTD will assume that all tiles with a resulting height of zero are sea. If the water layer is present, OpenTTD will only mark as sea those tiles indicated in the water layer (Issue: OpenTTD will flood any tiles with a height of zero in the border of the map). The water layer is scalable.
 
 Water layers include the following information:
 
@@ -67,11 +67,11 @@ Water layers include the following information:
 
 ===Road layer===
 
-Road layers are two-colour paletted PNG images that indicate the roads present in the map. The road layer is not scalable. Issue: what should we do with roads that are part of a town?
+The default file name for the road layer is "road.png". Road layers are two-colour paletted PNG images that indicate the roads present in the map. The road layer is not scalable. Issue: what should we do with roads that are part of a town?
 
 ===Canal layer===
 
-Canal layers are two-colour paletted PNG images that indicate the roads present in the map. The canal layer is not scalable.
+The default file name for the canal layer is "canal.png". Canal layers are two-colour paletted PNG images that indicate the roads present in the map. The canal layer is not scalable.
 
 
 ==Object files==
