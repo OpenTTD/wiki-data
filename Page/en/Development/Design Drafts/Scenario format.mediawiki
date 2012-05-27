@@ -1,0 +1,131 @@
+=Extended heightmap format=
+
+The extended heightmap format aims to store most of the information of a scenario (terrain, water, towns, etc) in a NewGRF agnostic way.
+
+An extended heightmap is composed of the following parts:
+
+* Metadata file: Stores datafile and layer data.
+
+* Layers: the layers store information for each one of the points in the map.
+
+* Object files: Each object file contains information about a given entity, such as towns.
+
+* Language files: Language files contain the extended heightmap name and its description. There are multiple files, one for each supported language.
+
+==Metadata file==
+
+Each layer has its own section in this file. The [height_layer] section is compulsory, since all extended heightmaps must have a height layer. Other layers are optional. Each layer section must have a file property that indicates which file contains the layer date. Some layers can also have extra properties.
+
+The [object_files] section is optional as there are no obligatory object files. It lists all object files used by the extended heightmap and the text file that contains their data.
+
+[height_layer]
+file=heightmap.png
+min_used_height=0
+max_used_height=255
+min_desired_height=0
+max_desired_height=15
+
+[water_layer]
+file=rivers.png
+
+[road_layer]
+layer=roads.png
+
+[object_files]
+town_file=town_data.txt
+tunnelbridge_file=extra_road_data.txt
+
+==Layers==
+
+Each layer stores information for each one of the points in the map in PNG format. Scalable layers are those that can be scaled to valid map sizes without a critical loss of information. Extended heightmap that include only scalable layers can have layers of any size, and they will be scaled when the game is generated.Since they contain position information, object files are treated as non scalable layers in this regard.
+
+If an extended heightmap contains one or more non scalable layers, all layers must have the same size, and it must be a valid OpenTTD map size. If these conditions are not fulfilled, OpenTTD will not be able to load the extended heightmap. The different types of layers are described below.
+
+===Height layer===
+
+Height layers are 8 bit grayscale images that describe the height of each point of the map as a number in the [0, 255] interval. Height layer size is scalable. OpenTTD will also scale the height information depending on the optional fields of the height layer metadata block.
+
+min_desired_height: Indicates the minimum height of the resulting OpenTTD map. If set above 0, the map will have no sea at all. This value must be in the [0, 15] range. This field is optional, with a default value of 0.
+
+max_desired_height: Maximum height of the resulting OpenTTD map. This value must be in the [0, 15] range. This field is optional, with a default value of 15.
+
+min_used_height: Indicates the minimum height from tle layer to take into account in the scaling. This height and all heights below this one will be converted to min_desired_height. This field is optional, with a default value of 0.
+
+max_used_height: Maximum height that OpenTTD will use to do the scaling. This height and all heights above this one will be converted to max_desired_height. This field is optional, with a default value of 255.
+
+===Water layer===
+
+Water layers are paletted PNG images which indicate the presence or abscense of water in each tile. If a water layer is not present, OpenTTD will assume that all tiles with a resulting height of zero are sea. If the water layer is present, OpenTTD will only mark as sea those tiles indicated in the water layer (Issue: OpenTTD will flood any tiles with a height of zero in the border of the map). The water layer is scalable.
+
+Water layers include the following information:
+
+No water: This is not a water tile
+
+Sea: Only tiles at zero height can be marked as sea. OpenTTD will treat any tiles marked as sea above height zero as rivers.
+
+River: Used to mark tiles as river.
+
+===Road layer===
+
+Road layers are two-colour paletted PNG images that indicate the roads present in the map. The road layer is not scalable. Issue: what should we do with roads that are part of a town?
+
+===Canal layer===
+
+Canal layers are two-colour paletted PNG images that indicate the roads present in the map. The canal layer is not scalable.
+
+
+==Object files==
+
+Object files contain text data associated to a given game entity.
+
+===Town file===
+
+The town file lists all towns included in the extended heightmap along with their position and properties. If this object file is not present, towns will be randomly generated accordingly to the current OpenTTD settings. There is a [town] section for each town, and it includes the following properties:
+
+[town]
+name=Town Name 1
+posx=59
+posy=12
+city=false
+layout=3
+buildings=32
+
+name: Town name.
+
+posx: X position of the town.
+
+posy: Y position of the town.
+
+city: True iff the town will grow faster than other towns.
+
+layout: Road layout to use in this town. 0 means original, 1 is better roads, 2 is 2x2 grid, 3 is 3x3 grid and 4 is random.
+
+buildings: Number of buildings that this town will have.
+
+===Tunnel and bridge file===
+
+This file stores all road tunnels and bridges. It should be present if the extended heightmap has a road layer.
+
+[tunnel]
+posx=34
+posy=59
+
+[bridge]
+posx=12
+posy=95
+direction=2
+length=12
+
+===Aqueduct and lock file===
+
+This file stores all aqueducts and locks. It should be present if the extended heightmap has a canal layer.
+
+[lock]
+posx=329
+posy=571
+direction=0
+
+[aqueduct]
+posx=12
+posy=950
+direction=2
