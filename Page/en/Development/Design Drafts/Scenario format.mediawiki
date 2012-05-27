@@ -16,7 +16,7 @@ An extended heightmap is composed of the following parts:
 
 The metadata file must be called "metadata.txt". Each layer has its own section in this file. The [height_layer] section is compulsory, since all extended heightmaps must have a height layer. Other layers are optional. Each layer section can have a file property that indicates which file contains the layer date if not included, a default file name will be used. Some layers can also have extra properties.
 
-The [object_files] section is optional as there are no obligatory object files. It lists all object files used by the extended heightmap and the text file that contains their data.
+Object files have also their own section. Their file property is also optional; if not included they will use the default file name.
 
 <pre>[height_layer]
 file=heightmap.png
@@ -31,9 +31,11 @@ file=rivers.png
 [road_layer]
 layer=roads.png
 
-[object_files]
-town_file=town_data.txt
-tunnelbridge_file=extra_road_data.txt</pre>
+[town_file]
+file=town_data.txt
+
+[tunnelbridge_file]
+file=extra_road_data.txt</pre>
 
 ==Layers==
 
@@ -80,7 +82,7 @@ Object files contain text data associated to a given game entity.
 
 ===Town file===
 
-The town file lists all towns included in the extended heightmap along with their position and properties. If this object file is not present, towns will be randomly generated accordingly to the current OpenTTD settings. There is a [town] section for each town, and it includes the following properties:
+The default file name for the town object file is "town.txt". The town file lists all towns included in the extended heightmap along with their position and properties. If this object file is not present, towns will be randomly generated accordingly to the current OpenTTD settings. There is a [town] section for each town, and it includes the following properties:
 
 <pre>[town]
 name=Town Name 1
@@ -104,7 +106,7 @@ buildings=32</pre>
 
 ===Tunnel and bridge file===
 
-This file stores all road tunnels and bridges. It should be present if the extended heightmap has a road layer.
+The default file name for the tunnel and bridge object file is "tunnelbridge.txt". This file stores all road tunnels and bridges. It should be present if the extended heightmap has a road layer.
 
 <pre>[tunnel]
 posx=34
@@ -118,7 +120,7 @@ length=12</pre>
 
 ===Aqueduct===
 
-This file stores all aqueducts. It should be present if the extended heightmap has a canal layer.
+The default file name for the aqueduct object file is "aqueduct.txt". This file stores all aqueducts. It should be present if the extended heightmap has a canal layer.
 
 <pre>[aqueduct]
 posx=12
