@@ -1,6 +1,6 @@
 =Extended heightmap format=
 
-The extended heightmap format aims to store most of the information of a scenario (terrain, water, towns, etc) in a NewGRF agnostic way. Since company property is not intended to be part of scenarios, this format will not be including it.
+The extended heightmap format aims to store most of the information of a scenario (terrain, water, towns, etc) in a NewGRF agnostic way. Since company property is not intended to be part of scenarios, this format will not be including it. Depending on the information included in the extended heightmap it will be possible to scale the extended heightmap to different sizes or it will be fixed.
 
 An extended heightmap is distributed as a tar file. The file includes the following parts:
 
@@ -20,6 +20,10 @@ The metadata file must be called "metadata.txt".
 
 The first section includes information about the extended heightmap itself.
 
+* Width: By default, the extended heightmap will be scaled to this width. The user can still choose which width to use. This information will be ignored if the heightmap is not scalable.
+
+* Height: By default, the extended heightmap will be scaled to this height. The user can still choose which height to use. This information will be ignored if the heightmap is not scalable.
+
 * Rotation: Indicates the preferred orientation for the extended heightmap. The possible values are "cw" (clockwise rotation) or "ccw" (counter clockwise rotation). OpenTTD will select this orientation automatically, but it will still allow the user to change the orientation. This property is optional.
 
 * Climate: By default, the extended heightmap will use this climate. OpenTTD will select this climate automatically, but it will still allow the user to change the climate. This property can use the following values: "temperate", "arctic", "tropical" and "toyland". This property is optional.
@@ -37,6 +41,8 @@ Each object file has its own section. Their file property is also optional; if n
 Example of format for the metadata file:
 
 <pre>[extended_heightmap]
+width=128
+height=256
 orientation=ccw
 climate=arctic
 snowline=12
