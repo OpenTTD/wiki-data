@@ -2,6 +2,10 @@
 
 The extended heightmap format aims to store most of the information of a scenario (terrain, water, towns, etc) in a NewGRF agnostic way. Since company property is not intended to be part of scenarios, this format will not be including it. Depending on the information included in the extended heightmap it will be possible to scale the extended heightmap to different sizes or it will be fixed.
 
+
+NOTE: Unless mentioned otherwise, all properties are optional.
+
+
 An extended heightmap is distributed as a tar file. The file includes the following parts:
 
 * Metadata file: Stores datafile and layer data.
@@ -24,11 +28,11 @@ The first section includes information about the extended heightmap itself.
 
 * Height: By default, the extended heightmap will be scaled to this height. The user can still choose which height to use. This information will be ignored if the heightmap is not scalable.
 
-* Rotation: Indicates the preferred orientation for the extended heightmap. The possible values are "cw" (clockwise rotation) or "ccw" (counter clockwise rotation). OpenTTD will select this orientation automatically, but it will still allow the user to change the orientation. This property is optional.
+* Rotation: Indicates the preferred orientation for the extended heightmap. The possible values are "cw" (clockwise rotation) or "ccw" (counter clockwise rotation). OpenTTD will select this orientation automatically, but it will still allow the user to change the orientation.
 
-* Climate: By default, the extended heightmap will use this climate. OpenTTD will select this climate automatically, but it will still allow the user to change the climate. This property can use the following values: "temperate", "arctic", "tropical" and "toyland". This property is optional.
+* Climate: By default, the extended heightmap will use this climate. OpenTTD will select this climate automatically, but it will still allow the user to change the climate. This property can use the following values: "temperate", "arctic", "tropical" and "toyland".
 
-* Snowline: Default snowline for the extended heightmap. This value will be ignored if the climate is not set to subarctic, or if the extended heightmap is loaded with a snowline NewGRF. OpenTTD will select this snowline automatically, but it will still allow the user to change the snowline. This property must be in the [0, 15] range. This property is optional.
+* Snowline: Default snowline for the extended heightmap. This value will be ignored if the climate is not set to subarctic, or if the extended heightmap is loaded with a snowline NewGRF. OpenTTD will select this snowline automatically, but it will still allow the user to change the snowline. This property must be in the [0, 15] range.
 
 ===Layer sections===
 
@@ -38,7 +42,7 @@ All included layers must have their own section in this file. The [height_layer]
 
 Each object file has its own section. Their file property is also optional; if not included they will use the default file name. The section must be present even if it is empty, otherwise OpenTTD will ignore the object file.
 
-Example of format for the metadata file:
+===Example of metadata file===
 
 <pre>[extended_heightmap]
 width=128
@@ -75,23 +79,27 @@ If an extended heightmap contains one or more non scalable layers, all layers mu
 ===Height layer===
 
 Metadata section: [height_layer]
+
 Default filename: height.png
+
 Scalable: Yes
 
 Height layers are 8 bit grayscale images that describe the height of each point of the map as a number in the [0, 255] interval. OpenTTD will scale the height information depending on the optional fields of the height layer metadata section.
 
-* min_desired_height: Indicates the minimum height of the resulting OpenTTD map. If set above 0, the resulting map will have no sea at all. This property must be in the [0, 15] range. This property is optional, with a default value of 0.
+* min_desired_height: Indicates the minimum height of the resulting OpenTTD map. If set above 0, the resulting map will have no sea at all. This property must be in the [0, 15] range. This property has a default value of 0.
 
-* max_desired_height: Maximum height of the resulting OpenTTD map. This property must be in the [0, 15] range. This property is optional, with a default value of 15.
+* max_desired_height: Maximum height of the resulting OpenTTD map. This property must be in the [0, 15] range. This property has a default value of 15.
 
-* min_used_height: Indicates the minimum height from tle layer to take into account in the scaling. This height and all heights below this one will be converted to min_desired_height. This property must be in the [0, 255] range. This property is optional, with a default value of 0.
+* min_used_height: Indicates the minimum height from tle layer to take into account in the scaling. This height and all heights below this one will be converted to min_desired_height. This property must be in the [0, 255] range. This property has a default value of 0.
 
-* max_used_height: Maximum height that OpenTTD will use to do the scaling. This height and all heights above this one will be converted to max_desired_height. This property must be in the [0, 255] range. This property is optional, with a default value of 255.
+* max_used_height: Maximum height that OpenTTD will use to do the scaling. This height and all heights above this one will be converted to max_desired_height. This property must be in the [0, 255] range. This property has a default value of 255.
 
 ===Terrain layer===
 
 Metadata section: [terrain_layer]
+
 Default filename: terrain.png
+
 Scalable: Yes
 
 The terrain layer is a paletted PNG image that stores information about the terrain type of each one of the tiles.
@@ -105,7 +113,9 @@ The terrain layer is a paletted PNG image that stores information about the terr
 ===Water layer===
 
 Metadata section: [water_layer]
+
 Default filename: water.png
+
 Scalable: Yes
 
 Water layers are paletted PNG images which indicate the presence or abscense of water in each tile. If a water layer is not present, OpenTTD will assume that all tiles with a resulting height of zero are sea. If the water layer is present, OpenTTD will only mark as sea those tiles indicated in the water layer (Issue: OpenTTD will flood any tiles with a height of zero in the border of the map).
@@ -179,21 +189,21 @@ The town file lists all towns included in the extended heightmap along with thei
 name=Town Name 1
 posx=59
 posy=12
+buildings=32
 city=false
-layout=random
-buildings=32</pre>
+layout=random</pre>
 
-* name: Town name.
+* posx: X position of the town. This property is obligatory.
 
-* posx: X position of the town.
+* posy: Y position of the town. This property is obligatory.
 
-* posy: Y position of the town.
+* name: Town name. If missing, a random town name (with the selected town name generator) will be used.
 
-* city: True iff the town will grow faster than other towns.
+* buildings: Number of buildings that this town will have. If missing, the default size for current OpenTTD settings will be used.
 
-* layout: Road layout to use in this town. It can be "original", "better" (better roads), "2x2", "3x3" and "random".
+* city: True iff the town will grow faster than other towns. The default value is "false".
 
-* buildings: Number of buildings that this town will have.
+* layout: Road layout to use in this town. It can be "original", "better" (better roads), "2x2", "3x3" and "random". If this property is missing, the current layout chosen in OpenTTD options will be used.
 
 ===Tunnel and bridge file===
 
@@ -201,7 +211,7 @@ Metadata section: [tunnelbridge_file]
 
 Default filename: tunnelbridge.txt
 
-This file stores all road tunnels and bridges.
+This file stores all road tunnels and bridges. All properties are obligatory.
 
 <pre>[tunnel]
 posx=34
@@ -219,7 +229,7 @@ Metadata section: [aqueduct_file]
 
 Default filename: aqueduct.txt
 
-This file stores all aqueducts.
+This file stores all aqueducts. All properties are obligatory.
 
 <pre>[aqueduct]
 posx=12
