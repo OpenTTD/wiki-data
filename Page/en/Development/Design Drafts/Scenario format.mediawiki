@@ -22,11 +22,11 @@ The metadata file must be called "metadata.txt".
 
 ===Extended heightmap section===
 
-The first section includes information about the extended heightmap itself. The height_levels, min_desired_height and max_desired height properties are used for scaling all height information present in the extended heightmap. All heights defined in the extended heightmap must be lower than the height_levels property. When an OpenTTD map is generated with the extended heightmap, all height values will be scaled from the extended heightmap format to an interval defined by the min_desired_height and max_desired_height values. None of these values will be scaled.
+The first section includes information about the extended heightmap itself. The max_height, min_desired_height and max_desired height properties are used for scaling all height information present in the extended heightmap. All heights defined in the extended heightmap must be equal or lower than the max_height property. When an OpenTTD map is generated with the extended heightmap, all height values will be scaled from the extended heightmap format to an interval defined by the min_desired_height and max_desired_height values. None of these values will be scaled.
 
 * version: This property specifies the format version used by the extended heightmap. It is a simple numerical value that will be increased whenever any format-breaking changes are introduced. It must be present in all extended heightmaps.
 
-* height_levels: This property indicates the maximum height level of the values defined in the extended heightmap. If not present, it will be assumed to be 16. It can take values in the [1, 256] interval.
+* max_height: This property indicates the maximum height level of the values defined in the extended heightmap. If not present, it will be assumed to be 255. It can take values in the [0, 255] interval.
 
 * min_desired_height: Indicates the minimum height of the resulting OpenTTD map. If set above 0, the resulting map will have no sea at all. This property must be in the [0, 14] range, and it must be smaller than max_desired_height. This property has a default value of 0.
 
@@ -40,11 +40,11 @@ The first section includes information about the extended heightmap itself. The 
 
 * climate: By default, the extended heightmap will use this climate. OpenTTD will select this climate automatically, but it will still allow the user to change the climate. This property can use the following values: "temperate", "arctic", "tropical" and "toyland".
 
-* Snowline: Default snowline for the extended heightmap. This value will be ignored if the climate is not set to subarctic, or if the extended heightmap is loaded with a snowline NewGRF. OpenTTD will select this snowline automatically, but it will still allow the user to change the snowline. This property must be in the [0, 15] range.
+* Snowline: Default snowline for the extended heightmap. This value will be ignored if the climate is not set to subarctic, or if the extended heightmap is loaded with a snowline NewGRF. OpenTTD will select this snowline automatically, but it will still allow the user to change the snowline. This property must be in the [0, max_height] range.
 
 ===Layer sections===
 
-All included layers must have their own section in this file. The [height_layer] section is compulsory, since all extended heightmaps must have a height layer. Other layers are optional. Each layer section can have a file property that indicates which file contains the layer date if not included, a default file name will be used. Some layers can also have extra properties. Note that even if a layer has no extra properties and uses the default file name, it must still have an empty section. Otherwise OpenTTD will ignore the layer.
+All included layers must have their own section in this file. The [height_layer] section is compulsory, since all extended heightmaps must have a height layer. Other layers are optional. Each layer section can have a file property that indicates which file contains the layer date if not included, a default file name will be used. Layers can also have extra properties. Note that even if a layer has no extra properties and uses the default file name, it must still have an empty section. Otherwise OpenTTD will ignore the layer.
 
 ===Object file sections===
 
@@ -63,10 +63,6 @@ snowline=12
 
 [height_layer]
 file=heightmap.png
-min_used_height=0
-max_used_height=255
-min_desired_height=0
-max_desired_height=15
 
 [water_layer]
 file=rivers.png
