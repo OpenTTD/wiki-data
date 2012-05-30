@@ -22,17 +22,23 @@ The metadata file must be called "metadata.txt".
 
 ===Extended heightmap section===
 
-The first section includes information about the extended heightmap itself.
+The first section includes information about the extended heightmap itself. The height_levels, min_desired_height and max_desired height properties are used for scaling all height information present in the extended heightmap. All heights defined in the extended heightmap must be lower than the height_levels property. When an OpenTTD map is generated with the extended heightmap, all height values will be scaled from the extended heightmap format to an interval defined by the min_desired_height and max_desired_height values. None of these values will be scaled.
 
-* Version: This property specifies the format version used by the extended heightmap. It is a simple numerical value that will be increased whenever any format-breaking changes are introduced. It must be present in all extended heightmaps.
+* version: This property specifies the format version used by the extended heightmap. It is a simple numerical value that will be increased whenever any format-breaking changes are introduced. It must be present in all extended heightmaps.
 
-* Width: By default, the extended heightmap will be scaled to this width. The user can still choose which width to use. This information will be ignored if the heightmap is not scalable.
+* height_levels: This property indicates the maximum height level of the values defined in the extended heightmap. If not present, it will be assumed to be 16. It can take values in the [1, 256] interval.
 
-* Height: By default, the extended heightmap will be scaled to this height. The user can still choose which height to use. This information will be ignored if the heightmap is not scalable.
+* min_desired_height: Indicates the minimum height of the resulting OpenTTD map. If set above 0, the resulting map will have no sea at all. This property must be in the [0, 14] range, and it must be smaller than max_desired_height. This property has a default value of 0.
 
-* Rotation: Indicates the preferred orientation for the extended heightmap. The possible values are "cw" (clockwise rotation) or "ccw" (counter clockwise rotation). OpenTTD will select this orientation automatically, but it will still allow the user to change the orientation.
+* max_desired_height: Maximum height of the resulting OpenTTD map. This property must be in the [1, 15] range, and it must be greater than min_desired_height. This property has a default value of 15.
 
-* Climate: By default, the extended heightmap will use this climate. OpenTTD will select this climate automatically, but it will still allow the user to change the climate. This property can use the following values: "temperate", "arctic", "tropical" and "toyland".
+* width: By default, the extended heightmap will be scaled to this width. The user can still choose which width to use. This information will be ignored if the heightmap is not scalable.
+
+* height: By default, the extended heightmap will be scaled to this height. The user can still choose which height to use. This information will be ignored if the heightmap is not scalable.
+
+* rotation: Indicates the preferred orientation for the extended heightmap. The possible values are "cw" (clockwise rotation) or "ccw" (counter clockwise rotation). OpenTTD will select this orientation automatically, but it will still allow the user to change the orientation.
+
+* climate: By default, the extended heightmap will use this climate. OpenTTD will select this climate automatically, but it will still allow the user to change the climate. This property can use the following values: "temperate", "arctic", "tropical" and "toyland".
 
 * Snowline: Default snowline for the extended heightmap. This value will be ignored if the climate is not set to subarctic, or if the extended heightmap is loaded with a snowline NewGRF. OpenTTD will select this snowline automatically, but it will still allow the user to change the snowline. This property must be in the [0, 15] range.
 
@@ -48,6 +54,7 @@ Each object file has its own section. Their file property is also optional; if n
 
 <pre>[extended_heightmap]
 version=1
+height_levels=16
 width=128
 height=256
 orientation=ccw
@@ -89,11 +96,7 @@ Scalable: Yes
 
 Height layers are 8 bit grayscale images that describe the height of each point of the map as a number in the [0, 255] interval. OpenTTD will scale the height information depending on the optional fields of the height layer metadata section.
 
-* min_desired_height: Indicates the minimum height of the resulting OpenTTD map. If set above 0, the resulting map will have no sea at all. This property must be in the [0, 15] range. This property has a default value of 0.
-
-* max_desired_height: Maximum height of the resulting OpenTTD map. This property must be in the [0, 15] range. This property has a default value of 15.
-
-* min_used_height: Indicates the minimum height from tle layer to take into account in the scaling. This height and all heights below this one will be converted to min_desired_height. This property must be in the [0, 255] range. This property has a default value of 0.
+* min_used_height: Indicates the minimum height from the layer to take into account in the scaling. This height and all heights below this one will be converted to min_desired_height. This property must be in the [0, 255] range. This property has a default value of 0.
 
 * max_used_height: Maximum height that OpenTTD will use to do the scaling. This height and all heights above this one will be converted to max_desired_height. This property must be in the [0, 255] range. This property has a default value of 255.
 
