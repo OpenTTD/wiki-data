@@ -127,13 +127,25 @@ Send an answer to a previous query, it will be sent to who has made the query to
 |}
 
 =='''SCPLib::Check'''()==
-You must include a call to this function in the main loop. This function scanns for incomming communication signs and if there is any incomming messages the registred callback functions are called.
+You must include a call to this function in the main loop. This function scans for incoming communication signs and if there is any incoming messages the registered callback functions are called. Check() has been designed so that when one task such as handling a incoming message has been done, it returns. If there is more work to do (eg. incoming messages), it will return true to indicate this, otherwise false. So if you have time and prioritize quick responses on SCP communication, you should do something like this: while(my_scp.Check()) { }.
 {|border="0" padding="4" class="wikitable"
 !scope="col" |
 !scope="col" |
 |-
 |''result''
-|void
+|true if there are more tasks for the lib to do, otherwise false
+|}
+
+=='''SCPLib::SetEventHandling'''(enable)==
+Enable or disable the handling of events by the lib (defaults to disabled).
+If enabled, the library will read and discard events from OpenTTD by itself when you call Check(). This is recommended if you don't call [AI/GS]EventController.GetNextEvent().
+If this setting is disabled, the library will get informed about events automagically when you call [AI/GS]EventController.GetNextEvent().
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|enable
+|true to enable handling of events by the lib, false if your script handle events itself
 |}
 
 =='''SCPLib::SetAIAIProtocol'''(enable)==
