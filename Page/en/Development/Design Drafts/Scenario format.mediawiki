@@ -16,6 +16,16 @@ An extended heightmap is distributed as a tar file. The file includes the follow
 
 * Language files: Language files contain the extended heightmap name and its description. There are multiple files, one for each supported language.
 
+==Scaling==
+
+In an extended heightmap, we have two different types of scaling.
+
+===Size scaling===
+
+The extended heightmap has multiple files that include information about the map. Some of these files are called "scalable in size". This means that OpenTTD is able to scale their size to a desired OpenTTD size without a (big) loss of information. As long as the extended heightmap only contains files that are scalable in size, each one of them can have a different size. OpenTTD will just scale all of them to the same size.
+
+If an extended heightmap contains one or more files that cannot be scaled in size, all files must use the same size, and it must be a valid OpenTTD map size. If these conditions are not fulfilled, OpenTTD will not be able to load the extended heightmap.
+
 ==Metadata file==
 
 The metadata file must be called "metadata.txt".
@@ -85,9 +95,7 @@ file=road_tunnel_file.txt</pre>
 
 ==Layers==
 
-Each layer stores information for each one of the points in the map in PNG format. Scalable layers are those that can be scaled to valid map sizes without a critical loss of information. Extended heightmap that include only scalable layers can have layers of any size, and they will be scaled when the game is generated.
-
-If an extended heightmap contains one or more non scalable layers, all layers must have the same size, and it must be a valid OpenTTD map size. If these conditions are not fulfilled, OpenTTD will not be able to load the extended heightmap. Since they contain position information, object files are treated as non scalable layers in this regard. The different types of layers are described below.
+Each layer stores information for each one of the points in the map in PNG format. The different types of layers are described below.
 
 ===Height layer===
 
