@@ -26,13 +26,19 @@ The extended heightmap has multiple files that include information about the map
 
 If an extended heightmap contains one or more files that cannot be scaled in size, all files must use the same size, and it must be a valid OpenTTD map size. If these conditions are not fulfilled, OpenTTD will not be able to load the extended heightmap.
 
+===Height scaling===
+
+Height scaling is completely independent from size scaling. It always takes place, no matter if the files that form the extended heightmap are size scalable or not.
+
+All heights in an extended heightmap are defined between 0 and a property called "max_height". The extended heightmap includes two properties that define the desired lower height and higher height of the resulting OpenTTD map. They are called "min_desired_height" and "max_desired_height". When OpenTTD generates a game from the extended heightmap version, it will scale all heights from the extended heightmap interval ([0, max_height]) to the desired OpenTTD height interval [min_desired_height, max_desired_height].
+
 ==Metadata file==
 
 The metadata file must be called "metadata.txt".
 
 ===Extended heightmap section===
 
-The first section includes information about the extended heightmap itself. The max_height, min_desired_height and max_desired height properties are used for scaling all height information present in the extended heightmap. All heights defined in the extended heightmap must be equal or lower than the max_height property. When an OpenTTD map is generated with the extended heightmap, all height values will be scaled from the extended heightmap format to an interval defined by the min_desired_height and max_desired_height values. None of these values will be scaled.
+The first section includes information about the extended heightmap itself.
 
 * version: This property specifies the format version used by the extended heightmap. It is a simple numerical value that will be increased whenever any format-breaking changes are introduced. It must be present in all extended heightmaps.
 
