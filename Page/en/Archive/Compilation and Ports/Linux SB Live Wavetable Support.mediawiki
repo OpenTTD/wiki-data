@@ -1,8 +1,8 @@
 [[Category:en/Manual/Installation]]
 
-It is possible to get OpenTTD to play music using the wavetable feature of a SB Live card (aka Awe32/64 or Emu10k1).  This method does not use timidity and therefore does not hammer the CPU.
+It is possible to get OpenTTD to play music using the wavetable feature of a SB Live card (aka Awe32/64 or Emu10k1).
 
-These instructions are written for Ubuntu Feisty (7.04), so adjust as necessary for your distribution.
+These instructions are written for Ubuntu 11.10 (Oneiric Ocelot), so adjust as necessary for your distribution.
 
 ===Requirements===
 
@@ -10,20 +10,13 @@ You will need the following:
 
 ;<tt>asfxload</tt>:Provided by the <tt>awesfx</tt> package.
 ;<tt>aplaymidi</tt>:Provided by the <tt>alsa-utils</tt> package.
-;A Sound Font:These can be found on the CD that came with your soundcard, or somewhere on your Windows partition if you have one.  This example uses the file <tt>8mbgmsfx.sf2</tt>.
+;a sound font:These can be found on the CD that came with your soundcard, or somewhere on your Windows partition if you have one.  This example uses the file <tt>8mbgmsfx.sf2</tt>.
 
 ===Load the Soundfont onto the card===
 
 Put the soundfont into <tt>/usr/share/sounds/sf2/</tt>, then run
 <pre>asfxload 8mbgmsfx</pre>
 to load the soundfont onto the sound card.
-
-You can make this load automatically at bootup by adding the following to an appropriate file in <tt>/etc/modprobe.d/</tt> (e.g. <tt>/etc/modprobe.d/local</tt>)
-<pre>
-# Load soundfont when module is loaded.
-install snd-emu10k1-synth /sbin/modprobe --ignore-install snd-emu10k1-synth $CMDLINE_OPTS ; \
-        sleep 5 ; /usr/bin/asfxload 8mbgmsfx ;
-</pre>
 
 ===Configure aplaymidi===
 
@@ -45,30 +38,25 @@ Note the port for Emu10k1 Port 0 (17:0 in this example)
 Run the following substituting the port above.
 <pre>export ALSA_OUTPUT_PORTS="17:0"</pre>
 
-You should now be able to use aplaymidi to play one of the gm files from the gm directory.
+You should now be able to use aplaymidi to play one of the music files from the gm directory.  If you can't hear anyting, check your mixer settings and ensure that the synth input is unmuted and turned up.
 
 ===Configure OpenTTD===
 
 Assuming that worked correctly, the last step is to edit <tt>~/.openttd/openttd.cfg</tt> to make OpenTTD use aplaymidi instead of timidity.
 
-In the [music] section set the extmidi line to:
-<pre>extmidi = /usr/bin/aplaymidi</pre>
+In the [misc] section set the musicdriver line to:
+<pre>musicdriver = "extmidi:cmd=aplaymidi"</pre>
 
 You should now have midi sound working in OpenTTD without it eating up all your CPU time.
 
-To automate setting the port, create a shell script somewhere (e.g. <tt>/usr/games/openttd.sh</tt>) with the following:
+=== Automating everything ===
+
+To automate loading the soundfont and setting the port, create a shell script somewhere (e.g. <tt>/usr/games/openttd.sh</tt>) as follows:
 <pre>
 #!/bin/bash
 
-APLAYMIDI='/usr/bin/aplaymidi'
-
-if [ ! -x $APLAYMIDI ]; then
-        echo "Error: Cannot execute $APLAYMIDI"
-        exit 1
-fi
-
-export ALSA_OUTPUT_PORTS=`$APLAYMIDI -l | grep "Emu10k1 Port 0" | awk '{print $1}'`
-
-exec /usr/games/openttd
+asfxload 8mbgmsfx
+export ALSA_OUTPUT_PORTS=`aplaymidi -l | awk '/Emu/ { print $1; exit }'`
+exec openttd
 </pre>
 Now use this to launch OpenTTD.
