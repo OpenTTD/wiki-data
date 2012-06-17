@@ -1,4 +1,147 @@
 [[Translation:en/Community/Railway Designs]]
-ABY STWORZYĆ SKŁAD KOLEJOWY WYSTARCZY WYPIERDALAĆ NA ANTARKTYDE I WYRZUCIC KOMPA DO WODY.
+{{pl/Tłumaczenie|oryg. = en/Manual/Railway construction
+|z     = en
+|Postępy = 0}}
+{{pl/Manual/Spis treści}}
+{{en/Warning| Stronka gotowa do tłumaczenia zapraszam.}}
 
-Ten tekst to oczywiście tylko myśle że śmieszny żart :), poprawny: http://demotywatory.com/i/c/1315568912_92.jpg
+=Pojemność (nośność) twoich sieci transportowych=
+Ta strona ma być opisem teoretycznych przykładów pozwalających zwiększyć przepustowość określonej sieci transportu lądowego.Oczywiście o wiele ważniejsze będzie rozmieszczenie węzłów i rozplanowanie przebiegu sieci lecz jej przepustowość też ma duże znaczenie. 
+
+
+==Rozstaw semaforów (SD)==
+Jest to dość oczywiste. Im dalej od siebie ustawione są sygnalizatory tym mniejsza jest przepustowość trakcji wynikająca z przeciętnej prędkości pociągów na objętych sygnalizacją odcinkach. With an '''SD''' of one signal every N tiles, minimalny odstęp pomiędzy dwoma pociągami jadącymi z pełną prędkością nie może być mniejszy niż N+1 (rys.1). On diagonal track one signal every 2N "half tiles" or N "full tiles" the minimum gap cannot be less than 2N+1 "half tiles" or N+1/2 "full tiles". Gdy pociągi są tak blisko siebie , osiągasz teoretycznie maximum pojemności danej trakcji co w praktyce jest raczej niemożliwe.
+[[File:en/Community/Pat Fig1.png|frame|none|Figure 1: Minimum train gap of five from a signal distance of four]]
+
+[[File:en/Community/Pat Fig2.png|frame|right|Figure 2: Signalling gap inefficiency]]
+One important consideration is consistency. The capacity of a track is determined by whichever individual signal gap is the largest. Thus, a track with one signal every two tiles, that has an anomalous one-off gap of three or four tiles, will suffer from greatly diminished capacity and can potentially jam and violate rule 1 (Figure 2). Remember that this also holds for corners and splits/merges.
+
+===Diagonal track===
+
+In OpenTTD, trains move slower on angled track (thanks SmatZ!), and thus require an increased signal density to prevent bottlenecks. It is important that the train gap (not '''SD''') of straight and diagonal tracks is as similar as possible. Otherwise trains can jam either when going from straight to diagonal or from diagonal to straight track.
+
+A quick experiment showed that in the same time a train moves 2 tiles on straight track, an equally fast train moves about 3 "half tiles" on diagonal track. So if using a certain autosignal setting, you will probably need to manually increase the signal density on any angled rail you have.
+
+The following examples have been created under the assumption that the length of the train also changes on diagonal track. This seems to be true for only some NewGRFs! (Iirc, it is true for the JapanSet and wrong for the default trains.)
+
+* An autosignal setting of 3 gives a minimum train gap of 4. This translates to a minimum diagonal train gap of 6 "half tiles", which can be achieved by placing signals with a distance of 5 "half tiles" (or by twice placing signals with an autosignal setting of 5).
+
+* An autosignal setting of 2 gives a minimum train gap of 3. This translates to a minimum diagonal train gap of 4.5 "half tiles". A diagonal train gap of 5 "half tiles" can be achieved by placing signals with a distance of 4 "half tiles" or with an autosignal setting of approximately 2. A diagonal train gap of 4 "half tiles" can be achieved by placing signals with a distance of 3 "half tiles" (or by twice placing signals with an autosignal setting of 3). Though this '''SD''' doesn't have a exact counterpart on diagonal track the deviation between straight and diagonal track is just 1/3 tile and the same autosignal setting can be used for straight and diagonal track.
+
+* An autosignal setting of 1 gives a minimum train gap of 2. This translates to a minimum diagonal train gap of 3 "half-tiles", which can be achieved by placing signals with a distance of 2 "half tiles" or with an autosignal setting of 1. Here the same autosignal setting is used for straight and diagonal track, too.
+
+===So what signal distance should I use?===
+* Two tiles <BR>A '''SD''' of two gives a minimum gap of 3, and is the optimal practical solution.
+
+*One tile <BR>A '''SD''' of one is fraught with problems. Even a track split causes a signalling gap. It would be possible to join angled rails with a signal gap of 1, but this would result in a considerable increase in build complexity.
+
+* Half tile <BR>Angled track is capable of double density signals. This may be of theoretical interest, or for shaving a few millimeters off a near-miss situation. The biggest flaw with a half tile SD is obviously that every straight piece of track will have a bigger SD.
+
+Whatever '''SD''' you choose, keep in mind that you have to be consistent. A network with '''SD''' of 2 and a signalling gap of 3 on a frequently used track can lead to jams. It might therefore have a lower capacity than a network with a consistent '''SD''' of 3! <br style="clear:both;">
+
+==Train length (TL)==
+This is a double-edged sword. A longer train will increase the likelihood of incurring a realistic acceleration penalty, making construction more spread out and complex. However, a longer ''''TL''' increases the maximum cargo capacity of your network. Note that when using engines that have a front and rear sections, the additional 1/2 tile taken up makes shorter train lengths even less favourable. 
+
+For high-speed networks typical values of three to five tiles are normal, with four being a particular favourite, because on a track with a '''SD''' of 2 a line of '''TL'''-4 trains accelerating from standstill has a lower reaction time than trains with uneven '''TL'''.
+
+==Quantifying carrying capacity==
+===Train Density (TD)===
+Your network will carry a certain number of trains, and assuming you have a standardised train length, we can define some metrics. The '''Train Density (TD)''' for a track is given in units of trains per thousand tiles, and can be calculated by counting the number of trains on that track and dividing by the length of the track.
+
+Typical measured values for an unoptimized network of 4-tile trains are a '''TD''' of 25 (trains per 1000 tiles).
+
+The maximum '''TD''' before traffic jams become self-propagating can be measured by permitting a queue of trains to accelerate from a halt and then measuring the train-train distance when all trains have reached full speed, and using the formula 
+
+'''1000 / (TL + train gap)'''
+
+This '''critical TD''' depends on the power and number of the engines, the weight of the train, the top speed, the '''SD''' and the length of the train. Because this critical density incorporates information about acceleration and time to reach top speed, it can also tell you about the practical maximum capacity of your network. For example, using trains with a lower top speed actually makes it easier to have a dense network. The average train-train gap is much smaller for rail than for monorail or maglev. Slow doesn't mean better, however, as the reduced line density will be more than compensated for by quick turnaround times.
+
+For example, a fully-laden 4-tile [[en/Manual/Base Set/Trains/Lev4 'Chimaera'|Chimaera]] (top-end [[en/Manual/Base Set/MagLev]]) was found to have a train-train distance of 12, giving critical density of 1000/16 or 62.5. Repeating the previous example but using the electric rail [[en/Manual/Base Set/Trains/T.I.M.]] gives a train-train distance of only 6, and a critical density of 100. 
+
+It is possible to run a network at higher than the critical density, but it is ill-advised.
+
+===Theoretical Maximum Train Density===
+Simply put, this is the train density if your network is entirely filled with trains at the minimum distance between each other. You will never reach this. 
+
+This is given by ''' 1000 / (TL + SD + 1) '''
+
+For example, 4-tile trains and a signal distance of 2 will give a theoretical maximum train density of 140.
+
+==Carrying Capacity (CC)==
+Since '''TL''' alters the carrying capacity of a line, comparing '''TD''' across different '''TL''' is meaningless. In order to compare efficiency figures between different personal preferences, we need a new metric. This new metric will simply be a measure of how many units of cargo your network is transporting per year, per track. It will be directly proportional to the average quantity of cargo per track tile, and also to how fast this cargo is moving.
+
+<pre>
+CC_day = TC / ( TL + TD ) * v_travel
+CC_day = TC / ( TL + TD ) * v_kmh * 74*2/16/256*1.00584
+CC_day = TC / ( TL + TD ) * v_mph * 74*2/16/256/1.6
+</pre>
+
+'''CC_day''' = carrying capacity [in cargo units per day] is how much cargo can cross each tile in one day. This amount of cargo can be fed to the start of the line and delivered at the end of the line.
+
+'''TC''' = train capacity [in cargo units], how much cargo one train can carry.
+
+'''v_travel''' = speed [in tiles/day], '''v_kmh''' = speed [in km/h] and '''v_mph''' = speed [in mph] is the speed of the train.
+
+'''TG''' = train gap [in tiles]. For track layouts which don't inject trains to form a high-density-stream this is the critical train gap.
+
+'''TL''' = trainlength [in tiles].
+
+The [[en/Manual/Base Set/Trains/Lev4 'Chimaera'|Chimaera]] from the above example has a carrying capacity of
+<pre>CC_day=47*6*402/16*0,0056=40 Passengers/day 
+or 
+CC_day=27*6*402/16*0,0056=23 Bags of Valuables/day</pre>
+The [[en/Manual/Base Set/Trains/T.I.M.]]  from the above example has a carrying capacity of
+<pre>CC_day=40*6*150/10*0,0056=20 Passengers/day 
+or 
+CC_day=20*6*150/10*0,0056=10 Bags of Valuables/day</pre>
+
+Work on this unit is pending.
+
+=Making your network more efficient=
+Ok, so now that we've defined the parameters that we had already intuitively understood, how can we use them to improve our networks? The golden rule number 1 of network optimisation is that trains on the network never slow down. There are two possible parts of a network where this could happen, splits and merges.
+
+==Splits==
+For a track split, one must ensure that there is not a longer-than-normal signalling gap at the split point. This can be taken care of by careful or over-abundant signalling.
+
+==Merges==
+Merges present us with a unique problem. For a trivial merge, trains on the mainline could potentially be stopped by a sideline train. There is already a body of work on [http://www.openttdcoop.org/wiki/Priorities Priorities] by our colleagues in the cooperative circuit. A perusal of this link should familiarise you with the principles of priority merges.
+
+Consider a typical non-junction merge, at the exit of a pickup station. A tightly-packed optimised stream of trains enters the station, but because of differences in loading times, this order is disrupted on the station exit, and you end up with two tracks of loosely-packed trains. One of these lines, designated the main line, will have, on average, train-train gaps large enough to fit a third train into. Simply connecting the two lines together will not work, and a priority merge is required.
+
+Note that, because trains that drop off cargo always spend the same length of time at a platform, it is possible to dematerialise and reassemble a tightly packed stream of trains, even one above the critical density! (Figure 3)
+[[File:en/Community/Diamond Stream.png|thumb|800px|none|Figure 3: Dropoff with stream reassembly]]
+
+A first-pass merge using a priority block will reduce the traffic ratio from 1:1 to about 3:1 in favour of the main track (Figure 4). Adding a second priority merge straight after the first one would be a futile gesture, since trains on both lines would continue at the same speed and the mainline train would simply claim priority again. Introducing a delay by a loop of track, followed by a second priority merge, will reduce the sideline to a mere trickle of trains and will have filled in most of the available slots on the mainline. Existing solutions would involve a pre-acceleration track, however a cyclotron eliminates the need to lose momentum.
+[[File:en/Community/Priority Merge.png|frame|none|Figure 4: Priority merge]]
+
+===Cyclotrons===
+Consider a sideline that loops back on itself after a failed priority merge. A train in this loop would continue to re-test the mainline for entry conditions, once every 8 * '''TL'' tiles until it found a space large enough to merge with the main line. After the cyclotron was empty, the next waiting train could pre-accelerate and be injected into the cyclotron, ready to continue the cycle. This system has some flaws, however, as it has a capacity of one train and there will be many missed opportunities due to the train being in the wrong position in the accelerator. ''[Broken link to Simple Cyclotron removed.]'' Junctions are a large and well-trodden area of openttd; I have restricted myself to unbranched feeder structures. You will find that a highly-optimised stream of trains does NOT weather a junction well.
+
+Refinements to the cyclotron are possible. There is enough space on the track loop to contain two trains, and a system of priority signals will enable a second train to optionally enter the cyclotron. With two trains in the cyclotron, there will be a doubled chance of entering a slot on the mainline. In order to prevent a traffic jam inside the cyclotron (which would be disasterous), some delay tweaking is necessary, but the end result is exceedingly useful.
+
+The injection delay assumes that the second injected train is accelerating from standstill, and there is a small chance that second train has in fact chanced upon the cyclotron entrance at full speed. In this case, the timing will be wrong and the second train will almost certainly cause a jam within the cyclotron (and consequently on the main line). This can be compensated for by some additional signalling to filter out full-speed trains. The filtered out full-speed trains can either be diverted onto a second loop, or simply drained of momentum by a signal. 
+
+A cyclotron incorporating all the optimisations discussed, and some additional fixes, is shown in Figure 5.
+[[File:en/Community/Junctionary/Cyclotron Full.png|thumb|800px|none|Figure 5: full-featured cyclotron]]
+
+''[Broken link to a savegame removed.]''
+
+Editor's note: Whilst I would like to defend my cyclotron refinements, experimentation has proven that pre-acceleration is a more robust system. The two have been combined in the savegame linked previously.
+{{en/Feature|0.7}}
+
+===Parallel cyclotrons===
+An attempt to minimize the drawbacks of the full featured cyclotron leads to parallel, small, 1-train cyclotrons. In this design, an array of cyclotrons, each handling one train, may be fed simultaneously. They may have different loop size in order to prevent synchronization between the cycling trains, giving more chance to find a slot in the flow of the main line. Each loop still needs it own acceleration lane so the trains enter the loop at full speed. If a train happened to enter the loop at low speed, it would get a chance to join the main line at non-max speed and cause a possibly large traffic jam.
+
+Figure 6 shows a parallel cyclotron with two loops.
+[[File:en/Community/Junctionary/Parallel Cyclotron.png|thumb|800px|none|Figure 6: Parallel cyclotron]]
+
+A savegame with the example given in Figure 6 is available [http://gbizzotto.free.fr/parallel_cyclotron.sav Here] (one of the GRF files used in this savegame is not available for download at the moment) (version 0.7 or higher required to open).
+
+Advantages over the full featured cyclotron:
+* Can handle more than two trains
+* Faster fail-and-retry pace
+* No need to synchronize the looping trains
+* Easier to build and remember
+
+Drawbacks:
+* Bigger when using more than one loop
