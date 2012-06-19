@@ -112,7 +112,7 @@ A pálya osztásakor győződj meg arról, hogy a normálisnál hosszabb jelzőt
 
 ==Pályaegyesítések==
 
-A pályaegyesítés sajátos problémával szembesít minket. Egy átlagos pályaegyesítésnél a fővonal forgalmát megállíthatja egy szárnyvonali vonat. Társaink már műhelymunkával dolgoznak ezen az [http://www.openttdcoop.org/wiki/Priorities elsőbbség] témakörében. Ha a linket követed, megismerkedhetsz a pályaegyesítés elsőbbségi alapelveivel.
+A pályaegyesítés sajátos problémával szembesít minket. Egy átlagos pályaegyesítésnél a fővonal forgalmát megállíthatja egy szárnyvonali vonat. Társaink már műhelymunkával dolgoznak ezen az [http://www.openttdcoop.org/wiki/Priority elsőbbség] témakörében. Ha a linket követed, megismerkedhetsz a pályaegyesítés elsőbbségi alapelveivel.
 
 Vegyünk például egy tipikus, nem csomóponti pályaegyesítést, egy berakó állomás kijáratánál. 
 
@@ -121,7 +121,7 @@ Egy optimalizált, szoros rendben érkező vonatsor lép be az állomásra, de a
 Megjegyzendő, hogy miután a kirakodó vonatok mindig azonos időt töltenek a vágánynál, a vonatok szoros rendjének kialakítása lehetséges, akár a kritikus sűrűség felett is! (3. ábra)[[File:en/Community/Diamond Stream.png|thumb|800px|none|3. ábra: Kirakodóállomás az ágak összegyűjtésével]]
 
 A first-pass merge using a priority block will reduce the traffic ratio from 1:1 to about 3:1 in favour of the main track (Figure 4). Adding a second priority merge straight after the first one would be a futile gesture, since trains on both lines would continue at the same speed and the mainline train would simply claim priority again. Introducing a delay by a loop of track, followed by a second priority merge, will reduce the sideline to a mere trickle of trains and will have filled in most of the available slots on the mainline. Existing solutions would involve a pre-acceleration track, however a cyclotron eliminates the need to lose momentum.
-[[File:en/Community/Priority Merge.png|frame|none|Figure 4: Priority merge]]
+[[File:en/Community/Priority Merge.png|frame|none|4. ábra: Elsőbbségi pályaegyesítés]]
 
 ===Cyclotrons===
 Consider a sideline that loops back on itself after a failed priority merge. A train in this loop would continue to re-test the mainline for entry conditions, once every 8 * '''TL'' tiles until it found a space large enough to merge with the main line. After the cyclotron was empty, the next waiting train could pre-accelerate and be injected into the cyclotron, ready to continue the cycle. This system has some flaws, however, as it has a capacity of one train and there will be many missed opportunities due to the train being in the wrong position in the accelerator. ''[Broken link to Simple Cyclotron removed.]'' Junctions are a large and well-trodden area of openttd; I have restricted myself to unbranched feeder structures. You will find that a highly-optimised stream of trains does NOT weather a junction well.
@@ -131,18 +131,16 @@ Refinements to the cyclotron are possible. There is enough space on the track lo
 The injection delay assumes that the second injected train is accelerating from standstill, and there is a small chance that second train has in fact chanced upon the cyclotron entrance at full speed. In this case, the timing will be wrong and the second train will almost certainly cause a jam within the cyclotron (and consequently on the main line). This can be compensated for by some additional signalling to filter out full-speed trains. The filtered out full-speed trains can either be diverted onto a second loop, or simply drained of momentum by a signal. 
 
 A cyclotron incorporating all the optimisations discussed, and some additional fixes, is shown in Figure 5.
-[[File:en/Community/Junctionary/Cyclotron Full.png|thumb|800px|none|Figure 5: full-featured cyclotron]]
+[[File:en/Community/Junctionary/Cyclotron Full.png|thumb|800px|none|5. ábra: full-featured cyclotron]]
 
-''[Broken link to a savegame removed.]''
-
-Editor's note: Whilst I would like to defend my cyclotron refinements, experimentation has proven that pre-acceleration is a more robust system. The two have been combined in the savegame linked previously.
+'''''Editor's note:''''' Whilst I would like to defend my cyclotron refinements, experimentation has proven that pre-acceleration is a more robust system. The two have been combined in the savegame linked previously.
 {{en/Feature|0.7}}
 
 ===Parallel cyclotrons===
 An attempt to minimize the drawbacks of the full featured cyclotron leads to parallel, small, 1-train cyclotrons. In this design, an array of cyclotrons, each handling one train, may be fed simultaneously. They may have different loop size in order to prevent synchronization between the cycling trains, giving more chance to find a slot in the flow of the main line. Each loop still needs it own acceleration lane so the trains enter the loop at full speed. If a train happened to enter the loop at low speed, it would get a chance to join the main line at non-max speed and cause a possibly large traffic jam.
 
 Figure 6 shows a parallel cyclotron with two loops.
-[[File:en/Community/Junctionary/Parallel Cyclotron.png|thumb|800px|none|Figure 6: Parallel cyclotron]]
+[[File:en/Community/Junctionary/Parallel Cyclotron.png|thumb|800px|none|6. ábra: Parallel cyclotron]]
 
 A savegame with the example given in Figure 6 is available [http://gbizzotto.free.fr/parallel_cyclotron.sav Here] (one of the GRF files used in this savegame is not available for download at the moment) (version 0.7 or higher required to open).
 
