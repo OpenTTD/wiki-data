@@ -4,21 +4,25 @@
 A window is drawn on the game screen at every <code>WE_PAINT</code> [[en/OpenTTDDevBlackBook/Window/WindowEvents|window event]].
 
 ==Opening a window==
-{{en/Outdated}}
-The function <nowiki>AllocateWindowDesc</nowiki> opens a window. It should be provided with a description (<code>AllocateWindowDesc(&_mywindow_desc);</code>). It returns the window pointer of the newly created window.
+Creating a new struct of a window opens a new window. It should be provided with a doxygen comment explaining the function.
 
 ;<nowiki>Example:</nowiki>
 
 <pre>
+/**
+ * Opens a new instance of a MyNew window.
+ * @param void Any parameters required by window
+ */
 void ShowMyNewWindow(void)
 {
-	AllocateWindowDesc(&_mywindow_desc);
+	DeleteWindowByClass(window class);
+	new MyNewWindow(void);
 }
 </pre>
 
 ==Describing a window==
 
-Set up a <code>WindowDesc</code> with the name you gave <code>this->InitNested()</code>.
+Set up a <code>WindowDesc</code> with the name you gave <code>this->CreateNestedTree()</code> and <code>this->FinishInitNested()</code>.
 
 ;<nowiki>Syntax:</nowiki>
 
@@ -32,9 +36,11 @@ static const WindowDesc _mywindow_desc(
         parent window class,
         window flags
         widget parts,
-        length of widget parts
+        lengthof(widget parts)
 );
 </pre>
+
+You will also need a struct describing
 You can find plenty of examples in the source code, look in a ''*_gui.cpp'' file.
 
 ===Window positioning===
@@ -50,25 +56,26 @@ The window flags are a composition of bit values from the ''WindowDefaultFlag'' 
 
 ==Setting up widgets==
 
-:{{en/Outdated|This doesn't reflect the nested widget scheme}}
-
 :;<nowiki>Syntax:</nowiki>
 
 <pre>
-static const Widget _mywindow_widgets[] = {
-{   Widget type, flags, color, position-left, position-right, position-top, position-bottom, string/image identifier, tooltip string identifier},
+static const NWidgetPart _nested_mywindow_widgets[] = {
+        NWidget(nwid),
+                 NWidget(wwt, colour, wid), SetDataTip(STR_NULL, STR_TOOLTIP_WINDOW_TITLE_DRAG_THIS),
+        EndContainer(),
 };
 </pre>
 
 :;<nowiki>Example:</nowiki>
 
 <pre>
-static const Widget _mywindow_widgets[] = {
-{   WWT_CLOSEBOX,   RESIZE_NONE,    14,     0,    10,     0,    13, STR_00C5,         STR_018B_CLOSE_WINDOW},
-{    WWT_CAPTION,   RESIZE_NONE,    14,    11,   419,     0,    13, STR_015B_OPENTTD, STR_NULL},
-{      WWT_PANEL,   RESIZE_NONE,    14,     0,   419,    14,   271, 0x0,              STR_NULL},
-{      WWT_FRAME,   RESIZE_NONE,    14,     5,   414,    40,   245, STR_NULL,         STR_NULL},
-{    WIDGETS_END},
+static const NWidgetPart _nested_mywindow_widgets[] = {
+	NWidget(NWID_HORIZONTAL),
+		NWidget(WWT_TEXT, COLOUR_MAUVE), SetDataTip(STR_NEWGRF_SETTINGS_SELECT_PRESET, STR_NULL),
+				SetPadding(0, WD_FRAMETEXT_RIGHT, 0, 0),
+		NWidget(WWT_DROPDOWN, COLOUR_YELLOW, WID_NS_PRESET_LIST), SetFill(1, 0), SetResize(1, 0),
+				SetDataTip(STR_JUST_STRING, STR_NEWGRF_SETTINGS_PRESET_LIST_TOOLTIP),
+	EndContainer(),
 };
 </pre>
 
@@ -238,24 +245,22 @@ Quote from <code>window.h</code> lines 16 onwards:
 :;<code>WIDG_LOWERED</code>
 :Widget pressed
 
-===Colors===
+===Colours===
 
 ''For a list of available colors, see [[en/Archive/Source/OpenTTDDevBlackBook/Window/Colours]].''
 
 ==Maintaining the window==
 
-Set up a window procedure to be run each time <code>WE_PAINT</code> is called.
+Define what to do with the window in a struct, with a constructor
 
 :;<nowiki>Example:</nowiki>
 
 <pre>
-static void MyWindowProc(Window *w, WindowEvent *e)
-{
-	switch (e->event) {
-		case WE_PAINT: {
-			DrawWindowWidgets(w);
-		}	break;
-	}
+struct MyNewWindow {
+        MyNewWindow()
+        {
+        }
+        ....
 }
 </pre>
 
