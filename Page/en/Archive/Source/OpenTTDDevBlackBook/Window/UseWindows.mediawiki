@@ -51,9 +51,6 @@ A window class is a unique number that represents a (set of) windows, for exampl
 
 The list of available window classes is defined by the ''WindowClass'' enum, in ''src/window_type.h''.
 
-===Flags===
-The window flags are a composition of bit values from the ''WindowDefaultFlag'' enum also defined in ''src/window_gui.h''. Use 0 if none of the flags apply.
-
 ==Setting up widgets==
 
 :;<nowiki>Syntax:</nowiki>
@@ -139,14 +136,6 @@ static const NWidgetPart _nested_mywindow_widgets[] = {
 ;<code>WWT_CLOSEBOX</code>
 :The button for closing a window.
 
-;<code>WWT_LAST</code>
-:
-{{en/Todo|-Include an explanation.}}
-
-;<code>WWT_MASK</code>
-:0x1F
-{{en/Todo}}
-
 ;<code>WWT_PUSHBTN</code>
 :
 {{en/Todo|-Include an explanation.}}
@@ -160,37 +149,6 @@ static const NWidgetPart _nested_mywindow_widgets[] = {
 {{en/Todo|-Include an explanation.}}
 
 ===Flags===
-
-Quote from <code>window.h</code> lines 16 onwards:
-
-<pre>
-/* How the resize system works:
-    First, you need to add a WWT_RESIZEBOX to the widgets, and you need
-     to add the flag WDF_RESIZABLE to the window. Now the window is ready
-     to resize itself.
-    As you may have noticed, all widgets have a RESIZE_XXX in their line.
-     This lines controls how the widgets behave on resize. RESIZE_NONE means
-     it doesn't do anything. Any other option let's one of the borders
-     move with the changed width/height. So if a widget has
-     RESIZE_RIGHT, and the window is made 5 pixels wider by the user,
-     the right of the window will also be made 5 pixels wider.
-    Now, what if you want to clamp a widget to the bottom? Give it the flag
-     RESIZE_TB. This is RESIZE_TOP + RESIZE_BOTTOM. Now if the window gets
-     5 pixels bigger, both the top and bottom gets 5 bigger, so the whole
-     widgets moves downwards without resizing, and appears to be clamped
-     to the bottom. Nice aint it?
-   You should know one more thing about this system. Most windows can't
-    handle an increase of 1 pixel. So there is a step function, which
-    let the windowsize only be changed by X pixels. You configure this
-    after making the window, like this:
-      w->resize.step_height = 10;
-    Now the window will only change in height in steps of 10.
-   You can also give a minimum width and height. The default value is
-    the default height/width of the window itself. You can change this
-    AFTER window-creation, with:
-     w->resize.width or w->resize.height.
-   That was all.. good luck, and enjoy :) -- TrueLight */
-</pre>
 
 :;<code>RESIZE_NONE</code>
 :
