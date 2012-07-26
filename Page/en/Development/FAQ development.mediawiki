@@ -65,39 +65,4 @@ If it fails, you know for sure the patch is not the source of the problems.
 :* In Linux, use the command "svn diff > mypatch.diff" from the source directory to create a diff file.
 :* In Windows, you can do the same from the command prompt, or, if you have Tortoise SVN, right button in the source directory and press Create Patch. It will ask for a location and filename.
 
-====How to apply a patch?====
-It's usually best to apply patches to the revision stated by the patch creator.
-
-Different version control systems use different ways of expressing changes. Currently, there are SVN type patches and HG/GIT type patches.
-To know what you have, open the patch file with a text editor, and look at the first few lines.
-
-A SVN type patch starts like
-<pre>
-Index: src/gfx.cpp
-===================================================================
---- src/gfx.cpp (revision 20024)
-+++ src/gfx.cpp (working copy)
-@@ -641,14 +641,13 @@
-...
-</pre>
-
-and a HG/GIT type patch starts like
-<pre>
-diff --git a/src/gfx.cpp b/src/gfx.cpp
---- a/src/gfx.cpp
-+++ b/src/gfx.cpp
-@@ -641,14 +641,13 @@
-...
-</pre>
-The crucial difference is the <code>a/</code> and <code>b/</code> additions at the lines starting with <code>---</code> and <code>+++</code>.
-
-
-*'''Linux:''' Type the following line into a console (replace patch_name with the filename of the patch):
-:<code>patch -p0 < patch_name</code> (for SVN type patches). However, in some cases you might need <code>patch -p1 < patch_name</code> (for HG/GIT type patches).
- 
-*'''Windows:''' Make sure you have [http://tortoisesvn.tigris.org TortoiseSVN] installed.
-{{en/Warning| TortoiseSVN can only handle SVN type patches, it '''CANNOT''' handle HG/GIT type patches!!}}
-:Right-click on the folder with the OpenTTD source code, open the TortoiseSVN submenu and select 'Apply Patch...'. Browse to the patch file and select it. Then, right click on the 'File Patches' window and click on 'Patch All'. After you're done, close the TortoiseMerge window.
-
-[[Category:en/FAQs]]
-[[Category:en/Development]]
+pku1986谢谢上一次的解答,学长再帮我看看这个,给出一个无向图nx+z->y程序跑了1000ms+,我看有很多是100ms+,能帮我看看怎么优化么#include#include#include#includeusing namespace std;int n,m;int Q;typedef stcurt{int num;int l;}node;//定义结点,num为编号,l为长度typedef stcurt{int num;int pos;}que;//定义查询,num为编号,pos 为该查询的顺序vector  v[50001];vector  q[50001];bool visit[50001];bool color[50001];//染色int ans[10001];//查询的结果int dis[50001];//dis[i]为根到i的距离int f[50001];//i的代表元void init(){int i;for(i=1;i<=n;i++){visit[i]=false;color[i]=false;dis[i]=0;f[i]=i;}}int Find(int x){if (x==f[x]) return x;else f[x]=Find(f[x]);return f[x];}void Union(int x,int y){x=Find(x);y=Find(y);f[y]=x;}void tarjan(int x){int i,j,temp;for(i=0;i<v[x].size();i++)   if (!visit[v[x][i].num])   {       dis[v[x][i].num]=dis[x]+v[x][i].l;       visit[v[x][i].num]=true;   tarjan(v[x][i].num);   Union(x,v[x][i].num);   }color[x]=true;for(j=0;j<q[x].size();j++){  if (color[q[x][j].num])  {  temp=Find(q[x][j].num);      ans[q[x][j].pos]=dis[x]+dis[q[x][j].num]-2*dis[temp];  }}}void slove(){int i;visit[1]=true;tarjan(1);for(i=1;i<=Q;i++)printf("%d",ans[i]);}int main(){int i,j,x,y,z;char p;node temp;que t;scanf("%d %d",&n,&m);for(i=1;i<=m;i++){scanf("%d %d %d %c",&x,&y,&z,&p);getchar();temp.num=y;temp.l=z;v[x].push_back(temp);temp.num=x;temp.l=z;v[y].push_back(temp);}scanf("%d",&Q);for(i=1;i<=Q;i++){scanf("%d %d",&x,&y);t.num=y;t.pos=i;q[x].push_back(t);t.num=x;t.pos=i;q[y].push_back(t);}init();slove();return 0;}汗，您这样发一个代码我没法看啊，至少给个题号什么的吧，我连你要解决什么问题都不知道。。
