@@ -1,2 +1,45 @@
 [[Translation:en/Development/NewGRF/Debugging]]
-Great plugin   ulufrtonateny there appears to be a problem with page caching. If the page is not cached and the first browser to request it is IE6, then the  fixed' page is cached and served to all subsequent browsers that request it   this means the fix code will run every time on the cached page and may cause problems with other browsers. Conversely, if a non-IE6 browser requests the page for the first-time, the page will be cached without the  fix' code and then if IE6 later requests that page, it will get an unfixed cached page.It's better to leave the browser detection to the browser by using the IE conditional comments.I'm changing the wp_head() function in your plugin   I'm ignoring your browser detect code and will always write out the javascript links between conditional comments   this will ensure that a cached paged always contains the links to the javascript.Perhaps you could add an option for sites that used cached pages?
+{{en/Manual/Navigation}}
+
+{{en/Feature|1.1}}
+
+== Activating newgrf developer tools ==
+OpenTTD r19723 and following introduced a number of debugging tools for (New)GRF developers. In order to make them accessible the debugging tools need to be activated via a hidden setting, best via [[en/Manual/Console]]:
+<pre>
+set newgrf_developer_tools 1
+</pre>
+
+Then a number of tools become available
+
+== Sprite alignment tool ==
+A simple sprite alignment helper available from the 'Information' menu on the main toolbar.
+
+The sprite alignment tool does not store the new offsets anywhere so as soon as the sprite is reloaded the offsets are gone (use a bigger sprite cache if this happens). Also anything that reloads NewGRFs (new games, loading games or (re)applying NewGRFs) clears the sprite cache and as such resets the offsets.
+
+A 'picker' is included to help you find the sprite you need.  This will list the sprites used at a particular screen location, try each item in the list until you find the one you are looking for.
+
+'''Accessing the sprite alignment tool'''
+
+[[File:en/Development/NewGRF/Sprite aligner 1.png]]
+
+
+'''The sprite alignment tool in use'''
+
+[[File:en/Development/NewGRF/Sprite aligner 2.png]]
+
+== Variable / Property inspection tool ==
+A debug tool for variables and properties is provided.  A wide range of variables and properties are included for each type of object.  Some properties are not shown as they are already obvious in either in-game (for example, vehicle name), or they are obvious in the nfo for action 0.  
+
+The industry debug window includes the values of the 16 persistent storage locations.  This enables industry coders to debug complex varation to chains by pushing values to storage (only possible for industries, vehicles, houses etc. have no persistent storage).
+
+The debug view for variables can be accessed via the tile area information tool for all newgrfs which don't deal with vehicles (note the debug icon in the upper right of the area information window):
+
+[[File:en/Development/NewGRF/Variable debug1.png]]
+
+[[File:en/Development/NewGRF/Variable debug2.png]]
+
+
+The debug for vehicle variables is accessed directly via the vehicle window.
+[[File:en/Development/NewGRF/Vehicle debug.png]]
+
+[[Category:en/NewGRF]]
