@@ -117,7 +117,24 @@ Use <code>AITile.GetDistanceManhattanToTile</code> to get this distance between 
 
 The distance might not be exactly what a "plane would fly", since planes, boats and trains with the correct tracks can move diagonally, lowering the direct distance taken between tiles. Buses always must move Manhattan distances however due to having no type of diagonal roads. For an AI, you'll nearly always want to use <code>AITile.GetDistanceManhattanToTile</code>, as that is the function OpenTTD uses internally for distance calculations.
 
-24 October, 2007 at 4:00 pm                                  These are really ace.  I love nice tiled badkcroungs.  Could you explain how you make them replicate so nicely?  I always end up with a slighly squiffy looking pattern.Cheers!
+==== Tile Arithmetic ====
+
+As part of various applications (e.g. pathfinding), an AI will need the ability to move around the map. Because of the way tile indices are represented, you can perform simple arithmetic on a tile index to find a new tile relative to its position. Adding or subtracting the result of <code>AIMap.GetTileIndex(x, y)</code> to a tile will yield the index of the tile ''x'' and ''y'' tiles from the original position.
+
+For instance, the following code snippet will create a list of tiles directly adjacent to ''tile''...
+
+ local adjacent = AITileList();
+ adjacent.AddTile(tile - AIMap.GetTileIndex(1,0));
+ adjacent.AddTile(tile - AIMap.GetTileIndex(0,1));
+ adjacent.AddTile(tile - AIMap.GetTileIndex(-1,0));
+ adjacent.AddTile(tile - AIMap.GetTileIndex(0,-1));
+
+This snippet creates a list containing all tiles within an 11x11 square area centered around ''tile''...
+
+ local area = AITileList();
+ area.AddRectangle(tile - AIMap.GetTileIndex(5, 5), tile + AIMap.GetTileIndex(5, 5));
+
+Because the Tile object in C++ is just an Integer, it's possible to wrap around the borders of the map using this trick. To avoid wrapping around the edge of the map, you should check the distance to the the new tile and makes sure it's within the distance you expect.
 
 === Cargos ===
 
