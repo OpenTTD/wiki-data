@@ -1,2 +1,74 @@
 [[Translation:en/Manual/FAQ multiplayer]]
-Warning: fopen(wp-config.php) [function.fopen]: failed to open stearm: Permission denied in D:\inetpub\vhosts\khondoi.com\subdomains\pa-oh\httpdocs\index-install.php on line 462Warning: fwrite(): supplied argument is not a valid stearm resource in D:\inetpub\vhosts\khondoi.com\subdomains\pa-oh\httpdocs\index-install.php on line 502Warning: fwrite(): supplied argument is not a valid stearm resource in D:\inetpub\vhosts\khondoi.com\subdomains\pa-oh\httpdocs\index-install.php on line 502Warning: fclose(): supplied argument is not a valid stearm resource in D:\inetpub\vhosts\khondoi.com\subdomains\pa-oh\httpdocs\index-install.php on line 506Warning: chmod() [function.chmod]: No such file or directory in D:\inetpub\vhosts\khondoi.com\subdomains\pa-oh\httpdocs\index-install.php on line 507Warning: include_once(./wp-config.php) [function.include-once]: failed to open stearm: No such file or directory in D:\inetpub\vhosts\khondoi.com\subdomains\pa-oh\httpdocs\index-install.php on line 663Warning: include_once() [function.include]: Failed opening  ./wp-config.php' for inclusion (include_path='.;./includes;./pear') in D:\inetpub\vhosts\khondoi.com\subdomains\pa-oh\httpdocs\index-install.php on line 663Warning: require_once(ABSPATHwp-admin/includes/admin.php) [function.require-once]: failed to open stearm: No such file or directory in D:\inetpub\vhosts\khondoi.com\subdomains\pa-oh\httpdocs\wp-admin\includes\upgrade.php on line 16Fatal error: require_once() [function.require]: Failed opening required  ABSPATHwp-admin/includes/admin.php' (include_path='.;./includes;./pear') in D:\inetpub\vhosts\khondoi.com\subdomains\pa-oh\httpdocs\wp-admin\includes\upgrade.php on line 16
+
+
+
+'''Questions regarding multiplayer aspect of OpenTTD''', e.g. joining the server, creating the server, playing the game..
+
+__FORCETOC__
+
+
+=====How many players can join an OpenTTD game?=====
+:* Up to 255 players can participate in a multiplayer game. You can only open up 15 companies though. Each player can either play his own company, join another company ([[en/Community/Play Style/Cooperative gameplay]]) or watch a game ([[en/Archive/Manual/Spectator mode]]).
+
+=====How do I start a multiplayer game?=====
+:* You can either do that through the [[en/Manual/Multiplayer]] or by using the following command line syntax:
+<pre>openttd -n IP[:port][#playerID]</pre>
+Example:
+<pre>openttd -n 192.168.0.1:3979#1</pre> would connect to 192.168.0.1 on port 3979 and joins as player 1.
+
+=====Does it work cross-platform?=====
+:* Yes. You could, for example, start a server on MacOS and players using Windows, Linux or any other system can join.
+
+=====What port does OpenTTD use?=====
+:* the default port is 3979, but you can change it to anything you like when you start a server. If you set up your own server behind a router, you need to forward both TCP and UDP on that port.
+:* Communication with the master-server works via port 3979 over UDP (inbound + outbound) and 3978 over UDP (outbound)
+:* If you are joining a server you do not need to forward any ports, as connections are outbound only.
+
+=====Can I use a Dedicated Server to host a Game?=====
+:* It is possible to run a Dedicated Server using the '-D' switch. See [[en/Manual/Dedicated server|"Dedicated Server"]] for more details.
+
+=====How much bandwidth does the game use?=====
+:* The rate is approximately 1.2 kbyte/sec upload and 1.2 kbyte/sec download per client.  Multiplying that up, a 10-player server will use approximately 12 kbyte/sec up and 12 kbyte/sec down (the exact numbers will depend on the number of retransmissions etc.).  Therefore, a 10-player, 24/7 server will consume 60 Gbyte/per month (30 Gbyte down AND 30 Gbyte upload) of bandwidth if all 10 players are connected the whole month. For one client, connecting to a server, for an hour game, it will consume around 8MB bandwidth, plus whatever you need to download.
+
+=====People get disconnected while joining, how to fix that?=====
+When a new player connects, he needs to download the entire map. If you disabled ''pause_on_join'', the game continues meanwhile. By the time he has finished, he thus needs to catch up with the changes made since the start of the download.
+Obviously, a new player needs to have a fast enough connection (and machine), otherwise he will take forever to catch up.
+
+To give you control over how long this may take, the folloing variables can be set:
+{| class="wikitable" style="text-align:left"
+|+Timing variables for network-play
+|-
+! Variable !! Values !! Meaning
+|-
+| max_join_time || 0-65535 || Maximum amount of time, in game ticks, a client may take to sync up during joining.
+|-
+| pause_on_join || true/false || Pause the game when people join.
+|-
+| max_download_time || 0-65535 || Maximum amount of time, in game ticks, a client may take to download the map.
+|-
+| max_lag_time || 0-65535 || Maximum amount of time, in game ticks, a client may be lagging behind the server.
+|}
+Note that all values are in game ticks, that is, 1/74th of a game day (1/30th of a second).
+
+Increase the values until your users can connect normally. If you set them too long however, there is an increased danger that people take too long to connect, and just waste bandwidth.
+
+For larger maps, it is highly recommended to enable the ''pause_on_join'', as it eliminates the need to catch-up with the game after map downloading.
+
+=====I am having trouble with cheating. Help!=====
+:* There is a guide to shielding yourself from the worst elements of [[en/Community/Multiplayer cheating]]. Also, check the [[en/Community/Play Style/Multiplayer Rules]].
+
+=====Are there any rules?=====
+:* There are some rules, yes. You can see the article [[en/Community/Play Style/Multiplayer Rules]]. However, the servers are not run by the OpenTTD Team, and they have no control over them what-so-ever. As such if you have any problems you should contact the person who runs the server.
+
+=====Can console commands be executed automatically?=====
+:* Yes, this is possible, and can be pretty handy. The page [[en/Manual/Running Startup Scripts]] will explain this in more detail.
+
+=====I started a new server. However, my game doesn't show up in my friends' game list, even after inserting the server manually on the list. Why does this happen?=====
+:* There seems to be a problem when starting a new server from a computer connected to Internet via a router, you can fix this by forwarding port number 3979, both UDP and TCP.
+
+=====What is a desync error?=====
+:* See [[en/Manual/Multiplayer#desync-error|Desync error]].
+
+[[Category:en/FAQs]]
+[[Category:en/Manual/Playing]]
+[[Category:en/Manual/Multiplayer]]
