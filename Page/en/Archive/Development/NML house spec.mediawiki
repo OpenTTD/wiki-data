@@ -1,5 +1,13 @@
 == NML house spec ==
+A multi-tile house should be considered a single entity, from the POV of the NML user. This is mainly because many properties and callbacks can be shared between house tiles. Also, letting NML handle the (somewhat complicated) mechanics of multi-tile houses prevents the possibility of user error.
 
+It may make sense to add a property 'size', which (along with the substitute type) would have to be set first.  When it's a separate property, we can easily determine the size of an item before action generation (as we need the size to generate the correct actions). The substitute type must be set to a house of the same size as the new house.
+
+House IDs for multi-tile houses have to be numbered consecutively. We should document this and also verify that the user doesn't accidentally mess this up by using IDs reserved for additional tiles of multi-tile houses.
+
+Below an overview of the properties and callbacks and how they would interact with multi-tile buildings. Variables are not listed, because the multi-tile issues should cause relatively problems.
+
+Furthermore I propose to add a variable 'building_tile' to distinguish between building tiles. This should be stored in a register (perhaps reserve register FF for this) before the varaction2 chain . 'north_tile_offset' (for use with vars 66/67) may also be useful.
 ===Properties===
 {|  
 ! Property
@@ -82,8 +90,8 @@
 |- 
 | 14
 | B
-| House callback flags
-|    513     # prop 14 (callback flags 1) is not set by user
+| See callbacks section
+| Bits for north-tile-only callbacks masked out
 | 
 |- 
 | 15
@@ -137,8 +145,8 @@
 | 1D
 | B
 | Callback flags 2
-|    522     # prop 1D (callback flags 2) is not set by user
-| 
+| See callbacks section
+| Bits for north-tile-only callbacks masked out
 |- 
 | 1E
 | D
@@ -170,11 +178,6 @@
 | See prop 0A
 | 
 |}
-===Variables===
-Implementing all the Varaction2 variables should be pretty straightforward.
-
-I propose to add a variable 'building_tile' to distinguish between building tiles. This should be stored in a register (perhaps reserve register FF for this) before the varaction2 chain
-
 ===Callbacks===
 {|  
 ! Callback
@@ -268,13 +271,13 @@ I propose to add a variable 'building_tile' to distinguish between building tile
 | 
 |- 
 | 14E
-| -
+| 11
 | Foundations
 | All tiles (differ by building_tile)
 | 
 |- 
 | 14F
-| 
+| 12
 | Autoslope
 | All tiles (differ by building_tile)
 | 
