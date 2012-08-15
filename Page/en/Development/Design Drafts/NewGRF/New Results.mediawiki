@@ -1,0 +1,167 @@
+GRF version 8 restricted all callbacks with boolean results to only return values 0 and 1, and no longer zero and non-zero.
+As a result of that, it is now possible to extent those callbacks with additional results for new features.
+This page collects some applications for that.
+
+
+== Slopes and foundations ==
+
+=== CB 30/14E/150: Decide drawing foundations ===
+New results:
+* 0: draw default foundation (leveled)
+* 1: do not draw any foundation
+* xx02: draw a foundation which results in a specific slope, controlled via "xx".
+*: The values/meaning of "xx" need to be decided:
+*:* It could specify the resulting slope, so OpenTTD draws a foundation which transforms the present slope into the desired slope. (not all combinations are reasonable, e.g. to transform STEEP_W into STEEP_E)
+*:* It could specify the foundation type to apply, which then results in a slope depending on the original slope. (not all combinations of original slope and foundation type are possible)
+*:* It could specify a height difference for one or multiple corners (would allow raising terrain multiple levels; currently not present anywhere in the game, likely not worth pursuing)
+*:* It could specify whether "high" foundations are allowd. (foundations across 2 height levels, i.e. steep slope into flat slope)
+*:* Creating halftile foundations won't be possible, since they need two groundsprites (for lower and upper part) and there is no way to supply them.
+
+TODO figure out the best result values
+
+=== CB 3C/14F/15D: Disable autosloping ===
+New results:
+* 0: allow everything
+* 1: disallow landscaping
+* xx02: allow autosloping, if it is possible to create slope xx using a (default) foundation.
+** If CB 30/14E/150 return a "resulting slope", then this callback could use the same return values.
+** However, in addition to the "resulting slope" autoslope might also need an allowed height difference. In the easiest case autoslope would only be allowed if the resulting slope on a foundation would have the same height as the same slope with a foundation before landscaping.
+**: Example:
+**** SLOPE_W at heightlevel 1 can be transformed into SLOPE_FLAT at heightlevel 2.
+**** Raising the N, E or S corners or even lowering the E corner would result in SLOPE_NW, SLOPE_EW, SLOPE_SW or SLOPE_STEEP_W, which can all still be transformed into SLOPE_FLAT at heightlevel 2.
+**** Loweing the W corner would result in SLOPE_FLAT at heightlevel 1.
+
+TODO figure out the best result values
+
+=== Slope information in industry layout ===
+There is often the desire for a better way for construction of industries (but actually also for objects and airports at some point) on sloped terrain.
+* OpenTTD shall be able to landscape the terrain to make it more likely for the industry to be created. (currently OpenTTD can only do that for flat industries)
+* When the user manually constructs an object, it might be nice to adapt the tile highlighting so that slope requirements are easier to see.
+
+The basic idea to archieve this is as follows:
+* Assign a "tilegroup" or "no tilegroup" to all tiles in a object/industry layout.
+* Within a tilegroup the slope and height of all tiles are tied to each other.
+* Different tilegroups are not tied to each other, and may have any height different between them.
+* Each tilegroup has a reference height, the tiles in the group specify
+** their desired slope,
+** the relative height of the desired slope wrt. the reference height of the tilegroup, and
+** whether the desired slope must match exactly, or may be archieved by using a foundation.
+
+Example: Farm with two houses and some fenced grass-area around them.
+* Tile group "none" for the fenced tiles: Fenced grass-area is allowed to have any slope at any height.
+* Tile group 0: All tiles of house 1 must be flat and at the same height, no foundation allowed at entry side.
+* Tile group 1: All tiles of house 2 must be flat and at the same height, no foundation allowed at entry side.
+* This allows the industry to be placed on any terrain as long as the terrain on the houses can be leveled. The houses can be at different height.
+
+==== Option 1: CB 2F/157: Slope check ====
+Results:
+* 0-3FF: text
+* 400-408: default texts
+* 409: allow building if slope matches slope requirements from reg 100
+
+Register 100: ffggyyss
+* ss: slope
+* yy: minimum z of the slope relative to minimum z of tilegroup
+* gg: tilegroup (FF = "no tilegroup")
+* ff: foundation flags: allow (high) foundations in certain corners
+
+==== Option 2: Property ====
+Allow specifying tilegroups and slope requirements via a property.
+* This would reduce the number of callbacks to be called.
+* However, it would have to deal with industry layouts and object views in some way.
+
+TODO figure out the best method
+
+
+== Industry / house acceptance, stockpiles ==
+Cargo acceptance at stations/industries has currently various problems:
+* Industries specify acceptance via both the industry and the industry tiles.
+* The tiles are asked periodically whether they accept the cargo. This controls the station acceptance.
+* The industry is asked on cargo delivery whether it wants to accept the cargo.
+
+This results in these problems:
+* Tile and industry acceptance is decided asynchronously, so they may not match.
+** Stations accept cargo, while there is no industry to accept it.
+** Stations reject cargo, even if the industry would accept it.
+* The industry can not control exactly the amount of cargo it wants to accept.
+
+=== CB 3D: Industry acceptance ===
+To solve the stockpiling problem CB 3D is extended.
+
+New results:
+* 0: reject cargo
+* 1: accept cargo
+* 2: accept cargo (partialy), limiting the stockpiling at a value given by reg 100
+
+=== Deciding cargo acceptance at stations ===
+To solve the acceptance inconsistencies, the algorithm within OpenTTD is modified. (No GRF (spec) changes required)
+
+* Stations shall destinguish two acceptance types:
+** House-style acceptance: Any amount of cargo is accepted and delivered to the nearest town.
+** Industry-style acceptance: The cargo is added to the "waiting to be processed" cargo of a nearby industry.
+**: Note: Industries can also have house-style acceptance. E.g. various industries (esp. oilrigs) accept passengers, but do not process them into anything.
+* The station periodically checks surrounding tiles for acceptance:
+** House tiles add to the house-style acceptance.
+** Industry tiles add to the house-style acceptance, if the accepted cargo is not in the list of input cargos of the industry.
+** Industry tiles add to the industry-style acceptance, if the accepted cargo is in the list of input cargos of the industry.
+* Stations accept a cargo if the acceptance level is more than 8/8 acceptance. The acceptance level is computed as the sum of:
+** house-style acceptance (unconditionally)
+** industry-style acceptance, if the particular industry currently accepts the cargo.
+
+Implementation details:
+* Station caches a list of acceptance amounts for house-style acceptance. (somewhat already present)
+* Station caches a list of nearby industries (already present).
+* For each nearby industry it caches the industry-style acceptance within the catchment area of the station.
+* When deciding acceptance, it starts with the house-style acceptance, and then iterates over the nearby industries, and adds their cached industry-style acceptance, if CB 3D says so.
+
+=== CB 1F/2B, 2A/2C: Tile acceptance ===
+The results of callbacks 2A/2C have only 5 bit per cargotype, so only the first 32 entries of the cargo translation table can be returned.
+
+New results for CB 1F/2B:
+* 0000 - 1FFF: Old acceptance result
+* 7Fxx: Extended cargo acceptance:
+** Do not call CB 2A/2C
+** Accept xx cargos as specified in regs 100 to 100+xx
+** Registers 100 to 100+xx contain cargotype/acceptance pairs:
+*** Bit 0..3: Acceptance level 0/8 - 8/8
+*** Bit 4..7: Reserved, must be zero
+*** Bit 8..16: Cargotype
+*** Bit 16..31: Reserved, must be zero
+
+TODO is there a more clever usage of regs 100... for this?
+
+=== CB 37: Industry window acceptance/cargo text ===
+Industries with production callbacks display cargo amounts "to be processed" in the industry window.
+This text appears weird
+* if the industry has no stockpiling, but processed cargos immediately.
+* if the cargo is not exactly "processed", but is rather and auxiliary cargo or production booster.
+
+New results for CB 37:
+0000 - 03FF: Display cargo amount and sub-type using string D000 - D3FF with textref stack from regs 100..105
+0400       : Display cargo amount without sub-type
+0401       : Display no cargo amount
+0800 - 0CFF: Display no cargo amount, but display string D000 - D3FF instead. You can still put the cargo amount or whatever into the string using the textref stack from regs 100..105
+
+TODO Do results 0800 to 0CFF make any sense? Or should such cases rather use CB 3A? (this is a GUI/window layout question)
+
+
+== CB 3B: Control special industry effect ==
+This allows industries to plant/remove objects around the industry. This can be used for farms or mines to plant/remove fields, mining excavations, ...
+Note that objects are not neccessarily user-buildable, so there can be specific objects only used by industries which do not appear in the build object window for the user.
+
+New results for effect 0:
+* 0: do nothing
+* 1: plant default field
+* 2: build newobject with ID from reg 100 from grf with ID from reg 101, and associate it to the industry (that is, it gets removed when the industry closes)
+* 3: build newobject with ID from reg 100 from grf with ID from reg 101; do not associate it to the industry
+Note: reg 100 contains both a grf local object id, and the view, or a special value for 'random view'
+
+New results for effect 1:
+* 0: do nothing
+* 1: cut a tree, and produce some cargo on success
+* 2: remove newobject with ID from reg 100 from grf with ID from reg 101, which is associated to the industry
+* 3: remove newobject with ID from reg 100 from grf with ID from reg 101, which is not company owned
+* 4: remove newobject with ID from reg 100 from grf with ID from reg 101, even if it is company owned
+Note: reg 100 contains a grf local object id and a view, or a special value for 'any view'
+
+TODO: Some way to enable/disable cargo production on successful planting/removal. Or some other way to evaluate the success of the action. Maybe increment certain persistent storage on success? (which can then be evaluated by the production callback)
