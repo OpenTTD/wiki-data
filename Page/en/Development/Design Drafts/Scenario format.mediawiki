@@ -9,16 +9,16 @@ NOTE: Unless mentioned otherwise, all properties are optional.
 An extended heightmap is distributed as a tar file. The file includes the following parts:
 
 
-* '''Metadata file:''' Stores datafile and layer data.
+* '''Metadata file:''' Stores general information, along with object file and layer data.
 
 
-* '''Layers:''' Each layer stores information for each one of the points in the map.
+* '''Layers:''' Layers are image files that store information for each one of the points in the map.
 
 
-* '''Object files:''' Each object file contains information about a given entity, such as towns.
+* '''Object files:''' Each object file contains information about a given map entity, such as towns.
 
 
-* '''Language files:''' Language files contain the extended heightmap name and its description. There are multiple files, one for each supported language.
+* '''Language files:''' Language files contain the extended heightmap name and its description. There are multiple files, one for each supported language. Language files are planned but not contemplated for the first versions of the Scenario format.
 
 
 ==Scaling==
@@ -27,7 +27,7 @@ In an extended heightmap, we have two different types of scaling.
 
 ===Size scaling===
 
-The extended heightmap has multiple files that include information about the map. Some of these files are called "scalable in size". This means that OpenTTD is able to scale their size to a desired OpenTTD size without a (big) loss of information. As long as the extended heightmap only contains files that are scalable in size, each one of them can have a different size. OpenTTD will just scale all of them to the same size.
+The extended heightmap has multiple files that include information about the map. Some of these files are called "scalable in size". This means that OpenTTD is able to scale their size to a desired OpenTTD size without a (big) loss of information. As long as the extended heightmap only contains files that are scalable in size, each one of them can have a different size. OpenTTD will just scale all of them to the same size, as selected by the user when generating the map.
 
 If an extended heightmap contains one or more files that cannot be scaled in size, all files must use the same size, and it must be a valid OpenTTD map size. If these conditions are not fulfilled, OpenTTD will not be able to load the extended heightmap.
 
@@ -58,10 +58,10 @@ The first section includes information about the extended heightmap itself.
 * '''max_desired_height:''' Maximum height of the resulting OpenTTD map. This property must be in the [1, 15] range, and it must be greater than min_desired_height. This property has a default value of 15.
 
 
-* '''width:''' By default, the extended heightmap will be scaled to this width. The user can still choose which width to use. This information will be ignored if the heightmap is not scalable.
+* '''width:''' By default, the extended heightmap will be scaled to this width. The user can still modify the default value and choose which width to use. This information will be ignored if the heightmap is not scalable.
 
 
-* '''height:''' By default, the extended heightmap will be scaled to this height. The user can still choose which height to use. This information will be ignored if the heightmap is not scalable.
+* '''height:''' By default, the extended heightmap will be scaled to this height. The user can still modify the default value and choose which height to use. This information will be ignored if the heightmap is not scalable.
 
 
 * '''rotation:''' Indicates the preferred orientation for the extended heightmap. The possible values are "cw" (clockwise rotation) or "ccw" (counter clockwise rotation). OpenTTD will select this orientation automatically, but it will still allow the user to change the orientation.
@@ -75,13 +75,11 @@ The first section includes information about the extended heightmap itself.
 
 ===Layer sections===
 
-All included layers must have their own section in this file. The [height_layer] section is compulsory, since all extended heightmaps must have a height layer. Other layers are optional. Each layer section can have a file property that indicates which file contains the layer date if not included, a default file name will be used. Layers can also have extra properties. Note that even if a layer has no extra properties and uses the default file name, it must still have an empty section. Otherwise OpenTTD will ignore the layer.
+All included layers must have their own section in the metadata file. The [height_layer] section is compulsory, because all extended heightmaps must have a height layer to be usable. Other layers are optional. Each layer section can have a file property that indicates which file contains the layer date if not included, a default file name will be used. Layers can also have extra properties, depending on their type. Note that even if a layer has no extra properties and uses the default file name, it must still have an empty section. Otherwise OpenTTD will ignore the layer.
 
 ===Object file sections===
 
-Each object file has its own section. Their file property is also optional; if not included they will use the default file name. The section must be present even if it is empty, otherwise OpenTTD will ignore the object file.
-
-All object files scalable in size will have a "width" and "height" property in their metadata section. These properties define the size of the rectangle in which their object are placed. Those properties are mandatory.
+Each object file has its own section. Their file property is also optional; if not included OpenTTD will search for the default file name. All object files must have "width" and "height" properties in their metadata section. These properties define the size of the rectangle in which their objects are placed. These properties are mandatory.
 
 ===Example of metadata file===
 
@@ -109,9 +107,13 @@ height=1024
 file=town_data.txt
 
 [road_bridge_file]
+width=128
+height=256
 file=road_bridge_file.txt
 
 [road_tunnel_file]
+width=128
+height=256
 file=road_tunnel_file.txt</pre>
 
 ==Layers==
@@ -174,7 +176,7 @@ Water layers include the following information:
 
 '''Size scalable:''' Yes
 
-The climate layer is a paletted PNG image that stores information about the climate type of each one of the tiles. Currently this only applies to the subtropical type of the tiles.
+The climate layer is a paletted PNG image that stores information about the climate type of each one of the tiles. Currently only the subtropical climate has different climate types for their tiles.
 
 
 * '''Default:''' Default terrain.
@@ -200,6 +202,7 @@ The four pixels that form the arms of the "cross" in the center of the 3x3 squar
 Oneway roads are represented with a different colour. If one of the pixels in the arm of the cross have this colour, it means that road vehicles will only be able to move in that direction. If the center tile is marked, the road will be blocked.
 
 ===Canal layer===
+
 '''Metadata section:''' [canal_layer]
 
 '''Default filename:''' canal.png
