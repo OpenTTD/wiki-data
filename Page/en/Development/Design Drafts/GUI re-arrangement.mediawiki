@@ -8,34 +8,63 @@ This is a big task and can certainly be structured into several sub-tasks
 Difficulty settings as they are present now serve little purpose as there are many (advanced) settings which have at least a strong impact as the historic difficulty settings.
 
 === Move difficulty settings ===
-They need moving to the advanced settings or the new map window (whatever appropriate for the individual setting). This gives as added benefit the capability to add nice help texts to the settings as well.
+* Remove current difficulty settings window.
+* Move settings which are not already in mapgen window, or AI settings or whatever... into advanced settings.
+*: The advanced settings dialog is more suitable wrt. extending usability (help texts and more; see below)
 
-
-This task has one or two pre-conditions:
+This task has some pre-conditions:
 #Add the capability to set the difficulty level explicity for individual NewGRFs, AIs and game scripts.
-#Remove all highscores but custom and disable difficulty different from 'custom'
+#* AI/GS currently can set specific values for their settings wrt. the difficulty profiles.
+#* The profile approach can be further improved by not requiring to fix all settings to the profile.
+#* Allowing AI/GS to define more profiles than easy/medium/hard might be possible, but would also hurt consistency and usuabiltiy wrt. setting up multiple AI/GS.
+#* For NewGRFs the difficulty profile currently does not seem very useful. ECS uses it, but it should likely be better integrated into action14 parameter descriptions, instead of overwriting parameters using action7/9 in later stages. So, for now difficulty profiles might just be dropped for NewGRFs, so that they always get "custom".
+#Remove all highscores but custom and disable difficulty different from 'custom'.
+#: This includes finding a new place for the highscore window.
+#:* Maybe just on the main screen instead of the current difficulty settings. (this would be a normal place in other games, except highscores are currently not quite meaningful/important in OTTD)
+#:* Maybe in game next to the company league or detailed rating windows.
+#:* On a side note: Company league, detailed rating and highscore might all be possibly become subject to game scripts. (highscore per gamescript instead of per difficulty profile)
 
 === Cleanup game options ===
-The game options contain a few settings which better belong to the advanced settings or new map window
+The game options contain a few settings which better belong to the advanced settings or new map window. Actually the only settings which would remain, which can not be moved to mapgen or advanced settings, are the baseset selections (because the controls do not fit the advanced settings).
+* Maybe "game options" could be turned into "baseset selection", while moving everything else to mapgen or adv. settings.
+* Maybe "basegraphics" could be moved to the newgrf gui, while sound and musicset are moved to the music gui with the tracks?
+*: Currently basesets cannot be changed in game. For graphics this is due to the extra GRF, but for sounds and music there should be no reason.
 
 === Filter for settings ===
 Allow users to apply various filters on the settings:
-* User / newgame / ingame settings
-* default / non-default
+* general text string filter
+* client/company/game settings
+* settings differing from default values
+* settings differing from newgame values
+* basic/advanced/expert settings
 * ...
 
 === Allow settings presets ===
+Settings presets can mean different things:
+* Store and restore the values of all settings.
+* Store and restore the values of some settings.
+** The preset would just not define values for other settings, which would leave them unchanged.
+** Multiple presets could be applied consecutively to change various setting aspects.
+** Easy via config files, but a GUI for displaying/editing such profiles would likely be complicated.
+
 There are several ways how this could be achieved:
-*Different config files, one per settings pre-set? 
+*Different config files, one per settings pre-set?
+**Allows easy sharing of profiles.
+**Would use a new "settings" subdirectory.
+**Setting profiles could be bundled with GS (on BaNaNaS)
+**GS could possibly enforce usage of certain profiles.
 *Array of values, similar to how NewGRF parameters are stored.
+**Hardly robust wrt. upgrading/using different OpenTTD versions.
 *Different sections in the same config file, similar how NewGRF presets are stored
 
 === Show deviations from default settings ===
-Single player: Show differences to default settings
-Multiplayer: Show differences to user's default settings to allow a quick overview of "what's different". Could already be achieved with 'Filter settings'
+Using the above filtering for default/newgame setting differences these things are possible:
+* Single player: Check notable settings of old savegames resp. scenarios.
+* Multiplayer: Show differences to user's default settings to allow a quick overview of "what's different".
 
-=== Reset to default settings ===
-From a UI perspective: A simple button in the settings window(s) will do the trick.
+=== Clearing deviations ===
+* A button to reset settings to default values. (wrt. current filter state)
+* A button to make the current settings the newgame settings. (wrt. current filter state)
 
 == Window Re-arangement ==
 
