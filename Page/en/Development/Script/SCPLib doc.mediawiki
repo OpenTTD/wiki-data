@@ -5,8 +5,27 @@ Note that you must create an instance of SCPLib and use that to call the member 
 
 {{en/Warning|The interface documentation of the main class is auto-generated using the [http://dev.openttdcoop.org/projects/scriptlib-scp/repository/entry/build-docs.py build-docs.py] command of the library. Do not edit the interface documentation of this class manually. Instead make suggestions on the tracker or submit a patch on main.nut: http://dev.openttdcoop.org/projects/scriptlib-scp}}
 
+=='''SCPLib::constructor'''(s_name, s_version, aicall=null)==
+Initialize the Script Communication Protocol library. You must call the SCPLib constructor before calling any other library function.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|s_name
+|a string with short name of your script
+|-
+|s_version
+|a string with the version of your script
+|-
+|aicall
+|a callback function that is called when an AIAI-protocol message is received
+|-
+|''result''
+|instance
+|}
+
 =='''SCPLib::AddCommand'''(_Name, _CommandSet, self, _loopback=null)==
-Add a command
+Add a command. AI & GS.
 {|border="0" padding="4" class="wikitable"
 !scope="col" |
 !scope="col" |
@@ -27,27 +46,8 @@ Add a command
 |void
 |}
 
-=='''SCPLib::QueryCompany'''(_usingCommand, _usingSet, _CompanyID, ...)==
-Send a query to a companyID (could be an AI or anyone)
-{|border="0" padding="4" class="wikitable"
-!scope="col" |
-!scope="col" |
-|-
-|_usingCommand
-|string with the command to send
-|-
-|_usingSet
-|a string with the command set where the command using_command belongs to
-|-
-|_CompanyID
-|company ID of the company to send the command to
-|-
-|...
-|data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
-|}
-
 =='''SCPLib::QueryServer'''(_usingCommand, _usingSet, ...)==
-Send a query to the server
+Send a query to the server. AI ONLY.
 {|border="0" padding="4" class="wikitable"
 !scope="col" |
 !scope="col" |
@@ -60,33 +60,14 @@ Send a query to the server
 |-
 |...
 |data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
-|}
-
-=='''SCPLib::TellCompany'''(_usingCommand, _usingSet, _CompanyID, ...)==
-Tell something a companyID (could be an AI or anyone).
-By using Tell* instead of Query*, we tell the receiver of this message that we are not
-expecting to get an answer.
-{|border="0" padding="4" class="wikitable"
-!scope="col" |
-!scope="col" |
 |-
-|_usingCommand
-|string with the command to send
-|-
-|_usingSet
-|a string with the command set where the command using_command belongs to
-|-
-|_CompanyID
-|company ID of the company to send the command to
-|-
-|...
-|data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
+|''result''
+|-1 on error, 0 on success, 1 delayed message
 |}
 
 =='''SCPLib::TellServer'''(_usingCommand, _usingSet, ...)==
-Send a query to the server
-By using Tell* instead of Query*, we tell the receiver of this message that we are not
-expecting to get an answer.
+Send a query to the server. AI ONLY.
+By using Tell* instead of Query*, we tell the receiver of this message that we are not expecting to get an answer.
 {|border="0" padding="4" class="wikitable"
 !scope="col" |
 !scope="col" |
@@ -99,10 +80,98 @@ expecting to get an answer.
 |-
 |...
 |data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
+|-
+|''result''
+|-1 on error, 0 on success, 1 delayed message
+|}
+
+=='''SCPLib::QueryAI'''(_CompanyID, ...)==
+Send a query to another AI controlling _CompanyID. AI ONLY.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|_CompanyID
+|company ID of the company to send the command to
+|-
+|...
+|data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
+|-
+|''result''
+|-1 on error, 0 on success, 1 delayed message
+|}
+
+=='''SCPLib::TellAI'''(_CompanyID, ...)==
+Tell something to another AI controlling _CompanyID. AI ONLY.
+By using Tell* instead of Query*, we tell the receiver of this message that we are not expecting to get an answer.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|_usingCommand
+|string with the command to send
+|-
+|_usingSet
+|a string with the command set where the command using_command belongs to
+|-
+|_CompanyID
+|company ID of the company to send the command to
+|-
+|...
+|data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
+|-
+|''result''
+|-1 on error, 0 on success, 1 delayed message
+|}
+
+=='''SCPLib::QueryCompany'''(_usingCommand, _usingSet, _CompanyID, ...)==
+Send a query to a companyID. GS ONLY.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|_usingCommand
+|string with the command to send
+|-
+|_usingSet
+|a string with the command set where the command using_command belongs to
+|-
+|_CompanyID
+|company ID of the company to send the command to
+|-
+|...
+|data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
+|-
+|''result''
+|-1 on error, 0 on success, 1 delayed message
+|}
+
+=='''SCPLib::TellCompany'''(_usingCommand, _usingSet, _CompanyID, ...)==
+Tell something a companyID. GS ONLY.
+By using Tell* instead of Query*, we tell the receiver of this message that we are not
+expecting to get an answer.
+{|border="0" padding="4" class="wikitable"
+!scope="col" |
+!scope="col" |
+|-
+|_usingCommand
+|string with the command to send
+|-
+|_usingSet
+|a string with the command set where the command using_command belongs to
+|-
+|_CompanyID
+|company ID of the company to send the command to
+|-
+|...
+|data to send to the receiver of the command. The data will end up in the order as it is sent in the Data member of the message structure that the receiver callback function get.
+|-
+|''result''
+|-1 on error, 0 on success, 1 delayed message
 |}
 
 =='''SCPLib::Answer'''(message, ...)==
-Send an answer to a previous query, it will be sent to who has made the query to you.
+Send an answer to a previous query, it will be sent to who has made the query to you (the server or an AI). AI & GS.
 {|border="0" padding="4" class="wikitable"
 !scope="col" |
 !scope="col" |
@@ -112,6 +181,9 @@ Send an answer to a previous query, it will be sent to who has made the query to
 |-
 |...
 |data to be sent along with the command. The data end up as Data[0], Data[1], .. etc. on the receiver end.
+|-
+|''result''
+|-1 on error, 0 on success, 1 delayed message
 |}
 
 =='''SCPLib::CanSpeakWith'''(companyID = 16)==
@@ -120,14 +192,14 @@ Send an answer to a previous query, it will be sent to who has made the query to
 !scope="col" |
 |-
 |companyID
-|ID of company to speak with. Defaults to 16 (Game Script)
+|ID of company to speak with. Defaults to 16 (Game Script). AI & GS.
 |-
 |''result''
 |true if we could speak with that company ID, otherwise false
 |}
 
 =='''SCPLib::Check'''()==
-You must include a call to this function in the main loop. This function scans for incoming communication signs and if there is any incoming messages the registered callback functions are called. Check() has been designed so that when one task such as handling a incoming message has been done, it returns. If there is more work to do (eg. incoming messages), it will return true to indicate this, otherwise false. So if you have time and prioritize quick responses on SCP communication, you should do something like this: while(my_scp.Check()) { }.
+You must include a call to this function in the main loop. This function scans for incoming communication signs and if there is any incoming messages the registered callback functions are called. Check() has been designed so that when one task such as handling a incoming message has been done, it returns. If there is more work to do (eg. incoming messages), it will return true to indicate this, otherwise false. So if you have time and prioritize quick responses on SCP communication, you should do something like this: while(my_scp.Check()) { }. AI & GS.
 {|border="0" padding="4" class="wikitable"
 !scope="col" |
 !scope="col" |
@@ -137,7 +209,7 @@ You must include a call to this function in the main loop. This function scans f
 |}
 
 =='''SCPLib::SetEventHandling'''(enable)==
-Enable or disable the handling of events by the lib (defaults to disabled).
+Enable or disable the handling of events by the lib (defaults to disabled). AI & GS.
 If enabled, the library will read and discard events from OpenTTD by itself when you call Check(). This is recommended if you don't call [AI/GS]EventController.GetNextEvent().
 If this setting is disabled, the library will get informed about events automagically when you call [AI/GS]EventController.GetNextEvent().
 {|border="0" padding="4" class="wikitable"
@@ -148,23 +220,13 @@ If this setting is disabled, the library will get informed about events automagi
 |true to enable handling of events by the lib, false if your script handle events itself
 |}
 
-=='''SCPLib::SetAIAIProtocol'''(enable)==
-Enable or disable AIAI protocol
-{|border="0" padding="4" class="wikitable"
-!scope="col" |
-!scope="col" |
-|-
-|enable
-|boolean or 1/0 to tell if AIAI protocol should be enabled or not
-|}
-
-=='''SCPLib::GetAIAIProtocol'''()==
+=='''SCPLib::GetAIAIProtocol'''(_CompanyID)==
 {|border="0" padding="4" class="wikitable"
 !scope="col" |
 !scope="col" |
 |-
 |''result''
-|1 if AIAI protocol is enabled, otherwise 0
+|true if AIAI protocol is enabled for that company, otherwise false. AI & GS.
 |}
 
 =='''SCPLib::SCPLogging_Error'''(enable)==
@@ -173,13 +235,11 @@ Enable or disable AIAI protocol
 !scope="col" |
 |-
 |enable
-|true to enable SCP loggin error only in console
+|true to enable SCP loggin error only in console. AI & GS.
 |}
 
 =='''SCPLib::SCPLogging_Info'''(enable)==
-If you wish help us debugging what's going on, enabling this one should
-help us, your console will get more noise. This also force error logging
-if enabled.
+If you wish help us debugging what's going on, enabling this one should help us, your console will get more noise. This also force error logging if enabled. AI & GS.
 {|border="0" padding="4" class="wikitable"
 !scope="col" |
 !scope="col" |
@@ -189,7 +249,7 @@ if enabled.
 |}
 
 =='''SCPLib::SCPGetCommunicationTile'''()==
-The communication tile is where the signs used to communicate are placed. You can use this function to ignore all signs on this tile if you use signs for some other purposes.
+The communication tile is where the signs used to communicate are placed. You can use this function to ignore all signs on this tile if you use signs for some other purposes. AI & GS.
 {|border="0" padding="4" class="wikitable"
 !scope="col" |
 !scope="col" |
