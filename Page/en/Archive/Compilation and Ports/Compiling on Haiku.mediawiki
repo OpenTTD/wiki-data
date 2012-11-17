@@ -1,47 +1,53 @@
-setgcc gcc4
-installoptionalpackage mercurial sdllibs
+<pre>setgcc gcc4
+installoptionalpackage mercurial sdllibs</pre>
 
 (or subversion if you wish)
 clone OpenTTD repository
-	
-wget http://zlib.net/zlib-1.2.7.tar.gz
+
+== zlib ==
+<pre>wget http://zlib.net/zlib-1.2.7.tar.gz
 tar xvfz zlib-1.2.7.tar.gz
 cd zlib-1.2.7
-configure --prefix=/boot/common && make install
+configure --prefix=/boot/common && make install</pre>
 
 There will be an error, simply do
 
-gcc -shared -O3  -fPIC -DHAVE_HIDDEN -o libz.so.1.2.7 adler32.lo crc32.lo deflate.lo infback.lo inffast.lo inflate.lo inftrees.lo trees.lo zutil.lo compress.lo uncompr.lo gzclose.lo gzlib.lo gzread.lo gzwrite.lo
+<pre>gcc -shared -O3  -fPIC -DHAVE_HIDDEN -o libz.so.1.2.7 adler32.lo crc32.lo deflate.lo infback.lo inffast.lo inflate.lo inftrees.lo trees.lo zutil.lo compress.lo uncompr.lo gzclose.lo gzlib.lo gzread.lo gzwrite.lo
 make install
-cd ..
+cd ..</pre>
 
 and everything will be fine. This is the same command that triggers the error, only without "-lc" on the end.
 
-wget http://sourceforge.net/projects/libpng/files/libpng15/1.5.13/libpng-1.5.13.tar.xz/download
+== libpng ==
+<pre>wget http://sourceforge.net/projects/libpng/files/libpng15/1.5.13/libpng-1.5.13.tar.xz/download
 tar xvfJ libpng-1.5.13.tar.xz
 cd libpng-1.5.13
 configure --prefix=/boot/common && make install
-cd ..
+cd ..</pre>
 
-wget http://www.oberhumer.com/opensource/lzo/download/lzo-2.06.tar.gz
+== lzo2 ==
+<pre>wget http://www.oberhumer.com/opensource/lzo/download/lzo-2.06.tar.gz
 tar xvfz lzo-2.06.tar.gz
 cd lzo-2.06
 configure --prefix=/boot/common && make install
-cd ..
+cd ..</pre>
 
-wget http://sourceforge.net/projects/freetype/files/freetype2/2.4.10/freetype-2.4.10.tar.gz/download
+== freetype ==
+<pre>wget http://sourceforge.net/projects/freetype/files/freetype2/2.4.10/freetype-2.4.10.tar.gz/download
 tar zxvf freetype-2.4.10.tar.gz
 cd freetype-2.4.10
 configure --prefix=/boot/common && make install
-cd ..
+cd ..</pre>
 
-download fontconfig and compile/install with
+== fontconfig ==
+download fontconfig and compile with
 
-configure --prefix=/boot/common --enable-libxml2 && make install
+<pre>configure --prefix=/boot/common --enable-libxml2 && make install</pre>
 
-ICU fails because it can't find the right shell, libtimidity because it's so old its configure scripts don't even recognize Haiku as an OS. Note that even after "installoptionalpackage ICU", it isn't recognized by OpenTTD - there seems to be a wider problem.
-Also warnings when compiling OpenTTD itself:
+== icu ==
+fails to build because it can't find the right shell ("no such file: /bin/sh"). Even after "installoptionalpackage ICU", it isn't recognized by OpenTTD - there seems to be a wider problem.
 
+== Errors and warnings ==
 /boot/home/trunk.hg/src/stdafx.h:47:0: warning: "INT64_MIN" redefined [enabled by default]
 /boot/develop/headers/posix/stdint.h:73:0: note: this is the location of the previous definition
 /boot/home/trunk.hg/src/stdafx.h:50:0: warning: "INT32_MIN" redefined [enabled by default]
@@ -55,5 +61,9 @@ Also warnings when compiling OpenTTD itself:
 
 /boot/home/trunk.hg/src/network/core/os_abstraction.h:194:0: warning: "IPV6_V6ONLY" redefined [enabled by default]
 /boot/develop/headers/posix/netinet/in.h:156:0: note: this is the location of the previous definition
+
+repeating constantly of course.
+
+Don't run music, there will be a segfault almost immediately using BeMidi.
 
 [[Category:en/Development/Compiling OpenTTD]]
