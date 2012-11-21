@@ -1,0 +1,80 @@
+== Introduction ==
+
+The goal of this API is to allow game scripts to assign certain behaviour to some regions of the map.
+* A region is a grouping of a number of tiles.
+* Regions are created by game scripts and are identified using RegionIDs.
+* Using the RegionID the game script can assign some properties to the region, which affects all tiles of the region. The region can also be deleted again using the ID.
+* Regions may overlap in which case all properties of all regions covering a certain tile apply to it. If multiple regions try to set the same property to a tile, then some region just wins. (the game script has no control over which region wins; it will likely be the region with the highest or lowest ID)
+
+
+== Definition ==
+
+A region can be created in two ways:
+* by specifying a rectangle (tile, width, height)
+* by specifying a circle (center tile, squared euclidian distance)
+More complex shapes can be created using multiple regions and assigning the same behaviour to them.
+
+
+== Properties ==
+
+After creation multiple properties of a region can be set.
+* Company filter
+*: The region can be set to influence only a set of companies. Furthermore there is a special "game engine" company which affects stuff OpenTTD does on its own without companies being involved (e.g. random industry construction).
+* Restrictions
+*: The region can be defined to restrict constructions. Following things can be disallowed:
+** Infrastructure construction. Destringuished in various groups:
+*** Railroad, road/tram, ship, aircraft
+*** Tracks (rail, road, canal), bridges (over the region), tunnels (under the region), stations, depots
+*** "Tracks" include "convert rail" and waypoints/buoys
+** Infrastructure destruction. (same groups as construction)
+** Industry construction (including prospecting)
+*** defined per industry type
+*** industry density (some kind of percentage: 0% = "disallowed entirely", 100% = "normal appearance chance", 200% = "twice as often as normal")
+** Other actions
+**: clear land, clear river, clear water, purchase land, landscape, plant tree, found town, build object
+* Each restriction is assigned a GSText which specifies the error message if a companies tries to execute the action.
+* For AIs there is a special error code "GS restiction applies" without further details.
+
+It remains to be decided what restrictions can be set using a single region, resp. when multiple regions with the same shape need to be used.
+
+
+== Examples ==
+
+* Forbid "game engine" to build processing industries in an area.
+* Disallow all but one company to build infrastructure in an area.
+* Disallow destruction of rivers on the whole map.
+
+
+== Off-topic: non-regional restrictions ==
+
+Independent of regions it might be interesting to allow restricting these things:
+* building/selling vehicles
+* engine preview
+* town actions
+But these things would be associated with engine types or towns, not with map regions.
+
+
+== NewGRF interface ==
+
+Regions could also be used to set properties readable by NewGRFs.
+Most likely this is interesting for industries.
+
+So the GS could define per industry type in a region:
+* Density of industry type (already in the list above)
+*: This somewhat defines a likelyhood of appearing and closure
+* Recommended production level (as in "low" or "high")
+
+Examples:
+* Industries producing COAL should try not to close in this region.
+* Raw industries producing OIL are more likely to spawn here.
+
+As long as OpenTTD controls the production and closure it will try to meet the requirements.
+Otherwise NewGRFs will have to support it explicitly.
+
+
+== Immediate actions ==
+
+It might also be useful to add some commands for execution in regions. Such as:
+* Destroy stuff in region (like flooding)
+*: Problem: Some things need flooding in multiple steps (first vehicle, then infrastructure, ...), so the "flood command" has to persist for some time. (might need some fancy animation)
+* Spawn industries (i.e. the GS does not have to set a specific tile, but OpenTTD tries a whole region to plant one)
