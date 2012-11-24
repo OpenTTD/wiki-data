@@ -1,10 +1,11 @@
-This article gets you started on compiling OpenTTD using Microsoft Visual C++ 2008/2010. Note that, for the Express Editions, compiling for 64-bit systems is unavailable.
+This article gets you started on compiling OpenTTD using Microsoft Visual C++ 2008/2010. Note that, for the Express Editions, compiling for 64-bit systems requires extra steps.
 
 
 __TOC__
 =Required software=
 :* [http://www.microsoft.com/express/download/default.aspx Microsoft® Visual C++ 2008 Express Editions] ''(current: Final)''
 :* [http://www.microsoft.com/downloads/details.aspx?FamilyID=529f03be-1339-48c4-bd5a-8506e5acf571 Microsoft® DirectX SDK - August 2007 or earlier] ''(only needed for DirectX Music, otherwise can be skipped. More later on.)'' This link is broken.  The Aug07 SDK does not appear to be available from Microsoft as of Aug 2012.
+:* [http://www.microsoft.com/en-us/download/details.aspx?id=8279 Microsoft windows 7 SP1 SDK] ''for 64 bit compilation only''
 
 :* [http://www.openttd.org/download-openttd-useful openttd-useful.zip] ''(current: 4.2)''
 :** openttd_useful.zip is a collection of files of varying age. For the latest zlib, libpng, liblzo2 and FreeType files you can browse their websites below.
@@ -18,19 +19,17 @@ __TOC__
 :* [http://subversion.tigris.org/servlets/ProjectDocumentList?folderID=8100&expandFolder=8100&folderID=91 Subversion command line version] binares ''(current: 1.6.6)''
 :* [http://tortoisesvn.net/downloads GUI TortoiseSVN] ''(current: 1.7.4)''
 
-:'''Note:''' This guide has been made on Windows Vista 32bit (also compatible with x64 and Windows 7).
-
-=Required Documents=
-:*http://wiki.openttd.org/Microsoft_Visual_C%2B%2B_2005_Express_Editions
-'' It is useful to read those Instructions, as they include some basic pre-requisites ( and it has pictures too )''
-
 =Installing=
 [[File:en/Archive/Compilation and Ports/Microsoft Visual Cpp 2008 Express Editions.png|thumb|200px|Install screen]]
 
 ===Microsoft® Visual C++ 2008 Express Editions===
 :If you just need to compile OpenTTD it's enough if you don't select any options, keep the default options and wait for the installation to finish (for illustration click the image).
 
+===Extra install required for 64bit compilation===
+You will need to install the windows SDK in order to compile the 64bit version
+:The only options you need are Developer Tools -> Windows Headers and Libraries.
 
+[[File:en/Archive/Compilation and Ports/SDK options.png|thumb|200px|Minimal SDK options]]
 
 ===Microsoft® DirectX SDK===
 If you don't want/need music, you can skip DirectX SDK. Please read next chapter on that.
@@ -56,8 +55,17 @@ If you don't want/need music, you can skip DirectX SDK. Please read next chapter
 :* Navigate to <code>Configuration properties -> C/C++ -> Preprocessor -> Preprocessor Definitions</code> and remove <code>WIN32_ENABLE_DIRECTMUSIC_SUPPORT</code> preprocessor definition.
 [[File:en/Archive/Compilation and Ports/Preprocessor.png|thumb|none|200px|Preprocessor settings]]
 
-:* Navigate to <code>Configuration properties -> Linker -> Input -> Additional Dependencies</code> and remove <code>dxguid.lib</code> library.
+:* Navigate to <code>Configuration properties -> Linker -> Input -> Additional Dependencies</code> and remove <code>dxguid.lib</code> library. ''note: this may no longer be necessary ''
 [[File:en/Archive/Compilation and Ports/Linker.png|thumb|none|200px|Linker settings]]
+
+=Preparing your system for 64bit compilation=
+:''Note: these instructions for using a 64bit version of Windows. If you are using a 32bit version, the registry edit will be different''
+*Download this .REG file and import it to your registry (https://docs.google.com/open?id=0B22TZ_qFdiWQYV9DSDZCV0Iwd3M)
+*Open folder 'C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcpackages'
+**rename / delete VCProjectEngine.Dll.Express.Config ''it gets replaced below''
+**change the extention from .config to .Express.config for the following files
+***AMD64.VCPlatform.Config
+***VCProjectEngine.dll.Express
 
 =Copying from OpenTTD needed includes and libraries=
 
@@ -154,6 +162,7 @@ Information: The DirectX SDK from November 2007 is the first one which supports 
 :* OpenTTD Developers for the great game.
 :* Microsoft® for the the SDKs and Visual C++ 2008 Express Edition.
 :* Sebastian and Desolator (aka Mircea Chirea) for creating/updating the Microsoft® Visual C++ 2005 Express guide.
+:* 64 bit instructions taken from http://jenshuebel.wordpress.com/2009/02/12/visual-c-2008-express-edition-and-64-bit-targets
 
 [[Category:en/Development]]
 [[Category:en/Development/Compiling OpenTTD]]
