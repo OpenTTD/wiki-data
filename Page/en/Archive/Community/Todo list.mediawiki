@@ -30,8 +30,9 @@ This section lists small tasks which require no advanced coding skills and no bi
 *: You can sort the filelist by modification date, but you cannot see it in the list.
 * Add pending newsitems to the crashlog.
 *: News messages are a client side thing, so they are not stored in savegames (not even in singleplayer). However, news can tell a bit about what happended recently in a game, so it might be useful to have this information in the crash.log (it's not in crash.sav). Just make sure that the textprocessing involved with the news does not cause crashes while writing the crashlog :p
-* Add text filter to load savegame/scenario/heightmap GUI. (similar to NewGRF GUI; wrt. "save" see "hard tasks")
-*: Add an editbox to enter a search term which the filelist is then filtered on. (Probably only considering the filename; reading the summary of eachs save would take too long)
+* Add text filter to load savegame/scenario/heightmap GUI.
+** Add an editbox to enter a search term which the filelist is then filtered on. (Probably only considering the filename; reading the summary of eachs save would take too long)
+** Filter to save savegame/scenario/heightmap GUI might be consistent, but usecase is questionable. Who wants to filter on the save to overwrite?
 * {{en/Flyspray|5078}} - [NOAI] API lack "vehicle is old"-event.
 * {{en/Flyspray|2064}}, {{en/Flyspray|1640}} - Increase usability of vehicle replacement window. (not necessarily every item in the list)
 * Change the "give money to" function so that money is donated to the company and not a specific player
@@ -61,8 +62,9 @@ This section lists medium tasks which require moderate coding skill and/or mediu
 *: Also this should not mess too much with cargo rating of stations, so as a first step the "if (_settings_game.order.selectgoods && st->goods[type].last_speed == 0) continue;"-hack in station_cmd.cpp would need replacement with something better. (i.e. acceptance should be a separate variable, no special value of some rating-related variable)
 * Add a font configuration window to the game options. (involves OS specific code)
 *: Currently it is very hard for the average user to configure fonts for OpenTTD, though this is kind of a must-task on todays high-resolution screens. So there should be some in-game method.
-* {{en/Flyspray|3852}} - Add text filter to server list.
-*: The list of servers is quite long. While adding lots of filters for various server properties would likely be quite cumbersome to use, a single editbox might provide a lot of filter options if it consideres various description texts of servers. (e.g. "arctic 256x256" would find arctic 256x256 maps, but also servers with the name "arctic")
+* Add more filters to server list.
+*: Currently there is a text filter for the server name. However, filtering on stuff like map size of climate might also be useful.
+*: Adding separate widgets for all filter criterions will likely result in a mess, so the idea is to extent the string filter to also be able to filter on stuff like "arctic 256x256". (which would include arctiv maps but also servers with the name "arctic" and mapsize 256x256)
 
 '''These tasks might depend on each other:'''
 * Include md5sum in NewGRF presets; actually store them using GRFID and md5sum instead of paths.
@@ -85,8 +87,6 @@ This section lists medium tasks which require moderate coding skill and/or mediu
 
 === Hard ===
 The items in this list either require good coding skills and/or bigger investment of time.
-* Add text filter to save savegame/scenario/heightmap GUIs. (requires support for multiple edit boxes in a single window)
-*: This task is here only for consistency with the load GUI task above. But actually I have no idea why you would want to filter the savelist on which save to overwrite... hmmm
 * Button in the order GUI to hide implicit orders. (only GUI, no gameplay effect)
 *: Implicit orders are somewhat a prerequisite for cargo destinations. But they make interaction with the orders list sometimes quite hard if there are a lot implicit orders. So, there should be a toggle-switch in the orders GUI to hide them. However, there is more to consider when hiding orders... Currently orders are numbered in the GUI including implcit orders. Changing the numbering when toggling would be confusing, and skipping numbers while hiding implicit orders would be confusing as well. So, maybe real orders should be numbered 1, 2, 3, and the implcit orders between them should be numbered 1.1, 1.2, 1.3, ... 2.1, 2.2 ... 
 * Map preview when loading heightmaps. And some sliders or similiar to adapt the range of heightlevels being used. (Maybe allow setting 3 control points like brightness/contrast/gamma in image processing)
