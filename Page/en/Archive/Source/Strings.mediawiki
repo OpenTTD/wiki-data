@@ -172,4 +172,12 @@ Only after that you call the appropiate draw function, for example:
 <pre>DrawStringRightAligned(x, y, STR_01A1_IS_GETTING_VERY_OLD, colour);</pre>
 Both parameters of "STR_01.." have been set up, and you will get the info nicely on your screen. Good luck!
 
+==Lifecycle==
+The "source of truth" for the [http://en.wikipedia.org/wiki/Internationalization_and_localization i18n] strings is located in the text tables of the language files (that is for example "'''english.txt'''") only. This means that the [http://translator.openttd.org/en/ Webtranslator] is updated automatically based on the latest state available in ''trunk'' of the SVN repository. Therefore, it is safe to remove an entire entry from "english.txt" in case that you know that it is not used elsewhere anymore. Make sure that you clean up the entry in all the other languages as well, as this is not done in ''trunk'' for you automatically. 
+
+Moreover, speaking more generally, if you want to ''change'' an English original text, you need to think about the impact on the other languages as well. Here are some rules of thumb:
+* If you are sure that your changes will affect all languages (also those which you do not speak) in the same way (for example, you want to change '''{STRING2}''' to '''{STRING3}'''), then go ahead and change it mechanically in all languages yourself. Don't wait for translators to adjust all other languages.
+* If you cannot assess if your change will change things in other languages (for example, you changed a single word in the phrase) or if you know that it will change things for sure (for example, you changed the entire phrase), then do the change in English and delete all other translations of this string in the other text tables. For translators, it is much easier to find a missing translation than searching for a changed one! As SVN keeps a history, the original translation is not lost either and can be restored, if really necessary.<br /> Also for the current case, if you are sure for a certain language (for example, it is your mother tongue) how the translation needs to be adjusted, adjust it yourself. Still get rid of the other strings in the other languages which you do not know well enough. If in doubt, whether it is right what you are doing, do not change the entry, but remove it.
+
+
 [[Category:en/Development]]
