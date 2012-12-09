@@ -189,11 +189,11 @@ Besides '''SetDParam(uint n, uint32 v)''' there are other '''SetDParam''xxx'' ''
 |-
 | <code>SetDParamStr(uint n, const char *str)</code>
 | Use the verbatim string ''str'' to apply it to the variable at index ''n''. 
-| Assume that it is <code>STR_XYZ: Hello World - {STRING}</code> in ''english.txt'' and <code>STR_XYZ: Hallo Welt - {STRING}</code> in ''german.txt''. The coding <pre>char *hello = 'Hello World!';
+| Assume that it is <code>STR_XYZ: Hello World - {RAW_STRING}</code> in ''english.txt'' and <code>STR_XYZ: Hallo Welt - {RAW_STRING}</code> in ''german.txt''. The coding <pre>char *hello = 'Hello World!';
 SetDParamStr(0, hello);
 DrawStringRightAligned(x, y, STR_XYZ, colour);
 </pre> would produce <code>Hello World - Hello World!</code> in English and <code>Hallo Welt - Hello World!'</code> in German.
-| Note that ''str'' is being used in a verbatim manner, i.e. the variable value is printed "as is" without any translation lookup in between (typically used for providing non-translated names to variables).
+| Note that ''str'' is being used in a verbatim manner, i.e. the variable value is printed "as is" without any translation lookup in between (typically used for providing non-translated names to variables). Only use <code>{RAW_STRING}</code> as variable!
 |-
 | <code>SetDParamMaxDigits(uint n, uint count)</code>
 | '''available since [http://vcs.openttd.org/svn/changeset/24801/ r24801]''': Emulate the variable value at index ''n'', which is of an integer type, by creating a number which has ''count'' maximal-width digits.
