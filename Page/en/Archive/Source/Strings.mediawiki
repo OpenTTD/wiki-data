@@ -206,6 +206,30 @@ DrawStringRightAligned(x, y, STR_XYZ, colour);
 | Assume that for the current font, the digit ''8'' is the digit with the largest font width. If you call <code>SetDParamMaxValue(1, 1234)</code>, this would be equivalent to calling <code>SetDParam(1, 8888)</code>, because ''1234'' consists of four digits. If you call <code>SetDParamMaxValue(2, 123, 5)</code>, this would be equivalent to calling <code>SetDParam(2, 88888)</code>, because ''123'' has only three digits, but you requested to have five digits at minimum.
 |}
 
+===Recursive Resolution Using {STRINGx} Commands===
+Using the <code>{STRINGx}</code> commands, it is possible to trigger a recursive resolution of strings. When using functions for processing variables, the indices are referencing in a ''top-to-bottom order'' whilst the leaf nodes are required to be in a ''left-to-right order''. 
+Here is an example: Let the strings be defined as:
+<pre>
+STR_A              : A
+STR_X              : X
+STR_Y              : Y
+STR_RECURSIVE      : {STRING5}
+STR_1ST_LEVEL      : {STRING1} / {STRING2}
+STR_2ND_LEVEL_A    : {STRING}
+STR_2ND_LEVEL_X    : {STRING} - {STRING} 
+</pre>
+To produce the output <code>A / X - Y</code> on drawing the string <code>STR_RECURSIVE</code> you have to set the variables like this:
+<pre>
+SetDParam(0, STR_1ST_LEVEL);
+SetDParam(1, STR_2ND_LEVEL_A);
+SetDParam(2, STR_A);
+SetDParam(3, STR_2ND_LEVEL_X);
+SetDParam(4, STR_X);
+SetDParam(5, STR_Y);
+DrawString(x, y, STR_RECURSIVE, colour);
+</pre>
+Moreover, note how <code>STR_RECURSIVE</code> is defined as <code>{STRING5}</code>: The first variable of <code>STR_1ST_LEVEL</code> requires space for two variables (the StringID of the string to show plus its single variable value). The second variable of <code>STR_1ST_LEVEL</code> requires space for three variables (the StringID of the string to show plus two additional variable values).
+
 ==Lifecycle==
 The "source of truth" for the [https://www.wikipedia.org/wiki/Internationalization_and_localization i18n] strings is located in the text tables of the language files (that is for example "'''english.txt'''") only. This means that the [http://translator.openttd.org/en/ WebTranslator] is updated automatically based on the latest state available in ''trunk'' of the SVN repository. Therefore, it is safe to remove an entire entry from "english.txt" in case that you know that it is not used elsewhere anymore (NB: If you do not find the name of the string in any source code file, you cannot conclude that it is not used anymore). Make sure that you clean up the entry in all the other languages as well, as this is not done in ''trunk'' for you automatically. 
 
