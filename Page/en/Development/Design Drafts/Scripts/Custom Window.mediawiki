@@ -1,0 +1,39 @@
+This is a draft for a possible API to allow scripts to create windows. It may or may not end up being implemented.
+
+
+== Window Class ==
+All windows created by this API will have the same Window Class which is a new Window Class that doesn't yet exist in OpenTTD. For now call it WC_SCRIPT.
+
+== Construct a window type ==
+Scripts can construct window types using:
+ GSScriptWindowType::Create(widgets)
+This method returns an ID that identifiers this window type.
+
+The ''widgets'' parameter is a nested table/array that describes the nested widget tree. (further work is needed to establish a specification for this.)
+
+== Open a window ==
+When using GSScriptWindow, the Window Class is implicitly set to WC_SCRIPT.
+
+To open a Window this method is used. The location parameter is an enum of window placements (Center, FreeSpot, ..). Since the same window type might be reused in similar but still slightly different situations, some widget texts may need to be customized when displaying the window. For this purpose there need to be possible to pass pairs of widgets and texts along when calling Open.
+ GSScriptWindow::Open(window_number, window_type, location, widget_texts);
+
+Example of a possible widget_texts table: (5 and 6 are widget IDs)
+ {
+   _5 = {
+     text = GSText(GSText.STR_HELLO, GSCompany.GetName(1)),
+     enabled = false
+   }
+   _6 = {
+     text = ..
+   }
+ }
+
+== Events ==
+Events occur when a user at some client clicks on a button. (some other widgets may also generate a 'done' signal)
+
+* GSEventButtonClick
+
+=== Possibilities ===
+* Perhaps when creating a window type or opening it, allow specifying which widgets that should emit events. This way fine grained events can be added to the system without spamming the event system, as scripts would then only white list the events that they really are interested into.
+* Perhaps when an event is triggered at a multiplayer client, the content of text edit widgets (and possible other widget status) should be sent in the same packet as the event to allow the script to inspect the status of other widgets when a user click eg. "Ok". In single player games, this isn't needed, but if this system is going to work in multiplayer, it might be useful.
+* Maybe if several clients are on the same company, OpenTTD should have a facility to sync the window on changes with some version number of the window state. When a client event is sent to the server, it include the window state number. In the successful case, the sending client have the same version as the server and the server increase the version number and send out an update to all clients of that company. If the server detects an old state in a received event packet, it discards the event and send back a new state update (assuming the previous one was lost).
