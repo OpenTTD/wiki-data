@@ -162,15 +162,48 @@ The strings enclosed in "{}"'s are special character strings that are interprete
 | <tt>{REV}</tt> || 0 || OpenTTD revision string
 |}
 
-==How to use these?==
-As you have seen before, you have to put these special modifiers into the string itself. Let us revisit the above example:
+==Functions for Processing Variables==
+===Example===
+As you have seen before, you have to put these special modifiers into the string itself. Let us revisit the example from above:
 <pre>STR_01A1_IS_GETTING_VERY_OLD   :{WHITE}{STRING} {COMMA} is getting very old</pre>
 Both "STRING" and "COMMA" are variables. You set them up by calling the appropriate '''"SetDParam(uint n, uint32 v)"''' function. So for this one you would do:
 <pre>SetDParam(0, _vehicle_type_names[v->type - 0x10]);
 SetDParam(1, v->unitnumber);</pre>
 Only after that you call the appropiate draw function, for example:
 <pre>DrawStringRightAligned(x, y, STR_01A1_IS_GETTING_VERY_OLD, colour);</pre>
-Both parameters of "STR_01.." have been set up, and you will get the info nicely on your screen. Good luck!
+Both parameters of "STR_01.." have been set up, and you will get the info nicely on your screen.
+
+===List of Functions===
+Besides '''SetDParam(uint n, uint32 v)''' there are other '''SetDParam''xxx'' ''' functions available:
+{| class="wikitable"
+|-
+! Signature 
+! Description
+! Example
+! Remarks
+|-
+| <code>SetDParam(uint n, uint32 v)</code>
+| Set the variable value at index ''n'' to value ''v''. 
+| see above
+| Depending on the variable used, the value is interpreted differently.
+|-
+| <code>SetDParamStr(uint n, const char *str)</code>
+| Use the verbatim string ''str'' to apply it to the variable at index ''n''. 
+| Assume that it is <code>STR_XYZ: Hello World - {STRING}</code> in ''english.txt'' and <code>STR_XYZ: Hallo Welt - {STRING}</code> in ''german.txt''. The coding <pre>char *hello = 'Hello World!';
+SetDParamStr(0, hello);
+DrawStringRightAligned(x, y, STR_XYZ, colour);
+</pre> would produce <code>Hello World - Hello World!</code> in English and <code>Hallo Welt - Hello World!'</code> in German.
+| Note that ''str'' is being used in a verbatim manner, i.e. the variable value is printed "as is" without any translation lookup in between (typically used for providing non-translated names to variables).
+|-
+| <code>SetDParamMaxDigits(uint n, uint count)</code>
+| '''available since [http://vcs.openttd.org/svn/changeset/24801/ r24801]''': Emulate the variable value at index ''n'', which is of an integer type, by creating a number which has ''count'' maximal-width digits.
+| Assume that for the current font, the digit ''8'' is the digit with the largest font width. If you call <code>SetDParamMaxDigits(1, 4)</code>, this would be equivalent to calling <code>SetDParam(1, 8888)</code>.
+| rowspan="2" | These functions are typically used when there is a need to guess the maximal width of a certain string, such as in '''UpdateWidgetSize'''. Make use of this function, if you know an upper boundary of your variable and calculating the exact value may be expensive, but you just need a "good guess" for the total width of your final string.
+|-
+| <code>SetDParamMaxValue(uint n, uint64 max_value, uint min_count = 0)</code>
+| '''available since [http://vcs.openttd.org/svn/changeset/24801/ r24801]''': Emulate the variable value at index ''n'', which is of an integer type, by creating a number with as many maximal-width digits as ''max_value'' provides. If ''min_count'' is provided, ensure that at least ''min_count'' digits are created.
+| Assume that for the current font, the digit ''8'' is the digit with the largest font width. If you call <code>SetDParamMaxValue(1, 1234)</code>, this would be equivalent to calling <code>SetDParam(1, 8888)</code>, because ''1234'' consists of four digits. If you call <code>SetDParamMaxValue(2, 123, 5)</code>, this would be equivalent to calling <code>SetDParam(2, 88888)</code>, because ''123'' has only three digits, but you requested to have five digits at minimum.
+|}
 
 ==Lifecycle==
 The "source of truth" for the [https://www.wikipedia.org/wiki/Internationalization_and_localization i18n] strings is located in the text tables of the language files (that is for example "'''english.txt'''") only. This means that the [http://translator.openttd.org/en/ Webtranslator] is updated automatically based on the latest state available in ''trunk'' of the SVN repository. Therefore, it is safe to remove an entire entry from "english.txt" in case that you know that it is not used elsewhere anymore. Make sure that you clean up the entry in all the other languages as well, as this is not done in ''trunk'' for you automatically. 
