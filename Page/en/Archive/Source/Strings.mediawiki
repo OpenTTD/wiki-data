@@ -1,16 +1,39 @@
 [[Translation:en/Archive/Source/Strings]]
 {{en/Development/Navigation}}
 
-This page is about the strings/language from a developers point of view. When you want to translate, please look at [[en/Archive/Source/OpenTTDDevBlackBook/Format of langfiles]] for a more in-depth article about translating and how to support for example genders and plurals.
+{{en/Note|This page deals with [https://www.wikipedia.org/wiki/Internationalization_and_localization i18n] strings from a ''developers'' point of view. If you are interested in aspects on translations, see [[en/Archive/Source/OpenTTDDevBlackBook/Format of langfiles]] for a more in-depth article. That article also covers language specific concepts like inflection due to gender, causes and plurality.}}
 
-You add a new string by adding a line to '''"english.txt"'''. This should happen at the place where it belongs with the other strings around. Keep in mind that sometimes OpenTTD uses special code for the numbering of strings. For example you SHOULD NOT put anything else in between the dates: ''"1st"'', ''"2nd"''... ''"31st"''. These strings are '''not''' called by their name, but iterated through from within the code with a counter. '''Keep this in mind!'''
+OpenTTD has built in a multi-language support for strings. These enduser-visible texts must be translated into multiple foreign languages.   Language dependent strings are stored in text files under '''src/lang/''' and have the pattern <code>''[language name]''.txt</code>. As any source code file they are under version control via SVN. The master language is considered to be English (British English) and is stored in the file '''english.txt'''. For a detailed explanation of these files, refer to [[en/Archive/Source/OpenTTDDevBlackBook/Format of langfiles]]. During the compilation process, language files are compiled into their corresponding <code>.lng</code> files which in turn are used during gameplay. 
+
 
 ==Adding Strings==
-You add a string by giving it an identifier, something starting with ''"STR_"'' then a number of spaces later a colon ":" and then the string itself. For example:
+You add a string by giving it an identifier then a number of spaces later a colon ":" and then the string itself. Use the file '''english.txt''' for this. By convention identifiers for strings always start with ''STR_''. The line could like something like this:
 <pre>STR_01A1_IS_GETTING_VERY_OLD   :{WHITE}{STRING} {COMMA} is getting very old</pre>
-The strings enclosed in "{}"'s are special character strings that are interpreted by the game. As you might have guessed, "{WHITE}" gives the string a white colour.
+Note that the location to where you add a string is not entirely arbitrary (see [[#ranges|Ranges]] below). The strings enclosed in curling brackets ("{}") are special character strings that are interpreted when rendering it. As you might have guessed, <code>{WHITE}</code> gives the string a white colour. For a list of special strings to use, refer to [[#special-strings|Special Strings]].<br />
 
-==List of special strings==
+==Comments==
+Every line which starts with a hash character "#" is considered to be a commentary line. 
+Empty lines (a line with just a carriage return symbol) are ignored and may be used to group strings which belong together semantically.
+
+==Ranges==
+<span id="ranges"></span>
+Ranges should be visually marked as a block by both starting and ending comments like this:
+<pre>
+############ range for months starts
+STR_MONTH_ABBREV_JAN                                            :Jan
+STR_MONTH_ABBREV_FEB                                            :Feb
+STR_MONTH_ABBREV_MAR                                            :Mar
+# ...
+############ range for months ends
+</pre>
+{{en/Warning|'''Do not break ranges''' when adding strings as this might have unwanted side-effects!}}
+Ranges are often used to define a group of texts which are ''not'' directly referenced in the source code. Instead, offset calculation in relation to the block's first entry is performed. Thus, texts are referenced only indirectly and during run-time.
+
+==Internals==
+Technically, string identifiers are assigned to integer numbers automatically. This is done during the build process. Consistent referencing is ensured via a header file (see '''lang/table/strings.h''') which is auto-generated. The corresponding data type used for strings in the C++ source code is <code>StringID</code>. This approach allows to perform arithmetics on StringID such as offset calculation. 
+
+==List of Special Strings==
+<span id="special_strings"></span>
 {| border="1" width="300"
 |-
 ! colspan = 2| Font and color (default size is medium)
@@ -231,7 +254,7 @@ DrawString(x, y, STR_TOP, colour);
 Moreover, note how <code>STR_TOP</code> is defined as <code>{STRING5}</code>: The first variable of <code>STR_1ST_LEVEL</code> requires space for two variables (the StringID of the string to show plus its single variable value). The second variable of <code>STR_1ST_LEVEL</code> requires space for three variables (the StringID of the string to show plus two additional variable values).
 
 ==Lifecycle==
-The "source of truth" for the [https://www.wikipedia.org/wiki/Internationalization_and_localization i18n] strings is located in the text tables of the language files (that is for example "'''english.txt'''") only. This means that the [http://translator.openttd.org/en/ WebTranslator] is updated automatically based on the latest state available in ''trunk'' of the SVN repository. Therefore, it is safe to remove an entire entry from "english.txt" in case that you know that it is not used elsewhere anymore (NB: If you do not find the name of the string in any source code file, you cannot conclude that it is not used anymore). Make sure that you clean up the entry in all the other languages as well, as this is not done in ''trunk'' for you automatically. 
+The "source of truth" for the i18n strings is located in the text tables of the language files (that is for example "'''english.txt'''") only. This means that the [http://translator.openttd.org/en/ WebTranslator] is updated automatically based on the latest state available in ''trunk'' of the SVN repository. Therefore, it is safe to remove an entire entry from "english.txt" in case that you know that it is not used elsewhere anymore (NB: If you do not find the name of the string in any source code file, you cannot conclude that it is not used anymore due to [[#ranges|ranges]]). Make sure that you clean up the entry in all the other languages as well, as this is not done in ''trunk'' for you automatically. 
 
 Moreover, speaking more generally, if you want to ''change'' an English original text, you need to think about the impact on the other languages as well. Here are some rules of thumb:
 * If you are sure that your changes will affect all languages (also those which you do not speak) in the same way (for example, you want to change '''{RED}''' to '''{GREEN}'''), then go ahead and change it mechanically in all languages yourself. Don't wait for translators to adjust all other languages.
