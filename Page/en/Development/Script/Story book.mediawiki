@@ -1,0 +1,38 @@
+[[Translation:en/Development/Script/Story book]]
+{{en/Note|This page describe ongoing work that haven't been decided to go into trunk yet}}
+
+The Story book is a collection of Story pages that a Game Script can create. It can be used both by pure tutorials but also just about any scenario or goal script which want to build a game story. The complete book can be constructed when the game starts, or the GS can add pages eg. after the completion of a task/goal.
+
+== GS API ==
+Pages can be company specific or global. Each company will only show the pages that are either company specific or global.
+
+Pages are stored in a pool. As long as you only append pages, they will be added at the end of the book.
+
+While a GS can remove a page, it will cause the next page to get the ID of this page. So it is only recommended to remove all pages or keep all pages.
+
+=== Methods ===
+Check if a given ID is a valid story page
+ bool GSStoryPage.IsValidStoryPage(story_page_id)
+
+Create a new story page. Returns the Id of the created story page.
+ StoryPageID GSStoryPage.New(company, text)
+
+Remove a story page.
+ bool GSStoryPage.Remove(story_page_id)
+
+Update the text of a given story page.
+ bool GSStoryPage.SetText(story_page_id, text)
+
+Update/set the title of a given story page. The title is used in the page selector, so don't make it too long. If no title is set, the gui will display "Page {n}" in the page selector.
+ bool GSStoryPage.SetTitle(story_page_id, title)
+
+=== Different ways to program the Story Book ===
+# At startup of GS, call GSStoryPage.New to create all your pages (as global pages). This can be used if you just want to provide some pages of text which is equal for all companies and all pages should always be visible.
+# Create just one or a few pages at start (of game or company). Later when a task that have been described on the last page is completed, call GSStoryPage.New to add a new page and then GSStoryPage.ShowPage to skip to that page. This method allows both to not reveal all pages directly but also having multiple paths to go in the story depending on whatever you want.
+
+If an API is added to restrict showing further pages until a goal have been completed, a complete book could be created at script start. All goals could also be added at start or add new ones as previous ones have been marked as completed (to not show all goals in the goal list at start). 
+
+== Future plans ==
+* Allow a Story Page to list one or more Goals which will get displayed below the text with.
+* Add a GS API to show a specific page (and open the window if it is not open yet)
+* Maybe allow referenced goals to be blocking the GUI to progress to next page until they have all been completed.
