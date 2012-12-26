@@ -1,0 +1,198 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/Special strings]]
+{{en/Development/Navigation}}
+
+End-user available texts allow to make use of special strings which allow to deal as placeholders and symbols, adjustments due to inflection, or change the formatting. 
+
+==General==
+Special Strings are always enclosed in curly brackets. Depending on the content within these curly brackets a certain command is triggered. These commands can be grouped as follows:
+
+# '''Replacement for symbols''' such as a train symbol, a bus symbol, or the "X" symbol at the top of a window to close it,
+# '''Change formatting''' such as making text colour look green/red/..., or changing the font size,
+# '''Placeholders''' such as another string, a value for a cargo that is waiting at a station, or a vehicle's number,
+# '''Inflection''' such as adjustments to other words to allow context-aware translation.
+
+See below for a complete list of commands currently available:
+
+{{en/Todo|Verify that the list below really is complete!}}
+
+==Special characters / Symbols==
+{| border = "1"
+| '''Command''' || '''Description'''
+|-
+| <tt>{}</tt> || Go to the next line
+|-
+| <tt>{NBSP}</tt> || non-breaking space
+|-
+| <tt>{{}</tt> || {
+|-
+| <tt>{CENT}</tt> || &cent;
+|-
+| <tt>{EURO}</tt> || &euro;
+|-
+| <tt>{POUNDSIGN}</tt> || £
+|-
+| <tt>{YENSIGN}</tt> || ¥
+|-
+| <tt>{UPARROW}</tt> || ↑
+|-
+| <tt>{DOWNARROW}</tt> || ↓
+|-
+| <tt>{RIGHTARROW}</tt> || →
+|-
+| <tt>{SMALLUPARROW}</tt> || small ↑
+|-
+| <tt>{SMALLDOWNARROW}</tt> || small ↓
+|-
+| <tt>{COPYRIGHT}</tt> || &copy;
+|-
+| <tt>{REGISTERED}</tt> || &reg;
+|-
+| <tt>{CHECKMARK}</tt> || (a checkmark)
+|-
+| <tt>{CROSS}</tt> || (an X, used for closing windows)
+|-
+| <tt>{TRAIN}</tt> || icon of a train
+|-
+| <tt>{LORRY}</tt> || icon of a lorry / truck
+|-
+| <tt>{BUS}</tt> || icon of a bus
+|-
+| <tt>{PLANE}</tt> || icon of a plane
+|-
+| <tt>{SHIP}</tt> || icon of a ship
+|-
+| <tt>{STATIONFEATURES}</tt> || small icons of the supported vehicle types of a specific station 
+|}
+
+
+==Formatting==
+<span id="special_strings"></span>
+{| border="1" width="300"
+|-
+| '''Command''' || '''Description'''
+|-
+| <tt>{TINYFONT}</tt> || switch to tiny font
+|-
+| <tt>{BIGFONT}</tt> || switch to big font
+|-
+| nowrap| 
+<tt>{BLACK} &nbsp;{WHITE}<br>
+{RED} &nbsp;&nbsp; {GREEN}<br>
+{BLUE} &nbsp; {YELLOW}<br>
+{ORANGE} {PURPLE}<br>
+{GRAY} &nbsp; {BROWN}<br>
+{SILVER} {GOLD}<br>
+{CREAM} &nbsp;{LTBLUE}<br>
+{DKBLUE} {DKGREEN}<br>
+{LTBROWN}</tt>
+| Change the colour of the string, or the part of string until overridden by another colour to this colour.
+|}
+{{en/Note|The default font size is ''medium''}}
+
+==Placeholders==
+{| border = "1"
+!colspan="3"| Formatted Numbers
+|- 
+| '''Command''' || '''Number of Params used''' || '''Description'''
+|-
+| <tt>{NUM}</tt> || 1 || show a 32-bit signed integer number, e.g. 1600
+|-
+| <tt>{COMMA}</tt> || 1 || show a 32-bit signed integer number with a thousands separator, e.g. 14,000
+|-
+| <tt>{CURRENCY}</tt> || 1 || number as a currency, e.g. € 230,000
+|-
+| <tt>{CURRENCY64}</tt> || 1 || a 64-bit number extended with currency symbols
+|-
+| <tt>{CURRCOMPACT}</tt> || 1 || short version of currency (used in graphs)
+|-
+| <tt>{CURRCOMPACT64}</tt> || 1 || a compacted 64-bit number extended by currency symbols 
+|-
+| <tt>{DATE_TINY}</tt> || 1 ||  tiny date version, e.g. 01-07-2004
+|-
+| <tt>{DATE_SHORT}</tt> || 1 ||  short date version, e.g. February 2004
+|-
+| <tt>{DATE_LONG}</tt> || 1 ||  long date version, e.g. 25th February 2004
+|-
+| <tt>{FORCE}</tt> || 1 || show number as force, e.g. 1500kN
+|-
+| <tt>{POWER}</tt> || 1 || show number as power, e.g. 6000HP
+|-
+| <tt>{VELOCITY}</tt> || 1 || show number as speed, e.g. 120km/h or 195mph
+|-
+| <tt>{VOLUME}</tt> || 1 || show number as volume, e.g. 1,000 litres
+|-
+| <tt>{VOLUME_S}</tt> || 1 || show number as volume, e.g. 1,000L
+|-
+| <tt>{WEIGHT}</tt> || 1 || show number as weight, e.g. 1,000 tonnes
+|-
+| <tt>{WEIGHT_S}</tt> || 1 || show number as weight, e.g. 1,000T
+|-
+| <tt>{CARGO}</tt> || 2 || show number as cargo, e.g. 950 tonnes of Coal
+|-
+| <tt>{SHORTCARGO}</tt> || 2 || number with cargo units, e.g. 950 tonnes
+|}
+{| border = "1"
+!colspan="3"| Formatted Strings (given an index)
+|-
+| '''Command''' || '''Number of Params used''' || '''Description''' || '''Comment'''
+|-
+| <tt>{STRING}</tt> || 1 || get a string without parameters from an index ||
+|-
+| <tt>{STRING1}</tt> || 2 || get a string with 1 parameter || Use in '''english.txt''' only; in other language files use <tt>{STRING}</tt> instead
+|-
+| <tt>{STRING2}</tt> || 3 || get a string with 2 parameters || Use in '''english.txt''' only; in other language files use <tt>{STRING}</tt> instead
+|-
+| <tt>{STRING3}</tt> || 4 || get a string with 3 parameters || Use in '''english.txt''' only; in other language files use <tt>{STRING}</tt> instead
+|-
+| <tt>{STRING4}</tt> || 5 || get a string with 4 parameters || Use in '''english.txt''' only; in other language files use <tt>{STRING}</tt> instead
+|- 
+| <tt>{STRING5}</tt> || 6 || get a string with 5 parameters || Use in '''english.txt''' only; in other language files use <tt>{STRING}</tt> instead
+|-
+| <tt>{STRING6}</tt> || 7 || get a string with 6 parameters || Use in '''english.txt''' only; in other language files use <tt>{STRING}</tt> instead
+|-
+| <tt>{STRING7}</tt> || 8 || get a string with 7 parameters || Use in '''english.txt''' only; in other language files use <tt>{STRING}</tt> instead
+|-
+| <tt>{RAW_STRING}</tt> || 1 || get a verbatim string || Use in '''english.txt''' only; in other language files use <tt>{STRING}</tt> instead
+|-
+| <tt>{COMPANY}</tt> || 1 || get the company name pointed to by this index ||
+|-
+| <tt>{PLAYERNAME}</tt> || 1 || get the player name pointed to by this index ||
+|-
+| <tt>{STATION}</tt> || 1 || get the station name pointed to by this index ||
+|-
+| <tt>{TOWN}</tt> || 1 || get the town name pointed to by this index ||
+|-
+| <tt>{INDUSTRY}</tt> || 1 || get the industry name pointed to by this index ||
+|-
+| <tt>{WAYPOINT}</tt> || 1 || get the waypoint name pointed to by this index ||
+|-
+| <tt>{VEHICLE}</tt> || 1 || get the vehicle name pointed to by this index ||
+|-
+| <tt>{GROUP}</tt> || 1 || get the vehicle group name pointed to by this index ||
+|-
+| <tt>{ENGINE}</tt> || 1 || get the engine name pointed to by this index ||
+|-
+| <tt>{SIGN}</tt> || 1 || get the sign name pointed to by this index ||
+|}
+
+{| border = "1"
+!colspan="3"| Miscellaneous other Placeholders
+|-
+| '''Command''' || '''Number of Params used''' || '''Description'''
+|-
+| <tt>{SKIP}</tt> || 1 || Use up a parameter but do nothing with it
+|-
+| <tt>{REV}</tt> || 0 || OpenTTD revision string
+|-
+|}
+
+==Inflection==
+{| border = "1"
+|-
+| '''Command''' || '''Number of Params used''' || '''Description'''
+|-
+| <tt>{P}</tt> || 0 || Plural modifier
+|-
+| <tt>{G}</tt> || 0 || Gender modifier
+|-
+|}
