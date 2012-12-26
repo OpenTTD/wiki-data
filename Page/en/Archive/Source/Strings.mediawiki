@@ -9,11 +9,14 @@ OpenTTD has built in a multi-language support for strings. These enduser-visible
 ==Adding Strings==
 You add a string by giving it an identifier then a number of spaces later a colon ":" and then the string itself. Use the file '''english.txt''' for this. By convention identifiers for strings always start with ''STR_''. The line could like something like this:
 <pre>STR_01A1_IS_GETTING_VERY_OLD   :{WHITE}{STRING} {COMMA} is getting very old</pre>
-Note that the location to where you add a string is not entirely arbitrary (see [[#ranges|Ranges]] below). The strings enclosed in curly brackets ("{}") are special character strings that are interpreted when rendering it. As you might have guessed, <code>{WHITE}</code> gives the string a white colour. For a list of special strings to use, refer to [[#special-strings|Special Strings]].<br />
+Note that the location to where you add a string is not entirely arbitrary (see [[#ranges|Ranges]] below). The strings enclosed in curly brackets ("{}") are special character strings that are interpreted when rendering it. As you might have guessed, <code>{WHITE}</code> gives the string a white colour. For a list of special strings to use, refer to [[en/Archive/Source/OpenTTDDevBlackBook/Special strings|Special Strings]].<br />
 
 ==Comments==
 Every line which starts with a hash character "#" is considered to be a commentary line. 
 Empty lines (a line with just a carriage return symbol) are ignored and may be used to group strings which belong together semantically.
+
+==Special Strings==
+Strings may include "Special Strings" which allow to modify the way how the string is being rendered or make substitutions for placeholders. A list of special strings can be found in a  [[en/Archive/Source/OpenTTDDevBlackBook/Special strings|separate article]].
 
 ==Ranges==
 <span id="ranges"></span>
@@ -31,160 +34,6 @@ Ranges are often used to define a group of texts which are ''not'' directly refe
 
 ==Internals==
 Technically, string identifiers are assigned to integer numbers automatically. This is done during the build process. Consistent referencing is ensured via a header file (see '''lang/table/strings.h''') which is auto-generated. The corresponding data type used for strings in the C++ source code is <code>StringID</code>. This approach allows to perform arithmetics on StringID such as offset calculation. 
-
-==List of Special Strings==
-<span id="special_strings"></span>
-{| border="1" width="300"
-|-
-! colspan = 2| Font and color (default size is medium)
-|-
-| '''Command''' || '''Description'''
-|-
-| <tt>{TINYFONT}</tt> || switch to tiny font
-|-
-| <tt>{BIGFONT}</tt> || switch to big font
-|-
-| nowrap| 
-<tt>{BLACK} &nbsp;{WHITE}<br>
-{RED} &nbsp;&nbsp; {GREEN}<br>
-{BLUE} &nbsp; {YELLOW}<br>
-{ORANGE} {PURPLE}<br>
-{GRAY} &nbsp; {BROWN}<br>
-{SILVER} {GOLD}<br>
-{CREAM} &nbsp;{LTBLUE}<br>
-{DKBLUE} {DKGREEN}<br>
-{LTBROWN}</tt>
-| Change the colour of the string, or the part of string until overridden by another colour to this colour.
-|}
-{| border = "1"
-!colspan="2"| Special characters
-|-
-| '''Command''' || '''Description'''
-|-
-| <tt>{}</tt> || Go to the next line
-|-
-| <tt>{NBSP}</tt> || non-breaking space
-|-
-| <tt>{{}</tt> || {
-|-
-| <tt>{POUNDSIGN}</tt> || £
-|-
-| <tt>{YENSIGN}</tt> || ¥
-|-
-| <tt>{COPYRIGHT}</tt> ||| ©
-|-
-| <tt>{UPARROW}</tt> || ↑
-|-
-| <tt>{DOWNARROW}</tt> || ↓
-|-
-| <tt>{RIGHTARROW}</tt> || →
-|-
-| <tt>{SMALLUPARROW}</tt> || small ↑
-|-
-| <tt>{SMALLDOWNARROW}</tt> || small ↓
-|-
-| <tt>{CHECKMARK}</tt> || (a checkmark)
-|-
-| <tt>{CROSS}</tt> || (an X, used for closing windows)
-|-
-| <tt>{TRAIN}</tt> || icon of a train
-|-
-| <tt>{LORRY}</tt> || icon of a lorry / truck
-|-
-| <tt>{BUS}</tt> || icon of a bus
-|-
-| <tt>{PLANE}</tt> || icon of a plane
-|-
-| <tt>{SHIP}</tt> || icon of a ship
-|}
-{| border = "1"
-!colspan="3"| Formatted Numbers
-|- 
-| '''Command''' || '''Number of Params used''' || '''Description'''
-|-
-| <tt>{NUM}</tt> || 1 || show a 32-bit signed integer number, e.g. 1600
-|-
-| <tt>{COMMA}</tt> || 1 || show a 32-bit signed integer number with a thousands separator, e.g. 14,000
-|-
-| <tt>{CURRENCY}</tt> || 1 || number as a currency, e.g. € 230,000
-|-
-| <tt>{CURRCOMPACT}</tt> || 1 || short version of currency (used in graphs)
-|-
-| <tt>{DATE_TINY}</tt> || 1 ||  tiny date version, e.g. 01-07-2004
-|-
-| <tt>{DATE_SHORT}</tt> || 1 ||  short date version, e.g. February 2004
-|-
-| <tt>{DATE_LONG}</tt> || 1 ||  long date version, e.g. 25th February 2004
-|-
-| <tt>{FORCE}</tt> || 1 || show number as force, e.g. 1500kN
-|-
-| <tt>{POWER}</tt> || 1 || show number as power, e.g. 6000HP
-|-
-| <tt>{VELOCITY}</tt> || 1 || show number as speed, e.g. 120km/h or 195mph
-|-
-| <tt>{VOLUME}</tt> || 1 || show number as volume, e.g. 1,000 litres
-|-
-| <tt>{VOLUME_S}</tt> || 1 || show number as volume, e.g. 1,000L
-|-
-| <tt>{WEIGHT}</tt> || 1 || show number as weight, e.g. 1,000 tonnes
-|-
-| <tt>{WEIGHT_S}</tt> || 1 || show number as weight, e.g. 1,000T
-|-
-| <tt>{CARGO}</tt> || 2 || show number as cargo, e.g. 950 tonnes of Coal
-|-
-| <tt>{SHORTCARGO}</tt> || 2 || number with cargo units, e.g. 950 tonnes
-|}
-{| border = "1"
-!colspan="3"| Formatted Strings (given an index)
-|-
-| '''Command''' || '''Number of Params used''' || '''Description'''
-|-
-| <tt>{STRING}</tt> || 1 || get a string without parameters from an index
-|-
-| <tt>{STRING1}</tt> || 2 || get a string with 1 parameter
-|-
-| <tt>{STRING2}</tt> || 3 || get a string with 2 parameters
-|-
-| <tt>{STRING3}</tt> || 4 || get a string with 3 parameters
-|-
-| <tt>{STRING4}</tt> || 5 || get a string with 4 parameters
-|-
-| <tt>{STRING5}</tt> || 6 || get a string with 5 parameters
-|-
-| <tt>{COMPANY}</tt> || 1 || get the company name pointed to by this index
-|-
-| <tt>{PLAYERNAME}</tt> || 1 || get the player name pointed to by this index
-|-
-| <tt>{STATION}</tt> || 1 || get the station name pointed to by this index
-|-
-| <tt>{TOWN}</tt> || 1 || get the town name pointed to by this index
-|-
-| <tt>{INDUSTRY}</tt> || 1 || get the industry name pointed to by this index
-|-
-| <tt>{WAYPOINT}</tt> || 1 || get the waypoint name pointed to by this index
-|-
-| <tt>{VEHICLE}</tt> || 1 || get the vehicle name pointed to by this index
-|-
-| <tt>{GROUP}</tt> || 1 || get the vehicle group name pointed to by this index
-|-
-| <tt>{ENGINE}</tt> || 1 || get the engine name pointed to by this index
-|-
-| <tt>{SIGN}</tt> || 1 || get the sign name pointed to by this index
-|-
-| <tt>{SKIP}</tt> || 1 || Use up a parameter but do nothing with it
-|}
-{{en/Note|The commands <code>{STRING'''x'''}</code> may lead to a nested resolution of commands. For details, refer to the section below}}
-{| border = "1"
-!colspan="3"| Special commands
-|-
-| '''Command''' || '''Number of Params used''' || '''Description'''
-|-
-| <tt>{P}</tt> || 0 || Plural modifier
-|-
-| <tt>{G}</tt> || 0 || Gender modifier
-|-
-| <tt>{REV}</tt> || 0 || OpenTTD revision string
-|}
 
 ==Functions for Processing Variables==
 ===Example===
