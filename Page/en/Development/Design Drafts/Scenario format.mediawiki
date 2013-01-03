@@ -6,26 +6,15 @@ http://www.tt-forums.net/viewtopic.php?f=32&t=61140
 The extended heightmap format aims to store most of the information of a scenario (terrain, water, towns, etc) in a NewGRF agnostic way. Since company property is not intended to be part of scenarios, this format will not be including it. Depending on the information included in the extended heightmap it will be possible to scale the extended heightmap to different sizes or it will be fixed.
 
 
-NOTE: Unless mentioned otherwise, all properties are optional.
-
+'''NOTE:''' Unless mentioned otherwise, all properties are optional.
 
 An extended heightmap is distributed as a tar file. The file includes the following parts:
-
-
 * '''Metadata file:''' Stores general information, along with object file and layer data.
-
-
 * '''Layers:''' Layers are image files that store information for each one of the points in the map.
-
-
 * '''Object files:''' Each object file contains information about a given map entity, such as towns.
 
-
 * '''Language files:''' Language files contain the extended heightmap name and its description. There are multiple files, one for each supported language. Language files are planned but not contemplated for the first versions of the Scenario format.
-
-
-* '''Game Script:''' We have to consider if bundling a scenario specific GS to a scenario is a good idea.
-
+* '''Game Script:''' We have to consider if bundling a scenario specific GS to a scenario is a good idea and, if it is, what is the best way to do it.
 
 ==Scaling==
 
@@ -45,27 +34,16 @@ All heights in an extended heightmap are defined between 0 and a property called
 
 ==Metadata file==
 
-The metadata file must be called "metadata.txt".
+The metadata file '''must''' be called "metadata.txt".
 
 ===Extended heightmap section===
 
 The first section includes information about the extended heightmap itself.
-
-
 * '''format_version:''' This property specifies the format version used by the extended heightmap. It is a simple numerical value that will be increased whenever any format-breaking changes are introduced. It must be present in all extended heightmaps with (initially) a value of 1. OpenTTD will check this value, and reject loading the extended heightmap if it is greater than 1 or incorrect. In the future, if any format-breaking changes have to be introduced, OpenTTD would need conversion code to be able to load old formats along with the new ones, and this code would use format_version as a guide.
-
-
 * '''width:''' By default, the extended heightmap will be scaled to this width. The user can still modify the default value and choose which width to use. This information will be ignored if the heightmap is not scalable.
-
-
 * '''height:''' By default, the extended heightmap will be scaled to this height. The user can still modify the default value and choose which height to use. This information will be ignored if the heightmap is not scalable.
-
-
 * '''rotation:''' Indicates the preferred orientation for the extended heightmap. The possible values are "cw" (clockwise rotation) or "ccw" (counter clockwise rotation). OpenTTD will select this orientation automatically, but it will still allow the user to change the orientation.
-
-
 * '''climate:''' By default, the extended heightmap will use this climate. OpenTTD will select this climate automatically, but it will still allow the user to change the climate. This property can use the following values: "temperate", "arctic", "tropical" and "toyland".
-
 
 ===Layer sections===
 
@@ -127,7 +105,6 @@ Each layer stores information for each one of the points in the map in PNG forma
 * '''max_desired_height:''' Maximum height of the resulting OpenTTD map. This property must be in the [1, 15] range, and it must be greater than min_desired_height. This property has a default value of 15.
 * '''snowline_height:''' Default snowline for the extended heightmap. OpenTTD will select this snowline automatically, but it will still allow the user to change the snowline. The snowline height can also be modified by any NewGRFs that the user chooses when he loads the extended heightmap. If the property is not present, OpenTTD will just set the current snowline height setting as the default when presenting the user with the choice to modify it. This property will be ignored if the climate is not subartic. This property must be in the [0, max_height] range.
 
-
 Height layers are 8 bit grayscale images that describe the height of each point of the map as a number in the [0, 255] interval. Any heights above max_height will be clamped to max_height when generating maps.
 
 ===Terrain layer===
@@ -138,16 +115,9 @@ Height layers are 8 bit grayscale images that describe the height of each point 
 '''Size scalable:''' Yes
 
 The terrain layer is a paletted PNG image that stores information about the terrain type of each one of the tiles.
-
-
 * '''Default:''' Default terrain.
-
-
 * '''Rough:''' Rough terrain.
-
-
 * '''Rock:''' Rocky terrain.
-
 
 ===Water layer===
 '''Metadata section:''' [water_layer]
@@ -159,16 +129,9 @@ The terrain layer is a paletted PNG image that stores information about the terr
 Water layers are paletted PNG images which indicate the presence or abscense of water in each tile. If a water layer is not present, OpenTTD will assume that all tiles with a resulting height of zero are sea. If the water layer is present, OpenTTD will only mark as sea those tiles indicated in the water layer (Issue: OpenTTD will flood any tiles with a height of zero in the border of the map).
 
 Water layers include the following information:
-
-
 * '''No water:''' This is not a water tile
-
-
 * '''Sea:''' Only tiles at zero height can be marked as sea. OpenTTD will treat any tiles marked as sea above height zero as rivers.
-
-
 * '''River:''' Used to mark tiles as river.
-
 
 ===Climate layer===
 '''Metadata section:''' [climate_layer]
@@ -178,16 +141,9 @@ Water layers include the following information:
 '''Size scalable:''' Yes
 
 The climate layer is a paletted PNG image that stores information about the climate type of each one of the tiles. Currently only the subtropical climate has different climate types for their tiles.
-
-
 * '''Default:''' Default terrain.
-
-
 * '''Desert:''' Desert terrain.
-
-
 * '''Rainforest:''' Rainforest terrain.
-
 
 ===Road layer===
 '''Metadata section:''' [road_layer]
@@ -221,19 +177,10 @@ An industry layer is planned, but since it is quite complicated it won't be desi
 Object files contain text data associated to a given game entity.
 
 The "direction" fields can take the following values:
-
-
 * '''NE:''' Northeast
-
-
 * '''NW:''' Northwest
-
-
 * '''SE:''' Southeast
-
-
 * '''SW:''' Southwest
-
 
 ===Town file===
 '''Metadata section:''' [town_file]
@@ -253,20 +200,10 @@ city=false
 layout=random</pre>
 
 * '''posx:''' X position of the town. This property is obligatory.
-
-
 * '''posy:''' Y position of the town. This property is obligatory.
-
-
 * '''name:''' Town name. If missing, a random town name (with the selected town name generator) will be used.
-
-
 * '''buildings:''' Number of buildings that this town will have. If missing, the default size for current OpenTTD settings will be used.
-
-
 * '''city:''' True if the town will grow faster than other towns. The default value is "false".
-
-
 * '''layout:''' Road layout to use in this town. It can be "original", "better" (better roads), "2x2", "3x3" and "random". If this property is missing, the current layout chosen in OpenTTD options will be used.
 
 
@@ -279,28 +216,18 @@ layout=random</pre>
 
 This file stores all road bridges. All properties are obligatory.
 
-
-* '''posx:''' Horizontal position of the bridge.
-
-
-* '''posy:''' Vertical position of the bridge.
-
-
-* '''direction:''' Direction of the bridge.
-
-
-* '''length:''' Length of the bridge.
-
-
-* '''max_speed:''' Preferred maximum speed of the bridge in km-ish/h. If OpenTTD can't find a bridge that uses this maximum speed, it will choose the bridge with the nearest lower maximum speed.
-
-
 <pre>[bridge]
 posx=12
 posy=95
 direction=SW
 length=12
 max_speed=220</pre>
+
+* '''posx:''' Horizontal position of the bridge.
+* '''posy:''' Vertical position of the bridge.
+* '''direction:''' Direction of the bridge.
+* '''length:''' Length of the bridge.
+* '''max_speed:''' Preferred maximum speed of the bridge in km-ish/h. If OpenTTD is not able to find a bridge that uses this maximum speed with the current selection of NewGRFs, it will choose the bridge with the nearest lower maximum speed.
 
 ===Road tunnel file===
 '''Metadata section:''' [road_tunnel_file]
@@ -311,16 +238,12 @@ max_speed=220</pre>
 
 This file stores all road tunnels. All properties are obligatory.
 
-
-* '''posx:''' Horizontal position of the tunnel.
-
-
-* '''posy:''' Vertical position of the tunnel.
-
-
 <pre>[tunnel]
 posx=34
 posy=59</pre>
+
+* '''posx:''' X position of the tunnel.
+* '''posy:''' Y position of the tunnel.
 
 ===Aqueduct file===
 '''Metadata section:''' [water_bridge_file]
@@ -335,6 +258,9 @@ This file stores all aqueducts. All properties are obligatory.
 posx=12
 posy=950</pre>
 
+* '''posx:''' X position of the aqueduct.
+* '''posy:''' Y position of the aqueduct.
+
 ===Sign file===
 '''Metadata section:''' [sign_file]
 
@@ -348,3 +274,7 @@ This file stores all signs. All properties are obligatory.
 posx=12
 posy=950
 text=Welcome to this scenario!</pre>
+
+* '''posx:''' X position of the sign.
+* '''posy:''' Y position of the sign.
+* '''text:''' Text to show in the sign.
