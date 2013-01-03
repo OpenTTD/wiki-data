@@ -23,6 +23,7 @@ An extended heightmap is distributed as a tar file. The file includes the follow
 
 * '''Language files:''' Language files contain the extended heightmap name and its description. There are multiple files, one for each supported language. Language files are planned but not contemplated for the first versions of the Scenario format.
 
+
 * '''Game Script:''' We have to consider if bundling a scenario specific GS to a scenario is a good idea.
 
 
@@ -54,15 +55,6 @@ The first section includes information about the extended heightmap itself.
 * '''format_version:''' This property specifies the format version used by the extended heightmap. It is a simple numerical value that will be increased whenever any format-breaking changes are introduced. It must be present in all extended heightmaps with (initially) a value of 1. OpenTTD will check this value, and reject loading the extended heightmap if it is greater than 1 or incorrect. In the future, if any format-breaking changes have to be introduced, OpenTTD would need conversion code to be able to load old formats along with the new ones, and this code would use format_version as a guide.
 
 
-* '''max_height:''' This property indicates the maximum height level of the values defined in the extended heightmap. If not present, it will be assumed to be 255. It can take values in the [0, 255] interval.
-
-
-* '''min_desired_height:''' Indicates the minimum height of the resulting OpenTTD map. If set above 0, the resulting map will have no sea at all. This property must be in the [0, 14] range, and it must be smaller than max_desired_height. This property has a default value of 0.
-
-
-* '''max_desired_height:''' Maximum height of the resulting OpenTTD map. This property must be in the [1, 15] range, and it must be greater than min_desired_height. This property has a default value of 15.
-
-
 * '''width:''' By default, the extended heightmap will be scaled to this width. The user can still modify the default value and choose which width to use. This information will be ignored if the heightmap is not scalable.
 
 
@@ -74,8 +66,6 @@ The first section includes information about the extended heightmap itself.
 
 * '''climate:''' By default, the extended heightmap will use this climate. OpenTTD will select this climate automatically, but it will still allow the user to change the climate. This property can use the following values: "temperate", "arctic", "tropical" and "toyland".
 
-
-* '''snowline:''' Default snowline for the extended heightmap. This value will be ignored if the climate is not set to subarctic, or if the extended heightmap is loaded with a snowline NewGRF. OpenTTD will select this snowline automatically, but it will still allow the user to change the snowline. This property must be in the [0, max_height] range.
 
 ===Layer sections===
 
@@ -89,15 +79,15 @@ Each object file has its own section. Their file property is also optional; if n
 
 <pre>[extended_heightmap]
 format_version=1
-height_levels=16
 width=128
 height=256
 orientation=ccw
 climate=arctic
-snowline=12
 
 [height_layer]
 file=heightmap.png
+max_height=16
+snowline_height=12
 
 [water_layer]
 file=rivers.png
@@ -130,6 +120,13 @@ Each layer stores information for each one of the points in the map in PNG forma
 '''Default filename:''' height.png
 
 '''Size scalable:''' Yes
+
+'''Extra properties:
+* '''max_height:''' This property indicates the maximum height level of the values defined in the extended heightmap. If not present, it will be assumed to be 255. It can take values in the [0, 255] interval.
+* '''min_desired_height:''' Indicates the minimum height of the resulting OpenTTD map. If set above 0, the resulting map will have no sea at all. This property must be in the [0, 14] range, and it must be smaller than max_desired_height. This property has a default value of 0.
+* '''max_desired_height:''' Maximum height of the resulting OpenTTD map. This property must be in the [1, 15] range, and it must be greater than min_desired_height. This property has a default value of 15.
+* '''snowline:''' Default snowline for the extended heightmap. This value will be ignored if the climate is not set to subarctic, or if the extended heightmap is loaded with a snowline NewGRF. OpenTTD will select this snowline automatically, but it will still allow the user to change the snowline. The snowline height can also be modified by any NewGRFs that the user chooses when he loads the extended heightmap. This property must be in the [0, max_height] range.
+
 
 Height layers are 8 bit grayscale images that describe the height of each point of the map as a number in the [0, 255] interval. Any heights above max_height will be clamped to max_height when generating maps.
 
