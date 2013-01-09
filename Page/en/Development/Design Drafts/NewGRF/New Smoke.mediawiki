@@ -1,0 +1,148 @@
+== Effect spawning model ==
+
+This controls when the vehicle emits a visual effect. The NewGRF can choose from a fixed set of models; more might
+be added in the future, but since this is performance critical NewGRFs cannot define their own models.
+
+The spawning model is choosen via callback 10 resp. the properties mentioned there.
+Additional to the existing return values, these new values are available.
+The triggers for calling the callback and caching the result remain unchanged.
+
+* 40: No effect
+* 41: Advanced effect, 'steam' model
+* 42: Advanced effect, 'diesel' model
+* 43: Advanced effect, 'electric' model
+* 44..7F: reserved
+* C0..FF: trains only: same as above, but with powered wagons
+
+The spawning models match the classical visual effects:
+* Steam (41): Gradually less effects when approaching max speed
+* Diesel (42): Effect proportional to acceleration, no effect when idling at top speed
+* Electric (43): Random effect, gradually less likely when approaching max spped
+
+
+== Advanced effect creation ==
+
+When 'advanced effects' are enabled, each time the vehicle wants to create visual effect, callback XXX is called.
+The callback decides the position and look of the effect.
+This callback is also called when a vehicle breaks down to decide the breakdown effect (unless disabled via misc flags).
+
+TODO: Or the other way around? Rename the 'disable breakdown effect' to 'call CB XXX for breakdown effect' and make CB-failure draw no effect
+
+Input:
+* Variable 10, bit 0-7:
+*: 00: Visual effect
+*: 01: Breakdown effect
+*: xx: reserved
+* Variable 18:
+*: 32 random bits
+
+Result:
+* Bits 0..3: Number of effects to spawn, details specified via registers 100+x
+* Bit 13: Disable auto-rotation of effect position wrt. vehicle orientation
+* Bit 14: Cache callback result until next call to CB 10
+
+CB Failure: Draw no effect or default effect?
+
+Registers 100+x: Define x-th effect.
+* Bit 0..7: Effect type
+*: 00..EF: Custom effect
+*: F0..FF: reserved, except
+*: F1    : default 'steam'
+*: F2    : default 'diesel'
+*: F3    : default 'electric'
+*: F6    : default 'breakdown smoke'
+*: FA    : default 'broken aircraft'
+*: FF    : no effect
+* Bit  8..15: Longitudinal resp. X position (signed)
+* Bit 16..24: Transversal resp. Y position (signed)
+* Bit 25..31: Z position (signed)
+
+TODO: What shall the position be relative to for trains and RV?
+* Vehicle front
+* Classic vehicle center (assuming vehicle length 8)
+* Actual vehicle center (using actual vehicle length)
+
+Note:
+* Longitudinal/transversal resp. X/Y is decided by result bit 13 for all effects.
+* The magic numbers F0..FE match the order of the existing effect vehicle types
+
+== Custom effects ==
+
+When returning a custom effect from CB XXX, the effect is resolved similar to the rotor sprite of helicopters using
+an 'self' wagon-override.
+
+* The effect vehicle has no access to the original vehicle; the vehicles are independent.
+* Variable 10 identifies the vehicle effect.
+** Lowest byte:
+**: 01: Rotor sprite
+**: 02: Visual effect
+**: 03: Breakdown effect
+** Second byte:
+**: Custom effect ID as returned by CB XXX
+* Vehicle direction of original vehicle is preserved (affects var 9F and selection of sprite from spriteset
+
+TODO Is there some better variable other than second byte of var 10?
+
+Animation:
+* For visual and aircraft breakdown effects the effect plays the animation once; after the last frame the effect is destroyed.
+* For ground vehicle breakdown effects the effect animation is looped until the breakdown is over; the animation does not necessarily end with the last frame.
+* The animation frame specifies which 'moving' spriteset is drawn.
+* The amount of 'moving' spritesets in the Action2 specifies the length of the animation.
+
+TODO: Is using the number of 'moving' spritesets clever? Or should there be an explicit Action 0 property? And some other variable for the frame?
+
+
+Animation physics:
+* There are 2 Action 0 properties to control the movement and speed of the animation
+* Propery YYY: Animation speed
+*: Format:  n ( speed offset )...
+{| |-
+|n||B||Number of effects (number of speed/offset pairs to follow)
+|-
+|speed||B||Number of ticks between animation frames
+|-
+|offset||B||Number of ticks between spawning of the effect (frame 0) and start of the animation (frame 1)
+|}
+* Propery ZZZ: Z movement
+*: Format:  n ( speed offset )...
+{| |-
+|n||B||Number of effects (number of speed/offset pairs to follow)
+|-
+|speed||B||Number of ticks between changes to the Z position.
+:  < 0: Decrement Z every -speed ticks
+: == 0: No movement
+:  > 0: Increment Z every speed ticks
+|-
+|offset||B||Number of ticks between spawning of the effect and first Z change
+|}
+
+
+== Default effects ==
+
+{| border=1 |-
+!Effect
+!colspan=5|Position
+!colspan=2|Animation speed
+!colspan=2|Z movement
+|-
+! !!L!!T!!X!!Y!!Z!!speed!!offset!!speed!!offset
+|-
+|Steam
+|rowspan=3|-8..7
+|rowspan=3|0
+|rowspan=3|
+|rowspan=3|
+|rowspan=3|10
+||16||8||8||4
+|-
+|Diesel||8||1||4||0
+|-
+|Electric||3||2||0||0
+|-
+|Air breakdown||
+6 (NW, NE, SE, SW)<br/>
+5 (N, E, S, W)
+|0|| || ||2||16||8||4||0
+|-
+|Ground breakdown|| || ||4||4||5||8||0||0||0
+|}
