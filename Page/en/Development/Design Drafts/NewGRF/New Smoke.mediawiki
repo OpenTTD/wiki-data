@@ -24,9 +24,10 @@ The spawning models match the classical visual effects:
 
 When 'advanced effects' are enabled, each time the vehicle wants to create visual effect, callback XXX is called.
 The callback decides the position and look of the effect.
-This callback is also called when a vehicle breaks down to decide the breakdown effect (unless disabled via misc flags).
 
-TODO: Or the other way around? Rename the 'disable breakdown effect' to 'call CB XXX for breakdown effect' and make CB-failure draw no effect
+This callback is also called when a vehicle breaks down to decide the breakdown effect.
+This is enabled by setting the current "disable breakdown effect" flag (which will be renamed).
+Since callback failure means no effect the behaviour is compatible.
 
 Input:
 * Variable 10, bit 0-7:
@@ -42,7 +43,7 @@ Result:
 * Bit 14: Disable auto-rotation of effect position wrt. vehicle orientation
 * <strike>Bit xx: Cache callback result until next call to CB 10</strike> (will cause desync trouble due to random var18)
 
-CB Failure: Draw no effect or default effect?
+CB Failure: Draw no effect
 
 Registers 100+x: Define x-th effect.
 * Bit 0..7: Effect type
