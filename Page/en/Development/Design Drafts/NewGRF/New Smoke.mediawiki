@@ -38,8 +38,9 @@ Input:
 
 Result:
 * Bits 0..3: Number of effects to spawn, details specified via registers 100+x
-* Bit 13: Disable auto-rotation of effect position wrt. vehicle orientation
-* Bit 14: Cache callback result until next call to CB 10
+* Bit 13: Train an RV only: Position effect relative to vehicle center instead of relative to vehicle sprite. (identical for vehlength 8/8)
+* Bit 14: Disable auto-rotation of effect position wrt. vehicle orientation
+* <strike>Bit xx: Cache callback result until next call to CB 10</strike> (will cause desync trouble)
 
 CB Failure: Draw no effect or default effect?
 
@@ -56,11 +57,6 @@ Registers 100+x: Define x-th effect.
 * Bit  8..15: Longitudinal resp. X position (signed)
 * Bit 16..24: Transversal resp. Y position (signed)
 * Bit 25..31: Z position (signed)
-
-TODO: What shall the position be relative to for trains and RV?
-* Vehicle front
-* Classic vehicle center (assuming vehicle length 8)
-* Actual vehicle center (using actual vehicle length)
 
 Note:
 * Longitudinal/transversal resp. X/Y is decided by result bit 13 for all effects.
