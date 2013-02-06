@@ -1,9 +1,9 @@
-<pre>setgcc gcc4
-installoptionalpackage mercurial sdllibs</pre>
-
-(or subversion if you wish)
-clone OpenTTD repository
-
+== Preliminaries ==
+<pre>setgcc gcc4</pre> Haiku uses GCC 2 by default, which is too old for OpenTTD.
+installoptionalpackage mercurial</pre>
+or subversion if you wish. 
+== SDL ==
+"installoptionalpackage sdlllibs" won't do (compiled with GCC 2). Use [http://haikuware.com/directory/view-details/development/class-libraries/sdlgamelibraries-gcc4 this] instead.
 == zlib ==
 <pre>wget http://zlib.net/zlib-1.2.7.tar.gz
 tar xvfz zlib-1.2.7.tar.gz
@@ -48,32 +48,12 @@ download fontconfig and compile with
 fails to build because it can't find the right shell ("no such file: /bin/sh"). Even after "installoptionalpackage ICU", it isn't recognized by OpenTTD - there seems to be a wider problem.
 
 == Errors and warnings ==
-<pre>/boot/home/trunk.hg/src/stdafx.h:47:0: warning: "INT64_MIN" redefined [enabled by default]
-
-/boot/develop/headers/posix/stdint.h:73:0: note: this is the location of the previous definition
-
-/boot/home/trunk.hg/src/stdafx.h:50:0: warning: "INT32_MIN" redefined [enabled by default]
-
-/boot/develop/headers/posix/stdint.h:69:0: note: this is the location of the previous definition
-
-/boot/home/trunk.hg/src/stdafx.h:53:0: warning: "INT16_MIN" redefined [enabled by default]
-
-/boot/develop/headers/posix/stdint.h:64:0: note: this is the location of the previous definition
-
-/boot/home/trunk.hg/src/stdafx.h:54:0: warning: "UINT8_MAX" redefined [enabled by default]
-
-/boot/develop/headers/posix/stdint.h:62:0: note: this is the location of the previous definition
-
-/boot/home/trunk.hg/src/stdafx.h:56:0: warning: "INT8_MIN" redefined [enabled by default]
-
-/boot/develop/headers/posix/stdint.h:60:0: note: this is the location of the previous definition
-
+<pre>
 /boot/home/trunk.hg/src/network/core/os_abstraction.h:194:0: warning: "IPV6_V6ONLY" redefined [enabled by default]
 
 /boot/develop/headers/posix/netinet/in.h:156:0: note: this is the location of the previous definition</pre>
 
-repeating constantly of course.
 
-Don't run music with the BeMidi driver, there will be a segfault almost immediately that has nothing to do with the OpenTTD code itself. Also don't try to compile with Allegro - no errors, but OpenTTD won't start because of undefined symbols or such.
+Don't run music with the BeMidi driver, there will be a segfault almost immediately that has nothing to do with the OpenTTD code itself. Also don't compile with Allegro - no errors, but OpenTTD won't start because of undefined symbols or such.
 
 [[Category:en/Development/Compiling OpenTTD]]
