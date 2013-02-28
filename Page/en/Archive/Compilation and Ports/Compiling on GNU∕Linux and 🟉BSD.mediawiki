@@ -3,33 +3,27 @@
 
 A quick guide to get started with OpenTTD development on Linux and other *nix-like systems. For help with compiling on various platforms, join [irc://irc.oftc.net/openttd.compile #openttd] on OFTC.
 
-==Required software==
-
-Most packages that are required for development (Like GCC) should already be installed on your box. You will require these packages in addition to GCC, make and the usual build tools.
-Beside those, OpenTTD requires the SDL development libraries to be installed. Optionally, but extremely recommended is install zlib development files, which compresses savegames (not having this doesn't just make your games bigger, but also makes you unable to load compressed savegames or join network games with compression, ie all network games).
-Lastly, OpenTTD can use the libpng development files to produce screenshots in PNG instead of BMP.
-
-Furthermore, if you want to be as up to date as you can be, you should install the subversion client to access the latest code in our subversion repository.
-
+==Required/recommended software==
+* Compiler: gcc and g++. CLang supposedly works, but <code>CC=clang CXX=clang ./configure && make</code> doesn't even work for endian_check.cpp. Required.
+* Libraries:
+** Graphics and sound: SDL and/or Allegro. Required except for dedicated servers. LibPNG (depends on ZLib) is also recommended, it allows making PNG screenshots.
+** Music: TiMidity, directly or with Allegro as a front-end. Other external MIDI players can also be used. Recommended.
+** Save file compression/decompression: LZO2 (oldest saves), ZLib (most saves up to 1.0.5), LZMA (newest saves). Strongly recommended.
+** Text: Fontconfig (TrueType fonts), ICU (list sorting). Recommended.
+* Utility programs:
+** Version control system, if you want to keep your source recent: Mercurial, Subversion or Git. Subversion is fastest and is thus the one used in this guide.
+** To apply patches: <code>patch</code>.
 === Mandriva ===
 (tested on Mandriva 2009 Spring)
 
-* gcc (required)
-* gcc-c++ (required)
-* libSDL-devel (required)
-* zlib1-devel (recommended, for savegame compression) 
-* libpng-devel (optional, for PNG screenshots) 
-* subversion (optional, for getting the latest source) 
-* patch (optional, for patching)
-* patchutils (optional, for patch creating)
-
-Or enter the command:
- <code>urpmi gcc gcc-c++ libsdl-devel zlib1-devel subversion patch patchutils</code>
+<code>urpmi gcc gcc-c++ libsdl-devel zlib1-devel subversion patch patchutils</code>
 
 === Debian and Ubuntu ===
+Tested on Ubuntu 12.10
 ==== Automatically ====
-<code> sudo apt-get build-dep openttd</code>This will not install version control software, so also
-<code>sudo apt-get install <VCS></code>Choose one or more of: <code>subversion mercurial git</code> This guide uses Subversion.
+<code> sudo apt-get build-dep openttd</code>
+This will not install any utility programs. For that:
+<code>sudo apt-get install subversion patch</code>
 
 ==== Manually ====
 Install:
@@ -128,7 +122,6 @@ If you are going to compile OpenTTD from subversion then again run:
 <code> cd /usr/pkgsrc/devel/subversion-base && make install clean</code>
 
 You should be asked for the root password once the code is compiled and ready for installation.
-
 
 == Getting the source ==
 === Releases ===
