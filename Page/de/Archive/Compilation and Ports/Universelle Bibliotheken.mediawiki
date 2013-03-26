@@ -1,0 +1,50 @@
+[[Translation:en/Archive/Compilation and Ports/Universal libraries]]
+
+
+Diese Seite erklärt, wie man unter MacOS X universelle Bibliotheken installiert
+um universelle OpenTTD Binärdateien zu kompilieren.
+
+==Voraussetzungen==
+* Apple MacOS X 10.4 oder neuer.
+* Xcode 2.1 oder neuer.
+
+==Wieso universelle Binärdateien gebraucht werden==
+Vor MacOS X 10.4.4 verbaute Apple in seinen Rechnern Prozessoren, die auf der
+[https://de.wikipedia.org/wiki/Powerpc PowerPC] Architektur basierten.
+Im Jahre 2006 wechselte Apple zu [https://de.wikipedia.org/wiki/X86-Prozessor x86-Prozessoren] der Firma Intel.
+Programme, die für den Befehlssatz der PowerPC Prozessoren kompiliert wurden,
+können nicht auf x86-Prozessoren ausgeführt werden. Das selbe gilt umgekehrt.
+Apple stattete OS X Rosetta mit einem PowerPC Emulator aus, in dem Programme
+aber deutlich langsamer laufen. Zudem zeigt OpenTTD in diesem Emulator
+Fehlverhalten. Dadurch wurde es notwendig ausführbare Dateien für x86 und PowerPC zu
+erstellen. Um die Verteilung von Programmen zu vereinfachen, bietet Apple eine
+Möglichkeit beide Binärdateien in einer Datei zusammen zu fassen. Diese Form der
+architekturunabhängigen Programme nennt Apple ''Universal Binaries'' (zu Deutsch
+in etwa universelle Binärdateien).
+
+==Aufbau einer universellen Binärdatei==
+Eine normale Binärdatei unter OSX besteht aus einem Header, der einige Informationen
+über die Datei enthält und dem eigentlichen, nativen Code. Der Header enthält
+unter anderem die Speicheradresse des Codesegments, damit dieses schnell gefunden werden kann.
+Eine universelle Binärdatei ist nach dem selben Muster gestaltet, mit der
+Ausnahme, dass der PowerPC-Code dem nativen x86-Code angehängt wird. In den
+Headerinformationen sind die Speicheradressen beider Segmente, so wie deren
+Architektur vermerkt. Beim Ausführen einer solchen Datei entscheidet sich das
+System für das richtige Codesegment.
+Beide Code Blöcke werden unabhängig von einander kompiliert und erst danach zu
+einer Datei zusammen gefasst. Durch das OpenTTD makefile geschieht das
+automatisch, aber für zusätzliche Bibliotheken muss dieser Schritt manuell
+durchgeführt werden.
+
+==Installation der benötigten Programme==
+Als erstes muss der crosscompiler von Apple installiert werden. Dieser sollte
+bei der Installation von Xcode dabei sein, lässt sich aber auch manuell
+nachinstallieren. Es wird das Cross-Development SDK der Version 10.3.9 und 10.4
+(universal), so wie gcc 4 benötigt. Diese Programme reichen aus, wenn man alle
+zusätzlichen Bibliotheken deaktiviert (Zur Zeit der Verfassung des Artikels:
+libpng, freetype).
+
+{{en/Warnung| Da Fink die universellen Bibliotheken nicht installieren kann, muss
+dies manuell geschehen.}}
+
+{{en/Todo|Anleitung zum kompilieren von universal libpng und freetype schreiben}}
