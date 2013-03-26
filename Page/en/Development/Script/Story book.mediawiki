@@ -16,17 +16,25 @@ While a GS can remove a page, it will cause the next page to get the ID of this 
 Check if a given ID is a valid story page
  bool GSStoryPage.IsValidStoryPage(story_page_id)
 
+Check if a given ID is a published (and valid) story page
+ bool GSStoryPage.IsPublishedStoryPage(story_page_id)
+
+Check if a given ID is a valid story page element
+ bool GSStoryPage.IsValidStoryPageElement(story_page_element_id)
+
 Create a new story page. Returns the Id of the created story page.
- StoryPageID GSStoryPage.New(company, text)
+ StoryPageID GSStoryPage.New(company, title)
+
+Create a new story page element and append it to a page. Returns the Id of the created story page element. Type can be one of [TEXT, LOCATION or GOAL]. For type == TEXT, ''reference'' is unused and ''text'' is used for the text. When type is LOCATION, ''reference'' is the TileIndex of a tile and ''text'' is a one-line description. When type is GOAL, ''reference'' is the GoalID and ''text'' is unused.
+
+Further note that page elements can only be appended to unpublished pages. (in the event that a goal is removed, that page element will show up as empty space in the page)
+ StoryPageID GSStoryPage.New(story_page_id, type, reference, text)
 
 Remove a story page.
  bool GSStoryPage.Remove(story_page_id)
 
-Update the text of a given story page.
- bool GSStoryPage.SetText(story_page_id, text)
-
-Update/set the title of a given story page. The title is used in the page selector, so don't make it too long. If no title is set, the gui will display "Page {n}" in the page selector.
- bool GSStoryPage.SetTitle(story_page_id, title)
+Publish a story page. A story page will only appear for users when it has been published. Note that only the first unpublished page (in creation order) can be published.
+ bool GSStoryPage.Publish(story_page_id)
 
 Show a story page. If a global page is given, all clients are affected. Otherwise only the clients that are connected to the company related to the page.
  bool GSStoryPage.Show(story_page_id)
