@@ -53,6 +53,82 @@ Show a story page. If a global page is given, all clients are affected. Otherwis
 
 If an API is added to restrict showing further pages until a goal have been completed, a complete book could be created at script start. All goals could also be added at start or add new ones as previous ones have been marked as completed (to not show all goals in the goal list at start).
 
+== Example code ==
+
+=== Create a page ===
+The following code creates the page as shown in this image below. It uses a wrapper function NewStoryPage which is given later.
+
+[[File:en/Development/Script/Story-book4.png|the image above]]:
+
+<pre>NewStoryPage(0, GSText(GSText.STR_TITLE1), [
+		[GSStoryPage.SPET_TEXT,     0, GSText(GSText.STR_PAGE1a)],
+		[GSStoryPage.SPET_LOCATION, GSTown.GetLocation(0), GSText(GSText.STR_TOWN_A)],
+		[GSStoryPage.SPET_TEXT,     0, GSText(GSText.STR_PAGE1b)],
+		[GSStoryPage.SPET_LOCATION, GSTown.GetLocation(1), GSText(GSText.STR_TOWN_B)],
+		[GSStoryPage.SPET_LOCATION, GSTown.GetLocation(2), GSText(GSText.STR_TOWN_C)],
+		[GSStoryPage.SPET_GOAL,     goal, null],
+]);
+</pre>
+
+=== Wrapper function ===
+The following code implements an atomic method for creating pages and adding page elements to it. Eg. it abstracts away that several API calls are required as the total amount of data will in some cases need several DoCommands / network packets to be transmitted to all clients.
+<pre>/**
+ * This function creates a new story page with page elements
+ * and finally publishes it. If any part fails, the page
+ * will be removed and the function returns false.
+ *
+ * Args: 
+ *  company, title, [ [type, reference, text], [type, reference, text], [type, reference, text], ... ]
+ *   or
+ *  company, title,   type, reference, text,   type, reference, text,   type, reference, text, ...
+ *
+ * 1) Each element is passed as an array with three unnamed elements. All elements are packed into an array.
+ * 2) Each element is passed as a sequence of three arguments.
+ */
+function NewStoryPage(company, title, ...)
+{
+	local page_id = GSStoryPage.New(company, title);
+	if (!GSStoryPage.IsValidStoryPage(page_id)) {
+		GSLog.Error("NewStoryPage: Failed to create page");
+		return false;
+	}
+
+	// Convert args to the stacked array format
+	local stacked_array = [];
+	if (vargc == 1) {
+		stacked_array = vargv[0];
+	} else {
+		for (local c = 0; c + 2 < vargc; c+= 3) {
+			stacked_array.append([vargv[c], vargv[c+1], vargv[c+2]]);
+		}
+	}
+
+	// Process element array
+	foreach(element in stacked_array) {
+		local type = element[0];
+		local ref = element[1];
+		local text = element[2];
+
+		local pe = GSStoryPage.NewElement(page_id, type, ref, text);
+		GSLog.Info("PE: " + pe);
+		if (!GSStoryPage.IsValidStoryPageElement(pe)) {
+			GSLog.Error("NewStoryPage: Failed to add element");
+			GSStoryPage.Remove(page_id);
+			return false;
+		}
+	}
+
+	// Page done => publish it
+	GSStoryPage.Publish(page_id);
+	if (!GSStoryPage.IsPublishedStoryPage(page_id)) {
+		GSLog.Error("NewStoryPage: Failed to publish page");
+		GSStoryPage.Remove(page_id);
+		return false;
+	}
+
+	return true;
+}</pre>
+
 == Future plans ==
 * Maybe allow referenced goals to be blocking the GUI to progress to next page until they have all been completed.
 * Allow adding one or more answers for a page. (eg. to allow creating a chapter selection page)
