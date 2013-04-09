@@ -10,20 +10,20 @@ In stock Openttd it is hard to distribute cargo from one source among multiple d
 
 Cargodist takes care of the transfers automatically and chooses destinations for the passengers involved. In the above example you wouldn't need to specify any "transfer and leave empty" orders, nor would you need to set up star-shaped bus networks. Any bus network in A and B with simple orders will do as long as it's connected to the train station. As passengers would have their own ideas about where to go and which vehicles to take you might see more congestion and a generally higher amount of passengers waiting at any station, though.
 
-There have been several other patches trying to achieve the same thing before. In contrast to the [[en/Community/Patches/Passenger and cargo destinations|Cargod'''e'''st]] project the problems of routing cargo and balancing loads on different routes are seen as inseperable in Cargod'''i'''st and thus solved together. Also the definition of transportation demand is seen as precondition to solving above problems and handled first. The main differences to [[en/YACD|http://www.tt-forums.net/viewtopic.php?f=33&t=54253]] are that Cargodist a, only considers reachable destinations, not the whole map and b, precomputes the whole routing scheme in separate threads for performance reasons.
+There have been several other patches trying to achieve the same thing before. In contrast to the [[en/Community/Patches/Passenger and cargo destinations|Cargod'''e'''st]] project the problems of routing cargo and balancing loads on different routes are seen as inseperable in Cargod'''i'''st and are thus solved together. Also the definition of transportation demand is seen as precondition to solving above problems and is handled first. The main differences to [http://www.tt-forums.net/viewtopic.php?f=33&t=54253 YACD] are that Cargodist a, only considers reachable destinations, not the whole map and b, precomputes the whole routing scheme in separate threads for performance reasons.
+
+The [http://www.tt-forums.net/viewtopic.php?f=33&t=41992&start=0 forum topic] has some more information. Please post there if you have any questions about Cargodist.
 
 ==Installation==
 
 The openttd compile farm builds binaries of cargodist for various platforms every night. You can download them at http://bundles.openttdcoop.org/cargodist/. Then install the same way you'd install a version of openttd without cargodist. See [[en/Archive/Manual/Installation FAQ]] for details.
 
-You can also pull from my git repository. It's located at git://github.com/ulfhermann/openttd.git and the relevant branch is "cd". So if you want the latest version of everything, do:
+You can also pull from the git repository. It's located at git://github.com/ulfhermann/openttd.git and the relevant branch is "cd". So if you want the latest version of everything, do:
 
  git clone git://github.com/ulfhermann/openttd.git
  git checkout origin/cd
 
 The "cd" branch is frequently rebased on trunk.
-
-The [http://www.tt-forums.net/viewtopic.php?f=33&t=41992&start=0 forum topic] has some more information.
 
 ==Modes of operation==
 
@@ -35,6 +35,8 @@ With Cargodist you get three different modes of distribution for cargo or passen
 When switching on automatic distribution for some cargo it will take a few game days until the cargo is actually distributed. This is because the distribution is periodically calculated and the effect can only be seen after the first calculation. The calculation is done based on link graphs. A link graph is a connected component for one cargo in your network in above example all stations in the towns A and B would form one link graph. If there is another bus network in a town C which isn't connected to A or B then that forms a different link graph. The more link graphs exist in a game the longer it takes until all of them are calculated. You can influence how often a new link graph calculation shall be started and how much time to allow for each calculation with the respective settings. Indirectly this determines the maximum number of link graphs to calculated in parallel at any time.
 
 ==Extensions to the smallmap and main viewport==
+
+There is a link graph overlay for both the smallmap and the main viewport. It shows stations and available transport links. Links are shown in different colors depending on how much cargo they carry related to their capacities.
 
 ==Record capacities of links==
 
