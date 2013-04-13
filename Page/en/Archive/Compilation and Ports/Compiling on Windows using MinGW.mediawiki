@@ -146,17 +146,26 @@ make install
 cd ../..</pre>
 
 ==Getting the source code==
-Check the [[en/Development/FAQ development#how-can-i-obtain-the-source-code|development FAQ]] for different methods for obtaining the source. If you download it without using MSYS (for example downloading the source code from the website) don't forget to place it in your home folder (by default it is C:\MinGW\msys\1.0\home\<user_name>).
+Open the MSYS shell and run
+<pre>cd && svn checkout svn://svn.openttd.org/trunk</pre>
+The OpenTTD source code is now in the <code>trunk</code> subdirectory of your MSYS home folder (<MinGW installation folder>\MSYS\1.0\home\<your Windows user name>).
 
 ==Compiling OpenTTD==
 
 <ol><li>Start MSYS.</li>
 <li>Run:<pre>cd ~/<path_to_source>
 ./configure
-make</pre>(note that ~ means your home folder)</li>
+make</pre>(note that ~ means your MSYS home folder)</li>
 <li>The compiling is complete when the openttd.exe file is made. It will be copied to the <code>./bin</code> subfolder.</li>
 <li>To test your compilation you can run (from the same folder in which you compiled OpenTTD):<pre>./bin/openttd</pre>Don't forget to install a [http://wiki.openttd.org/Base_graphics base graphics set] before this step if you don't have one (the simplest solution is to install [http://wiki.openttd.org/Opengfx#Installing_OpenGFX_Manually OpenGFX])</li>
 <li>If you want to generate a installation bundle you can use: <pre>make bundle</pre>After this command is done you will find a complete OpenTTD ready for distribution in the ~/<path_to_source>/bundle folder.</li></ol>
+
+==Patching the source code==
+Place the patch you want to apply into the directory the OpenTTD source code is located in (<MinGW installation folder>\MSYS\1.0\home\<your Windows user name>\trunk in this example). Then, in the MSYS shell:
+<pre>cd ~/trunk
+patch -p1/p0 < <patch name></pre>
+Use p0 for Subversion style patches, p1 for all others (it's probably a good idea to try p1 first). Explanation of the difference: [[en/Development/FAQ development#how-to-apply-a-patch]]
+
 
 [[Category:en/Development/Compiling OpenTTD]]
 [[Category:en/Archive/Program Descriptions]]
