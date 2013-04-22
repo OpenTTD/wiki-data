@@ -3,7 +3,7 @@ A ''Cyclotron'' is a priority merge with a loop, so a train can wait at full spe
 According to the edition history of [[en/Community/Railway Designs]], the first design was proposed by [[en/Pitt2]] as follows:
 [[File:en/Community/Junctionary/Cyclotron Full.png|thumb|800px|none|Figure 5: full-featured cyclotron]]
 
-    "Consider a sideline that loops back on itself after a failed priority merge. A train in this loop would continue to re-test the mainline for entry conditions, once every 8 * '''TL'' tiles until it found a space large enough to merge with the main line. After the cyclotron was empty, the next waiting train could pre-accelerate and be injected into the cyclotron, ready to continue the cycle. This system has some flaws, however, as it has a capacity of one train and there will be many missed opportunities due to the train being in the wrong position in the accelerator. Junctions are a large and well-trodden area of openttd; I have restricted myself to unbranched feeder structures. You will find that a highly-optimised stream of trains does NOT weather a junction well."
+"Consider a sideline that loops back on itself after a failed priority merge. A train in this loop would continue to re-test the mainline for entry conditions, once every 8 * '''TL'' tiles until it found a space large enough to merge with the main line. After the cyclotron was empty, the next waiting train could pre-accelerate and be injected into the cyclotron, ready to continue the cycle. This system has some flaws, however, as it has a capacity of one train and there will be many missed opportunities due to the train being in the wrong position in the accelerator. Junctions are a large and well-trodden area of openttd; I have restricted myself to unbranched feeder structures. You will find that a highly-optimised stream of trains does NOT weather a junction well."
 
 The design actually includes two trains in the loop, thus increasing the chance to find a slot on the high-speed line.
 
@@ -16,4 +16,28 @@ Refinements on those two points lead to the following design:
 
 [[File:en/Community/Junctionary/Enhanced Cyclotron.png|thumb|800px|none|Enhanced Cyclotron]]
 
-The size of the loop is tailored to the train size.
+The size of the loop is tailored to the train size. This one is specific for 12-tiles trains.
+
+Let's explain all the details from the mainline up to the side line, so that one can make the necessary changes for a specific train length.
+
+The mainline has the necessary crossings that feed the priority merge. One should not allow a gap between signals of more than 1 tile, otherwise a train following too closely another one would come to a stop, causing a traffic jam.
+
+The first parallel line contains combo signals. Those signals forward the presence of a train on the mainline to the two-sided entry pre signal. When there is a train on the main line in the priority merge, the two-sided entry pre signal is red, forbidding the train in the cyclotron to enter the main line. The two-sided entry pre signal allows for a train to choose another path when red, so the train loops instead of stopping at the signal.
+
+There is another two-sided entry pre signal at the entrance of the loop. It forbids other trains to enter the loop when a train is already inside. Two signals in the loop allow for a train to enter the loop when the train that is already inside is on its way out.
+
+With those signals in the loop, others are necessary to allow the train to loop and not stop at a signal.
+
+There is one connection lane from the loop to the first parallel lane. This one prevents a subtle bug. Let's suppose this lane does not exist. Consider that the train in the loop decides to enter the main line. It is but one pixel into the entrance line when a train crosses the first connection lane on the main line. The two-sided entry pre signal turns red before the train in the loop has crossed it, so it stops there, loosing its speed. After the train on the main line has passed, the train in the loops goes ahead and enters the main line at low speed, causing a traffic jam.
+
+The connection lane between the loop and the first parallel forces the two-sided entry pre signal to stay green after the train in the loop has taken the decision to enter the main line, thus forcing it to go on even if a train has come on the main line. The position of this connection lane on the loop must be very precise. It should force the two-sided entry pre signal green as soon as the train in the loop has taken the decision to enter the main line, but no sooner, otherwise the train would always enter the main line, regardless of the presence of a train on it.
+
+There is another connection lane between the loop and the two-sided pre signal before the loop, so that it stays red when a train is in the loop, but not when the train is on its way out.
+
+That was the actual cyclotron.
+
+Now for the waiting bays. A train must not enter the cyclotron while not at full speed. If it did so, it could join the main line while too slow, causing a traffic jam. To allow for full speed waiting, waiting bays are added. There is no need for cyclotrons here, since there is no joining involved. Two-sided pre signals are used with the same purpose of forcing the train to loop instead of stopping at the signal.
+
+The wating bays should be as small as possible -depending on your train length- to allow for more frequent testing of the signal. Add as many waiting bays as needed, depending on your network's load. If too many trains come into the waiting bays, fill it, and end up stopped before the waiting bays, your network is probably overloaded.
+
+The waiting bays are so organized to allow for a maximum gap of 1 between signals. This way, trains that are well-packed arriving at the waiting bay will not suffer from stoppings and nicely fill the waiting bays.
