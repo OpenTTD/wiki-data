@@ -1,31 +1,19 @@
+A ''Cyclotron'' is a priority merge with a loop, so a train can wait at full speed for an opportunity to join a high-speed line.
 
-Consider a sideline that loops back on itself after a failed priority merge. A train in this loop would continue to re-test the mainline for entry conditions, once every 8 * '''TL'' tiles until it found a space large enough to merge with the main line. After the cyclotron was empty, the next waiting train could pre-accelerate and be injected into the cyclotron, ready to continue the cycle. This system has some flaws, however, as it has a capacity of one train and there will be many missed opportunities due to the train being in the wrong position in the accelerator. ''[Broken link to Simple Cyclotron removed.]'' Junctions are a large and well-trodden area of openttd; I have restricted myself to unbranched feeder structures. You will find that a highly-optimised stream of trains does NOT weather a junction well.
-
-Refinements to the cyclotron are possible. There is enough space on the track loop to contain two trains, and a system of priority signals will enable a second train to optionally enter the cyclotron. With two trains in the cyclotron, there will be a doubled chance of entering a slot on the mainline. In order to prevent a traffic jam inside the cyclotron (which would be disasterous), some delay tweaking is necessary, but the end result is exceedingly useful.
-
-The injection delay assumes that the second injected train is accelerating from standstill, and there is a small chance that second train has in fact chanced upon the cyclotron entrance at full speed. In this case, the timing will be wrong and the second train will almost certainly cause a jam within the cyclotron (and consequently on the main line). This can be compensated for by some additional signalling to filter out full-speed trains. The filtered out full-speed trains can either be diverted onto a second loop, or simply drained of momentum by a signal. 
-
-A cyclotron incorporating all the optimisations discussed, and some additional fixes, is shown in Figure 5.
+According to the edition history of [[en/Community/Railway Designs]], the first design was proposed by [[en/Pitt2]] as follows:
 [[File:en/Community/Junctionary/Cyclotron Full.png|thumb|800px|none|Figure 5: full-featured cyclotron]]
 
-''[Broken link to a savegame removed.]''
+    "Consider a sideline that loops back on itself after a failed priority merge. A train in this loop would continue to re-test the mainline for entry conditions, once every 8 * '''TL'' tiles until it found a space large enough to merge with the main line. After the cyclotron was empty, the next waiting train could pre-accelerate and be injected into the cyclotron, ready to continue the cycle. This system has some flaws, however, as it has a capacity of one train and there will be many missed opportunities due to the train being in the wrong position in the accelerator. Junctions are a large and well-trodden area of openttd; I have restricted myself to unbranched feeder structures. You will find that a highly-optimised stream of trains does NOT weather a junction well."
 
-Editor's note: Whilst I would like to defend my cyclotron refinements, experimentation has proven that pre-acceleration is a more robust system. The two have been combined in the savegame linked previously.
-{{en/Feature|0.7}}
+The design actually includes two trains in the loop, thus increasing the chance to find a slot on the high-speed line.
 
-===Parallel cyclotrons===
-An attempt to minimize the drawbacks of the full featured cyclotron leads to parallel, small, 1-train cyclotrons. In this design, an array of cyclotrons, each handling one train, may be fed simultaneously. They may have different loop size in order to prevent synchronization between the cycling trains, giving more chance to find a slot in the flow of the main line. Each loop still needs it own acceleration lane so the trains enter the loop at full speed. If a train happened to enter the loop at low speed, it would get a chance to join the main line at non-max speed and cause a possibly large traffic jam.
+==Enhancements==
 
-Figure 6 shows a parallel cyclotron with two loops.
-[[File:en/Community/Junctionary/Parallel Cyclotron.png|thumb|800px|none|Figure 6: Parallel cyclotron]]
+* Smaller cyclotrons increase the chance to find a slot on the high-speed line.
+* One should not allow a train to enter a cyclotron while not at full speed. Injecting a slow train on a high-speed line would cause a traffic jam.
 
-A savegame with the example given in Figure 6 is available [http://gbizzotto.free.fr/parallel_cyclotron.sav Here] (one of the GRF files used in this savegame is not available for download at the moment) (version 0.7 or higher required to open).
+Refinements on those two points lead to the following design:
 
-Advantages over the full featured cyclotron:
-* Can handle more than two trains
-* Faster fail-and-retry pace
-* No need to synchronize the looping trains
-* Easier to build and remember
+[[File:en/Community/Junctionary/Enhanced Cyclotron.png|thumb|800px|none|Enhanced Cyclotron]]
 
-Drawbacks:
-* Bigger when using more than one loop
+The size of the loop is tailored to the train size.
