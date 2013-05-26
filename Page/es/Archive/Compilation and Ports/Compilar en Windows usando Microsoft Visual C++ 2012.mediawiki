@@ -1,0 +1,126 @@
+[[Translation:en/Archive/Compilation and Ports/Compiling on Windows using Microsoft Visual C++ 2012]]
+
+
+
+Una guía paso por paso para compilar OpenTTD en Visual Studio 2012
+
+== Antes de empezar == 
+Asumo que ya tienes Microsoft Visual Studio instalado y funcionando.
+=== Archivos requeridos ===
+*[http://msdn.microsoft.com/en-us/windows/desktop/aa904949 Microsoft® Windows® SDK]
+*[http://www.openttd.org/en/download-openttd-useful openttd-useful-X.X-win.zip] -> Archivos fuentes necesarios para compilar.
+*[http://www.tt-forums.net/download/file.php?id=118839 DMusic_for_OpenTTD.zip] -> Viejos archivos include de DirectMusic.
+*[http://tortoisesvn.net/ TortoiseSVN] Un programa de Windows para conseguir y actualizar el código de los repositorios SVN.
+
+
+{{en/Note|Esta guía ha sido comprobada en Windows 8 64 bits, debería funcionar en otras versiones de Windows también, si encuentras algún error adicional por favor háznoslo saber en el foro.}}
+
+== Paso 1 - Preparando los archivos == 
+
+'''1.1''' Crea tu carpeta de <code>Trabajo</code> principal (por ejemplo <code>C:\OpenTTD</code>)
+
+'''1.2''' Crea una subcarpeta llamada <code>trunk</code> dentro de la carpeta que creaste antes.
+
+'''1.3''' Seleccciona la carpeta <code>trunk</code> y haz un check-out con TortoiseSVN usando svn://svn.openttd.org/trunk en el campo URL (si necesitas ayuda échale un vistazo a [http://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-checkout.html svn checkout])
+
+'''1.4''' Extrae el archivo <code>openttd-useful-X.X-win.zip</code> descargado previamente dentro de nuestra carpeta de <code>Trabajo</code> y una carpeta llamada <code>OpenTTD essentials</code> se creará.
+
+'''1.5''' Extrae el archivo <code>DMusic_for_OpenTTD.zip</code>  descargado previamente dentro de la carpeta <code>OpenTTD essentials</code>.
+
+== Paso 2 - Configurar Visual Studio ==
+
+'''2.1''' Cierra Visual Studio si lo tienes abierto e instala <code>Microsoft Windows SDK</code>.
+
+'''2.2''' Abre Microsoft Visual Studio y ve a <code>Archivo -> Abrir Proyecto</code>.
+
+'''2.3''' Selecciona el archivo <code>(CarpetaDeTrabajo)\trunk\projects\openttd_vs100.sln</code>.
+
+'''2.4''' Aparecerá una ventana preguntándote si quieres actualizar los ajustes del compilador, pulsa el botón <code>Actualizar</code>.
+
+'''2.5''' Ve a <code>Compilar -> Administrador de Configuración</code> y selecciona <code>Configuración: Release</code>.
+
+'''2.6''' Selecciona <code>openttd</code> en el <code>Explorador de Soluciones</code>, haz click con el botón derecho del ratón y selecciona  <code>Propiedades</code>.
+
+'''2.7''' Selecciona <code>Configuración: Release</code> en la parte superior de la ventana.
+
+
+{{en/Note|Puedes dejar ambos ajustes tal y como vienen por defecto en <code>Debug</code> si quieres pero tendrás que repetir estos pasos cuando lo cambies de nuevo a Release.}}
+
+
+'''2.8''' Selecciona <code>Propiedades de configuración -> Directorios de VC++</code>.
+
+'''2.9''' Selecciona <code>Directorio de archivos de inclusión</code> y añade <code>(CarpetaDeTrabajo)\OpenTTD essentials\shared\include;</code> a la lista. 
+'''No olvides poner el ; al final, es importante'''.
+
+'''2.10''' Selecciona <code>Directorio de archivos de bibliotecas</code> y añade <code>(CarpetaDeTrabajo)\OpenTTD essentials\win32\library;</code> a la lista. De nuevo
+'''No olvides poner el ; al final, es importante''', 
+Cambia win32 por win64 si estás compilando una build de 64 bits.
+
+
+Ahora puedes intentar generar la solución.
+
+Tu archivo final deberá estar en <code>(CarpetaDeTrabajo)\trunk\objs\Win32\Release\openttd.exe</code>
+
+== Solución de Errores == 
+
+
+
+=== Arreglar Error C1083: No se puede abrir el archivo (de código fuente/incluir) 'X' No such file or directory === 
+
+Esto normalmente ocurre cuando intentas compilar solo el proyecto <code>openttd</code>, debes compilar la solución completa porque algunos archivos necesarios son creados "al vuelo" por scripts
+
+Solución: Selecciona <code>Solución 'openttd_vs100'</code> en <code>Explorador de Soluciones</code>, haz click con el botón derecho del ratón y selecciona <code>Compilar Solución</code>.
+
+=== Arreglar Error C1189: "The C++ Standard Library forbids macroizing keywords. Enable warning C4005 to find the forbidden macro[...]"=== 
+
+Abre la ventana de propiedades del proyecto. (Ver paso 2.6)
+
+Selecciona <code>C/C++ -> Preprocesador</code>.
+
+Selecciona <code>Definiciones de preprocesador</code> y añade
+
+<pre>_XKEYCHECK_H;</pre>
+
+a la lista.
+'''No olvides poner el ; al final, es importante'''.
+
+=== Arreglar Error LNK2026: "Módulo no seguro de una imagen SAFESEH[...]" === 
+
+Abre la ventana de propiedades del proyecto. (Ver paso 2.6)
+
+Selecciona <code>Vinculador</code>.
+
+Selecciona <code>Línea de comandos</code>.
+
+Escribe (o c&p) en la caja de texto <code>Opciones adicionales</code>:
+
+<pre>/SAFESEH:NO</pre>
+
+Más información: [http://msdn.microsoft.com/es-es/library/9a89h429(v=vs.110).aspx]
+
+=== Arreglar Warning C4005: "'FACILITY_DIRECTMUSIC' : redefinición de macro" === 
+
+Abre el árbol <code>openttd</code> en el <code>Explorador de Soluciones</code>, abre <code>Dependencias Externas</code> y selecciona <code>dmerror.h</code>
+
+Cambia al principio del archivo (normalmente en la línea 12) donde está esto:
+
+<pre>
+
+#define FACILITY_DIRECTMUSIC      0x878       /* Shared with DirectSound */
+
+</pre>
+
+a
+
+<pre>
+
+#ifndef FACILITY_DIRECTMUSIC
+	#define FACILITY_DIRECTMUSIC      0x878       /* Shared with DirectSound */
+#endif
+
+</pre>
+
+[[Category:en/Development]]
+[[Category:en/Development/Compiling OpenTTD]]
+[[Category:en/Development/Microsoft Visual C++]]
+[[Category:en/Archive/Program Descriptions]]
