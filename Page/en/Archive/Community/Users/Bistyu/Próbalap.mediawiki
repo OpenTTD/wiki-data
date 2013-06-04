@@ -1,59 +1,204 @@
-__NOTOC__
+{{hu/Manual/Tutorial/Oktatás}}{{hu/Manual/Tartalomjegyzék}}
+:''Ez a fejezet az [[hu/OpenTTD 0.7.0|OpenTTD 0.7.0]] és későbbi verzióira alapul. Ha korábbi verziót használsz, olvasd el angolul a [[en/Archive/Manual/Orders (old)|korábbi leírást]]''
 
-{{en/Tabs|3|2
-|hu/Manual/Tutorial/Állomás két vágánnyal|1. Állomás két vágánnyal<!--
--->|hu/Manual/Tutorial/Kétvágányú vasúti pálya|2. Kétvágányú vasúti pálya<!--
--->|hu/Manual/Tutorial/Kezdő vasúthálózatok|3. Kezdő vasúthálózatok}}
-<div style="padding:.5em 1em 1em 1em; border-top:none; background-color:#f1f2fe; color:#000;">
-{{hu/Manual/Tutorial/Oktatás}}
-== Két pálya ==
-
-Ha több vonat használ két állomás közt egy egyszerű vasúti pályát, előfordulhat, hogy az egyik vonatnak sokat kell várnia, mielőtt a pályát használhatná, főleg, ha a pálya hosszú. Ez azért van, mert -- a vonatok ütközését megelőzendő -- egy pályaszakaszon csak egy vonat tartózkodhat.
-
-Ennek megoldására dupla pályára van szükséged, így a vonatok nemcsak az állomáson kerülhetik egymást. Ezt úgy is elérheted, ha egy vagy több '''kerülővágányt''' építesz, és úgy is, ha egyszerűen megduplázod az egész pályát.
-
-=== A pálya részleges megkettőzése: a kerülővágány ===
-A kerülővágány a pálya jelzőkkel biztosított rövid része, mely a pályát részlegesen megkettőzi. Olcsó megoldás, de a vonatok késését még mindig lehetővé teszi, ha nincsenek elég jól összehangolva.
-
-A kerülővágány sikerének nyitja, hogy elég hosszú legyen ahhoz, hogy a leghosszabb vonat elférjen rajta. Miután az állomásaink ötmezőnyi hosszúak, úgy logikus, ha a kerülővágány is ötmezőnyi hosszúra épül. Mivel a jelző is elfoglal egy mezőt, a végeredmény ennél valamivel hosszabb.
+Az '''utasítások''' ismerete elengedhetetlen a sikeres OpenTTD-zéshez. Ezek közül a [[hu/Manual/Feltételes utasítások|feltételes utasítások]] fejlett utasítások, a járművek különleges irányítását teszik lehetővé. Ha nem használnál utasításokat, [[hu/Manual/Járművek|járműveid]] céltalanul bolyonganának, és igazán szerencsésnek mondhatnád magad, ha egyáltalán pénzt hoznának. [[hu/Manual/Rakomány|rakomány]] felvétele és kirakása érdekében (ami végül is a játék célja) a járműveknek utasításokat kell adni. 
 
 
-Ami a jelzőket illeti, [[File:en/Manual/Signal Electric Path One-Way.png]] '''egyirányú útvonaljelzőket''' használunk. Használhatsz kétirányú útvonaljelzőket is, csak akkor előfordulhat, hogy a vonatok előrelopakodnak, az egyirányú útvonaljelző ezt akadályozza meg. Tartsd szem előtt: fontos, hogy a vonatoknak elegendő helyük legyen a jelzőnél a várakozásra, lásd a lentebbi példát.
+==Adjunk a járműnek utasítást==
 
-{{en/Phototable|[[File:en/Manual/Tutorial/Tutorial passing siding.png|400px]]|Egy kerülővágány (Kattints a nagyításhoz)|none}}
+Utasításokat a járműveknek te magad tudsz adni. Járművezetőid megpróbálják ezeket követni (igaz, el is tévedhetnek, ha a közlekedési hálózat szerkezete nem megfelelő, de ez már egy másik kérdés). Utasítás adásához:
 
-Ha a pályád hosszabb, mint a példánkban, az útvonal mentén több kerülővágányt is építhetsz. Ha a vonatok kezeléséhez ez nem felel meg eléggé, érdemes a teljes pályát megkettőzni.
+*Keresd meg a járművet, és kattints rá (vonat esetében bármelyik kocsira is kattinthatsz). A jármű a járműtelepen is várakozhat, ha nemrég vetted meg, de az is lehet, hogy már elindítottad. A jármű járműablaka jelenik meg.<br/>[[File:en/Manual/Orders-1.png|frame|none|A járműablak]]
 
-=== A teljes pálya megkettőzése ===
+*Kattints a ''Jármű utasításainak mutatása'' gombra (a fenti képen pirossal bekarikáztuk). Ez az utasításablakot nyitja meg, mely a jármű minden jelenlegi utasítását tartalmazza (a példánkban szereplő járműnek nincs még egy sem).<br/>[[File:en/Manual/Orders-2.png|frame|none|Az utasításablak]]
 
-Dupla pálya esetén mindkét irányban egy-egy pálya szolgál, ezáltal sokkal több vonatot lehet kezelni.
+*Kattints az ''[[#uj-cel|Új cél]]'' gombra, és kattints a terepen az első [[hu/Manual/Állomások|állomásra]].
 
-A pálya megduplázásához a legelső lépés, hogy a két állomás közt egy nagyon hosszú kerülővágányt építsünk. Ez elég ahhoz, hogy a harmadik vonatot is elindíthassuk, pont úgy, mint a kisebb kerülővágány esetében is.
+*Kattints az épp elkészült utasításra a kijelöléséhez, és mondd meg a járműnek, mit kell azon az állomáson tennie. Pl., kattints a ''Telerakodás bármiből'' feliratra, hogy a teljes berakodásig várjon az állomáson.
 
-{{en/Phototable|[[File:en/Manual/Tutorial/Tutorial three trains.png|400px]]|Teljesen megkettőzött pálya és a harmadik vonat (Kattints a nagyításhoz)|none}}
-
-Ez három vonattal működik ugyan, de még mindig egy vonatunk halad csak az erőmű felé, és vele egy időben egy vonatunk halad csak a szénbánya felé. Ha elég hosszú a pályád, azt szeretnéd, hogy több vonat közlekedhessen egyszerre ugyanabban az irányban. Építhetsz további pályákat is, de a jelzőépítés sokkal hatékonyabb (és olcsóbb) megoldás.
-
-Ezt tesszük tehát. Építsünk több jelzőt! Ehhez használhatod a két útvonaljelző-típust, de miután csomópont nélküli pályán az egyébként csodás útvonal-foglalásra nincs szükség, használhatjuk az egyszerű jelzőt is. Ez a standard szakaszjelző, mely a jelzőválasztó bal szélén található: [[File:en/Manual/Signal Electric.png]].
-
-A jelzőtávolság (vagy jelzősűrűség) itt nem annyira fontos. Ha valamennyire valósághű pályát szeretnél, válassz legalább akkora jelzőtávolságot, mint a vonat hossza. Ha némileg nagyobb kapacitást szeretnél elérni, nagyon sűrű jelzősort építs. De mindkét esetben fontos, hogy szem előtt tartsd: oda építs csak jelzőt, ahol a vonat szabadon várakozhat! Példánk szerint tehát öt mezőnyi helyet számolj mindkét csomóponttól, és a hatodikra tedd a jelzőt. Ha így teszel, a jelzőnél várakozó mozdony soha nem fogja megállítani a csomópont forgalmát.
-
-Jelöld ki azt a jelzőtípust, amelyiket meg szeretnéd építeni, majd kattints arra a mezőre, amelyiken meg szeretnéd építeni. A szakaszjelzők kihelyezésükkor kétirányúak. Kattints megint a most már jelzőzött mezőre (a jelzőépítő eszköztár még mindig aktív), és egyirányúvá válik. Ha a másik irányban szeretnéd egyirányúvá tenni, kattints megint. A szakaszjelzők mellett a túloldalról érkező vonatok nem haladnak el. A jelzők grafikája első alkalommal talán egyértelműen világos. A szakaszjelző kisebb, és zöld jelzést mutat, ha nincs ott vonat. Az útvonaljelző magasabb, és vörös jelzést ad addig, amíg egy vonat le nem egy útvonalat a jelzőn át. Ha mindez zavarba hoz, használd csak az útvonaljelzőket, az elhelyezésükre ugyanazok a szabályok érvényesek.
-
-{{en/Phototable|[[File:en/Manual/Tutorial/Tutorial intermediate signals.png|400px]]|Dupla pálya közbülső jelzőkkel. Az útvonaljelzők ezeken a helyeken szintén működnek(kattints a kép nagyításához)|none}}
-
-Elkészültek a jelzők? Remek! Ebben a példában hat vonat fér el (bár négy vonat sokkal jobban dolgozik, próbáld ki magad is!). Van egy kiajánlott pályánk az erőmű felé, és egy másik kiajánlott pályánk a szénbányához visszatérő vonatok számára. A jelzők szakaszokra osztják a pályát, hogy több vonat közlekedhessen.
-
-=== A másik állomás második vágánya ===
-Már megépítettük a második vágányt a szénbányánál. Viszont ha a forgalom igazán erőssé válik, valószínűleg egy második vágányt akarsz építeni az erőműnél is. Az elvek ugyanazok, mint a szénbánya állomásánál, és biztosan meg tudod magad is építeni a korábbi iránymutatások figyelembe vételével.
-
-{{en/Phototable|[[File:en/Manual/Tutorial/Tutorial two platforms both ends.png|400px]]|Második vágány az erőműnél (Kattints a kép nagyításához)|none}}
-
-Ha a távolság a két állomás közt (sokkal) nagyobb, felmerülhet, hogy a pálya másik végén is járműtelepet kellene építened. Ha a [[hu/Archive/Manual/Lerobbanások|lerobbanásokat]] engedélyezted (alapértelmezés szerint engedélyezettek), a másik járműtelep építése lehetőséget biztosít a járművek javítására, a lerobbanások ritkulását eredményezve.
+==Az aktuális célállomás==
+A jármű aktuális célját mindig láthatod a jármű [[hu/Állapotsor|állapotsorán]] is, és az utasításablakban is: az utasításlistától balra található egy fekete háromszög, mely az egyik utasításra mutat, az az aktuális célállomás.
 
 
+==Az utasításablak==
+Az utasításablakon a következő gombok láthatók:
+* '''Új cél'''
+* '''Kihagy'''
+* '''Töröl'''
+* és más gombok az '''állomási előírások'''
 
-<span style="float: right">[[hu/Manual/Tutorial/Kezdő vasúthálózatok|'''Következő:''' Kezdő vasúthálózatok]] &raquo;</span>
-</div>
-[[Category:hu/Manual/Oktatás]]
-[[Category:hu/Manual/Tutorial/Haladó vasúti oktatás]]
+===Az "Új cél" gomb===
+
+Az "Új cél" arra szolgál, hogy úticélt adjunk a járműnek. Az utasításlista kijelölt sora elé új utasítást szúr be, vagy ha nem jelöltünk ki utasítást a lista végére. A lehetséges úticélok:
+*Saját állomásod, de csak akkor, ha a jármű fajtáját fogadni tudja. Nem küldhetsz tehát buszt a repülőtérre, ha a repülőtérnek nincs buszmegállója. Ellenfél állomására nem küldhetsz járművet.
+*[[hu/Manual/Járműtelepek|Járműtelep]], lásd lentebb: [[#atalakitas-gomb|"Átalakítás" gomb]] és [[#javitas-gomb|"Javítás" gomb]].
+*[[hu/Manual/Ellenőrzőpontok|Ellenőrzőpontok]]: vonatodnak egy közbülső úticélt is meghatározhatsz, ha túl nagy a távolság az állomásai közt, és eltéved emiatt, de használhatod az ellenőrzőpontot arra is, hogy a vonatod meghatározott vasúti pályán haladjon tovább. A [[hu/Manual/Kikötők|bóják]] is ellenőrzőpontok, a nagy távolságon közlekedő hajók számára.
+*Egy járműnek [[#utasitaslista-masolasa|az utasításait másolhatod]] másik jármű utasításlistájára, ha ugyanaz a járműfajtájuk, vagy [[#megosztott-utasitaslista|megosztott utasításlista]] szerint is járathatod őket (bővebben lásd lentebb).
+
+
+Az ''Új cél'' gomb '''opciói''':
+* '''Menj'''
+* '''Legközelebbi járműtelepre'''
+* '''[[hu/Manual/Feltételes utasítások|Feltételes ugrás]]''': ezáltal pl. arra utasítjuk a vonatot, hogy hagyjon ki egy állomást, ha már tele van.
+[[File:en/Manual/Orders gotooptions.png|frame|none|Az "Új cél" gomb opciói]]
+
+Lásd még [[hu/Gyors új cél|Gyors új cél]] c. fejezetet az utasítások gyorsbillentyűvel történő elkészítéséhez.
+
+==="Töröl" gomb===
+A "Töröl" gombbal törölhetjük a kijelölt utasítást.
+
+Ha az "-- Utasításlista vége --" sort jelöltük ki, a "Töröl" gomb megnyomására az egész lista kiürül (a [[#megosztott-utasitaslista|megosztott utasításlista]] ebből a szempontból máshogy működik, lásd lentebb).
+
+==="Kihagy" gomb===
+Ha megnyomjuk a "Kihagy" gombot, a jármű átugorja az utasítást (pl. vonat félbehagyja a berakodást), és a következő utasítás teljesítését kezdi meg. Ha az utolsó utasítás teljesítésekor nyomjuk meg, a jármű az első utasításba kezd.
+
+==Állomási előírások==
+A ''Kihagy'', ''Töröl'' és ''Új cél'' gombokon kívül vannak gombok, amelyekkel pontosan meg lehet határozni, mit tegyen a jármű az állomáson, tehát pl. maradjon ott, amíg a teljes berakodása elkészül, vagy a rakomány kirakására lehet kényszeríteni. A hajóknak és a repülőknek a berakodást és a kirakodást, valamint elszállítást lehet részletesebben előírni, a vonatoknak és a közúti járműveknek ezeken túl van egy ''Non-stop'' gombja is. Egy utasításhoz előírást felvenni úgy tudsz, hogy kijelölöd az utasítást (így elérhetővé válnak az előírásokat lehetővé tevő gombok), majd kiválasztod az előírást. 
+
+Amikor a ''Menj <> állomásra'' utasítást kijelölöd, a következő instrukciók válnak elérhetővé:
+* '''a megállás''' mikéntjének meghatározása,
+* '''a berakodás''' mikéntjének meghatározása,
+* '''a kirakodás''' mikéntjének meghatározása.
+
+Amikor a ''Menj <> járműtelepre'' utasítást jelölsz ki, a következő gombok válnak elérhetővé::
+* '''Átalakít''' (a berakodás gombja helyén),
+* '''Javítás''' (a kirakodás gombja helyén).
+
+==A berakodás opciói==
+[[File:en/Manual/Orders goto load.png|frame|none|A berakodás opciói]]
+
+===Berakodás, ha lehetséges===
+: A jármű áthalad az állomáson, berakja az állomáson akkor és ott elérhető rakományt, és indul a következő célja felé. Ez az alapbeállítás, de használatát nem javasoljuk, csak az utas- és levélszállításra.
+
+===Telerakodás===
+: Ez arra készteti a járművet, hogy várjon, amíg megtelik rakománnyal, mielőtt elhagyná az állomást. Két változata van:
+:*'''Telerakodás mindenből''': a jármű nem indul tovább addig, amíg minden általa szállítható rakományból meg nem telik. Az utasítás sora ''(Mindenből teljes berakodás)'' felirattal egészül ki. A gomb helyett használhatod a ''CTRL + kattintás az állomásra'' billentyűkombinációt is.
+:*'''Telerakodás bármiből''': a jármű továbbindul, ha az általa szállítható rakományok közül bármelyikkel megtelt. Az utasítás sora ''(Bármiből teljes berakodás)'' felirattal egészül ki.
+::'''Megjegyzendő:''' A repülőgépek esetében a "Telerakodás bármiből" azt jelenti: "várj utasokra". Bár nem következetes, de gyakran ez a kívánt viselkedés ([http://www.tt-forums.net/viewtopic.php?p=986327#p986327 forrás]).
+
+===Nincs berakodás===
+:Az állomáson a jármű anélkül halad át, hogy bármit is berakodna. Az utasítás ''(Nincs berakodás)'' felirattal egészül ki.
+
+==A kirakodás opciói==
+A kirakodásnál:
+*''"Kirakodás, ha fogadott"'' to unload only accepted cargo.
+*''"Unload all"'' to unload everything.
+*''"Transfer"'' to transfer the load.
+*''"No unloading"'' to unload nothing.
+[[File:en/Manual/Orders goto unload.png|frame|none|The unload options.]]
+
+===Kirakodás, ha fogadott===
+: A jármű áthalad az állomáson, és kirakodik minden olyan rakományt, amit az állomás elfogad, majd elindul következő célja felé. Ez az alapbeállítás.
+
+===Teljes kirakodás===
+: Azt írja elő a járműnek, hogy minden rakományt, amit csak szállít,rakodjon ki az állomáson. 
+:*Az állomás minden olyan rakományt, amit az állomás elfogad, a szokásos módon kezel, tehát pl. kifizeti. 
+:*A jármű az állomáson nem fogadott rakományért nem kap fizetséget. Az ilyen rakomány kirakodásra kerül, és ottmarad, hogy egy másik jármű felvegye. A rakomány az állomáson fog várakozni, ami az állomás ablakában '''Várakozik''' felirat alatt jelenik meg (ha a várakozó rakomány mennyiségét és fajtáját feltüntető sor mellett ''+'' jelre kattintasz, megnézheted származási helyét is).
+
+:Ez az opció nem zárja ki rakomány berakodását, ha a berakodás módját az utasításban nem határoztad meg.
+
+===Elszállítás===
+:Ez az opció krakodtat a járművel minden rakományát, figyelmen kívül hagyva, hogy az állomás fogadja-e vagy sem. Ebben az esetben részfizetséget kapsz a szállítási távolságra tekintettel. Ez [[hu/Átrakó szolgáltatás|átrakó szolgáltatás]] esetében hasznos, mert a járműveid így nem mutatnak veszteséget, ha nem a rakomány célállomásáig közlekednek. 
+
+:Ez az opció nem zárja ki rakomány berakodását, ha a berakodás módját az utasításban nem határoztad meg.
+
+:Alapértelmezés szerint a jármű, ahogy szokásos, felvesz bármilyen várakozó rakományt, az utasítás sorában ''(Elszállítás és rakományfelvétel)'' kiegészítés szerepel. Sajnos ez alatt azt a rakományt is érteni kell, amit pont most szállítottál le! Ha nem ezt akarod, válaszd a berakodásra a "Nincs berakodás" opciót, így az utasítás sorában ''(Elszállítás és üresen indulás)'' fog szerepelni.
+
+===Nincs kirakodás===
+: A jármű áthalad az állomáson anélkül, hogy kirakodna bármit is. Az utasítás ''(Ki nem rakodás és)'' felirattal egészül ki.
+
+:Ez az opció nem zárja ki rakomány berakodását, ha a berakodás módját az utasításban nem határoztad meg.
+
+==A megállás opciói==
+[[File:en/Manual/Orders goto stopoptions.png|frame|none|A megállás opcióiThe route options.]]
+*''"Menj <célállomás>"''
+*''"Non-stop - Megállás nélkül menj <célállomás>"'': Közvetlenül a célállomásra is lehet menni. A [[hu/Non-stop|Non-stop]] megóvja a járművet attól, hogy bármelyik állomáson, melyen áthalad, megálljon.
+*''"Via - Megállás nélkül menj <közbeeső állomás>"'' Az utasítás alapján a jármű a közbeeső állomást [[hu/Manual/Ellenőrzőpontok|ellenőrzőpontként]] használja.
+*''"Non-stop via"''
+
+==Javítás==
+Ez az opció akkor elérhető, ha az utasításlistán ''Menj járműtelepre'' utasítást jelöltél ki. Lásd [[hu/Jármű javítása|Jármű javítása]].
+[[File:en/Manual/Service-options.png|none|frame|A ''Javítás'' gomb opciói]]
+
+==Átalakít==
+A jármű számára az utasításlistán is előírhatod az [[hu/Jármű átalakítása|átalakítását]]. Amikor az utasításlistán kijelölöd az utasítást, egy újabb ablak ad lehetőséget annak kiválasztására, hogy milyen rakomány szállítson a jármű tovább. Ez az utasítás korlátozottan használható, mert szokásosan egy jármű rakományát csak egyszer változtatod meg.
+[[File:en/Manual/Order-Refit.png|none|frame|A jármű átalakítására szóló utasítás]]
+
+==Menetrend==
+{{en/Main|en/Manual/Timetable}}
+Timetables let you specify how long vehicles should try to take to travel along each part of the route and how long to spend in each station, as well as specifying speed limits between orders. See the [[en/Manual/Timetable|timetable]] article for details on how to use them.
+[[File:en/Manual/Orders-timetable.png|none|frame|The timetable interface.]]
+
+==Copy Orders==
+If you want to set up a service that is used by more [[en/Manual/Vehicles]], it is repetitive to give each of these vehicles orders separately. Imagine a bus service where 5 buses go around to 5 [[en/Manual/Stations]] in a town for a frequent passenger service. It is boring to carry out the same steps 5 times over, so you can copy all orders from one vehicle to another.
+
+===Instructions===
+#Give out the orders as you would normally do for the first vehicle. 
+#Now click on the next vehicle, go to its order window and press ''Go To''
+#Instead of clicking a destination as before, '''click on the first vehicle''' which already has its orders set (either in its [[en/Manual/Depots]] or if it has been set loose; on the road/track/etc.)
+#You will now see that the second vehicle has the same orders as the first one.
+
+To prevent mistakes, you can only copy orders to a vehicle if it doesn't already have orders. This is because in a busy station you might accidentally click on a vehicle with existing orders and overwrite all your hard work. 
+
+Copying orders is still not the best solution because if you want to change orders later you must reassign them individually to each vehicle.  See shared orders for an even better way to give out orders.
+
+==Shared Orders==
+'''Shared orders''' allow you to share one set of orders between multiple vehicles so that when one vehicle's orders are updated, the other vehicles sharing the same orders are also updated.  It doesn't matter which vehicle you update - all vehicles sharing those orders are changed.
+
+===Instructions===
+#Open the orders list for the vehicle you want to share another vehicle's orders, '''and click on ''Go To'''''.
+#Hold down ''Ctrl'' and click on another vehicle that has the orders you want to share.
+#Now the two vehicles share the same schedule; they are linked together.  You will see that the orders from the other vehicle are displayed and the last line now reads ''--End of Shared Orders--''.
+
+[[File:en/Manual/Shared-orders.png|center|frame|The schedules for the 2 buses have been shared]]
+
+You can link together as many vehicles as you want, there is no limit, but of course you can only link the same type of vehicle together because they will be using the same stations.
+
+===Undo shared orders===
+At some point you may decide you don't want a vehicle to share orders any more.  Of course you can't simply delete them because this will delete them on all vehicles linked to that share.  Instead:
+#Open the orders list of the vehicle you want to remove from the share.
+#Select the last line: ''--End of Shared Orders--''
+#Click ''Delete''.
+
+You will see that all orders are removed from the schedule of that vehicle, and now the last line says ''--End of Orders--'' again. All other vehicles sharing those orders are unaffected by this change. You can now control the unshared vehicle's schedule independently from other vehicles as normal.
+
+===List of vehicles with shared orders===
+The [[File:en/Manual/SharedOrders.png]] icon to the right of the Orders window (or Timetable window) is the Shared Orders button. It shows a list of all the vehicles that have the same [[#shared-orders|shared orders]] as the current vehicle. The icon will only be enabled if the vehicle is sharing orders.
+[[File:en/Manual/SharedOrders-1.png|none|frame|List of vehicles with shared orders]]
+
+===Notes===
+*Unlike copied orders, sharing orders is possible for vehicles that already have an existing schedule. This is because to share orders you must hold down the ''Ctrl'' key, making it unlikely that you could accidentally lose the vehicle's schedule. When doing this the vehicle will lose all of its existing orders, and only have the shared ones.
+*You can use the ''clone vehicle'' button (of depot window) or ''buy a copy'' button (of vehicle window) to create an identical copy of a vehicle but by default orders are copied.  If you want to share orders with cloned vehicles, hold ''Ctrl'' as you click on the vehicle to clone.
+[[File:en/Manual/Clone-vehicle-2.png|none|frame|Clone vehicle button.]]
+[[File:en/Manual/Clone-vehicle.png|none|frame|Buy a copy button.Only available if the vehicle is in the depot.]]
+*With shared orders, there is no "master" set of orders (e.g. one vehicle that stores the main orders list that the others link to) that you can inadvertently delete.  As long as at least one vehicle with the orders you want exists, the orders list is preserved.
+
+==Orders checking==
+When you are running a large company with many different vehicles and a vast network, it is inevitable that mistakes will be introduced into some orders lists. For example, this can occur when a station is deleted or if you accidentally click on a hangar instead of an airport when giving orders to an aircraft.
+
+The [[en/Archive/Manual/Settings/Order review system|order review system]] automatically runs in the background and checks for four typical problems that can occur in an order list.  In the event it detects one, it will trigger a news message that informs you about the anomaly so that you can take action.
+
+===Too few orders===
+In order for a vehicle to make profit, it needs at least two stations in its schedule. Depots or waypoints do not count as they do not allow picking up or dropping off of cargo.
+[[File:en/Manual/Few-orders.png|none|frame|"<Vehicle> has too few orders in the schedule".]]
+
+===Duplicated order===
+Sometimes a station is accidentally selected twice consecutively. For most vehicles, this causes quite a mess in the pathfinder; for example an aircraft that takes off and lands again at the same airport.
+[[File:en/Manual/Duplicate-orders.png|none|frame|"<Vehicle> has duplicate orders".]]
+
+===Invalid orders===
+If you delete a station a vehicle is due to stop at, the ghost of the station will be visible for a while (in the form of a gray station name label).  This allows you to construct a new station in the same location as the old one which will assume the old station's name.  Vehicles will start arriving at that station (if it's still of the correct type) without any need to change their orders.
+[[File:en/Manual/Invalid-order.png|frame|none|"Invalid order"]]
+
+However, if you leave it too long or deliberately don't build a new station to replace an old one, the ghost station will eventually disappear.  Any orders that vehicles had that referred to it will be replaced with '''Invalid Order''' and will be skipped.
+
+===Invalid station===
+If you delete a part of a station (for example the bus stop that is attached to a train station) the order will not become void as the station does still exist. However, the vehicle has no way to get to the station as the correct facility is missing. This leads to the vehicle searching for the station forever.
+[[File:en/Manual/Invalid-station.png|frame|none|"<Vehicle> has an invalid station in its orders".]]
+
+==See also==
+* [[en/Manual/Conditional Orders]]
+* [[en/Manual/Timetable]]
+* [[en/Archive/Manual/Orders (old)]]
+
+[[Category:hu/Manual/Járművek]]
