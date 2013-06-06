@@ -1,0 +1,103 @@
+[[Translation:en/Manual/Timetable]]
+
+== A kezelőfelület ==
+A menetrend az [[hu/OpenTTD 0.6.0|OpenTTD 0.6.0]] verziójával került bevezetésre. A menetrend gombja az utasításablak jobb felső szélén található. A menetrend ablakában a teljes utasításlista megjelenik. Meghatározhatod, hogy egy jármű mennyi ideig maradjon egy állomáson (napokban, vagy ciklusban számolva: az időegységek közt váltani a [[hu/Haladó beállítások/Megjelenítés#menetrendi-ido-alapegyseg-tick-a-nap-helyett|Haladó beállításoknál]] lehet), és ha akarod, meghatározhatod, mennyi idő alatt tegye meg az utat annak két pontja közt, vagy sebességkorlátozást határozhatsz meg az út egy részére. A kezelőfelületen található egy számláló is, amely azt mutatja, hogy a jármű pontosan közlekedik-e, vagy késéssel.
+[[File:en/Manual/Orders-timetable.png|center|frame|A menetrend kezelőfelülete, az utasításablakból érhető el]]
+
+{| {{en/Wikitable}}
+{|rules=rows border=1 
+| '''Idő megváltoztatása'''
+|A menetrend egy sorához időtartamot határoz meg.
+|Ablak nyílik fel az új időtartam meghatározásához.
+|-
+| '''Idő törlése'''
+|Időtartam meghatározását törli.
+|Hagyja, hogy a jármű annyi idő alatt tegye meg az utat, amennyi alatt tudja.
+|-
+| '''Sebességkorlátozás megváltoztatása'''
+|A jármű számára maximum sebességet határozz az útja egy kiválasztott részére.
+|Új ablak nyílik fel a sebességkorlátozás meghatározásához.
+|-
+| '''Sebességkorlátozás törlése'''
+|Törli a sebességkorlátozást.
+|Hagyja, hogy a jármű olyan sebességgel tegye meg az utat, amilyennel tudja.
+|-
+| '''Indulás dátuma'''
+|Beállítja, hogy a menetrend melyik napon induljon.
+|Új ablak nyílik fel a menetrend indulási napjának meghatározásához.
+|-
+| '''Késés nullázása'''
+|A késésszámlálót nullára állítja.
+|A járművet pontosan közlekedővé nyilvánítja, így törli annak lassítási vagy felzárkózási szándékát.
+|-
+| '''Automatikus kitöltés'''
+|A menetrend automatikus kitöltése a következő utazás alapján.
+|Kitölti a menetrend adatait, így elvégezheted a hangolását.
+|-
+| '''Kímélő automatikus kitöltés'''
+|A menetrend automatikus kitöltése a következő utazás alapján, a várakozási idők változtatása nélkül.
+|Hasznos, amikor új menetidőkkel frissítjük a menetrendet, pl. gyorsabb járművet indítunk a régi útvonalon.
+|}
+<br/>
+{{hu/Figyelmeztetés|A menetrend automatikus kitöltése minden korábbi menetrendi bejegyegyzést töröl. Győződj meg arról, hogy a menetrend frissítése során a kímélő automatikus kitöltést használod: CTRL + kattints az Automatikus kitöltés gombra.}}
+
+<!-- [This section no longer appears as of OTTD 1.3.0.] '''Expected / Scheduled'''
+|Switches Expected and Scheduled panels.
+|Shows the times vehicles are scheduled or expected to arrive, expected panel taking the lateness/earliness into account.
+
+{{note|Expected/scheduled times are avaible only for complete timetables that have already started}} --->
+
+== Menetrendek használata ==
+A menetrend hasznos, ha meg akarjuk a járműveinket óvni attól, hogy összegyűljenek. A lerobbanások, a forgalmi okok és a késedelem általában azt okozza, hogy összeállnak egy sorba, a menetrend annak biztosításában segít, hogy a járművek állomástól állomásig egyenletesebben áramoljanak.
+
+Ennek bemutatására egy egyszerű esetet mutatunk be, melyben három busz köröz három város közt. Újonnan létrehozott útvonalukat már meghatároztuk, [[hu/Manual/Utasítások#megosztott-utasitaslista|megosztott utasításlista]] formájában. Az utasításlista megosztása a menetrendek szempontjából ''nagyon'' hasznos, mert a járművek a menetrenden is osztoznak.
+
+Kezdő lépésként nyissuk meg az egyik busz menetrendjét, és engedélyezzük a menetrend automatikus kitöltését. Aztán hagyjuk őket közlekedni. Ha az első busz végigjárta az útvonalát, megjelenik a menetrendablakban, hogy az mennyi ideig tartott. 
+[[File:en/Manual/Timetable-autofill.png|center|frame|Az 'automatikus kitöltés' felméri, mennyi ideig tart a jármű útja az út minden egyes pontjára, és mennyi időt tölt az egyes állomásokon]]
+
+Kísérd az új buszok konvoját az útjukon, és állítsd meg az utolsó buszt minden egyes megálló után, így azok szépen széthúzódnak (Ha más számban járatsz buszokat, próbáld megbecsülni az egyenletes időközt. Ha bármelyik azt jelzi, hogy késéssel érkezett, nullázd a késésszámlálóját). Ha az első busz teljesen befejezte az útját, a menetrend megjelenik, és kikapcsolhatod az automatikus kitöltést. Most állítsd meg a buszt.
+[[File:en/Manual/Timetable-autofilled.png|center|frame|A példánkban szereplő autóbusz-útvonal, automatikusan felmérve]]
+
+Erősen valószínű, hogy az időfelmérés tökéletes menetet mér: nem befolyásolja sem lerobbanás, sem forgalmi okok , így a buszok teljes sebességgel száguldották végig az egész utat. Ráadásul, ha a megállók is újak, nem kellett sok rakományt ki- és berakodniuk. 
+
+Magyarán a menetrended reménytelenül optimista, inkább a ''legjobb lehetséges esetet'' mutatja be, mint egy hétköznapi esetet. Ennek korrigálására jelöld ki a menetrend minden egyes idejét, kattints az '''Idő megváltoztatása''' gombra, és írj be új időtartamot, hogy némi ráhagyás kerüljön a menetrendbe.
+[[File:en/Manual/Timetable-slack.png|center|frame|Változtasd meg menetrendben az időket az elkészült feszes menetrend lazítására]]
+
+És most indítsd el a buszokat! Biztosítsd, hogy mind egyszerre induljon újra, mert máskülönben a széthúzásukat célzó erőfeszítéseid hiábavalóvá válnak.
+
+Esélyes, legalábbis először, hogy a ráhagyást nem jól adod meg. A menetrendkészítés még mindig egy kicsit tanult műhelymunka, és messze van a csodás "automatikusan húzd szét az útvonalon az azonos menetrend szerint közlekedő járművek sorát" opciótól ([http://bugs.openttd.org/task/1128 még]). Hagyd a buszokat futni egy ideig (elég hosszú időt hagyj néhány lerobbanáshoz -- mondjuk egy évet), és nézd meg, mit mutat a menetrendablakuk.
+[[File:en/Manual/Timetable-runninglate.png|center|frame|Elég ráhagyás nélkül a lerobbanások és más késedelmi okok a késési idő halmozódásához vezetnek]]
+A példánkban nyolc napnyi késés halmozódott fel, ami nem sok, de a késésben jelentkező különbségek ténye azt jelenti, hogy a buszok nem húzódnak szét egyenletesen az útvonalon. Adjunk több ráhagyást a menetrendhez. '''Ne nyomd meg a ''''Késés nullázása'''' gombot''', mert ez arra készteti őket, hogy próbáljanak egymáshoz közelíteni ahelyett, hogy egyenletesen eloszlanának az útvonalon.
+{{hu/Megjegyzés|Ha sosem késnek a buszaid, és úgy tűnik, hogy sok időt töltenek a megállókban anélkül, hogy utasokat szállítanának ki vagy be, valószínűleg túl sok ráhagyást adtál a menetrendbe.}}
+
+A buszaid most már valószínűleg jól vannak beállítva, és nyugodtan magukra hagyhatod őket, amíg más útvonalakkal foglalkozol. Lássuk, hogy néz ki példánk öt év után:
+[[File:en/Manual/Timetable-fiveyears.png|center|frame|Elég menetrendi ráhagyással a buszok szépen eloszlanak az útvonalon]]
+
+
+Ismételt lerobbanások ellenére is jól oszlanak el az útvonalon. De mi történik, ha új busztípus jelenik meg, és [[hu/Manual/Járműcsere|lecseréled]] őket?
+[[File:en/Manual/Timetable-newbus.png|center|frame|Az új, gyorsabb buszok korlátozzák magukat a régi menetrendhez igazodás érdekében: várakoznak a megállókban]]
+A jó hír az, hogy a menetrend tovább működik, a rossz hír pedig az, hogy az új és gyorsabb buszok a menet közben nyert időt a megállókban töltött várakozásra fordítják, mert a régi, lassú buszokra készült menetrenddel vannak összehangolva. Miután ez nem hiba (hiszen megtartják az egymás közti távolságot, szállítják a rakományukat, és pénzt csinálnak) erről nem kapsz semmiféle értesítést.
+
+Ez tehát a menetrendek kellemetlen vonása -- ''frissítened kell a menetrendet, ha új járműveket állítasz be''. Hogy ez mennyi munkával jár, több tényezőtől függ, pl. a szükséges menetrend-lazításban szerzett gyakorlottságodtól, mindenesetre azt javasoljuk, hogy a buszokra és talán még a levélszállító teherautókra használd.
+
+A menetrendek nagy előnye viszont, hogy [[hu/Így számol a játék#az-allomas-ertekelese|az állomások értékelése]] során komoly tényező, mennyi idő telt el azóta, hogy az utolsó jármű ott megjelent. Az emberek nem szeretik, ha a buszmegállókban kell álldogálniuk, még akkor sem, ha épp egy öt gyors buszból álló konvojra várnak, ami aztán mind a kilencszáz utast eltünteti onnan. Kb. tíz év (és az új busztervek érdekében némi játékgyorsítás) után ilyen a megállók értékelése:
+
+[[File:en/Manual/Timetable-ratings.png|center|frame|A rendszeres buszjáratok az értékelést magasabban tartják, mint a rendszertelen és lökésszerű szolgáltatás, még akkor is, ha a szállítási kapacitás nem tud lépést tartani az utasszám növekedési ütemével]]
+Overnfield megállójának teljes kiszolgálásához a három busz közel sem elég, de  a rendszeres szolgáltatással elkerülünk egy "Szörnyű" minősítést (és azt, hogy a helyi önkormányzat megakadályozzon bármiben is minket a környéken).
+
+=== Korlátozások ===
+
+A menetrendek alkalmazásához nincs általános keret, minden menetrend attól függ, hogy a jármű menetrendje mikor lett legutóbb nullázva. Ez néhány, a valós életben megszokott menetrendi feladatot nehézzé vagy lehetetlenné tesz:
+* a jármű olyan ütemezése, hogy nem sokkal egy csatlakozó szolgáltatás után érkezzen;
+* szabad vágány ütemezése expressz szolgáltatás számára;
+* vonatok ütemezése egy forgalmas csomóponton anélkül, hogy valamelyiküknek várakoznia kelljen
+
+=== Össszegzés ===
+* A menetrendkészítés adott útvonalra és járműsebességre alapul. Használd olyan járművekre, mint a buszok, a vonatoknak inkább teljes berakodást írj elő. Használd az utasításlista megosztását.
+* Használd az '''Automatikus kitöltést''' a menetrendi idők kezdeti felmérésére (feszes menetrend).
+* Manuálisan húzd szét az útvonalon a járműveket. Nullázz minden késési időt.
+* Adj ráhagyást a menetrendi időkhöz, hogy esetleges késés után a járművek fel tudjanak zárkózni.
+* Indíts minden járművet egyszerre.
+* Ismételd meg a hangolást a '''Kímélő automatikus kitöltés''' segítségével, ha a járműveket új típusra frissíted.
+
+[[Category:0.6.0 verzió újításai] [[Category:hu/Manual/Oktatás]] [[Category:hu/Manual/Járművek]]
