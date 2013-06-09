@@ -1,12 +1,9 @@
 [[Translation:en/Development/Script/Story book]]
-{{en/Note|This page describe ongoing work that haven't been decided to go into trunk yet}}
+{{en/Feature|1.4}}
 
 The Story book is a collection of Story pages that a Game Script can create. It can be used both by pure tutorials but also just about any scenario or goal script which want to build a game story. The complete book can be constructed when the game starts, or the GS can add pages eg. after the completion of a task/goal.
 
 [[File:en/Development/Script/Story-book4.png]]
-
-== Patch files ==
-Patch files can be found here: http://devs.openttd.org/~zuu/goal-gui/
 
 == GS API ==
 Pages can be company specific or global. Each company will only show the pages that are either company specific or global.
@@ -16,73 +13,19 @@ Pages are stored in a pool but will get an automatic sort value based on creatio
 It is possible to remove pages, but in general pages should be seen as printed as soon as you created them. It is not possible to insert pages in between existing pages.
 
 === Page Elements ===
-All pages display the creation date and its title at the top. All further content is added by appending page elements to a page. A page element uses the full width of the page and one or more lines. Currently there are three types of page elements: text, location and goal. Text allows displaying a section of text. Location will display a link to a location on the map which can be clicked to jump there. Goal allows referring to a goal. (It is planned that the icon next to the goal will indicate if the goal is completed or not)
+All pages display the creation date and its title at the top. All further content is added by appending page elements to a page. A page element uses the full width of the page and one or more lines. Currently there are three types of page elements: text, location and goal. Text allows displaying a section of text. Location will display a link to a location on the map which can be clicked to jump there. Goal allows referring to a goal.
 
-Due to the amount of data to supply when creating a page + page elements it is not possible to do this using a single DoCommand. Instead users need to make one API call to create the page and then one for each element to add. When you are done, call a third API method called ''Publish'' to finalize the page. After it has been published further additions to the page are rejected. Only published pages are visible to the end user.
-
-(Zuu: I do predict a GS Library that encapsulates this into a atomic library call to create (and publish) a page with N page elements using variable argument count)
+Due to the amount of data to supply when creating a page + page elements it is not possible to do this using a single DoCommand. Instead users need to make one API call to create the page and then one for each element to add. It is recommended that you create a page and then quickly populate it with elements. The book will not automatically progress to new pages, instead you can use an API call to force the book to show a specific page. However, if you do that, do it carefully so that you don't open the story book window when the user do not want that.
 
 === Methods ===
-Check if a given ID is a valid story page
- bool GSStoryPage.IsValidStoryPage(story_page_id)
-
-Check if a given ID is a published (and valid) story page
- bool GSStoryPage.IsPublishedStoryPage(story_page_id)
-
-Check if a given ID is a valid story page element
- bool GSStoryPage.IsValidStoryPageElement(story_page_element_id)
-
-Create a new story page. Returns the Id of the created story page.
- StoryPageID GSStoryPage.New(company, title)
-
-Create a new story page element and append it to a page. Returns the Id of the created story page element. Type can be one of [TEXT, LOCATION or GOAL]. For type == TEXT, ''reference'' is unused and ''text'' is used for the text. When type is LOCATION, ''reference'' is the TileIndex of a tile and ''text'' is a one-line description. When type is GOAL, ''reference'' is the GoalID and ''text'' is unused.
-
-Further note that page elements can only be appended to unpublished pages. (in the event that a goal is removed, that page element will show up as empty space in the page)
- StoryPageID GSStoryPage.New(story_page_id, type, reference, text)
-
-Remove a story page.
- bool GSStoryPage.Remove(story_page_id)
-
-Publish a story page. A story page will only appear for users when it has been published. Note that only the first unpublished page (in creation order) can be published.
- bool GSStoryPage.Publish(story_page_id)
-
-Show a story page. If a global page is given, all clients are affected. Otherwise only the clients that are connected to the company related to the page.
- bool GSStoryPage.Show(story_page_id)
-
-
-=== Alternative, more dynamic API ===
-Check if a given ID is a valid story page
- bool GSStoryPage.IsValidStoryPage(story_page_id)
-
-Check if a given ID is a valid story page element
- bool GSStoryPage.IsValidStoryPageElement(story_page_element_id)
-
-Create a new story page. Returns the Id of the created story page.
- StoryPageID GSStoryPage.New(company, title)
-
-Create a new story page element and append it to a page. Returns the Id of the created story page element. Type can be one of [TEXT, LOCATION or GOAL]. For type == TEXT, ''reference'' is unused and ''text'' is used for the text. When type is LOCATION, ''reference'' is the TileIndex of a tile and ''text'' is a one-line description. When type is GOAL, ''reference'' is the GoalID and ''text'' is unused. (In the event that a goal is removed, that page element will show up as empty space in the page)
- StoryPageID GSStoryPage.NewElement(story_page_id, type, reference, text)
-
-Remove a story page.
- bool GSStoryPage.Remove(story_page_id)
-
-Updates the title of a page.
- StoryPageID GSStoryPage.UpdateTitle(story_page_id, title)
-
-Updates the content of a page element. See also NewElement.
- StoryPageID GSStoryPage.UpdateElement(story_page_element_id, type, reference, text)
-
-Show a story page. If a global page is given, all clients are affected. Otherwise only the clients that are connected to the company related to the page.
- bool GSStoryPage.Show(story_page_id)
+[http://nogo.openttd.org/api/trunk/ See API docs]
 
 === Different ways to program the Story Book ===
 # At startup of GS, create and publish all your pages (as global pages). This can be used if you just want to provide some pages of text which is equal for all companies and all pages should always be visible.
-# Create and publish just one or a few pages at start (of game or company). Later when a task that have been described on the last page is completed, create and publish an additional page and then GSStoryPage.ShowPage to skip to that page. This method allows both to not reveal all pages directly but also having multiple paths to go in the story depending on whatever you want.
-
-If an API is added to restrict showing further pages until a goal have been completed, a complete book could be created at script start. All goals could also be added at start or add new ones as previous ones have been marked as completed (to not show all goals in the goal list at start).
+# Create just one or a few pages at start (of game or company). Later when a task that have been described on the last page is completed, create an additional page and then GSStoryPage.ShowPage to skip to that page. This method allows both to not reveal all pages directly, but also having multiple paths to go in the story depending on whatever you want.
 
 == Example Game Script code ==
-A complete GS (as in can be executed by OpenTTD with these patches) can be found here: http://devs.openttd.org/~zuu/goal-gui/GoalGUI-Test-GS-v1.tar
+A fully working example can be found here: http://devs.openttd.org/~zuu/goal-gui/GoalGUI-Test-GS-v2.tar (it is not very interesting to play against however)
 
 === Create a page ===
 The following code creates the page as shown in this image below. It uses a wrapper function NewStoryPage which is given later.
@@ -147,23 +90,8 @@ function NewStoryPage(company, title, ...)
 		}
 	}
 
-	// Page done => publish it
-	GSStoryPage.Publish(page_id);
-	if (!GSStoryPage.IsPublishedStoryPage(page_id)) {
-		GSLog.Error("NewStoryPage: Failed to publish page");
-		GSStoryPage.Remove(page_id);
-		return false;
-	}
-
 	return true;
 }</pre>
 
-== Future plans ==
-* Maybe allow referenced goals to be blocking the GUI to progress to next page until they have all been completed.
+== Possible future extensions ==
 * Allow adding one or more answers for a page. (eg. to allow creating a chapter selection page)
-
-== Old plans ==
-Earlier there was an idea to solve references to industries etc. using [[en/Development/Design Drafts/Scripts/Click on String|click-on-text]]. Currently this track is not developed and the above solution with page elements have been chosen.
-
-=== Description of click-on-text idea ===
-The idea here is to implement [[en/Development/Design Drafts/Scripts/Click on String|click-on-text]] and in OpenTTD turn {TOWN}, {INDUSTRY} etc. from GS lang file into clickable text parts. When a user click on these, the main viewport moves to the location of the town, industry, etc.
