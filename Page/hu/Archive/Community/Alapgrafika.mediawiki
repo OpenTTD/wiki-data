@@ -1,0 +1,135 @@
+[[Translation:en/Archive/Community/Base graphics]]
+
+
+Az '''alapgrafika''' grafikus fájlok egy olyan csomagja, mely nélkül az OpenTTD nem lenne játék.
+
+<div style="float:right; padding-left: 10px;">__TOC__</div>
+==Elérhető grafikus alapcsomagok==
+A grafikus alapcsomagok kétfélék lehetnek: a TTD alapgrafika és alternatív grafikus alapcsomagok. Az OpenTTD már születése óta a Transport Tycoon grafikáját használta. Az r14197-es alverzió óta azonban képes a játék a TTD-étől különböző grafikus alapcsomagokat is betölteni. Az első ilyen képességű stabil kiadás az [[en/Archive/OpenTTD/OpenTTD 0.7.0]].
+
+===TTD alapgrafika===
+A TTD grafikus alapcsomag a Transport Tycoon Deluxe eredeti grafikáját jelenti, és két változata van: Windows-os és DOS-os. A Windows-os nyilvánvalóan a TTD Windows-ra való kiadásából, a DOS-os pedig a DOS-ra való kiadásából származik. Mindegy, milyen operációs rendszered van, mindkét változat működni fog, nevükre való tekintet nélkül: a TTD DOS-os alapgrafikája működik Windows-on csakúgy, mint a TTD Windows-os alapgrafikája Mac-en vagy Linuxon.
+
+====original_windows====
+Az '''eredeti Transport Tycoon Deluxe Windows-os kiadásának grafikus alapcsomagja''' az alábbi fájlokból áll:
+* trg1r.grf
+* trgcr.grf
+* trghr.grf
+* trgir.grf
+* trgtr.grf
+* openttdw.grf (az OpenTTD-vel terjesztve)
+* orig_win.obg (az OpenTTD-vel terjesztve)
+
+====original_dos====
+Az '''eredeti Transport Tycoon Deluxe DOS-os kiadásának grafikus alapcsomagja''' az alábbi fájlokból áll:
+* trg1.grf
+* trgc.grf
+* trgh.grf
+* trgi.grf
+* trgt.grf
+* openttdd.grf (az OpenTTD-vel terjesztve)
+* orig_dos.obg (az OpenTTD-vel terjesztve)
+
+
+'''Megjegyzés:''' A német TTD DOS-os lemezének játékvilág grf fájlja egy hibás objektumképet tartalmaz. Ezért az OpenTTD-hez egy ráadás obg-fájl (orig_dos_de.obg) is jár.
+
+
+===Alternatív alapgrafika===
+2008. augusztus 31. óta az OpenTTD a TTD-étől különböző grafikus alapcsomagokat is be tud tölteni.
+
+====Alternatív alapgrafikák listája====
+Jelenleg csak egyetlen alternatív grafikus alapcsomag létezik.
+* [[hu/OpenGFX|OpenGFX]]
+
+==Grafikus alapcsomag telepítése==
+Az alternatív grafikus alapcsomagokat általában [https://www.wikipedia.org/wiki/tar (file format) tar fájlok] alakjában terjesztik. Egy grafikus alapcsomag telepítéséhez semmi mást nem kell tenned, mint belehelyezni azt az OpenTTD /data mappájába. Az OpenTTD ''data'' mappája az alábbi helyeken lehet:
+* Felhasználói fiókod saját mappájának OpenTTD könyvtárában.
+* Az OpenTTD telepítési könyvtárában.
+
+
+A TTD grafikus alapcsomagok nem tar formátumban léteznek. Ha már telepítve van a TTD grafikus alapcsomag egyik változata, semmi értelme a másikat is telepíteni, mert egyformán néznek ki.
+Ha az OpenTTD telepítése közben nem telepítettél TTD grafikus alapcsomagot, de utólag szeretnél, akkor csak másold be a [[#ttd-alapgrafika|fenti]] fájlokat (kivéve az OpenTTD-vel terjesztetteket) az OpenTTD /data könyvtárába.
+
+
+==Váltás grafikus alapcsomagok között==
+Egyszerre mindig csak egy grafikus alapcsomag lehet aktív. Ha több is van telepítve, számos módon válthatsz közöttük.
+
+===Váltás a játékban===
+A grafikus alapcsomagok közötti váltás egyik módja a megfelelő játékbeli funkció használata.
+* A játék főmenüjében kattints a ''Beállítások'' gombra. Megnyílik a ''Beállítások'' párbeszédablak.
+* A ''Grafikus alapcsomag'' részben válaszd ki a legördülő listából a kívánt grafikus alapcsomagot.
+* Zárd be az ablakot a bal felső sarokban lévő × gombbal a kiválasztott csomag aktiválásához.
+
+===A beállító fájl szerkesztése===
+A grafikus alapcsomagok közötti váltás egy másik módja a beállító fájl szerkesztése.
+* Keresd meg és nyisd meg az [[hu/Archive/Manual/Settings/Openttd.cfg|openttd.cfg]] fájlt egy sima szövegszerkesztővel (pl. Jegyzettömb).
+* Keresd meg a ''[misc]'' szakaszt és add hozzá az alábbi (vagy írd át a létező) sort a szakasz végén:
+ graphicsset = grafikus_alapcsomag_neve
+: A grafikus alapcsomag neve annak obg-fájljában szerepel, és nem feltétlenül egyezik meg a fájl nevével.
+[[File:en/Manual/Installation 9 grx manual configuration cfg.png|frame|center|Példa]]
+* Mentsd az elvégzett módosítást és futtasd az OpenTTD-t.
+
+===OpenTTD indítása parancssorból===
+Egy adott grafikus alapcsomag kiválsztásának harmadik módja, hogy a játékot parancssorból indítjuk, paraméterezéssel.
+ openttd -I grafikus_alapcsomag_neve
+: A grafikus alapcsomag neve annak obg-fájljában szerepel, és nem feltétlenül egyezik meg a fájl nevével.
+
+
+==Grafikus alapcsomag készítése==
+Eltekintve az objektumok képeinek tényleges megrajzolásától és elrendezésétől, egy, az OpenTTD által használható grafikus alapcsomag elkészítése egészen egyszerű. Egy grafikus alapcsomag az alábbi fájlokból áll:
+* Pontosan 6 .grf fájl;
+* pontosan 1 .obg fájl.
+Érdemes a grafikus alapcsomag fájljait egy ''tar'' archívumba csomagolni. Ez átláthatóan együtt tartja az alapcsomag összes állományát. Az OpenTTD képes ''tar'' fájlokat olvasni, így a felhasználónak nem kell azt kibontania.
+
+===A .grf fájlok===
+* A hat .grf fájlból öt pontosan olyan formátumú, mint az eredeti TTD CD-ről való öt .grf fájl, mindegyikben pontosan annyi objektumképpel és olyan sorrendben, mint a TTD .grf fájlokban, és ezek nem tartalmazhatnak [[hu/Manual/NewGRF|NewGRF]] elemeket.
+* Egy .grf fájlnak megegyezik a formátuma az openttd[w|d].grf-ével, és tartalmazza az összes [http://wiki.ttdpatch.net/tiki-index.php?page=Action5 5-ös típusú NewGRF leírót] (''NewGRF Action 5''). Ez a fájl tartalmazhat még egyes további NewGRF leírókat is, amennyiben azok statikusak, és nem változtatják meg a játék tulajdonságait (1, 5, 6, 7, 8, 9, A, C, 10, 12, esetleg néhány statikus lehetőség a 0-ból és a 2-ből). Ennek a fájlnak rendelkeznie kell egy GRF-azonosítóval, ami FF "OT" -vel kezdődik. A negyedik betű szabadon választható. A "D" és a "W" rendre az openttdd.grf és az openttdw.grf sajátja, a 01 az OpenGFX-é.
+
+===Az .obg fájl===
+Az .obg fájl kapcsolja össze valamennyi .grf fájlt, ez a grafikus alapcsomag nélkülözhetetlen alapköve. Az .obg fájl egy sima szövegfájl, az alábbi formátummal (a példa az orig_win.obg-ből való):
+
+ [metadata]
+ name         = original_windows
+ shortname    = TTDW
+ version      = 0
+ description  = Original Transport Tycoon Deluxe Windows edition graphics
+ palette      = Windows
+ 
+ [files]
+ base         = TRG1R.GRF
+ logos        = TRGIR.GRF
+ arctic       = TRGCR.GRF
+ tropical     = TRGHR.GRF
+ toyland      = TRGTR.GRF
+ extra        = OPENTTDW.GRF
+ 
+ [md5s]
+ TRG1R.GRF    = b04ce593d8c5016e07473a743d7d3358
+ TRGIR.GRF    = 0c2484ff6be49fc63a83be6ab5c38f32
+ TRGCR.GRF    = 3668f410c761a050b5e7095a2b14879b
+ TRGHR.GRF    = 06bf2b7a31766f048baac2ebe43457b1
+ TRGTR.GRF    = de53650517fe661ceaa3138c6edb0eb8
+ OPENTTDW.GRF = b6689105405fa3ea34cb8a5543633d29
+ 
+ [origin]
+ default      = You can find it on your Transport Tycoon Deluxe CD-ROM.
+ OPENTTDW.GRF = This file was part of your installation.
+
+===[metadata]===
+* '''name''': A grafikus alapcsomag neve, ahogy az a játékban megjelenik.
+* '''shortname''': Egy egyedi, négykarakteres sztring, hasonló a NewGRF-ek GRFID-jéhez.
+* '''version''': Egy egész szám, mely a grafikus alapcsomag verzióját jelöli. Ha két, megegyező azonosítójú (''shortname'') csomag is található, ezen szám nyomán azonosítható az újabb kiadás.
+* '''description''': Grafikus alapcsomagod egy rövid leírása.
+* '''palette''': A .grf fájlok által használt színkészlet. Lehet ''Windows'' vagy ''DOS''.
+
+===[files]===
+A hat különböző grf-tartalomtípus listája a grafikus alapcsomag hat .grf fájljának nevével.
+
+===[md5s]===
+A [files] szakaszban szereplő fájlnevek listája [http://hu.wikipedia.org/wiki/MD5 MD5] hashjükkel.
+
+===[origin]===
+A [files] szakaszban szereplő fájlnevek listája egy-egy olyan hibaüzenettel, amely akkor hivatott megjelenni, ha a grafikus alapcsomag megfelelő fájlja sérült vagy hiányzik. A ''default'' kulcsszóval megadhatsz minden fájlhoz egy egységes hibaüzenetet, és/vagy felsorolhatod az egyes fájlokat egyedi hibaüzenetekkel.
+
+[[Category:hu/Archive/Community/Alapgrafika]]
+[[Category:hu/Manual/Beállítások és finomhangolás]]
