@@ -1,0 +1,21 @@
+[[Translation:en/Archive/Manual/Settings/Transparency locks]]
+
+:<small><<Back to the [[en/Archive/Manual/Settings/Openttd.cfg]] (OpenTTD configuration file)</small>
+
+'''transparency_locks''' is a variable of openttd.cfg file.
+
+It is an integer value that stores what map features are locked against being toggled to be transparent (more accurately, to not have full opacity) with the {{en/Keypress|X}} key. Practically it means: on which buttons are there [[File:en/Manual/TransparencyOptions-a.png]] icons in the first row of ''Transparency options'' toolbar.
+
+See [[en/Manual/Transparency options]] for further information on what effect it has and how to change it in the game.
+
+If no map features are locked, the value is 0 (zero).
+
+Otherwise, the integer value which will be the value of this variable, is calculated as follows:
+
+If the nth feature is locked ([[File:en/Manual/TransparencyOptions-a.png]] icon on the nth button), 2<sup>n-1</sup> will be added to the value. This applies to all the 9 buttons in the row.
+
+For example, if trees, houses and bridges are locked against being toggled with {{en/Keypress|X}}, it means that the second, third and sixth buttons have a [[File:en/Manual/TransparencyOptions-a.png]] icon, so the value of transparency_locks will be 2<sup>1</sup>+2<sup>2</sup>+2<sup>5</sup> = 2+4+32 = 38.
+
+The method implies that the lowest possible value of the variable is 0, the highest is 511, and all integers between them are valid values, each one representing a state of the buttons, that is, a combination of map features.
+
+[[Category:en/Manual/Settings & Preferences]]
