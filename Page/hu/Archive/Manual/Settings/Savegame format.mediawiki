@@ -1,0 +1,31 @@
+[[Translation:en/Archive/Manual/Settings/Savegame format]]
+
+:<small><< Vissza az [[hu/Archive/Manual/Settings/Openttd.cfg|openttd.cfg]]-hez (OpenTTD beállítófájl)</small>
+
+
+A '''savegame_format''' az openttd.cfg fájl egy változója.
+
+A használandó játékmentés-formátumot határozza meg. Ez csak kliensre vonatkozó beállítás. Csak tesztelési céllal érdemes módosítani, ugyanis a rendszerednek megfelelő legjobb lehetőség automatikusan megválasztásra kerül.
+
+'''Lehetséges értékek:''' [ <üres> | lzma | lzma:0 .. lzma:9 | zlib | zlib:0 .. zlib:9 | lzo | none ]
+
+'''Alapbeállítás:''' <üres>
+
+Előfordulhat, hogy egyes lehetőségek nem alkalmazhatók, amennyiben a szükséges programkönyvtárakat nem fordították le az OpenTTD-vel együtt. Némelyik beállításnál lehetőség van tömörítési szint megadására is.
+
+Az értékek magyarázata (a legjobbtól a legrosszabbig):
+* <empty> - A rendszerednek leginkább megfelelő beállítást alkalmazza.
+* lzma - lzma2/xz tömörítést alkalmaz.
+** lzma:0 .. lzma:9 (alapértelmezés: 2)
+** A 2-es szintű tömörítés sebessége a zlib 6-os szintű tömörítésének felel meg (korábbi alapbeállítás), de mintegy 10%-kal kisebb fájlméretet eredményez. Magasabb tömörítési szint is alkalmazható, és akár 25%-kal is csökkenhet általa a fájlméret, viszont az akár tízszer lassabb is lehet. A legközelebbi, jelentős fájlméretcsökkenést elérő szint a 4-es, de már az is négyszer lassabb. A 3-as szint mintegy 50%-kal lassabb, miközben a fájlméreten nem javít; a 0-s és 1-es szintek pedig gyorsak, de nem nagyon csökkentik a fájlméretet.
+* zlib - zlib tömörítést alkalmaz.
+** zlib:0 .. zlib:9 (alapértelmezés: 6)
+** A 6-os szint felett jelentős a sebességcsökkenés (szintenként 1,5–2,5-szer lassabb), míg a fájlméretcsökkenés meglehetősen csekély (lépésenként kb. 1%). A 6-os alatt minden szint kb. 5-10%-kal nagyobb fájlt ad, mint a tőle eggyel magasabb szint, ugyanakkor az 1-es szint is "csupán" 3-szor gyorsabb. Nullás szint alkalmazása tömörítetlen játékmentést eredményez, mintegy nyolcszor akkora fájlt, mint amilyen a "none" beállítással kapható.
+* lzo - lzo tömörítést alkalmaz.
+** Durván 75%-kal nagyobb fájlt ad, mint a 6-os szintű zlib, de csak kb. annak 7%-a a processzorigénye.
+* none - Nem alkalmaz tömörítést.
+** Durván ötször akkora fájlt ad, mint a 6-os szintű zlib, de csak kb. annak 1%-a a processzorigénye.
+
+A választott tömörítési módszer a játékmentés betöltését nem befolyásolja.
+ 
+[[Category:hu/Manual/Beállítások és finomhangolás]]
