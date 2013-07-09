@@ -1,11 +1,9 @@
 [[Translation:en/Manual/Passenger and cargo distribution]]
 
 
-{{en/Warning|Savegames which are created with this branch might no longer work in subsequent versions. They will for sure not work in trunk if Cargodist is merged.}}
-
 ==Introduction==
 
-In stock Openttd it is hard to distribute cargo from one source among multiple destinations. You either have to use different vehicles for each destination or set up complicated order systems to do so. Suppose you have a train going between towns A and B. In each of the towns you have a bus network linking several stops to the train station. You might want passengers from any of the bus stops or the train station in A to travel to any of the bus stops or the train station in B and vice versa. In openttd you can have buses in A collect passengers from the various bus stops and transfer them at the train station. There a train can pick them up and transfer then again at the train station in B. You can then have buses in B distribute the passengers among the bus stops by going back and forth between the train station and each bus stop in a star-shaped pattern. Each of the vehicles would use "transfer and leave empty" orders and this solution would not allow passengers to go for B to A, nor to any of the trains stations or between the bus stops within one town. It is possible to allow those additional routes by setting up even more complicated order systems. However, the more stations and vehicles you add the more complicated and unwieldy those systems get.
+In classic OpenTTD, without cargodist it is hard to distribute cargo from one source among multiple destinations. You either have to use different vehicles for each destination or set up complicated order systems to do so. Suppose you have a train going between towns A and B. In each of the towns you have a bus network linking several stops to the train station. You might want passengers from any of the bus stops or the train station in A to travel to any of the bus stops or the train station in B and vice versa. In classic OpenTTD you can have buses in A collect passengers from the various bus stops and transfer them at the train station. There a train can pick them up and transfer them again at the train station in B. You can then have buses in B distribute the passengers among the bus stops by going back and forth between the train station and each bus stop in a star-shaped pattern. Each of the vehicles would use "transfer and leave empty" orders and this solution would not allow passengers to go for B to A, nor to any of the trains stations or between the bus stops within one town. It is possible to allow those additional routes by setting up even more complicated order systems. However, the more stations and vehicles you add the more complicated and unwieldy those systems get.
 
 Cargodist takes care of the transfers automatically and chooses destinations for the passengers involved. In the above example you wouldn't need to specify any "transfer and leave empty" orders, nor would you need to set up star-shaped bus networks. Any bus network in A and B with simple orders will do as long as it's connected to the train station. As passengers would have their own ideas about where to go and which vehicles to take you might see more congestion and a generally higher amount of passengers waiting at any station, though.
 
@@ -13,16 +11,7 @@ There have been several other patches trying to achieve the same thing before. I
 
 The [http://www.tt-forums.net/viewtopic.php?f=33&t=41992&start=0 forum topic] has some more information. Please post there if you have any questions about Cargodist.
 
-==Installation==
-
-The openttd compile farm builds binaries of cargodist for various platforms every night. You can download them at http://bundles.openttdcoop.org/cargodist/. Then install the same way you'd install a version of openttd without cargodist. See [[en/Archive/Manual/Installation FAQ]] for details.
-
-You can also pull from the git repository. It's located at git://github.com/ulfhermann/openttd.git and the relevant branch is "cd". So if you want the latest version of everything, do:
-
- git clone git://github.com/ulfhermann/openttd.git
- git checkout origin/cd
-
-The "cd" branch is frequently rebased on trunk.
+Since June 2013 Cargodist is included in trunk.
 
 ==Modes of operation==
 [[File:en/Manual/Cargodist-overlays.png|frame|Screenshot of linkgraph overlays]]
@@ -57,4 +46,13 @@ The setting for the effect of distance on demands determines how much more cargo
 
 Cargodist currently doesn't take some orders with "unload all", "transfer", "no unloading" or "no loading" attributes into account when building the link graph. It does handle any order with a "leave empty" attribute somewhat adequately and it understands any "go via" order (by ignoring it). Any other combinations of "unload all", "transfer", "no unloading" or "no loading" may lead to cargo being planned for loading or unloading at the station referred to by the order even though that is in fact impossible as the respective vehicles are unable to do so with their current orders. It is possible to handle those orders correctly within the current architecture of the link graph. However, as that would be a rather large project on its own and the effect on gameplay is small there is no implementation for that, yet.
 
-Conditional orders are problematic by definition. You can create an [http://en.wikipedia.org/wiki/Undecidable_problem undecidable problem] for the link graph creation algorithm by having a vehicle's orders depend on load percentage. The shape of the link graph determines which cargo a vehicle will load. The cargo loaded then determines which way it goes and that in turn determines the shape of the link graph. Some of the other conditions' outcomes are very hard to predict in advance without simulating the whole game up to the point when they are to be evaluated normally. The link graph creation and cargo routing algorithms handle that pragmatically and assume that most conditions will just yield the same result when they are evaluated for link graph creation or cargo loading and for vehicle routing. This does not work for load percentage conditions that have to be evaluated in order to decide which cargo to load. Those are evaluated based on cargo available at the station where the vehicle is loading. The condition is evaluated so that the vehicle can load the most cargo available at the station when assumed to take the same decision about the conditional order later on.
+Conditional orders are problematic by definition. You can create an [http://en.wikipedia.org/wiki/Undecidable_problem undecidable problem] for the link graph creation algorithm by having a vehicle's orders depend on load percentage. The shape of the link graph determines which cargo a vehicle will load. The cargo loaded then determines which way it goes and that in turn determines the shape of the link graph. Some of the other conditions' outcomes are very hard to predict in advance without simulating the whole game up to the point when they are to be evaluated normally. The link graph creation and cargo routing algorithms handle that pragmatically and assume that most conditions will just yield the same result when they are evaluated for link graph creation or cargo loading and for vehicle routing. This does not work for load percentage conditions that have to be evaluated in order to decide which cargo to load. Those are evaluated based on cargo available at the station where the vehicle is loading. The condition is evaluated so that the vehicle can load the most cargo available at the station when assumed to take the same decision about the conditional order later on. An example for a problematic order configuration is this:
+
+ Go to LOADING STATION
+ Go to DROP1
+ If load percentage equals 0 go to LOADING STATION
+ Go to DROP2
+ If load percentage equals 0 go to LOADING STATION
+ Go to DROP3
+
+It's a nice idea but obviously any vehicle following those orders could either decide to transfer all its cargo at DROP1 and return to LOADING STATION or it could keep the cargo going via DROP2 and go on. Both is correct. Thus, if you construct order systems like that, you'll see a lot of random and seemingly pointless loading and unloading at DROP1 and DROP2 as vehicles can't decide what to do.
