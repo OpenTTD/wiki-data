@@ -42,29 +42,29 @@ Although the one-way (block) signal appears there is only one side of the signal
 One-way signal was first introduced to ''[[en/Archive/OpenTTD/Transport Tycoon Deluxe]]''.
 
 ==Pre-signals==
-Pre-signals are a group of specialised block signals. They are so named because entry pre-signal input comes from not just the block itself, but other pre-signals on the other side of the block (that is to say exits from the block). They are usually used to limit the entry of trains into blocks, when many trains must share those tracks.
+Pre-signals are a group of specialised block signals. They are so named because block entry pre-signal input comes from not just the track in the block, but any other pre-signals placed on the other side of the block (that is to say exits from that block). They are used to limit the entry of trains into blocks that cannot be obstructed or occupied. Examples include station entry/exit junctions, or single-track lines that are used by trains in both directions. Any section of track where several trains must share a limited number of tracks, and must also not obstruct that section is a situation where pre-signals are of use.
 
 <div style="float:right">
 [[File:en/Manual/Station no pre-signals.png|frame|right|A problem with block signal only setup - the left train may leave first, the train waiting behind may get stuck in the track right behind the right train.]]
 [[File:en/Manual/Station with pre-signals.png|frame|right|Solve the problem using presignals]]
 </div>
-The image on the top right shows a setup where entry to a station is controlled using ordinary signals.  When at least one platform is empty, this works well, as an incoming train is always directed to a free platform. However, consider what happens when all platforms are full, as in the screenshot. All branches are showing red, so the incoming train picks the shortest path - straight on.  But suppose the train on the platform to the right is going to be in the station for some time. Meanwhile, the train on the left leaves.  The incoming train has committed itself to a platform and is stuck waiting for a train to depart even though there is now an empty platform available. We need to stop that incoming train before the track splits so that it picks the empty platform when a train leaves. For this, we need to use pre-signals.
+The image on the top right shows a setup where entry to a station is controlled using ordinary signals.  When at least one platform is empty, this works well, as an incoming train is always directed to a free platform. However, consider what happens when all platforms are full, as in the screenshot. All branches are showing red, so the incoming train picks the shortest path - straight on.  But suppose the train on the platform to the right is going to be in the station for some time. Meanwhile, the train on the left leaves.  The incoming train has committed itself to a platform and is stuck between the signals, waiting for a train to depart even though there is now an empty platform available. We need to stop that incoming train before the track splits so that it picks the empty platform when a train leaves. For this, we need to use pre-signals.
 
-Pre-signals function as block signals, but additionally decide on which colour to show by the status of other pre-signals further down the line.  Specifically, an entry pre-signal allows trains to enter if, and only if, there is at least one green exit out of the following block.  You, as the planner, need to identify which signals are to be the pre-signals and which are to identify exits.
+Pre-signals function as block signals, but additionally decide on which colour to show by the status of other pre-signals in the same direction down the track.  Specifically, an entry pre-signal allows trains to enter if, and only if, there is at least one green exit out of the adjacent/following block.  You, as the planner, need to identify which signals are to be the block entry pre-signals and which are to identify exits.
 
-====Entry Pre-signal====
+====Block Entry Pre-signal====
 <div style="float:right">
 [[File:en/Manual/Entry presignal.png|60px]]
 </div>
-An entry pre-signal shows green as long as there is at least one green exit signal on the following section of track.  Otherwise it shows red.  This prevents trains from entering the signal block until there is an available exit. Note that depots have a built-in two way signal (it works as an entry pre-signal in a pre-signal set).
+An entry pre-signal prevents trains from entering the following block, unless there is at least one green exit signal on the opposite side of the block.  This prevents trains from entering the block until there is an available exit and obstructing it. Note that depots have a built-in two way signal (it works as an entry pre-signal in a pre-signal set).
 
-If there are no signals designated as exits behind the entry pre-signal, it behaves as a normal block signal. This is convenient for bi-directional pre-signals where only one direction needs pre-signal functionality.
+If there are no signals designated as exits on the block directly behind the entry pre-signal, it behaves as a normal block signal. This is convenient for bi-directional pre-signals where only one direction needs pre-signal functionality.
 
-====Exit-signal====
+====Block Exit pre-signal====
 <div style="float:right">
 [[File:en/Manual/Exit presignal.png|60px]]
 </div>
-An exit signal behaves in the same way as a normal block signal but is necessary to trigger the correct colour on entry and combo pre-signals.
+An exit signal behaves in the same way as a normal block signal but provides information to trigger the correct colour on entry and combo pre-signals. They should mark any exit to the pre-signal block that may be easily obstructed, such as station platforms.
 {{en/-}}
 
 ====Combo-signal====
@@ -72,7 +72,9 @@ An exit signal behaves in the same way as a normal block signal but is necessary
 <div style="float:right">
 [[File:en/Manual/Combo presignal.png|60px]]
 </div>
-There is a third type of pre-signal called the combo signal and simply acts as both an entry and exit signal.  This allows you to build large "trees" of pre-signals as shown on the right. Literally, in a tree of pre-signals, combo-signals are placed in between the entry pre-signals and exit-signals, the other 2 types of signals are placed at the very beginning and end of the setup respectively.
+There is a third type of pre-signal called the combo signal and simply acts as both an entry and exit signal. They effectively combine many exit signals into one signal, effectively copying their effect down the chain. Any one green exit signal will make any combo signals up the line become green, which will successively relay up to the original block entry signal. This allows you to build large "trees" of pre-signals spanning several blocks, as shown on the right. 
+
+In a tree of pre-signals, combo-signals are placed in between the entry pre-signals and exit-signals for that reason above, the other 2 types of signals are placed at the very beginning and end of the setup respectively.
 {{en/-}}
 ====Building pre-signals====
 To build a pre-signal select the appropriate button in [[#signal-interface|signal selection toolbar]].
