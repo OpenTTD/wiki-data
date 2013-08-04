@@ -27,6 +27,8 @@ Due to the amount of data to supply when creating a page + page elements it is n
 == Example Game Script code ==
 A fully working example can be found here: http://devs.openttd.org/~zuu/goal-gui/GoalGUI-Test-GS-v2.tar (it is not very interesting to play against however)
 
+Additionally, both [http://www.tt-forums.net/viewtopic.php?f=65&t=62212 NoCarGoal] and [http://www.tt-forums.net/viewtopic.php?f=65&t=57963 Neighbours are important] makes use of the Story Book. Both of them uses [http://dev.openttdcoop.org/projects/superlib/repository/entry/story.nut SuperLib.Story] which contain some useful helper methods.
+
 === Create a page ===
 The following code creates the page as shown in this image below. It uses a wrapper function NewStoryPage which is given later.
 
@@ -43,7 +45,7 @@ The following code creates the page as shown in this image below. It uses a wrap
 </pre>
 
 === Wrapper function ===
-The following code implements an atomic method for creating pages and adding page elements to it. Eg. it abstracts away that several API calls are required as the total amount of data will in some cases need several DoCommands / network packets to be transmitted to all clients.
+The following code implements an atomic method for creating pages and adding page elements to it. Eg. it abstracts away that several API calls are required as the total amount of data will in some cases need several DoCommands / network packets to be transmitted to all clients. You find this method along with a few more useful wrappers in the story module of SuperLib: [http://dev.openttdcoop.org/projects/superlib/repository/entry/story.nut SuperLib.Story]
 <pre>/**
  * This function creates a new story page with page elements
  * and finally publishes it. If any part fails, the page
@@ -92,6 +94,15 @@ function NewStoryPage(company, title, ...)
 
 	return true;
 }</pre>
+
+=== Compatibility check ===
+It is worth noting that some initial trunk versions had GSStoryBook, but had a fatal error in the save/load code. This made story pages saved by these versions corrupt. If you load a such save game with a newer version, the story pages (and page elements) will simply be removed. 
+
+The best thing you can do is to avoid using the story book on the affected trunk versions and instead use the same fallback code as you need to support 1.3. (if you don't support 1.3, just set min version as trunk r25621 (or 1.4.x).
+
+To check if story book is available you can use SuperLib.Story.IsStoryBookAvailable() which will only return true on versions with the story book and after the point when the save/load error was fixed.
+
+If you just want to display a body of text, you can use SuperLib.Story.ShowMessage(company, text, title = null) which will use the story book when IsStoryBookAvailable returns true, and otherwise fall back to showing the text in a GSGoal.Query window. The title text will only be used in the story book.
 
 == Possible future extensions ==
 * Allow adding one or more answers for a page. (eg. to allow creating a chapter selection page)
