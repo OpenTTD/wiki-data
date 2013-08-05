@@ -1,6 +1,5 @@
 [[Translation:en/Archive/Source/OpenTTDDevBlackBook/Window/TextEdit]]
 {{en/Development/Navigation}}
-{{en/Outdated}}
 
 
 The way users interact with edit boxes is influenced by the [[en/Archive/Source/OpenTTDDevBlackBook/Window/WidgetFocus|widget focus system]]. This page describes what modifications that are necessary to add a text box to a window that do not have it yet. 
@@ -8,52 +7,23 @@ The way users interact with edit boxes is influenced by the [[en/Archive/Source/
 == Checklist for adding a text box to a window ==
 
 * Add a constant for the widget index eg. OP_WIDGET_NUM_PIZZAS_EDIT (OP = Order Pizza window). Follow the naming pattern of the other widgets in the same window.
-
-
 * Add an edit box to the nested widget array:
-
  NWidget(WWT_EDITBOX, COLOUR_WHITE, OP_WIDGET_NUM_PIZZAS_EDIT), 
    SetDataTip(STR_ORDER_PIZZA_NUM_PIZZAS_OSKTITLE, STR_ORDER_PIZZA_NUM_PIZZAS_TOOLTIP),
 (should be on one line, but has been broken up on two lines here on the wiki to avoid horizontal scrolling)
-
-
-* Make the window class derive from QueryStringBaseWindow instead of just Window.
-
- OrderPizzaWindow(const WindowDesc *desc, WindowNumber number) : 
-   QueryStringBaseWindow(MAX_NUM_PIZZA_STRING_LENGTH)
-(should be on one line)
-
-
-* In your constructor you must do:
-
- InitializeTextBuffer(&this->text, this->edit_str_buf, 
-   this->edit_str_size, MAX_NUM_PIZZA_STRING_LENGTH);
-(should be on one line)
-
-If you want to focus the edit box by default when the window opens, call the SetFocusedWidget function:
-
+* Add a QueryString member variable to the window class, and initialise it in the constructor with the maximum desired text length.
+ QueryString filter_editbox; ///< Filter editbox;
+* In your constructor (after FinishInitNested resp. InitNested) link the editbox with the QueryString:
+ /* Initialize the text edit widget */
+ this->querystrings[WID_SIL_FILTER_TEXT] = &this->filter_editbox;
+* If needed, assign special behaviour to ENTER/ESC keys, resp OK/CANCEL buttons in the OSK window. For filter editboxes it is expected that ESC clears the editbox:
+ this->filter_editbox.ok_button = WID_SIL_FILTER_ENTER_BTN;
+ this->filter_editbox.cancel_button = QueryString::ACTION_CLEAR;
+* Via the QueryString you can set some other properties, like restricting the accepted character set to digits etc.
+* If you want to focus the edit box by default when the window opens, call the SetFocusedWidget function:
  this->SetFocusedWidget(OP_WIDGET_NUM_PIZZAS_EDIT);
-
-
-* Make sure that OnMouseLoop is implemented and make it call HandleEditBox. If you don't do this, the carret will not flash when the edit box is focused.
-
- virtual void OnMouseLoop()
- {
-   this->HandleEditBox(OP_WIDGET_NUM_PIZZAS_EDIT);
- }
-
-
-* In OnPaint call this->DrawEditBox(OP_WIDGET_NUM_PIZZAS_EDIT) after making sure that the window is not shaded (this->IsShaded()).
-
-
-* Make sure that OnKeyPress is implemented and make it call this->HandleEditBoxInput(..). The HandleEditBoxKey function has some interesting return values that are worth to check out. It will tell you if the enter/escape button was pressed or if no input was processed because the edit box was not in global focus.
-
- virtual EventState OnKeyPress(uint16 key, uint16 keycode)
- {
-   EventState state = ES_NOT_HANDLED;
-   this->HandleEditBoxKey(OP_WIDGET_NUM_PIZZAS_EDIT, key, keycode, state);
-   return state;
- }
+* If you want editing the editbox trigger some functionality, override the window member function:
+ virtual void OnEditboxChanged(int widget)
 
 == Related articles ==
 
