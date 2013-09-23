@@ -85,3 +85,26 @@ In order to call a static instance you need to preface the method with the class
   }
   
 Remember that your functions can be called in either way. It's up to the caller how to use the function.
+
+
+== Assignment statements that take long time ==
+Assume that ''good_pairs'' is a member variable of your main class. Assume that there is a method ''FindGoodPairs'' that finds new pairs and that this method takes some time to return.
+
+You may think that this is a good way to update good_pairs:
+  this.good_pairs = FindGoodPairs();
+
+Now lets assume FindGoodPairs look some thing like this:
+  function FindGoodPairs() {
+    local result = AIList();
+    // .. time consuming code that finds good pairs
+    return result;
+  }
+
+Now if Save() is called from the point when FindGoodPairs() is called, but before it returns, good_pairs will not hold the old result from your previous call to FindGoodPairs, instead it will hold some partial result from the FindGoodPairs method.
+
+I can't tell exactly what will happen for different ways of writing FindGoodPairs, only that I've found bugs in scripts related to this thing.
+
+A way to get around this is to change the code that calls FindGoodPairs to this:
+
+  local temp = FindGoodPairs();
+  this.good_pairs = temp;
