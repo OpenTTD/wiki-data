@@ -1,0 +1,26 @@
+[[Translation:en/Community/Patches/Compiling and installing the unofficial Android port]]
+{{en/To do|Very sparse}}
+This documents how to build and install pelya's unofficial SDL 1.2/OpenTTD Android port.
+
+== Preliminaries ==
+(Warning: Large downloads!)
+
+* Download the Android SDK and NDK for your operating system and extract them anywhere.
+* Install '''Oracle''' JDK 6 or newer. OpenJDK won't do.
+* Install Apache Ant.
+* Install Git or Subversion and use it to clone pelya's [https://github.com/pelya/commandergenius GitHub repository].
+
+== Building ==
+* Add the NDK root directory and <SDK root directory>/tools to your PATH variable. 
+* Change to the root directory of the cloned Git repository. 
+* <code>ln -s openttd project/jni/application/src</code> (do a <code>rm -rf project/jni/application/src</code> if you aren't building for the first time.)
+* <code>./changeAppSettings.sh -a</code> to your liking.
+* <code>android update project -p project</code>
+* <code>./build.sh</code>
+
+There will now be a file named MainActivity-debug.apk in the <code>project/bin</code> directory. This is what you need to install.
+
+== Installing ==
+If you already have OpenTTD installed on your Android device, you will not be able to install the created APK as an update, and will need to uninstall the original app first (back up data!). This is because you have built a debug APK, which is signed with a different cryptographic key than the releases from the Play Store.
+Now, either copy the APK to your device and install it with "Install from unknown sources" enabled, or run <code>adb install project/bin/MainActivity-debug.apk</code> with debugging enabled and ÀDB in your PATH variable.
+An icon for OpenTTD will now be visible on your home screen.
