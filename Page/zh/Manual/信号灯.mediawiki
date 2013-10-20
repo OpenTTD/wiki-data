@@ -127,34 +127,34 @@ __TOC__
 处于一个''路线信号灯''以及两个''区块信号灯''之间的Y形区块。
 |}
 
-There are two things you should know about this signal:
-* Place it only where trains can stop and wait without blocking junctions ;
-* This signal only works in one direction. In the other direction, it is either ignored or considered a one-way signal, depending on the signal path (see below).
+关于路线信号灯你要知道两件事：
+* 需要将其放置在列车可以停靠并且不会阻挡岔道口的地方；
+* 这种信号灯只对一个方向起作用。在另外一个方向上，信号灯要么被忽略，要么被认为是单向信号灯，这取决于信号灯的路线（详情见下）。
 {|class=wikitable style="width:600px; margin:auto"
 |[[File:en/Manual/Yapp pbssignal.png]]
-|'''Path Signal''' (PS): trains can pass through this signal from the back side. Not to be confused with the one-way (block) signal.
+|'''路线信号灯''' (PS): 列车可以从这个信号灯的背后通过。不要和单向（区块）信号灯搞混了。
 |-
 |[[File:en/Manual/Yapp onewaypbssignal.png]]
-|'''One-way Path Signal''' (1W PS): trains '''cannot''' pass through this signal from the back side, as if there is another signal facing the opposite side permanently red.
+|'''单向路线信号灯''' (1W PS): 列车''无法''从这个信号灯的背后通过，就好像背后有一个永远亮着红灯的灯一样。
 |}
-Most of the time it will be sufficient to use a default path signal, as passing a path signal from the back is penalised by the pathfinder, unless the destination (station or waypoint) is right after the path signal facing backward. However, one-way path signals might be useful in certain specific cases.
+大多数情况下使用默认的路线信号灯就足够了，因为计算路径时通常不会允许从后面通过信号灯，除非目标（车站或者路点）正好被信号灯背对着挡住。不过单向路线信号灯在这种特殊情况下可能有用。
 
-The two new signal types behave a bit differently than standard block signal types. The path signals are red by default, and will only show green as soon as a train can reserve a path to the next safe waiting position on its route. Safe waiting positions are - by definition - in front of signals, depots and track ends. The back of a path signal is not considered a safe waiting position, and therefore paths are reserved through these signals.
+这两个新型的信号灯与标准的区块信号灯类型有一点点不同。路线信号灯默认为红灯，只有在某列车可以预定保留出前往下一个安全等待位置的路线时才会亮绿灯。安全等待位置的定义是，在信号灯之前，或者车库内，或者轨道终点。某个路径信号灯的背后不作为一个安全等待位置，因此在计算预订路线时会越过这些信号灯。
 
-Because the front of every signal is defined as a safe waiting position, you would normally not want to place a signal immediately behind a junction, only in front of a junction. This is because it is only safe for a train to wait in front of a junction. It is not safe for a a train to wait at a signal immediately after a junction before the whole train has cleared the junction, as it would be blocking the junction while waiting, as illustrated in the example below. This is a major advantage against traditional block signals, where you had to place signals before and after junctions, which caused trains to block junctions while waiting.
+因为每种信号灯的前面都被当作是一个安全等待位置，通常你不应该在岔道口之后立即就放置一个信号灯，只应该在岔道口前放置。这是因为在岔道口之前等待通过是安全的，但是在整列列车离开岔道口之前就开始等待信号灯是不安全的，这样可能会导致岔道口被阻塞，如下面的例子所展示的。这是比传统信号灯有着最大优越性的地方，传统信号灯需要在岔道口之前和之后都放置信号灯，这样列车在等待的时候可能就阻塞了岔道口。
 {|class=wikitable style="margin:auto"
 |style="background:#fee"|[[File:en/Manual/Yapp unsafewaitinglocation.png|center]]
-'''Bad''': The signal indicated by the arrow is a bad waiting location, as the train in the junction now blocks the otherwise free path of the train coming from the top. There's a second bad waiting location in this picture. Can you find it?
+'''错误'''：箭头所指处的信号灯构成了一个糟糕的等待位置，等待的列车把来自于上方的本来可以通过的列车给挡住了。这里面还有一处糟糕的等待位置，你能找到么？
 |style="background:#efe"|[[File:en/Manual/Yappgoodexample.png|center]]
-'''Good''': Here there is enough space after the juction for a train to wait. As long as this space is unavailable, the next train will wait before the junction rather than blocking it. This allows the train coming from the top to proceed.
+'''正确'''：在这张图里，岔道口之后有足够的位置可供列车等待。只要这个位置被占用，下一辆列车会等在岔道口之前而不是挡在岔道口之内。这样来自于上方的列车就可以正常通过。
 |}
 
-This is one other example of what you can do with those path signals. This works far better than using pre-signals because you can have two trains leaving the station at the same time AND share the same depot (there is no way to make it with pre-signals, because of the block share). In this case there are one-way path signals for trains leaving the station, and simple path signal for trains leaving the depot.
-[[File:en/Manual/Pathsignal station exit.png|frame|center|Two exit station. Note that the signals in front of the depot are not required, as depots have built-in signals. However, path signals in front of depots like this give trains leaving the depot priority over trains wanting to enter the depot.]]
+这里还有一个你可以利用路线信号灯来做事的例子。效果要比使用预处理信号灯还好，因为你可以有两列列车同时出站'''并且'''共用一个车库（预处理信号灯做不到，因为区块也是同一个）。在这种情况下有一个单向路线信号灯控制出站的列车，以及一个普通的路线信号灯控制出车库的列车。
+[[File:en/Manual/Pathsignal station exit.png|frame|center|两个出站的站点。要注意在车库之前放置信号灯不是必须的，因为车库内置一个信号灯，不过在这种情况下在车库前放置路线信号灯会让出车库的列车的优先权高于要进车库的列车。]]
 
-Although the screen shot above does not show, it is unnecessary to place any signal between the pass-through station entrance and junction (effectively an "exit-signal" in the traditional block signal setup) if the signal of entrance tracks in front of the junction is path signal.
+尽管上面的截图并未展示出来，如果岔道口之前的铁轨上放置的是路线信号灯的话，是不需要在经过的站点与岔道口之间放置任何信号灯的（等同于传统信号灯设置里的“出口信号灯”）。
 
-[[File:en/Manual/Rpbs img10.png|center|frame|Pass-through station does not require exit signal in front of the station entrance, if all signals are path signal type.]]
+[[File:en/Manual/Rpbs img10.png|center|frame|如果所有信号灯都是路线信号灯的话，经过的站点在进站之前是不需要放置出口信号灯的。]]
 
 ====Advanced Settings====
 [[File:zh/Manual/Yapp patch-options.png|frame|right|YAPP高级设置]]
