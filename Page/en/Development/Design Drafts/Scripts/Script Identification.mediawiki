@@ -1,0 +1,82 @@
+Currently there are several names/ids for each script (AI, GS). These are used in a somewhat illogical way in OpenTTD and on Bananas which causes some problems.
+
+This article tries to describe the current problems and then proposes a solution.
+
+=Current script names/ids=
+
+{|
+!
+!OpenTTD
+!Bananas
+!Comment
+|-
+|name
+|ScriptInfo.GetName
+|Name field
+|No verification that these are equal. This name is saved in OpenTTD save games and config file.
+|-
+|short name
+|ScriptInfo.GetShortName
+|uniqueid
+|Read from the script and stored in bananas, verified to be unique on bananas
+|-
+|version
+|ScriptInfo.GetVersion
+|Version field
+|In OpenTTD this must be an integer. In bananas any arbitrary string is allowed. No verification that they match.
+|-
+|instance name
+|ScriptInfo.GetInstanceName
+|n/a
+|in OpenTTD this gives the name of the main class in main.nut. Libraries are imported using this name.
+|-
+|md5sum
+|not used in OpenTTD
+|md5sum
+|computed by bananas upon upload
+|}
+
+=Problems=
+
+* Bananas verify that short name is unique, but OpenTTD uses name as identifier, which may have conflicts
+* Upon load OpenTTD tries to find a AI/GS with the same name as recorded in the save game. It will pick the latest version that report compatibility with the script version stored in the save game.
+** If no compatible script is found locally, OpenTTD doesn't inform the user about this (the game loads, and the problem is only visible in the fact that the script doesn't seem to react unless you look in the script debug window)
+** If no compatible script is found, the only way for the user to fix this is to know the name of the script and hope that the last version on bananas is compatible. There is no way to get that version used in the save game from bananas (unless it is the last one).
+* If a script author decide to rename his script from one version to another, but did not intend to make those versions save-game incompatible, he/she will by mistake stop saves from the old version being upgraded to the new GS version. (not all script authors may be aware that the name is used as ID by OpenTTD as there is a short name which is documented as a unique identifier for the script)
+
+=Solution=
+A challenge when solving these problems is to make a change that has as low impact as possible on existing scripts that may not be maintained anymore. It is also good if the solution does not require more work from authors that do maintain their scripts than necessary.
+
+== Script ID ==
+As script ID, unique for the script, but persistent for all versions of the same script, it would be better to use the short name where we already have a system in place to ensure unique short names.
+
+== File ID ==
+Either 1) ''Script ID + version'' or 2) ''md5sum''
+
+1. version is troublesome because bananas do not ensure that it match the version used in the script
+2. md5sums are already known by bananas and there is a defined way how to compute it from a script tar/directory.
+
+While md5sum may be easier for File ID, a benefit with syncing version between script and bananas is that it can possible be used to be more intelligent in getting the last compatible version.
+
+== Save / load ==
+Save/load in OpenTTD can be changed so that on save games with save version < xyz, use GetName-name as today. For newer save versions, use short name. We could also start saving the md5sum. (possible keep saving the GetName-name in addition to the short name if we want to display it in the load dialog and not just the short name) 
+
+Old saves will be loaded with the old method and upon save, be saved with short name instead. We may want to ask script developers to stay away from changing their name and/or provide their old name in a new GetLegacySaveName() method if they want to load old saves with their new version.
+
+== Library import ==
+For AI/GS that report API version "1.4" or later, expect the name given to Import() to be the short name. For older API versions, import using GetInstanceName().
+
+A challenge is however libraries that import other libraries. These execute with same API version as the AI/GS that imported them. The above solution then make it hard to release a library that depend on other libraries and may be used both with API version < 1.4 and >= 1.4.
+
+'''Comment:''' As this library change doesn't really solve any problem other than perhaps making things more consistent, it may be good to leave it out as it creates some problems on its own.
+
+That said, if both uniqueid + version is validated to be equal between script and bananas entry, and import uses this information, then OpenTTD could offer to download missing libraries when import fails. (and then the user would need to re-load the game)
+
+For save games it may be more user friendly if the save game contain a list of all imported libraries so that those can be downloaded before attempting to load the game.
+
+Though, if the bananas entry correctly list all dependencies, those will be downloaded with the GS and the save game/import does not need to contain information needed to download missing libraries.
+
+== Load dialog ==
+List AIs + GSs found in the save game and mark if they missing.
+
+Offer a button to download missing AIs/GSs or change the missing NewGRF download button to include all missing content (probably more useful - as a user just want the save to load and doesn't really care if the missing content is a NewGRF or a GS)
