@@ -2,8 +2,7 @@
 {{cs/Překlad|origin= en/Manual/Railway station
 |from  = en
 |to    = cs
-|Percentage = 40
-}}
+|Percentage = 50}}
 
 {{cs/Manual/Obsah}}
 '''Nádraží''' jsou nejdůležitější železniční objekty. Umožňují nakládat, vykládat a překládat náklad na vlaky. Nejlepší způsob je mít nádraží mimo hlavní trať, aby vlaky, které do nádraží zajíždět nepotřebují, okolo stanice projely.
@@ -35,43 +34,39 @@ Pokud není místo k postavení kolejí z obou stran stanice a stanice není kon
 Tato stanice nemůže být postavena na vytížené trati, protože pro každý směr může být ve stanici jen jeden vlak, což způsobuje zácpy.
 [[File:en/Manual/Polany.jpeg|center|frame|Stanice mimo hlavní trať, hlavní trať je nahoře.]]
 
-==Advanced stations==
-For larger train networks, the above stations probably won't be able to handle all of the trains assigned to them.  You will need more advanced track layouts and signals.
+==Pokročilá nádraží==
+Při větším rozsahu infrastruktury, výše uvedené stanice nebudou pravděpodobně stíhat odbavit všechny vlaky. Musíte použít více propracovaná schémata.
 
-What happens when a third train arrives at one of the above stations? It sees both two-way signals are red, so it just picks the closest one and waits for the light to change. If the other platform empties while the third train is waiting, the platform will stay empty.
+===Pre-signály===
+Nádraží s [[cs/Manual/Signály#vjezdove-a-vyjezdove-navestidla|pre-signály]] nechají přijíždějící vlaky čekat mimo stanici, pokud pro ně není místo a pokud se místo uvolní, zaručí, že se na něj dostanou co nejrychleji.
+[[File:en/Manual/Presignalstation.png|center|frame|Stanice s pre-signály]]
 
-What about the queues that form as trains line up to enter a station?  These lines can stretch far, and can even hold up your entire train network!
+===Záliv na čekání===
+Dobrým řešením, jak udržet vlaky čekající na vjezd do stanice je vícekolejný záliv na čekání. Pokud je nádraží plné, přijíždějící vlak vjede na kolej nejbližší ke koleji, odkud přijel. Pokud se uvolní nástupiště na nádraží, jeden z čekajících vlaků se tam přesune. Ujistěte se, že se čekající vlak vejde mezi návěstí. [[cs/Manual/Signály#vjezdove-a-vyjezdove-navestidla|Pre-signály]] jsou volitelné; jsou užitečné, pokud se záliv naplní také.
+[[File:en/Manual/Waitingbay.png|center|frame|Záliv na čekání pro až čtyři 6 políček dlouhé vlaky.]]
 
-===Pre-signals===
-Stations with [[en/Manual/Signals#pre-signals|pre-signals]] make arriving trains wait outside the station until there is a free platform.
-[[File:en/Manual/Presignalstation.png|center|frame|Pre-signal station]]
-
-===Waiting bay===
-A good solution to hold a queue of trains waiting to enter a station is a multi-line waiting bay.  If the station is full, an arriving train picks the closest empty track in the waiting bay.  When a spot opens in the station, one of the waiting trains will move in.  Make sure a train can fit between the signals.  The pre-signals are optional; they help if your waiting bay fills up too!
-[[File:en/Manual/Waitingbay.png|center|frame|Waiting bay for up to 4 6-wagon trains]]
-
-===Loop around===
-Instead of using pre-signals, you can build a loop around track. When a train enters the station and sees all the two way signals are red (platforms are full) except the loop around track, it will take the loop around track. It loops around and around, waiting for a free platform. A problem with this system is other arriving trains can steal the free platform while the first train is looping around. Remember to make the loop big enough to fit at least your longest train.
+===Smyčka===
+Pokud používáte [[cs/Manual/Signály#vjezdove-a-vyjezdove-navestidla|pre-signály]], můžete vybudovat smyčku. Pokud přijede vlak a zjistí, že všechna návěstidla k nástupištím jsou červená (nástupiště jsou plná), ale smyčka je volná, obkrouží smyčku. Vlak krouží a krouží, dokud nebude nějaké nástupiště prázdné. Bohužel jiné vlaky mohou tomu prvnímu sebrat místo, zatímco on krouží. Nezapomeňte udělat smyčku tak dlouhou, aby se do ní vešel i váš nejdelší vlak.
 [[File:en/Manual/Loop.png|center|frame|Loop for overflow control]]
 
-===Escape depot===
-Another way of controlling station overflow is an "escape depot." Place a depot in the two-way/one-way signal set up at the entrance. Depots automatically have a (traditional) bi-directional signal in them so behave just like a loop around track. Escape depots, unlike loops, have an unlimited capacity. 
+===Úniková depa===
+Jiným způsobem pro zvládnutí přeplnění stanice je "únikové depo". Depa mají v sobě automaticky [[cs/Manual/Signály#obousmerne-navestidlo|obyčejná obousměrná návěstí]], takže se chovají jako smyčka. Depa ovšem mají, narozdíl od smyček, neomezenou kapacitu. 
 
-The best layout has a depot at both ends of the station entrance. (This will reduce the time required to cross a large station)
+Nejlepší je depo po obou stranách od vjezdu. (Sníží to čas potřebný k překonání šířky nástupišť ve velkých stanicích.)
 
-[[File:en/Manual/Escapedepot.png|center|frame|Escape depots for overflow control (this example works only with pf.yapf.rail_firstred_twoway_eol set to true, which is not default setting anymore)]]
+[[File:en/Manual/Escapedepot.png|center|frame|Únikové depo]]
 
-===Long exits===
-Normally, when two trains leave a station at once, one must stop and give way to the other. This leaves one train half in the station and half out, making that platform unusable to any other trains trying to enter the station. Long exits allow the train to pull out of the station completely before it hits the red signal. This frees up the platform for another train entering the station. Note the length of the exit track, a 10-car train can fit neatly between the signals.
-[[File:en/Manual/Longexit.png|center|frame|Long exits overflow control]]
+===Dlouhé výjezdy===
+Obvykle, když dva vlaky opouštějí nádraží najednou, jeden musí zastavit a dát přednost druhému. Vlak dávající přednost blokuje nástupiště a jiný vlak čekající na vjezd do stanice musí čekat, ačkoliv není nástupiště použito. Dlouhé výjezdy umožní vlaku vyjet ze stanice úplně, než narazí na červenou. Uvolní tím místo jinému, čekajícímu vlaku. Výjezdy musí být samozřejmě dlouhé tak, aby vlak stále nezasahoval do nádraží.
+[[File:en/Manual/Longexit.png|center|frame|Dlouhé výjezdy pro max. 10-vozový vlak]]
 
-===Long exits, prioritized===
-Getting [[en/Archive/Manual/Settings/Mammoth trains]] to exit a busy Ro-Ro station in a timely fashion can be challenging. By using pre-signals you can prioritize station exit tracks to allow trains on faster tracks to depart sooner. In the image below a lower priority is assigned to the topmost 5 exits (since they'll block the return track longer) and the exit at the bottom (since trains accelerate slower on the sharp bend) by requiring them to wait upon the block exit pre-signal. They must wait for the exit signal to clear (that is, when a train passes the 2nd signal on the return track). The other tracks are not forced to do so and will depart when a train passes the 1st signal as usual. 
-[[File:en/Manual/Priorityexit.png|center|frame|Long exits with priority signals]]
+===Dlouhé výjezdy s předností===
+Používáním [[cs/Manual/Signály#vjezdove-a-vyjezdove-navestidla|pre-signálů]] upřednostnit určité koleje,. Na obrázku níže, vlaky na modře označených kolejích musí čekat (díky vjezdovému návěstidlu) dokud se neuvolní místo za výjezdovým návěstidlem. Ostatní (zelené) koleje používají [[cs/Manual/Signály#obycejne-navestidlo|obyčejná návěstí]], takže musí čekat jen dokud se neuvolní místo k výjezdovému návěstí. 
+[[File:en/Manual/Priorityexit.png|center|frame|Dlouhé výjezdy s předností]]
 
-===Long entrances===
-If you play with [[en/Archive/Manual/Settings/Realistic acceleration]], faster trains slow down a good bit before stopping in a station.  This can delay the next train from entering.  Adding a few track sections in front of the station can help with this.
-[[File:en/Manual/Longentrance.png|center|frame|Long entrance for realistic acceleration patch]]
+===Dlouhé vjezdy===
+Pokud hrajete s realistickým zrychlením, rychlé vlaky zpomalují již chvíli předtím, než vjedou do stanice. To může zbrzdit další vlak(y). Přidáním více kolejí před každé nástupiště to můžete vyřešit.
+[[File:en/Manual/Longentrance.png|center|frame|Dlouhé výjezdy pro realistické zrychlení.]]
 
 ===Double entrance===
 This is a type of design used for stations that handle a huge number of trains, such as the stations servicing factories or food processing plants. Trains coming from one place can use loading bays meant for other trains if need be.  Be sure to use pre-signals.
