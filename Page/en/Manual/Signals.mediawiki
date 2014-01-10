@@ -133,13 +133,13 @@ With this station layout, trains can use both platforms when coming from either 
 {{en/Feature|0.7}}
 
 ==Pre-signals==
-Pre-signals are a group of specialised block signals. They are so named because block entry pre-signal input comes from not just the track in the block, but any other pre-signals placed on the other side of the block (that is to say exits from that block). They are used to limit the entry of trains into blocks that cannot be obstructed or occupied. Examples include station entry/exit junctions, or single-track lines that are used by trains in both directions. Any section of track where several trains must share a limited number of tracks, and must also not obstruct that section is a situation where pre-signals are of use.
+Pre-signals are a group of specialised block signals. They are so named because block entry pre-signal input comes from not just the track in the block, but any other pre-signals placed on the other side of the block (that is to say exits from that block). They are used to limit the entry of trains into blocks that cannot be obstructed or occupied. In most cases you can use path signals to solve situations where trains can choose between multiple alternatives, for instance at stations or single-track lines that are used by trains in both directions.
 
 <div style="float:right">
 [[File:en/Manual/Station no pre-signals.png|frame|right|A problem with block signal only setup - the left train may leave first, the train waiting behind may get stuck in the track right behind the right train.]]
 [[File:en/Manual/Station with pre-signals.png|frame|right|Solve the problem using presignals]]
 </div>
-The image on the top right shows a setup where entry to a station is controlled using ordinary signals.  When at least one platform is empty, this works well, as an incoming train is always directed to a free platform. However, consider what happens when all platforms are full, as in the screenshot. All branches are showing red, so the incoming train picks the shortest path - straight on.  But suppose the train on the platform to the right is going to be in the station for some time. Meanwhile, the train on the left leaves.  The incoming train has committed itself to a platform and is stuck between the signals, waiting for a train to depart even though there is now an empty platform available. We need to stop that incoming train before the track splits so that it picks the empty platform when a train leaves. For this, we need to use pre-signals.
+The image on the top right shows a setup where entry to a station is controlled using ordinary signals.  When at least one platform is empty, this works well, as an incoming train is always directed to a free platform. However, consider what happens when all platforms are full, as in the screenshot. All branches are showing red, so the incoming train picks the shortest path - straight on.  But suppose the train on the platform to the right is going to be in the station for some time. Meanwhile, the train on the left leaves.  The incoming train has committed itself to a platform and is stuck between the signals, waiting for a train to depart even though there is now an empty platform available. We need to stop that incoming train before the track splits so that it picks the empty platform when a train leaves. For this you can use path signals, but you can also solve this situation with pre-signals. In fact, this was the way to build stations before path signals were invented.
 
 Pre-signals function as block signals, but additionally decide on which colour to show by the status of other pre-signals in the same direction down the track.  Specifically, an entry pre-signal allows trains to enter if, and only if, there is at least one green exit out of the adjacent/following block.  You, as the planner, need to identify which signals are to be the block entry pre-signals and which are to identify exits.
 
@@ -147,7 +147,9 @@ Pre-signals function as block signals, but additionally decide on which colour t
 <div style="float:right">
 [[File:en/Manual/Entry presignal.png|60px]]
 </div>
-An entry pre-signal prevents trains from entering the following block, unless there is at least one green exit signal on the opposite side of the block.  This prevents trains from entering the block until there is an available exit and obstructing it. Note that depots have a built-in two way signal (it works as an entry pre-signal in a pre-signal set).
+An entry pre-signal checks the signal aspect of all exit pre-signals of the signal block following the entry pre-signal. If there is at least one green exit pre-signal, the entry pre-signal wil also show green. If all exit pre-signals of the next block are red, then the entry pre-signal is also red.
+
+This prevents trains from entering the block and obstructing it until there is an available exit. Note that depots have a built-in two way signal (it works as an entry pre-signal in a pre-signal set).
 
 If there are no signals designated as exits on the block directly behind the entry pre-signal, it behaves as a normal block signal. This is convenient for bi-directional pre-signals where only one direction needs pre-signal functionality.
 
@@ -155,7 +157,10 @@ If there are no signals designated as exits on the block directly behind the ent
 <div style="float:right">
 [[File:en/Manual/Exit presignal.png|60px]]
 </div>
-An exit signal behaves in the same way as a normal block signal but provides information to trigger the correct colour on entry and combo pre-signals. They should mark any exit to the pre-signal block that may be easily obstructed, such as station platforms.
+The exit pre-signals are what an entry pre-signal looks for to decide what aspect to show. They otherwise behave in the same way as a normal block signal.
+
+To summarize: in the direction of travel you first have an entry pre-signal, then a junction where the track splits in at least two directions. After the junction there is an exit pre-signal on each branch. If the first block of each branch after the junction is occupied, then no trains will be allowed onto the junction. If at least one branch is available, then the junction will be available as well. Note that trains still can choose the occupied branch, if that is the only route to its destination. If both branches lead to the destination, then the train will choose the branch that is not occupied.
+
 {{en/-}}
 
 ====Combo-signal====
