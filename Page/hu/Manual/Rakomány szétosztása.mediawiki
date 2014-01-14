@@ -1,0 +1,50 @@
+[[Translation:en/Manual/Passenger and cargo distribution]]
+
+Az utasok és a rakományok szétosztása korábban a Cargodist nevű patch használatával volt lehetséges. A patch 2013. júniusától az OpenTTD [[hu/Nightly|nightly]], majd a 2013. karácsonyán kiadott 1.4.0 béta verziója részévé vált, így a [[hu/Haladó beállítok|Haladó beállítások]] használatával elérhető az a lehetőség, hogy a játék az utasok, a levelek és minden más rakomány számára célállomást határozzon meg. A rakomány csak a célállomása felé tartó járműre kerül fel.
+
+
+
+==Áttekintés==
+
+A klasszikus OpenTTD-ben nehéz az állomáson felhalmozódó rakományt szétosztani több célállomás közt: vagy több járművet kell használni eltérő utasításlistával, vagy bonyolult utasításlistát kell összeállítani. Tegyük fel, hogy van egy vonatunk, mely "A" és "B" város közt jár. A vasútállomáshoz mindkét városban több buszmegállóból álló buszhálózat kapcsolódik. Szándékod szerint az utasok "A" város bármely buszmegállójából utazhatnának "B" város bármely buszmegállójáig, és viszont. Az OpenTTD hagyományos használatával "A" városban buszokkal szállíthatod az utasokat a vasútállomásra, ahol aztán egy vonat veszi fel őket és szállítja tovább "B" város vasútállomására, ahol pedig "B" város buszai osztják szét őket a buszmegállók közt úgy, hogy a vasútállomás és az egyes buszmegállók közt csillag formában ingáznak. Minden jármű utasításlistája "Elszállítás és üresen indulás" utasítást tartalmaz, mely megoldás még nem válaszolja meg azt a kérdést, hogy az utasok "A"-ból "B"-be, vagy az egyik város valamelyik vasútállomására vagy valamelyik buszmegállójába akarnak-e jutni. A kiegészítő útvonalakon bonyolultabb utasításlista is használhatsz, de összességében elmondható, hogy minél több állomást és járművet adsz a hálózathoz, annál bonyolultabb és nehézkesebb rendszert kapsz.
+
+A '''rakományok szétosztása''' automatikusan gondoskodik az elszállításról, és kiválasztja az érintett utasok célállomását. A fenti példában nem kell egyetlen "Elszállítás és üresen indulás" utasítást sem meghatároznod, és nem kell csillag formájú buszhálózatot sem összeállítanod. Viszont, miután az utasok tudják, hová utaznak és melyik járműre szálljanak fel, valószínűleg több várakozó utast találsz az állomásokon.
+
+A rakomány szétosztására választott Cargodist mellett más patch-ek is hasonló hatást próbáltak elérni. A [[hu/Cargodest|Cargod'''e'''st]]-tel szemben a Cargodist a rakomány útvonalának meghatározását és a különböző útvonalak terhelésének kiegyensúlyozását együtt oldja meg, a szállítási igényt pedig ezek előfeltételeként kezeli. A [http://www.tt-forums.net/viewtopic.php?f=33&t=54253 YACD]-től egyfelől abban tér el a Cargodist, hogy elérhető úticélokat vesz figyelembe, nem pedig az egész terepet, másfelől pedig -- a számítógép teljesítményére tekintettel -- a teljes útvonal-rendszert külön szálon számítja elő.
+
+==Működési módok==
+
+[[File:en/Manual/Cargodist-overlays.png|frame|A rakományáramlási térkép és a rakományáramlási jelmagyarázat]]
+[[File:en/Manual/Cargodist-station.png|frame|A megváltozott állomásablak]]
+
+A Cargodist-tel az utasok és a rakományok szétosztására három módot kapsz. A '''Haladó beállítások''' ''Rakományok szétosztása'' csoportjában meghatározhatod, hogy a rakomány különböző típusaira melyiket akarod alkalmazni. 
+* A '''kézi''' szétosztás azt jelenti, hogy nincs automatikus szétosztás, vagyis a játék úgy működik, mint a Cargodist nélkül.
+* A '''szimmetrikus''' szétosztással az algoritmus két célállomás közt azonos mértékben próbálja meg szétosztani a rakományt. Ez nem mindig sikerül. Ha van olyan nagy állomásod, ahol több utas keletkezik, mint a szóba jöhető többi állomáson összesen, azokra nyilván nem osztható szét a rakomány egyenletesen. Az algoritmus következetességét befolyásolhatod a ''Szimmetrikus esetben a visszatérő rakomány mennyisége'' opció beállításával. Ha 100%-nál kisebbre állítod, az egyik irányba kevesebb rakomány indul, mint a másik irányba.
+* Az '''aszimmetrikus''' szétosztással ilyen előírások nélkül kerül a rakomány szétosztásra.
+
+==Kiegészítések a világtérképhez és a főablakhoz==
+
+A rakomány áramlásának áttekintéséhez úgy a főablak, mint a világtérkép segítséget nyújt az állomások és szóba jöhető szállítási kapcsolataik feltüntetésével. A kapcsolatok vonalként jelennek meg a szállítási útvonal kapacitásától függő színekkel. A sárga és a vörös akkor jelenik meg, ha a rakomány szétosztását az adott rakományra engedélyeztük, és a rakományáramlás-számítás szerint a szállítható rakományhoz túl kicsi a szállítási kapacitás az adott viszonylatban. Ilyenkor több, vagy gyorsabb járművet állíthatsz be. A fehér és a világoszöld azt jelzi, hogy a szállítható rakományra túl nagy a szállítási kapacitás. Ilyen esetben néhány járművet kivonhatsz a forgalomból. Szállítási kapcsolat jelenhet meg ott is, ahol a járművek a rakomány célba juttatása után szándékosan üresen térnek vissza. 
+
+Az állomásokat a cég színének megfelelő színű négyzetek jelölik. Minél több utast vagy rakományt adnak a környező házak vagy gazdasági épületek az állomásnak, annál nagyobb a négyzet. A főablak rakományáramlási magyarázata a '''Térkép''' menüből nyitható meg. Kijelölheted, hogy a főablak mely játékosok milyen rakományainak szállítási kapcsolatait jelenítse meg. A rakományáramlási világtérkép csak a saját cég kapcsolatait mutatja. A menüben új almenü szolgál a megjelenítendő rakománytípus kiválasztására.
+
+==Az állomásablak kiegészítése==
+Az állomásablakban látható, csoportosítható és rendezhető az állomáson tartózkodó, vagy oda tervezett rakomány mennyisége, származási helye, következő átszállítási állomása, valamint becsült végcélja szerint. A rakomány végcélja csak becsült, ne várd tehát, hogy minden rakomány a feltüntetett célállomásra fog érkezni: a program a feltüntetett rakománykötegeket az útvonaltervezés miatt nem, de a járművek eltérő mérete miatt megbonthatja. A becsült cél pontossága vonatkozásában tehát nehéz lenne itt pontos számokat mondani. Hosszútávon viszont minden a megfelelő állomásra jut.
+
+A lenyíló menü használatával megadott szempontoknak megfelelően, az állomások vagy a rakomány mennyisége szerint csoportosított és sorba rendezett csoportokat a sor végén található kis "+" vagy "-" jelre kattintva alcsoportokra lehet kifejteni és vissza lehet zárni. A csoportokat és alcsoportokat sorba is rendezheted a rakomány mennyisége vagy az állomások kiválasztott rendje szerint.
+
+==Haladó beállítások==
+
+Ha a rakomány szétosztását valamelyik rakományfajtára bekapcsoljuk, néhány játéknapnak el kell telnie, amíg az automatikus szétosztás megkezdődik. A szétosztást a program időszakonként újraszámolja, így a rakomány szétosztása az első számítás elvégzése után kezdődik. A számítás ún. '''kapcsolati gráfokra''' alapul. A kapcsolati gráf a szállítási hálózatod adott rakományához kapcsolódó elem. A bevezető példában "A" és "B" város összes állomása és buszmegállója alkot egy kapcsolati gráfot. Ha egy harmadik, "C" városban is van egy buszhálózatod, ami nincs kapcsolatban sem "A", sem "B" várossal, külön kapcsolati gráfot alkot. Minél több kapcsolati gráf van egy játékban, annál tovább tart azok kiszámítása.
+
+A '''Haladó beállítások''' ''Rakományok szétosztása'' csoportjában befolyásolhatod, milyen gyakorisággal induljon, és mennyi ideig tartson az egyes kapcsolati gráfok számítása. Ez közvetve meghatározza az egyidejűleg végezhető kapcsolati gráfszámítások számát. A kapcsolati gráfok számítása a játéktól független külön szálakon fut. Ezek a szálak előre meghatározott rendszerességgel kapcsolódnak a játékhoz a hálózat összehangolása végett. A rendszeresség és az időtartam a legtöbb játék esetében a legtöbb számítógépen valamelyest csökkenthető annak érdekében, hogy a parancsok és a végrehajtásuk közti idő rövidebbé váljon. Ha túl alacsonyra állítod ezeket az értékeket, előfordulhat, hogy a játék lelassul, mert a kapcsolati gráfok számításának befejezését várja. Ha az alapértelmezett értékeket használod, ez nem fordulhat elő, mert azokat lassú számítógépen futó kivételesen nagy játékokra szabtuk. A szétosztás pontosságát egy további beállítás is befolyásolja. Minél pontosabb egy gráfszámítás, annál tovább tart. Ezért, ha ezt a beállítást megváltoztatod, ellensúlyozd az időtartam megváltoztatásával.
+
+A ''Távolság hatása a küldött mennyiségre'' beállítás a közeli és a távoli állomásokra küldött rakomány arányát határozza meg. Az alapértelmezettől eltérő értéket csak hibakeresés esetén érdemes adni.
+
+==Korlátozások==
+
+A Cargodist nem veszi figyelembe a "Teljes kirakodás", az "Elszállítás", a "Nincs kirakodás" és a "Nincs berakodás" utasításokat a kapcsolati gráf létrehozásakor. A '''"Berakodás, ha lehetséges"''' és a '''"Kirakodás, ha lehetséges"''' utasításokat jól kezeli, és ért '''minden "Via"''' utasítást (mivelhogy nem érdekli). Minden egyéb "Teljes kirakodás", "Elszállítás", "Nincs kirakodás", vagy "Nincs berakodás" utasítás ahhoz vezethet, hogy a rakományt ki-vagy berakodásra tervezi az utasításban szereplő állomáson még akkor is, ha valójában ez nem következhet be a szóban forgó be- vagy kirakodási utasítás miatt. Ezek az utasítások a kapcsolati gráfokban elvileg kezelhetők, de ennek megvalósítása külön nagy projekt lenne, a játékra gyakorolt csekély hatása miatt a kivitelezését még nem tervezzük.
+
+A ''feltételes utasítások'' fogalmilag problemtatikusak. A jármű berakodás mértékétől függő utasítása a kapcsolati gráf számára [http://hu.wikipedia.org/wiki/Matematikai_probl%C3%A9ma eldönthetetlen problémát] okozhat, más feltételek eredményét pedig nagyon nehéz előre megjósolni anélkül, hogy a teljes játékot ne szimulálnánk a feltétel bekövetkezésekor várható állapotig.
+
+Az [http://www.tt-forums.net/viewtopic.php?f=33&t=41992&start=0 angol nyelvű fórum-topikban] további tájékoztatás olvasható.
