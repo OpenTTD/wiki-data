@@ -1,0 +1,426 @@
+[[Translation:en/Archive/Manual/Settings/Advanced Settings/Vehicles]]
+
+{| align="center"
+|- valign="top"
+|__TOC__
+|}
+===Útvonalkeresés===
+{| class="wikitable mw-collapsible" style="margin: auto;"
+|- 
+! scope="col" width="225px" | Név
+! Lehetséges értékek
+! Alapértelmezett érték
+! Leírás
+! Beállítás szintje
+! Hatóköre
+! Bevezető verzió
+! Az openttd.cfg változójaként
+|-
+| '''Útvonalkereső vonatokhoz'''
+| NPF;<br /> YAPF (ajánlott)
+| YAPF (ajánlott)
+| A vonatokhoz használt útvonalkereső (Az NPF a régebbi algoritmus, de természetesen használhatod azt is).
+| Szakértő                      
+| Játék
+| 0.6.0
+| [pf] pathfinder_for_trains
+|-
+| '''Vonatok és hajók nem tehetnek 90 fokos kanyart'''
+| Be/Ki
+| Ki
+| 90 fokos kanyarok akkor fordulnak elő, ha egy vízszintes pályaelemet egy függőleges elem követ közvetlenül a következő mezőn, ami által a vonat egy 90 fokos kanyart tesz a szokásos 45 fokos helyett. Ez ugyanígy előfordulhat hajók esetében is. A vonatok valósághű gyorsulása (ld. lentebb) esetén 90 fokos kanyarban a sebesség jelentősen korlátozott (ld. még [[hu/Pályaívek|Pályaívek]]. Érdemes ugyanakkor figyelembe venni, hogy ha a funkciót bekapcsoljuk, a hajók (kiváltképpen kikötőnél, parton, folyón haladva) több ''Eltévedt'' hibaüzenetével kell számolni.
+| Szakértő                      
+| Játék
+| 0.4.0
+| [pf] forbid_90_deg
+|-
+| '''Útvonalkereső közúti járművekhez'''
+| NPF;<br /> YAPF (ajánlott)
+| YAPF (ajánlott)
+| A közúti járművekhez használt útvonalkereső (Az NPF a régebbi algoritmus, de természetesen használhatod azt is).
+| Szakértő                      
+| Játék
+| 0.6.0
+| [pf] pathfinder_for_roadvehs
+|-
+| '''Közúti járművek sorbanállása'''
+| Be/Ki
+| Be
+| Közúti járművek megállnak egy foglalt buszmegálló vagy teherautó-rakodó előtt ahelyett, hogy visszafordulnának.
+| Szakértő                      
+| Játék
+| 0.2.0
+| [pf] roadveh_queue
+|-
+| '''Útvonalkereső hajókhoz'''
+| Eredeti;<br /> NPF;<br /> YAPF (ajánlott)
+| YAPF (ajánlott)
+| A hajókhoz használt útvonalkereső (A YAPF ajánlott, de természetesen használhatod a másikakat is).
+| Szakértő                      
+| Játék
+| 0.6.0
+| [pf] pathfinder_for_ships
+|}
+===Automata felújítás===
+{| class="wikitable mw-collapsible" style="margin: auto;"
+|- 
+! scope="col" width="225px" | Név
+! Lehetséges értékek
+! Alapértelmezett érték
+! Leírás
+! Beállítás szintje
+! Hatóköre
+! Bevezető verzió
+! Az openttd.cfg változójaként
+|-
+| '''Automatikusan felújítja a járművet ha előregedik'''
+| Be/Ki
+| Ki
+| Bekapcsolva a jármű élettartamának végén automatikusan cserére kerül, ha a lecserélési feltételek teljesülnek (pl. a modell még nem ault el, így megvásárolható). Ld. még lentebb: '''Járművek sosem avulnak el''' beállítást.
+| Haladó              
+| Vállalati
+| 0.3.3
+| [company] engine_renew
+|-
+| '''Automatikus járműfelújítás ha a jármű max (x) éves'''
+| 12-1 hónappal előtte;<br /> 0-12 hónappal utána
+| 6 hónappal utána
+| Járműfelújításhoz szükséges relatív kor. Ha az automatikus felújítást engedélyeztük, és ennek a beállításnak megfelelő időben a jármű bármilyen más okból is (pl. javítás, vagy utasításlistája teljesítése miatt) járműtelepre hajt, az automatikus felújítására sor kerül.
+| Haladó              
+| Vállalati
+| 0.3.4
+| [company] engine_renew_months
+|-
+| '''Automatikus járműfelújításhoz szükséges min. pénz'''
+| 0-756000000 Ft
+| 37800000
+| A bankban maradó legkisebb pénzösszeg járműfelújítás előtt.<br />Ennek megfelelően, ha az automatikus felújítást engedélyeztük, arra akkor kerülhet sor, amint a bankegyenleg és az automatikusan megvásárlandó új jármű árának együttes összege eléri az itt meghatározott értéket.
+| Haladó              
+| Vállalati
+| 0.3.4
+| [company] engine_renew_money
+|}
+===Javítás===
+{| class="wikitable mw-collapsible" style="margin: auto;"
+|- 
+! scope="col" width="225px" | Név
+! Lehetséges értékek
+! Alapértelmezett érték
+! Leírás
+! Beállítás szintje
+! Hatóköre
+! Bevezető verzió
+! Az openttd.cfg változójaként
+|-
+| '''Javítási intervallumok százalékban'''
+| Ki;<br /> Be
+| Ki
+| A járművek javítási módjának kiválasztása, hogy az utolsó javítás óta eltelt idő, vagy a maximális megbízhatósághoz képesti százalékos csökkenés alapján kerüljenek javításra. Ha tehát egy jármű javítási intervallumát 10%-ra állítottuk, megvásárlásakor a megbízhatósága pedig 82% volt, a javítása 72%-os megbízhatóság alatt válik szükségessé.
+| Haladó              
+| Vállalati
+| 0.3.4
+| [vehicle] servint_trains
+|-
+| '''Alapértelmezett javítási intervallumok vonatoknak'''
+| 30-800 nap/%
+| 150 nap/%
+| Alapértelmezett javítási intervallum beállítása új vonatoknak, ha nincs külön javítási intervallum beállítva a járműre
+| Haladó              
+| Vállalati
+| 0.3.2
+| [vehicle] servint_trains
+|-
+| '''Alapértelmezett javítási intervallumok közúti járműveknek'''
+| 30-800 nap/%
+| 150 nap/%
+| Alapértelmezett javítási intervallum beállítása új közúti járműveknek, ha nincs külön javítási intervallum beállítva a járműre
+| Haladó              
+| Vállalati
+| 0.3.2
+| [vehicle] servint_roadveh
+|-
+| '''Alapértelmezett javítási intervallumok hajóknak'''
+| 30-800 nap/%
+| 360 nap/%
+| Alapértelmezett javítási intervallum beállítása új hajóknak, ha nincs külön javítási intervallum beállítva a járműre
+| Haladó              
+| Vállalati
+| 0.3.2
+| [vehicle] servint_ships
+|-
+| '''Alapértelmezett javítási intervallumok repülőgépeknek'''
+| 30-800 nap/%
+| 100 nap/%
+| Alapértelmezett javítási intervallum beállítása új repülőgépeknek, ha nincs külön javítási intervallum beállítva a járműre
+| Haladó              
+| Vállalati
+| 0.3.2
+| [vehicle] servint_aircraft
+|-
+| '''Jármű lerobbanások'''
+| Nincs;<br /> Ritka;<br /> Normál
+| Ritka
+| Megfelelően karbantartott járművek lerobbanásának gyakorisága
+| Alap                 
+| Játék
+| 
+| 
+|-
+| '''Ne legyen javítás ha lerobbanások nincsenek'''
+| Be/Ki
+| Be
+| Bekapcsolva a járművek nem kerülnek javításra, ha nem tudnak lerobbanni. <br />Ilyenkor a járművek csak automatikus felújítás vagy [[hu/Manual/Járműcsere|járműcsere]] miatt mennek járműtelepre.
+| Haladó              
+| Játék
+| 0.3.3
+| [order] no_servicing_if_no_breakdowns
+|-
+| '''Helikopterek automatikus javítása a helikopter-leszállókon'''
+| Be/Ki
+| Be
+| Helikopterek javítása minden leszálláskor, még ha nincs is járműtelep a reptéren<br />A beállítás akkor hasznos, ha útvonalukon nincs repülőtér, csak helikopter-állomás.
+| Szakértő                      
+| Játék
+| 
+| 
+|}
+===Vonatok===
+{| class="wikitable mw-collapsible" style="margin: auto;"
+|- 
+! scope="col" width="225px" | Név
+! Lehetséges értékek
+! Alapértelmezett érték
+! Leírás
+! Beállítás szintje
+! Hatóköre
+! Bevezető verzió
+! Az openttd.cfg változójaként
+|-
+| '''Vonatok állomáson történő megfordulásának tiltása'''
+| Be/Ki
+| Ki
+| Ha engedélyezve van, a vonatok nem fordulnak vissza egy (nem vég-) állomáson, még ha lenne egy rövidebb út is visszafordulva
+| Haladó              
+| Játék
+| 
+| 
+|-
+| '''Automatikus megfordulás jelzőknél'''
+| Be/Ki
+| Ki
+| A vonatok automatikus megfordításának engedélyezése, ha azok túl hosszú ideje várakoznak egy jelző előtt
+| Haladó              
+| Játék
+| 
+| 
+|-
+| '''Vonatok gyorsulási módja'''
+| Eredeti;<br /> Valósághű
+| Eredeti
+| Vonatok gyorsulásának fizikai modelljének beállítása. Az '''eredeti''' modellben a járművek egyenlően kapnak emelkedő általi büntetést. A ''[[hu/Archive/Manual/Settings/Valósághű gyorsulás|valósághű''']] modell a járművek külöböző tulajdonságai alapján bünteti az emelkedőket és az íveket, úgymint hossz és vonóerő
+| Haladó              
+| Játék
+| 0.7.0 (0.3.2)
+| [vehicle] train_acceleration_model
+|-
+| '''Emelkedő meredeksége vonatoknak'''
+| 0-10%
+| 0,03
+| Egy emelkedő mező meredeksége vonatoknak. Nagyobb érték esetén a vonat nehezebben mássza meg az emelkedőt. Akkor működik, ha fentebb, a ''Vonatok gyorsulási módja'' beállításnál a valósághű gyorsulást engedélyeztük. 
+| Szakértő                      
+| Játék
+| 1.0.0
+| [vehicle] train_slope_steepness
+|-
+| '''Vonatok maximális hossza'''
+| 1-64 mező
+| 7 mező
+| Vonatok maximális hosszának beállítása (Korábban 50 mezőnyi hosszú [[hu/Archive/Manual/Settings/Óriásvonatok|óriásvonatok]] építésének engedélyezésére volt külön lehetőség a néhány mezőnyi hosszú alapértelmezett vonathosszon túl).
+| Alap                 
+| Játék
+| 1.1.0 (0.2.0)
+| [vehicle] max_train_length
+|-
+| '''A vagonok sebessége korlátozható'''
+| Be/Ki
+| Be
+| Bekapcsolva a szerelvényben lévő vasúti kocsik maximális sebessége is korlátozza a vonat maximális sebességét.<br /> Több vonatos NewGRF korlátozott sebességű vagonokat tartalmaz, mert így valósághűbb. Ezzel az opcióval lehet ezt ki/bekapcsolni.
+| Haladó              
+| Játék
+| 0.4.5
+| [vehicle] wagon_speed_limits
+|-
+| '''Villamosított vasúti vágányok letiltása'''
+| Be/Ki
+| Ki
+| Bekapcsolva nem szükséges villamosítani egy vágányt ahhoz, hogy azon villanymozdonyok közlekedhessenek
+| Szakértő                      
+| Játék
+| 0.5.0
+| [vehicle] disable_elrails
+|-
+| '''Tömegszorző tehervonatoknak nehéz vonatok szimulációjára'''
+| 1-255
+| 1
+| Tehervonatok terhelési szorzójának beállítása. Magasabb érék esetén a tehervagonok jobban igénybe veszik a vontatójárművet, főleg dombokon
+| Haladó              
+| Játék
+| 0.5.0
+| [vehicle] freight_trains
+|-
+| '''A vonatok az állomások (x) állnak meg új utasításokban'''
+| elején;<br /> közepén;<br /> távoli végén
+| távoli végén
+| A hely, ahol a vonat az állomási peron mellett alapértelmezetten megáll. Az '''elején''' jelentése, hogy a vonat a peron belépéshez legközelebbi pontján fog megállni, '''középen''' jelentése, hogy a vonat a peron közepén fog megállni, '''végén''' jelentése, hogy a vonat a peron belépéshez ellentétes végén fog megállni. Ez a beállítás csak egy alapértelmezett értéket jelent új utasítások részére, az egyes utasítások viszont beállíthatóak másfajta működési módra is természetesen.
+| Alap                 
+| Kliens
+| 1.0.0
+| [gui] stop_location
+|}
+=== Járművek - Egyéb beállítások ===
+{| class="wikitable mw-collapsible" style="margin: auto;"
+|- 
+! scope="col" width="225px" | Név
+! Lehetséges értékek
+! Alapértelmezett érték
+! Leírás
+! Beállítás szintje
+! Hatóköre
+! Bevezető verzió
+! Az openttd.cfg változójaként
+|-
+| '''Minden új utasítás alapból '''non-stop''''''
+| Be/Ki
+| Ki
+| Alapvetően egy jármű megáll minden útba eső állomáson. Ezzel a beállítással a járművek a következő célpontjukig nem állnak meg egy útjukba eső állomáson sem. Ez a beállítás csak egy alapértelmezett értéket jelent új utasítások részére, az egyes utasítások viszont beállíthatóak másfajta működési módra is természetesen.
+| Alap                 
+| Kliens
+| 0.7.0
+| [gui] new_nonstop
+|-
+| '''Utasításlista ellenőrzése'''
+| nincs;<br /> csak mozgó járművekre;<br /> minden járműre
+| minden járműre
+| Bekapcsolva a járművek utasításlistája rendszeresen ellenőrzésre kerül, és bizonyos különös kimenetelek hírüzenetben jelentésre kerülnek. Előfordulhatnak viszont olyan időszakok is a játékban, amikor erre nincs szükséged, mert pl. több járművet szándékosan megállítottál.
+| Alap                 
+| Kliens
+| 0.3.4
+| [gui] order_review_system
+|-
+| '''Figyelmeztetés veszteséges jármű esetén'''
+| Be/Ki
+| Be
+| Üzenetek megjelenítése azokról a járművekről, melyek nem termeltek profitot egy naptári év alatt. Ha a jármű azért veszteséges, mert [[hu/Ráhordó szolgáltatás|ráhordó szolgáltatásra]] használod, érdemesebb az utasításlistájára '''Elszállítás''' utasítást felvenni.
+| Alap                 
+| Kliens
+| 0.7.0 (0.3.2)
+| [gui] vehicle_income_warn
+|-
+| '''Figyelmeztetés, ha egy jármű eltévedt'''
+| Be/Ki
+| Be
+| Üzenetek megjelenítése azokról a járművekről, melyek nem képesek eljutni következő célpontjukba
+| Haladó              
+| Kliens
+| 
+| 
+|-
+| '''Járművek sosem avulnak el'''
+| Be/Ki
+| Ki
+| Bekapcsolva minden járműmodell örökké elérhető marad bevezetése után
+| Haladó              
+| Játék
+| 0.3.4
+| [vehicle] never_expire_vehicles
+|-
+| '''Maximum vonat vállalatonként'''
+| 0-5000
+| 500
+| Egy vállalat által birtokolható vonatok maximális száma
+| Alap                 
+| Játék
+| 0.3.2
+| [vehicle] max_trains
+|-
+| '''Maximum közúti jármű vállalatonként'''
+| 0-5000
+| 500
+| Egy vállalat által birtokolható közúti járművek maximális száma
+| Alap                 
+| Játék
+| 0.3.2
+| [vehicle] max_roadveh
+|-
+| '''Maximum repülőgép vállalatonként'''
+| 0-5000
+| 200
+| Egy vállalat által birtokolható repülőgépek maximális száma
+| Alap                 
+| Játék
+| 0.3.2
+| [vehicle] max_aircraft
+|-
+| '''Maximum hajók vállalatonként'''
+| 0-5000
+| 300
+| Egy vállalat által birtokolható hajók maximális száma
+| Alap                 
+| Játék
+| 0.3.2
+| [vehicle] max_ships
+|-
+| '''Repülőgép sebességszorzó'''
+| 1/1;<br /> 1/2;<br /> 1/3;<br /> 1/4
+| 1/4
+| Repülőgépek relatív sebességének beállítása más járműtípusokhoz viszonyítva, a légi szállítás bevételének csökkentéséhez (A Transport Tycoon Deluxe-ban 1/4, az alapértelmezett érték ezt vette át).
+| Haladó              
+| Játék
+| 
+| 
+|-
+| '''Repülőgép-szerencsétlenségek száma'''
+| nincs, csökkentett, normál
+| normál
+| Repülőgép-szerencsétlenség esélyének beállítása.
+| Alap                 
+| Játék
+| 1.0.0
+| [vehicle] plane_crashes
+|-
+| '''Több NewGRF járműgarnitúra engedélyezése'''
+| Ki;<br /> Be
+| Be
+| Kompatibilitási lehetőség régi [[hu/Manual/NewGRF|NewGRF]]-ekhez. Ne kapcsold ki, ha nem tudod, mit csinálsz!<br />Ez a beállítás azt teszi lehetővé, hogy több járműves NewGRF-készlet létezzen egymás mellett. Ha kikapcsoljuk, egyfelől a különböző járművek száma erősen korlátozottá válik, másfelől ugyanannak a közlekedési ágnak a járművei felülírják egymás járműtulajdonságait. Ez nagyon magas és nagyon alacsony vételárral valamint üzemeltetési költséggel egyaránt járhat, emellett grafikai problémákhoz is vezethet, ha különböző NewGRF-ek mozdonyait és vagonjait kombináljuk.
+| Szakértő                      
+| Játék
+| 0.7.0
+| [vehicle] dynamic_engines
+|-
+| '''Közúti járművek gyorsulási módja'''
+| Eredeti, Valósághű
+| Eredeti
+| Közúti járművek gyorsulásának fizikai modelljének beállítása. Az '''eredeti modellben a járművek egyenlően kapnak emelkedő általi büntetést. A '''valósághű"' modell a járművek teljesítményét és vonóerejét érvényesíti az emelkedőkön és kanyarodáskor.
+| Haladó              
+| Játék
+| 1.1.0
+| [vehicle] roadveh_acceleration_model
+|-
+| '''Emelkedő meredeksége közúti járműveknek'''
+| 0-10%
+| 0,07
+| Egy emelkedő mező meredeksége közúti járműveknek. Nagyobb érték esetén a jármű nehezebben mássza meg az emelkedőt. A funkció akkor működik, ha az előzőekben a közúti járművek gyorsulási módjánál a '''valósághű gyorsulást''' engedélyeztük.
+| Szakértő                      
+| Játék
+| 1.1.0
+| [vehicle] roadveh_slope_steepness
+|-
+| '''Járművek kipufogógáz/füst mennyisége'''
+| Nincs;<br /> Eredeti;<br /> Valósághű
+| Eredeti
+| Járművek által kibocsátott füst vagy szikra mennyiségének beállítása
+| Haladó              
+| Játék
+| 
+| 
+|}
