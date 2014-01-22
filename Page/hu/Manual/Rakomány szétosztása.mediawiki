@@ -41,6 +41,64 @@ A '''Haladó beállítások''' ''Rakományok szétosztása'' csoportjában befol
 
 A ''Távolság hatása a küldött mennyiségre'' beállítás a közeli és a távoli állomásokra küldött rakomány arányát határozza meg. Az alapértelmezettől eltérő értéket csak hibakeresés esetén érdemes adni.
 
+{| class="wikitable mw-collapsible" style="margin: auto;"
+|- 
+! Név
+! Lehetséges értékek
+! Alapértelmezett érték
+! Beállítás szintje
+|-
+| '''A szétosztási gréf újraszámolására szánt idő'''
+| 1-4096 nap
+| 16 nap
+| A kapcsolati gráf egy komponensének újraszámítására szánt idő. Az újraszámítás egy külön szálon indul el, és a megadott számú napig fut. <br />Minél ''rövidebb'' ez az időtartam, annál valószínűbb, hogy a számítás nincs kész az idő lejártakor. Ilyenkor a játék megáll a számítás befejeződéséig (ettől a játék elakadhat). Minél ''hosszabb'' ez az időtartam, annál több idő kell a szétosztás frissüléséhez, amikor megváltoznak az útvonalak
+|-
+| '''A szétosztási gráf frissítése (x) naponként'''
+| 2-32 nap
+| 4 nap
+| A kapcsolati gráf egyes újraszámításai között eltelő idő.<br />Minden számítás a gráf egy adott komponensére vonatkozik. Egy adott X beállítás esetén nem fog a teljes gráf X naponként frissülni, csak egy komponense. <br />Minél ''rövidebb'' ez az idő, annál több CPU időre lesz szükség a számítás elvégzéséhez. Minél ''hosszabb'' ez az idő, annál több ideig fog tartani, mire a szétosztás megindul az új útvonalakon
+|-
+| '''Utasok szétosztása'''
+| kézi;<br /> aszimmetrikus;<br /> szimmetrikus
+| kézi
+| A '''szimmetrikus''' azt jelenti, hogy megközelítőleg ugyanannyi utas megy majd A-ból B-be, mint B-ből A-ba. Az '''aszimmetrikus''' beállítás esetén a különböző irányokba tetszőleges mennyiségű utas mehet. '''Kézi''' esetben az utasok nem lesznek automatikusan szétosztva
+|-
+| '''Levelek szétosztása'''
+| kézi;<br /> aszimmetrikus;<br /> szimmetrikus
+| kézi
+| Mint előbb: '''Utasok szétosztása'''.
+|-
+| '''A páncélozott rakománytípus szétosztása'''
+| kézi;<br /> aszimmetrikus;<br /> szimmetrikus
+| kézi
+| A beállítások értelmezése mint előbb: '''Utasok szétosztása'''. <br /> A páncélozott rakományítpus a mérsékelt égövi tájon az értéktárgyakat, szubtrópusi tájon a gyémántot, szubarktikus tájon pedig az aranyat jelenti, ezeken a NewGRF-ek változtathatnak. ''Szubarktikus és szubtrópusi'' esetben az '''aszimmetrikus''' vagy '''kézi''' beállítás javasolt, mivel a bankok nem fognak aranyat ill. gyémántot visszaküldeni a bányáknak. ''Mérsékelt'' égövi esetben a szimmetrikus is jó választás, ebben az esetben a bankok a fogadott mennyiségnek megfelelően fognak értéktárgyakat visszaküldeni a küldő banknak
+|-
+| '''Egyéb rakománytípusok szétosztása'''
+| kézi, aszimmetrikus
+| kézi
+| Az '''aszimmetrikus''' beállítás esetén a különböző irányokba tetszőleges mennyiségű rakomány mehet. '''Kézi''' esetben a rakományok nem lesznek automatikusan szétosztva. 
+|-
+| '''A szétosztás pontossága'''
+| 2-64
+| 16
+| Magasabb beállítás esetén a kapcsolati gráf kiszámítása több időt fog igénybe venni. A játék akadozhat, ha ez a számítás túl sok időbe telik. Alacsony beállítás esetén viszont a szétosztás pontatlan lehet, a rakományok váratlan célokat kaphatnak.
+|-
+| '''A távolság hatása a küldött mennyiségekre'''
+| 0-255%
+| 1
+| Ha 0-nál magasabb értékre állítod, az A és B állomás távolsága befolyásolni fogja az A-ból B-be küldött rakomány mennyiségét. Minél messzebb van B A-tól, annál kevesebb rakomány kerül majd küldésre. Minél magasabb ez a beállítás, annál kevesebb rakomány megy majd a távolibb állomásokra, és annál több rakomány megy majd a közelebbi állomásokra.
+|-
+| '''Szimmetrikus esetben a visszaküldött rakomány mennyisége'''
+| 0-100%
+| 1
+| 100%-nál kisebb beállítás esetén a szimmetrikus szétosztás jobban fog hasonlítani az aszimmetrikusra. Adott mennyiségű rakomány küldése esetén kevesebb lesz automatikusan visszaküldve. 0% esetén a szimmetrikus szétosztás pontosan úgy fog viselkedni, mint az aszimmetrikus szétosztás
+|-
+| '''A rövidebb utak telítettsége a szabad utak felhasználása előtt'''
+| 0-250%
+| 0,8
+| Gyakran több útvonal is van két adott állomás között. A Cargodist először a legrövidebb útvonalat telíti be, majd a második legrövidebb útvonalat, miután az első útvonal már telített, és így tovább. A telítettséget a kapacitás becslése és a tervezett kihasználtság határozza meg. Amennyiben az összes útvonal telített, és még mindig van igény, az összes útvonalat terhelni fogja, elsősorban a legnagyobb kapacitásúakat. Viszont a legtöbb esetben az algoritmus nem fogja pontosan megbecsülni a kapacitást. <br />Ezen opció segítségével beállíthatjuk, hogy milyen telítettségi szintig legyen kihasználva a rövidebb útvonal a hosszabb útvonal használatba vétele előtt. Állítsd 100%-nál kisebbre, hogy elkerüld a túlterhelődő állomásokat abban az esetben, ha a kapacitás túl lenne becsülve!
+|}
+
 ==Korlátozások==
 
 A Cargodist nem veszi figyelembe a "Teljes kirakodás", az "Elszállítás", a "Nincs kirakodás" és a "Nincs berakodás" utasításokat a kapcsolati gráf létrehozásakor. A '''"Berakodás, ha lehetséges"''' és a '''"Kirakodás, ha lehetséges"''' utasításokat jól kezeli, és ért '''minden "Via"''' utasítást (mivelhogy nem érdekli). Minden egyéb "Teljes kirakodás", "Elszállítás", "Nincs kirakodás", vagy "Nincs berakodás" utasítás ahhoz vezethet, hogy a rakományt ki-vagy berakodásra tervezi az utasításban szereplő állomáson még akkor is, ha valójában ez nem következhet be a szóban forgó be- vagy kirakodási utasítás miatt. Ezek az utasítások a kapcsolati gráfokban elvileg kezelhetők, de ennek megvalósítása külön nagy projekt lenne, a játékra gyakorolt csekély hatása miatt a kivitelezését még nem tervezzük.
