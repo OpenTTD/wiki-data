@@ -1,272 +1,621 @@
+{{en/Manual/Navigation}}
 
-{| align="center" style="margin:0;<br />"
-|- valign="top"
-|style="padding: 0;<br /> border: 0;<br /> background: transparent;<br />"|__TOC__
+Here you can find information about how OpenTTD calculates in-game figures.
+
+You always wanted to know how the station-rating was built up? How goods-distribution works? Here you can find it!
+
+==Company rating==
+
+Each part of the company rating is a linear function, ie. earning 50% of the target for a component will give 50% of the points allocated for that component. Where components involve monetary amounts, these are converted to the currency of the current game; internally these amounts are stored as the pound amount.
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+! Összetevő !! Cél !! Pont (minimum) !! Pont (maximum) !! Százalék
+|-
+|Járművek száma||>=120||0 pont 0 járműért||100 pont legalább 120 járműért||0 - 10%
+|-
+|A cég állomáselemeinek száma||>=80||0 pont 0 elemért||100 pont legalább 80 elemért||0 - 10%
+|-
+|A legalább kétéves járművek legkisebb profitja||>=£10,000||0 pont veszteségért vagy £0-ért||100 pont legalább £10,000-ért||0 - 10%
+|-
+|A legalacsonyabb negyedéves bevétel az elmúlt három évben||>=£50k||0 pont £0-ért||50 pont legalább £50k-ért||0 - 5%
+|-
+|A legmagasabb negyedéves bevétel az elmúlt három évben||>=£100k||0 pont £0-ért||100 pont legalább £100k-ért||0 - 10%
+|-
+|Leszállított rakományegységek száma az előző évben||>=40,000||0 pont 0 egységért||400 pont legalább 40,000 egységért||0 - 40%
+|-
+|Az előző negyedévben leszállított rakományfajták száma||>=8||0 pont 0 rakományfajtáért||50 pont legalább 8 rakományfajtáért ||0 - 5% 
+|-
+|Jelenlegi bankegyenleg||>=£10m||0 pont £0-ért||50 ponts legalább £10m-ért||0 - 5%
+|-
+|Jelenlegi bankhitel||£0||0 pont >£250k-ért||50 pont £0-ért||0 - 5%
+|- style="background:#efefef"
+! Összesen !!!! 0 pont !! 1000 pont !! 0 - 100%
 |}
-===Honosítás===
-{| class="wikitable"
-|- 
-! Név
-! Lehetséges értékek
-! Alapértelmezett érték
-! Beállítás szintje
-! Hatóköre
-|- 
-| Sebesség mértékegysége
-| Angolszász (mi/h);<br /> metrikus (km/h);<br /> SI (m/s)
-| metrikus
-| Alap                 
-| Játék
-|- 
-| Teljesítmény mértékegysége
-| Angolszász (LE);<br /> Metrikus (LE);<br /> SI (kW)
-| Metrikus (LE)
-| Alap                 
-| Játék
-|- 
-| Tömeg mértékegysége
-| Angolszász (angolszász tonna);<br /> Metrikus (t/tonna);<br /> SI (kg)
-| Metrikus (t/tonna)
-| Alap                 
-| Játék
+
+<table>
+<tr valign="top"><td style="background:none; border:0px">
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!colspan="2"|A ''Vállalatok helyezése'' tábla
+|- style="background:#efefef"
+!Értékelés!!Cím
 |-
-| Űrtartalom mértékegysége
-| Angolszász (gal);<br /> Metrikus (l);<br /> SI (m3)
-| Metrikus (l)
-| Alap                 
-| Játék
-|- 
-| Vonóerő mértékegysége
-| Angolszász (lbf);<br /> Metrikus (kp);<br /> SI (kN)
-| SI (kN)
-| Alap                 
-| Játék
-|- 
-| Hosszúságok mértékegysége
-| Angolszász (láb);<br /> Metrikus (m);<br /> SI (m)
-| Metrikus (m)
-| Alap                 
-| Játék
+|0 - 127||Mérnök
+|-
+|128 - 255||Forgalomigazgató
+|-
+|256 - 383||Szállításszervező
+|-
+|384 - 511||Útfelügyelő
+|-
+|512 - 639||Igazgató
+|-
+|640 - 767||Főigazgató
+|-
+|768 - 895||Alelnök
+|-
+|896 - 959||Elnök
+|-
+|960 - 1000||Nagytőkés
 |}
-===Megjelenítési beállítások===
-{| class="wikitable"
-|- 
-! Név
-! Lehetséges értékek
-! Alapértelmezett érték
-! Leírás
-! Beállítás szintje
-! Hatóköre
-! Bevezető verzió
-! Az openttd.cfg változójaként
-|- 
-| Játékmentés dátumformátuma
-| Hosszú (31th Dec 2008);<br /> Rövid (31-12-2008);<br /> ISO (2008-12-31)
-| Hosszú (31th Dec 2008)
-| A játékmentés elnevezésében használt dátum formátuma
-| Haladó               
-| Kliens
-| 0.7.0
-| [[hu/Date format in default names|date_format_in_default_names]]
+</td><td style="background:none; border:0px">
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!colspan="2"|A rekordtábla 2050-ben
 |-
-| Mutassa a település lakosságát a feliratban
-| Be;<br /> Ki
-| Be
-| Település lakosságszámának kijelzése a címkéjén
-| Haladó               
-| Kliens
-| 0.3.6
-| [[hu/Population in label|population_in_label]]
+!Értékelés!!Cím
 |-
-|Területinformációk mutatása építési eszközök használatakor
-| Be/Ki
-| Be
-| Mezők közti távolságok és/vagy magasságkülönbségek megjelenítése húzás közben építkezéskor
-| Alap                 
-| Kliens
-| 0.5.0
-| [[hu/Measure tooltip|measure_tooltip]]
+|0 - 319||Üzletember
 |-
-|Rakodásjelző használata
-| Kikapcsolva;<br /> Saját vállalat;<br /> Minden vállalat
-| Saját vállalat
-| A [[hu/Rakodásjelző|rakodásjelző]] megjelenítése a be- és kirakodó jármûvek felett
-| Alap                 
-| Kliens
-| 0.5.0
-| [[hu/Loading indicators|loading_indicators]]
-|- 
-| Jármûvek egyedi színezésének mutatása
-| Egyikét sem;<br /> Csak a sajátét;<br /> Minden vállalatét
-| Minden vállalatét
-| A [[File:en/Manual/Company information button.png|Céginformáció]] Céginformáció-menü '''Színséma''' pontjában meghatározott színek használata
-| Haladó               
-| Kliens
-| 0.5.0
-| [[hu/Liveries|liveries]]
+|320 - 447||Vállalkozó
 |-
-| Vágányszakasz foglaltságának jelzése
-| Be;<br /> Ki
-| Ki
-| A vonatok által lefoglalt vágányutak jelölése más színnel. Hasznos az [[hu/Manual/Jelzők#utvonaljelzok|irányjelzési rendszerrel]] kapcsolatos vonatmegállási problémák megoldása során.
-| Alap                 
-| Kliens
-| 0.7.0
-| [[hu/Show track reservation|show_track_reservation]]
-|- 
-| Kiadási/bevételi adatok csoportosítása a pénzügyi ablakban
-| Be;<br /> Ki
-| Ki
-| A [[File:en/Manual/Finances screen button.png|Pénzügyi adatok]] '''Pénzügyi adatok''' ablak elrendezésének beállítása
-| Haladó               
-| Kliens
-| 0.7.0
-| [[hu/Expenses layout|expenses_layout]]
-|- 
-| Föld színe a térképen
-| Zöld;<br /> Sötétzöld;<br /> Sötétkék
-| Zöld
-| A talaj színe a [[File:en/Manual/Minimap button.png|Világtérkép]] Világtérképen
-| Haladó               
-| Kliens
-| 1.0.0
-| [[hu/Smallmap land colour|smallmap_land_colour]]
-|- 
-| A nagyítás maximális mértéke
-| 4x;<br /> 2x;<br /> Normál
-| 4x
-| Maximális nagyítás mértéke. A nagyobb nagyítási mérték több memóriát igényel
-| Haladó               
-| Kliens
-| 1.2.0
-| [[hu/Zoom max|zoom_max]]
-|- 
-| A kicsinyítés maximális mértéke
-| 2x;<br /> 4x;<br /> 8x
-| 8x
-| Maximális kicsinyítés mértéke. A nagyobb kicsinyítési mérték szaggatást okozhat
-| Haladó               
-| Kliens
-| 1.2.0
-| [[hu/Zoom min|zoom_min]]
-|- 
-| A vonalak vastagsága a grafikonokon
-| 1-5
-| 3
-| Vonalak szélessége a [[File:en/Manual/Graphs button.png|Grafikonok]] grafikonokon. A vékony vonal pontosabb információt nyújt, míg a vastagabb jobban látható, és a színek jobban megkülönböztethetőek.
-| Haladó               
-| Kliens
-| 1.2.0
-| [[hu/Graph line thickness|graph_line_thickness]]
+|448 - 575||Iparos
+|-
+|576 - 703||Tőkés
+|-
+|704 - 831||Mágnás
+|-
+|832 - 959||Mogul
+|-
+|960 - 1000||Az évszázad iparmágnása
 |}
-===Irányítás===
-{| class="wikitable"
-|- 
-! scope="col" width="225px" | Név
-! Lehetséges értékek
-! Alapértelmezett érték
-! Leírás
-! Beállítás szintje
-! Hatóköre
-! Bevezető verzió
-! Az openttd.cfg változójaként
+</td></tr></table>
+
+==Station rating==
+This section shows the factors that affect the station rating. All calculations are done separately for each cargo type.
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Factor!!Condition!!Rating points!!Rating %
 |-
-| Ablakillesztés távolsága
-| 0-32 pixel
-| 10 pixel
-| Az ablakok közti automatikus távolság, ha egérhúzással két ablakot illesztünk egymás mellé.
-| Szakértő                      
-| Kliens
-| 0.3.5
-| [[hu/Window snap radius|window_snap_radius]]
+| Max speed of last vehicle entering station (to a max of 255 km/h) || Above 85 km/h (52 mph)|| (Speed (km/h) - 85) / 4 || 0% to 17%
 |-
-| Nem zárolt ablakok maximális száma
-| Kikapcsolva;<br /> 5-255
-| 20
-| Ha a nem [[hu/Archive/Manual/Felhasználói felület egyéb elemei#zarolt-ablakok|zárolt]] ablakok száma a beállított értéket a képernyőn elérte, új ablak megnyitása esetén a régi ablakok bezárásra kerülnek, hogy legyen hely az új ablakok számára.
-| Szakértő                      
-| Kliens
-| 0.7.0
-| [[hu/Window soft limit|window_soft_limit]]
+|rowspan="3"|Age in years of last vehicle entering station || 2 || 10|| 4%
 |-
-| Tájrendező eszköztár megnyitása az építési eszköztárakkal
-| Be;<br /> Ki
-| Ki
-| Egy közlekedési ág építési eszköztárának megnyitásakor a [[hu/Manual/Tájrendezés|Tájrendező eszköztárat]] is nyissa meg
-| Haladó               
-| Kliens
-| 0.4.0.1
-| [[hu/Link terraform toolbar|link_terraform_toolbar]]
+| 1 || 20 || 8%
 |-
-| Alapesetben csapatban beszélsz <ENTER>-rel
-| Be;<br /> Ki
-| Ki
-| Az <ENTER> és a <Ctrl+ENTER> billentyű működésének felcserélése a csapaton belüli és publikus beszélgetésekhez. Így <ENTER>-rel elküldött üzenetedet csak a csapattársak látják.
-| Alap                 
-| Kliens
-| 0.5.0
-| [[hu/Prefer teamchat|prefer_teamchat]]
+| 0 || 33 || 13%
 |-
-| Ablakmozgatás, ha az egér a képernyő szélén van
-| - Kikapcsolva;<br /> <br /> - fő nézet, csak teljes képernyős módban;<br /> <br />- fő nézet;<br /><br />- Minden látkép
-| Kikapcsolva
-| Bekapcsolva görgetődik a látkép, ha az egér az ablak széléhez közel van
-| Alap                 
-| Kliens
-| 0.2.0
-| [[hu/Autoscroll|autoscroll]]
+|rowspan="4"|Days since last cargo pickup <br> Multiply days in "Condition" column by 4 if last vehicle was a ship.<br><small>(Note: If a vehicle was ready to pick up a cargo but there was no cargo, it is regarded as a cargo pickup anyhow)</small>|| 30 to 52,5 || 25 || 10%
 |-
-| Inverz görgetési irány
-| Ki, Be
-| Ki
-| A térkép jobb gombbal történő görgetésének viselkedése. Kikapcsolva az egér a kamerát mozgatja, bekapcsolva pedig a térképet.
-| Alap                 
-| Kliens
-| 0.4.5
-| [[hu/Reverse scroll|reverse_scroll]]
+| 15 to 30 || 50 || 20%
 |-
-| Finomított nézőpont-görgetés
-| Be;<br /> Ki
-| Ki
-| Beállítható, hogy a fő nézet hogyan mozogjon egy adott pozícióra a térképre kattintáskor, ha egy adott objektumra történik mozgás. Bekapcsolva a nézet egyenletesen mozog, ha egy '''Megnéz''' gombra vagy egy újsághírre kattintunk, míg kikapcsolva közvetlenül a kijelölt helyre ugrik.
-| Haladó               
-| Kliens
-| 0.6.0
-| [[hu/Smooth scroll|smooth_scroll]]
+| 7.5 to 15  || 95 || 37%
 |-
-| Bal gombos térképmozgatás
-| Be;<br /> Ki
-| Ki
-| Bal egérgombbal történő térképmozgatás engedélyezése. Különösen hasznos érintőképernyős mozgatás használata esetén. A funkció a régi, jobb egérgombbal történő húzás lehetőségét nem érinti, az most is érvényes.
-| Alap                 
-| Kliens
-| 0.7.0
-| [[hu/Left mouse btn scrolling|left_mouse_btn_scrolling]]
+| less than 7.5 || 130 || 51%
 |-
-| Egérgörgő funkció
-| Térképnagyítás;<br /> Térképmozgatás;<br /> Ki
-| Térképnagyítás
-| Kétdimenziós egérgörgővel történő mozgatás engedélyezése
-| Alap                 
-| Kliens
-| 0.6.0
-| [[hu/Scrollwheel scrolling|scrollwheel_scrolling]]
+|rowspan="6"|Units of cargo waiting at station || More than 1500 || -90 || -35%
 |-
-| Egérgörgő sebessége a térképen
-| 1-15
-| 5
-| Egérgörgős mozgatás érzékenységének beállítása
-| Alap                 
-| Kliens
-| 0.6.0
-| [[hu/Scrollwheel multiplier|scrollwheel_multiplier]]
+| 1001 to 1500 || -35 || -14%
 |-
-| Képernyőbillentyűzet
-| Kikapcsolva;<br /> Dupla kattintás;<br /> Egyszeres kattintás (amikor előtérben van);<br /> Egyszeres kattintás (azonnal)
-| Dupla kattintás
-| Válaszd ki a képernyőbillentyűzet ablak megnyitásának módját, hogy csak mutatóeszközzel is be tudj írni szöveget vagy számot. Ez a billentyűzet nélküli játéknál hasznos.
-| Alap                 
-| Kliens
-| 0.7.0
-| [[hu/Archive/Manual/Settings/Keyboard|keyboard]];<br /> [[hu/Keyboard caps|keyboard_caps]]
+| 601 to 1000 || 0 || 0%
+|-
+| 301 to 600 || 10 || 4%
+|-
+| 101 to 300 || 30 || 12%
+|-
+| less than 100 || 40 || 16%
+|-
+|Statue in town of station||Built||26|| 10%
+|-
+|Small advertising campaign||Station within 10 tiles of town center||+64|| +25%
+|-
+|Medium advertising campaign||Station within 15 tiles of town center||+112|| +44%
+|-
+|Large advertising campaign||Station within 20 tiles of town center||+160|| +63%
+|-
+|Road vehicle crashed||Station within 22 tiles of crash ||-160|| -63%
+|-
+|Train crashed||Station within 30 tiles of crash ||-160|| -63%
 |}
+Divide the total rating points by 255 to get the percent rating.  The maximum possible rating is 100%.  Advertising campaigns give an instant, temporary boost to ratings of nearby stations. The boost will gradually fall down to the calculated rating. 
+
+The amount of cargo that can be transported from an industry is fully reliant on the station rating. So if the amount of cargo transported from an industry is low, it is probably because the station rating is low, too. 
+
+Every 2.5 days station ratings are computed; ratings can't change by more than 2 points per cycle, except after crashes.
+
+'''Note:'''  The exact formula can be seen under "[http://vcs.openttd.org/svn/browser/trunk/src/station_cmd.cpp#L3163 UpdateStationRating()]" in station_cmd.cpp.
+
+'''Note:'''  If rating will less than 50%, the station starts losing cargo.
+
+==Cargo delivery to stations==
+During each cycle of 2.5 days for each cargo type of the delivering industry a maximum of 2 stations can get cargo assigned. If there are more than 2 possible stations with the same maximum rating value for the current cargo type then it depends on internal ordering of the stations which ones get the cargo.
+
+If there's only one possible station then the delivered amount is: produced_amount * station_rating_in_percent, rounded up to the next integer value.
+
+For two possible stations the calculation is more complex. First the rating in points of station 2 is divided by 2 for the further local calculations. The amount available to station 1 is calculated as follows: (station_rating_in_points1 * (amount + 1)) / (station_rating_in_points1 + station_rating_in_points2); for similar ratings this is about 2/3 of the production, it increases for larger differences. The result is subject to the same calculation as in the single station case. This is delivered to station 1. If station 1 doesn't get the full amount available to it then that part won't be transported at all. The remaining amount of the production, if any, is subject to the same calculation as in the single station case and delivered to station 2.
+
+==Local authority rating==
+Ratings limit some player actions; they start at +500 and can change based on some actions.
+
+Currently you can exploit the game by clearing ~200 trees and then replanting them.  This sets the rating to -1000 (the minimum), and then raises it to 220.
+
+<table>
+<tr valign="top"><td style="background:none; border:0px">
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Rating points!!Rating
+|-
+| -1000 to -400 || Appalling
+|-
+| -399 to -200 || Very Poor
+|-
+| -199 to 0 || Poor
+|-
+| 0 to 200 || Mediocre
+|-
+| 201 to 400 || Good
+|-
+| 401 to 600 || Very Good
+|-
+| 601 to 800 || Excellent
+|-
+| 801 to 1000 || Outstanding
+|}
+</td><td style="background:none; border:0px">
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Player action!!Required rating*!!Effect on rating
+|-
+|Build a station|| -200 || n/a
+|-
+|Destroy an 'edge' piece of road|| 16 / 64 / 112 ||-18, down to -100.
+|-
+|Destroy an 'inner' piece of road|| 16 / 64 / 112 ||-50, down to -100.
+|-
+|Destroy a city tunnel or bridge|| 144 / 208 / 400 ||-250, down to 0.
+|-
+|Destroy building|| 40 to 300 ||-40 to -300
+|-
+|Plant tree on clear square|| n/a ||+7, up to 220.
+|-
+|Clear a tile with trees|| n/a ||-35
+|-
+|Successful bribe|| n/a ||+200, up to 800.
+|-
+|Unsuccessful bribe|| n/a ||Set to -50.
+|}
+<nowiki>*</nowiki> "Required rating" is listed for the settings Permissive / Neutral / Hostile of<br>the [[en/Archive/Manual/Settings/Difficulty]] option ''City council attitude towards area restructuring''.
+</td></tr></table>
+
+Each month players' ratings automatically change:
+* Rating goes up by 5 if it is less than 200.
+* Rating goes up by 12 for each station that has transferred cargo in the last 50 days.
+* Rating goes down by 15 for each station that has not transferred cargo in the last 50 days.
+
+
+'''Example:'''<br>
+A player has a rating of -300, (Very Poor), 2 active stations and 1 inactive station at a town.<br>
+5pts + 2 * 12pts - 15pts = 14pts points gain per month.<br>
+(-200 - -300)pts / 14pts/mo = 8 months before the town will let him build another station.
+
+Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
+
+==Industry production==
+Here is how the game determines how much cargo an industry produces per month.  This table lists possible starting productions governed by the  [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|smooth economy]] patch.  Production is a multiple of 8 or 9 (sometimes 10 with forests).
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Raw Material Industry!!Produced Cargo!!Initial production range
+|-
+|Coal Mine||Coal||56 to 176
+|-
+|Forest||Wood||48 to 152
+|-
+|Oil Rig||Oil||56 to 176
+|-
+|Farm||Grain and Livestock||40 to 112
+|-
+|Copper Mine||Copper Ore||56 to 112
+|-
+|Oil Well||Oil||48 to 152
+|-
+|Iron Mine||Iron Ore||40 to 112
+|-
+|Bank||Valuables||24 to 64
+|-
+|colspan="5"|
+|-
+|Gold Mine||Gold||24 to 80
+|-
+|colspan="5"|
+|-
+|Diamond Mine||Diamonds||24 to 80
+|-
+|Fruit Plantation||Fruit||40 to 112
+|-
+|Rubber Plantation||Rubber||40 to 112
+|-
+|Water Supply||Water||48 to 152
+|-
+|Farm||Maize||40 to 128
+|-
+|Lumber Mill||Wood||180 or 225 (if trees available)
+|-
+|colspan="5"|
+|-
+|Cotton Candy Forest||Cotton Candy||48 to 152
+|-
+|Battery Farm||Batteries||40 to 128
+|-
+|Cola Wells||Cola||48 to 136
+|-
+|Plastic Fountain||Plastic||56 to 160
+|-
+|Bubble Generator||Bubbles||48 to 152
+|-
+|Toffee Quarry||Toffee||40 to 112
+|-
+|Sugar Mine||Sugar||40 to 128
+|}
+
+===Production change===
+Each month the game randomly changes some industry productions.
+====Default / TTD-like Economy Rules====
+For 256x256 tile maps there is one change per month possible (only 1 industry changes). Number scales nicely with map size since the introduction of "Daily production changes" function in trunk (r14332). 
+
+
+*As with smooth economy, industries deliver cargo to the stations 8, 9 or 10 (high production forests only - more than 400t) times per month.
+However - productions are limited to 6 production levels: lowest, lower, normal (with a new game started or a new industry built), higher, 2x higher and the highest.
+Production changes between these levels are either a 50% decrease (half) or a 100% increase (double).
+
+*Examples:
+**A Coal Mine: lowest (32 or 40 t per month), lower (64 or 72), normal (120 or 135), higher (240 or 270), 2x higher (480 or 540) and the highest (960 or 1080).
+**A Forest:    lowest (32 or 64 t per month), lower (35 or 70), normal ( 78 or 117), higher (208 or 260), 2x higher (416 or 468 or 520 (= 10x multiplier)) and the highest (832 or 936 or 1040).
+**A Gold Mine: lowest (12 or 18 bags/month), lower (32 or 40), normal ( 56 or  63), higher (112 or 126), 2x higher (224 or 252) and the highest (448 or  504).
+
+
+To make things simple, let's look what are the chances for 256x256 maps (max. 1 change per month = max. 1 industry per month changes production):
+
+*The chance for a production change each month is:
+** 50% for only_decrease industry to decrease (currently only Temperate terrain Oil Wells) or
+** 50% for 1/3 chance (=16.7%) that other industry (non only_decrease) changes production.
+
+
+*If a production change does occur (~16.7% chance per month):
+** For an industry that has poor or no service (less than 60% of its cargo is transported): '''33%''' chance of increase, '''67%''' chance of decrease.
+** For an industry that has good (greater than 60%) service: '''67%''' chance of increase, '''33%''' chance of decrease.
+** There is no bonus for excellent service with default economy.
+
+
+*To calculate the chance for a particular change, i.e. 50% * 1/3 * 33% = 5.56%:
+** Poor service: '''5.56%''' that 1 possible change per month is an increase and '''11.12%''' that 1 possible change per month is a decrease.
+** Good service: '''11.12%''' that 1 possible change per month is an increase and '''5.56%''' that 1 possible change per month is a decrease.
+
+====Smooth Economy Rules====
+:''Distinguish [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|Smooth economy]] (advanced setting) and [[en/Archive/Manual/Settings/Difficulty|Steady economy]] (difficulty setting)''
+
+*The chance for a production change each month is '''4.5%''', i.e. 4.5% of producing industries from industry list change production.
+
+
+*If a production change does occur:
+** For an industry that has poor or no service (less than 60% of its cargo is transported): '''33%''' chance of increase, '''67%''' chance of decrease
+** For an industry that has good (greater than 60%) service: '''67%''' chance of increase, '''33%''' chance of decrease
+** For an industry that has excellent (greater than 80%) service: '''83%''' chance of increase, '''17%''' chance of decrease
+
+
+*These two are multiplied together, i.e. 4.5% * 33% = 1.5%:
+** Poor service: '''1.5%''' to increase and '''3.0%''' to decrease
+** Good service: '''3.0%''' to increase and '''1.5%''' to decrease
+** Excellent service: '''3.75%''' to increase and '''0.75%''' to decrease
+
+
+*With the [[en/Archive/Manual/Settings/Smooth economy]] option enabled, production changes per month are between 3 and 23%
+**Industries with very low productions, (ie. 12-40 tonnes per month) will have higher changes.
+**Primary industries produce cargo 8 or 9 times (10 times possible for forests) a month. Monthly production is an industries 'base value' multiplied times 8 or 9 (or 10 for higher productions forests).  For example, the base value for a coal mine is 15 tons, so the monthly production is 120 or 135 tons. This base value is capped at 255, so the maximum possible monthly production for any industry is 2040 or 2295 (or 2550 - again - forest).[http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
+
+====Examples====
+If a coal mine has 70% of its output transported, there is a '''3%''' chance (4.5% * 67%) of a production increase from 3-23% and a '''1.5%''' chance (4.5% * 33%) of a production decrease from 3-23% (but 13% on average).
+
+(1 + (0.03 - 0.015) * 0.13) ^12 - 1 = 0.0237 or '''2.37%'''
+
+The coal mine will grow an average of 2.37% after the first year<br>
+(1.0237 ^20) - 1 = 59.6% after twenty years<br>
+(1.0237 ^50) - 1 = 321.8% or '''3.22x''' after fifty years<br>
+(1.0237 ^100) - 1 = '''10.35x''' after one hundred years<br>
+
+
+For an industry with rating of more than 80%, there is a '''3.75%''' chance of increase and '''0.75%''' chance of decrease:<br>
+(1 + (.0375 - 0.0075) * .13) ^12 - 1 = 0.0478 or '''4.78%'''
+
+The industry will grow approximately 4.78% after first year<br>
+(1.0478 ^20) - 1 = '''2.54x''' after twenty years<br>
+(1.0478 ^50) - 1 = '''10.32x''' after fifty years<br>
+(1.0478 ^100) - 1 = '''106.62x''' after one hundred years<br>
+
+For good service, it takes '''29.6 years''' on average '''to double'''; with excellent service, it takes '''14.8 years'''. If in the game's time a day is 2.36 seconds, then the '''doubling time''' with good service is '''7.1 hours'''; with excellent service, the doubling time is '''3.6 hours'''. For production to go from near bottom of 100 to near maximum of 2100 takes '''130 years''' with good service and '''65 years''' with excellent service.
+
+However, in game you will find industries changing their production rate very randomly. It must be stressed the above examples are only true when observing many industries over the long-term; individual industries may greatly deviate from these averages. Statistically speaking, 6 out of 10 industries will not go from 100 to 2100 even with the best service during 65 years. About 1 out of 9 industries will even lower their production when being served at 60-80% cargo transported for 50 years. 
+
+For more responsiveness from industries, adapt the number of wagons to industry production (for the lowest production, you should use two wagons). [Full Load] orders are usually used for such cargo trains.
+
+
+'''Note:'''  The exact formula can be seen under "[http://vcs.openttd.org/svn/browser/trunk/src/industry_cmd.cpp#L2373 ChangeIndustryProduction()]" in industry_cmd.cpp.
+
+==Delivery payment rates==
+The amount you get paid for delivering cargo is based on 4 factors: the amount of cargo you deliver, the value of the cargo, the distance you deliver it, and how on-time you deliver it.
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Cargo!!Units!!Early Delivery<br> Time (days)!!Late Delivery<br> Time (days)!!Initial cargo <br> payment (pounds)
+|-
+|[[en/Manual/Base Set/Cargos/Passengers]]|| ||Immediate||24||£39
+|-
+|[[en/Manual/Base Set/Cargos/Valuables]]||Bags||1||32||£91
+|-
+|[[en/Manual/Base Set/Cargos/Livestock]]||Items||4||18||£53
+|-
+|[[en/Manual/Base Set/Cargos/Grain]]||Tons||4||40||£58
+|-
+|[[en/Manual/Base Set/Cargos/Goods]]||Crates||5||28||£75
+|-
+|[[en/Manual/Base Set/Cargos/Coal]]||Tons||7||None||£72
+|-
+|[[en/Manual/Base Set/Cargos/Steel]]||Tons||7||None||£69
+|-
+|[[en/Manual/Base Set/Cargos/Iron Ore]]||Tons||9||None||£62
+|-
+|[[en/Manual/Base Set/Cargos/Wood]]||Tons||15||None||£61
+|-
+|[[en/Manual/Base Set/Cargos/Oil]]||Kiloliters||25||None||£54
+|-
+|[[en/Manual/Base Set/Cargos/Mail]]||Bags||20||90||£55
+|- style="background:#efefef"
+!colspan="5" align="center"|Arctic specific
+|-
+|[[en/Manual/Base Set/Cargos/Wheat]]||Tons||4||40||£58
+|-
+|[[en/Manual/Base Set/Cargos/Paper]]||Tons||7||60||£66
+|-
+|[[en/Manual/Base Set/Cargos/Gold]]||Bags||10||40||£71
+|-
+|[[en/Manual/Base Set/Cargos/Food]]||Tons||Immediate||30||£69
+|- style="background:#efefef"
+!colspan="5" align="center"|Tropical specific
+|-
+|[[en/Manual/Base Set/Cargos/Rubber]]||Kiloliters||2||20||£54
+|-
+|[[en/Manual/Base Set/Cargos/Fruit]]||Tons||Immediate||15||£51
+|-
+|[[en/Manual/Base Set/Cargos/Maize]]||Tons||4||40||£53
+|-
+|Tropical [[en/Manual/Base Set/Cargos/Wood]]||Tons||15||None||£97
+|-
+|[[en/Manual/Base Set/Cargos/Copper Ore]]||Tons||12||None||£59
+|-
+|[[en/Manual/Base Set/Cargos/Water]]||Kiloliters||20||80||£57
+|-
+|[[en/Manual/Base Set/Cargos/Diamonds]]||Bags||10||None||£71
+|- style="background:#efefef"
+!colspan="5" align="center"|Toyland specific
+|-
+|[[en/Manual/Base Set/Cargos/Sugar]]||Tons||20||None||£54
+|-
+|[[en/Manual/Base Set/Cargos/Toys]]|| ||25||None||£68
+|-
+|[[en/Manual/Base Set/Cargos/Batteries]]|| ||2||30||£53
+|-
+|[[en/Manual/Base Set/Cargos/Sweets]]||Tons||8||40||£75
+|-
+|[[en/Manual/Base Set/Cargos/Toffee]]||Tons||14||60||£58
+|-
+|[[en/Manual/Base Set/Cargos/Cola]]||Kiloliters||5||75||£59
+|-
+|[[en/Manual/Base Set/Cargos/Candyfloss]]||Tons||10||25||£61
+|-
+|[[en/Manual/Base Set/Cargos/Bubbles]]|| ||20||80||£62
+|-
+|[[en/Manual/Base Set/Cargos/Plastic]]||Kiloliters||30||None||£54
+|-
+|[[en/Manual/Base Set/Cargos/Fizzy Drinks]]|| ||30||50||£76
+|}
+
+Initial cargo payment values are for delivering 100 pieces of cargo 1 tile.  Payment goes up with inflation as the game progresses.
+
+
+Late delivery penalties:
+*For each day after the Early Delivery time that you deliver the cargo, you are penalized 0.4%.
+*For each day after the Late Delivery time that you deliver the cargo, you are penalized an additional 0.4%.
+*Maximum penalty is 88%.
+
+
+'''Examples''' (no inflation):<br>
+Deliver 200,000 liters of oil 20 squares in 10 days:<br>
+2 * £54 * 20 squares * 100% = £2160
+
+Deliver 100 bags of mail 100 squares in 100 days:<br>
+£55 * 100 squares * (1 - 80*0.004 - 10*0.004) = £3520
+
+'''HINT calculate easy''':<br>
+Income = cargo units * cargo value * 0,4<br>
+[[en/Cargo value]] comes from the Y-axis on the specific transported goods graph in-game<br>
+measure your real delivery time in days and plot on x-axis
+This result will give you an easy estimation of your income with 5% deviation
+
+'''Notes:'''
+* The exact formula is much more complicated and slightly more accurate, due to rounding error when converting from larger discrete values.  See economy.cpp (GetTransportedGoodsIncome) and [[en/Manual/Game Mechanics/Cargo income]].
+
+* Distance is measured between the name-labeled tiles of the stations, not from the industries or by vehicle distance traveled.  It is computed by adding the differences in x and y tiles ([http://en.wikipedia.org/wiki/Manhattan_distance manhattan distance]), not straight-line distance.
+
+* Each cargo has a characteristic time at which payment is maximized, assuming you can keep it moving away from the source station at a constant speed.  For a cargo with a "late delivery" penalty, this time is typically around 70 days; for one without, this is typically around 130 days.
+
+==Vehicle speeds==
+Internally OpenTTD works with a unit called "km-ish/h", which is equal to "mph/1.6". 
+The conversion factor from km-ish/h to km/h is 1.00584, and the conversion factor from km-ish/h to mph is 1.6.
+
+A tile is, for vehicle speed purposes 664.(216) km-ish, 668 km or 415 miles long. This is based on the following facts: 
+*A tile has 16 sub locations per X/Y axis.
+*A vehicle has stores remainder of tile movement in a byte called subspeed, thus has 256 different values.
+*The vehicle's (raw) speed is added to subspeed. The resulting number is divided by 256, the remainder is stored in subspeed and the vehicle is moved quotient sub locations forward. For trains and aircraft the raw speed is in km-ish/h, for road vehicles/ships in 0.5 km-ish/h. For trains and aircraft this step is done twice a tick, whereas ships and road vehicles do it once a tick.
+*A day contains 74 ticks, and takes 24 hours.
+Now assume a vehicle going 1 km-ish/hour: (1 * 16 * 256) / (74 * 2) * 24 = 664.(216).
+
+The net result is that 100 km/hour is ~3.6 tiles/day.
+
+
+==== Aircraft ====
+*By default aircraft fly at a quarter of their listed speed (this can be changed in advanced settings).
+*Aircraft acceleration varies per aircraft, between 144 km-ish/h/day and 400 km-ish/h/day.
+*Broken down planes fly at 320 km-ish/h.
+*Airport taxi speed is 150 km-ish/h.
+
+==== Road Vehicles ====
+*Road vehicles accelerate at 37 km-ish/h/day.
+*Road vehicles go around corners at half their max speed.
+*Road vehicles accelerate an additional 74 km-ish/h/day downhill.
+*When going uphill, road vehicles slow down 10% 4 times per tile.  This balances out with acceleration at 34-ish km/h for all road vehicles.
+
+(Note: This does not apply when using the improved road vehicle acceleration model.)
+
+==== Ships ====
+*Ships accelerate at 37 km-ish/h/day.
+*A "stopped" ship resumes its last speed instantly.
+
+==== Trains ==== 
+(with the [[en/Archive/Manual/Settings/Realistic acceleration|realistic train acceleration patch]])<br>
+*Trains are not affected going up or down hills if they are powerful enough.
+*Trains are limited to entering and exiting a depot at 61km/h.
+*Trains can make one 45° turn without slowing down.
+*When making two or more 45° turns in the same direction, the max speed is limited as follows:
+
+{| style="margin: 1em 1em 1em 0;"    <!-- begin nested tables -->
+|-
+
+|    <!-- metric -->
+{| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #efefff;"
+|-
+!rowspan=2  style="background:#efefef"  | Curvature
+!colspan=3  style="background:#dfdfff"  | Max speed (km/h)
+|-
+!   style="background:#dfdfff"      | Railroad
+!   style="background:#dfdfff"      | Monorail
+!   style="background:#dfdfff"      | Maglev
+|-
+| style="background:#f8f8ff"    | 0 (90° turn)  
+|    61||91||121
+|-
+| style="background:#f8f8ff"    | 1 (2x45° turn)
+|     88||132||176
+|-
+| style="background:#f8f8ff"    | 2
+|    111||166||221
+|-
+| style="background:#f8f8ff"    | 3
+|    132||198||264
+|-
+| style="background:#f8f8ff"    | 4
+|    151||226||301
+|-
+| style="background:#f8f8ff"    | 5
+|    168||252||336
+|-
+| style="background:#f8f8ff"    | 6
+|    183||274||365
+|-
+| style="background:#f8f8ff"    | 7
+|    196||294||392
+|-
+| style="background:#f8f8ff"    | 8
+|    207||310||413
+|-
+| style="background:#f8f8ff"    | 9
+|    216||324||432
+|-
+| style="background:#f8f8ff"    | 10
+|    223||334||445
+|-
+| style="background:#f8f8ff"    | 11
+|    228||342||456
+|-
+| style="background:#f8f8ff"    | 12+
+|    231||346||461
+|}
+
+|    <!-- imperial -->
+{| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #ffefef;"
+|-
+!rowspan=2  style="background:#efefef"  | Curvature
+!colspan=3  style="background:#efdfdf"  | Max speed (mi/h)
+|-
+!   style="background:#efdfdf"      | Railroad
+!   style="background:#efdfdf"      | Monorail
+!   style="background:#efdfdf"      | Maglev
+|-
+| style="background:#f8f8ff"    | 0
+|     37|| 56|| 75 
+|-
+| style="background:#f8f8ff"    | 1
+|     54|| 82||109 
+|-
+| style="background:#f8f8ff"    | 2
+|     68||103||137 
+|-
+| style="background:#f8f8ff"    | 3
+|     82||123||164 
+|-
+| style="background:#f8f8ff"    | 4
+|     93||140||187 
+|-
+| style="background:#f8f8ff"    | 5
+|    104||156||208 
+|-
+| style="background:#f8f8ff"    | 6
+|    113||170||226 
+|-
+| style="background:#f8f8ff"    | 7
+|    121||182||243 
+|-
+| style="background:#f8f8ff"    | 8
+|    128||192||256 
+|-
+| style="background:#f8f8ff"    | 9
+|    134||201||268 
+|-
+| style="background:#f8f8ff"    | 10    ||138||207||276 
+|-
+| style="background:#f8f8ff"    | 11    ||141||212||283 
+|-
+| style="background:#f8f8ff"    | 12+   ||143||214||286 
+|}
+
+|}  <!-- end nested tables -->
+"Curvature" means the average number of wagons of the train between turns. However, very sharp turns (curvatures 0 and 1) are not averaged out in longer trains.
+
+*New railtypes can specify custom maximum curve speeds in the same steps as the three default types in the table.
+*Tilting train gain an additional bonus of 20% on the maximum speed.
+*Train acceleration and max speed are affected by engine power, maximum tractive effort (all engines and powered wagons combined), current speed, air drag, total train mass, and wagons/engines on slopes.
+*Non maglev train Acceleration spreadsheet can be found on tt-forums: [http://www.tt-forums.net/viewtopic.php?f=31&t=55972&p=960678#p960672 tt-forums] (There is no updated mathematical formulas for the latest release, just that spreadsheet)
+*Braking is twice acceleration except when entering a depot or a station.
+[[File:en/Manual/Game Mechanics/Speed-limits.png]]
+
+''See also: [[en/Archive/Manual/Settings/Realistic acceleration]] and [[en/Community/Corners]].''
+
+See aircraft_cmd.c, roadveh_cmd.c, ship_cmd.c, train_cmd.c, vechicle.c for code.
+
+== Town growth ==
+
+See [[en/Manual/Towns#town-growth]].
+
+[[Category:en/Manual/Playing]]
+[[Category:en/Development]]
