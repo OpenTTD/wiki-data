@@ -1,12 +1,10 @@
 {{en/Manual/Navigation}}
 
-Here you can find information about how OpenTTD calculates in-game figures.
+Ha mindig is kíváncsi voltál arra, hogyan számol a játék, például, hogy az állomások értékelése során mit vesz figyelembe, vagy hogyan történik a rakomány elosztása ugyanannak a gazdasági épületnek több állomása között, itt tájékoztatást kapsz.
 
-You always wanted to know how the station-rating was built up? How goods-distribution works? Here you can find it!
+==Vállalatok értékelése==
 
-==Company rating==
-
-Each part of the company rating is a linear function, ie. earning 50% of the target for a component will give 50% of the points allocated for that component. Where components involve monetary amounts, these are converted to the currency of the current game; internally these amounts are stored as the pound amount.
+A vállalatok értékelésének minden összetevője lineáris függvény, tehát ha a cél 50%-át éred el, a megkapható pontok 50%-át kapod meg. A pénzben kifejezhető tényezőket a játék fontban tárolja; ha más pénznemben játszol, azt az aktuális játék árfolyamán átváltja.
 
 {| {{en/Wikitable}}
 |- style="background:#efefef"
@@ -82,16 +80,16 @@ Each part of the company rating is a linear function, ie. earning 50% of the tar
 |}
 </td></tr></table>
 
-==Station rating==
-This section shows the factors that affect the station rating. All calculations are done separately for each cargo type.
+==Állomások értékelése==
+Ebben a részben az állomások értékelésére ható tényezőket mutatjuk be. A számításokra a játékban rakománytípusonként külön-külön kerül sor.
 
 {| {{en/Wikitable}}
 |- style="background:#efefef"
 !Tényező!!Feltétel!!Értékelés pontban!!Értékelés %-ban
 |-
-| Az állomásra legutóbb behaladó jármű legnagyobb sebessége (max 255 km/h-ig) || 85 km/h (52 mph) fölött|| (Sebesség (km/h) - 85) / 4 || 0% - 17%
+| Az állomásra utolsóként behaladó jármű legnagyobb sebessége (max 255 km/h-ig) || 85 km/h (52 mph) fölött|| (Sebesség (km/h) - 85) / 4 || 0% - 17%
 |-
-|rowspan="3"|Az állomásra legutóbb behaladó jármű kora (évben) || 2 || 10|| 4%
+|rowspan="3"|Az állomásra utolsóként behaladó jármű kora (évben) || 2 || 10|| 4%
 |-
 | 1 || 20 || 8%
 |-
@@ -131,20 +129,22 @@ This section shows the factors that affect the station rating. All calculations 
 |}
 Az értékelés összpontszámát 255-tel kell osztani, és megkapjuk a %-os értékelést. A legmagasabb értékelés 100%. A reklámkampányok azonnali és ideiglenes lökést adnak a közeli állomások értékeléséhez, fokozatosan csökkenő hatással. 
 
-The amount of cargo that can be transported from an industry is fully reliant on the station rating. So if the amount of cargo transported from an industry is low, it is probably because the station rating is low, too. 
+A gazdasági épülettől elszállítható rakomány mennyisége teljes egészében az állomás értékelésétől függ. Ha tehát a gazdasági épülettől elszállított rakomány mennyisége kicsi, annak valószínűleg az az oka, hogy az állomás értékelése is alacsony.
 
-Every 2.5 days station ratings are computed; ratings can't change by more than 2 points per cycle, except after crashes.
+Az állomások értékelését a játék 2,5 játéknaponként számítja; egy ilyen ciklus tartama alatt az értékelés nem változhat 2 pontnál többet. Ez alól a balesetek utáni ciklusok a kivételek. 
 
-'''Note:'''  The exact formula can be seen under "[http://vcs.openttd.org/svn/browser/trunk/src/station_cmd.cpp#L3163 UpdateStationRating()]" in station_cmd.cpp.
+'''Megjegyzés:'''  A pontos képlet itt található: "[http://vcs.openttd.org/svn/browser/trunk/src/station_cmd.cpp#L3163 UpdateStationRating()]", a station_cmd.cpp-ben.
 
-'''Note:'''  If rating will less than 50%, the station starts losing cargo.
+'''Megjegyzés'''  Ha az értékelés 50% alá csökken, az állomás elkezdi elveszíteni a rakományt.
 
-==Cargo delivery to stations==
-During each cycle of 2.5 days for each cargo type of the delivering industry a maximum of 2 stations can get cargo assigned. If there are more than 2 possible stations with the same maximum rating value for the current cargo type then it depends on internal ordering of the stations which ones get the cargo.
+==Rakományszállítás az állomásra==
+A játék a rakományt kibocsátó gazdasági épület legfeljebb két berakó állomása között osztja el 2,5 napos ciklusonként. Ha kettőnél több, azonos maximális értékelésű állomás jön szóba, az állomás belső utasításától függ, melyik állomás kapja a rakományt.
 
-If there's only one possible station then the delivered amount is: produced_amount * station_rating_in_percent, rounded up to the next integer value.
+Ha csak egy állomás jön szóba, a küldött rakomány mennyisége = termelt mennyiség * állomás-értékelés %-ban, a legközelebbi egész értékre felkerekítve.
 
-For two possible stations the calculation is more complex. First the rating in points of station 2 is divided by 2 for the further local calculations. The amount available to station 1 is calculated as follows: (station_rating_in_points1 * (amount + 1)) / (station_rating_in_points1 + station_rating_in_points2); for similar ratings this is about 2/3 of the production, it increases for larger differences. The result is subject to the same calculation as in the single station case. This is delivered to station 1. If station 1 doesn't get the full amount available to it then that part won't be transported at all. The remaining amount of the production, if any, is subject to the same calculation as in the single station case and delivered to station 2.
+Két lehetséges állomásra a számítás sokkal összetettebb. Először is: a második állomás értékelési pontjait a játék elosztja kettővel a további számításokhoz. Az első állomás elérhető rakományának számítása a következő: ((az első állomás értékelése pontban) * mennyiség + 1) / (az első állomás értékelése pontban + a második állomás értékelése pontban). Hasonló értékelések esetében ez a termelésnek kb. 2/3-a, nagyobb különbségek esetén növekszik. Az eredménnyel ugyanúgy számolunk tovább, mint egy állomás esetében. Ez kerül az első állomásra. Ha az első állomás nem kapja meg az elérhető mennyiséget, akkor az a rész nem kerül kiszállításra egyáltalán. 
+A többi ki nem osztott rakomány -- már amennyiben marad -- kerül a második állomásra ugyanazzal a számítással, mint egy állomás esetében.
+
 
 ==A helyi önkormányzat értékelése==
 Az értékelés korlátozza a játékos néhány tevékenységét; +500-zal kezdődik, és cselekvésekkel befolyásolható.
