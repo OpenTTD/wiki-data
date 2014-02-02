@@ -251,7 +251,7 @@ Itt arról olvashatsz, hogyan határozza meg a játék, hogy egy gazdasági ép�
 |-
 |Farm||Kukorica||40 - 128
 |-
-|Favágó||Fa||180 vagy 225 (ha a fák [[hu/Manual/Éghajlatok#szubtropusi|engedélyezettek]])
+|Favágó||Fa||180 vagy 225 (ha a fa [[hu/Manual/Éghajlatok#szubtropusi|engedélyezett]])
 |-
 |colspan="5"|
 |-
@@ -270,60 +270,59 @@ Itt arról olvashatsz, hogyan határozza meg a játék, hogy egy gazdasági ép�
 |Cukorbánya||Cukor||40 to 128
 |}
 
-===Production change===
-Each month the game randomly changes some industry productions.
-====Default / TTD-like Economy Rules====
-For 256x256 tile maps there is one change per month possible (only 1 industry changes). Number scales nicely with map size since the introduction of "Daily production changes" function in trunk (r14332). 
+===A termelés változása===
+A játék minden hónapban véletlenszerűen megváltoztatja néhány gazdasági épület termelését.
+
+====Alapértelmezett gazdasági szabályok====
+Az eredeti Transport Tycoon Deluxe-hoz hasonlóan egy 256x256 mezőből álló térképen havonként egy változás lehetséges (1 gazdasági épület termelése változik). A szám a térkép méretével fokozatosan emelkedik, amióta a "Napi termelési változások" funkció a játékba került (OpenTTD 0.7.0).
+
+*Egyenletes gazdaság esetében a gazdasági épületek havi 8-9 (a 400 tonna fölött termelő erdők esetében 10) alkalommal küldenek rakományt az állomásaikra. 
+Ezzel együtt a termelés hat szint szerint korlátozott: legalacsonyabb, alacsonyabb, normál (ha új játékot indítunk, vagy új gazdasági épület alapítására kerül sor), magasabb, 2x magasabb, és legmagasabb. A termelés ezek között a szintek között változik 50%-os mérséklődéssel, de akár 100%-os növekedéssel is.
+
+*Példák:
+**szénbánya: legalacsonyabb (32 vagy 40 t/hó), alacsonyabb (64 vagy 72), normál (120 vagy 135), magasabb (240 vagy 270), 2x magasabb (480 vagy 540) és legmagasabb (960 vagy 1080).
+**erdő:    legalacsonyabb (32 vagy 64 t/hó), alacsonyabb (35 vagy 70), normál ( 78 vagy 117), magasabb (208 vagy 260), 2x magasabb (416 vagy 468 vagy 520 (a tízszeri emelés lehetősége miatt)) és legmagasabb (832 vagy 936 vagy 1040).
+**Aranybánya: legalacsonyabb (12 vagy 18 zsák/hó), alacsonyabb (32 vagy 40), normál ( 56 vagy  63), magasabb (112 vagy 126), 2x magasabb (224 vagy 252) és legmagasabb (448 vagy 504).
 
 
-*As with smooth economy, industries deliver cargo to the stations 8, 9 or 10 (high production forests only - more than 400t) times per month.
-However - productions are limited to 6 production levels: lowest, lower, normal (with a new game started or a new industry built), higher, 2x higher and the highest.
-Production changes between these levels are either a 50% decrease (half) or a 100% increase (double).
+A könnyebb megértés kedvéért lássunk, milyen lehetőségek vannak egy 256x256-os térképen (legfeljebb 1 változás/hó = havonként legfeljebb 1 gazdasági épület változtat a termelésén):
 
-*Examples:
-**A Coal Mine: lowest (32 or 40 t per month), lower (64 or 72), normal (120 or 135), higher (240 or 270), 2x higher (480 or 540) and the highest (960 or 1080).
-**A Forest:    lowest (32 or 64 t per month), lower (35 or 70), normal ( 78 or 117), higher (208 or 260), 2x higher (416 or 468 or 520 (= 10x multiplier)) and the highest (832 or 936 or 1040).
-**A Gold Mine: lowest (12 or 18 bags/month), lower (32 or 40), normal ( 56 or  63), higher (112 or 126), 2x higher (224 or 252) and the highest (448 or  504).
+*Az esély a termelés változására minden hónapban:
+** 50% a csak csökkenthető gazdasági épületek csökkenésére (ez jelenleg egyedül a mérsékelt égöv olajkútját jelenti)vagy
+** 50% 1/3 esélyre (=16.7%) hogy más gazdasági épület változtatja a termelését.
 
 
-To make things simple, let's look what are the chances for 256x256 maps (max. 1 change per month = max. 1 industry per month changes production):
-
-*The chance for a production change each month is:
-** 50% for only_decrease industry to decrease (currently only Temperate terrain Oil Wells) or
-** 50% for 1/3 chance (=16.7%) that other industry (non only_decrease) changes production.
-
-
-*If a production change does occur (~16.7% chance per month):
-** For an industry that has poor or no service (less than 60% of its cargo is transported): '''33%''' chance of increase, '''67%''' chance of decrease.
-** For an industry that has good (greater than 60%) service: '''67%''' chance of increase, '''33%''' chance of decrease.
-** There is no bonus for excellent service with default economy.
+*Ha termelésváltozás következik be (minden hónapban kb. 16.7% eséllyel):
+** Olyan gazdasági épületnél, ahol nincs vagy gyenge az elszállítási szolgáltatás (rakományának a kevesebb, mint 60%-a elszállítására kerül sor): '''33%''' eséllyel nő, '''67%''' eséllyel csökken a termelés.
+** Olyan gazdasági épületnél, amelynél jó (60% fölötti) az elszállítás: '''67%''' az esély a növekedésre, '''33%''' az esély a csökkenésre.
+** Alapértelmezett gazdasággal a kiváló elszállítás számára külön bónusz nincs.
 
 
-*To calculate the chance for a particular change, i.e. 50% * 1/3 * 33% = 5.56%:
-** Poor service: '''5.56%''' that 1 possible change per month is an increase and '''11.12%''' that 1 possible change per month is a decrease.
-** Good service: '''11.12%''' that 1 possible change per month is an increase and '''5.56%''' that 1 possible change per month is a decrease.
+*Részleges változás esélyének számolásához, 50% * 1/3 * 33% = 5,56%:
+** Gyenge elszállítás: '''5,56%''' hogy havi 1 lehetséges változás: növekedés, és '''11,12%''' hogy havi 1 lehetséges változás: csökkenés.
+** Jó elszállítás: '''11,12%''' hogy havi 1 lehetséges változás: növekedés, és '''5,56%''' hogy havi 1 lehetséges változás: csökkenés.
 
-====Smooth Economy Rules====
-:''Distinguish [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|Smooth economy]] (advanced setting) and [[en/Archive/Manual/Settings/Difficulty|Steady economy]] (difficulty setting)''
+====Az egyenletes gazdaság szabályai====
+:''Értsük jól: nem a gazdasági válság nélküli gazdaságról van szó, hanem a ''Haladó beállítások - [[hu/Haladó beállítások/Gazdaság#gazdasag-egyeb-beallitasok|Gazdaság - Egyéb beállítások]] - Egyenletes gazdaság'' beállításról''
 
-*The chance for a production change each month is '''4.5%''', i.e. 4.5% of producing industries from industry list change production.
-
-
-*If a production change does occur:
-** For an industry that has poor or no service (less than 60% of its cargo is transported): '''33%''' chance of increase, '''67%''' chance of decrease
-** For an industry that has good (greater than 60%) service: '''67%''' chance of increase, '''33%''' chance of decrease
-** For an industry that has excellent (greater than 80%) service: '''83%''' chance of increase, '''17%''' chance of decrease
+*Esély a termelés változására havonként: '''4.5%''', vagyis a gazdasági épületek listájáról a termelő gazdasági épületek 4.5%-a megváltoztatja a termelését.
 
 
-*These two are multiplied together, i.e. 4.5% * 33% = 1.5%:
-** Poor service: '''1.5%''' to increase and '''3.0%''' to decrease
-** Good service: '''3.0%''' to increase and '''1.5%''' to decrease
-** Excellent service: '''3.75%''' to increase and '''0.75%''' to decrease
+*Ha a termelésváltozás megtörténik:
+** Egy olyan gazdasági épületnél, ahol nincs elszállítás, vagy van, de gyenge (60%-nál kisebb): '''33%''' esélye a növekedésnek, '''67%''' az esélye a csökkenésnek
+** Jó (60% fölötti) elszállítással termelő gazdasági épületnél '''67%''' az esélye a növekedésnek, '''33%''' az esélye a csökkenésnek
+** Kiváló (80% fölötti) elszállítással termelő gazdasági épületnél '''83%''' az esélye a növekedésnek, '''17%''' az esélye a csökkenésnek.
 
 
-*With the [[en/Archive/Manual/Settings/Smooth economy]] option enabled, production changes per month are between 3 and 23%
-**Industries with very low productions, (ie. 12-40 tonnes per month) will have higher changes.
-**Primary industries produce cargo 8 or 9 times (10 times possible for forests) a month. Monthly production is an industries 'base value' multiplied times 8 or 9 (or 10 for higher productions forests).  For example, the base value for a coal mine is 15 tons, so the monthly production is 120 or 135 tons. This base value is capped at 255, so the maximum possible monthly production for any industry is 2040 or 2295 (or 2550 - again - forest).[http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
+*Ezek megszorzásával, vagyis 4,5% * 33% = 1,5%:
+** Gyenge elszállítás: '''1.5%''' a növekedésre, és '''3.0%''' a csökkenésre
+** Jó elszállítás: '''3.0%''' a növekedésre és '''1.5%''' a csökkenésre
+** Kiváló elszállítás: '''3.75%''' növekedésre és '''0.75%''' a csökkenésre
+
+
+*Egyenletes gazdaság esetén a havi termelésváltozás 3 és 23% közt van.
+**Nagyon alacsony termeléssel (12-40 t/hó) rendelkező gazdasági épületek változása nagyobb.
+**Az elsődleges gazdasági épületek rakományt 8 vagy 9 alkalommal adnak ki havonta (ill. erdő esetében lehetséges, hogy tízszer). A havi termelés a gazdasági épületek 'bázisértékéből' indul ki, amely többszöröződik a havi 8 vagy 9 (400 t fölött termelő erdők esetében előfordulhat, hogy 10) alkalommal. Például a bázisérték egy szénbányánál 15 tonna, így a havi termelés 120 vagy 135 tonna. Ez a bázisérték legfeljebb 255-ig nőhet, így minden gazdasági épület lehetséges legmagasabb havi termelése 2040 vagy 2295 (erdő esetében a már említettek miatt 2550). [http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 (Forrás)]
 
 ====Examples====
 If a coal mine has 70% of its output transported, there is a '''3%''' chance (4.5% * 67%) of a production increase from 3-23% and a '''1.5%''' chance (4.5% * 33%) of a production decrease from 3-23% (but 13% on average).
