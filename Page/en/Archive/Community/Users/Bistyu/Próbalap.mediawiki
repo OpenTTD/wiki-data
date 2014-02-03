@@ -1,620 +1,386 @@
-{{hu/Fordítás|en/Manual/Game Mechanics/Main Page|97}}{{en/Manual/Navigation}}
+{{en/Tartalomjegyzék}}
 
-Ha mindig is kíváncsi voltál arra, hogyan számol a játék, például, hogy az állomások értékelése során mit vesz figyelembe, vagy hogyan történik a rakomány elosztása ugyanannak a gazdasági épületnek több állomása között, itt tájékoztatást kapsz.
+:''Ez a fejezet az OpenTTD gazdasági épületekhez kapcsolódó koncepcióját ismerteti. A gazdasági épületek típusainak részletes ismertetőit a [[hu/Categories/Gazdasági épületek|Gazdasági épületek kategóriában]] találod.
 
-==Vállalatok értékelése==
+'''A gazdasági épületek''' olyan szervezetek, amelyek adott [[hu/Manual/Rakomány|rakományt]] és/vagy szolgáltatást állítanak elő. Az OpenTTD-ben három csoportjuk van: az elsődleges, a másodlagos és aharmadlagos gazdasági épületek. Az elsődleges gazdasági épületek, mint a bányák, anélkül állítanak elő nyersanyagot, hogy ehhez bármire szükségük lenne. Ezeket a nyersanyagokat aztán [[hu/Manual/Szállítási vállalat|szállítási vállalat]] továbbítja egy másodlagos gazdasági épülethez. A másodlagos gazdasági épületek terméke vagy a településekre kerülnek (mint az áru vagy az étel), vagy harmadlagos gazdasági épületek alapanyagaiként szolgálnak.
 
-A vállalatok értékelésének minden összetevője lineáris függvény, tehát ha a cél 50%-át éred el, a megkapható pontok 50%-át kapod meg. A pénzben kifejezhető tényezőket a játék fontban tárolja; ha más pénznemben játszol, azt az aktuális játék árfolyamán átváltja.
+Vállalkozásod a gyártók megbízásából szállít: minden nyereséged tisztán az általad felszámított szállítási díjakból adódik, nem pedig a rakomány eladásából.
 
-{| {{en/Wikitable}}
-|- style="background:#efefef"
-! Összetevő !! Cél !! Pont (minimum) !! Pont (maximum) !! Százalék
-|-
-|Járművek száma||>=120||0 pont 0 járműért||100 pont legalább 120 járműért||0 - 10%
-|-
-|A cég állomáselemeinek száma||>=80||0 pont 0 elemért||100 pont legalább 80 elemért||0 - 10%
-|-
-|A legalább kétéves járművek legkisebb profitja||>=£10,000||0 pont veszteségért vagy £0-ért||100 pont legalább £10,000-ért||0 - 10%
-|-
-|A legalacsonyabb negyedéves bevétel az elmúlt három évben||>=£50k||0 pont £0-ért||50 pont legalább £50k-ért||0 - 5%
-|-
-|A legmagasabb negyedéves bevétel az elmúlt három évben||>=£100k||0 pont £0-ért||100 pont legalább £100k-ért||0 - 10%
-|-
-|Leszállított rakományegységek száma az előző évben||>=40,000||0 pont 0 egységért||400 pont legalább 40,000 egységért||0 - 40%
-|-
-|Az előző negyedévben leszállított rakományfajták száma||>=8||0 pont 0 rakományfajtáért||50 pont legalább 8 rakományfajtáért ||0 - 5% 
-|-
-|Jelenlegi bankegyenleg||>=£10m||0 pont £0-ért||50 ponts legalább £10m-ért||0 - 5%
-|-
-|Jelenlegi bankhitel||£0||0 pont >£250k-ért||50 pont £0-ért||0 - 5%
-|- style="background:#efefef"
-! Összesen !!!! 0 pont !! 1000 pont !! 0 - 100%
-|}
+A gazdasági épület ablaka két számot jelez ki minden ott előállított rakománytípusra, az előző hónap teljes értékei alapján. Az első az előállított mennyiség. Ez a gazdasági épület belső tényezői függvényében változik. [[hu/Manual/Gazdaság#recesszio|Gazdasági válság]] idején ez a szokásos termelés fele.
 
-<table>
-<tr valign="top"><td style="background:none; border:0px">
-{| {{en/Wikitable}}
-|- style="background:#efefef"
-!colspan="2"|A ''Vállalatok helyezése'' tábla
-|- style="background:#efefef"
-!Értékelés!!Cím
-|-
-|0 - 127||Mérnök
-|-
-|128 - 255||Forgalomigazgató
-|-
-|256 - 383||Szállításszervező
-|-
-|384 - 511||Útfelügyelő
-|-
-|512 - 639||Igazgató
-|-
-|640 - 767||Főigazgató
-|-
-|768 - 895||Alelnök
-|-
-|896 - 959||Elnök
-|-
-|960 - 1000||Nagytőkés
-|}
-</td><td style="background:none; border:0px">
-{| {{en/Wikitable}}
-|- style="background:#efefef"
-!colspan="2"|A rekordtábla 2050-ben
-|-
-!Értékelés!!Cím
-|-
-|0 - 319||Üzletember
-|-
-|320 - 447||Vállalkozó
-|-
-|448 - 575||Iparos
-|-
-|576 - 703||Tőkés
-|-
-|704 - 831||Mágnás
-|-
-|832 - 959||Mogul
-|-
-|960 - 1000||Az évszázad iparmágnása
-|}
+A második érték azt mutatja, hogy az előállított mennyiségnek milyen arányát adta ki a gazdasági épület a közeli állomásoknak elosztásra. A gazdasági épület úgy is dönthet, hogy a termelés egy részét visszatartja, és nem adja ki egy állomásnak sem.
+
+[[File:en/Manual/Industry window.png|frame|center|Szénbánya információs ablaka]]
+
+A gazdasági épületek kibocsátásának növekedése a tőlük elszállított rakomány arányától függ. Minél többet szállítasz el, a növekedés - hosszú idő átlagában - annál gyorsabb. 
+A fent említett számítások részleteit a [[hu/Manual/Game Mechanics/Main Page|Játéktechnika]] oldalon találhatod.
+
+__TOC__
+
+==A gazdasági épületek táblázata tájtípusonként==
+<table><tr><td valign="top" style="padding:0px; border:none; background-color:transparent;">
+  {| {{en/Wikitable}} style="margin:2px 4px 2px 0; border:solid 1px #AAAAAA" rules="cols"
+  |- 
+  | style="background: #ccffcc" colspan="3" align="center"| '''Mérsékelt'''
+  |- style="background: #ffdead"
+  | '''Gazdasági épület'''
+  | '''Elfogad'''
+  | '''Előállít'''
+  |- style="background: #E5FFE5"
+  |[[hu/Manual/Base Set/Industries/Bank|Bank]]
+  |[[hu/Manual/Base Set/Cargos/Értéktárgyak|Értéktárgyak]]
+  |[[hu/Manual/Base Set/Cargos/Értéktárgyak|Értéktárgyak]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Szénbánya|Szénbánya]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Szén|Szén]]
+  |- style="background: #E5FFE5"
+  |[[hu/Manual/Base Set/Industries/Gyár|Gyár]]
+  |[[hu/Manual/Base Set/Cargos/Állat|Állat]],<br/>[[hu/Manual/Base Set/Cargos/Búza|Búza]],<br/>[[hu/Acál|Acél]]
+  |[[hu/Manual/Base Set/Cargos/Áru|Áru]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Farm|Farm]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Búza|Búza]],<br/>[[hu/Manual/Base Set/Cargos/Állat|Állat]]
+  |- style="background: #E5FFE5"
+  |[[hu/Manual/Base Set/Industries/Erdő|Erdő]]
+  |semmi
+  |[[hu/Manual/Base Set/Cargos/Fa|Fa]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Vasércbánya|Vasércbánya]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Vasérc|Vasérc]]
+  |- style="background: #E5FFE5"
+  |[[hu/Manual/Base Set/Industries/Olajfinomító|Olajfinomító]]
+  |[[hu/Manual/Base Set/Cargos/Olaj|Olaj]]
+  |[[hu/Manual/Base Set/Cargos/Áru|Áru]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Olajfúró torony|Olajfúró torony]]
+  |[[hu/Manual/Base Set/Cargos/Utasok|Utasok]]
+  |[[hu/Manual/Base Set/Cargos/Olaj|Olaj]],<br/>[[hu/Manual/Base Set/Cargos/Utasok|Utasok]]
+  |- style="background: #E5FFE5"
+  |[[hu/Manual/Base Set/Industries/Olajkút|Olajkút]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Olaj|Olaj]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Erőmű|Erőmű]]
+  |[[hu/Manual/Base Set/Cargos/Szén|Szén]]
+  |Semmi
+  |- style="background: #E5FFE5"
+  |[[hu/Manual/Base Set/Industries/Fűrésztelep|Fűrésztelep]]
+  |[[hu/Manual/Base Set/Cargos/Fa|Fa]]
+  |[[hu/Manual/Base Set/Cargos/Áru|Áru]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Acélöntő|Acélöntő]]
+  |[[hu/Vasérc|Vasérc]]
+  |[[hu/Manual/Base Set/Cargos/Acél|Acél]]
+  |}
+</td><td valign="top" style="padding:0px; border:none; background-color:transparent;">
+  {| {{en/Wikitable}} style="margin:2px 4px 2px 0; border:solid 1px #AAAAAA" rules="cols"
+  |- 
+  | style="background: #ccccff" colspan="3" align="center"| '''Szubarktikus'''
+  |- style="background: #ffdead"
+  | '''Gazdasági épület'''
+  | '''Elfogad'''
+  | '''Előállít'''
+  |- style="background: #dfefef"
+  |[[hu/Manual/Base Set/Industries/Bank|Bank]]
+  |[[hu/Manual/Base Set/Cargos/Arany|Arany]]
+  |Semmi
+  |-
+  |[[hu/Manual/Base Set/Industries/Szénbánya|Szénbánya]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Szén|Szén]]
+  |- style="background: #dfefef"
+  |[[hu/Manual/Base Set/Industries/Konzervgyár|Konzervgyár]]
+  |[[hu/Manual/Base Set/Cargos/Állat|Állat]],<br/>[[hu/Manual/Base Set/Cargos/Sarki búza|Búza]]
+  |[[hu/Manual/Base Set/Cargos/Étel|Étel]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Farm|Farm]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Állat|Állat]],<br/>[[hu/Manual/Base Set/Cargos/Sarki búza|Búza]]
+  |- style="background: #dfefef"
+  |[[hu/Manual/Base Set/Industries/Erdő|Erdő]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Fa|Fa]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Papírgyár|Papírgyár]]
+  |[[hu/Manual/Base Set/Cargos/Fa|Fa]]
+  |[[hu/Manual/Base Set/Cargos/Papír|Papír]]
+  |- style="background: #dfefef"
+  |[[hu/Manual/Base Set/Industries/Olajfinomító|Olajfinomító]]
+  |[[hu/Manual/Base Set/Cargos/Olaj|Olaj]]
+  |[[hu/Manual/Base Set/Cargos/Áru|Áru]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Nyomda|Nyomda]]
+  |[[hu/Manual/Base Set/Cargos/Papír|Papír]]
+  |[[hu/Manual/Base Set/Cargos/Áru|Áru]]
+  |- style="background: #dfefef"
+  |[[hu/Manual/Base Set/Industries/Olajkút|Olajkút]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Olaj|Olaj]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Erőmű|Erőmű]]
+  |[[hu/Manual/Base Set/Cargos/Szén|Szén]]
+  |Semmi
+  |- style="background: #dfefef"
+  |[[hu/Manual/Base Set/Industries/Aranybánya|Aranybánya]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Arany|Arany]]
+  |}
+ </td><td valign="top" style="padding:0px; border:none; background-color:transparent;">
+  {| {{en/Wikitable}} style="margin:2px 4px 2px 0; border:solid 1px #AAAAAA" rules="cols"
+  |- 
+  | style="background: #ffffcc" colspan="3" align="center"| '''Szubtrópusi'''
+  |- style="background: #ffdead"
+  | '''Gazdasági épület'''
+  | '''Elfogad'''
+  | '''Előállít'''
+  |- style="background: #FFFDE0"
+  |[[hu/Manual/Base Set/Industries/Bank|Bank]]
+  |[[hu/Manual/Base Set/Cargos/Gyémánt|Gyémánt]]
+  |Semmi
+  |-
+  |[[hu/Manual/Base Set/Industries/Gyémántbánya|Gyémántbánya]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Gyémánt|Gyémánt]]
+  |- style="background: #FFFDE0"
+  |[[hu/Manual/Base Set/Industries/Gyár|Gyár]]
+  |[[hu/Manual/Base Set/Cargos/Gumi|Gumi]],<br/>[[hu/Manual/Base Set/Cargos/Rézérc|Rézérc]],<br/>[[hu/Manual/Base Set/Cargos/Fa|Fa]]
+  |[[hu/Manual/Base Set/Cargos/Áru|Áru]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Farm|Farm]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Kukorica|Kukorica]]
+  |- style="background: #FFFDE0"
+  |[[hu/Manual/Base Set/Industries/Favágó|Favágó]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Fa|Fa]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Rézércbánya|Rézércbánya]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Rézérc|Rézérc]]
+  |- style="background: #FFFDE0"
+  |[[hu/Manual/Base Set/Industries/Olajfinomító|Olajfinomító]]
+  |[[hu/Manual/Base Set/Cargos/Olaj|Olaj]]
+  |[[hu/Manual/Base Set/Cargos/Áru|Áru]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Olajkút|Olajkút]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Olaj]]
+  |- style="background: #FFFDE0"
+  |[[hu/Manual/Base Set/Industries/Konzervgyár|Konzervgyár]]
+  |[[hu/Manual/Base Set/Cargos/Gyümölcs|Gyümölcs]],<br/>[[hu/Manual/Base Set/Cargos/Kukorica|Kukorica]]
+  |[[hu/Manual/Base Set/Cargos/Étel|Étel]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Gyümölcsültetvény|Gyümölcsültetvény]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Gyümölcs|Gyümölcs]]
+  |- style="background: #FFFDE0"
+  |[[hu/Gumifa ültetvény|Gumifa ültetvény]]
+  |Semmi
+  |[[hu/Manual/Base Set/Cargos/Gumi|Gumi]]
+  |-
+  |[[hu/Manual/Base Set/Industries/Vízforrás|Vízforrás]]
+  |Semmi
+  |[[en/Víz]]
+  |- style="background: #FFFDE0"
+  |[[hu/Manual/Base Set/Industries/Víztorony|Víztorony]]
+  |[[hu/Manual/Base Set/Cargos/Víz|Víz]]
+  |Semmi
+  |}
+ </td><td valign="top" style="padding:0px; border:none; background-color:transparent;">
+  {| {{en/Wikitable}} style="margin:2px 4px 2px 0; border:solid 1px #AAAAAA" rules="cols"
+  |- 
+  | style="background: #ff9999" colspan="3" align="center"| '''Játékvilág'''
+  |- style="background: #ffdead;"
+  | '''Gazdasági épület'''
+  | '''Elfogad'''
+  | '''Előállít'''
+  |- style="background: #FFF0F5"
+  |[[hu/Vattacukor-erdő|Vattacukor-erdő]]
+  |Semmi
+  |[[hu/Vattacukor|Vattacukor]]
+  |-
+  |[[hu/Cukorkagyár|Cukorkagyár]]
+  |[[hu/Cukor|Cukor]],<br/>[[hu/Tejkaramelle|Tejkaramella]],<br/>[[hu/Vattacukor|Vattacukor]]
+  |[[hu/Cukorka|Cukorka]]
+  |- style="background: #FFF0F5"
+  |[[hu/Elemfarm|Elemfarm]]
+  |Semmi
+  |[[hu/Elem|Elem]]
+  |-
+  |[[hu/Kólakút|Kólakút]]
+  |Semmi
+  |[[hu/Kóla|Kóla]]
+  |- style="background: #FFF0F5"
+  |[[hu/Játékbolt|Játékbolt]]
+  |[[hu/Játék|Játék]]
+  |Semmi
+  |-
+  |[[hu/Játékgyár|Játékgyár]]
+  |[[hu/Műanyag|Műanyag]],<br/>[[hu/Elem|Elem]]
+  |[[hu/Játék|Játék]]
+  |- style="background: #FFF0F5"
+  |[[hu/Műanyagforrás|Műanyagforrás]]
+  |Semmi
+  |[[en/Műanyag]]
+  |-
+  |[[hu/Üdítőital-gyár|Üdítőital-gyár]]
+  |[[hu/Kóla|Kóla]],<br/>[[hu/Buborék|Buborék]]
+  |[[hu/Szénsavas ital|Szénsavas ital]]
+  |- style="background: #FFF0F5"
+  |[[hu/Buborékgenerátor|Buborékgenerátor]]
+  |Semmi
+  |[[hu/Buborék|Buborék]]
+  |-
+  |[[hu/Tejkaramella-fejtő|Tejkaramella-fejtő]]
+  |Semmi
+  |[[hu/Tejkaramella|Tejkaramella]]
+  |- style="background: #FFF0F5"
+  |[[hu/Cukorbánya|Cukorbánya]]
+  |Semmi
+  |[[hu/Cukor|Cukor]]
+  |}
 </td></tr></table>
 
-==Állomások értékelése==
-Ebben a részben az állomások értékelésére ható tényezőket mutatjuk be. A számításokra a játékban rakománytípusonként külön-külön kerül sor.
+==Új gazdasági épület alapítása==
+
+Ha közlekedés vállalkozásod elég gazdag ahhoz, hogy új gazdasági épületet építését finanszírozza, az új gazdasági épület akkor és oda fog épülni, amikor és ahova akarod. Befektetésed fejében nem számíthatsz azonnali megtérülésre, nyereségéből sem részesülsz, csak a rakományszállításodból. Abban az értelemben sem válsz a gazdasági épület tulajdonosává, hogy jogot szereznél a lebontására, tehát győződj meg arról, hogy megfelelő helyen alapítod.
+
+Rendesen csak a következő [[hu/Categories/Gazdasági épületek|gazdasági épületeket]] alapíthatod:
 
 {| {{en/Wikitable}}
-|- style="background:#efefef"
-!Tényező!!Feltétel!!Értékelés pontban!!Értékelés %-ban
+!colspan=4 style="background:#ccffcc"|Mérsékelt éghajlat
 |-
-| Az állomásra utolsóként behaladó jármű legnagyobb sebessége (max 255 km/h-ig) || 85 km/h (52 mph) fölött|| (Sebesség (km/h) - 85) / 4 || 0% - 17%
+| rowspan=7 valign="top"| [[File:en/Manual/Fund Industry template.png]]
+| style="background:#efefef" | '''Név'''
+| style="background:#efefef" | <span style="white-space:nowrap">'''Ár''' (infláció nélkül)</span>
+| style="background:#efefef" | '''Megjegyzés'''
 |-
-|rowspan="3"|Az állomásra utolsóként behaladó jármű kora (évben) || 2 || 10|| 4%
+| [[en/Erőmű]]
+| £703,125<span style="white-space:nowrap"> </span>($1,406,250)
+| Elfogad: [[hu/Manual/Base Set/Cargos/Szén|szént]] a [[hu/Manual/Base Set/Industries/Szénbánya|szénbányákból]].
 |-
-| 1 || 20 || 8%
+| [[en/Manual/Base Set/Industries/Sawmill]]
+| £656,250<span style="white-space:nowrap"> </span>($1,212,500)
+| Accepts [[en/Manual/Base Set/Cargos/Wood]] from [[en/Manual/Base Set/Industries/Forest]]. Produces [[en/Manual/Base Set/Cargos/Goods]].
 |-
-| 0 || 33 || 13%
+| [[en/Manual/Base Set/Industries/Oil Refinery]]
+| £714,843<span style="white-space:nowrap"> </span>($1,429,686)
+| These may only be built on or very near the coast. Accepts [[en/Manual/Base Set/Cargos/Oil]] from either [[en/Manual/Base Set/Industries/Oil Rig]]s or [[en/Manual/Base Set/Industries/Oil Wells]].
 |-
-|rowspan="4"|A legutóbbi rakományfelvétel óta eltelt idő napokban <br>A "Feltétel" oszlopban szereplő napok számát 4-gyel kell szorozni, ha az utolsó jármű hajó volt.<br><small>(Megjegyzés: Ha a jármű rakományfelvételre kész volt ugyan, de rakomány nem volt, az értékelésnél úgy kell tekinteni, mintha rakományfelvétel történt volna)</small>|| 30 - 52,5 || 25 || 10%
+| [[en/Manual/Base Set/Industries/Factory]]
+| £609,375<span style="white-space:nowrap"> </span>($1,218,750)
+| Accepts [[en/Manual/Base Set/Cargos/Grain]] and [[en/Manual/Base Set/Cargos/Livestock]] from [[en/Manual/Base Set/Industries/Farm]]s and [[en/Manual/Base Set/Cargos/Steel]] from [[en/Manual/Base Set/Industries/Steel Mill]]s. Produces [[en/Manual/Base Set/Cargos/Goods]].
 |-
-| 15 - 30 || 50 || 20%
+| [[en/Manual/Base Set/Industries/Steel Mill]]
+| £629,882<span style="white-space:nowrap"> </span>($1,259,764)
+| Accepts [[en/Manual/Base Set/Cargos/Iron Ore]] from [[en/Manual/Base Set/Industries/Iron Ore Mine]]s which it turns into [[en/Manual/Base Set/Cargos/Steel]].
 |-
-| 7.5 - 15  || 95 || 37%
+| [[en/Manual/Base Set/Industries/Bank]]
+| £747,070<span style="white-space:nowrap"> </span>($1,494,140)
+| Accepts and produces [[en/Manual/Base Set/Cargos/Valuables]].
 |-
-| Kevesebb mint 7.5 || 130 || 51%
+!colspan=4 style="background:#ccccff"|Sub-arctic
 |-
-|rowspan="6"|Az állomáson várakozó rakományegységek száma || Több mint 1500 || -90 || -35%
+| rowspan=7 valign="top"| [[File:en/Manual/Fund Industry subarctic.png]]
+| style="background:#efefef" | '''Name'''
+| style="background:#efefef" | <span style="white-space:nowrap">'''Cost''' (without inflation)</span>
+| style="background:#efefef" | '''Notes'''
 |-
-| 1001 - 1500 || -35 || -14%
+| [[en/Manual/Base Set/Industries/Power Station]]
+| £703,125<span style="white-space:nowrap"> </span>($1,406,250)
+| Accepts [[en/Manual/Base Set/Cargos/Coal]] from [[en/Manual/Base Set/Industries/Coal Mine]]s
 |-
-| 601 - 1000 || 0 || 0%
+| [[en/Manual/Base Set/Industries/Oil Refinery]]
+| £714,843<span style="white-space:nowrap"> </span>($1,429,686)
+| These may only be built on or very near the coast. Accepts [[en/Manual/Base Set/Cargos/Oil]] from [[en/Manual/Base Set/Industries/Oil Wells]].
 |-
-| 301 - 600 || 10 || 4%
+| [[en/Manual/Base Set/Industries/Printing Works]]
+| £609,375<span style="white-space:nowrap"> </span>($1,218,750)
+| Accepts [[en/Manual/Base Set/Cargos/Paper]] from [[en/Manual/Base Set/Industries/Paper Mill]] and produces [[en/Manual/Base Set/Cargos/Goods]].
 |-
-| 101 - 300 || 30 || 12%
+| [[en/Manual/Base Set/Industries/Food Processing Plant]]
+| £603,515<span style="white-space:nowrap"> </span>($1,307,030)
+| Accepts [[en/Manual/Base Set/Cargos/Livestock]] and [[en/Manual/Base Set/Cargos/Wheat]] and produces [[en/Manual/Base Set/Cargos/Food]].
 |-
-| less - 100 || 40 || 16%
+| [[en/Manual/Base Set/Industries/Paper Mill]]
+| £665,039<span style="white-space:nowrap"> </span>($1,330,078)
+| Accepts [[en/Manual/Base Set/Cargos/Wood]] and produces [[en/Manual/Base Set/Cargos/Paper]].
 |-
-|Szobor a településen a vállalat tulajdonosának||Épült||26|| 10%
+| [[en/Manual/Base Set/Industries/Bank]]
+| £442,382<span style="white-space:nowrap"> </span>($884,764)
+| Accepts [[en/Manual/Base Set/Cargos/Gold]].
 |-
-|Kis reklámkampány||Az állomás a település központjáról 10 mezőnyi távolságon belül van||+64|| +25%
+!colspan=4 style="background:#ffffcc"|Tropical
 |-
-|Közepes reklámkampány||Az állomás a település központjától 15 mezőnyi távolságon belül van||+112|| +44%
+| rowspan=7 valign="top"| [[File:en/Manual/Fund Industry subtropical.png]]
+| style="background:#efefef" | '''Name'''
+| style="background:#efefef" | <span style="white-space:nowrap">'''Cost''' (without inflation)</span>
+| style="background:#efefef" | '''Notes'''
 |-
-|Nagy reklámkampány||Az állomás a település központjától 20 mezőnyi távolságon belül van||+160|| +63%
+| [[en/Manual/Base Set/Industries/Oil Refinery]]
+| £714,843<span style="white-space:nowrap"> </span>($1,429,686)
+| Accepts [[en/Manual/Base Set/Cargos/Oil]] from [[en/Manual/Base Set/Industries/Oil Rig]]s and produces [[en/Manual/Base Set/Cargos/Goods]].
 |-
-|Közúti jármű balesetet szenvedett||Az állomás a balesettől 22 mezőnyi távolságon belül||-160|| -63%
+| [[en/Manual/Base Set/Industries/Food Processing Plant]]
+| £603,515<span style="white-space:nowrap"> </span>($1,307,030)
+| Accepts [[en/Manual/Base Set/Cargos/Fruit]]s from [[en/Manual/Base Set/Industries/Fruit Plantation]] and [[en/Manual/Base Set/Cargos/Maize]] from [[en/Manual/Base Set/Industries/Farm]] and produces [[en/Manual/Base Set/Cargos/Food]].
 |-
-|Vonat balesetet szenvedett||Állomás a balesettől 30 mezőnyi távolságon belül||-160|| -63%
-|}
-Az értékelés összpontszámát 255-tel kell osztani, és megkapjuk a %-os értékelést. A legmagasabb értékelés 100%. A reklámkampányok azonnali és ideiglenes lökést adnak a közeli állomások értékeléséhez, fokozatosan csökkenő hatással. 
-
-A gazdasági épülettől elszállítható rakomány mennyisége teljes egészében az állomás értékelésétől függ. Ha tehát a gazdasági épülettől elszállított rakomány mennyisége kicsi, annak valószínűleg az az oka, hogy az állomás értékelése is alacsony.
-
-Az állomások értékelését a játék 2,5 játéknaponként számítja; egy ilyen ciklus tartama alatt az értékelés nem változhat 2 pontnál többet. Ez alól a balesetek utáni ciklusok a kivételek. 
-
-'''Megjegyzés:'''  A pontos képlet itt található: "[http://vcs.openttd.org/svn/browser/trunk/src/station_cmd.cpp#L3163 UpdateStationRating()]", a station_cmd.cpp-ben.
-
-'''Megjegyzés'''  Ha az értékelés 50% alá csökken, az állomás elkezdi elveszíteni a rakományt.
-
-==Rakományszállítás az állomásra==
-A játék a rakományt kibocsátó gazdasági épület legfeljebb két berakó állomása között osztja el 2,5 napos ciklusonként. Ha kettőnél több, azonos maximális értékelésű állomás jön szóba, az állomás belső utasításától függ, melyik állomás kapja a rakományt.
-
-Ha csak egy állomás jön szóba, a küldött rakomány mennyisége = termelt mennyiség * állomás-értékelés %-ban, a legközelebbi egész értékre felkerekítve.
-
-Két lehetséges állomásra a számítás sokkal összetettebb. Először is: a második állomás értékelési pontjait a játék elosztja kettővel a további számításokhoz. Az első állomás elérhető rakományának számítása a következő: ((az első állomás értékelése pontban) * mennyiség + 1) / (az első állomás értékelése pontban + a második állomás értékelése pontban). Hasonló értékelések esetében ez a termelésnek kb. 2/3-a, nagyobb különbségek esetén növekszik. Az eredménnyel ugyanúgy számolunk tovább, mint egy állomás esetében. Ez kerül az első állomásra. Ha az első állomás nem kapja meg az elérhető mennyiséget, akkor az a rész nem kerül kiszállításra egyáltalán. 
-A többi ki nem osztott rakomány -- már amennyiben marad -- kerül a második állomásra ugyanazzal a számítással, mint egy állomás esetében.
-
-
-==A helyi önkormányzat értékelése==
-Az értékelés korlátozza a játékos néhány tevékenységét; +500-zal kezdődik, és cselekvésekkel befolyásolható.
-
-Jelenleg kihasználhatod a játékot úgy, hogy kivágsz kb. 200 fát, és újraülteted őket. Ez az értékelést a minimum -1000-re csökkenti, aztán megemeli 220-ra.
-
-<table>
-<tr valign="top"><td style="background:none; border:0px">
-{| {{en/Wikitable}}
-|- style="background:#efefef"
-!Értékelés pontszáma!!Értékelés
+| [[en/Manual/Base Set/Industries/Bank]]
+| £442,382<span style="white-space:nowrap"> </span>($884,764)
+| Accepts [[en/Manual/Base Set/Cargos/Diamonds]] from [[en/Manual/Base Set/Industries/Diamond Mine]]s.
 |-
-| -1000 és -400 közt|| Szörnyű
+| [[en/Manual/Base Set/Industries/Water Tower]]
+| £336,914<span style="white-space:nowrap"> </span>($673,828)
+| Acceps [[en/Manual/Base Set/Cargos/Water]] from [[en/Manual/Base Set/Industries/Water Supply]].
 |-
-| -399 és -200 közt|| Nagyon rossz
+| [[en/Manual/Base Set/Industries/Factory]]
+| £609,375<span style="white-space:nowrap"> </span>($1,218,750)
+| Accepts [[en/Manual/Base Set/Cargos/Rubber]] from [[en/Manual/Base Set/Industries/Rubber Plantation]]s, [[en/Manual/Base Set/Cargos/Copper Ore]] from [[en/Manual/Base Set/Industries/Copper Ore Mine]]s and [[en/Manual/Base Set/Cargos/Wood]] from [[en/Manual/Base Set/Industries/Lumber Mill]]. Produces [[en/Manual/Base Set/Cargos/Goods]].
 |-
-| -199 és 0 közt|| Rossz
+| [[en/Manual/Base Set/Industries/Lumber Mill]]
+| £395,507<span style="white-space:nowrap"> </span>($791,014)
+| Produces [[en/Manual/Base Set/Cargos/Wood]].
 |-
-| 0 és 200 közt|| Közepes
+!colspan=4 style="background:#ff9999"|Toyland
 |-
-| 201 és 400 közt|| Jó
+| rowspan=5 valign="top"| [[File:en/Manual/Fund Industry toyland.png]]
+| style="background:#efefef" | '''Name'''
+| style="background:#efefef" | <span style="white-space:nowrap">'''Cost''' (without inflation)</span>
+| style="background:#efefef" | '''Notes'''
 |-
-| 401 és 600 közt|| Nagyon jó
+| [[en/Manual/Base Set/Industries/Sweet Factory]]
+| £603,515<span style="white-space:nowrap"> </span>($1,207,030)
+| Accepts [[en/Manual/Base Set/Cargos/Sugar]], [[en/Manual/Base Set/Cargos/Toffee]] and [[en/Manual/Base Set/Cargos/Candyfloss]]. Produces [[en/Manual/Base Set/Cargos/Sweets]].
 |-
-| 601 és 800 közt|| Kiváló
+| [[en/Manual/Base Set/Industries/Toy Shop]]
+| £389,648<span style="white-space:nowrap"> </span>($779,296)
+| Accepts [[en/Manual/Base Set/Cargos/Toys]] from [[en/Manual/Base Set/Industries/Toy Factory]].
 |-
-| 801 és 1000 közt|| Kimagasló
-|}
-</td><td style="background:none; border:0px">
-{| {{en/Wikitable}}
-|- style="background:#efefef"
-!A játékos cselekvése!!Szükséges értékelés*!!Hatása az értékelésre
+| [[en/Manual/Base Set/Industries/Toy Factory]]
+| £477,539<span style="white-space:nowrap"> </span>($955,078)
+| Accepts [[en/Manual/Base Set/Cargos/Plastic]] from [[en/Manual/Base Set/Industries/Plastic Fountains]] and [[en/Manual/Base Set/Cargos/Batteries]] from [[en/Manual/Base Set/Industries/Battery Farm]]. Produces [[en/Manual/Base Set/Cargos/Toys]].
 |-
-|Állomás építése|| -200 || n/a
-|-
-|Külterületi útszakasz törlése|| 16 / 64 / 112 ||-18, le egészen -100-ig.
-|-
-|Belterületi útszakasz törlése|| 16 / 64 / 112 ||-50, le egészen -100-ig.
-|-
-|Városi alagút vagy híd lebontása|| 144 / 208 / 400 ||-250-től 0-ig.
-|-
-|Épület lebontása|| 40 - 300 ||-40-től -300-ig
-|-
-|Faültetés üres játékmezőre|| n/a ||+7, fel egészen 220-ig.
-|-
-|Játékmező megtisztítása fával|| n/a ||-35
-|-
-|Sikeres megvesztegetés|| n/a ||+200, fel egészen 800-ig.
-|-
-|Sikertelen megvesztegetés|| n/a || -50.
-|}
-<nowiki>*</nowiki> A "szükséges értékelés" összefügg a városi önkormányzatok engedékenységével <br>(ld. ''Haladó beállítások'' [[hu/Haladó beállítások/Gazdaság|Gazdaság]] ''Városi tanács hozzáállása a területének az átépítéséhez'' beállítást).
-</td></tr></table>
-
-A játékosok értékelése havonta automatikusan változik:
-* Az értékelés 5 pontonként nő, ha 200 pontnál kevesebb.
-* Az értékelés 12 pontonként nő minden olyan állomásért, melyen 50 napon belül történt rakománymozgás.
-* Az értékelés 12 pontonként csökken minden olyan állomásért, melyen 50 napon belül nem történt rakománymozgás.
-
-'''Példa:'''<br>
-A játékos értékelése a településen -300 (nagyon rossz), ahol két működő és egy inaktív állomása van.<br>
-5 pont + 2x12 pont - 15 pont = 14 pontnyi növekedés havonta az értékelésben.
-5pts + 2 * 12pts - 15pts = 14pts points gain per month.<br>
-(-200 - -300) pont / (14 pont/hó) = 8 hónap múlva engedi az önkormányzat a játékosnak, hogy új állomást építsen.
-
-A települési értékelés kódjainak helye a programban: town.h, town_cmd.c, tree_cmd.c, és road_cmd.c. alatt.
-
-==A gazdasági épületek termelése==
-Itt arról olvashatsz, hogyan határozza meg a játék, hogy egy gazdasági épület mennyit termeljen havonta. A táblázat a ''Haladó beállítások - [[hu/Haladó beállítások/Gazdaság#gazdasag-egyeb-beallitasok|Gazdaság - Egyéb beállítások]] - Egyenletes gazdaság'' bekapcsolt állapotával meghatározott kezdő termelési értékekre alapul. A termelés a 8 vagy 9 (erdők esetében néha a 10) többszöröse.
-
-{| {{en/Wikitable}}
-|- style="background:#efefef"
-!Elsődleges gazdasági épület!!Termelt rakomány!!Kezdeti termelt mennyiség
-|-
-|Szénbánya||Szén||56 - 176
-|-
-|Erdő||Fa||48 - 152
-|-
-|Olajfúró torony||Olaj||56 - 176
-|-
-|Farm||Búza és Állat||40 - 112
-|-
-|Rézércbánya||Rézérc||56 - 112
-|-
-|Olajkút||Olaj||48 - 152
-|-
-|Vasércbánya||Vasérc||40 - 112
-|-
-|Bank||Értéktárgyak||24 - 64
-|-
-|colspan="5"|
-|-
-|Aranybánya||Arany||24 - 80
-|-
-|colspan="5"|
-|-
-|Gyémántbánya||Gyémánt||24 - 80
-|-
-|Gyümölcsültetvény||Gyümölcs||40 - 112
-|-
-|Gumifa ültetvény||Gumi||40 - 112
-|-
-|Vízforrás||Víz||48 - 152
-|-
-|Farm||Kukorica||40 - 128
-|-
-|Favágó||Fa||180 vagy 225 (ha a fa [[hu/Manual/Éghajlatok#szubtropusi|engedélyezett]])
-|-
-|colspan="5"|
-|-
-|Vattacukor-erdő||Vattacukor||48 - 152
-|-
-|Elemfarm||Elem||40 - 128
-|-
-|Kólakút||Kóla||48 - 136
-|-
-|Műanyagforrás||Műanyag||56 - 160
-|-
-|Buborékgenerátor||Buborék||48 - 152
-|-
-|Tejkaramella fejtő||Tejkaramella||40 - 112
-|-
-|Cukorbánya||Cukor||40 to 128
+| [[en/Manual/Base Set/Industries/Fizzy Drink Factory]]
+| £518,554<span style="white-space:nowrap"> </span>($1,037,108)
+| Accepts [[en/Manual/Base Set/Cargos/Cola]] from [[en/Manual/Base Set/Industries/Cola Wells]] and [[en/Manual/Base Set/Cargos/Bubbles]] from [[en/Manual/Base Set/Industries/Bubble Generator]]. Produces [[en/Manual/Base Set/Cargos/Fizzy Drinks]].
 |}
 
-===A termelés változása===
-A játék minden hónapban véletlenszerűen megváltoztatja néhány gazdasági épület termelését.
+To fund a new industry in-game, hold down the ''Industries'' toolbar button [[File:en/Manual/Manual html m4d6ba21e.png]] (see ''Company and industry information'' on the [[en/Manual/Game interface|Game interface]] page) and select ''Fund New Industry''.
 
-====Alapértelmezett gazdasági szabályok====
-Az eredeti Transport Tycoon Deluxe-hoz hasonlóan egy 256x256 mezőből álló térképen havonként egy változás lehetséges (1 gazdasági épület termelése változik). A szám a térkép méretével fokozatosan emelkedik, amióta a "Napi termelési változások" funkció a játékba került (OpenTTD 0.7.0).
+Several settings change the rules of building new industries:	
+* [[en/Archive/Manual/Settings/Build raw material industries]]
+* [[en/Archive/Manual/Settings/Multiple industries per town]]
+* [[en/Archive/Manual/Settings/Same industries close]]
 
-*Egyenletes gazdaság esetében a gazdasági épületek havi 8-9 (a 400 tonna fölött termelő erdők esetében 10) alkalommal küldenek rakományt az állomásaikra. 
-Ezzel együtt a termelés hat szint szerint korlátozott: legalacsonyabb, alacsonyabb, normál (ha új játékot indítunk, vagy új gazdasági épület alapítására kerül sor), magasabb, 2x magasabb, és legmagasabb. A termelés ezek között a szintek között változik 50%-os mérséklődéssel, de akár 100%-os növekedéssel is.
+==Prospecting New Industries==
+As of version 0.6.1, you now can ''prospect'' new industries. Funding new industries and prospecting have two major differences.  Firstly, prospecting is only used for primary industries (i.e. raw materials), and secondly, you cannot set the place for a prospected industry - it will be set up wherever your prospectors first discover the correct natural resources. 
 
-*Példák:
-**szénbánya: legalacsonyabb (32 vagy 40 t/hó), alacsonyabb (64 vagy 72), normál (120 vagy 135), magasabb (240 vagy 270), 2x magasabb (480 vagy 540) és legmagasabb (960 vagy 1080).
-**erdő:    legalacsonyabb (32 vagy 64 t/hó), alacsonyabb (35 vagy 70), normál ( 78 vagy 117), magasabb (208 vagy 260), 2x magasabb (416 vagy 468 vagy 520 (a tízszeri emelés lehetősége miatt)) és legmagasabb (832 vagy 936 vagy 1040).
-**Aranybánya: legalacsonyabb (12 vagy 18 zsák/hó), alacsonyabb (32 vagy 40), normál ( 56 vagy  63), magasabb (112 vagy 126), 2x magasabb (224 vagy 252) és legmagasabb (448 vagy 504).
+You can enable this feature in-game from patch settings window ''economy'' tab, ''Manual primary industry constructing method'' which can be on three settings: ''none'', ''as other industries'' and ''prospecting'' (default).
 
+[[File:en/Manual/Base Set/Industries/Coalmine.png|center|frame|The Coal Mine is just one of the many OpenTTD industries.]]
 
-Az egyszerűség kedvéért lássuk, milyen lehetőségek vannak egy 256x256-os térképen (legfeljebb 1 változás/hó = havonként legfeljebb 1 gazdasági épület változtat a termelésén):
-
-*Az esély a termelés változására minden hónapban:
-** 50% a csak csökkenthető gazdasági épületek csökkenésére (ez jelenleg egyedül a mérsékelt égöv olajkútját jelenti)vagy
-** 50% 1/3 esélyre (=16.7%) hogy más gazdasági épület változtatja a termelését.
-
-
-*Ha termelésváltozás következik be (minden hónapban kb. 16.7% eséllyel):
-** Olyan gazdasági épületnél, ahol nincs vagy gyenge az elszállítási szolgáltatás (rakományának a kevesebb, mint 60%-a elszállítására kerül sor): '''33%''' eséllyel nő, '''67%''' eséllyel csökken a termelés.
-** Olyan gazdasági épületnél, amelynél jó (60% fölötti) az elszállítás: '''67%''' az esély a növekedésre, '''33%''' az esély a csökkenésre.
-** Alapértelmezett gazdasággal a kiváló elszállítás számára külön bónusz nincs.
-
-
-*Részleges változás esélyének számolásához, 50% * 1/3 * 33% = 5,56%:
-** Gyenge elszállítás: '''5,56%''' hogy havi 1 lehetséges változás: növekedés, és '''11,12%''' hogy havi 1 lehetséges változás: csökkenés.
-** Jó elszállítás: '''11,12%''' hogy havi 1 lehetséges változás: növekedés, és '''5,56%''' hogy havi 1 lehetséges változás: csökkenés.
-
-====Az egyenletes gazdaság szabályai====
-:''Értsük jól: nem a gazdasági válság nélküli gazdaságról van szó, hanem a ''Haladó beállítások - [[hu/Haladó beállítások/Gazdaság#gazdasag-egyeb-beallitasok|Gazdaság - Egyéb beállítások]] - Egyenletes gazdaság'' beállításról''
-
-*Esély a termelés változására havonként: '''4.5%''', vagyis a gazdasági épületek listájáról a termelő gazdasági épületek 4.5%-a megváltoztatja a termelését.
-
-
-*Ha a termelésváltozás megtörténik:
-** Egy olyan gazdasági épületnél, ahol nincs elszállítás, vagy van, de gyenge (60%-nál kisebb): '''33%''' esélye a növekedésnek, '''67%''' az esélye a csökkenésnek
-** Jó (60% fölötti) elszállítással termelő gazdasági épületnél '''67%''' az esélye a növekedésnek, '''33%''' az esélye a csökkenésnek
-** Kiváló (80% fölötti) elszállítással termelő gazdasági épületnél '''83%''' az esélye a növekedésnek, '''17%''' az esélye a csökkenésnek.
-
-
-*E kettő összeszorzásával, vagyis 4,5% * 33% = 1,5%:
-** Gyenge elszállítás: '''1.5%''' a növekedésre, és '''3.0%''' a csökkenésre
-** Jó elszállítás: '''3.0%''' a növekedésre és '''1.5%''' a csökkenésre
-** Kiváló elszállítás: '''3.75%''' növekedésre és '''0.75%''' a csökkenésre
-
-
-*Egyenletes gazdaság esetén a havi termelésváltozás 3 és 23% közt van.
-**Nagyon alacsony termeléssel (12-40 t/hó) rendelkező gazdasági épületek változása nagyobb.
-**Az elsődleges gazdasági épületek rakományt 8 vagy 9 alkalommal adnak ki havonta (ill. erdő esetében lehetséges, hogy tízszer). A havi termelés a gazdasági épületek 'bázisértékéből' indul ki, amely többszöröződik a havi 8 vagy 9 (400 t fölött termelő erdők esetében előfordulhat, hogy 10) alkalommal. Például a bázisérték egy szénbányánál 15 tonna, így a havi termelés 120 vagy 135 tonna. Ez a bázisérték legfeljebb 255-ig nőhet, így minden gazdasági épület lehetséges legmagasabb havi termelése 2040 vagy 2295 (erdő esetében a már említettek miatt 2550). [http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 (Forrás)]
-
-====Példák====
-Ha egy szénbánya termelésének 70%-át elszállítjuk, '''3%''' (4,5% * 67%) az esélye, hogy a termelés megnő 3-23 %-kal, és '''1.5%''' (4.5% * 33%) eséllyel csökken a termelés 3-23%-kal (de 13% átlagosan).
-
-(1 + (0,03 - 0,015) * 0,13) ^12 - 1 = 0,0237 vagyis '''2,37%'''
-
-A szénbánya átlagosan 2,37%-kal nő az első év után. Vagyis:<br>
-(1,0237 ^20) - 1 = 59,6% húsz év múlva<br>
-(1,0237 ^50) - 1 = 321,8% vagy '''3,22x''' ötven év múlva<br>
-(1,0237 ^100) - 1 = '''10,35x''' száz év múlva<br>
-
-
-80%-nál magasabb értékelésű gazdasági épülettel '''3.75%''' az esélye a növekedésnek, és '''0.75%''' a csökkenésnek.:<br>
-(1 + (0,0375 - 0,0075) * 0,13) ^12 - 1 = 0,0478 vagy '''4,78%'''
-
-A gazdasági épület kb. 4,78%-kal nő az első év után,<br>
-(1,0478 ^20) - 1 = '''2,54x''' húsz év múlva,<br>
-(1,0478 ^50) - 1 = '''10,32x''' ötven év múlva,<br>
-(1,0478 ^100) - 1 = '''106,62x''' száz év múlva<br>
-
-Jó szállítási szolgáltatás mellett átlag '''29,6 évig tart''', hogy megduplázódjon; kiváló elszállítással ez '''14,8 év'''. Ha egy játéknap 2,36 másodperc, a '''duplázási idő''' jó elszállítással '''7,1 óra'''; kiváló elszállítás mellett '''3,6 óra'''. A kb. 100 tonnás havi termelést a maximum-közeli 2100-ra növelni  '''130 évbe''' telik jó elszállítással, és '''65 évbe''' kiváló elszállítással.
-
-Ezzel együtt a játékban úgy fogod találni, hogy a gazdasági épületek a termelés véletlenszerűen változtatják. Ki kell emelni, hogy a fenti példák csak sok gazdasági épület hosszútávú megfigyelésével igazak, így az egyes gazdasági épületek ezektől az átlagoktól jelentősen el is térhetnek. Ha statisztikai szempontból nézzük, 6-ból 10 gazdasági épület még a legjobb elszállítással sem fog a 100 egység körüli termelésről a maximum körüli 2100-ra növekedni 65 év alatt. Sőt, kilencből kb. egy gazdasági épület csökkenti 50 év alatt a termelését jó elszállítás mellett.
-
-A gazdasági épület érzékenységének növelése érdekében a vagonok számát igazítsd a gazdasági épület termelékenységéhez (a legalacsonyabb termeléshez két vagont érdemes használni). Ilyen tehervonatokhoz rendszerint a ''Teljes berakodás'' utasítás használatos.
-
-
-'''Megjegyzés:'''  A pontos képlet itt található: "[http://vcs.openttd.org/svn/browser/trunk/src/industry_cmd.cpp#L2373 ChangeIndustryProduction()]", az industry_cmd.cpp-ben.
-
-==A szállítás kifizetése==
-A rakomány leszállításért számodra kifizetett összeg négy tényezőtől függ: a szállított rakomány mennyiségétől, a rakomány értékétől, a szállítás távolságától, és attól, hogy mennyire időben szállítod.
-
-{| {{en/Wikitable}}
-|- style="background:#efefef"
-!Rakomány!!Egység!!Korai leszállítás<br> Idő (nap)!!Késedelmes leszállítás<br> Idő (nap)!!Kezdeti <br> szállítási<br> díj (font)
-|-
-|[[hu/Manual/Base Set/Cargos/Utasok|Utasok]]|| ||Azonnal||24||£39
-|-
-|[[hu/Manual/Base Set/Cargos/Értéktárgyak|Értéktárgyak]]||csomag||1||32||£91
-|-
-|[[hu/Manual/Base Set/Cargos/Állat|Állat]]||darab||4||18||£53
-|-
-|[[hu/Manual/Base Set/Cargos/Búza|Búza]]||tonna||4||40||£58
-|-
-|[[hu/Manual/Base Set/Cargos/Áru|Áru]]||Láda||5||28||£75
-|-
-|[[hu/Manual/Base Set/Cargos/Szén|Szén]]||tonna||7||nincs||£72
-|-
-|[[hu/Manual/Base Set/Cargos/Acél|Acél]]||tonna||7||nincs||£69
-|-
-|[[hu/Manual/Base Set/Cargos/Vasérc|Vasérc]]||tonna||9||nincs||£62
-|-
-|[[en/Fa]]||tonna||15||nincs||£61
-|-
-|[[hu/Manual/Base Set/Cargos/Olaj|Olaj]]||ezer liter||25||None||£54
-|-
-|[[en/Levél]]||csomag||20||90||£55
-|- style="background:#efefef"
-!colspan="5" align="center"|Artikus-specifikus
-|-
-|[[hu/Manual/Base Set/Cargos/Sarki búza|Búza]]||tonna||4||40||£58
-|-
-|[[hu/Manual/Base Set/Cargos/Papír|Papír]]||tonna||7||60||£66
-|-
-|[[hu/Manual/Base Set/Cargos/Arany|Arany]]||zsák||10||40||£71
-|-
-|[[hu/Manual/Base Set/Cargos/Étel|Étel]]||tonna||azonnal||30||£69
-|- style="background:#efefef"
-!colspan="5" align="center"|Trópikus-specifikus
-|-
-|[[hu/Manual/Base Set/Cargos/Gumi|Gumi]]||ezer liter||2||20||£54
-|-
-|[[hu/Manual/Base Set/Cargos/Gyümölcs|Gyümölcs]]||tonna||azonnal||15||£51
-|-
-|[[hu/Manual/Base Set/Cargos/Kukorica|Kukorica]]||tonna||4||40||£53
-|-
-|Trópusi [[hu/Manual/Base Set/Cargos/Fa|Fa]]||tonna||15||nincs||£97
-|-
-|[[hu/Manual/Base Set/Cargos/Rézérc|Rézérc]]||tonna||12||nincs||£59
-|-
-|[[hu/Manual/Base Set/Cargos/Víz|Víz]]||ezer liter||20||80||£57
-|-
-|[[hu/Manual/Base Set/Cargos/Gyémánt|Gyémánt]]||Zsák||10||nincs||£71
-|- style="background:#efefef"
-!colspan="5" align="center"|Játékvilág-specifikus
-|-
-|[[hu/Cukor|Cukor]]||tonna||20||nincs||£54
-|-
-|[[hu/Játék|Játék]]|| ||25||nincs||£68
-|-
-|[[hu/Elem|Elem]]|| ||2||30||£53
-|-
-|[[hu/Cukorka|Cukorka]]||tonna||8||40||£75
-|-
-|[[hu/Tejkaramella|Tejkaramella]]||tonna||14||60||£58
-|-
-|[[hu/Kóla|Kóla]]||ezer liter||5||75||£59
-|-
-|[[hu/Vattacukor|Vattacukor]]||tonna||10||25||£61
-|-
-|[[hu/Buborék|Buborék]]|| ||20||80||£62
-|-
-|[[hu/Műanyag|Műanyag]]||ezer liter||30||nincs||£54
-|-
-|[[en/Szénsavas ital]]|| ||30||50||£76
-|}
-
-A kezdeti szállítási díj értéke alatt 100 egységnyi rakomány 1 mezőnyi távolságra történő szállítására értendő. A díj emelkedik a játék ideje alatt, az infláció miatt.
-
-
-Késedelmes szállítás bírsága:
-*A korai szállítási időt követő minden nap után a díjból 0,4% levonás jár .
-*A késedelmes szállítási időt követő minden nap után további 0,4% levonás jár.
-*A bírság legmagasabb összege a szállítási díj 88%-a.
-
-
-'''Példák''' (nincs infláció):<br>
-Szállíts 200.000 liter olajt 20 mezőnyi távolságra 10 nap alatt:<br>
-2 * £54 * 20 mező * 100% = £2160
-
-Szállíts 100 csomag levelet 100 mezőnyi távolságra 100 nap alatt:<br>
-£55 * 100 mező * (1 - 80*0.004 - 10*0.004) = £3520
-
-'''HINT calculate easy''':<br>
-Income = cargo units * cargo value * 0,4<br>
-[[en/Cargo value]] comes from the Y-axis on the specific transported goods graph in-game<br>
-measure your real delivery time in days and plot on x-axis
-This result will give you an easy estimation of your income with 5% deviation
-
-'''Notes:'''
-* The exact formula is much more complicated and slightly more accurate, due to rounding error when converting from larger discrete values.  See economy.cpp (GetTransportedGoodsIncome) and [[en/Manual/Game Mechanics/Cargo income]].
-
-* Distance is measured between the name-labeled tiles of the stations, not from the industries or by vehicle distance traveled.  It is computed by adding the differences in x and y tiles ([http://en.wikipedia.org/wiki/Manhattan_distance manhattan distance]), not straight-line distance.
-
-* Each cargo has a characteristic time at which payment is maximized, assuming you can keep it moving away from the source station at a constant speed.  For a cargo with a "late delivery" penalty, this time is typically around 70 days; for one without, this is typically around 130 days.
-
-==Járműsebességek==
-Internally OpenTTD works with a unit called "km-ish/h", which is equal to "mph/1.6". 
-The conversion factor from km-ish/h to km/h is 1.00584, and the conversion factor from km-ish/h to mph is 1.6.
-
-A tile is, for vehicle speed purposes 664.(216) km-ish, 668 km or 415 miles long. This is based on the following facts: 
-*A tile has 16 sub locations per X/Y axis.
-*A vehicle has stores remainder of tile movement in a byte called subspeed, thus has 256 different values.
-*The vehicle's (raw) speed is added to subspeed. The resulting number is divided by 256, the remainder is stored in subspeed and the vehicle is moved quotient sub locations forward. For trains and aircraft the raw speed is in km-ish/h, for road vehicles/ships in 0.5 km-ish/h. For trains and aircraft this step is done twice a tick, whereas ships and road vehicles do it once a tick.
-*A day contains 74 ticks, and takes 24 hours.
-Now assume a vehicle going 1 km-ish/hour: (1 * 16 * 256) / (74 * 2) * 24 = 664.(216).
-
-The net result is that 100 km/hour is ~3.6 tiles/day.
-
-
-==== Aircraft ====
-*By default aircraft fly at a quarter of their listed speed (this can be changed in advanced settings).
-*Aircraft acceleration varies per aircraft, between 144 km-ish/h/day and 400 km-ish/h/day.
-*Broken down planes fly at 320 km-ish/h.
-*Airport taxi speed is 150 km-ish/h.
-
-==== Road Vehicles ====
-*Road vehicles accelerate at 37 km-ish/h/day.
-*Road vehicles go around corners at half their max speed.
-*Road vehicles accelerate an additional 74 km-ish/h/day downhill.
-*When going uphill, road vehicles slow down 10% 4 times per tile.  This balances out with acceleration at 34-ish km/h for all road vehicles.
-
-(Note: This does not apply when using the improved road vehicle acceleration model.)
-
-==== Ships ====
-*Ships accelerate at 37 km-ish/h/day.
-*A "stopped" ship resumes its last speed instantly.
-
-==== Trains ==== 
-(with the [[en/Archive/Manual/Settings/Realistic acceleration|realistic train acceleration patch]])<br>
-*Trains are not affected going up or down hills if they are powerful enough.
-*Trains are limited to entering and exiting a depot at 61km/h.
-*Trains can make one 45° turn without slowing down.
-*When making two or more 45° turns in the same direction, the max speed is limited as follows:
-
-{| style="margin: 1em 1em 1em 0;"    <!-- begin nested tables -->
-|-
-
-|    <!-- metric -->
-{| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #efefff;"
-|-
-!rowspan=2  style="background:#efefef"  | Curvature
-!colspan=3  style="background:#dfdfff"  | Max speed (km/h)
-|-
-!   style="background:#dfdfff"      | Railroad
-!   style="background:#dfdfff"      | Monorail
-!   style="background:#dfdfff"      | Maglev
-|-
-| style="background:#f8f8ff"    | 0 (90° turn)  
-|    61||91||121
-|-
-| style="background:#f8f8ff"    | 1 (2x45° turn)
-|     88||132||176
-|-
-| style="background:#f8f8ff"    | 2
-|    111||166||221
-|-
-| style="background:#f8f8ff"    | 3
-|    132||198||264
-|-
-| style="background:#f8f8ff"    | 4
-|    151||226||301
-|-
-| style="background:#f8f8ff"    | 5
-|    168||252||336
-|-
-| style="background:#f8f8ff"    | 6
-|    183||274||365
-|-
-| style="background:#f8f8ff"    | 7
-|    196||294||392
-|-
-| style="background:#f8f8ff"    | 8
-|    207||310||413
-|-
-| style="background:#f8f8ff"    | 9
-|    216||324||432
-|-
-| style="background:#f8f8ff"    | 10
-|    223||334||445
-|-
-| style="background:#f8f8ff"    | 11
-|    228||342||456
-|-
-| style="background:#f8f8ff"    | 12+
-|    231||346||461
-|}
-
-|    <!-- imperial -->
-{| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #ffefef;"
-|-
-!rowspan=2  style="background:#efefef"  | Curvature
-!colspan=3  style="background:#efdfdf"  | Max speed (mi/h)
-|-
-!   style="background:#efdfdf"      | Railroad
-!   style="background:#efdfdf"      | Monorail
-!   style="background:#efdfdf"      | Maglev
-|-
-| style="background:#f8f8ff"    | 0
-|     37|| 56|| 75 
-|-
-| style="background:#f8f8ff"    | 1
-|     54|| 82||109 
-|-
-| style="background:#f8f8ff"    | 2
-|     68||103||137 
-|-
-| style="background:#f8f8ff"    | 3
-|     82||123||164 
-|-
-| style="background:#f8f8ff"    | 4
-|     93||140||187 
-|-
-| style="background:#f8f8ff"    | 5
-|    104||156||208 
-|-
-| style="background:#f8f8ff"    | 6
-|    113||170||226 
-|-
-| style="background:#f8f8ff"    | 7
-|    121||182||243 
-|-
-| style="background:#f8f8ff"    | 8
-|    128||192||256 
-|-
-| style="background:#f8f8ff"    | 9
-|    134||201||268 
-|-
-| style="background:#f8f8ff"    | 10    ||138||207||276 
-|-
-| style="background:#f8f8ff"    | 11    ||141||212||283 
-|-
-| style="background:#f8f8ff"    | 12+   ||143||214||286 
-|}
-
-|}  <!-- end nested tables -->
-"Curvature" means the average number of wagons of the train between turns. However, very sharp turns (curvatures 0 and 1) are not averaged out in longer trains.
-
-*New railtypes can specify custom maximum curve speeds in the same steps as the three default types in the table.
-*Tilting train gain an additional bonus of 20% on the maximum speed.
-*Train acceleration and max speed are affected by engine power, maximum tractive effort (all engines and powered wagons combined), current speed, air drag, total train mass, and wagons/engines on slopes.
-*Non maglev train Acceleration spreadsheet can be found on tt-forums: [http://www.tt-forums.net/viewtopic.php?f=31&t=55972&p=960678#p960672 tt-forums] (There is no updated mathematical formulas for the latest release, just that spreadsheet)
-*Braking is twice acceleration except when entering a depot or a station.
-[[File:en/Manual/Game Mechanics/Speed-limits.png]]
-
-''See also: [[en/Archive/Manual/Settings/Realistic acceleration]] and [[en/Community/Corners]].''
-
-See aircraft_cmd.c, roadveh_cmd.c, ship_cmd.c, train_cmd.c, vechicle.c for code.
-
-== Town growth ==
-
-See [[en/Manual/Towns#town-growth]].
-
-[[Category:en/Manual/Playing]]
-[[Category:en/Development]]
+[[Category:en/Manual/Industries]]
+[[Category:en/Manual/Entities]]
