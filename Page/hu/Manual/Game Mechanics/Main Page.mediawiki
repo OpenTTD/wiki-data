@@ -1,0 +1,621 @@
+[[Translation:en/Manual/Game Mechanics/Main Page]]
+{{hu/Fordítás|en/Manual/Game Mechanics/Main Page|97}}{{hu/Manual/Tartalomjegyzék}}
+
+Ha mindig is kíváncsi voltál arra, hogyan számol a játék, például, hogy az állomások értékelése során mit vesz figyelembe, vagy hogyan történik a rakomány elosztása ugyanannak a gazdasági épületnek több állomása között, itt megfelelő tájékoztatást kaphatsz.
+
+==Vállalatok értékelése==
+
+A vállalatok értékelésének minden összetevője lineáris függvény, tehát ha a cél 50%-át éred el, a kapható pontok 50%-át kapod meg. A pénzben kifejezhető tényezőket a játék fontban tárolja; ha más pénznemben játszol, azt az aktuális játék árfolyamán átváltja.
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+! Összetevő !! Cél !! Pont (minimum) !! Pont (maximum) !! Százalék
+|-
+|Járművek száma||>=120||0 pont 0 járműért||100 pont legalább 120 járműért||0 - 10%
+|-
+|A cég állomáselemeinek száma||>=80||0 pont 0 elemért||100 pont legalább 80 elemért||0 - 10%
+|-
+|A legalább kétéves járművek legkisebb profitja||>=10.000 £||0 pont veszteségért vagy 0 £-ért||100 pont legalább 10.000 £-ért||0 - 10%
+|-
+|A legalacsonyabb negyedéves bevétel az elmúlt három évben||>=50.000 £||0 pont 0 £-ért||50 pont legalább 50.000 £-ért||0 - 5%
+|-
+|A legmagasabb negyedéves bevétel az elmúlt három évben||>=100.000 £||0 pont 0 £-ért||100 pont legalább 100.000 £-ért||0 - 10%
+|-
+|Leszállított rakományegységek száma az előző évben||>=40.000 egység||0 pont 0 egységért||400 pont legalább 40.000 egységért||0 - 40%
+|-
+|Az előző negyedévben leszállított rakományfajták száma||>=8||0 pont 0 rakományfajtáért||50 pont legalább 8 rakományfajtáért ||0 - 5% 
+|-
+|Jelenlegi bankegyenleg||>=10.000.000 £||0 pont 0 £-ért||50 pont legalább 10.000.000 £-ért||0 - 5%
+|-
+|Jelenlegi bankhitel||£0||0 pont >250.000 £-ért||50 pont 0 £-ért||0 - 5%
+|- style="background:#efefef"
+! Összesen !!!! 0 pont !! 1000 pont !! 0 - 100%
+|}
+
+<table>
+<tr valign="top"><td style="background:none; border:0px">
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!colspan="2"|A ''Vállalatok helyezése'' tábla
+|- style="background:#efefef"
+!Értékelés!!Cím
+|-
+|0 - 127||Mérnök
+|-
+|128 - 255||Forgalomigazgató
+|-
+|256 - 383||Szállításszervező
+|-
+|384 - 511||Útfelügyelő
+|-
+|512 - 639||Igazgató
+|-
+|640 - 767||Főigazgató
+|-
+|768 - 895||Alelnök
+|-
+|896 - 959||Elnök
+|-
+|960 - 1000||Nagytőkés
+|}
+</td><td style="background:none; border:0px">
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!colspan="2"|A rekordtábla 2050-ben
+|-
+!Értékelés!!Cím
+|-
+|0 - 319||Üzletember
+|-
+|320 - 447||Vállalkozó
+|-
+|448 - 575||Iparos
+|-
+|576 - 703||Tőkés
+|-
+|704 - 831||Mágnás
+|-
+|832 - 959||Mogul
+|-
+|960 - 1000||Az évszázad iparmágnása
+|}
+</td></tr></table>
+
+==Állomások értékelése==
+Ebben a részben az állomások értékelésére ható tényezőket mutatjuk be. A számításokra a játékban rakománytípusonként külön-külön kerül sor.
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Tényező!!Feltétel!!Értékelés pontban!!Értékelés %-ban
+|-
+| Az állomásra utolsóként behaladó jármű legnagyobb sebessége (max 255 km/h-ig) || 85 km/h (52 mph) fölött|| (Sebesség (km/h) - 85) / 4 || 0% - 17%
+|-
+|rowspan="3"|Az állomásra utolsóként behaladó jármű kora (évben) || 2 || 10|| 4%
+|-
+| 1 || 20 || 8%
+|-
+| 0 || 33 || 13%
+|-
+|rowspan="4"|A legutóbbi rakományfelvétel óta eltelt idő napokban <br>A "Feltétel" oszlopban szereplő napok számát 4-gyel kell szorozni, ha az utolsó jármű hajó volt.<br><small>(Megjegyzés: Ha a jármű rakományfelvételre kész volt ugyan, de rakomány nem volt, az értékelésnél úgy kell tekinteni, mintha rakományfelvétel történt volna)</small>|| 30 - 52,5 || 25 || 10%
+|-
+| 15 - 30 || 50 || 20%
+|-
+| 7,5 - 15  || 95 || 37%
+|-
+| Kevesebb mint 7,5 || 130 || 51%
+|-
+|rowspan="6"|Az állomáson várakozó rakományegységek száma || Több mint 1500 || -90 || -35%
+|-
+| 1001 - 1500 || -35 || -14%
+|-
+| 601 - 1000 || 0 || 0%
+|-
+| 301 - 600 || 10 || 4%
+|-
+| 101 - 300 || 30 || 12%
+|-
+| less - 100 || 40 || 16%
+|-
+|Szobor a településen a vállalat tulajdonosának||Épült||26|| 10%
+|-
+|Kis reklámkampány||Az állomás a település központjáról 10 mezőnyi távolságon belül van||+64|| +25%
+|-
+|Közepes reklámkampány||Az állomás a település központjától 15 mezőnyi távolságon belül van||+112|| +44%
+|-
+|Nagy reklámkampány||Az állomás a település központjától 20 mezőnyi távolságon belül van||+160|| +63%
+|-
+|Közúti jármű balesetet szenvedett||Az állomás a balesettől 22 mezőnyi távolságon belül||-160|| -63%
+|-
+|Vonat balesetet szenvedett||Állomás a balesettől 30 mezőnyi távolságon belül||-160|| -63%
+|}
+Az értékelés összpontszámát 255-tel kell osztani, és megkapjuk a %-os értékelést. A legmagasabb értékelés 100%. A reklámkampányok azonnali és ideiglenes lökést adnak a közeli állomások értékeléséhez, fokozatosan csökkenő hatással. 
+
+A gazdasági épülettől elszállítható rakomány mennyisége teljes egészében az állomás értékelésétől függ. Ha tehát a gazdasági épülettől elszállított rakomány mennyisége kicsi, annak valószínűleg az az oka, hogy az állomás értékelése is alacsony.
+
+Az állomások értékelését a játék 2,5 játéknaponként számítja; egy ilyen ciklus tartama alatt az értékelés nem változhat 2 pontnál többet. Ez alól a balesetek utáni ciklusok a kivételek. 
+
+'''Megjegyzés:'''  A pontos képlet itt található: "[http://vcs.openttd.org/svn/browser/trunk/src/station_cmd.cpp#L3163 UpdateStationRating()]", a station_cmd.cpp-ben.
+
+'''Megjegyzés'''  Ha az értékelés 50% alá csökken, az állomás elkezdi elveszíteni a rakományt.
+
+==A rakomány kihelyezése az állomásra==
+A játék a rakományt a kibocsátó gazdasági épület legfeljebb két berakó állomása között osztja el 2,5 napos ciklusonként. Ha kettőnél több, azonos maximális értékelésű állomás jön szóba, az állomás belső utasításától függ, melyik állomás kapja a rakományt.
+
+Ha csak egy állomás jön szóba, a küldött rakomány mennyisége = termelt mennyiség * állomás-értékelés %-ban, a legközelebbi egész értékre felkerekítve.
+
+Két lehetséges állomásra a számítás sokkal összetettebb. Először is: a második állomás értékelési pontjait a játék elosztja kettővel a további számításokhoz. Az első állomás elérhető rakományának számítása a következő: ((az első állomás értékelése pontban) * mennyiség + 1) / (az első állomás értékelése pontban + a második állomás értékelése pontban). Hasonló értékelések esetében ez a termelésnek kb. 2/3-a, nagyobb különbségek esetén növekszik. Az eredménnyel ugyanúgy számolunk tovább, mint egy állomás esetében. Ez kerül az első állomásra. Ha az első állomás nem kapja meg az elérhető mennyiséget, akkor az a rész nem kerül elszállításra egyáltalán. 
+A többi ki nem osztott rakomány -- már amennyiben marad -- kerül a második állomásra ugyanazzal a számítással, mint egy állomás esetében.
+
+
+==A helyi önkormányzat értékelése==
+Az értékelés korlátozza a játékos néhány tevékenységét; +500-zal kezdődik, és cselekvésekkel befolyásolható.
+
+Jelenleg kihasználhatod a játékot úgy, hogy kivágsz kb. 200 fát, és újraülteted őket. Ez az értékelést a minimum -1000-re csökkenti, aztán megemeli 220-ra.
+
+<table>
+<tr valign="top"><td style="background:none; border:0px">
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Értékelés pontszáma!!Értékelés
+|-
+| -1000 és -400 közt|| Szörnyű
+|-
+| -399 és -200 közt|| Nagyon rossz
+|-
+| -199 és 0 közt|| Rossz
+|-
+| 0 és 200 közt|| Közepes
+|-
+| 201 és 400 közt|| Jó
+|-
+| 401 és 600 közt|| Nagyon jó
+|-
+| 601 és 800 közt|| Kiváló
+|-
+| 801 és 1000 közt|| Kimagasló
+|}
+</td><td style="background:none; border:0px">
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!A játékos cselekvése!!Szükséges értékelés*!!Hatása az értékelésre
+|-
+|Állomás építése|| -200 || n/a
+|-
+|Külterületi útszakasz törlése|| 16 / 64 / 112 ||-18, le egészen -100-ig.
+|-
+|Belterületi útszakasz törlése|| 16 / 64 / 112 ||-50, le egészen -100-ig.
+|-
+|Városi alagút vagy híd lebontása|| 144 / 208 / 400 ||-250-től 0-ig.
+|-
+|Épület lebontása|| 40 - 300 ||-40-től -300-ig
+|-
+|Faültetés üres játékmezőre|| n/a ||+7, fel egészen 220-ig.
+|-
+|Játékmező megtisztítása fával|| n/a ||-35
+|-
+|Sikeres megvesztegetés|| n/a ||+200, fel egészen 800-ig.
+|-
+|Sikertelen megvesztegetés|| n/a || -50.
+|}
+<nowiki>*</nowiki> A "szükséges értékelés" összefügg a városi önkormányzatok engedékenységével <br>(ld. ''Haladó beállítások'' [[hu/Haladó beállítások/Gazdaság|Gazdaság]] ''Városi tanács hozzáállása a területének az átépítéséhez'' beállítást).
+</td></tr></table>
+
+A játékosok értékelése havonta automatikusan változik:
+* Az értékelés 5 pontonként nő, ha 200 pontnál kevesebb.
+* Az értékelés 12 pontonként nő minden olyan állomásért, melyen 50 napon belül történt rakománymozgás.
+* Az értékelés 12 pontonként csökken minden olyan állomásért, melyen 50 napon belül nem történt rakománymozgás.
+
+'''Példa:'''<br>
+A játékos értékelése a településen -300 (nagyon rossz), ahol két működő és egy inaktív állomása van.<br>
+5 pont + 2x12 pont - 15 pont = 14 pontnyi növekedés havonta az értékelésben.
+5pt + 2 * 12pt - 15pt = 14pt növekedés havonta.<br>
+(-200 - -300) pont / (14 pont/hó) = 8 hónap múlva engedi az önkormányzat a játékosnak, hogy új állomást építsen.
+
+A települési értékelés kódjainak helye a programban: town.h, town_cmd.c, tree_cmd.c, és road_cmd.c. alatt.
+
+==A gazdasági épületek termelése==
+Itt arról olvashatsz, hogyan határozza meg a játék, hogy egy gazdasági épület mennyit termeljen havonta. A táblázat a ''Haladó beállítások - [[hu/Haladó beállítások/Gazdaság#gazdasag-egyeb-beallitasok|Gazdaság - Egyéb beállítások]] - Egyenletes gazdaság'' bekapcsolt állapotával meghatározott kezdő termelési értékekre alapul. A termelés a 8 vagy 9 (erdők esetében néha a 10) többszöröse.
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Elsődleges gazdasági épület!!Termelt rakomány!!Kezdeti termelt mennyiség
+|-
+|Szénbánya||Szén||56 - 176
+|-
+|Erdő||Fa||48 - 152
+|-
+|Olajfúró torony||Olaj||56 - 176
+|-
+|Farm||Búza és Állat||40 - 112
+|-
+|Rézércbánya||Rézérc||56 - 112
+|-
+|Olajkút||Olaj||48 - 152
+|-
+|Vasércbánya||Vasérc||40 - 112
+|-
+|Bank||Értéktárgyak||24 - 64
+|-
+|colspan="5"|
+|-
+|Aranybánya||Arany||24 - 80
+|-
+|colspan="5"|
+|-
+|Gyémántbánya||Gyémánt||24 - 80
+|-
+|Gyümölcsültetvény||Gyümölcs||40 - 112
+|-
+|Gumifa ültetvény||Gumi||40 - 112
+|-
+|Vízforrás||Víz||48 - 152
+|-
+|Farm||Kukorica||40 - 128
+|-
+|Favágó||Fa||180 vagy 225 (ha a fa [[hu/Manual/Éghajlatok#szubtropusi|engedélyezett]])
+|-
+|colspan="5"|
+|-
+|Vattacukor-erdő||Vattacukor||48 - 152
+|-
+|Elemfarm||Elem||40 - 128
+|-
+|Kólakút||Kóla||48 - 136
+|-
+|Műanyagforrás||Műanyag||56 - 160
+|-
+|Buborékgenerátor||Buborék||48 - 152
+|-
+|Tejkaramella fejtő||Tejkaramella||40 - 112
+|-
+|Cukorbánya||Cukor||40 to 128
+|}
+
+===A termelés változása===
+A játék minden hónapban véletlenszerűen megváltoztatja néhány gazdasági épület termelését.
+
+====Alapértelmezett gazdasági szabályok====
+Az eredeti Transport Tycoon Deluxe-hoz hasonlóan egy 256x256 mezőből álló térképen havonként egy változás lehetséges (1 gazdasági épület termelése változik). A szám a térkép méretével fokozatosan emelkedik, amióta a "Napi termelési változások" funkció a játékba került (OpenTTD 0.7.0).
+
+*Egyenletes gazdaság esetében a gazdasági épületek havi 8-9 (a 400 tonna fölött termelő erdők esetében 10) alkalommal küldenek rakományt az állomásaikra. 
+Ezzel együtt a termelés hat szint szerint korlátozott: legalacsonyabb, alacsonyabb, normál (ha új játékot indítunk, vagy új gazdasági épület alapítására kerül sor), magasabb, 2x magasabb, és legmagasabb. A termelés ezek között a szintek között változik 50%-os mérséklődéssel, de akár 100%-os növekedéssel is.
+
+*Példák:
+**szénbánya: legalacsonyabb (32 vagy 40 t/hó), alacsonyabb (64 vagy 72), normál (120 vagy 135), magasabb (240 vagy 270), 2x magasabb (480 vagy 540) és legmagasabb (960 vagy 1080).
+**erdő:    legalacsonyabb (32 vagy 64 t/hó), alacsonyabb (35 vagy 70), normál ( 78 vagy 117), magasabb (208 vagy 260), 2x magasabb (416 vagy 468 vagy 520 (a tízszeri emelés lehetősége miatt)) és legmagasabb (832 vagy 936 vagy 1040).
+**Aranybánya: legalacsonyabb (12 vagy 18 zsák/hó), alacsonyabb (32 vagy 40), normál ( 56 vagy  63), magasabb (112 vagy 126), 2x magasabb (224 vagy 252) és legmagasabb (448 vagy 504).
+
+
+Az egyszerűség kedvéért lássuk, milyen lehetőségek vannak egy 256x256-os térképen (legfeljebb 1 változás/hó = havonként legfeljebb 1 gazdasági épület változtat a termelésén):
+
+*Az esély a termelés változására minden hónapban:
+** 50% a csak csökkenthető gazdasági épületek csökkenésére (ez jelenleg egyedül a mérsékelt égöv olajkútját jelenti)vagy
+** 50% 1/3 esélyre (=16,7%) hogy más gazdasági épület változtatja a termelését.
+
+
+*Ha termelésváltozás következik be (minden hónapban kb. 16,7% eséllyel):
+** Olyan gazdasági épületnél, ahol nincs vagy gyenge az elszállítási szolgáltatás (rakományának a kevesebb, mint 60%-a elszállítására kerül sor): '''33%''' eséllyel nő, '''67%''' eséllyel csökken a termelés.
+** Olyan gazdasági épületnél, amelynél jó (60% fölötti) az elszállítás: '''67%''' az esély a növekedésre, '''33%''' az esély a csökkenésre.
+** Alapértelmezett gazdasággal a kiváló elszállítás számára külön bónusz nincs.
+
+
+*Részleges változás esélyének számolásához, 50% * 1/3 * 33% = 5,56%:
+** Gyenge elszállítás: '''5,56%''' hogy havi 1 lehetséges változás: növekedés, és '''11,12%''' hogy havi 1 lehetséges változás: csökkenés.
+** Jó elszállítás: '''11,12%''' hogy havi 1 lehetséges változás: növekedés, és '''5,56%''' hogy havi 1 lehetséges változás: csökkenés.
+
+====Az egyenletes gazdaság szabályai====
+:''Értsük jól: nem a gazdasági válság nélküli gazdaságról van szó, hanem a ''Haladó beállítások - [[hu/Haladó beállítások/Gazdaság#gazdasag-egyeb-beallitasok|Gazdaság - Egyéb beállítások]] - Egyenletes gazdaság'' beállításról''
+
+*Esély a termelés változására havonként: '''4,5%''', vagyis a gazdasági épületek listájáról a termelő gazdasági épületek 4,5%-a megváltoztatja a termelését.
+
+
+*Ha a termelésváltozás megtörténik:
+** Egy olyan gazdasági épületnél, ahol nincs elszállítás, vagy van, de gyenge (60%-nál kisebb): '''33%''' esélye a növekedésnek, '''67%''' az esélye a csökkenésnek
+** Jó (60% fölötti) elszállítással termelő gazdasági épületnél '''67%''' az esélye a növekedésnek, '''33%''' az esélye a csökkenésnek
+** Kiváló (80% fölötti) elszállítással termelő gazdasági épületnél '''83%''' az esélye a növekedésnek, '''17%''' az esélye a csökkenésnek.
+
+
+*E kettő összeszorzásával, vagyis 4,5% * 33% = 1,5%:
+** Gyenge elszállítás: '''1,5%''' a növekedésre, és '''3,0%''' a csökkenésre
+** Jó elszállítás: '''3,0%''' a növekedésre és '''1,5%''' a csökkenésre
+** Kiváló elszállítás: '''3,75%''' növekedésre és '''0,75%''' a csökkenésre
+
+
+*Egyenletes gazdaság esetén a havi termelésváltozás 3 és 23% közt van.
+**Nagyon alacsony termeléssel (12-40 t/hó) rendelkező gazdasági épületek változása nagyobb.
+**Az elsődleges gazdasági épületek rakományt 8 vagy 9 alkalommal adnak ki havonta (ill. erdő esetében lehetséges, hogy tízszer). A havi termelés a gazdasági épületek 'bázisértékéből' indul ki, amely többszöröződik a havi 8 vagy 9 (400 t fölött termelő erdők esetében előfordulhat, hogy 10) alkalommal. Például a bázisérték egy szénbányánál 15 tonna, így a havi termelés 120 vagy 135 tonna. Ez a bázisérték legfeljebb 255-ig nőhet, így minden gazdasági épület lehetséges legmagasabb havi termelése 2040 vagy 2295 (erdő esetében a már említettek miatt 2550). [http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 (Forrás)]
+
+====Példák====
+Ha egy szénbánya termelésének 70%-át elszállítjuk, '''3%''' (4,5% * 67%) az esélye, hogy a termelés megnő 3-23 %-kal, és '''1,5%''' (4,5% * 33%) eséllyel csökken a termelés 3-23%-kal (de 13% átlagosan).
+
+(1 + (0,03 - 0,015) * 0,13) ^12 - 1 = 0,0237 vagyis '''2,37%'''
+
+A szénbánya átlagosan 2,37%-kal nő az első év után. Vagyis:<br>
+(1,0237 ^20) - 1 = 59,6% húsz év múlva<br>
+(1,0237 ^50) - 1 = 321,8% vagy '''3,22x''' ötven év múlva<br>
+(1,0237 ^100) - 1 = '''10,35x''' száz év múlva<br>
+
+
+80%-nál magasabb értékelésű gazdasági épülettel '''3,75%''' az esélye a növekedésnek, és '''0,75%''' a csökkenésnek.:<br>
+(1 + (0,0375 - 0,0075) * 0,13) ^12 - 1 = 0,0478 vagy '''4,78%'''
+
+A gazdasági épület kb. 4,78%-kal nő az első év után,<br>
+(1,0478 ^20) - 1 = '''2,54x''' húsz év múlva,<br>
+(1,0478 ^50) - 1 = '''10,32x''' ötven év múlva,<br>
+(1,0478 ^100) - 1 = '''106,62x''' száz év múlva<br>
+
+Jó szállítási szolgáltatás mellett átlag '''29,6 évig tart''', hogy megduplázódjon; kiváló elszállítással ez '''14,8 év'''. Ha egy játéknap 2,36 másodperc, a '''duplázási idő''' jó elszállítással '''7,1 óra'''; kiváló elszállítás mellett '''3,6 óra'''. A kb. 100 tonnás havi termelést a maximum-közeli 2100-ra növelni  '''130 évbe''' telik jó elszállítással, és '''65 évbe''' kiváló elszállítással.
+
+Ezzel együtt a játékban azt tapasztalod, hogy a gazdasági épületek a termelés véletlenszerűen változtatják. Ki kell emelni, hogy a fenti példák csak sok gazdasági épület hosszútávú megfigyelésével igazak, így az egyes gazdasági épületek ezektől az átlagoktól jelentősen el is térhetnek. Ha statisztikai szempontból nézzük, 6-ból 10 gazdasági épület még a legjobb elszállítással sem fog a 100 egység körüli termelésről a maximum körüli 2100-ra növekedni 65 év alatt. Sőt, kilencből kb. egy gazdasági épület jó elszállítás mellett csökkenti 50 év alatt a termelését.
+
+A gazdasági épület érzékenységének növelése érdekében a vagonok számát igazítsd a gazdasági épület termelékenységéhez (a legalacsonyabb termeléshez két vagont érdemes használni). Ilyen tehervonatokhoz rendszerint a ''Teljes berakodás'' utasítás használatos.
+
+
+'''Megjegyzés:'''  A pontos képlet itt található: "[http://vcs.openttd.org/svn/browser/trunk/src/industry_cmd.cpp#L2373 ChangeIndustryProduction()]", az industry_cmd.cpp-ben.
+
+==A szállítás kifizetése==
+A rakomány leszállításért számodra kifizetett összeg négy tényezőtől függ: a szállított rakomány mennyiségétől, a rakomány értékétől, a szállítás távolságától, és attól, hogy mennyire időben szállítod.
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Rakomány!!Egység!!Korai leszállítás<br> Idő (nap)!!Késedelmes leszállítás<br> Idő (nap)!!Kezdeti <br> szállítási<br> díj (font)
+|-
+|[[hu/Manual/Base Set/Cargos/Utasok|Utasok]]|| ||Azonnal||24||£39
+|-
+|[[hu/Manual/Base Set/Cargos/Értéktárgyak|Értéktárgyak]]||csomag||1||32||£91
+|-
+|[[hu/Manual/Base Set/Cargos/Állat|Állat]]||darab||4||18||£53
+|-
+|[[hu/Manual/Base Set/Cargos/Búza|Búza]]||tonna||4||40||£58
+|-
+|[[hu/Manual/Base Set/Cargos/Áru|Áru]]||Láda||5||28||£75
+|-
+|[[hu/Manual/Base Set/Cargos/Szén|Szén]]||tonna||7||nincs||£72
+|-
+|[[hu/Manual/Base Set/Cargos/Acél|Acél]]||tonna||7||nincs||£69
+|-
+|[[hu/Manual/Base Set/Cargos/Vasérc|Vasérc]]||tonna||9||nincs||£62
+|-
+|[[en/Fa]]||tonna||15||nincs||£61
+|-
+|[[hu/Manual/Base Set/Cargos/Olaj|Olaj]]||ezer liter||25||None||£54
+|-
+|[[en/Levél]]||csomag||20||90||£55
+|- style="background:#efefef"
+!colspan="5" align="center"|Szubarktikus
+|-
+|[[hu/Manual/Base Set/Cargos/Sarki búza|Búza]]||tonna||4||40||£58
+|-
+|[[hu/Manual/Base Set/Cargos/Papír|Papír]]||tonna||7||60||£66
+|-
+|[[hu/Manual/Base Set/Cargos/Arany|Arany]]||zsák||10||40||£71
+|-
+|[[hu/Manual/Base Set/Cargos/Étel|Étel]]||tonna||azonnal||30||£69
+|- style="background:#efefef"
+!colspan="5" align="center"|Szubtrópusi
+|-
+|[[hu/Manual/Base Set/Cargos/Gumi|Gumi]]||ezer liter||2||20||£54
+|-
+|[[hu/Manual/Base Set/Cargos/Gyümölcs|Gyümölcs]]||tonna||azonnal||15||£51
+|-
+|[[hu/Manual/Base Set/Cargos/Kukorica|Kukorica]]||tonna||4||40||£53
+|-
+|Trópusi [[hu/Manual/Base Set/Cargos/Fa|Fa]]||tonna||15||nincs||£97
+|-
+|[[hu/Manual/Base Set/Cargos/Rézérc|Rézérc]]||tonna||12||nincs||£59
+|-
+|[[hu/Manual/Base Set/Cargos/Víz|Víz]]||ezer liter||20||80||£57
+|-
+|[[hu/Manual/Base Set/Cargos/Gyémánt|Gyémánt]]||Zsák||10||nincs||£71
+|- style="background:#efefef"
+!colspan="5" align="center"|Játékvilág
+|-
+|[[hu/Cukor|Cukor]]||tonna||20||nincs||£54
+|-
+|[[hu/Játék|Játék]]|| ||25||nincs||£68
+|-
+|[[hu/Elem|Elem]]|| ||2||30||£53
+|-
+|[[hu/Cukorka|Cukorka]]||tonna||8||40||£75
+|-
+|[[hu/Tejkaramella|Tejkaramella]]||tonna||14||60||£58
+|-
+|[[hu/Kóla|Kóla]]||ezer liter||5||75||£59
+|-
+|[[hu/Vattacukor|Vattacukor]]||tonna||10||25||£61
+|-
+|[[hu/Buborék|Buborék]]|| ||20||80||£62
+|-
+|[[hu/Műanyag|Műanyag]]||ezer liter||30||nincs||£54
+|-
+|[[en/Szénsavas ital]]|| ||30||50||£76
+|}
+
+A kezdeti szállítási díj értéke alatt 100 egységnyi rakomány 1 mezőnyi távolságra történő szállítására értendő. A díj játék közben az infláció miatt emelkedik.
+
+
+Késedelmes szállítás bírsága:
+*A korai szállítási időt követő minden nap után a díjból 0,4% levonás jár.
+*A késedelmes szállítási időt követő minden nap után további 0,4% kötbér jár.
+*A bírság legmagasabb összege a szállítási díj 88%-a.
+
+
+'''Példák''' (nincs infláció):<br>
+Szállíts 200.000 liter olajt 20 mezőnyi távolságra 10 nap alatt:<br>
+2 * £54 * 20 mező * 100% = £2160
+
+Szállíts 100 csomag levelet 100 mezőnyi távolságra 100 nap alatt:<br>
+£55 * 100 mező * (1 - 80*0,004 - 10*0,004) = £3520
+
+<font color="blue">'''HINT calculate easy''':<br>
+Income = cargo units * cargo value * 0,4<br>
+[[en/Cargo value]] comes from the Y-axis on the specific transported goods graph in-game<br>
+measure your real delivery time in days and plot on x-axis
+This result will give you an easy estimation of your income with 5% deviation
+
+'''Notes:'''
+* The exact formula is much more complicated and slightly more accurate, due to rounding error when converting from larger discrete values.  See economy.cpp (GetTransportedGoodsIncome) and [[en/Manual/Game Mechanics/Cargo income]].
+
+* Distance is measured between the name-labeled tiles of the stations, not from the industries or by vehicle distance traveled.  It is computed by adding the differences in x and y tiles ([http://en.wikipedia.org/wiki/Manhattan_distance manhattan distance]), not straight-line distance.
+
+* Each cargo has a characteristic time at which payment is maximized, assuming you can keep it moving away from the source station at a constant speed.  For a cargo with a "late delivery" penalty, this time is typically around 70 days; for one without, this is typically around 130 days.</font>
+
+==Járműsebességek==
+Az OpenTTD egy úgynevezett "km-ish/h" mértékegységgel számol, ami mph/1,6. 
+Az átszámítás szorzója km-ish/h-ról km/h-ra: 1,00584, km-ish/h-ról mph-ra pedig 1,6.
+
+<font color="blue">A tile is, for vehicle speed purposes 664.(216) km-ish, 668 km or 415 miles long. This is based on the following facts: 
+*A tile has 16 sub locations per X/Y axis.
+*A vehicle has stores remainder of tile movement in a byte called subspeed, thus has 256 different values.
+*The vehicle's (raw) speed is added to subspeed. The resulting number is divided by 256, the remainder is stored in subspeed and the vehicle is moved quotient sub locations forward. For trains and aircraft the raw speed is in km-ish/h, for road vehicles/ships in 0,5 km-ish/h. For trains and aircraft this step is done twice a tick, whereas ships and road vehicles do it once a tick.
+*A day contains 74 ticks, and takes 24 hours.
+Now assume a vehicle going 1 km-ish/hour: (1 * 16 * 256) / (74 * 2) * 24 = 664.(216).
+
+The net result is that 100 km/hour is ~3,6 tiles/day.
+</font>
+
+==== Repülőgépek ====
+*A repülőgépek alapértelmezett beállítás szerint a listán szereplő sebességük 1/4-ével repülnek (ez a Haladó beállításoknál megváltoztatható).
+*A repülőgépek gyorsulása a repülőgép típusától függően változik, 144 km-ish/h/nap és 400 km-ish/h/nap közt.
+*A lerobbant repülőgépek 320 km-ish/h sebességgel szállnak.
+*A [[hu/Manual/Repülőterek|reptéri taxi]] sebessége 150 km-ish/h.
+
+==== Közúti járművek ====
+*A közúti járművek gyorsulása 37 km-ish/h/nap.
+*A közúti járművek lejtmenetben további 74 km-ish/h/nap gyorsulást kapnak.
+*A közúti járművek maximum sebességük felével kanyarodnak.
+*Hegymenetben a közúti járművek egy térközön négy alkalommal 10%-ot veszítenek a sebességükből. Ezt ellensúlyozza a 34-ish km/h gyorsulás, ami minden közúti járműre vonatkozik.
+
+(Megjegyzés: A fentiek alkalmazására nem kerül sor, amikor a közúti járművek fejlett gyorsulási modelljét használjuk.)
+
+==== Hajók ====
+*A hajók gyorsulása 37 km-ish/h/nap.
+*Megállított, majd elindított sebessége azonnal visszatér a megállítás előtti sebességre.
+
+==== Vonatok ==== 
+([[hu/Archive/Manual/Settings/Valósághű gyorsulás|Valósághű gyorsulásal]])<br>
+*A vonatok sebességére, ha elég erősek, a hegy- vagy lejtmenet ténye önmagában nincs hatással.
+*A vonatok ki- és behajtási sebessége vasúti járműtelepen 61 km/h.
+*A vonatok 45°-os kanyart lassulás nélkül tesznek meg.
+*Ha teljes hosszukon egynél több 45°-os kanyart tesznek ugyanabban az irányban, csúcssebességük a következők szerint korlátozott:
+
+{| style="margin: 1em 1em 1em 0;"    <!-- begin nested tables -->
+|-
+
+|    <!-- metric -->
+{| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #efefff;"
+|-
+!rowspan=2  style="background:#efefef"  | Kanyarodó
+!colspan=3  style="background:#dfdfff"  | Lehetséges <br>csúcssebesség (km/h)
+|-
+!   style="background:#dfdfff"      | Vasút
+!   style="background:#dfdfff"      | Egysínű <br>vasút
+!   style="background:#dfdfff"      | Maglev
+|-
+| style="background:#f8f8ff"    | 0 (90°-os kanyar)  
+|    61||91||121
+|-
+| style="background:#f8f8ff"    | 1 (2x45°-os kanyar)
+|     88||132||176
+|-
+| style="background:#f8f8ff"    | 2
+|    111||166||221
+|-
+| style="background:#f8f8ff"    | 3
+|    132||198||264
+|-
+| style="background:#f8f8ff"    | 4
+|    151||226||301
+|-
+| style="background:#f8f8ff"    | 5
+|    168||252||336
+|-
+| style="background:#f8f8ff"    | 6
+|    183||274||365
+|-
+| style="background:#f8f8ff"    | 7
+|    196||294||392
+|-
+| style="background:#f8f8ff"    | 8
+|    207||310||413
+|-
+| style="background:#f8f8ff"    | 9
+|    216||324||432
+|-
+| style="background:#f8f8ff"    | 10
+|    223||334||445
+|-
+| style="background:#f8f8ff"    | 11
+|    228||342||456
+|-
+| style="background:#f8f8ff"    | 12+
+|    231||346||461
+|}
+
+|    <!-- imperial -->
+{| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #ffefef;"
+|-
+!rowspan=2  style="background:#efefef"  | Kanyarodó
+!colspan=3  style="background:#efdfdf"  | Lehetséges <br>csúcssebesség (mph)
+|-
+!   style="background:#efdfdf"      | Vasút
+!   style="background:#efdfdf"      | Egysínű <br>vasút
+!   style="background:#efdfdf"      | Maglev
+|-
+| style="background:#f8f8ff"    | 0
+|     37|| 56|| 75 
+|-
+| style="background:#f8f8ff"    | 1
+|     54|| 82||109 
+|-
+| style="background:#f8f8ff"    | 2
+|     68||103||137 
+|-
+| style="background:#f8f8ff"    | 3
+|     82||123||164 
+|-
+| style="background:#f8f8ff"    | 4
+|     93||140||187 
+|-
+| style="background:#f8f8ff"    | 5
+|    104||156||208 
+|-
+| style="background:#f8f8ff"    | 6
+|    113||170||226 
+|-
+| style="background:#f8f8ff"    | 7
+|    121||182||243 
+|-
+| style="background:#f8f8ff"    | 8
+|    128||192||256 
+|-
+| style="background:#f8f8ff"    | 9
+|    134||201||268 
+|-
+| style="background:#f8f8ff"    | 10    ||138||207||276 
+|-
+| style="background:#f8f8ff"    | 11    ||141||212||283 
+|-
+| style="background:#f8f8ff"    | 12+   ||143||214||286 
+|}
+
+|}  <!-- end nested tables -->
+A '''"Kanyarodó"''' oszlopban szereplő értékek a kanyarok közti vagonok átlagos számát mutatja (átlagszámításra nem kerül sor hosszabb vonatok esetében a nagyon éles (0 és 1) kanyarban).
+
+*Előfordulhat, hogy NewGRF-ben megjelenő újabb vasúttípusok a fenti táblázatban szereplő alapértékekből kiindulva saját kanyarodási csúcssebességgel dolgoznak.
+*[http://hu.wikipedia.org/wiki/Billen%C5%91szekr%C3%A9nyes_j%C3%A1rm%C5%B1vek|Billenőszekrényes vonatok] kanyarban további 20%-os bónuszban részesülnek.
+*A vonatok gyorsulását és csúcssebességét a mozdony (valamint a meghajtott vagonok) teljesítménye és vontatóereje, az aktuális sebesség, a légellenállás, a vonat összsúlya,  valamint a mozdony (kocsik) lejtős mezőn haladása is befolyásolja.
+*A nem maglev-vonatok gyorsulási táblázatát itt találhatod: [http://www.tt-forums.net/viewtopic.php?f=31&t=55972&p=960678#p960672 tt-forums] (az OpenTTD újabb kiadásaihoz átdolgozott képletek nem jelentek meg, csak a táblázat van).
+*A fékezés a gyorsulás kétszerese, ez alól kivétel az állomásra és a vasúti járműtelepre történő behajtás.
+[[File:en/Manual/Game Mechanics/Speed-limits.png]]
+
+''Lásd még: [[hu/Archive/Manual/Settings/Valósághű gyorsulás|Valósághű gyorsulás]] és [[hu/Community/Kanyarok|Kanyarok]].''
+
+A programkódokért ld. aircraft_cmd.c, roadveh_cmd.c, ship_cmd.c, train_cmd.c, vechicle.c.
+
+== A települések növekedése ==
+
+Lásd [[hu/Manual/Települések#a-telepules-fejlodese]].
+
+[[Category:hu/Manual/Játszás]]
+[[Category:hu/Fejlesztés]]
