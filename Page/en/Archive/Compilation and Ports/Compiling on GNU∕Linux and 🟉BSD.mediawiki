@@ -3,7 +3,7 @@
 
 A quick guide to get started with OpenTTD development on Linux and other *nix-like systems. For help with compiling on various platforms, join [irc://irc.oftc.net/openttd.compile #openttd] on OFTC.
 
-==Required/recommended software==
+==Required/recommended software and how to install it==
 * Compiler: gcc/g++ or CLang/CLang++ (this guide uses GCC). Required.
 * Libraries:
 ** Graphics and sound: SDL and/or Allegro. Required except for dedicated servers. LibPNG (depends on ZLib) is also recommended, it allows making PNG screenshots.
@@ -12,14 +12,17 @@ A quick guide to get started with OpenTTD development on Linux and other *nix-li
 ** Text: Fontconfig (TrueType fonts), ICU (list sorting). Recommended.
 * Utility programs:
 ** Version control system, if you want to keep your source recent: Mercurial, Subversion or Git. Subversion is fastest and is thus the one used in this guide.
-** To apply patches: <code>patch</code>.
+** To apply patches: the ''patch'' utility.
+
+Instructions for the various distributions should also be applicable to derivatives of them. Text that looks <code>like this</code> is a shell command.
 === Mandriva ===
 (tested on Mandriva 2009 Spring)
+
 <code>urpmi gcc gcc-c++ libsdl-devel zlib1-devel subversion patch patchutils</code>
-=== Debian and Ubuntu ===
-Tested on Ubuntu 13.04
+=== Debian, Ubuntu===
+Tested on Ubuntu 13.10
 ==== Automatically ====
-For the same dependencies as the official package:
+To install the same dependencies used by the official packages, run:
 
 <code> sudo apt-get build-dep openttd</code>
 
@@ -76,7 +79,7 @@ In one command (as root):
 ==== Automatically ====
 For the same dependencies as the official package:
 
- <code>$ zypper source-install --build-deps-only openttd</code>
+ <code>zypper source-install --build-deps-only openttd</code>
 
 ==== Manually ====
 Use YaST to download:
@@ -91,11 +94,11 @@ Use YaST to download:
 * subversion (optional, could also be mercurial or git)
 
 You can use the command-line tool `zypper' as well:
- <code>$ zypper install gcc-c++ SDL-devel zlib-devel libpng-devel libicu-devel lzo-devel freetype2-devel subversion</code>
+ <code>zypper install gcc-c++ SDL-devel zlib-devel libpng-devel libicu-devel lzo-devel freetype2-devel subversion</code>
 === Gentoo ===
 
 As root run
-<code>$ emerge --onlydeps -av openttd && emerge subversion</code>
+<code>emerge --onlydeps -av openttd && emerge subversion</code>
 This install all dependencies as well as Subversion.
 
 If you want to use the most current version (aka TRUNK/SVN), run the following, again as root:
@@ -149,7 +152,7 @@ The most current version of the official code is stored in our subversion reposi
 
 To obtain the source code from the subversion server type:
 
-<code>$ svn checkout svn://svn.openttd.org/trunk openttd</code>
+<code>svn checkout svn://svn.openttd.org/trunk openttd</code>
 
 from command line to dump the code into the directory <code>openttd/</code>. We will refer to this directory as you "working copy" from now on. Also, all svn commands given from now on assume your working directory is the <code>openttd/</code> directory.
 
@@ -159,7 +162,7 @@ You can now skip to step 3 if you just want to compile the latest version.
 
 If you have previously downloaded the code and a new version is available (iow, new revisions have been committed), you can update your working copy to the latest version. Inside your working copy run the following:
 
-<code>$ svn update</code>
+<code>svn update</code>
 
 Also, if you have made any local changes to the source, these will be preserved and merged with changes in svn. If a conflict between the changes occurs, it will be flagged as conflicted (Marked "C" in <code>svn status</code>) (still preserving your local changes). For more information about resolving conflicts, look at the SVN Book at [http://subversion.tigris.org].
 
@@ -168,7 +171,7 @@ Also, if you have made any local changes to the source, these will be preserved 
 If you have made changes to your source that you want to share or upload as a patch, you can ask svn to generate a diff file.
 The command
 
-<code>$ svn diff > mypatch.diff</code>
+<code>svn diff > mypatch.diff</code>
 
 creates a diff file (also referred to as "patch") which you can submit to the developers to share your improvements.
 
@@ -176,11 +179,11 @@ creates a diff file (also referred to as "patch") which you can submit to the de
 
 You can undo changes to a file with:
 
-<code>$svn revert filename</code>
+<code>svn revert filename</code>
 
 or to your entire working directory with:
 
-<code>$svn revert -R .</code>
+<code>svn revert -R .</code>
 
 ==== Applying a patch ====
 
@@ -191,42 +194,42 @@ To apply a patch (diff file) to the source code, update your source code to the 
  --- foo.c (revision 1234)
  +++ foo.c (working copy)
  </code>
-To update your source code to r1234, type
+To update your source code to r1234, run
 
-<code>$ svn update -r 1234</code>
+<code>svn update -r 1234</code>
 
 Then you're ready to merge the patch file
 
-<code>$ patch -p0 < mydiff.diff</code>
+<code>patch -p0 < mydiff.diff</code>
 
 Now (optionally) update the source code to the newest revision with
 
-<code>$ svn update</code>
+<code>svn update</code>
 
 If this produces conflicts (files marked with "C"), tough luck, the patch doesn't work for the latest revision (you can always revert and retry the patching, skipping this last step and playing an older version).
 
 == Compiling and running ==
-Run
+<code>cd <directory in which the OpenTTD source code is located></code> and
 
-<code>$ ./configure</code>
+<code>./configure</code>
 
 Your system's default compiler (usually GCC) will be used - if you want to use a specific compiler, temporarily set the CC and CXX environment variables accordingly: <code>$ CC=<command for C compiler> CXX=<command for C++ compiler> ./configure</code>
 
-NOTE: Without a compiler configured, you will receive the "''please define the CC/CXX environment to where it is located''" message when running configure. Define (export) it, or pass it as "CC=" to the command in the example above.
+NOTE: Without a compiler configured, you will receive the "''please define the CC/CXX environment to where it is located''" message when running configure. Define (<code>export</code>) them, or pass them as given in the example above.
 
 This will create a Makefile, then run make.
-If you have changed files or updated your source, only modified code will be recompiled. 
+If you have changed files or updated your source, only modified code will be recompiled. Now:
 
-<code>$ make --jobs=<#></code>
+<code>make --jobs=<#></code>
 
 On multi-core systems, using a high thread number (the #) can speed up compiling greatly; it's commonly recommended to use the number of logical cores (obtainable using <code>getconf _NPROCESSORS_ONLN</code> on Linux at least) plus one. (The theory behind this is that if one compiling thread is currently limited by I/O speed, the others should still fully saturate the available hardware threads.) 
-For example, on an Intel i5 with two hyper-threaded cores (i.e. four logical ones), make -j5 took 1 minute and 33 seconds, and plain make three minutes and 18 seconds.
+For example, on an Intel i5 with two hyper-threaded cores (i.e. four logical ones), make --jobs=5 took 1 minute and 33 seconds, and plain make three minutes and 18 seconds.
 
-There should now be an OpenTTD executable in the <code>bin</code> directory.
+There should now be an OpenTTD executable in the ''bin'' subdirectory. To install the OpenTTD binary to a directory included in your PATH variable, so it can be run as only <code>openttd<code>, do a <code>make install</code> as root/using sudo.
 
 == Optional original TTD data files ==
 
-Copy the GRF files from Transport Tycoon Deluxe to the <code>data/</code> directory:
+Copy the GRF files from Transport Tycoon Deluxe to the ''data'' subdirectory:
 
 '''Windows version'''
 *sample.cat
@@ -243,41 +246,36 @@ Copy the GRF files from Transport Tycoon Deluxe to the <code>data/</code> direct
 *TRGH.GRF
 *TRGI.GRF
 *TRGT.GRF
-== Playing the soundtrack==
 
-If you want the original TTD music you need to copy the whole <code>gm/</code> directory. Additionally the TiMidity program is required:
+For the original TTD music, do the same with the contents of the TTD ''gm'' directory. 
+== Installing TiMidity and sound fonts==
 
 '''In Debian/Ubuntu''':
- sudo apt-get install timidity freepats
+ <code>sudo apt-get install timidity freepats</code>
 
 '''In Fedora''':
- yum install timidity++ 
+ <code>yum install timidity++</code>
 
 Timidity wants to talk to ESD, so you will need to "enable software sound mixing (ESD)" (System &rarr; Preferences &rarr; Sound).
-To run OpenTTD with music support:
-<code>$ ./openttd -m extmidi</code>
 
 '''In Arch Linux''':
-  pacman -S timidity++ timidity-freepats
-  cp /etc/timidity++/timidity-freepats.cfg /etc/timidity++/timidity.cfg
+ <code> pacman -S timidity++ timidity-freepats
+  cp /etc/timidity++/timidity-freepats.cfg /etc/timidity++/timidity.cfg</code>
 
 == Debian package ==
 {{en/Todo|Doesn't actually work, at least not on Ubuntu 13.04.}}
-You should be able to build a Debian package from the latest source using the supplied debian directory. You can replace step 3 by this. This Debian directory is, conforming to OpenTTD standards, put inside the <code>os/</code> directory and needs to be moved a level up first:
+You should be able to build a Debian package from the latest source using the supplied debian directory. You can replace step 3 by this. This Debian directory is, conforming to OpenTTD standards, put inside the ''os'' subdirectory and needs to be moved a level up first:
 
-<code>$ mv os/debian .</code>
+<code>mv os/debian .</code>
 
 After that, use normal debian tools to build the package:
 
-<code>$ dpkg-buildpackage -rfakeroot -uc -us</code>
+<code>dpkg-buildpackage -rfakeroot -uc -us</code>
 
 Installing can then be done by executing (as root):
-<code>$ dpkg -i ../openttd-<version>_<something>.deb</code>
+<code>dpkg -i ../openttd-<version>_<architecture>.deb</code>
 
-You now have OpenTTD installed. 
 
-In step 3 you need to copy the datafiles to <code>/usr/share/games/openttd/data</code>, since they are not included in the .deb due to licensing issues.
+Data files (original TTD as well as replacement) will need to be manually copied to ''/usr/share/games/openttd/data'', since they are not included in the .deb due to licensing issues.
 
-Instead of running OpenTTD as <code>$ bin/openttd</code>, you can just type <code>$ openttd</code> to start it.
-
-In step 5, you need to copy the music files from the gm directory into <code>/usr/share/games/openttd</code>.
+Now, when you run <code>openttd</code>, you will always be starting the version you have just built and installed.
