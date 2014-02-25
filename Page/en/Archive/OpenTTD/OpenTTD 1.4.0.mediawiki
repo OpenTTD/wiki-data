@@ -2,9 +2,10 @@
 {{en/Archive/OpenTTD/Navigation}}
 {{en/Archive/OpenTTD/NaviPrevNext|prev=en/Archive/OpenTTD/OpenTTD 1.3.3|next=en/Roadmap 1.5|date=TBA}}
 
-You can download this release from [http://www.openttd.org/en/download-testing/1.4.0-beta3 openttd.org].
+You can download this release from [http://www.openttd.org/en/download-testing/1.4.0-beta5 openttd.org].
 
 ==Major new features==
+* Larger (4096x4096) map size
 * [[en/Manual/Passenger and cargo distribution]]
 * [[en/GoalScript|NoGo]] improvements
 * [[en/NewObject]] improvements
@@ -13,6 +14,48 @@ You can download this release from [http://www.openttd.org/en/download-testing/1
 * Bug fixes
 
 ==Changelog==
+===1.4.0-beta5 (2014-02-25)===
+* Feature: Warn the user about empty setting search results, and about missing setting search results due to filtering (r26322, r26321)
+* Feature: [NewGRF] Extend object variable 0x60 to also return the view {{en/Flyspray|5696}} (r26316)
+* Feature: Allow map sizes up to 4096x4096 (r26319)
+* Feature: [NoGo] Allow GS to hide story page date (r26307)
+* Feature: [NoGo] More story APIs: RemovePageElement, GetCompany, GetDate, SetDate (r26306)
+* Feature: [NoGo] ScriptStoryPageElementList() - a list of all story page elements for a given page (r26305)
+* Feature: [NoGo] ScriptStoryPageList() - a list of all story pages (r26303)
+* Change: improve the performance of map generation (r26313, r26312, r26311, r26310, r26309, r26308)
+* Fix: Station sizes > 8 were always allowed {{en/Flyspray|5929}} (r26375)
+* Fix: [NewGRF] Mixed up callback mask flags in station inspect window {{en/Flyspray|5928}} (r26374)
+* Fix: Calling DoCommandP during the gameloop cleared pending persistent storage changes {{en/Flyspray|5831}} (r26371)
+* Fix: [Windows] Use a separate event to indicate that the drawing thread has finished initialising, preventing potential deadlocks (r26367)
+* Fix: [Windows] Protect the whole video driver from concurrent access (r26366)
+* Fix: [Windows] Do not draw the cursor when its sprite is not ready and set _screen.dst_ptr immediately when the buffer changes {{en/Flyspray|5867}} (r26365)
+* Fix: Writing out of the bounds of the rail type map {{en/Flyspray|5892}} (r26364)
+* Fix: Reset the default window size icon size just like all the other cached icon sizes {{en/Flyspray|5906}} (r26362)
+* Fix: ClientSizeChanged is only called via WndProcGdi which already has the mutex {{en/Flyspray|5922}} (r26360)
+* Fix: Some order options do not combine with others, e.g. go via + full load {{en/Flyspray|5845}} (r26357)
+* Fix: Protect all VideoDriver_SDL methods with the (now recursive) _draw_mutex (r26351)
+* Fix: Make sure link graph jobs can delete themselves after SLA_NULL {{en/Flyspray|5898}} (r26347)
+* Fix: Call Layouter::ReduceLineCache from GenerateTownName in all cases to keep cache size in check {{en/Flyspray|5870}} (r26346)
+* Fix: Rewrite SmallStack so that it does not use a pool and is reentrant (r26343)
+* Fix: Reroute cargo when automatic distribution is switched off {{en/Flyspray|5902}} (r26341)
+* Fix: Do not redraw the link graph overlay if it is empty {{en/Flyspray|5908}} (r26338)
+* Fix: Some inconsistencies regarding link graph (job) IDs (r26331)
+* Fix: The case of rerouting cargo from one VehicleCargoList to another (r26330)
+* Fix: Take care of next_station when reassigning from MTA_DELIVER to MTA_TRANSFER {{en/Flyspray|5901}} (r26327)
+* Fix: when autosaving the message about a save already happening could be shown, even though the code's intention was to not show it {{en/Flyspray|5871}} (r26326)
+* Fix: Check whether NewGRF change vehicle capacity when they are not supposed to, and truncate cargo appropiately if they are allowed to {{en/Flyspray|5897}} (r26317)
+* Fix: The giant-screenshot confirmation window only triggered for ridiculously big screenshots, for ludicrously big ones {{en/Flyspray|5899}} (r26314)
+
+===1.4.0-beta4 (2014-02-06)===
+* Change: [NewGRF] Make vehicle variable 61 return 'not available' instead of zero when using it in invalid callback contexts (r26294)
+* Feature: Display speed limit also for road bridges in the TileInfo window {{en/Flyspray|5849}} (r26277)
+* Fix: [NoGo] Invalid DoCommand return callback for method returning bool (r26298)
+* Fix: Correctly identify opposite ends of bridges and tunnels when converting rails {{en/Flyspray|5866}}, {{en/Flyspray|5888}} (r26291)
+* Fix: Prevent infinite recursion also in RefreshLinks {{en/Flyspray|5878}} (r26283)
+* Fix: [NoAI] Some RemoveRail methods required to set a valid railtype, though it was not used anyway. Remove the need to set one {{en/Flyspray|5853}} (r26279)
+* Fix: Do not spawn link graph jobs for link graphs with only one node {{en/Flyspray|5874}} (r26276)
+* Fix: [NewGRF] If NewGRF provided the same station name for different industry types, stations would end up with same name. So also consider the provided name, not only the industry type (r26275)
+
 ===1.4.0-beta3 (2014-01-21)===
 * Feature: Several small performance improvements with the SSE blitters (r26260, r26259, r26256, r26255, r26254)
 * Feature: [NewGRF] Add StringCodes 9A 1B, 9A 1C and 9A 1D to display amounts of cargo (r26244)
@@ -23,7 +66,6 @@ You can download this release from [http://www.openttd.org/en/download-testing/1
 * Fix: Possible out of bounds reads with the sse blitters {{en/Flyspray|5854}}, {{en/Flyspray|5855}} (r26247)
 * Fix: Do not overreserve after autorefit, but do reserve mail for aircraft (r26236)
 * Fix: Decimal and digit separators were swapped for Korean language (r26235)
-
 
 ===1.4.0-beta2 (2014-01-07)===
 * Feature: Blitter autoselection is now based on full animation state, so a non-animated specialised blitter will generally be chosen when animation is turned off (r26217)
@@ -124,6 +166,12 @@ You can download this release from [http://www.openttd.org/en/download-testing/1
 * Remove: Ordered refit with subtypes, since the cases where it worked were corner cases rather than the general case {{en/Flyspray|3764}} (r25041)
 
 ==See Also==
+* {{en/Forum|topic=70077|Forum topic for 1.4.0-beta5}}
+* {{en/OTTDNewsArticle|197|The 1.4.0-beta5 news article}}
+* {{en/Forum|topic=69978|Forum topic for 1.4.0-beta4}}
+* {{en/OTTDNewsArticle|195|The 1.4.0-beta4 news article}}
+* {{en/Forum|topic=69868|Forum topic for 1.4.0-beta3}}
+* {{en/OTTDNewsArticle|194|The 1.4.0-beta3 news article}}
 * {{en/Forum|topic=69794|Forum topic for 1.4.0-beta2}}
 * {{en/OTTDNewsArticle|193|The 1.4.0-beta2 news article}}
 * {{en/Forum|topic=69689|Forum topic for 1.4.0-beta1}}
