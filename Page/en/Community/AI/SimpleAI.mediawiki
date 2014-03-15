@@ -1,0 +1,87 @@
+[[Translation:en/Community/AI/SimpleAI]]
+{{en/Development/Script/Navigation}}
+SimpleAI is a remake of the old AI which was present in the game until version 0.6.3 (and the original Transport Tycoon as well). It build simple point-to-point routes in a similar fashion to the old AI, but it uses a better pathfinder instead of the algorithm that the old AI used.
+
+SimpleAI uses trains, road vehicles and aircraft, and is compatibile with all cargo types.
+
+__TOC__
+
+==General information==
+
+* '''Author:''' Brumi
+* '''First release:''' January 4, 2010
+* '''Latest release:''' July 21, 2013
+* '''License:''' GPL v2
+* '''Download link:''' [http://binaries.openttd.org/bananas/ai/SimpleAI-9.tar.gz SimpleAI-9.tar.gz]
+* '''Forum link:''' [http://www.tt-forums.net/viewtopic.php?f=65&t=44809 link] (report bugs here)
+
+==Building style==
+
+The following pictures show the characteristic style of SimpleAI:
+{|
+|[[File:en/Community/AI/Simpleai.png|frame|none|A railway station and a lorry loading bay]]
+|[[File:en/Community/AI/Simpleai passinglane.png|frame|none|Passing lanes built by the AI]]
+|}
+Road vehicle stations are built together with depots, and usually 5-25 road vehicles can run on a single route (the upper limit is configurable). The AI doesn't use trams nor articulated vehicles, because it only builds terminus style stations.
+
+Railways can be ''single'' or ''double'': On ''single'' railways, only one train runs which is 2 or 3 tiles long, depending on the length of the route. The stations have one platform each. On ''double'' railways, two 3-tile long trains run on the route, and there are two passing lane sections where the trains can pass each other. The rest of the rail line is not doubled. The stations have two platforms each.
+
+The AI uses airplanes as well, and tries to re-use airports if more than one air route is connected to the same town.
+
+==Behaviour==
+
+SimpleAI builds its routes randomly, so it is suitable for running multiple instances of itself, it usually won't compete with itself at the same locations. Although it goes for subsidies, so if there are mutiple instances of SimpleAI, it is advisable to turn down the frequency of going after subsidies (this setting is described later).
+
+By default, the AI won't compete with other companies at industries where the service is already good enough. The limit over which a service is considered 'good enough' can be configured through the settings.
+
+The AI manages its routes after they're built, which means that unprofitable vehicles are sold, old vehicles are replaced, and crashed vehicles are re-built. It will also remove unused stations (for example, if all vehicles using the station were unprofitable and got sold).
+
+The AI will try to avoid building level crossings if possible.
+
+==NewGRF compatibility==
+
+SimpleAI is mostly compatibile with NewGRF vehicle and industry sets. It has been tested with the ECS Vectors and the FIRS Industry Replacement set, and various vehicle sets including eGRVTS, UKRS, NARS, NUTS, the 2cc Trainset, the Aviators Aircraft set, and the OpenGFX+ vehicle sets. Itt will try to transport all cargoes available, and it will build NewGRF railway stations if available (for example, the Industrial Staions Renewal).
+
+However, the AI has problems with NewGRFs that include additional railway types, and may have financial problems if certain vehicles have high running costs.
+
+[[File:en/Community/AI/Simpleai firs.png|frame|none|SimpleAI with the FIRS Industry Replacement Set, the UK Renewal Set and the Industrial Stations Renewal]]
+
+==Configuration==
+
+[[File:en/Community/AI/Simpleai configuration.png|frame|none|The configuration window of SimpleAI]]
+
+* '''Number of days to start this AI after the previous one (give or take)''': This is a setting which appears with all AIs, here you can configure the waiting time before the AI is started.
+
+* '''Use trains / road vehicles / aircraft''': Configure whether this instance of SimpleAI will use these types of transport.
+
+* '''Build new routes if transported percentage is smaller than this value''': Here you can configure how competitive SimpleAI will be, the higher the setting, the more competitive. For example, if this is set to 60, the AI will refrain from competition at industries where 60% of the produced cargo is already transported.
+
+* '''The chance of taking subsidies''': Here you can configure how frequently the AI will go for subsidies, the higher the setting, the more frequently.
+
+* '''The maximum number of road vehicles on a route''': The AI won't build more road vehicles on a route than this number, regardless of how profitable the route is.
+
+* '''Days to wait betweeen building two routes''': With this setting, the AI can be configured to build new routes slower.
+
+* '''Slowdown effect (how much the AI will become slower over time)''': If enabled, the AI will wait more and more between building two routes as tim progresses. With this you can prevent SimpleAI from continuously building new routes at the later stages of the game.
+
+* '''Build company headquarters near towns''': If enabled, the HQ will be built in a town. If disabled, the HQ will be built near the first station the AI builds (this is the behaviour of the old AI).
+
+* '''Signal type to be used''': You can set the type of signal the AI will use: one-way block signals (default), two-way block signals (original Transport Tycoon behaviour) or path signals (which will make level crossings safer for road vehicles as the crossings will close in advance).
+
+* '''Use NewGRF rail staions if available''': If this setting is on, the AI will build different rail stations based on the cargo type, for example, with the Industrial Stations Renewal.
+
+==Limitations==
+
+SimpleAI is not a competitive AI, so it doesn't build routes which have the highest profit, instead it builds randomly. It may get into financial trouble if running costs are too high (due to a NewGRF), inflation is enabled or infrastructure maintenance costs are enabled.
+
+It is advisable to enable 90 degree turns for railways when using SimpleAI, as the default (old AI-style) station pattern includes a 90 degree turn when the train is leaving the depot in the direction og the other station. If 90 degree turns are disabled, the train leaving the depot will go to the station first, turn around there and leave afterwards.
+
+[[File:en/Community/AI/Simpleai 90degturn.png|frame|none|90 degree turn]]
+
+It is also advisable to have the ''build on slopes'' setting on, as the AI will not do any terraforming while building routes.
+
+==See also==
+
+* [http://www.tt-forums.net/viewtopic.php?t=44809 Forum link]
+* [[en/Community/AI/Comparison of AIs]]
+* [[en/Manual/AI settings]]
