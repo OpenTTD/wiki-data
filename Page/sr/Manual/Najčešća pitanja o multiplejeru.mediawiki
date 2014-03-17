@@ -30,51 +30,52 @@ Primer:
 =====Koliki je protok potreban za igranje?=====
 :* Približna stopa je 1.2 kbit/sek aplouda i 1.2 kbit/sek daunloda po klijentu. Množeći tako dobijene cifre, server sa deset igrača koristio bi približno 12 kbit/sek aplouda i 12 kbit/sek daunloda (tačne cifre zavise od retransmisije itd.). Polazeći od navedenog, server koji bi radio non-stop, sa desetoricom igrača, potrošio bi 60 GB protoka mesečno (30 GB za daunload i 30 GB za apload) ako je svih 10 igrača u igri čitav mesec. Za jednog igrača, za sat igranja, biće potrebno oko 8 MB protoka, uz dodatak protoka za neophodna preuzimanja.
 
-=====People get disconnected while joining, how to fix that?=====
-When a new player connects, he needs to download the entire map. If you disabled ''pause_on_join'', the game continues meanwhile. By the time he has finished, he thus needs to catch up with the changes made since the start of the download.
-Obviously, a new player needs to have a fast enough connection (and machine), otherwise he will take forever to catch up.
+=====Igra često izbacuje ljude sa servera, kako da rešim to?=====
+Kada se novi igrač poveže, treba da preuzme čitavu mapu. Ako je opcija ''pause_on_join'' isključena, partija neće biti pauzirana. Kada se preuzimanje završi, novi igra treba da sustigne propušteno dok je preuzimanje trajalo.
+Logično, novi igrač treba da ima dovoljno brzu vezi i računar, inače će čitav proces potrajati. 
 
-To give you control over how long this may take, the folloing variables can be set:
+Da bi imali kontrolu nad trajanjem čitavog procesa, podesite sledeće promenjive: 
 {| class="wikitable" style="text-align:left"
 |+Timing variables for network-play
 |-
 ! Variable !! Values !! Meaning
 |-
-| max_join_time || 0-65535 || Maximum amount of time, in game ticks, a client may take to sync up during joining.
+| max_join_time || 0-65535 || Maksimalno vreme, u otkucajima, koje klijent ima na raspolaganju da se priključi.
 |-
-| pause_on_join || true/false || Pause the game when people join.
+| pause_on_join || true/false || Pauzira igru dok se novi igrači ne priključe.
 |-
-| max_download_time || 0-65535 || Maximum amount of time, in game ticks, a client may take to download the map.
+| max_download_time || 0-65535 || Maksimalno vreme, u otkucajima, koje klijent ima na raspolaganju da preuzme mapu.
 |-
-| max_lag_time || 0-65535 || Maximum amount of time, in game ticks, a client may be lagging behind the server.
+| max_lag_time || 0-65535 || Maksimalno vreme, u otkucajima, u kome klijent može da laguje za serverom.
 |}
-Note that all values are in game ticks, that is, 1/74th of a game day (1/30th of a second).
+Napomena: Sve vrednosti su u okucajima u smislu same igre, odnosno 1/74 dana u igri (1/30 sekunde).
 
-Increase the values until your users can connect normally. If you set them too long however, there is an increased danger that people take too long to connect, and just waste bandwidth.
+Povećavajte ove vrednosti sve dok vaši saigrači ne budu mogli da se normalno priključe. Ako stavite prevelike vrednosti, postoji opasnost da će saigračima trebati predugo da se povežu ili da će raipati protok. 
 
-For larger maps, it is highly recommended to enable the ''pause_on_join'', as it eliminates the need to catch-up with the game after map downloading.
+Za velike mape preporučuje se uključivanje opcije ''pause_on_join'', jer se njom eliminiše potreba za sustizanjem posle preuzimanjem mape.
 
-=====I am having trouble with cheating. Help!=====
-:* There is a guide to shielding yourself from the worst elements of [[en/Community/Multiplayer cheating]]. Also, check the [[en/Community/Play Style/Multiplayer Rules]].
+=====Imam problem sa varanjem. Pomoć!=====
+:* Postoji vodič kako da se zaštitie od najgorih oblika [[en/Varanje u multiplejeru|varanja u multiplejeru]]. Takođe, pročitajte i  [[en/Pravila multiplejera]].
 
-=====Are there any rules?=====
-:* There are some rules, yes. You can see the article [[en/Community/Play Style/Multiplayer Rules]]. However, the servers are not run by the OpenTTD Team, and they have no control over them what-so-ever. As such if you have any problems you should contact the person who runs the server.
+=====Postoje li neka pravila?=====
+:* Da, postoje. Možete ih pročitati na [[en/Pravila multiplejera]]. Međutim, servere ne vode članovi OpenTTD Tima i samim tim, nemaju kontrole nad njima. Ako imate problema, kontaktirajte osobu koja vodi server.
 
-=====Can console commands be executed automatically?=====
-:* Yes, this is possible, and can be pretty handy. The page [[en/Manual/Running Startup Scripts]] will explain this in more detail.
+=====Da li se komande iz konzole mogu izvršiti automatski?=====
+:* Da, ovo je moguće i poprilično je zgodno. Na stranici [[en/Korištenje startap skripti]] možete naći više detalja.
 
-=====I started a new server. However, my game doesn't show up in my friends' game list, even after inserting the server manually on the list. Why does this happen?=====
-:* There seems to be a problem when starting a new server from a computer connected to Internet via a router, you can fix this by forwarding port number 3979, both UDP and TCP.
+=====Pokrenuo sam novi server, međutim on se ne pojavljuje na listama igara kod prijatelja, čak i kada ručno unesemo server na listu. Zašto se ovo dešava?=====
+:* Postoji problem kod pokretanja servera sa računara koji je povezan na internet preko rutera i on se rešava forvardovanjem porta 3979, i UDP i TCP.
 
-=====What is a desync error?=====
-:* See [[en/Manual/Multiplayer#desync-error|Desync error]].
+=====Šta je to desink greška?=====
+:* Pročitajte [[en/Multipljer#desink-greska|Desink greška]].
 
-=====My NewGRFs are not appearing at my server=====
-Best approach is to use a normal desktop game to construct a configuration file, and then copy that file with the NewGRFs to your server.
-Some things to watch out for:
+=====Moj NewGRFs se ne pojavljuje na serveru=====
+Najoblje je da koristite normalno stonu verziju igre da bi napravili konfiguracijski fajl, a onda kopirajte taj fajl sa NewGRFs na vaš server.
 
-:* Don't copy the config file while the server is running (OpenTTD writes its config file on exit by default, overwriting the just copied file).
-:* Fix the paths of the NewGRFs, \ is not a directory separator at a Unix system.
+Obratite pažnju na sledeće:
+
+:* Ne kopirajte konfiguracijski fajl ako je server pokrenut (Prema podrazumevanim vrednostima OpenTTD piše konfiguracijski fajl prilikom zatvaranja, preko upravo kopiranog fajla).
+:* Ispravite putanju NewGRFs, \ ne služi za odvajanje direktorijuma na Unix sistemu.
 
 [[Category:sr/Najčešća pitanja]]
 [[Category:sr/Igranje]]
