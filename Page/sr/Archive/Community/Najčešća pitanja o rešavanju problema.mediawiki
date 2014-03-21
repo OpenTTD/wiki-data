@@ -71,44 +71,44 @@ Zapamtite da su vam potrebne i definicije instrumenata. Znaćete da vam nedostaj
 
 === Emu10k1 ===
 
-If you have an emu10k-based soundcard, you can use its built in wavetable synth to play music.
-You will need a General MIDI SF2 bank (such as 8MBGMGS.SF2), asfxload and pmidi, and the following commands:
+Ako imate zvučnu karticu baziranu na emu10k, možete iskoristiti njegov ugrađeni vejvtejbl sintisajzer za sviranje muzike.
+Trebaće vam Opšta MIDI SF2 banka (poput 8MBGMGS.SF2), asfxload and pmidi i sledeća komanda:
 
 <pre>asfxload sf2file.sf2
 export ALSA_OUTPUT_PORTS=`pmidi -l | awk '/Emu/ { print $1; exit }'`
 openttd -m extmidi:cmd=pmidi</pre>
 
-If you get this working, you can put the first two commands to execute on start up, or login, and adjust the musicdriver configuration option, to make the settings permanent.
+Ako vam ovo bude radilo, možete staviti prve dve komande da se izvrše na pokretanju ili prilikom prijavljivanja i podesite muzički drajver na ova podešavanja, kao trajna.
 
-See [[en/Archive/Compilation and Ports/Linux SB Live Wavetable Support]] for more details.
+Pogledajte [[en/Archive/Compilation and Ports/Linux SB Live Wavetable Support]] za više detalja.
 
-== The game keeps scrolling on my IBM ThinkPad Laptop ==
-This seems to be a common problem with these laptops. The workaround for this problem is the following:
-In the "Pass 0 rules" section of (either) %SYSTEM_ROOT%\System32\tp4table.dat or %SYSTEM_ROOT%\System32\tp4scrol.dat, add:
+== Igra se pomera na mom IBM ThinkPad Laptopu ==
+Ovo je uobičajen problem sa ovim laptopovima. Rešenje je sledeće:
+U "Pass 0 rules" odeljku u (bilo) %SYSTEM_ROOT%\System32\tp4table.dat ili %SYSTEM_ROOT%\System32\tp4scrol.dat, dodajte:
 
 <pre>*,*,openttd.exe,*,*,*,WheelStd,0,9</pre>
-Thank you Sam for your helpful comment on the bugtracker [http://bugs.openttd.org/task/345 FlySpray #345]
+Zahvaljujemo Semu na pomoći u komentaru o praćenju greške [http://bugs.openttd.org/task/345 FlySpray #345]
 
-== My mouse is not sensitive enough (SDL / Fullscreen) ==
-OpenTTD does nothing with the mouse sensitivity, SDL takes full control over the mouse. Some people might feel it is not doing a good job about this; but luckily you can change SDL's mouse setting. Please read the doc over at [ftp://ptah.lnf.kth.se/pub/misc/sdl-env-vars].
+== Moj miš nije dovoljno osetljiv (SDL / Fullscreen) ==
+OpenTTD nema veze sa osetljivošću miša, SDL ima punu kontrolu nad mišom. Neki ljudi imaju osećaj da on ne radi dobar posao, ali srećommožete da promenite SDL podešavanja miša. Za više informacija pročitajte [ftp://ptah.lnf.kth.se/pub/misc/sdl-env-vars].
 
-The necessary environment variable is SDL_VIDEO_X11_MOUSEACCEL.<br>
-I found that setting SDL_VIDEO_X11_MOUSEACCEL didn't work for me without setting SDL_MOUSE_RELATIVE=0 too.
+Neophodna promenjiva okruženja je SDL_VIDEO_X11_MOUSEACCEL.<br>
+Otkrio sam da podešavanje SDL_VIDEO_X11_MOUSEACCEL ne radi u mom slučaju,ako ne podesim SDL_MOUSE_RELATIVE=0.
 
-So, for example:
+Na primer:
 <pre>
 $ SDL_MOUSE_RELATIVE=0 SDL_VIDEO_X11_MOUSEACCEL=6/1/0 openttd
 </pre>
-There are other reports which suggest that
+Postoje i drugi izveštaji koji ukazuju da
 <pre>
 $ SDL_VIDEO_X11_DGAMOUSE=0
 </pre>
-might work.
+će možda raditi.
 
-== OpenTTD crashes iTunes ==
-OpenTTD can cause iTunes to crash. This is due to iTunes not being compatible with the 256 screen colours OpenTTD will use by default. This can be corrected by setting OpenTTD to use the 32bpp blitter, or by running OpenTTD windowed as opposed to fullscreen. To activate the 32bpp blitter, use this parameter on the shortcut to OpenTTD or through the command prompt "-b32bpp-optimized". You can also use "-b32bpp-anim" if you wish to retain water animation and such. 
+== OpenTTD ruši iTunes ==
+OpenTTD može uzrokovati pucanje iTunes. Ovo se dešava jer iTunes nije kompatibilan sa 256 paletom boja koju podrazumevano koristi OpenTTD. Ovo može biti ispravljeno podešavanjem OpenTTD da koristi 32bpp blitter ili pokretanjem OpenTTD u prozoru umesto preko čitavog ekrana. Da aktivirate 32bpp blitter, iskoristitr ovaj parametar na prečici do OpenTTD ili preko komandne linije "-b32bpp-optimized". MOžete koristiti i "-b32bpp-anim" ako želite da zadržite animacije vode i slično. 
 
-This may also correct issues with other programs that crash randomly when OpenTTD launches, if the issue of 256 colors also affects it.
+Ovo takođe može da reši probleme sa drugim programima koji nasumično krahiraju kada se pokrene OpenTTD, ako je problem 256 palete boja uzrok.
 
 == My User Interface is too small to read / My font is unreadable or faulty ==
 The default font is part of the base graphics set you're using, for languages with non-latin letters a fallback font is selected automatically from the fonts available on your system.
