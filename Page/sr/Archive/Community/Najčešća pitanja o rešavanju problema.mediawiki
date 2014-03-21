@@ -1,0 +1,200 @@
+[[Translation:en/Archive/Community/FAQ troubleshooting]]
+
+{{sr/Manual/Sadržaj}}
+
+This article covers troubleshooting errors of [[en/Manual/Main Page]]. It is recommended that you try the latest [[en/Archive/Community/Nightly build|nightly build]], which is the very latest version of OpenTTD, before reporting a problem publicly. Often, the problem has been corrected already.
+
+If you are experiencing errors even with the most recent build, you can run the game in debug mode. Run the game with the ''"-d1"'' flag in that case. Read more in the [[en/Development/Debugging]] section.
+
+== The game will not start because ... ==
+
+=== ... it complains about missing files ===
+OpenTTD requires some graphic sets in order to function.  It can either be the original ones from Transport Tycoon Deluxe or the OpenGFX/OpenSFX ones. Refer to the [[en/Archive/Manual/Installation FAQ|installation FAQ]] article and ensure you have followed the appropriate steps for your Operating System.
+
+If you have not completed these steps sucessfully, you may see one of the following errors:
+* ''' 'Nix style OS ''' (Linux, OSX, Morhops, etc.): Error: Cannot open file '/usr/share/games/openttd/data/sample.cat'
+* '''Windows OS''' (Win98, Win2k, WinXP, etc.): Cannot open file '<OpenTTD Install Directory>\data\sample.cat'
+
+NOTE:
+On *nix computers, if you copied the files from, say, a Windows partition as, say, "root" you may also have problems
+because you don't have the proper permissions to read the files as a normal user.  (if this is the case, you can still
+run OpenTTD as root; you should probably fix the file permissions, though)
+
+=== ... it crashes on Win98(SE) ===
+:* Windows98/98SE has problems with DirectX and DirectMusic. Try to start the game with: <pre>openttd.exe -m win32</pre>
+
+=== ... it outputs an error ''MD5 of <filename> is ****INCORRECT**** - File Corrupt'' ===
+:*This error comes about if you have a corrupt or changed GRF file. OpenTTD only checks the ones for the original TTD game, either DOS or Windows version, and if it finds that the file is corrupted, it presents this message. You should copy the file from your original TTD disk again.
+:*This message will also appear if you are using modified GRF files (but only if they modify the original TTD files).  Other GRF's are not checked for corruption. The message was incorporated to make sure that any problems within the game are caused by the error you report rather than corrupt files on the disk.
+
+=== ... it shows a white screen on MacOS X Leopard ===
+:* OpenTTD 0.6.0 running on Leopard has sometimes a problem with the color profile of the current display. The error message "Could not get system colour space. You may need to calibrate your monitor." can appear on OpenTTD 0.7.2 too. Please make sure the at least one color profile is selected in the 'Monitor Preferences'. If that doesn't work, please create a new color profile by calibrating the old one. This is not a OpenTTD bug, it's more a Leopard bug and it's very rare. After setting the color profile, restart the computer and try running OpenTTD again.
+
+=== ... it outputs an error 'Error: Unable to load driver 'sdl'. The error was: Couldn't open X11 display' ===
+:* When running xdm on Linux, this error may occur. This is an SDL issue. One can simply do <code>xhost +</code> before starting OpenTTD to work around this problem. Once OpenTTD is running you should do <code>xhost -</code>.
+
+== When I start game in fullscreen mode, the refresh rate is changed to 60Hz! (Windows) ==
+:*It's because you haven't configured DirectX properly. For the same reason it may happen that the game runs with a higer refresh rate than your monitor supports. Try to download "DirectX Control Panel" from microsoft.com, copy it into /windows/system32, open the dialog in the Control Panel, go to DirectDraw tab, and set the "Forced Refresh Rate" to the maximum what your monitor can show.
+:*You can set '''display_hz''' to have correct refreshrate. This item is in '''[win32]''' group of [[en/Archive/Manual/Settings/Openttd.cfg]].
+
+== Cursor is hidden in fullscreen modes under Linux ==
+* OpenTTD is playable in window mode.
+* Ensure you have the latest ATi propetiary drivers installed correctly, follow [http://xoomer.virgilio.it/flavio.stanchina/debian/fglrx-installer.html this guide].
+
+== The Jukebox won't play any music/skips through tracks really fast ==
+First of all, have you put all of the *.gm or *.mid files into the 'gm' or 'baseset' directory?
+=== What 'gm' directory? ===
+For OpenTTD up to version 1.1.5, there should be one in the same directory as your OTTD program file. If there isn't, then create it and transfer the .gm files from your original TTD install/CD.
+If you only have the DOS version of the game, and you do not see any .gm files anywhere, then you may not have them. Sorry, no cheesy midi for you unless you find them elsewhere :( 
+=== What 'baseset' directory? ===
+For OpenTTD 1.2.0 and later, there should be a '/baseset' directory that contains your base graphics and sound files, in the same directory as your OpenTTD program files. If there isn't, then you may not have properly installed OpenTTD or copied the files properly. You can then copy the .gm files from your original TTD install/CD, or any General MIDI-standard .mid file into the /baseset directory, or any subdirectory. 
+=== I copied the files, still isn't working ===
+It has been reported that the music will not play if you have any parent directories with spaces or special characters in them (eg. 'C:\\Program files\ottd\gm', note the space in 'program files'.).
+Try putting your install into a path without spaces and special characters (like é).
+
+Also, there are sometimes issues with file permissions, especially if you have copied the files across direct from CD.
+Try setting all the file permissions to read/write:
+* OS X; go to 'gm' directory, select all files [cmd]+[a], select file->'get info' (or [cmd]+[i]), under 'owner permissions' select 'read and write'.
+* Windows; go to 'gm' directory, select all files [ctrl]+[a], select file->properties, uncheck 'read only'.
+
+Also, '''check the next question''' if on Linux.
+
+== There is no sound or no music on Linux ==
+This is a known issue for some systems. Only one application can send to the sound driver.
+Install Timidity using your distributions package manager, eg. for Ubuntu use Synaptic, or from a terminal type <pre>sudo apt-get install timidity</pre>  the game music should now play.
+If not then try running the Timidity media player with commands <pre>timidity -iAD -Os</pre> or <pre>timidity -iA -Os</pre> The -iAD is daemonized, while -iA is not-daemonized.
+
+If you tried all the above and still didn't get sound you can try running "aoss openttd". It made the sound work for me.
+If that doesn't work. It's posible that your soundcard doesn't support multiple sound sources at once. Then try using ALSA compactibility mode (http://gentoo-wiki.com/ALSA/Install).
+
+Remember that you also need instrument definitions. You know they are missing if you get errors while trying to directly listen to a track via timidity (from command line). Free sets are provided e.g. by [http://freepats.zenvoid.org/ Freepats] package. Look for it in repository of your distribution. In Arch type <pre>pacman -S timidity++ timidity-freepats</pre>
+
+'''Note:''' Freepats doesn't seem to provide every single instrument needed for OpenMSX music.  Some songs may not sound right.
+
+=== Emu10k1 ===
+
+If you have an emu10k-based soundcard, you can use its built in wavetable synth to play music.
+You will need a General MIDI SF2 bank (such as 8MBGMGS.SF2), asfxload and pmidi, and the following commands:
+
+<pre>asfxload sf2file.sf2
+export ALSA_OUTPUT_PORTS=`pmidi -l | awk '/Emu/ { print $1; exit }'`
+openttd -m extmidi:cmd=pmidi</pre>
+
+If you get this working, you can put the first two commands to execute on start up, or login, and adjust the musicdriver configuration option, to make the settings permanent.
+
+See [[en/Archive/Compilation and Ports/Linux SB Live Wavetable Support]] for more details.
+
+== The game keeps scrolling on my IBM ThinkPad Laptop ==
+This seems to be a common problem with these laptops. The workaround for this problem is the following:
+In the "Pass 0 rules" section of (either) %SYSTEM_ROOT%\System32\tp4table.dat or %SYSTEM_ROOT%\System32\tp4scrol.dat, add:
+
+<pre>*,*,openttd.exe,*,*,*,WheelStd,0,9</pre>
+Thank you Sam for your helpful comment on the bugtracker [http://bugs.openttd.org/task/345 FlySpray #345]
+
+== My mouse is not sensitive enough (SDL / Fullscreen) ==
+OpenTTD does nothing with the mouse sensitivity, SDL takes full control over the mouse. Some people might feel it is not doing a good job about this; but luckily you can change SDL's mouse setting. Please read the doc over at [ftp://ptah.lnf.kth.se/pub/misc/sdl-env-vars].
+
+The necessary environment variable is SDL_VIDEO_X11_MOUSEACCEL.<br>
+I found that setting SDL_VIDEO_X11_MOUSEACCEL didn't work for me without setting SDL_MOUSE_RELATIVE=0 too.
+
+So, for example:
+<pre>
+$ SDL_MOUSE_RELATIVE=0 SDL_VIDEO_X11_MOUSEACCEL=6/1/0 openttd
+</pre>
+There are other reports which suggest that
+<pre>
+$ SDL_VIDEO_X11_DGAMOUSE=0
+</pre>
+might work.
+
+== OpenTTD crashes iTunes ==
+OpenTTD can cause iTunes to crash. This is due to iTunes not being compatible with the 256 screen colours OpenTTD will use by default. This can be corrected by setting OpenTTD to use the 32bpp blitter, or by running OpenTTD windowed as opposed to fullscreen. To activate the 32bpp blitter, use this parameter on the shortcut to OpenTTD or through the command prompt "-b32bpp-optimized". You can also use "-b32bpp-anim" if you wish to retain water animation and such. 
+
+This may also correct issues with other programs that crash randomly when OpenTTD launches, if the issue of 256 colors also affects it.
+
+== My User Interface is too small to read / My font is unreadable or faulty ==
+The default font is part of the base graphics set you're using, for languages with non-latin letters a fallback font is selected automatically from the fonts available on your system.
+
+To use a different font quit OpenTTD and modify the ''small_font'', ''medium_font'', ''large_font'', ''mono_font'', ''small_size'', ''medium_size'', ''large_size'' and ''mono_size'' settings in your ''[[en/Archive/Manual/Settings/Openttd.cfg]]'' file. Here you may set a different font face and size for each of the four font types available in OpenTTD. 
+
+You can set any font face available on your system. What face and size works best for you, is a matter of trial-and-error. Note that you must change both the font and size entries for your changes to have any effect (however you can change for instance only the small font by setting ''small_font'' and ''small_size'' while keeping medium and large fonts from your base graphics set).
+
+See also: [[en/Archive/Manual/Settings/Unicode]]
+
+=== Linux/Mac ===
+Linux and Mac users can set the font using the name or the path of a font that exists on your system, for example:
+
+<pre>
+small_font = DejaVu Sans
+medium_font = DejaVu Sans, bold
+large_font = Century Schoolbook L
+mono_font = /usr/share/X11/fonts/100dpi/FreeMono.otf
+small_size = 10
+medium_size = 14
+large_size = 18
+mono_size = 14
+</pre>
+
+The above values are just a demonstration of how to change it. The suggested values have not been chosen with care. If you have better values, please update this section.
+
+Mac system and user fonts are typically found in "/Library/Fonts" and "~/Library/Fonts" respectively
+
+=== Windows ===
+Windows users can set just the name of a font face installed on the system; no need to use the path to a font file.
+
+<pre>
+small_font = Arial
+medium_font = Tahoma Bold
+large_font = Times New Roman
+mono_font = Courier New
+small_size = 11
+medium_size = 12
+large_size = 20
+mono_size = 12
+</pre>
+
+The example above gives you larger fonts while keeping the spirit of the original TTD font types.
+
+== The User Interface buttons are too small ==
+TTD was designed for 640x480 screen size in a time monitors were around 12" diagonal. This is a resolution of about 67 dpi. Now you went ahead and bought this 21" fullHD screen with a resolution of over 100 dpi. In other words, the individual pixels are smaller while a button still uses the same amount of pixels. As a result, there fits more on your screen, but everything is smaller than in 1995.
+
+Here are some suggestions:
+
+'''Use the BigGUI NewGRF'''
+
+In the [[en/Manual/Online content]] you can find a [[en/Manual/NewGRF]] named ''OpenGFX+ BigGUI''. This NewGRF provides a "double size GUI for high resolution screens, dodgy old ball mice and touch screens with fat fingers". It is designed to be used with the OpenGFX base graphics set, but can also be used with the original TTD base graphics. It will give you buttons that are four times as big and because you don't have to lower the screen resolution, the graphics will remain nice and crisp.
+
+If you downloaded OpenGFX+ BigGUI you can also enable this NewGRF as static NewGRF in the [newgrf-static] section of the openttd.cfg (exact name may vary upon version, just showing the principle here):
+<pre>[newgrf-static]
+opengfx_biggui-2.0.0/ogfx-biggui.grf = 1
+</pre>
+
+
+'''Change screen resolution'''
+
+This is probably the easiest fix with reasonable results. If you lower your screen resolution, everything gets bigger. In case of that fullHD screen, instead of 1920x1080 set something lower, like 1280x720.
+
+If you play the game in fullscreen, you can make this change from the [[en/Manual/Game options window]] dialog and then this setting will only affect OpenTTD. If you play in windowed mode, you need to change this from your operating system, which will affect your whole computing experience, so you might want to change it back when you're done playing OpenTTD.
+
+Note that modern flatscreen panels are designed for one specific resolution. Setting anything lower will inevitably result in graphics that are a bit blurry and that is something you'll have to live with. The only exception is if you can set a resolution of exactly half the design resolution, so for instance instead of 1920x1080 you set 960x540. In that case, every original pixel can now use exactly four pixes, keeping your graphics nice and crisp.
+
+
+'''Use a magnifier'''
+If you don't want to lower the screen resolution, don't want to play full screen and don't want to use the BigGUI, you can use a magnifier tool. This allows you to increase the game's size without losing quality. The instructions below are for Windows 7; similar solutions might or might not be available for other operating systems.
+
+* Start the game window and set it at 640x480 (windowed mode).
+* Start Win7 Magnifier from Ease of Access and set it at 200% (this will essentially double all pixels).
+* Using magnifier on "Follow mouse pointer" mode, drag your game window to the screen.
+* To keep the magnified area on a fixed position, uncheck from options "Follow mouse pointer" and check "Have magnifier follow the text insertion point". Now drag your game window and stretch it to fit your screen ([http://www.tt-forums.net/download/file.php?id=137680 example on 1680x1050]). OpenTTD will remember the last used window size, so, you need to do this only once.
+* This is it. You can minimize now the magnifier and when you need to bring it back use ALT+TAB.
+
+[http://www.tt-forums.net/viewtopic.php?uid=36464&f=29&t=51506&start=0 source]
+
+== Where are the ''difficulty settings'' and ''news settings'' in OpenTTD 1.3 or later? ==
+
+OpenTTD had a lot of different places to change settings. In 1.3, the ''difficulty settings'', and the ''news settings'' have been moved to the ''advanced settings''.
+In addition, the ''advanced settings'' have been made better accessible, you can select to display only a subset of settings, and use a filter to further reduce the number of shown settings.
+
+See also [http://www.tt-forums.net/viewtopic.php?f=31&t=68283 No Difficulty button on Startup Menu with 1.3.2]
+
+[[Category:en/FAQs]]
