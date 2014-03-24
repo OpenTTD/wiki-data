@@ -1,0 +1,105 @@
+[[Translation:en/Development/FAQ development]]
+{{sr/Manual/Sadržaj}}
+
+This article covers questions regarding development of OpenTTD, e.g. using SVN, downloading the source, setting up compilers, etc..
+
+===Contributing to the project===
+====What can I do to contribute to the project?====
+:* This depends on your talents. If you are good at coding, you might want to help implementing new features or fixing bugs. Also other help is always welcome, like [[en/Archive/Community/Internationalization|translating]] to other languages, drawing graphics, writing this manual, or making sounds and music.
+
+====What language is OpenTTD written in?====
+:* OpenTTD is programmed in C++, the ANSI-C flavor used by MS Visual Studio, to be specific. Read the [[en/Development/Coding style|coding style]] guidelines for reference how your code should be structured.
+
+====I've fixed a bug / added a feature. How can I submit it to the codebase?====
+:*Make a diff file (aka patch file) of your changes and submit it to [http://bugs.openttd.org Flyspray]. Please watch the patch tracker carefully to see if the developers have any suggestions. If everything is OK with your patch, it will get merged into the SVN tree.
+:*You may also create a thread on [http://www.tt-forums.net/viewforum.php?f=33 our forum] and add your patch to [[en/Archive/Community/List of patches|the patch list]].
+
+====I want to become an official OpenTTD developer! How?====
+:*The only way to get there is by constantly making patches, especially for fixing bugs. Check out the list of [http://bugs.openttd.org/index.php?string=&project=1&type=1 known bugs] and be aware of our preferred [[en/Development/Coding style|coding style]]. When the amount of time you spend with coding OpenTTD reaches our level, chances are high that you'll receive a SVN account and get added to the list.
+
+===Source code===
+====What is source code?====
+:* [http://www.google.com/search?q=C%2B%2B+tutorial Don't worry about it, and don't bother reading the rest of this.]
+
+====How can I obtain the source code?====
+Preferentially you obtain the source code via a version control system (VCS). They allow you to checkout the source easily and update to any version (maybe newest as nightlies got a new feature or some special one needed for a particular patch) you might need. If you plan to use patches, using mercurial or git is preferred do to their easier ways to update and handle patched versions.
+:* Subversion: <code>svn checkout svn://svn.openttd.org/trunk</code>
+:* Mercurial: <code>hg clone http://hg.openttd.org/openttd/trunk.hg</code>
+:* Git: <code>http://git.openttd.org/openttd/trunk.git/</code> (alternatively <code>git://git.openttd.org/openttd/trunk.git/</code>)
+Note that new revisions may appear in the git repository via HTTP only after a delay of several hours. This delay does not appear to happen using the git protocol. 
+
+You can also obtain the source via tar balls, but avoid this, if you can make use of a VCS:
+:* Latest release version:  [http://www.openttd.org/download-stable  Get from the website]
+:* [[en/Archive/Community/Nightly build|Nightly builds]]: [http://nightly.openttd.org/ Get from the Nightly build webpage]
+
+====What is the SVN version?====
+:* SVN aka [https://www.wikipedia.org/wiki/Subversion_%28software%29 Subversion] is a version control system like CVS. Basically it tracks changes to the source code of the game. The SVN version is the latest (bleeding edge) source code for the game.
+
+====What operating systems does Subversion run on?====
+:* Any modern Unix(-like) (Mac OS X, Linux, BSD, ...), Win32, BeOS/Haiku, OS/2. Subversion is written in ANSI C and uses APR, the Apache Portable Runtime library, as a portability layer. The Subversion client will run anywhere APR runs, which is most places.
+
+====How do I get the SVN version then?====
+:* First you need to download the client software for your operating system which will connect to the SVN server and download the source code. You can get it from the SVN project homepage at http://subversion.apache.org/. If you are using Windows you may want to get [http://tortoisesvn.tigris.org/ TortoiseSVN] as it integrates with Explorer nicely and you won't have to run command line stuff.<br><br>Next you need to set up the client to use the repository url which is ''"svn://svn.openttd.org/trunk"''. This will depend on which software you get, but you can find out how to do this with the documentation included with it.<br><br> On Linux (Unix) you can use command ''"svn co svn://svn.openttd.org/trunk/"''.<br><br>On MacOSX Xcode can handle both SVN and Git by itself so no need to install anything (unless you haven't got Xcode yet).
+
+====Subversion has not been ported to my platform / I don't want to install more software - is there any other way I can get to the source code?====
+:* You can view the repository online at http://svn.openttd.org/, you can also checkout copies so you will be able to get a complete set of source code. You can also get the latest nightly source code from http://nightly.openttd.org/.
+
+====Now I have got the source code how can I compile it?====
+:* Compiling OpenTTD on Windows using [[:Category:en/Development/Microsoft Visual C++|Microsoft Visual C++]]
+:* Compiling OpenTTD on Windows using [[en/Archive/Compilation and Ports/Compiling on Windows using MinGW|MinGW]]
+:* Compiling OpenTTD on [[en/Archive/Compilation and Ports/Compiling on GNU∕Linux and 🟉BSD|Linux]]
+:* Compiling OpenTTD on [[en/Archive/Compilation and Ports/Compiling on Mac OS X|Mac OS X]]
+:* Compiling OpenTTD on [[en/Archive/Compilation and Ports/Compiling on Solaris|Solaris]]
+:* Compiling OpenTTD on [[en/Archive/Compilation and Ports/Compiling on Haiku|Haiku]]
+
+To test the compiler setup, try compiling the game from source code without applying any patch (see below), and run the resulting executable. If all goes well, you can be fairly sure the setup is good.
+If it fails, you know for sure the patch is not the source of the problems.
+
+====I had a problem compiling! What should I do?====
+:* This is not a compiling FAQ, try to ask your compiler vendor for help.
+====Why did the developers decide to use Subversion?====
+:* Subversion (SVN) was chosen over CVS because it is more advanced and easier to use. Also a lot of the developers don't like CVS any more now they know SVN.
+:* SVN was "chosen" over distributed version control systems (DVCS) like Bazaar, Darcs, git, Mercurial and SVK because at the time the choice had to be made none of these existed. GNU arch was one of the few DVCSes that existed but was difficult to learn and understand. Later on a versioning API for NewGRFs was made out of the SVN revision so migrating to a DVCS would remove that capability breaking lots of existing NewGRFs.
+
+====What is the point of a version control system? Why don't they just upload the source code to an FTP directory?====
+:* Version control systems keep track of all the changes, when they were made and by who. If the developers later find out something they did was a mistake and broke something important they may have to rewrite it from scratch. With this they can just 'checkout' a revision from when it was working. It also allows the developers to add comments so they know what changes have been done.
+====How do I make a diff file to share my changes with other coders?====
+:* In Linux, use the command "svn diff > mypatch.diff" from the source directory to create a diff file.
+:* In Windows, you can do the same from the command prompt, or, if you have Tortoise SVN, right button in the source directory and press Create Patch. It will ask for a location and filename.
+
+====How to apply a patch?====
+It's usually best to apply patches to the revision stated by the patch creator.
+
+Different version control systems use different ways of expressing changes. Currently, there are SVN type patches and HG/GIT type patches.
+To know what you have, open the patch file with a text editor, and look at the first few lines.
+
+A SVN type patch starts like
+<pre>
+Index: src/gfx.cpp
+===================================================================
+--- src/gfx.cpp (revision 20024)
++++ src/gfx.cpp (working copy)
+@@ -641,14 +641,13 @@
+...
+</pre>
+
+and a HG/GIT type patch starts like
+<pre>
+diff --git a/src/gfx.cpp b/src/gfx.cpp
+--- a/src/gfx.cpp
++++ b/src/gfx.cpp
+@@ -641,14 +641,13 @@
+...
+</pre>
+The crucial difference is the <code>a/</code> and <code>b/</code> additions at the lines starting with <code>---</code> and <code>+++</code>.
+
+
+*'''Unix shell (Windows using MSYS/MinGW, Mac OS X, Linux, ...):''' Type the following line into a console (replace patch_name with the filename of the patch):
+:<code>patch -p0 < patch_name</code> (for SVN type patches). However, in some cases you might need <code>patch -p1 < patch_name</code> (for HG/GIT type patches).
+ 
+*'''Windows, graphical:''' Make sure you have [http://tortoisesvn.tigris.org TortoiseSVN] installed.
+{{en/Warning| TortoiseSVN can only handle SVN type patches, it '''CANNOT''' handle HG/GIT type patches!!}}
+:Right-click on the folder with the OpenTTD source code, open the TortoiseSVN submenu and select 'Apply Patch...'. Browse to the patch file and select it. Then, right click on the 'File Patches' window and click on 'Patch All'. After you're done, close the TortoiseMerge window.
+
+[[Category:sr/Najčešća pitanja]]
+[[Category:sr/Razvoj]]
