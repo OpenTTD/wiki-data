@@ -44,11 +44,15 @@ You can influence how often a new link graph calculation shall be started and ho
 
 The setting for the effect of distance on demands determines how much more cargo is sent to nearby stations than to far away stations. You probably don't want to change the short path saturation settings, except for debugging purposes.
 
-==Limitations==
+==Past Limitations==
 
-Cargodist currently doesn't take some orders with "unload all", "transfer", "no unloading" or "no loading" attributes into account when building the link graph. It does handle any order with a "leave empty" attribute somewhat adequately and it understands any "go via" order (by ignoring it). Any other combinations of "unload all", "transfer", "no unloading" or "no loading" may lead to cargo being planned for loading or unloading at the station referred to by the order even though that is in fact impossible as the respective vehicles are unable to do so with their current orders. It is possible to handle those orders correctly within the current architecture of the link graph. However, as that would be a rather large project on its own and the effect on gameplay is small there is no implementation for that, yet.
+Cargodist used to not take some orders with "unload all", "transfer", "no unloading" or "no loading" attributes into account when building the link graph. It still cannot estimate the capacity of related links correctly if you have both vehicles with such modifications and without them on the same route. It will find out if the orders allow cargo from any source to be transported on those links at all, though. That means you shouldn't be able to produce unroutable cargo with those orders.
 
-Conditional orders are problematic by definition. You can create an [http://en.wikipedia.org/wiki/Undecidable_problem undecidable problem] for the link graph creation algorithm by having a vehicle's orders depend on load percentage. The shape of the link graph determines which cargo a vehicle will load. The cargo loaded then determines which way it goes and that in turn determines the shape of the link graph. Some of the other conditions' outcomes are very hard to predict in advance without simulating the whole game up to the point when they are to be evaluated normally. The link graph creation and cargo routing algorithms handle that pragmatically and assume that most conditions will just yield the same result when they are evaluated for link graph creation or cargo loading and for vehicle routing. This does not work for load percentage conditions that have to be evaluated in order to decide which cargo to load. Those are evaluated based on cargo available at the station where the vehicle is loading. The condition is evaluated so that the vehicle can load the most cargo available at the station when assumed to take the same decision about the conditional order later on. An example for a problematic order configuration is this:
+Conditional orders are problematic by definition. You can create an [http://en.wikipedia.org/wiki/Undecidable_problem undecidable problem] for the link graph creation algorithm by having a vehicle's orders depend on load percentage. The shape of the link graph determines which cargo a vehicle will load. The cargo loaded then determines which way it goes and that in turn determines the shape of the link graph. Some of the other conditions' outcomes are very hard to predict in advance without simulating the whole game up to the point when they are to be evaluated normally. The link graph creation and cargo routing algorithms handle that pragmatically and always load greedily. That means they'll load cargo for any station that can potentially be reached with the given conditionals and they won't unload cargo that goes to one of those stations.
+
+The algorithm used to evaluate the conditions and load/unload based on that but this strategy was suboptimal as the same cargo would be loaded and unloaded at the same station.
+
+With the latest changes (in OpenTTD 1.4) you can do things like this, without creating any problems:
 
  Go to LOADING STATION
  Go to DROP1
@@ -56,5 +60,3 @@ Conditional orders are problematic by definition. You can create an [http://en.w
  Go to DROP2
  If load percentage equals 0 go to LOADING STATION
  Go to DROP3
-
-It's a nice idea but obviously any vehicle following those orders could either decide to transfer all its cargo at DROP1 and return to LOADING STATION or it could keep the cargo going via DROP2 and go on. Both is correct. Thus, if you construct order systems like that, you'll see a lot of random and seemingly pointless loading and unloading at DROP1 and DROP2 as vehicles can't decide what to do.
