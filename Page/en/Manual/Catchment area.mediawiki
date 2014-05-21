@@ -31,11 +31,34 @@ For a single physical station, [[en/Archive/Manual/Settings/Modified catchment]]
 So, the lone road station shown, '''Altoona''', has a radius of 3. The lone rail station, '''Altoona West''', has a radius of 4. But if we demolish Altoona West and rebuild it as a rail station combined with Altoona, then the road station's radius is ''promoted'' to 4 as well. 
 
 
-== Cargo Acceptance of stations ==
+== Production catchment area ==
+
+In some industries only certain squares can accept the cargo required by that industry. You can use the [[en/Manual/Land area information]] tool to find out which square accept cargo. When building a station you can see, in the station building dialog, which types of cargo will be accepted by the industries in the catchment area. For [[en/Manual/Stations#building-non-physically-attached-stations|non-physically attached combined stations]] the catchment area also covers all the space between the individual stations. Both stations in the picture wouldn't accept oil if they were built as separate stations because they are too far away from the refinery. But since they form a single combined station their catchment area extends over the refinery and makes them accept oil. This only applies for delivery, not for pickup of cargo. Thus the pictured stations won't get the goods produced by the refinery. (The described case and picture applies when the ''Allow more realistically sized catchment areas'' option is enabled.)
+
+[[File:en/Manual/Catch-altoona-produce.png|thumb|400px|Altoona production catchment area. Catchment is shown in red; the bounding box of each industry is shown in bright green.]]
+
+: ''For production, catchment area of a logical station is the union of the physical station radii.''
+
+: ''For production, an industry's bounding box counts toward overlap. Any single tile of overlap is sufficient. 
+
+Industries that don't overlap the production catchment area cannot ship goods out of the station. Therefore, no lumber nor sheep wait for pickup at Altoona; the Sawmill and Sheep Farm don't overlap the catchment. 
+
+The Brick Works overlaps Altoona's production catchment by a single tile, in its parking lot. Even so, Altoona can carry away the full brick production. The Glass Works is missing the tile that would otherwise overlap the catchment; but that's okay, since the Glass Works' bounding box ''does'' overlap. Therefore, both bricks and glass wait for pickup at Altoona. 
+
+
+== Cargo Acceptance area of stations ==
 Every industry square can provide the cargo produced by that industry. Having multiple catchment area squares overlapping an industry doesn't give any advantages. However, coverage for town-building has direct effect on [[en/Manual/Base Set/Cargos/Passengers]] and [[en/Manual/Base Set/Cargos/Mail]] received. So the strategy to boost the [[en/Manual/Towns#town-growth|town growth]] and building non-physically attached stations to increase the catchment area will improve the patronage of large station which is difficult to be built near the center of the town.
 
-== Cargo Delivery from industries to stations ==
-In some industries only certain squares can accept the cargo required by that industry. You can use the [[en/Manual/Land area information]] tool to find out which square accept cargo. When building a station you can see, in the station building dialog, which types of cargo will be accepted by the industries in the catchment area. For [[en/Manual/Stations#building-non-physically-attached-stations|non-physically attached combined stations]] the catchment area also covers all the space between the individual stations. Both stations in the picture wouldn't accept oil if they were built as separate stations because they are too far away from the refinery. But since they form a single combined station their catchment area extends over the refinery and makes them accept oil. This only applies for delivery, not for pickup of cargo. Thus the pictured stations won't get the goods produced by the refinery. (The described case and picture applies when the ''Allow more realistically sized catchment areas'' option is enabled.)
+[[File:en/Manual/Catch-altoona-accept.png|thumb|400px|Altoona acceptance catchment area. Catchment is shown in blue; the footprint of each industry is shown in light brown.]]
+
+: ''For acceptance, catchment area of a logical station is the bounding box of its physical station radii.'' Equivalently, ''Acceptance catchment area is the station radius around the bounding box of its physical stations.'' 
+
+: ''For acceptance, an industry's footprint only counts toward the overlap. Any single tile of overlap is sufficient.''
+
+Altoona's acceptance catchment overlaps the Sawmill and Brick Works, so the station will accept wood and clay for these industries. 
+
+The Sheep Farm's bounding box overlaps the acceptance catchment but no footprint tile does overlap; the same is true for the Glass Works, due to that missing corner. Therefore, Altoona cannot accept farm supplies or lime, respectively. 
+
 
 == Catchment Area and Station Rating ==
 When a building is covered by multiple catchment areas, the station with the highest [[en/Manual/Game Mechanics/Main Page#station-rating|rating]] will get the largest part of the cargo. Note that when three or more catchment areas cover the same building, only the two catchment areas with the highest ratings will get cargo.
