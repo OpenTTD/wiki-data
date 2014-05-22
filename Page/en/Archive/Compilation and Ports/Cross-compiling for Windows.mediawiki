@@ -5,6 +5,7 @@ The simplest way to compile an OpenTTD executable for Windows on any operating s
 However, you must replace (or override in the Wine configuration tool) the Wine-supplied msvcp60.dll with an official Windows one (6.0 version) or SVN will not run. You can find it at [http://www.dll-files.com/dllindex/dll-files.shtml?msvcp60 dll-files.com], click on the "Alternative versions" menu entry and download the second one listed. 
 
 = Native MinGW =
+ {{en/Note|Should work analogously on Mac OS X, please test}}
 You will need the MinGW binaries, includes and libraries for Linux-to-Windows cross-compiling (32-bit, 64-bit not tested) installed under /usr/i586-mingw32msvc (Debian/Ubuntu: sudo apt-get install mingw32). The further steps are more or less the same as those required for compiling with MinGW on Windows. 
 
 For consistency, self-installed libraries etc. will be stored in subfolders of /usr/local/i586-mingw32msvc. However, the OpenTTD configure script isn't very good at finding libraries that match the selected host, so some will need to be specified manually/linked to a hardcoded directory (see end).
@@ -24,7 +25,7 @@ This tutorial has been tested with the following versions of the required packag
 <ul><li>Open the Linux command line.</li>
 <li>Run the following command:<pre>
 i586-mingw32msvc-gcc -v</pre></li>
-<li>It should output something.  Check if something goes wrong.</li></ul>
+<li>It should output something.</li></ul>
 
 ==Compilation and installation of the required packages==
 Install patch, wget, unzip and your favorite version control system if not already installed.
@@ -79,7 +80,7 @@ Liblzma (which is a part of xz) is required for compiling OpenTTD since [http://
 
 At the command line:
 
-<pre>
+<pre>wget http://tukaani.org/xz/xz-5.0.4.tar.gz
 tar xvfz xz-5.0.4.tar.gz
 cd xz-5.0.4
 ./configure --host=i586-mingw32msvc --prefix=/usr/local/i586-mingw32msvc --enable-static --disable-threads CPPFLAGS=-I/usr/local/i586-mingw32msvc/include LDFLAGS=-L/usr/local/i586-mingw32msvc/lib
