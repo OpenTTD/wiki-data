@@ -1,6 +1,158 @@
 [[Category:en/Development/Compiling OpenTTD]]
+= Wine/MinGW =
 The simplest way to compile an OpenTTD executable for Windows on any operating system supported by [http://winehq.org Wine], such as Linux, is to use it to set up the Windows MinGW - follow the existing [[en/Archive/Compilation and Ports/Compiling on Windows using MinGW]] guide. This is rather slow (about 1/3 native speed for make, much slower for configure), but guaranteed to work.
 
 However, you must replace (or override in the Wine configuration tool) the Wine-supplied msvcp60.dll with an official Windows one (6.0 version) or SVN will not run. You can find it at [http://www.dll-files.com/dllindex/dll-files.shtml?msvcp60 dll-files.com], click on the "Alternative versions" menu entry and download the second one listed. 
 
-If you're adventurous, you can try a MinGW GCC cross-compiler, but you'll need to make it work on your own at this time.
+= Native MinGW =
+You will need the MinGW binaries, includes and libraries for Linux-to-Windows cross-compiling (32-bit, 64-bit not tested) installed under /usr/i586-mingw32msvc (Debian/Ubuntu: sudo apt-get install mingw32). The further steps are more or less the same as those required for compiling with MinGW on Windows. 
+
+For consistency, self-installed libraries etc. will be stored in subfolders of /usr/local/i586-mingw32msvc. However, the OpenTTD configure script isn't very good at finding libraries that match the selected host, so some will need to be specified manually/linked to a hardcoded directory (see end).
+
+==List of packages==
+This tutorial has been tested with the following versions of the required packages:
+
+* OpenTTD 1.3.x or trunk.
+* [http://zlib.net/zlib-1.2.7.tar.gz zlib-1.2.7]
+* [http://sourceforge.net/projects/libpng/files/libpng15/1.5.13/libpng-1.5.13.tar.xz/download libpng-1.5.13]
+* [http://www.oberhumer.com/opensource/lzo/download/lzo-2.06.tar.gz lzo-2.06]
+* [http://sourceforge.net/projects/freetype/files/freetype2/2.4.10/freetype-2.4.10.tar.gz/download freetype-2.4.10]
+* [http://tukaani.org/xz/xz-5.0.4.tar.gz xz-5.0.4]
+* [http://download.icu-project.org/files/icu4c/4.6/icu4c-4_6-src.zip libicu-4.6]
+
+==Testing MinGW/MSYS installation==
+<ul><li>Open the Linux command line.</li>
+<li>Run the following command:<pre>
+i586-mingw32msvc-gcc -v</pre></li>
+<li>It should output something.  Check if something goes wrong.</li></ul>
+
+==Compilation and installation of the required packages==
+Install patch, wget, unzip and your favorite version control system if not already installed.
+
+==Compiling zlib==
+At the command line:
+
+<pre>wget http://zlib.net/zlib-1.2.8.tar.gz
+tar xvfz zlib-1.2.8.tar.gz
+cd zlib-1.2.8
+#  automatic replacement
+sed -e s/"PREFIX ="/"PREFIX = i586-mingw32msvc-"/ -i win32/Makefile.gcc
+make -f win32/Makefile.gcc 
+sudo BINARY_PATH=/usr/local/i586-mingw32msvc/bin INCLUDE_PATH=/usr/local/i586-mingw32msvc/include LIBRARY_PATH=/usr/local/i586-mingw32msvc/lib make -f win32/Makefile.gcc install
+cd ..</pre>
+
+==Compiling libpng==
+At the command line:
+<pre>wget http://sourceforge.net/projects/libpng/files/libpng15/older-releases/1.5.16/libpng-1.5.16.tar.xz/download libpng-1.5.16.tar.xz
+tar xvfJ libpng-1.5.16.tar.xz
+cd libpng-1.5.16
+mv INSTALL INSTALL.txt
+./configure --host=i586-mingw32msvc --prefix=/usr/local/i586-mingw32msvc CPPFLAGS=-I/usr/local/i586-mingw32msvc/include LDFLAGS=-L/usr/local/i586-mingw32msvc/lib 
+make
+sudo make install
+cd ..</pre>
+
+==Compiling liblzo2==
+At the command line:
+
+<pre>wget http://www.oberhumer.com/opensource/lzo/download/lzo-2.06.tar.gz
+tar xvfz lzo-2.06.tar.gz
+cd lzo-2.06
+./configure --host=i586-mingw32msvc --prefix=/usr/local/i586-mingw32msvc --enable-static CPPFLAGS=-I/usr/local/i586-mingw32msvc/include LDFLAGS=-L/usr/local/i586-mingw32msvc/lib
+make
+sudo make install
+cd ..</pre>
+
+==Compiling libfreetype==
+At the command line:
+
+<pre>wget http://sourceforge.net/projects/freetype/files/freetype2/2.4.10/freetype-2.4.10.tar.gz
+tar zxvf freetype-2.4.10.tar.gz
+cd freetype-2.4.10
+./configure --host=i586-mingw32msvc --prefix=/usr/local/i586-mingw32msvc --enable-static CPPFLAGS=-I/usr/local/i586-mingw32msvc/include LDFLAGS=-L/usr/local/i586-mingw32msvc/lib
+make
+sudo make install
+cd ..</pre>
+
+==Compiling xz==
+Liblzma (which is a part of xz) is required for compiling OpenTTD since [http://vcs.openttd.org/svn/changeset/21044/ r21044]. pkg-config should already be installed on your system; since it's not a library, the system versions can be used.
+
+At the command line:
+
+<pre>
+tar xvfz xz-5.0.4.tar.gz
+cd xz-5.0.4
+./configure --host=i586-mingw32msvc --prefix=/usr/local/i586-mingw32msvc --enable-static --disable-threads CPPFLAGS=-I/usr/local/i586-mingw32msvc/include LDFLAGS=-L/usr/local/i586-mingw32msvc/lib
+make 
+sudo make install
+cd ..</pre>
+
+==Compiling libicu== 
+
+Doesn't work (same problem as https://www.mail-archive.com/bug-guile@gnu.org/msg04505.html, so probably internal to ICU). 
+
+libicu is an optional library used for handling of right-to-left scripts (e.g. Arabic and Persian) and the natural sorting of lists. It can take a long time to compile, so you can safely omit this step if you don't require libicu.
+
+
+{{en/Note|The application of the second patch is an optional step. It will reduce the size of compiled OpenTTD, at the cost of losing sorting data for most languages.}}
+
+{{en/Warning|Compiling with libicu will greatly increase the size of the resulting OpenTTD executable.<BR><BR>'''openttd.exe size with libicu: '''approx. 25 MB<BR>'''openttd.exe size with libicu (reduced icudata size): '''approx. 10 MB<BR>'''openttd.exe size without libicu: '''approx. 8 MB}}
+Steps to ultimate failure:
+
+<pre>wget http://download.icu-project.org/files/icu4c/4.6/icu4c-4_6-src.zip
+unzip icu4c-4_6-src.zip
+cd icu
+wget http://devs.openttd.org/~terkhen/libicu/libicu_4_6_mingw32.diff
+patch -p1 -i libicu_4_6_mingw32.diff
+wget http://devs.openttd.org/~terkhen/libicu/libicu_reduce_icudata_size.diff
+patch -p1 -i libicu_reduce_icudata_size.diff
+# recursively convert to Unix line endings
+dos2unix -f `find . -type f`
+cd source/config
+cp mh-unknown mh-unknown.1
+cp mh-mingw mh-unknown
+cd ..
+./configure --host=i586-mingw32msvc --prefix=/usr/local/i586-mingw32msvc  --enable-static --disable-shared --disable-strict --disable-threads CPPFLAGS="-I/usr/local/i586-mingw32msvc/include -DLC_MESSAGES" LDFLAGS=-L/usr/local/i586-mingw32msvc/lib
+
+cd lib
+# one of these libraries isn't built for some reason, so this doesn't really help anyway
+for i in $(ls -x); do ln -s $i lib$(basename $i .lib)46.a; done
+cd ..
+
+make
+sudo make install
+cd ../..</pre>
+
+==Getting the source code==
+Same as for standard Linux.
+==Compiling OpenTTD==
+There is a capitalization error in src/os/windows/win32.cpp, fix it with the following patch:
+<pre>diff --git a/src/os/windows/win32.cpp b/src/os/windows/win32.cpp
+--- a/src/os/windows/win32.cpp
++++ b/src/os/windows/win32.cpp
+@@ -19,7 +19,7 @@
+ #include <fcntl.h>
+ #include <regstr.h>
+ #include <shlobj.h> /* SHGetFolderPath */
+-#include <Shellapi.h>
++#include <shellapi.h>
+ #include "win32.h"
+ #include "../../core/alloc_func.hpp"
+ #include "../../openttd.h"
+</pre>
+
+<ol>
+<li>Run:<pre>cd ~/<path_to_source>
+# Stupid hardcoded directories; you only need to do this once
+sudo ln -s /usr/local/i586-mingw32msvc/ /mingw
+
+# Configure, disable all libraries that are falsely detected, explicitly specify others
+./configure --host=i586-mingw32msvc --prefix=/usr/local/i586-mingw32msvc CFLAGS="-I/usr/local/i586-mingw32msvc/include  --sysroot=/usr/i586-mingw32msvc" \ 
+LDFLAGS="-L/usr/local/i586-mingw32msvc/lib"  --without-sdl --without-icu --with-png=/usr/local/i586-mingw32msvc/bin/libpng-config \ 
+--with-freetype=/usr/local/i586-mingw32msvc/bin/freetype-config
+make</pre>
+
+Installing Wine and running 
+
+<pre>wine bin/openttd.exe</pre> 
+will start your Windows OpenTTD version.
