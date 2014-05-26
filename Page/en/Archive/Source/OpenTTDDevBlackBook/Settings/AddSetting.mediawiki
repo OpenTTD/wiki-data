@@ -74,7 +74,9 @@ You must define your string in the most appropriate one:
 ====settings.ini====
 The last change you have to make determines the behaviour of the Configure Patches window and exactly how your setting will be saved to [[en/Archive/Manual/Settings/Openttd.cfg]].  This is set with an entry in [http://svn.openttd.org/trunk/src/table/settings.ini settings.ini].
 
-While you only add a single entry per setting that you make, it is fairly complicated. To give you an idea here is an example:
+You can choose from a wide range of data types - each of them with different attributes. Below we'll take a look on SDT_VAR and SDT_BOOL - the two most common. The list below is not complete - for all attributes, look for [templates] near the top of the file.
+
+
 
  [SDT_VAR]
  base     = GameSettings
@@ -83,73 +85,98 @@ While you only add a single entry per setting that you make, it is fairly compli
  from     = 161
  to       = SL_MAX_VERSION
  flags    = 0
- guiflags = 0
  def      = 100
  min      = 10
  max      = 100
  interval = 5
  str      = STR_CONFIG_SETTING_MY_VAR_OPT
+ strhelp  = STR_CONFIG_SETTING_MY_VAR_OPT_HELPTEXT
+ strval   = STR_JUST_INT
  proc     = NULL
 
  [SDT_BOOL]
  base     = GameSettings
  var      = my_bool_opt
- from     = 161
- to       = SL_MAX_VERSION
- flags    = 0
- guiflags = 0
+ flags    = SLF_NOT_IN_SAVE | SLF_NO_NETWORK_SYNC
  def      = true
  str      = STR_CONFIG_SETTING_MY_BOOL_OPT
+ strhelp  = STR_CONFIG_SETTING_MY_BOOL_OPT_HELPTEXT
  proc     = NULL
 
-Of course you will have to place it in the appropriate order in the settings.ini file (hopefully this will be fairly obvious).
+If not specified, default values are used:
 
-Following is a detailed explanation of what it all means:
+ [defaults]
+ flags    = 0
+ guiflags = 0
+ interval = 0
+ str      = STR_NULL
+ strhelp  = STR_CONFIG_SETTING_NO_EXPLANATION_AVAILABLE_HELPTEXT
+ strval   = STR_NULL
+ proc     = NULL
+ load     = NULL
+ from     = 0
+ to       = SL_MAX_VERSION
+ cat      = SC_ADVANCED
+
+Try to find a natural place in the file for your settings. 
+
+Following is a detailed explanation of some of the attributes:
 
 =====Patch Setting Types=====
-The format of the patch setting can be a bit hard to follow, but is quite straightforward.  These are the two standard types of settings, i.e. SDT_BOOL and SDT_VAR
 
-*base: GameSettings
-*var: The variable name
-*type: data size for the variable - not required for BOOL, but can be a variety of sizes; SLE_UINT8, SLE_INT16, SLE_UINT32, etc.   etc... pick what you need
-*flags: this is the most awkward to understand, and is quite cryptic. It can take the following values:
-**0 (zero) = Default behaviour: Save in save game and openttd.cfg.  Sync with Network (Only the server can set the option)
-**N = Do '''not''' sync with network. (Each player can set their own)
-**S = Do '''not''' save in save game (but save in openttd.cfg).  '''Also''' does '''not''' sync with network.  (Each player can set their own)
-**C = Do not save in openttd.cfg, but save in save game.
-*guiflags: Affects how the option is displayed
-**D0 = Disable option.  Grey out for now but leave in for future use?  Maybe for internal use only.
-**NC = No Commas.  Display numbers without any thousands separators.
-**MS = Multi-string.  Option displays various strings instead of numbers for settings.
-**NO = Network Only.  Setting only applies to network games
-**CR = Currency.  Number in string will be converted to proper currency.
-*def: default value (true or false for BOOL, any valid value for VAR)
-*min, max, interval: min value, max value and interval by which integer value increments/decrements when using the yellow arrows (only applicable to VAR, obviously) 
-*str: the string used in the language file for the patch setting when displayed in the Patch Settings control panel. If you don't need to display it, just leave it as NULL.
-*proc: the procedure to call when the value is changed. Just leave this as NULL - safer that way.
-*from, to: Range of OpenTTD versions for which the setting is valid (see below)
+* '''base''': GameSettings
+* '''var''': The variable name
+* '''type''': data size for the variable - not required for BOOL, but can be a variety of sizes; SLE_UINT8, SLE_INT16, SLE_UINT32, etc.   etc... pick what you need
+* '''flags''': this is the most awkward to understand, and is quite cryptic. It can take the following values:
+** '''SLF_NOT_IN_SAVE''' - do not save with savegame, basically client-based
+** '''SLF_NOT_IN_CONFIG''' - do not save to config file
+** '''SLF_NO_NETWORK_SYNC''' - do not synchronize over network (but it is saved if SLF_NOT_IN_SAVE is not set)
+** '''SLF_ALLOW_CONTROL''' - allow control codes in the strings
+** '''SLF_ALLOW_NEWLINE''' - allow new lines in the strings
+* '''guiflags''': Affects how the option is displayed
+** '''SGF_0ISDISABLED''' - The feature is disabled (greyed out)
+** '''SGF_DISPLAY_ABS''' - display absolute value of the setting
+** '''SGF_MULTISTRING''' - the value represents a limited number of string-options (internally integer)
+** '''SGF_NETWORK_ONLY''' - this setting only applies to network games
+** '''SGF_CURRENCY''' - the number represents money, so when reading value multiply by exchange rate
+** '''SGF_NO_NETWORK''' - this setting does not apply to network games; it may not be changed during the game
+** '''SGF_NEWGAME_ONLY''' - this setting cannot be changed in a game
+** '''SGF_SCENEDIT_TOO''' - this setting can be changed in the scenario editor (only makes sense when SGF_NEWGAME_ONLY is set)
+** '''SGF_PER_COMPANY''' - this setting can be different for each company (saved in company struct)
+* '''def''': default value (true or false for BOOL, any valid value for VAR)
+* '''min''', '''max''', '''interval''': min value, max value and interval by which integer value increments/decrements when using the yellow arrows (only applicable to VAR, obviously) 
+* '''str''': the string used in the language file for the patch setting when displayed in the Patch Settings control panel. If you don't need to display it, just leave it as NULL.
+* '''strhelp''': the help string displayed when selecting the option in the menu.
+* '''strval''': What kind of value a SDT_VAL is. There are several options, but the most common are:
+** '''STR_JUST_INT''' - integer
+** '''STR_JUST_COMMA''' - float
+* '''proc''': the procedure to call when the value is changed.
+*'''from''', '''to''': Range of OpenTTD versions for which the setting is valid (see below)
+* '''cat''': Which category the setting belongs to. Defines if the setting is shown based on if basic, advanced or expert filtering is chosen in the filtering in the advanced settings menu.
+** SC_BASIC
+** SC_ADVANCED
+** SC_EXPERT
 
 =====SAVEGAME_VERSION=====
 
-You have your saved patch variable, but if you add it straight, OTTD will expect to find it in every savegame. So there is an extra pair of entries available for conditional variables; ones only available for a range of savegame versions. The savegame version number is found near the start of [http://svn.openttd.org/trunk/src/saveload/saveload.cpp saveload.cpp].
+If you don't use the flag '''SLF_NOT_IN_SAVE''', OpenTTD will expect to find your variable in every savegame. Therefore, it's important to tell the game from which version this setting was added. The savegame version number is found near the start of [http://svn.openttd.org/trunk/src/saveload/saveload.cpp saveload.cpp]. 
 
-When OTTD loads a data chunk, it compares the savegame version it was compiled with, with the savegame version in the savegame. By checking the <from> and <to> version numbers in the patch settings, it can see whether it supports the feature, and how to handle it.
+When OTTD loads a data chunk, it compares the savegame version it was compiled with, with the savegame version in the savegame. By checking the '''<to>''' and '''<from>''' attributes in the patch settings, it can see whether it supports the feature, and how to handle it.
 
 This way, you can control whether your feature is saved, and if it is, whether that save is compatible with previous versions.
 
-'''Note:''' by just defining your saved variable in the patch settings, you automatically make saves with your OTTD incompatible with everybody else's. Also, unless you follow the procedure below, you will not be able to *load* normal OTTD games with your version either!
+'''Note:''' If you define any variables without the '''SLF_NOT_IN_SAVE''' flag in the settings, all saves made on your build will be incompatible with all other versions of OpenTTD. 
 
-This is where the savegame version, and conditional vars save your bacon.
+To allow the opposite (load old games using your build), you'll have tell OpenTTD that you've introduced a new feature, and ''increase the savegame version''. If the current trunk is at version 160, and you have a new feature that to be saved along with the savefile, simply increase the savegame version. This is known as a '''Savegame BUMP'''.
 
-If the current trunk is at version 160, but you have a new feature that needs its settings vars saving, then ALWAYS increase the savegame version. This is known as a Savegame BUMP.
+When a normal build of OTTD tries to load a savegame from your system, it will see the savegame bump, and gracefully say ''Sorry, I cant load that - it's too new for me"''.
 
-When a normal OTTD tries to load a savegame from your system, it will see the savegame bump, and gracefully say "sorry, i cant load that - its too new for me".
+However, when loading a game with a savegame version lower than the specified in your '''from''' attribute in your setting - OpenTTD will know that it wont find that setting in the savefile, and loading should go succeed.
 
-However, to do the reverse - you loading older OTTD games - you need to identify your patch settings as "new in version XX" by using the <from> and <to> entries.
-
-So for our example (see above): we BUMP the savegame to 161, and set our vars with a <from> of 161, and a <to> of SL_MAX_VERSION, which as you can guess means "from now on". 
-
+So for our example above, we bump the savegame to 161, set '''from''' to 161 and '''to''' to '''SL_MAX_VERSION'''.
 
 
 [[Category:en/Archive/Source/OpenTTDDevBlackBook|P]]
 [[Category:en/Development]]
+
+--steili (talk) 12:13, 26 May 2014 (UTC)
