@@ -1,7 +1,9 @@
 [[Translation:en/Archive/Source/OpenTTDDevBlackBook/Settings/AddSetting]]
 {{en/Development/Navigation}}
 
-This article will briefly explain how a custom setting variable can be made by changing the sourcecode of OpenTTD. The tutorial will describe the process of adding two additional options to the  ''Advanced Settings'' dialog - one integer option and one bool.
+This article will briefly explain how a custom setting variable can be made by changing the source code of OpenTTD. The tutorial will describe the process of adding two additional options to the  ''Advanced Settings'' dialog - one integer option and one bool.
+
+
 
 ==Sections==
 The different settings categories can be seen from the ''Advanced Settings'' window:
@@ -29,7 +31,7 @@ During this tutorial, a number of files will be changed:
 * [http://svn.openttd.org/trunk/src/table/settings.ini settings.ini]
 * [http://svn.openttd.org/trunk/src/saveload/saveload.cpp saveload.cpp]
 
-To understand this thouroughly - you are advised to look around in all these files and try to get a feeling with how they are structured and how things generally are done. 
+To understand this thoroughly - you are advised to look around in all these files and try to get a feeling with how they are structured and how things generally are done. 
 
 ===Translation file - ''english.txt''===
 All text strings in OpenTTD are saved in language files. English is the only required translation - but if you know more languages you are welcome to add translations to those as well.
@@ -213,6 +215,7 @@ Below is a detailed explanation of some of the attributes:
 ** SC_EXPERT
 
 ====Making your build compatible with older savegames====
+[[File:en/Archive/Source/Setting tutorial small.png|right|frame|Final result]]
 
 If you don't use the flag <code>SLF_NOT_IN_SAVE</code>, OpenTTD will expect to find your variable in every savegame. Therefore, it's important to tell the game from which version this setting was added. The savegame version number is found near the start of [http://svn.openttd.org/trunk/src/saveload/saveload.cpp saveload.cpp]. 
 
@@ -230,10 +233,7 @@ However, when loading a game with a savegame version lower than the specified in
 
 So for our example above, we bump the savegame to 189 in [http://svn.openttd.org/trunk/src/saveload/saveload.cpp saveload.cpp] and set <code>from</code> to 161 and <code>to</code> to <code>SL_MAX_VERSION</code> in both our blocks in [http://svn.openttd.org/trunk/src/table/settings.ini settings.ini].
 
-===Compile===
-Now there's only one thing left to do - compile!
-
-[[File:en/Setting tutorial.png|frame|Image caption]]
+Now there's only one thing left to do - compile! I you've everything correct, you should see something similar as the picture to the right.
 
 
 [[Category:en/Archive/Source/OpenTTDDevBlackBook|P]]
