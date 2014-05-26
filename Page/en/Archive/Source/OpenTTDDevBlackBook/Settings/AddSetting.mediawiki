@@ -211,22 +211,21 @@ Below is a detailed explanation of some of the attributes:
 
 ====Making your build compatible with older savegames====
 
-If you don't use the flag '''SLF_NOT_IN_SAVE''', OpenTTD will expect to find your variable in every savegame. Therefore, it's important to tell the game from which version this setting was added. The savegame version number is found near the start of [http://svn.openttd.org/trunk/src/saveload/saveload.cpp saveload.cpp]. 
+If you don't use the flag <code>SLF_NOT_IN_SAVE</code>, OpenTTD will expect to find your variable in every savegame. Therefore, it's important to tell the game from which version this setting was added. The savegame version number is found near the start of [http://svn.openttd.org/trunk/src/saveload/saveload.cpp saveload.cpp]. 
 
-When OTTD loads a data chunk, it compares the savegame version it was compiled with, with the savegame version in the savegame. By checking the '''<to>''' and '''<from>''' attributes in the patch settings, it can see whether it supports the feature or not.
+When OpenTTD loads a data chunk, it compares the savegame version it was compiled with, with the savegame version in the savegame. By checking the <code>to</code> and <code>from</code> attributes in the patch settings, it can see whether it supports the feature or not.
 
 This way, you can control whether your feature is saved, and if it is, whether that save is compatible with previous versions.
 
-'''Note:''' If you define any variables without the '''SLF_NOT_IN_SAVE''' flag in the settings, all saves made on your build will be incompatible with all other versions of OpenTTD. 
+'''Note:''' If you define any variables without the <code>SLF_NOT_IN_SAVE</code> flag in the settings, all saves made on your build will be incompatible with all other versions of OpenTTD. 
 
-To allow the opposite (load old games using your build), you'll have tell OpenTTD that you've introduced a new feature, and ''increase the savegame version''. If the current trunk is at version 160, and you have a new feature that to be saved along with the savefile, simply increase the savegame version. This is known as a '''Savegame BUMP'''.
+To allow the opposite (load old games using your build), you'll have tell OpenTTD that you've introduced a new feature, and ''increase the savegame version''. If the current trunk is at version 160, and you have a new feature that to be saved along with the savefile, simply increase the savegame version. This is known as a ''savegame bump''.
 
-When a normal build of OTTD tries to load a savegame from your system, it will see the savegame bump, and gracefully say ''Sorry, I cant load that - it's too new for me"''.
+When a normal build of OpenTTD tries to load a savegame from your system, it will notice the savegame bump, and gracefully say ''Sorry, I cant load that - it's too new for me"''.
 
 However, when loading a game with a savegame version lower than the specified in your '''from''' attribute in your setting - OpenTTD will know that it wont find that setting in the savefile, and loading should go succeed.
 
-So for our example above, we bump the savegame to 161, set '''from''' to 161 and '''to''' to '''SL_MAX_VERSION'''.
-
+So for our example above, we bump the savegame to 189, set <code>from</code> to 161 and <code>to</code> to <code>SL_MAX_VERSION</code>.
 
 ===Compile===
 Now there's only one thing left to do - compile!
