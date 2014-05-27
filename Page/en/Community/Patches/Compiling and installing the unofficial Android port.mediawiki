@@ -10,11 +10,22 @@ This documents how to build and install pelya's unofficial SDL 1.2/OpenTTD Andro
 ** Download the Android SDK and NDK for your operating system and extract them anywhere.
 ** Install a JDK. Contrary to the official Android SDK page, you do not need the Oracle JDK; version 6 or newer of the Oracle JDK or OpenJDK will definitely work.
 ** Install Apache Ant.
-* Install Git or Subversion and use it to clone pelya's [https://github.com/pelya/commandergenius GitHub repository].
+* Download source archive from [https://sourceforge.net/projects/libsdl-android/files/apk/OpenTTD/ the sourceforge releases page].
+* If you want pre-release version, install Git and use it to clone pelya's [https://github.com/pelya/commandergenius SDL repository]: '''git clone https://github.com/pelya/commandergenius sdl-android'''.
+* Run command '''git submodule update --init project/jni/application/openttd/src''' from directory '''sdl-android''', this will download OpenTTD sources with Android modificaitons.
 
 <!-->== Modifying the source code ==
 
-Full OpenTTD source code (latest stable version) will be located in <repository root>/project/jni/application/openttd/openttd-<version>-orig (openttd-<version> is pre-patched). Modify and/or update this to your liking, then apply the Android-specific patch (one directory above) and finish the build.</!-->
+Full OpenTTD source code (latest stable version) will be located in '''sdl-android/project/jni/application/openttd/src'''</!-->
+
+== Viewing Android changes ==
+
+To view the differences between official and Android build, run commands from the directory '''sdl-android/project/jni/application/openttd/src''':
+
+* git remote add upstream git://git.openttd.org/openttd/trunk
+* git fetch upstream
+* git diff upstream/master
+* git format-patch upstream/master
 
 == Building ==
 * Add the NDK root directory and <SDK root directory>/tools to your PATH variable. 
