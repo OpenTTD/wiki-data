@@ -63,9 +63,21 @@ If it fails, you know for sure the patch is not the source of the problems.
 
 ====What is the point of a version control system? Why don't they just upload the source code to an FTP directory?====
 :* Version control systems keep track of all the changes, when they were made and by who. If the developers later find out something they did was a mistake and broke something important they may have to rewrite it from scratch. With this they can just 'checkout' a revision from when it was working. It also allows the developers to add comments so they know what changes have been done.
-====How do I make a diff file to share my changes with other coders?====
-:* In Linux, use the command "svn diff > mypatch.diff" from the source directory to create a diff file.
-:* In Windows, you can do the same from the command prompt, or, if you have Tortoise SVN, right button in the source directory and press Create Patch. It will ask for a location and filename.
+====How to create patches====
+
+:* '''Bash (Linux) or cmd (Windows)
+:** In Windows, make sure you have either the [http://sourceforge.net/projects/win32svn/ svn] or [http://git-scm.com/downloads git] binary installed. They ship as default with most versions of Linux.
+:*** '''SVN''': <code>svn diff > mypatch.diff</code> from the source directory
+:*** '''git''': <code>git diff origin/master HEAD /src > mypatch.patch</code> from anywhere inside your repository
+:* '''GUI'''
+:** '''Tortoise SVN (Windows)'''
+:*** Right click on the source directory, select <code>Create Patch</code> and supply a location and a name of your new patch.
+
+===Notes===
+:* Make sure that your patch doesn't contain unnecessary changes. 
+:* Read the [[en/Archive/Community/Patch Checklist]]
+:* TortoiseSVN doesn't understand patch files created with git.
+:* Have a look at the [http://git-scm.com/documentation git documentation] or the [https://subversion.apache.org/docs/ svn documentation] if this is new to you.
 
 ====How to apply a patch?====
 It's usually best to apply patches to the revision stated by the patch creator.
