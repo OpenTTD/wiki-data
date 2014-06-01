@@ -1,0 +1,225 @@
+= Contracts =
+The idea is to have subsidies that can also function as contracts, to be controlled with NoGo.
+
+Basically it's a subsidy but extensions to
+* an amount of cargo to transport,
+* with a custom expire date,
+* with optional post-awarded time.
+
+Cargo-dist is making havoc in subsidies, therefore subsidies (and thus also extensions such as the above) are disabled for cargoes controlled by cargo-dist.
+NoGo has access to that table, which means a subsidy script should be able to figure it out.
+
+== Overview ==
+
+When a subsidy is published for a cargo, companies have 12 months to setup a transport from a source to a destination. This period is called ''competition stage'' here. When the first cargo is delivered, the subsidy is rewarded, and the company that delivered the cargo gets a larger amount of money paid for 12 more months. That period is called the ''reward stage''.
+
+When considering extensions to this scheme, several things come to mind:
+
+* Don't use time in the competition stage, but an amount of cargo.
+* Don't use time in the reward stage, but an amount of cargo.
+* Allow for more flexible time or amount of cargo in both stages.
+* Allow for more flexible payment schemes.
+* Drop reward stage (the whole point is to achieve the condition set by the subsidy).
+* Skip competition stage (a company is awarded directly, and gets paid).
+
+For compabitility reasons, the existing subsidies should still be possible.
+
+== CmdCreateSubsidy ==
+The first order of business is to find out how what you can set in a command. The current allocation of information (r26621) for <tt>CmdCreateSubsidy</tt> is
+<tt> * @param p1 various bitstuffed elements
+ * - p1 = (bit  0 -  7) - SourceType of source.
+ * - p1 = (bit  8 - 23) - SourceID of source.
+ * - p1 = (bit 24 - 31) - CargoID of subsidy.
+ * @param p2 various bitstuffed elements
+ * - p2 = (bit  0 -  7) - SourceType of destination.
+ * - p2 = (bit  8 - 23) - SourceID of destination.</tt>
+
+There is plenty of room, <tt>SourceType</tt> is just 3 values, so 2 bits suffice, and <tt>CargoID</tt> is just 5 bit long.
+That results in the following use of bits:
+* 5 bits CargoID.
+* 2 bits SourceType of source.
+* 16 bits SourceID of source.
+* 2 bits SourceType of destination.
+* 16 bits SourceID of destination.
+
+Total 5 + 2 + 16 + 2 + 16 = 41 bits, leaving 64 - 41 = 23 bits free.
+
+=== Extensions ===
+For the extensions that space can be used as follows
+
+* 8 bits for a variable total amount of time (that is, other than the current maximum 12+12 months).
+* 4 bits for the ratio of the competition and the reward stages.
+* 1 bit for toggling amount of time or amount of cargo (8 bits above becomes the total amount of cargo to deliver).
+* 4 bits for assigning a rewarded company (required if the competition stage is skipped).
+* 2 bits whether a competition stage and/or reward stage exists (must have at least one stage).
+* 1 bit for payment of companies in competition stage (0 means 'no payment', 1 means 'normal payment').
+* 1 bit for payment of the rewarded company in reward stage (0 means 'normal payment', 1 means 'subsidized payment').
+* 1 bit for payment of the non-rewarded companies in reward stage (0 means 'no payment', 1 means 'normal payment').
+
+Total 8 + 4 + 1 + 4 + 2 + 1 + 1 + 1 = 22, leaving 1 bit free.
+
+=== Variable time ===
+With just 8 bit, a linear increment does not scale very well, therefore I propose a non-linear scale. The following table shows the scale. Entries are cumulative, the second row adds to the first row, the third row adds to the second row.
+
+{| class="wikitable"
+|-
+! '''n'''
+! increments
+! maximum
+|-
+| 0 to 60
+| 3 months
+| 15 year
+|-
+| 61 to 90
+| 6 months
+| 15 + 15 year = 30 years
+|-
+| 91 to 160
+| 12 months
+| 15 + 15 + 70 year = 100 years
+|-
+| 161 to 255
+| 24 months
+| 15 + 15 + 70 + 190 = 290 years
+|}
+
+
+The Python program that computes it exactly for each value of '''n''':
+
+<tt>def get_length(n)
+    base = 0
+    if n <= 60: return (base + n*3)/12 # 60 = 15 year
+    n, base = n-60, base + 60*3
+    if n <= 30: return (base + n*6)/12 # 90 = 30 year
+    n, base = n-30, base + 30*6
+    if n <= 70: return (base + n*12)/12 # 160 = 100 year
+    n, base = n-70, base + 70*12
+    return (base + n*24)/12 # 255 == 290 year</tt>
+
+=== Variable cargo ===
+Cargo is even worse with respect to scale than time. For this reason there are much more steps with bigger increments.
+
+{| class="wikitable"
+|-
+! '''n'''
+! increments
+! maximum
+|-
+| 0 to 40
+| 250
+| 10K
+|-
+| 41 to 70
+| 500
+| 10K + 15K = 25K
+|-
+| 71 to 95
+| 1K
+| 25K + 25K = 50K
+|-
+| 96 to 115
+| 2K5
+| 50K + 50K = 100K
+|-
+| 116 to 135
+| 5K
+| 100K + 100K = 200K
+|-
+| 135 to 165
+| 10K
+| 200K + 300K = 500K
+|-
+| 166 to 185
+| 25K
+| 500K + 500K = 1M
+|-
+| 186 to 195
+| 100K
+| 1M + 1M = 2M
+|-
+| 196 to 207
+| 250K
+| 2M + 3M = 5M
+|-
+| 208 to 217
+| 500K
+| 5M + 5M = 10M
+|-
+| 218 to 232
+| 1M
+| 10M + 15M = 25M
+|-
+| 233 to 247
+| 5M
+| 25M + 75M = 100M
+|-
+| 248 to 255
+| 50M
+| 100M + 400M = 500M
+|}
+
+And the Python program with that performs the compution for any '''n''':
+
+<tt>def get_amount(n)
+    base = 0
+    if n <= 40: return base + n*250 # 40 == 10K
+    n, base = n-40, base + 40*250
+    if n <= 30: return base + n*500 # 70 == 25K
+    n, base = n-30, base + 30*500
+    if n <= 25: return base + n*1000 # 95 == 50K
+    n, base = n-25, base + 25*1000
+    if n <= 20: return base + n*2500 # 115 == 100K
+    n, base = n-20, base + 20*2500
+    if n <= 20: return base + n*5000 # 135 == 200K
+    n, base = n-20, base + 20*5000
+    if n <= 30: return base + n*10000 # 165 == 500K
+    n, base = n-30, base + 30*10000
+    if n <= 20: return base + n*25000 # 185 == 1M
+    n, base = n-20, base + 20*25000
+    if n <= 10: return base + n*100000 # 195 == 2M
+    n, base = n-10, base + 10*100000
+    if n <= 12: return base + n*250000 # 207 == 5M
+    n, base = n-12, base + 12*250000
+    if n <= 10: return base + n*500000 # 217 == 10M
+    n, base = n-10, base + 10*500000
+    if n <= 15: return base + n*1000000 # 232 == 25M
+    n, base = n-15, base + 15*1000000
+    if n <= 15: return base + n*5000000 # 247 == 100M
+    n, base = n-15, base + 15*5000000
+    return base + n*50000000 # 255 == 500M</tt>
+
+
+=== Variable ratio ===
+Part of the above total amount of time or cargo is in the competition stage, and the remaining part is for the reward stage. It should be possible to give everything to one stage (if the other one is of no interest. Also, it should be possible to split the amount in two exactly the same amounts.
+
+With 4 bits available, this results in ratios 0/14 to 14/14 for the competition stage. Note that the ratio is computed over the total amount, eg a time-based subsidy with '''n = 10''' (meaning 30 months), with a ratio 5/15, means that 30*5/14 months go to the competition stage.
+
+=== Skipping stages ===
+The two bits for skipping stages should be able to express
+
+* only a competition stage,
+* only a reward stage, or
+* both a competition and a reward stage.
+
+In the second case, a company to reward the subsidy to should be provided as well.
+
+=== Payment bits ===
+Maybe having different payment models could be nice, for cargo transported as expressed by the subsidy:
+
+* In competition stage:
+:* Nobody gets paid.
+:* Everybody gets normal pay.
+
+* In reward stage:
+:* The rewarded company can have normal pay or subsidized pay.
+:* Other companies can have no pay or normal pay.
+
+=== Things to ponder about ===
+Some open questions that need to be considered at some point:
+
+* A subsidy on amount has no expire date set. This may cause trouble when many such subsidies are issued and no company goes to the reward stage.
+* A company may go bankrupt after it reached the reward stage. Simplest solution is perhaps to drop the subsidy at that time.
+* Payment bits look a lot like exclusive transport rights in a way.
+
+* Can a subsidy be retracted without being rewarded to a company? (In particular, by NoGo)
