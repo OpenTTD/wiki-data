@@ -1,5 +1,7 @@
 == Effect spawning model ==
 
+(implemented in r26747)
+
 This controls when the vehicle emits a visual effect. The NewGRF can choose from a fixed set of models; more might
 be added in the future, but since this is performance critical NewGRFs cannot define their own models.
 
@@ -22,7 +24,7 @@ The spawning models match the classical visual effects:
 
 == Advanced effect creation ==
 
-When 'advanced effects' are enabled, each time the vehicle wants to create visual effect, callback XXX is called.
+When 'advanced effects' are enabled, each time the vehicle wants to create visual effect, callback 160 called.
 The callback decides the position and look of the effect.
 
 This callback is also called when a vehicle breaks down to decide the breakdown effect.
@@ -31,39 +33,41 @@ Since callback failure means no effect the behaviour is compatible.
 
 Input:
 * Variable 10, bit 0-7:
-*: 00: Visual effect
-*: 01: Breakdown effect
+*: 00: Visual effect (implemented in r26747)
+*: 01: Breakdown effect (not yet implemented)
 *: xx: reserved
 * Variable 18:
 *: 32 random bits
 
 Result:
-* Bits 0..3: Number of effects to spawn, details specified via registers 100+x
-* Bit 13: Train and RV only: Position effect relative to vehicle center instead of relative to vehicle sprite. (identical for vehlength 8/8)
-* Bit 14: Disable auto-rotation of effect position wrt. vehicle orientation
+* Bits 0..3: Number of effects to spawn, details specified via registers 100+x (implemented in r26747)
+* Bit 13: Train and RV only: Position effect relative to vehicle center instead of relative to vehicle sprite. (identical for vehlength 8/8) (implemented in r26747)
+* Bit 14: Disable auto-rotation of effect position wrt. vehicle orientation (implemented in r26747)
 * <strike>Bit xx: Cache callback result until next call to CB 10</strike> (will cause desync trouble due to random var18)
 
 CB Failure: Draw no effect
 
 Registers 100+x: Define x-th effect.
 * Bit 0..7: Effect type
-*: 00..EF: Custom effect
+*: 00..EF: Custom effect (not yet implemented)
 *: F0..FF: reserved, except
-*: F1    : default 'steam'
-*: F2    : default 'diesel'
-*: F3    : default 'electric'
-*: F6    : default 'breakdown smoke'
-*: FA    : default 'broken aircraft'
-*: FF    : no effect
-* Bit  8..15: Longitudinal resp. X position (signed)
-* Bit 16..24: Transversal resp. Y position (signed)
-* Bit 25..31: Z position (signed)
+*: F1    : default 'steam' (implemented in r26747)
+*: F2    : default 'diesel' (implemented in r26747)
+*: F3    : default 'electric' (implemented in r26747)
+*: F6    : default 'breakdown smoke' (implemented in r26747)
+*: FA    : default 'broken aircraft' (implemented in r26747)
+*: FF    : no effect (implemented in r26747)
+* Bit  8..15: Longitudinal resp. X position (signed) (implemented in r26747)
+* Bit 16..24: Transversal resp. Y position (signed) (implemented in r26747)
+* Bit 25..31: Z position (signed) (implemented in r26747)
 
 Note:
 * Longitudinal/transversal resp. X/Y is decided by result bit 14 for all effects.
 * The magic numbers F0..FE match the order of the existing effect vehicle types
 
 == Custom effects ==
+
+(not yet implemented)
 
 When returning a custom effect from CB XXX, the effect is resolved similar to the rotor sprite of helicopters using
 an 'self' wagon-override.
