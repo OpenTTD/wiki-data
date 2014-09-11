@@ -7,54 +7,53 @@
 
 Если у вас появляются ошибки даже в самой последней сборке, вы можете запустить игру в режиме отладки. Запускайте игру с параметром ''"-d1"'' в этом случае. Более подробно можно прочитать в разделе [[en/Development/Debugging|отладка]].
 
-== The game will not start because ... ==
+== Игра не запускается потому, что ... ==
 
-=== ... it complains about missing files ===
-OpenTTD requires some graphic sets in order to function.  It can either be the original ones from Transport Tycoon Deluxe or the OpenGFX/OpenSFX ones. Refer to the [[ru/Archive/Manual/ЧЗВ Установка|installation FAQ]] article and ensure you have followed the appropriate steps for your Operating System.
+=== ... жалуется на недостающие файлы  ===
+OpenTTD нуждается в графическом сете. Он может быть как оригинальный из Transport Tycoon Deluxe, так и OpenGFX/OpenSFX . Обратитесь к [[ru/Archive/Manual/ЧЗВ Установка|данной статье]] и убедитесь в том, что вы выполнили шаги для вашей ОС.
 
-If you have not completed these steps sucessfully, you may see one of the following errors:
+Если вы не следовали данным советам, вы можете увидеть следующие ошибки:
 * ''' 'Nix style OS ''' (Linux, OSX, Morhops, etc.): Error: Cannot open file '/usr/share/games/openttd/data/sample.cat'
 * '''Windows OS''' (Win98, Win2k, WinXP, etc.): Cannot open file '<OpenTTD Install Directory>\data\sample.cat'
 
 NOTE:
-On *nix computers, if you copied the files from, say, a Windows partition as, say, "root" you may also have problems
-because you don't have the proper permissions to read the files as a normal user.  (if this is the case, you can still
-run OpenTTD as root; you should probably fix the file permissions, though)
+На *nix ОС, если вы копировали файлы из, так скажем, из раздела Windows как "корень", вы также можете иметь проблемы
+из-за того, что у вас нету прав для чтения файла как у обычного пользователя.  (Если это так, вы можете 
+запустить OpenTTD как корень; вам следовало бы исправить проблему с правами)
 
-=== ... it crashes on Win98(SE) ===
-:* Windows98/98SE has problems with DirectX and DirectMusic. Try to start the game with: <pre>openttd.exe -m win32</pre>
+=== ... вылетает на Win98(SE) ===
+:* Windows98/98SE имеет проблему с DirectX и DirectMusic. попробуйте запустить игру с параметрами: <pre>openttd.exe -m win32</pre>
 
-=== ... it outputs an error '''MD5 of <filename> is ****INCORRECT**** - File Corrupt ===
-:*This error comes about if you have a corrupt or changed GRF file. OpenTTD only checks the ones for the original TTD game, either DOS or Windows version, and if it finds that the file is corrupted, it presents this message. You should copy the file from your original TTD disk again.
-:*This message will also appear if you are using modified GRF files (but only if they modify the original TTD files).  Other GRF's are not checked for corruption. The message was incorporated to make sure that any problems within the game are caused by the error you report rather than corrupt files on the disk.
+=== ... показывает ошибку '''MD5 of <filename> is ****INCORRECT**** - File Corrupt ===
+:*Ошибка появляется, если вы изменили или повредили GRF файл. OpenTTD проверяет файлы только из DOS или Windows версии TTD, и если файлы повреждены, выводится сообщение из ошибки. Вам следовало бы скопировать файлы TTD ещё раз. В настоящее время игра не требует оригинальных файлов.
+:*Ошибка может появится также из-за того, что вы используете модифицированные GRF файлы (только если это модифицированные файлы оригинального TTD).  Другие GRF не проверялись на повреждения.
+=== ... показывает белый экран на MacOS X Leopard ===
+:* OpenTTD 0.6.0 иногда имеет проблему с цветовым профилем с дисплеем. Ошибка: "Could not get system colour space. You may need to calibrate your monitor." может появится также в OpenTTD 0.7.2. Убедитесь в том, что хотя бы один цветовой профиль выбран в 'Monitor Preferences'. Если это не работает, создайте новый профиль исходя из калибровки старого. Это не баг OpenTTD, а скорее баг Leopard и он очень редкий. После выбора профиля перезапустите свой компьютер и запустите OpenTTD заново.
 
-=== ... it shows a white screen on MacOS X Leopard ===
-:* OpenTTD 0.6.0 running on Leopard has sometimes a problem with the color profile of the current display. The error message "Could not get system colour space. You may need to calibrate your monitor." can appear on OpenTTD 0.7.2 too. Please make sure the at least one color profile is selected in the 'Monitor Preferences'. If that doesn't work, please create a new color profile by calibrating the old one. This is not a OpenTTD bug, it's more a Leopard bug and it's very rare. After setting the color profile, restart the computer and try running OpenTTD again.
+=== ... показывает ошибку 'Error: Unable to load driver 'sdl'. Ошибка была: Couldn't open X11 display' ===
+:* Когда запущена xdm на Linux, может появится эта ошибка. Это проблема SDL. Вы можете сделать так: <code>xhost +</code>, перед запуском OpenTTD для обхода ошибки. После запуска OpenTTD вы должны сделать так: <code>xhost -</code>.
 
-=== ... it outputs an error 'Error: Unable to load driver 'sdl'. The error was: Couldn't open X11 display' ===
-:* When running xdm on Linux, this error may occur. This is an SDL issue. One can simply do <code>xhost +</code> before starting OpenTTD to work around this problem. Once OpenTTD is running you should do <code>xhost -</code>.
+== Когда я запускаю игру в полном экране, частота обновления изменяется на 60Hz! (Windows) ==
+:*Это из-за того, что вы не настроили DirectX правильно. Из-за этого игра может также запуститься с повышенной частотой обновления. Попробуйте скачать "DirectX Control Panel" с сайта microsoft.com, скопировать в  /windows/system32, открыть Control Panel, затем во вкладку DirectDraw и выставить "Forced Refresh Rate" на максимальную частоту вашего монитора.
+:*Вы можете использовать '''display_hz''' для правильной частоты. Это находится в группе '''[win32]''' в файле [[en/Archive/Manual/Settings/Openttd.cfg]].
 
-== When I start game in fullscreen mode, the refresh rate is changed to 60Hz! (Windows) ==
-:*It's because you haven't configured DirectX properly. For the same reason it may happen that the game runs with a higer refresh rate than your monitor supports. Try to download "DirectX Control Panel" from microsoft.com, copy it into /windows/system32, open the dialog in the Control Panel, go to DirectDraw tab, and set the "Forced Refresh Rate" to the maximum what your monitor can show.
-:*You can set '''display_hz''' to have correct refreshrate. This item is in '''[win32]''' group of [[en/Archive/Manual/Settings/Openttd.cfg]].
+== Курсор скрыт при полном экране на  Linux ==
+* В OpenTTD можно играть в окне.
+* Убедитесь, что вы установили ATi драйвера правильно, воспользуйтесь  [http://xoomer.virgilio.it/flavio.stanchina/debian/fglrx-installer.html данным гайдом].
 
-== Cursor is hidden in fullscreen modes under Linux ==
-* OpenTTD is playable in window mode.
-* Ensure you have the latest ATi propetiary drivers installed correctly, follow [http://xoomer.virgilio.it/flavio.stanchina/debian/fglrx-installer.html this guide].
+== Jukebox не воспроизводит музыку/переключается между треками очень быстро ==
+Прежде всего, переместили ли вы все .gm файлы в 'gm' директорию?
+=== Что за 'gm' директория? ===
+Это должно быть там же, где и ваш OTTD программный файл. Если там ничего нет - создайте и переместите .gm файлы с оригинального TTD install/CD.
+Если у вас только DOS версия, файлы могут отсутствовать. Извините, никаких midi для вас до того момента, когда вы найдёте их где-нибудь ещё :(
+=== Я скопировал файлы, но ничего не работает ===
+Музыка не будет воспроизводиться, если в пути к файлам имеются пробелы или некоторые (как é) знаки (пример: 'C:\\Program files\ottd\gm').
+Попробуйте переустановить используя другой путь
 
-== The Jukebox won't play any music/skips through tracks really fast ==
-First of all, have you put all of the *.gm files into the 'gm' directory?
-=== What 'gm' directory? ===
-There should be one in the same directory as your OTTD program file. If there isn't, then create it and transfer the .gm files from your original TTD install/CD.
-If you only have the DOS version of the game, and you do not see any .gm files anywhere, then you may not have them. Sorry, no cheesy midi for you unless you find them elsewhere :(
-=== I copied the files, still isn't working ===
-It has been reported that the music will not play if you have any parent directories with spaces or special characters in them (eg. 'C:\\Program files\ottd\gm').
-Try putting your install into a path without spaces and special characters (like é).
-
-Also, there are sometimes issues with file permissions, especially if you have copied the files across direct from CD.
-Try setting all the file permissions to read/write:
-* OS X; goto 'gm' directory, select all files [cmd]+[a], select file->'get info' (or [cmd]+[i]), under 'owner permissions' select 'read and write'.
-* Windows; goto 'gm' directory, select all files [ctrl]+[a], select file->properties, uncheck 'read only'.
+Также, может быть проблема доступа к файлам, если вы скопировали файлы TTD прямо с диска.
+Попробуйте изменить чтение/запись в параметрах файлов:
+* OS X; зайдите в 'gm' директорию, выберите все файлы [cmd]+[a], затем file->'get info' (или [cmd]+[i]), под 'owner permissions' выберите 'read and write'.
+* Windows; gзайдите в 'gm' директорию, выберите все файлы [ctrl]+[a], затем file->properties, уберите галочку с 'read only'.
 
 == There is no sound or no music on Linux ==
 This is a known issue for some systems. Only one application can send to the sound driver.
