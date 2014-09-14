@@ -9,6 +9,27 @@ However, you must replace (or override in the Wine configuration tool) the Wine-
 You will need the MinGW binaries, includes and libraries for Linux-to-Windows cross-compiling (32-bit, 64-bit not tested) installed under /usr/i586-mingw32msvc (Debian/Ubuntu: sudo apt-get install mingw32). The further steps are more or less the same as those required for compiling with MinGW on Windows. 
 
 For consistency, self-installed libraries etc. will be stored in subfolders of /usr/local/i586-mingw32msvc. However, the OpenTTD configure script isn't very good at finding libraries that match the selected host, so some will need to be specified manually/linked to a hardcoded directory (see end).
+=== 64-bit builds ===
+Should work exactly the same way, but with the mingw64 package and all occurences of i586-mingw32msvc replaced by x86_64-w64-mingw32. It does for the libraries, but the OpenTTD build fails anyway:
+<pre>In file included from /home/****/trunk/src/os/windows/../../network/core/os_abstraction.h:42:0,
+                 from /home/****/trunk/src/os/windows/../../network/core/tcp_content.h:17,
+                 from /home/****/trunk/src/os/windows/../../fios.h:18,
+                 from /home/****/trunk/src/os/windows/win32.cpp:17:
+/home/****/trunk/src/os/windows/../../network/core/../../os/windows/win32.h:39:28: error: expected identifier before numeric constant
+ #define SHGFP_TYPE_CURRENT 0
+                            ^
+/home/****/trunk/src/os/windows/../../network/core/../../os/windows/win32.h:39:28: error: expected '}' before numeric constant
+/home/****/trunk/src/os/windows/../../network/core/../../os/windows/win32.h:39:28: error: expected unqualified-id before numeric constant
+In file included from /home/****/trunk/src/os/windows/win32.cpp:21:0:
+/usr/share/mingw-w64/include/shlobj.h:710:5: error: 'SHGFP_TYPE' does not name a type
+   } SHGFP_TYPE;
+     ^
+In file included from /home/****/trunk/src/os/windows/win32.cpp:21:0:
+/usr/share/mingw-w64/include/shlobj.h:2747:1: error: expected declaration before '}' token
+ }
+ ^
+make[1]: *** [os/windows/win32.o] Error 1
+</pre>
 
 ==List of packages==
 This tutorial has been tested with the following versions of the required packages:
