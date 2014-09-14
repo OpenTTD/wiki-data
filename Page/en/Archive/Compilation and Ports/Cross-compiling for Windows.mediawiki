@@ -89,40 +89,31 @@ sudo make install
 cd ..</pre>
 
 ==Compiling libicu== 
-
-Doesn't work (same problem as https://www.mail-archive.com/bug-guile@gnu.org/msg04505.html, so probably internal to ICU). 
-
 libicu is an optional library used for handling of right-to-left scripts (e.g. Arabic and Persian) and the natural sorting of lists. It can take a long time to compile, so you can safely omit this step if you don't require libicu.
 
-
-{{en/Note|The application of the second patch is an optional step. It will reduce the size of compiled OpenTTD, at the cost of losing sorting data for most languages.}}
+This was attempted with ICU 5.3 (newest release) after failure with the 4.6 version used in the Windows MinGW guide. The size reduction patches were not tested and probably won't work anyway.
 
 {{en/Warning|Compiling with libicu will greatly increase the size of the resulting OpenTTD executable.<BR><BR>'''openttd.exe size with libicu: '''approx. 25 MB<BR>'''openttd.exe size with libicu (reduced icudata size): '''approx. 10 MB<BR>'''openttd.exe size without libicu: '''approx. 8 MB}}
-Steps to ultimate failure:
-
-<pre>wget http://download.icu-project.org/files/icu4c/4.6/icu4c-4_6-src.zip
-unzip icu4c-4_6-src.zip
-cd icu
-wget http://devs.openttd.org/~terkhen/libicu/libicu_4_6_mingw32.diff
-patch -p1 -i libicu_4_6_mingw32.diff
-wget http://devs.openttd.org/~terkhen/libicu/libicu_reduce_icudata_size.diff
-patch -p1 -i libicu_reduce_icudata_size.diff
-# recursively convert to Unix line endings
-dos2unix -f `find . -type f`
-cd source/config
+Steps (doesn't entirely/reliably work yet, probably should separate the build directories for the native and cross-compiled ICU versions):
+* Fetch and unpack the ICU source code
+<pre>wget http://download.icu-project.org/files/icu4c/5.3/icu4c-53_1-src.tgz
+tar xvfz icu4c-53_1-src.tgz
+cd icu/source</pre>
+* Compile ICU for your platform first, this is required to make a few build tools available 
+<pre>./configure
+make</pre>
+* Prepare and execute cross-compilation
+<pre>cd config
 cp mh-unknown mh-unknown.1
 cp mh-mingw mh-unknown
 cd ..
-./configure --host=i586-mingw32msvc --prefix=/usr/local/i586-mingw32msvc  --enable-static --disable-shared --disable-strict --disable-threads CPPFLAGS="-I/usr/local/i586-mingw32msvc/include -DLC_MESSAGES" LDFLAGS=-L/usr/local/i586-mingw32msvc/lib
-
-cd lib
-# one of these libraries isn't built for some reason, so this doesn't really help anyway
-for i in $(ls -x); do ln -s $i lib$(basename $i .lib)46.a; done
-cd ..
+# --disable-threads isn't supported anymore
+./configure --host=i586-mingw32msvc --prefix=/usr/local/i586-mingw32msvc  --enable-static --disable-shared --disable-strict CPPFLAGS=-I/usr/local/i586-mingw32msvc/include LDFLAGS=-L/usr/local/i586-mingw32msvc/lib --with-cross-build=`pwd`
 
 make
 sudo make install
 cd ../..</pre>
+One build was successful, but icu-config --version failed anyway because it couldn't find libicu4c.dll (which, as a dynamic library, shouldn't have been built anyway), and thus, OpenTTD refused to configure itself to use the compiled ICU version (--with-icu=/usr/local/i586-mingw32msvc/bin/icu-config).
 
 ==Getting the source code==
 Same as for standard Linux.
