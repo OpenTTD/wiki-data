@@ -606,13 +606,32 @@ The net result is that 100 km/hour is ~3.6 tiles/day.
 *New railtypes can specify custom maximum curve speeds in the same steps as the three default types in the table.
 *Tilting train gain an additional bonus of 20% on the maximum speed.
 *Train acceleration and max speed are affected by engine power, maximum tractive effort (all engines and powered wagons combined), current speed, air drag, total train mass, and wagons/engines on slopes.
-*Non maglev train Acceleration spreadsheet can be found on tt-forums: [http://www.tt-forums.net/viewtopic.php?f=31&t=55972&p=960678#p960672 tt-forums] (There is no updated mathematical formulas for the latest release, just that spreadsheet)
+*Non maglev train Acceleration spreadsheet can be found on tt-forums: [http://www.tt-forums.net/viewtopic.php?f=31&t=55972&p=960678#p960672 tt-forums]
 *Braking is twice acceleration except when entering a depot or a station.
 [[File:en/Manual/Game Mechanics/Speed-limits.png]]
 
 ''See also: [[en/Archive/Manual/Settings/Realistic acceleration]] and [[en/Community/Corners]].''
 
 See aircraft_cmd.c, roadveh_cmd.c, ship_cmd.c, train_cmd.c, vechicle.c for code.
+
+As of OpenTTD 1.4.2, given power in hp, max tractive effort in kN, total weight of the train in tonnes, the number train parts (engines and wagons), the air drag value of the first engine in the train (NewGRF setting, defaults to <code>min(192,max(1,floor(2048/max_speed))</code>, meaning faster trains are built more aerodynamically), the combined weight of any train parts (engines or wagons) currently on an up-slope, the combined weight of any train parts (engines or wagons) currently on a down-slope, the slope steepness (game setting [1-10], default 3), and the current speed of the train in km/h, the acceleration of a non-maglev train can be calculated as follows:
+
+; force = min((max_te * 1000), floor((power * 746) / (current_speed * 5/18)))    [N]
+; slope_force = weight_on_upslope * slope_steepness * 100 - weight_on_downslope * slope_steepness * 100    [N]
+; axle_friction = total_weight * 10    [N]
+; rolling_friction = total_weight * 15 * (1 + floor(current_speed / 512))    [N]
+; air_drag_coefficient = 14 * floor(air_drag_value * 1 + number_of_parts * 3/20) / 1000    [kg/m]
+; air_drag = floor(air_drag_coefficient * current_speed^2)   [N]
+; acceleration = (force - (slope_force + axle_friction + rolling_friction + air_drag)) / (total_weight * 4) [256th of a km/h per half-tick]
+
+Note: air_drag_coefficient is twice that if any part of the train is in a tunnel
+
+Given the same values, the equilibrium speed, eg the speed the train would eventually settle on if the same conditions continued indefinitely, can be calculated as follows [Assuming a constant <code>rolling_friction</code> (ie the speed stays below 512 km/h), and ignoring the flooring of <code>force</code> and <code>air_drag</code> to an integral value]:
+
+; p = (slope_force + axle_friction + rolling_friction) / air_drag_coefficient
+; q = (-power * 746 * 18/5) / air_drag_coefficient
+; C = (27/2*q + ((27/2*q)^2 + 27*p^3)^(1/2))^(1/3)
+; equilibrium = min(max_speed, p/C - C/3, (max_te*1000-p)^(1/2))
 
 == Town growth ==
 
