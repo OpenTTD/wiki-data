@@ -614,13 +614,13 @@ The net result is that 100 km/hour is ~3.6 tiles/day.
 
 See aircraft_cmd.c, roadveh_cmd.c, ship_cmd.c, train_cmd.c, vechicle.c for code.
 
-As of OpenTTD 1.4.2, given power in hp, max tractive effort in kN, total weight of the train in tonnes, the number train parts (engines and wagons), the air drag value of the first engine in the train (NewGRF setting, defaults to <code>min(192,max(1,floor(2048/max_speed))</code>, meaning faster trains are built more aerodynamically), the combined weight of any train parts (engines or wagons) currently on an up-slope, the combined weight of any train parts (engines or wagons) currently on a down-slope, the slope steepness (game setting [1-10], default 3), and the current speed of the train in km/h, the acceleration of a non-maglev train can be calculated as follows:
+As of OpenTTD 1.4.2, given power in hp, max tractive effort in kN, total weight of the train in tonnes, the number train parts (engines and wagons), the air drag value of the first engine in the train (NewGRF setting, defaults to <code>min(192,max(1,floor(2048/max_speed)))</code>, meaning faster trains are built more aerodynamically), the combined weight of any train parts (engines or wagons) currently on an up-slope, the combined weight of any train parts (engines or wagons) currently on a down-slope, the slope steepness (game setting [1-10], default 3), and the current speed of the train in km/h, the acceleration of a non-maglev train can be calculated as follows:
 
 ; force = min((max_te * 1000), floor((power * 746) / (current_speed * 5/18)))    [N]
 ; slope_force = weight_on_upslope * slope_steepness * 100 - weight_on_downslope * slope_steepness * 100    [N]
 ; axle_friction = total_weight * 10    [N]
 ; rolling_friction = total_weight * 15 * (1 + floor(current_speed / 512))    [N]
-; air_drag_coefficient = 14 * floor(air_drag_value * 1 + number_of_parts * 3/20) / 1000    [kg/m]
+; air_drag_coefficient = 14 * floor(air_drag_value * 1 + number_of_parts * 3/20) / 1000
 ; air_drag = floor(air_drag_coefficient * current_speed^2)   [N]
 ; acceleration = (force - (slope_force + axle_friction + rolling_friction + air_drag)) / (total_weight * 4) [256th of a km/h per half-tick]
 
