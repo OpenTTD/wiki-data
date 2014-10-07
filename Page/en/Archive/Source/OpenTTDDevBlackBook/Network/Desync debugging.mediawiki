@@ -1,4 +1,22 @@
 [[Translation:en/Archive/Source/OpenTTDDevBlackBook/Network/Desync debugging]]
+== How to gather desync data ==
+
+In order to fix a desync, one needs playback data. Only server admins can gather those and their help is needed as they need to enabled desync debugging on their servers. Without these desync debugging data one has nearly no chance to find and fix these bugs. This is how you can gather these necessary data and help us pin-point and ultimately fix the problem:
+
+* Make sure you have enough free disk space on your server. You'll need place for a savegame every two minutes without cleaning, possibly over hours.
+* Via rcon set: debug_level desync=3
+* save the game to 'desync_start.sav' (or some other name you remember)
+* load the game you just saved from the savegame file you just created. This makes sure there's a well-defined starting point.
+* let people play until you see a desync happening
+* When the desync happend:
+** gather the data and make them available for download: save/desync_start.sav, save/autosave/dmp_cmds*.sav, save/autosave/commands-out.log.
+** Open an issue in our [http://bugs.openttd.org|bug tracker] and link us there to the available desync data. Check back on the issue or enable notifications, we might have further questions or ask you to possibly try a fix.
+** You then can also disable desync debugging again (rcon debug_level desync=0)
+
+Anything less will likely not fix the desync issue nor help finding it. Thus if you are a server admin and want to see them gone: enable desync debugging on *your* server and gather the data! Don't wait for anyone else - chances are slim there will be, especially as some desyncs might need the specific combination of settings and / or NewGRFs which only you use on a server.
+
+== How to find the desync once data are available ==
+{{en/Outdated|This information might need revision}}
 ===Step 1===
 Make the desync reproducable.
 If the client desyncs immediatelly (few seconds) after joining, then something is not correctly loaded (or rather saved) from the savegame or caches differ between the clients. Go to step 3.
