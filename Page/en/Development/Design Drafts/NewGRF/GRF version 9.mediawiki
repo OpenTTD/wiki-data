@@ -6,17 +6,18 @@ Not all of them necessarily need a new GRF version, some could also be just hand
 Problem:
 * In spritelayouts child sprites are positioned relative to the top-left corner of the parent sprite.
 * This is troublesome if the parent sprite changes, and it dis-allows clipping of the parent sprite.
+* Also, the signedness of the offsets differ: For stations and OTTD-internal spritelayouts they are signed. For Action2Spritelayouts of Industries/houses/objects/... they are unsigned.
 
 Proposal:
 * Position child sprites relatively to same reference point as the parent sprite is positioned, i.e. relative to the bounding box.
 * This is technically already the case for secondary ground sprites.
+* The offsets for child sprites should always be signed.
 
 Related issue:
 * TTD only draws parent sprites, after doing a clipping-test with the viewport bounds.
 * For child sprites no clipping test is done, they are drawn exactly when the parent sprite is drawn.
 * So, currently child sprites may not extent over the bounds of the parent sprite, else they flicker.
 Solution: Check clipping for parent and child sprites independently.
-
 
 == Action2 ==
 
