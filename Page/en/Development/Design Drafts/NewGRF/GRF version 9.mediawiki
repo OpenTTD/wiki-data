@@ -1,0 +1,89 @@
+This is a random collection of troublesome NewGRF syntax.
+Not all of them necessarily need a new GRF version, some could also be just handled via NML abstraction.
+
+
+== Childsprite Offsets ==
+Problem:
+* In spritelayouts child sprites are positioned relative to the top-left corner of the parent sprite.
+* This is troublesome if the parent sprite changes, and it dis-allows clipping of the parent sprite.
+
+Proposal:
+* Position child sprites relatively to same reference point as the parent sprite is positioned, i.e. relative to the bounding box.
+* This is technically already the case for secondary ground sprites.
+
+Related issue:
+* TTD only draws parent sprites, after doing a clipping-test with the viewport bounds.
+* For child sprites no clipping test is done, they are drawn exactly when the parent sprite is drawn.
+* So, currently child sprites may not extent over the bounds of the parent sprite, else they flicker.
+Solution: Check clipping for parent and child sprites independently.
+
+
+== Action2 ==
+
+=== Callback results ===
+
+==== Callback failure ====
+Problem:
+* Currently callback are failed by returning a (dummy) RealSprite/Production/SpriteLayout result, even if the feature does not have graphics at all.
+* Sometimes failing graphics resolving also makes sense, in which case a callback result is used.
+* Creating these dummy things is tedious.
+
+Proposal:
+* Add a new completely seperate "failure" Action2 type, which fails graphics sprite and callback resolving.
+
+
+==== 32bit callback results ====
+Problem:
+* In some cases 15 bit callback results are quite limiting.
+* Some callbacks use registers 100+x instead to return results.
+
+Ideas:
+* Add some new Action2 types which return 32bit values, or change the existing ones incompatibly.
+* The callback results should be true 32bit, not 31bit. So callback results and Action2 references need to be indicated differently.
+* Those callbacks which currently return a signed value using bit 14 for signedness, should return proper int32 or at least int16, not int15.
+* Maybe callback results and return registers could be unified (see summary below)
+
+
+=== RandomAction2 ===
+Problems:
+* It only supports 128 cases. (power of two and <= 255)
+* Rerandomisation only works inside the graphics chain, not after callback-branching.
+* Rerandomisation with type 83 and 84 for vehicles is completely broken.
+* In NML the dependent/independent stuff is quite complicated, and it is somewhat intransparent to the user how many random bits are actually available.
+
+Proposal:
+* Separate rerandomisation from random choices.
+* Random choices can already be done with VarAction2 using variable 5F (and variable 61 for other vehicles). This would also make things more similar to industries testing random bits of other tiles etc.
+* Rerandomisation would be done via a normal callback, which can test triggers via variables, and returns the bits to rerandomise and the triggers to clear.
+
+Open issue in case of GRF version 9 solution:
+* What should the callback look like?
+
+Solution via NML only:
+* NML generates a check for callback 1, this chains to a dummy RandomAction2 which does only the rerandomisation based on the triggers, and does the same for all cases otherwise (chain to the same next rerandomisation action).
+
+
+=== Extended byte for 60+x vars ===
+Problem:
+* Some 60+x variables accept parameters bigger than 0xFF (actually, maybe it is only vehicle var 60 currently).
+* Currently bigger values can only be passed using variable 7B.
+
+Ideas:
+* Make it an extended byte. This is quite incompatible though, since 0xFF is a popular parameter value for "information about nearby tiles).
+* Possibly extent the nearby-tiles variables to 8bit offsets at the same time, instead of 4bit offset.
+* Maybe it should be a int32 in the first place, instead of extended byte.
+
+
+=== Action2 Summary ===
+Some of these ideas require an entirely different Action2 format. So let's consider what else could be changed, when redesigning it entirely from scratch.
+* Allow more than 256 VarAction2 ids.
+* Drop the special case for "error", instead make the sprite/callback resolving fail immediately.
+* Drop the VarAction2 scopes. Instead prefix every variable with the "scope" (parent, self, more in future), so different scopes can be mixed easily within expressions, without chaining to other Action2.
+* Drop the VarAction2 sizes. Do everything in 32bit, as it is already the case when using registers. Variable access usese and-masks anyway, so the additional masking is somewhat redundant.
+* Drop the special cases for returning computed callback results (this is a bear trap deluxe).
+: Instead allow composing callback results of arbitrary size:
+:: 0..10: return [ word(accumulator) word(0x123) dword(register100) ]
+:: 11..20: chain to spritegroup 123
+:: default: chain to spritegroup 345
+* This also simplifies text stack handling a lot, since you can easily compose words and bytes to a stack.
+* If someone finds any use case for explicit "error" handling, one could also add a "error:" to the result switch.
