@@ -88,3 +88,19 @@ Some of these ideas require an entirely different Action2 format. So let's consi
 :: default: return failure
 * This also simplifies text stack handling a lot, since you can easily compose words and bytes to a stack.
 * If someone finds any use case for explicit "error" handling, one could also add a "error:" to the result switch.
+
+== Units, properties, variables ==
+Rework all variables, properties and callbacks with physical units:
+* Use the same units for all features, variables and properties of the same physical dimension.
+* Extend the range and granularity of the values if needed. (this should consider requirements of smoother movement in zoom-in levels)
+* Granularity should be finer than the (popular) GUI units, so that values are converted more predictable to (nice) km/h and mph values.
+* GUI always rounds values to somewhat nice values (display cost of "1349838 C" as "1350000 C", display "1379 km/h" as "1380 km/h", ...)
+* The old properties using the old units are removed. If there are multiple properties for the same thing, they are removed as well. (stuff like long/short date properties, train weight, RV speed)
+* Since properties are changed incompatibly anyway, reorder the properties of vehicles, so that same things get the same property ID.
+
+Unit suggestions:
+* Speed in 1/10 km-ish/h (10 units = 1 km-ish/h, 16 units = 1 mph)
+* Weight in 1/16 metric tons.
+* Vastly increased range for costs (to avoid the need for base cost multipliers), i.e. always dwords, possibly in cents of pounds or something
+* The previous item somewhat implies to make most of the base costs "1" in normal difficulty. I.e. "cost multipliers" turn into "absolute costs at normal difficulty without inflation".
+* Time stamps/time spans always in "days"? Or do some places only make sense as "year"? (this may run into the "daylength" dilemma)
