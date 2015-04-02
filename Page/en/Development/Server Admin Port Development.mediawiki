@@ -25,3 +25,31 @@ JOAN comes with an example in the form of SimpleConsole which extends the OpenTT
 
 === Creating your own ===
 Connecting to the admin port requires sending a ADMIN_PACKET_ADMIN_JOIN packet to your server.
+
+== Packets ==
+The format of packets sent to the Admin Port are expected to be: <br />
+SIZE | TYPE | DATA <br />
+When you wish to connect your packet would be something like:
+0x1B 0x00 + 0x00 + "password" + 0x00 + "botname" + 0x00 + "version" + 0x00
+{|
+!Field!!Size
+|-
+|Size||2 bytes
+|-
+|type||1 byte
+|-
+!colspan="2"|Example Data
+|-
+|"password"||9 bytes
+|-
+|"botname"||8 bytes
+|- 
+|"version"|| 7 bytes
+|-
+|Total Size|| 27 Bytes (0x1B)
+|}
+
+'''''It is very important to remember to prepend the packet with the size of the packet (remember to +2 for the packet size bytes).''''' In the example above the payload (Type and data is 25 bytes. The +2 for packet size makes it 27)
+
+=== Packet types ===
+There are multiple packets which are used to achieve different purposes. While these are mostly self explanatory below is a quick reference.
