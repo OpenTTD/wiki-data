@@ -2,6 +2,34 @@ This is a random collection of troublesome NewGRF syntax.
 Not all of them necessarily need a new GRF version, some could also be just handled via NML abstraction.
 
 
+== Produced/accepted cargo ==
+Problem:
+* Various properties and callbacks cannot handle more than 2 or 3 accepted/produced cargos.
+
+Affected:
+* Callback 37: Cargo sub-type text.
+* Callback 1F, 2B: Cargo acceptance.
+* Callback 2A, 2C: Accepted cargo types.
+* Callback 14B, 14C: Input/output cargos
+* Industry production callback.
+
+=== Callback 37: Cargo sub-type display ===
+Proposal:
+* Variable 18 byte 0 contains "n" for the n-th input cargo and "0x80+n" for the n-th output cargo.
+
+=== Callback 14B, 14C: Input/output cargos ===
+Proposal:
+* Call the callback also in purchase list for industry-chain view, construction GUI and script information.
+* Additional result bits for
+** always accepted/produced during the whole game
+** always accepted/produced in the current date era (may change after some years)
+** seasonal acceptance/production (predictable multiple changes per year)
+** possibly accepted/produced (more or less randomly, but not predictable without readme)
+* Addtional result bits for accepted cargos:
+** Cargo required (nothing produced without)
+** Main cargo (cargo is processed)
+** Bonus cargo (cargo is not processed, but affects the processing of other cargos; no point in delivery when not delivering something else)
+
 == Childsprite Offsets ==
 Problem:
 * In spritelayouts child sprites are positioned relative to the top-left corner of the parent sprite.
