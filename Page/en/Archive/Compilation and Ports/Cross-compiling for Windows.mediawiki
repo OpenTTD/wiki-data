@@ -1,14 +1,19 @@
-[[Category:en/Development/Compiling OpenTTD]]
-
 = Native MinGW =
  {{en/Note|Should work analogously on Mac OS X, please test}}
 You will need the MinGW binaries, includes and libraries for Linux-to-Windows cross-compiling (32-bit, 64-bit not tested) installed under /usr/i586-mingw32msvc (Debian/Ubuntu: sudo apt-get install mingw32). The further steps are more or less the same as those required for compiling with MinGW on Windows. 
 
 For consistency, self-installed libraries etc. will be stored in subfolders of /usr/local/i586-mingw32msvc. However, the OpenTTD configure script isn't very good at finding libraries that match the selected host, so some will need to be specified manually/linked to a hardcoded directory (see end).
 === 64-bit builds ===
-Work exactly the same way, but with all occurences of i586-mingw32msvc replaced by x86_64-w64-mingw32 (you will need 64-bit MinGW, of course - Ubuntu: mingw-w64 package). However, building OpenTTD itself with ICU doesn't because cmemory.h isn't found (yet another bug in the ICU build system), so do the following to copy it to the correct location:
+
+
+Work exactly the same way, but with all occurences of i586-mingw32msvc replaced by x86_64-w64-mingw32 (you will need 64-bit MinGW, of course - Ubuntu: mingw-w64 package). You will need to link a few files to alternative names to be able to compile with ICU after you have built ICU:
 <pre>
-sudo cp <icu_sourcedir>/source/common/cmemory.h /usr/local/x86_64-w64-mingw32/include</pre>
+sudo ln -s <icu_sourcedir>/source/common/cmemory.h /usr/local/x86_64-w64-mingw32/include
+sudo ln -s /usr/local/x86_64-w64-mingw32/lib/libsicuuc.a /usr/local/x86_64-w64-mingw32/lib/libicuuc.a
+sudo ln -s /usr/local/x86_64-w64-mingw32/lib/libsicule.a /usr/local/x86_64-w64-mingw32/lib/libicule.a
+sudo ln -s /usr/local/x86_64-w64-mingw32/lib/libsiculx.a /usr/local/x86_64-w64-mingw32/lib/libiculx.a</pre>
+
+Even with these, libicui18n and libicudata still can't be found and apparently weren't even compiled? Everything does work if you leave out ICU.
 
 ==List of packages==
 This tutorial has been tested with the following versions of the required packages:
@@ -147,8 +152,3 @@ Installing Wine and running
 
 <pre>wine bin/openttd.exe</pre> 
 will start your Windows OpenTTD version.
-
-= Wine/MinGW =
-One way to compile an OpenTTD executable for Windows on any operating system supported by [http://winehq.org Wine], such as Linux, is to use it to set up a Windows MinGW environment - follow the existing [[en/Archive/Compilation and Ports/Compiling on Windows using MinGW]] guide. This is rather slow (about 1/3 native speed for make, much slower for configure), but guaranteed to work.
-
-However, you must replace (or override in the Wine configuration tool) the Wine-supplied msvcp60.dll with an official Windows one (6.0 version) or SVN will not run. You can find it at [http://www.dll-files.com/dllindex/dll-files.shtml?msvcp60 dll-files.com], click on the "Alternative versions" menu entry and download the second one listed.
