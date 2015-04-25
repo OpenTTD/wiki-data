@@ -119,21 +119,32 @@ Steps (doesn't entirely/reliably work yet, probably should separate the build di
 * Fetch and unpack the ICU source code
 <pre>wget http://download.icu-project.org/files/icu4c/53.1/icu4c-53_1-src.tgz
 tar xvfz icu4c-53_1-src.tgz
-cd icu/source</pre>
+cd icu
+mkdir build
+mkdir build-cross</pre>
+* Link the MinGW toolchain binaries to something the ICU configure script detects
+<pre>
+cd /usr/bin
+for file in `ls i586-mingw32msvc-*`; do sudo ln -s $file i586-mingw32-`echo $file | rev | cut -d- -f1 | rev`; done
+cd <main ICU source directory>
+</pre>
+
 * Compile ICU for your platform first, this is required to make a few build tools available 
-<pre>./configure
-make</pre>
-* Prepare and execute cross-compilation
-<pre>cd config
-cp mh-unknown mh-unknown.1
-cp mh-mingw mh-unknown
-cd ..
+<pre>
+cd build
+../source/configure
+make -j<N>
+cd ..</pre>
+* Prepare and execute cross-compilation. Note the missing "msvc" in --host (see also http://d.hatena.ne.jp/higepon/20110829/1314628455)
+<pre>
+cd build-cross
 # --disable-threads isn't supported anymore
-./configure --host=i586-mingw32msvc --prefix=/usr/local/i586-mingw32msvc  --enable-static --disable-shared --disable-strict CPPFLAGS=-I/usr/local/i586-mingw32msvc/include LDFLAGS=-L/usr/local/i586-mingw32msvc/lib --with-cross-build=`pwd`
+../source/configure --host=i586-mingw32 --prefix=/usr/local/i586-mingw32msvc  --enable-static --disable-shared --disable-strict \
+        CPPFLAGS=-I/usr/local/i586-mingw32msvc/include LDFLAGS=-L/usr/local/i586-mingw32msvc/lib --with-cross-build=`pwd`/../build
 
 make
 sudo make install
-cd ../..</pre>
+cd ..</pre>
 One build was successful, but icu-config --version failed anyway because it couldn't find libicu4c.dll (which, as a dynamic library, shouldn't have been built anyway), and thus, OpenTTD refused to configure itself to use the compiled ICU version (--with-icu=/usr/local/i586-mingw32msvc/bin/icu-config).
 
 ==Getting the source code==
