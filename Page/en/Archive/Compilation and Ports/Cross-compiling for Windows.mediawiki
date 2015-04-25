@@ -122,7 +122,7 @@ tar xvfz icu4c-53_1-src.tgz
 cd icu
 mkdir build
 mkdir build-cross</pre>
-* Link the MinGW toolchain binaries to something the ICU configure script detects
+* Link the MinGW toolchain binaries to something the ICU configure script detects (really an ICU bug)
 <pre>
 cd /usr/bin
 for file in `ls i586-mingw32msvc-*`; do sudo ln -s $file i586-mingw32-`echo $file | rev | cut -d- -f1 | rev`; done
@@ -145,7 +145,11 @@ cd build-cross
 make
 sudo make install
 cd ..</pre>
-One build was successful, but icu-config --version failed anyway because it couldn't find libicu4c.dll (which, as a dynamic library, shouldn't have been built anyway), and thus, OpenTTD refused to configure itself to use the compiled ICU version (--with-icu=/usr/local/i586-mingw32msvc/bin/icu-config).
+* Link the built DLLs to something icu-config detects (really an ICU bug)
+<pre>
+cd /usr/local/i586-mingw32msvc/lib
+for dll in `ls icu*.dll`; do sudo ln -s $dll lib$dll; done
+</pre>
 
 ==Getting the source code==
 Same as for standard Linux.
