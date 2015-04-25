@@ -135,11 +135,11 @@ cd build
 ../source/configure
 make -j<N>
 cd ..</pre>
-* Prepare and execute cross-compilation. Note the missing "msvc" in --host (see also http://d.hatena.ne.jp/higepon/20110829/1314628455)
+* Prepare and execute cross-compilation. Note the missing "msvc" in --host (see also http://d.hatena.ne.jp/higepon/20110829/1314628455). Also, you can't use --disable-shared because icu-config complains about the missing DLLs.
 <pre>
 cd build-cross
 # --disable-threads isn't supported anymore
-../source/configure --host=i586-mingw32 --prefix=/usr/local/i586-mingw32msvc  --enable-static --disable-shared --disable-strict \
+../source/configure --host=i586-mingw32 --prefix=/usr/local/i586-mingw32msvc  --enable-static --disable-strict \
         CPPFLAGS=-I/usr/local/i586-mingw32msvc/include LDFLAGS=-L/usr/local/i586-mingw32msvc/lib --with-cross-build=`pwd`/../build
 
 make
