@@ -1,0 +1,93 @@
+{{en/Development/Script/Navigation}}
+
+= Adding Doxygen documentation to your AI library =
+
+AI Libraries can add Doxygen documentation of their API's. This will make it easier for users of your library to figure out how to use it.
+
+Libraries hosted on OpenTTDcoop can request automatic Doxygen documentation generation. In case you host your library somewhere else you will have to figure out the generation yourself.
+
+To be able to generate Doxygen documentation from Squirrel scripts yourself you need to use the [http://dev.openttdcoop.org/projects/squirrel2doxygen Doxygen Squirrel Filter] and set that as the filter in Doxygen. Note that this filter requires python to be available on your system. It has been tested with python 2.7.
+
+= A short introduction to writing Doxygen documentation =
+For detailed documentation about using Doxygen and writing Doxygen documentation you should study the [http://www.stack.nl/~dimitri/doxygen/manual/index.html official Doxygen documentation].
+
+Doxygen documentation is added inside comments that start with either <code>/**</code> or <code>///</code>.
+Following that usually one or more sentences describing the function or variable is added.
+For functions you can add descriptions of a function parameter by adding <code>@param</code> followed by a description. The return value can be described by adding <code>@return</code> followed by a description.
+
+An example:    
+<code>
+ /// This is our library class Abc.
+ class Abc {
+   AVariable = 1;  ///< Doxygen documentation behind the subject on the same line.
+   /**
+    * Add two variables and returns the sum.
+    * @param a The first value.
+    * @param b The second value.
+    * @return Returns the sum as an integer value.
+    */
+   function Add(a, b) {return a + b;}
+ }
+</code>
+
+=== Grouping functions together ===
+Sometimes you may want to group several functions or variables together with a common description. To start a named group use the @name tag followed by a description. Then before the group of functions starts you add <code>@{</code> and at the end of the group you add <code>@}</code> (of course always inside a Doxygen recognizable comment).
+
+An example:
+<code>
+ /** @name Data encoding/decoding
+  * These two functions can be used to encode a integer value in a string.
+  * if encode_chars is null, it defaults to a 84-base characterset which
+  * has been designed to produce smilies for low values. 
+  */
+ /// @{
+ /** 
+  * @param int_val integer value to encode
+  * @param str_len minimum string length. The first character in the set
+  * of characters to use will be used as 'zero' to fill out the string.
+  * @param encode_chars a string with the characters to use as symbols. To
+  * get a standard 10-base result use "0123456789". If you omit this parameter
+  * or pass null, a 84-base character set will be used. The characters has
+  * been ordered such that it will produce smilies for low numbers.
+  * @ return a string
+  */
+ static function EncodeIntegerInStr(int_val, str_len, encode_chars = null);
+ /**
+  * @param str string to decode
+  * @param encode_chars same usage and rules as for the encode_chars 
+  * parameter to EncodeIntegerInStr. You must pass the same value as
+  * encode_chars to EncodeIntegerInStr and DecodeIntegerFromStr to
+  * be able to decode your string correctly.
+  * @return a integer value
+  */
+ static function DecodeIntegerFromStr(str, encode_chars = null);
+ /// @}
+</code>
+
+=== Hiding private functions and variables ===
+You may want to use private functions or variables inside a class that users of your library are not supposed to use.
+There are three ways to mark something as private.
+* The Squirrel filter will automatically mark any function, variable or enum inside a class that starts with an underscore as private.
+* Use the doxygen commands <code>@private</code> or <code>@privatesection</code>. Note that <code>@private</code> only marks one item as private and <code>@privatesection</code> will mark anything as private until Doxygen encounters a <code>@publicesection</code> command.
+* Use doxygen conditional defines that start with <code>@cond ConditionalName</code> and ends with <code>@endcond</code>.
+
+An example:
+<code>
+ /** Class Test is a Squirrel class to test our doxygen filter. */
+ class Test extends AIController {
+   _class_private_var = null; ///< Variable marked private by our doxygen filter because it starts with an underscore.
+   doxygen_private = -1;      ///< @private Using doxygen command to make 1 class item private.
+ 
+   /// @privatesection
+   /** This section should stay private. We use the doxygen private section command. */
+   function Private1() {}
+   /** Second private function that should not be visible. */
+   function Private2() {}
+   function Third() {}
+ 
+   /// @publicsection
+   /** Part of a public section that should be visible with doxygen. */
+   function ThisShouldBePublic() {}
+ 
+ }
+</code>
