@@ -1,0 +1,164 @@
+== General ==
+
+=== Supported types of communication ===
+* GS can query NewGRF and get information instantly. The querying does not affect the game state.
+* NewGRF can query GS information, which has been set in advance by the GS.
+* GS can trigger NewGRF entities (e.g. industries) to change their game state. This is done via a command, so at most one trigger per tick. GS may have to address groups of entities at once.
+
+=== Emulatable types of communication ===
+* NewGRF triggering GS:
+* GS have no interrupts, they can only poll.
+* NewGRF can only do stuff in callbacks, this always involves some NewGRF entitiy.
+* The 'query information from NewGRF entity' covers this case.
+
+=== Not supported types of communication ===
+* GS cannot supply information instantly, thus NewGRF cannot query information which hasn't been set in advance. This limits parameterized queries.
+* No communication in settings GUI. Neither the GS nor the NewGRF are active at this point.
+* Communication during game-initialisation. NewGRFs are loaded first. They cannot query GS information at this point. GS can then also not influence placement of initial industries etc.
+
+=== AIs ===
+* AI may also be enabled to read the information shared between GS and NewGRF, though the information may need a flag noting that the information is 'also knows to humans in some way'.
+
+== Overview ==
+
+=== GS/AI info query callback ===
+* The GS/AI asks a NewGRF or a NewGRF industry about information wrt. some 'format identifier'. This triggers a callback to the NewGRF on the server. The result is returned as a structure to the GS/AI. An Action 14 describes conversion between callback parameters and result registers to a JSON structure.
+* This does not change the gamestate!
+* Parameters:
+** Result format identifier
+* Target:
+** Single industry
+** Industry type
+** Single NewGRF (later)
+* Result:
+** JSON with dynamic values
+
+=== GS trigger callback ===
+* The GS issues a command for a NewGRF entity (e.g. industry). Input is a 'format identifier' and a matching structure. The data is transfered to all clients (as command), and then triggers a NewGRF callback for the addressed entity.The callback result instruct OpenTTD to call further callbacks, like 'production change callback' or 'animation trigger'. An Action 14 describes conversion from the input structure (JSON) to callback parameters and registers.
+* Parameters:
+** Input format identifier
+** JSON input
+*Target:
+** Single industry
+* Result:
+** ok/failure
+** Request to trigger random-production-change callback.
+** Request to trigger animation trigger for all tiles
+
+=== GS announcement board ===
+* The GS writes information on a global announcement board, which NewGRF can query, if they want to. The data is identified via a 'format identifier'. The GS can store a structure addressed by this data. NewGRF can query this information in VarAction2 via a new 60+x variable. An Action 14 describes conversion from the input structure (JSON) to the 60+x variable.
+* Parameters:
+** Input format identifier
+** JSON input
+* Target:
+** All NewGRF
+** Single NewGRF (later)
+** Visible/hidden to AI (later)
+* Result:
+** None
+
+== Structure details ==
+* The JSON structures are limited.
+** Integers, strings, arrays, tables, booleans. No 'null' and no classes.
+** NewGRF cannot iterate arrays, so all arrays must have a known/limited/fixed size.
+
+== GS Details ==
+
+* SquirrelTable ScriptIndustry::GetNewGRFInfo(IndustryId ind, const char *formatid, SquirrelTable param);
+   local param;
+   param.foo = 123;
+   local data = GSIndustry.GetNewGRFInfo(industry, "bar", param);
+   if (data.rawin("foobar")) {
+     data.foobar ...
+   }
+
+* bool ScriptIndustry::SendNewGRFTrigger(IndustryId ind, const char *formatid, SquirrelTable data);
+   local data;
+   data.foo = 123;
+   GSIndustry.SendNewGRFTrigger(industry, "bar", data);
+
+* bool ScriptController::SetNewGRFInfo(const char *formatid, SquirrelTable data);
+   local data;
+   data.foo = 123;
+   GSController.SetNewGRFInfo("bar", data);
+
+* SquirrelTable ScriptController::GetNewGRFInfo(const char *formatid);
+   local data;
+   data.foo = 123;
+   GSController.SetNewGRFInfo("bar", data);
+
+== NewGRF Details ==
+
+=== Announcement board: Conversion from global JSON to 60+x variable ===
+Action14:
+     JSON -> VARI
+         <60+x parameter>
+              FMT_           FormatId
+              PATH           JSON path, e.g 'Foo.Bar[2].Doh'.
+              VALU
+                  <val>      String enum literal
+              DFLT           Default value if unassigned (required!)
+
+New global 60+x variable:
+* Parameter: Index into JSON->VARI
+* Result: Data according to JSON->VARI
+
+=== Query: Conversion from Callback result to JSON ===
+Action14:
+     JSON -> CBOU
+         <callback result>
+             TMPL                  JSON template string with <1> <2> parameters
+                                   Example: '{ "Supports": ["GSProduction"], "Production": <1>, "Technology": <2> }'
+             PARA
+                 <paramid>
+                     TYPE          0 = uint/enum, 1 bool, 2 = sint/enum
+                     MASK          \w register (0x00-0x10F) \b first-bit \b num-bit
+                     VALU
+                         <val>     String enum literal
+
+New callback:
+* Target:
+** Single industry
+** 'Purchase list'-style for industry type.
+** Generic callback for feature 08 (global settings).
+* Input:
+** Var 10: FormatId according to JSON->CBIN
+** Registers 0x00 to 0xFF according to JSON->CBIN
+* Result:
+** CB Result: FormatId according to JSON->CBOU
+** Registers 0x00 to 0x10F according to JSON->CBOU
+
+=== Conversion from input JSON to callback paramters ===
+Action14:
+     JSON -> CBIN
+         <callback param 1>
+             FMT_                  FormatId
+             TMPL                  JSON template string with <1> <2> paramters
+                                   Example '{ "ProductionLevel": <1>, "InputCargoEfficiency": [ <1>, <2> ] }'
+             PARA
+                 <paramid>
+                     MASK          \w register (0x00-0xFF) \b first-bit \b num-bit
+                     VALU
+                         <val>     String enum literal
+                     DFLT          default value if missing
+
+Template matching:
+* Structure members which are present in the input data, but missing the template, are skipped/ignored/dropped.
+* Missing members in the input data are filled up with the DFLT value. If there is no DFLT, the input is considered invalid.
+* The same rules apply to arrays with more/too few items.
+* Bools are converted to 0/1.
+* Strings are converted according to the VALU enum values. If there is no matching value, the input is considered invalid.
+
+TODO: This is quite complicated, the format for the 60+x variable looks both easier to use and to implement. So, use it for this as well.
+
+New callback:
+* Target:
+** Single industry
+* Input:
+** Var 10: FormatId according to JSON->CBIN
+** Registers 0x00 to 0xFF according to JSON->CBIN
+* Result:
+** CB Result:
+*** Bit 0: Report success
+*** Bit 1: Call callback 29 (random production change) now. (data must be passed via persistent storage)
+*** Bit 2: Trigger animation trigger for all tiles. (new trigger; other data must be passed via persistent storage)
