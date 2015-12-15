@@ -1,62 +1,70 @@
-== Preliminaries ==
-<pre>setgcc gcc4</pre> Haiku uses GCC 2 by default, which is too old for OpenTTD.
-<pre>installoptionalpackage mercurial</pre>
-or subversion if you wish. Alternatively, Git is available from http://haikuware.com/directory/view-details/development/miscellaneous/git (untested).
+OpenTTD works on [http://www.haiku-os.org Haiku]. These instructions worked for OpenTTD 1.5.3 running Haiku nightly hrev49917.
 
-== SDL ==
-"installoptionalpackage sdlllibs" won't do (compiled with GCC 2). Use [http://haikuware.com/directory/view-details/development/class-libraries/sdlgamelibraries-gcc4 this] instead.
-== zlib ==
-<pre>wget http://zlib.net/zlib-1.2.7.tar.gz
-tar xvfz zlib-1.2.7.tar.gz
-cd zlib-1.2.7
-configure --prefix=/boot/common && make install</pre>
+== Using HaikuPorter ==
 
-There will be an error, simply do
+You may want to use [http://github.com/haikuports/haikuports HaikuPorter]. It will download and compile the lastest stable version and all its dependencies. Once you have HaikuPorter configured, just write:
 
-<pre>gcc -shared -O3  -fPIC -DHAVE_HIDDEN -o libz.so.1.2.7 adler32.lo crc32.lo deflate.lo infback.lo inffast.lo inflate.lo inftrees.lo trees.lo zutil.lo compress.lo uncompr.lo gzclose.lo gzlib.lo gzread.lo gzwrite.lo
-make install
-cd ..</pre>
+<pre>haikuporter openttd</pre>
 
-and everything will be fine. This is the same command that triggers the error, only without "-lc" on the end.
+Note: If you run Haiku hybrid with GCC2 as the default architecture (the default download) you need to write.
 
-== libpng ==
-<pre>wget http://sourceforge.net/projects/libpng/files/libpng15/1.5.13/libpng-1.5.13.tar.xz/download
-tar xvfJ libpng-1.5.13.tar.xz
-cd libpng-1.5.13
-configure --prefix=/boot/common && make install
-cd ..</pre>
+<pre>haikuporter openttd_x86</pre>
 
-== lzo2 ==
-<pre>wget http://www.oberhumer.com/opensource/lzo/download/lzo-2.06.tar.gz
-tar xvfz lzo-2.06.tar.gz
-cd lzo-2.06
-configure --prefix=/boot/common && make install
-cd ..</pre>
+== Getting the source ==
 
-== freetype ==
-<pre>wget http://sourceforge.net/projects/freetype/files/freetype2/2.4.10/freetype-2.4.10.tar.gz/download
-tar zxvf freetype-2.4.10.tar.gz
-cd freetype-2.4.10
-configure --prefix=/boot/common && make install
-cd ..</pre>
+OpenTTD uses Subversion but also allows to download the source tree using Mercurial or Git. Here we're going to use Subversion.
+First we need to install Subversion. Just check for Subversion in HaikuDepot or type
 
-== fontconfig ==
-<pre>wget http://www.freedesktop.org/software/fontconfig/release/fontconfig-2.10.2.tar.gz
-tar xvfz fontconfig-2.10.2.tar.gz
-cd fontconfig-2.10.2
-configure --prefix=/boot/common --enable-libxml2 && make install
-cd ..</pre>
+<pre>pkgman install subversion</pre>
 
-== icu ==
-fails to build because it can't find the right shell ("no such file: /bin/sh"). Even after "installoptionalpackage ICU", it isn't recognized by OpenTTD - there seems to be a wider problem.
+Now we can start downloading the source tree.
 
-== Errors and warnings ==
-<pre>
-/boot/home/trunk.hg/src/network/core/os_abstraction.h:194:0: warning: "IPV6_V6ONLY" redefined [enabled by default]
+<pre>mkdir openttd && cd openttd</pre>
+<pre>svn checkout svn://svn.openttd.org</pre>
 
-/boot/develop/headers/posix/netinet/in.h:156:0: note: this is the location of the previous definition</pre>
+== Prerequisites ==
+
+OpenTTD requires some libraries to be installed first. All of them can be installed from HaikuDepot or pkgman.
+
+=== SDL ===
+
+<pre>pkgman install devel:libsdl</pre>
+
+Or if you use Haiku hybrid with GCC2 as the main architecture
+
+<pre>pkgman install devel:libsdl_x86</pre>
+
+=== zlib ===
+
+<pre>pkgman install devel:libz</pre>
+
+Or
+
+<pre>pkgman install devel:libz_x86</pre>
+
+=== lzo and lzma ===
+
+<pre>pkgman install devel:liblzma devel:libzo2</pre>
+
+Or
+
+<pre>pkgman install devel:liblzma_x86 devel:libzo2_x86</pre>
 
 
-Don't run music with the BeMidi driver, there will be a segfault almost immediately that has nothing to do with the OpenTTD code itself. Also don't compile with Allegro - no errors, but OpenTTD won't start because of undefined symbols or such.
+=== MIDI SoundFont (optional) ===
+
+If you want to hear music you'll need a MIDI soundfont. You can use TimGm soundfont.
+
+<pre>pkgman install timgmsoundfont</pre>
+
+== Compile ==
+
+Now we're ready to compile OpenTTD. Go to the source tree and type
+
+<pre>./configure</pre>
+<pre>make</pre>
+
+Now you may want to download and install [[en/Archive/Community/OpenGFX Readme]], [[en/Archive/Community/OpenMSX]] and [[en/Archive/Community/Sound Effects Replacement]].
+
 
 [[Category:en/Development/Compiling OpenTTD]]
