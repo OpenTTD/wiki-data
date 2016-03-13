@@ -1,5 +1,5 @@
 [[Translation:en/Manual/Dedicated server]]
-{{es/Traducción|en/Manual/Dedicated server|65}}
+{{es/Traducción|en/Manual/Dedicated server|85}}
 
 [[File:en/Manual/Dedicated server.png|right|frame|Ventana del servidor dedicado]]Un '''servidor dedicado''' es un [[es/Manual/Servidor|servidor]] (juego en red) de OpenTTD que no necesita un cliente local dentro del juego. Un servidor dedicado puede funcionar en un computador sin tener abierto el juego.
 
@@ -44,7 +44,7 @@ También puedes abrir OpenTTD con la opción -f. Eso significa que el proceso se
 Hay tres formas de cambiar las opciones del juego:
 *Abre un juego de un jugador, cambia las opciones, y cierra el juego.
 *Usa los [[es/Manual/Consola|comandos de la consola]] para controlar el servidor mientras esté abierto.
-*Edita el archivo [[es/Archive/Manual/Settings/Openttd.cfg|openttd.cfg]] manualmente. Vea [[es/Dificultades personalizadas|Dificultades personalizadas]] para algo de ayuda.
+*Edita el archivo [[es/Archive/Manual/Settings/Openttd.cfg|openttd.cfg]] manualmente. Vea [[es/Dificultades personalizadas|dificultades personalizadas]] para algo de ayuda.
 Herramientas disponibles:
 *[http://www.tt-forums.net/viewtopic.php?f=29&t=33967 Interfaz de juego]
 *[http://olex.biz/en/software/spiele/openttd-webconfig Configuración web de OpenTTD]
@@ -63,43 +63,44 @@ Configura el servidor dedicado para aceptar comandos [[es/Manual/Consola|rcon]]:
 *En la ventana del servidor, escribe {{en/C|rcon_pw <password>|}}. 
 :Ejemplo: {{en/C|rcon_pw x8na7f|}}
 
+Conectándote al servidor como un cliente:
+*Abre OpenTTD normalmente.
+*Encuentra el servidor mutijugador en la lista y conéctate.
+*Abre la consola (tecla ~)(ctrl, alt y +).
+*Escribe {{en/C|rcon <password> "<command>"|}}. 
+:Ejemplo: {{en/C|rcon x8na7f "kick 5"|}}
 
-Connect to the server as a client:
-*Launch OpenTTD normally.
-*Find your server on the multiplayer list and connect to it.
-*Open the console (~ key).
-*Type {{en/C|rcon <password> "<command>"|}}. 
-:Example: {{en/C|rcon x8na7f "kick 5"|}}
+==Instalando contenido online==
+Si quieres instalar contenido online usando la descarga de contenido del OpenTTD, puedes hacerlo desde la consola en tu servidor dedicado. El beneficio de usar esto a copiar los archivo manualmente a tu servidor es que automáticamente consiguen todas las dependencias que el autor del contenido declara cuando lo sube al sistema de contenido.
 
-==Installing online content==
-If you want to install content using the in-game content download facility, you can do that from the console in your dedicated server. The benefit of using this compared to copying the files manually to your server is that it will automatically get all dependencies that the content author has declared when uploading it to the content system.
-
-*First, you need to load the list of available content from the content server:
+*Primero necesitas cargar la lista de contenido disponible del servidor de contenidos:
 :{{en/C|content update|}}
-:Wait until "Content server connection closed" is printed in the console.
+:Espera hasta "Content server connection closed"(Se cerró la conexión al servidor de contenidos) se muestre en la consola.
 
-*List all available content
+*Lista todo el contenido disponible
 :{{en/C|content state|}}
-:A list of available content is now printed. Find the content you like to download and read its ID which is written in the beginning of the line. Eg. 2947 for Simple City Builder.
+:La lista de contenido disponible es mostrada. Encuentra el contenido que quiera para descargar y lee sus ID, lo cual está escrito al comienzo de la línea. Ej: 2947 para Simple City Builder(Script de juego).
 
-*Next, select the content to download using its id:
+*Después, selecciona el contenido para descargar usando sus ID:
 :{{en/C|content select 2947|}}
 
-*You can add more content by repeating the {{en/C|content select|}} command.
+*Puedes agregar más contenido repitiendo el comando {{en/C|content select|}}.
 
-*Then download all selected content:
+*Entonces descarga todo el contenido seleccionado:
 :{{en/C|content download|}}
 
-Hint: If you use nightly r26000+ or stable 1.4+, you can type {{en/C|content state city|}} to only list content that contain the word 'city' in their name.
+Insinuación: Si usas la versión nightly r26000+ o la estable 1.4+, puedes escribir {{en/C|content state city|}} para solamente buscar el contenido que tenga la palabra city.
 
-==Loading a game==
-In the dedicated server window (or with rcon):
-*Type {{en/C|ls|}} to list the files of the current directory, a number will be beside each one, which represents {{en/C|<number>|}} below.
-*Type {{en/C|cd <number>|}} to go to that directory.
-*Type {{en/C|load <number>|}} to load that file.
+==Cargando un juego==
+En la ventana del servidor dedicado (o con rcon):
+*Escrible {{en/C|ls|}} para encontrar los archivos en la carpeta actual, un número que será junto a cada uno, cual representa un {{en/C|<number>|}} (número) abajo.
+*Escribe {{en/C|cd <number>|}} para ir a esa carpeta.
+*Escribe {{en/C|load <number>|}} para cargar ese archivo.
 
-*You can also load savegames and scenarios with the {{en/C|-g "<filename>"|}}, command line option. 
-:Example: {{en/C|openttd.exe -D -g "scenario/echo.scn"|}}.
+*También puedes cargar juegos guardados o escenario con la opción {{en/C|-g "<filename>"|}}, de la línea de comandos. 
+:Ejemplo: {{en/C|openttd.exe -D -g "scenario/echo.scn"|}}.
+
+{{es/Pendiente de traducción}}
 
 == Automatically start/stop and save your game ==
 If you do not want to run docker: Run your dedicated server in ubuntu/debian you can download and install a init.d script
