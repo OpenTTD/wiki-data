@@ -1,0 +1,119 @@
+[[Translation:en/Manual/Dedicated server]]
+
+[[File:en/Manual/Dedicated server.png|right|frame|Dedicated server window]]A '''dedicated server''' is a OpenTTD network game [[en/Manual/Server]] that does not have a local client taking part in the game. A dedicated server can run in the background on a computer.
+
+==Starting a dedicated server==
+Run the OpenTTD executable using the {{en/C|-D|}} (capital D!) [[en/Manual/Command line]] option. 
+
+===In Windows===
+Method 1:
+*Create a shortcut to {{en/C|openttd.exe|}}
+*Right-click on the shortcut and click Properties
+*Add {{en/C|-D|}} onto the end of the Target line
+*Click Apply
+*Run the shortcut
+
+
+Method 2:
+*On the start menu click Run
+*Enter: {{en/C|"c:\(path to openttd)\openttd.exe" -D|}}
+*Click OK
+
+===In Linux===
+*Run {{en/C|openttd -D|}} in a terminal. If you are connecting to the server via SSH and would like the game to run when you logout you should use [http://www.gnu.org/software/screen/ GNU Screen] or [http://dtach.sourceforge.net/ dtach].
+
+You can also start openttd with -f option. It means that the process will run in the background, but no console will be avaible. All output will be sent to the file openttd.log. You can display the log with tail : tail -f openttd.log to follow events.
+
+===In OS/2===
+*Run the {{en/C|dedicated.cmd|}} file. If you run {{en/C|openttd -D|}}, you will not see a console window and will be unable to provide commands to the program.
+
+===In Mac OS X===
+*Open Terminal.
+*cd into the directory with OpenTTD
+*type cd OpenTTD.app/Contents/MacOS/
+*type ./openttd -D
+*OpenTTD should start up in Dedicated Server.
+
+===In Docker.io ===
+* See https://registry.hub.docker.com/u/bateau/openttd/ for more details
+
+==Configuring the server==
+There are 3 ways to change the game options:
+*Launch a single player game, change the settings, and close the game.
+*Use the [[en/Manual/Console#server-commands|console commands]] to control the server while it is running.
+*Edit the [[en/Archive/Manual/Settings/Openttd.cfg]] file manually. See [[en/Archive/Manual/Settings/Diff custom]] for some help.
+Available Tools:
+*[http://www.tt-forums.net/viewtopic.php?f=29&t=33967 Web Interface]
+*[http://olex.biz/en/software/spiele/openttd-webconfig OpenTTD WebConfig]
+
+
+Change the network settings in the Network section of [[en/Archive/Manual/Settings/Openttd.cfg]]:
+*Set [[en/Archive/Manual/Settings/Lan internet]] to 0.
+*Change [[en/Archive/Manual/Settings/Server name]] so you can identify the server, 
+*Set [[en/Archive/Manual/Settings/Server advertise]] to true, so it will be visible on the [[en/Server list]]
+*If you have multiple network interfaces make sure you set [[en/Archive/Manual/Settings/Server bind ip]].
+*If you are behind a router, make sure that you forward the port specified by [[en/Archive/Manual/Settings/Server port]] (both TCP and UDP)
+
+==Controlling the server with rcon==
+Configure the dedicated server to accept [[en/Manual/Console#server-commands|rcon]] commands:
+*In the dedicated server window, type {{en/C|rcon_pw <password>|}}. 
+:Example: {{en/C|rcon_pw x8na7f|}}
+
+
+Connect to the server as a client:
+*Launch OpenTTD normally.
+*Find your server on the multiplayer list and connect to it.
+*Open the console (~ key).
+*Type {{en/C|rcon <password> "<command>"|}}. 
+:Example: {{en/C|rcon x8na7f "kick 5"|}}
+
+==Installing online content==
+If you want to install content using the in-game content download facility, you can do that from the console in your dedicated server. The benefit of using this compared to copying the files manually to your server is that it will automatically get all dependencies that the content author has declared when uploading it to the content system.
+
+*First, you need to load the list of available content from the content server:
+:{{en/C|content update|}}
+:Wait until "Content server connection closed" is printed in the console.
+
+*List all available content
+:{{en/C|content state|}}
+:A list of available content is now printed. Find the content you like to download and read its ID which is written in the beginning of the line. Eg. 2947 for Simple City Builder.
+
+*Next, select the content to download using its id:
+:{{en/C|content select 2947|}}
+
+*You can add more content by repeating the {{en/C|content select|}} command.
+
+*Then download all selected content:
+:{{en/C|content download|}}
+
+Hint: If you use nightly r26000+ or stable 1.4+, you can type {{en/C|content state city|}} to only list content that contain the word 'city' in their name.
+
+==Loading a game==
+In the dedicated server window (or with rcon):
+*Type {{en/C|ls|}} to list the files of the current directory, a number will be beside each one, which represents {{en/C|<number>|}} below.
+*Type {{en/C|cd <number>|}} to go to that directory.
+*Type {{en/C|load <number>|}} to load that file.
+
+*You can also load savegames and scenarios with the {{en/C|-g "<filename>"|}}, command line option. 
+:Example: {{en/C|openttd.exe -D -g "scenario/echo.scn"|}}.
+
+== Automatically start/stop and save your game ==
+If you do not want to run docker: Run your dedicated server in ubuntu/debian you can download and install a init.d script
+You will get the following functions:
+* Automatically startup when your server box bootup
+* Automatically shutdown when you server box is shutdown
+* Automatically saving your game at a defined interval
+For more functions, install guide and download, visit: https://bitbucket.org/frodus/openttd-init
+
+With a ready-made docker container you get a tested and working environment for openttd.
+In ubuntu 14.04 or newer you can run: sudo apt-get install docker.io and then read documentation on the following url
+https://registry.hub.docker.com/u/bateau/openttd/
+Mind that this is a pre-configured virtual machine and packaging is done by 3rd party.
+
+
+==See also==
+*[[en/Archive/Manual/Settings/Autoclean companies|Autoclean companies]]   in order to specify what happens when a player logs off during a game and a company becomes inactive
+*A short intro on Firewalls for  Dedicated Servers [http://www.uk2.net/blog/why-is-a-firewall-important-for-your-dedicated-server-2/]
+
+[[Category:en/Manual/Multiplayer]]
+[[Category:en/Manual/Tutorial]]
