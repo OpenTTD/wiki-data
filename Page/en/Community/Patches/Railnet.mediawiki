@@ -1,0 +1,47 @@
+This page is currently WIP!
+
+The railnet tool (just called "railnet") is a schematic railroad network map exporter for (a special kind of) OpenTTD savegame dumps.
+
+It consists of two components: the railnet video driver and the railnet converter.
+
+== Introduction ==
+
+OpenTTD maps can get large sometimes. It can be hard to keep an overview of all lines. Also, while changes on a map are made, trains can take other routes without the player noticing.
+
+Railnet shall help solving these problems by generating a schematic railroad network map. These kinds of networks are often offered by suburban railways for their customers. While the connectivity of stations is being preserved, the geometry is often stretched in order to make the map more readable.
+
+== The three steps ==
+
+The production chain is like this:
+
+<pre>
+openttd savegame ===railnet-video-driver===> json railnet dump ===|
+                                                                  |===railnet-converter===> .dot-file ===dot-utility===> pdf-file
+                                       user-defined parameters ===|
+</pre>
+
+About the 4 file types:
+* The openttd savegame is any loadable .sav-file
+* The binary railnet dump contains the used stations, the order lists and their cargo.
+* The .dot file contains a graph in human readable text format.
+* The pdf-file finally contains your graph
+
+=== Railnet Video Driver ===
+
+The railnet video driver is an ingame video driver. It computes the "railnet dump" and renders it to stdout. There is no "real video" rendered.
+
+=== Railnet Converter ===
+
+The railnet converter takes the binary railnet dump and converts it into a .dot file.
+
+You can pass different parameters to the converter in order to make the graph look as desired. Try --help.
+
+=== dot-utility ===
+
+The dot-utility is no part of OpenTTD.
+
+=== A practical example ===
+
+<pre>
+TODO
+</pre>
