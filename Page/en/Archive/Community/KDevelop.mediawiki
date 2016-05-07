@@ -1,15 +1,35 @@
-=== Using kdevelop with subversion ===
-* sync svn to directory where you want to store your copy of files
- svn co svn://svn.openttd.org/trunk openttd_svn # for anonymous user
-* enable debug
- cd openttd_svn
- ./configure --enable-debug
-* start kdevelop and select Project->Import existing Project ..., choose directory and click OK
-* select Project->Project Options and in Version system tab change "none" to "Subversion" and click OK
-* in Project Options you should also set Executable in "Run Options" to /path/to/openttd_svn/bin/openttd (will be available after building project)
-* Now you can use svn
+[[Category:en/Development/Compiling OpenTTD]]
 
-=== Synchronizing all to svn's HEAD ===
-*click on File Tree (it's on right)
-*then right click on project's root (the most top entity in File Tree)
-*select subversion->update
+KDevelop is an IDE developed for KDE Platform. It runs natively on many Unix-like systems including MacOS.
+
+== Importing OpenTTD to KDevelop ==
+To import OpenTTD project into KDevelop follow these steps:
+* prepare OpenTTD source code [[en/Archive/Compilation and Ports/Compiling on GNU∕Linux and 🟉BSD|as usual]], configure
+* in KDevelop, select ''Project -> Open / import project...''
+* navigate to the root folder of source code e.g. ''~/OpenTTD'' and choose ''Makefile'' file
+* enter name of the project and select "Custom Makefile Project Manager"
+Now you should be able to build the project (''Project -> Build all Projects'').
+
+== Running/debugging ==
+In order to run/debug the project from KDevelop you have to create a "Launch configuration":
+* from menu select ''Run -> Configure Launches...''
+* on the left, select your project instead of "Global"
+* click ''Add New...'' button and select ''Compiled Binary''
+* next to ''Executable'' enter full path to OpenTTD binary e.g. ''~/OpenTTD/bin/openttd''
+* next to ''Arguments'' enter any custom options e.g. ''-d 1''
+* next to ''Working Directory'' enter full path to the run directory e.g. ''~/OpenTTD/bin''
+Now you should be able to run and debug the project (''Run -> Execute launch'', ''Run -> Debug launch'').
+
+== Useful tips ==
+KDevelop comes with a background parser which gives you a real-time information on the code. It needs some tweaks however:
+* Exclude "objs" directory from the project: open the ''Projects'' toolbox, locate "objs" directory in the tree, right click and select ''Exclude Item From Project''.
+* In project options (''Project -> Open Configuration...''), select ''Custom Defines And Includes -> Includes/Imports'' and add two full paths. One to the "stdafx.h" file e.g. ''~/OpenTTD/src/stdafx.h''. Second to the "objs/lang" directory e.g. ''~/OpenTTD/objs/lang''.
+* In project options, select ''Custom Defines And Includes -> Defines'' and add any macros you may find useful e.g. ''ENABLE_NETWORK''.
+
+KDevelop also has an internal VCS GUI tool. If you have imported a Mercurial or Git "working copy" then just open the ''VCS Changes'' toolbox.
+
+In the "Find/Replace in Files" dialog it might be necessary to add ",/objs/" to the ''Exclude'' pattern. You can also add some file extensions specific to OpenTTD e.g. ''nut'' or ''ini''.
+
+== See also ==
+*[http://www.kdevelop.org/ KDevelop website]
+*[http://userbase.kde.org/KDevelop4/Manual/Building_%28compiling%29_projects_with_custom_Makefiles ''Building (compiling) projects with custom Makefiles''] at KDE UserBase Wiki
