@@ -97,4 +97,35 @@ In fact, most scheduling tasks other than creating headway between the vehicles 
 * Start the vehicles at the same time.
 * Repeat the tuning when upgrading to faster vehicles.
 
+== Automatic Spacing ==
+Since version 1.4.0 it has been possible to automatically space vehicles using the timetable feature.
+
+The basic way this works is as follows:
+* The total number of days in the timetable is divided by the number of vehicles sharing the timetable to get a "gap number".
+* The start date of each vehicle is then increased by the "gap number" so that each vehicle starts the same number of days after the last.
+* Each vehicle speeds up or slows down depending on whether it is late or early according to the timetable.
+* Provided the timetable has a little slack in it to account for traffic and busy stations, this should keep them in sync forever.
+
+For example, let's say you have a bus that takes 100 days to complete its route. If you then clone this bus 9 times, you will have 10 buses sharing the orders. Automatically spacing them means that each bus will set out 10 days after the last. Each station will be serviced every 10 days.
+
+
+
+'''How to use:'''
+* Set up a vehicle and plot the route using the Orders tab.
+* When complete, click on the Timetable button and click Autofill.
+* Start the vehicle and let it complete the route and fill in the timetable.
+* Stop the vehicle as soon as the last item has filled in the timetable.
+* On the Orders tab, click Skip until the next station is the first station in the list.
+* Unclick Autofill and add a little slack into the timetable to account for filling up at stations. Since this is generally the first time you visit each station, there are no passengers to load, and you need to increase the time so that the vehicle can load up.
+* Once the timetable is complete, decide how many vehicles you want on that route.
+* Clone the initial vehicle using ctrl-click. The cloned vehicles will share the order list and timetable.
+* Once you have all the clones, select the first vehicle and '''ctrl-click''' on Start Date.
+* Set a start date a few days into the future. Ideally, the vehicle should arrive at the first station before this time.
+* Release all the vehicles. They will bunch up at the first station, but should leave in regular intervals until they are all spaced out.
+* You can confirm by checking the timetable of each vehicle and see that the start date of each vehicle is evenly spaced.
+
+You may find it easier to pause the game after the timetable has been filled, so that you can clone the other vehicles and set up the timetable without worrying about the first vehicle continuing on its route too far.
+
+It's not strictly necessary to set a start date in the future or to even stop the first vehicle. Provided there is a little slack in the timetable, the vehicles will speed up and slow down as needed and will eventually space out evenly. The above is just the simplest method I have found.
+
 [[Category:en/Archive/OpenTTD/0.6.0 Features]] [[Category:en/Manual/Tutorial]] [[Category:en/Manual/Vehicles]]
