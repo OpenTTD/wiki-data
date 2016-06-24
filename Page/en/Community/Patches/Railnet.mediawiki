@@ -15,26 +15,89 @@ Railnet shall help solving these problems by generating a schematic railroad net
 The production chain is like this:
 
 <pre>
-openttd savegame ===railnet-video-driver===> json railnet dump ===|
-                                                                  |===railnet-converter===> .dot-file ===dot-utility===> pdf-file
-                                       user-defined parameters ===|
+                                                      ===<===railnet-filter===<========
+                                                     |                            ^   ^
+                                                     V                            |   |
+openttd savegame ===railnet video-driver==> json railnet dump ===>==========>=====|   |
+                                                     |                                |
+                                                     |<-------------<------------user-defined
+                                                     |                            parameters
+                                                railnet2dot
+                                                     |
+                                                     V
+                      pdf-file <==dot-utility=== .dot-file
 </pre>
 
 About the 4 file types:
 * The openttd savegame is any loadable .sav-file
 * The json railnet dump contains the used stations, the order lists and their cargo.
 * The .dot file contains a graph in human readable text format.
-* The pdf-file finally contains your graph
+* The pdf-file finally contains your railroad network graph in a printable format
 
 === Railnet Video Driver ===
 
 The railnet video driver is an ingame video driver. It computes the "railnet dump" and renders it to stdout. There is no "real video" rendered.
 
-=== Railnet Converter ===
+You can not pass any parameters to the video driver.
 
-The railnet converter takes the json railnet dump and converts it into a .dot file.
+The video driver does the following:
+* First, each train's order list is being computed. An order list is a pair of <StationID, bool>, where the second parameter is true if the train stops at the station and false if it passes through.
+** A train starts where it's currently located
+** The order list is queried in forward order, and the first station that is reachable from the train is being driven to
+** Then, the train drives the rest of the order list. This is done to ensure that the train is looking into the right direction when it returns to the first station.
+** Now, the train drives through the whole order list, recording all stations where it stops or passes through
+** If a train's order list equals a previously computed one, or is the exact reverse, the current train's order list is not being added, instead, its cargo is being *merged* (see "Cargo merging" below) to the previously added train
+* Next, for all used stations, the names and position are being recorded
+* Everything is being serialized into a railnet json file
 
-You can pass different parameters to the converter in order to make the graph look as desired. Try --help.
+=== Cargo merging ===
+
+Whenever a train has the same or reverse (this happens only for cyclic order lists) order list of another one (this includes "shifted" order lists), the cargo is being "merged" to that other train's cargo. The following examples illustrate it:
+
+<pre>
+Train A: wood + passengers + mail
+Train B: passengers + mail + oil + goods
+A + B have the same directions
+</pre>
+
+This would result in three trains:
+<pre>
+C: passengers + mail,
+D: wood,
+E: oil + goods
+</pre>
+
+<pre>
+Train A: wood + passengers + mail
+Train B: passengers + mail + oil + goods
+B is in the reverse direction of A
+=> Three trains: C: passengers + mail, D: wood, E: oil + goods
+</pre>
+
+This would result in the same thre trains, however, with different directions:
+<pre>
+C: passengers + mail, (forward + backward)
+D: wood, (forward)
+E: oil + goods (reverse)
+</pre>
+
+Note that in the code and the json file, trains C, D and E are stored in one "train", but in different "slices" of it.
+
+=== Railnet filter ===
+
+The railnet filter takes json files and outputs them with filters specified by user defined parameters.
+
+* First, a cargo filter is being applied to the order lists
+* Next, so called "short" and "express" can be sorted out:
+** Both are trains such that another train exists whose order list is a real superset
+** If between any two nodes of the current train, there is one pair (N,M), where in the superset, the order is (N, ... N, ... M), then the train is a short train. If one pair misses this property, it is an express train. The idea behind it is that express trains just leave out stations, while short trains start later in the order list and have a shorter run than regular trains (usually, they 
+each station is visited twice, the train 
+
+=== Railnet 2 pdf ===
+
+The railnet2pdf tool takes the json railnet dump and converts it into a .dot file.
+
+You can pass parameters to the converter in order to make the graph look as desired. Try --help.
 
 === dot-utility ===
 
