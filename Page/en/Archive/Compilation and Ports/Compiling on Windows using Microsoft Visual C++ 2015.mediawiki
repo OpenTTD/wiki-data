@@ -1,0 +1,129 @@
+
+
+A step by step guide for compile successfully OpenTTD in Visual Studio 2015. Note the  [[en/Archive/Compilation and Ports/Compiling on Windows using Microsoft Visual C++ 2008∕2010|2008/2010 version]] of this document contains more information (such as creating a bundle) and is more verbose, hence if you get stuck it is recommended to look at that document as well.
+
+== Before Start == 
+I'm assuming that you have Microsoft Visual Studio installed and running.
+=== Required software ===
+*[https://www.openttd.org/en/download-openttd-useful/6.0 openttd-useful-X.X-win.zip] -> Source files needed to compile.
+*[http://www.tt-forums.net/download/file.php?id=118839 DMusic_for_OpenTTD.zip] -> Old DirectMusic includes.
+*[http://tortoisesvn.net/ TortoiseSVN] A Windows program for get and update code from SVN repositories.
+
+
+{{en/Note|This guide has been tested on Windows 8 64 bits, it should work on other Windows versions too, if you find any additional errors please let us know in the forum.}}
+
+== Step 1 - Preparing the files == 
+
+'''1.1''' Create your main <code>Work</code> folder (ie <code>C:\OpenTTD</code>)
+
+'''1.2''' Create a subfolder called <code>trunk</code> inside the previously created folder.
+
+'''1.3''' Select <code>trunk</code> folder and make a check-out with TortoiseSVN using svn://svn.openttd.org/trunk as URL (if you need help see [http://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-checkout.html svn checkout])
+
+'''1.4''' Extract the previously downloaded file <code>openttd-useful-X.X-win.zip</code> inside our <code>Work</code> folder and a folder called <code>OpenTTD essentials</code> will be created.
+
+'''1.5''' Extract the previously downloaded file <code>DMusic_for_OpenTTD.zip</code> inside <code>OpenTTD essentials</code> folder.
+
+== Step 2 - Configure Visual Studio ==
+
+'''2.1''' If you have Visual Studio running, close it first, then install <code>Microsoft Windows SDK</code>.
+
+'''2.2''' Open Microsoft Visual Studio and go to <code>File -> Open Project</code>.
+
+'''2.3''' Select the file <code>(WorkFolder)\trunk\projects\openttd_vs140.sln</code>.
+
+'''2.4''' A popup will ask you to update the compiler settings, click <code>Update</code> button.
+
+'''2.5''' Go to <code>Compile -> Configuration Administrator</code> and select <code>Configuration: Release</code>.
+
+'''2.6''' Right click on the <code>openttd</code> project in <code>Solution Explorer</code> and select <code>Properties</code>.
+
+'''2.7''' Select <code>Configuration: Release</code> at the top of the Property window.
+
+
+{{en/Note|You can leave both settings as default in <code>Debug</code> if you want but you will need to repeat these steps when you change it later to Release.}}
+
+
+'''2.8''' Navigate to <code>Configuration Properties -> VC++ Directories</code>.
+
+'''2.9''' Select <code>Include files folder</code> and add <code>(WorkFolder)\OpenTTD essentials\shared\include;</code> '''IN FRONT''' of the list. 
+'''DON'T forget the final semicolon(;) it's important'''.
+
+'''2.10''' Select <code>Library files folder</code> and add <code>(WorkFolder)\OpenTTD essentials\win32\library;</code> '''IN FRONT''' of the list. Again 
+'''DON'T forget the final semicolon(;) it's important''', change win32 to win64 if you want to compile a x64 build.
+
+
+You can try now to build the solution.
+
+Your final file will be in <code>(WorkFolder)\trunk\objs\Win32\Release\openttd.exe</code>
+
+== Error troubleshooting== 
+
+
+=== Fix Error C4430 missing type specifier - int assumed. Note: C++ does not support default-int (compiling source file ..\src\crashlog.cpp) openttd C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared\fttypes.h 38  ===
+
+see this post: https://www.tt-forums.net/viewtopic.php?t=75394
+
+=== Fix Error LNK2001 unresolved external symbol ___iob_func openttd C:\OpenTTD\trunk\projects\libpng.lib(pngerror.obj) ===
+
+You're probably using an outdated version of openttd-useful. You can find version 6.0 here: https://www.openttd.org/en/download-openttd-useful/6.0.
+
+For more details, see the discussion here: https://www.tt-forums.net/viewtopic.php?t=73769.
+
+=== Fix for Error C1083: Cannot open (include file/source file) 'X' No such file or directory === 
+
+This usually happens when you try to compile only the <code>openttd</code> project, you must compile entire solution because some needed files are created by scripts "on the fly"
+
+Solution: Select <code>Solution 'openttd_vs100'</code> in <code>Solution Explorer</code>, make right click with the mouse over it and click on <code>Compile Solution</code>.
+
+=== Fix for Error C1189: "The C++ Standard Library forbids macroizing keywords. Enable warning C4005 to find the forbidden macro[...]"=== 
+
+Open the project's Property Pages dialog box. (See step 2.6)
+
+Navigate to <code>C/C++ -> Preprocessor</code>.
+
+Select <code>Preprocessor Definitions</code> and add
+
+<pre>_XKEYCHECK_H;</pre>
+
+to the list.
+'''DON'T forget the final ; it's important'''
+
+=== Fix Error LNK2026: "Module unsafe for SAFESEH image[...]" === 
+
+Open the project's <code>Property Pages</code> dialog box. (See step 2.6)
+
+Click the <code>Linker</code> folder.
+
+Click the <code>Advanced</code> property page.
+
+Choose "No" under "Image Has Safe Exception Handlers".
+
+More info: [http://msdn.microsoft.com/library/9a89h429(v=vs.110).aspx]
+
+=== Fix Warning C4005: "'FACILITY_DIRECTMUSIC' : macro redefinition" === 
+
+Open <code>openttd</code> tree in <code>Solution Explorer</code>, open <code>External Dependencies</code> and select <code>dmerror.h</code>
+
+Change this at the start of the file (usually near line 12):
+
+<pre>
+
+#define FACILITY_DIRECTMUSIC      0x878       /* Shared with DirectSound */
+
+</pre>
+
+to
+
+<pre>
+
+#ifndef FACILITY_DIRECTMUSIC
+	#define FACILITY_DIRECTMUSIC      0x878       /* Shared with DirectSound */
+#endif
+
+</pre>
+
+[[Category:en/Development]]
+[[Category:en/Development/Compiling OpenTTD]]
+[[Category:en/Development/Microsoft Visual C++]]
+[[Category:en/Archive/Program Descriptions]]
