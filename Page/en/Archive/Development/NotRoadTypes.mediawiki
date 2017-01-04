@@ -3,17 +3,17 @@
 === Introduction ===
 
 Road and tram are constructed independently.
-You can build road with a certain Roadtype on a tile, and you can build tram with a certain tramtype on a tile.
+You can build road with a certain roadtype on a tile, and you can build tram with a certain tramtype on a tile.
 In general there are no implications between the two infrastructures, just like there are no implications to
 railtypes on levelcrossings, though rail-, road- and tramtypes can forbid levelcrossings.
 
-Each tile may have one Roadtype and one tramtype.
+Each tile may have one roadtype and one tramtype.
 
 === Roadtype and Tramtype labels ===
 
-Roadtypes and Tramtypes are identified via 4-character labels between NewGRFs.
+Roadtypes and tramtypes are identified via 4-character labels between NewGRFs.
 Labels of the different entities are independent.
-You can have Roadtype "OTTD", Tramtype "OTTD", Railtype "OTTD", Cargotype "OTTD", ... independently of each other, in the same game or in the same NewGRF.
+You can have roadtype "OTTD", tramtype "OTTD", railtype "OTTD", cargotype "OTTD", ... independently of each other, in the same game or in the same NewGRF.
 
 By default OpenTTD knows these labels, and provides graphics for them:
 
@@ -43,7 +43,7 @@ Vehicles have a specific road-/tramtype label.
 The road-/tramtypes specify, which other tracktypes their vehicles can drive on.
 
 ==== Example 1 ====
-4 Roadtypes:
+4 roadtypes:
 * ROAD: Normal road
 * ELRD: Electrified road
 * OFFR: Off-road / dirt-road
@@ -97,11 +97,11 @@ General rules:
 |-
 | Underlay from Roadtype         || Roadtype || X || X ||
 |-
-| Underlay from TramType         || Roadtype ||   || - || X
+| Underlay from Tramtype         || Roadtype ||   || - || X
 |-
 | Overlay from Roadtype          || Roadtype || X || X ||
 |-
-| Overlay from TramType          || Roadtype ||   || X || X
+| Overlay from Tramtype          || Roadtype ||   || X || X
 |-
 | Oneway signs                   || baseset  || X || X ||
 |-
@@ -109,7 +109,7 @@ General rules:
 |-
 | Road catenary, back            || Roadtype || X || X ||
 |-
-| Tram catenary, back            || TramType ||   || - || X
+| Tram catenary, back            || Tramtype ||   || - || X
 |-
 | Roadside (lamps, trees), back  || baseset  || X || X || X
 |-
@@ -119,7 +119,7 @@ General rules:
 |-
 | Road catenary, front           || Roadtype || X || X || 
 |-
-| Tram catenary, front           || TramType ||   || - || X
+| Tram catenary, front           || Tramtype ||   || - || X
 |}
 
 === Level crossing ===
@@ -133,21 +133,21 @@ General rules:
 |-
 | Underlay from Roadtype         || Roadtype || X || X ||
 |-
-| Underlay from TramType         || Roadtype ||   || - || X
+| Underlay from Tramtype         || Roadtype ||   || - || X
 |-
 | Overlay from Roadtype          || Roadtype || X || X ||
 |-
-| Overlay from TramType          || Roadtype ||   || X || X
+| Overlay from Tramtype          || Roadtype ||   || X || X
 |-
 | Overlay from Roadtype          || Roadtype || X || X ||
 |-
-| Overlay from TramType          || Roadtype ||   || X || X
+| Overlay from Tramtype          || Roadtype ||   || X || X
 |-
 | Rail overlay                   || RailType || X || X || X
 |-
 | Road catenary, back            || Roadtype || X || X ||
 |-
-| Tram catenary, back            || TramType ||   || - || X
+| Tram catenary, back            || Tramtype ||   || - || X
 |-
 | Rail catenary, back            || RailType || X || X || X
 |-
@@ -161,7 +161,7 @@ General rules:
 |-
 | Road catenary, front           || Roadtype || X || X || 
 |-
-| Tram catenary, front           || TramType ||   || - || X
+| Tram catenary, front           || Tramtype ||   || - || X
 |}
 
 === Road depot ===
@@ -171,11 +171,11 @@ General rules:
 |-
 | Foundation                     || baseset       || X ||   || X
 |-
-| Depot, back                    || Road/TramType || X ||   || X
+| Depot, back                    || Road/Tramtype || X ||   || X
 |-
-| Road/Tram overlay (if default depot gfx) || Road/TramType || X ||   || X
+| Road/Tram overlay (if default depot gfx) || Road/Tramtype || X ||   || X
 |-
-| Depot, front                   || Road/TramType || X ||   || X
+| Depot, front                   || Road/Tramtype || X ||   || X
 |}
 
 === Drive-in road stop ===
@@ -218,13 +218,13 @@ General rules:
 
 === Global stuff ===
 
-Road-/TramType translation table:
-; NFO: Action 0 Feature 8 Properties 0x16 (Roadtypes) and 0x17 (tramtypes) work the same as 0x12 for railtypes
-; NML: "Roadtypetable" and "tramtypetable" work the same as "railtypetable"
+Road-/Tramtype translation table:
+; NFO: Action 0 Feature 8 Properties 0x16 (roadtypes) and 0x17 (tramtypes) work the same as 0x12 for railtypes
+; NML: "roadtypetable" and "tramtypetable" work the same as "railtypetable"
 
 Testing for road-/tramtypes:
-; NFO: Action 7 tests 0x0F (Roadtype not defined), 0x10 (Roadtype defined), 0x11 (tramtype not defined), 0x12 (tramtype defined) work the same as 0x0D and 0x0E for railtypes.
-; NML: "Roadtype_available" and "tramtype_available" work the same as "railtype_available"
+; NFO: Action 7 tests 0x0F (roadtype not defined), 0x10 (roadtype defined), 0x11 (tramtype not defined), 0x12 (tramtype defined) work the same as 0x0D and 0x0E for railtypes.
+; NML: "roadtype_available" and "tramtype_available" work the same as "railtype_available"
 
 === Vehicle stuff ===
 
@@ -239,16 +239,16 @@ If the property is not set, then road vehicles default to "ROAD" and trams defau
 
 Current road-/tramtype under vehicle:
 ; NFO: Var 0x4A works the same as for trains. Bit 8 "is/would be powered" is always set.
-; NML: "current_Roadtype" and "current_tramtype" work the same as "current_railtype".
+; NML: "current_roadtype" and "current_tramtype" work the same as "current_railtype".
 
 === Road-/Tramtype ===
 
 Feature:
-; NFO: 0x12 for Roadtypes, 0x13 for tramtypes
-; NML: FEAT_RoadtypeS, FEAT_TRAMTYPES
+; NFO: 0x12 for roadtypes, 0x13 for tramtypes
+; NML: FEAT_ROADTYPES, FEAT_TRAMTYPES
 There is no "parent" scope.
 
-There is a global limit of 15 Roadtypes and 15 tramtypes, including the default types.
+There is a global limit of 15 roadtypes and 15 tramtypes, including the default types.
 
 ==== Properties ====
 
@@ -267,9 +267,9 @@ There is a global limit of 15 Roadtypes and 15 tramtypes, including the default 
 |-
 | 0x0D (word)  || new_engine_text ||
 |-
-| 0x0F (*)     || powered_Roadtype_list, powered_tramtype_list || there is no difference between "powered" and "compatible" for road-/tramtypes
+| 0x0F (*)     || powered_roadtype_list, powered_tramtype_list || there is no difference between "powered" and "compatible" for road-/tramtypes
 |-
-| 0x10 (byte)  || Roadtype_flags, tramtype_flags || 0x01 = Roadtype_FLAG_CATENARY = TRAMTYPE_FLAG_CATENARY, 0x02 = Roadtype_FLAG_NO_LEVEL_CROSSING = TRAMTYPE_FLAG_NO_LEVEL_CROSSING
+| 0x10 (byte)  || roadtype_flags, tramtype_flags || 0x01 = ROADTYPE_FLAG_CATENARY = TRAMTYPE_FLAG_CATENARY <br/> 0x02 = ROADTYPE_FLAG_NO_LEVEL_CROSSING = TRAMTYPE_FLAG_NO_LEVEL_CROSSING
 |-
 | 0x13 (word)  || construction_cost || Defaults: ROAD = 8, ELRD = 16, RAIL = 8, ELRL = 16
 |-
@@ -279,9 +279,9 @@ There is a global limit of 15 Roadtypes and 15 tramtypes, including the default 
 |-
 | 0x17 (dword) || introduction_date ||
 |-
-| 0x18 (*)     || requires_Roadtype_list, requires_tramtype_list ||
+| 0x18 (*)     || requires_roadtype_list, requires_tramtype_list ||
 |-
-| 0x19 (*)     || introduces_Roadtype_list, introduces_tramtype_list ||
+| 0x19 (*)     || introduces_roadtype_list, introduces_tramtype_list ||
 |-
 | 0x1A (byte)  || sort_order || Defaults: ROAD = 0x07, ELRD = 0x17, RAIL = 0x07, ELRL = 0x17
 |-
@@ -289,7 +289,7 @@ There is a global limit of 15 Roadtypes and 15 tramtypes, including the default 
 |-
 | 0x1C (word)  || maintenance_cost || Defaults: ROAD = 16, ELRD = 24, RAIL = 16, ELRL = 24
 |-
-| 0x1D (*)     || alternative_Roadtype_list, alternative_tramtype_list ||
+| 0x1D (*)     || alternative_roadtype_list, alternative_tramtype_list ||
 |}
 
 ==== Variables ====
