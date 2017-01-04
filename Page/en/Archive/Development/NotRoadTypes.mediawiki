@@ -1,0 +1,358 @@
+== Road- and Tramtypes ==
+
+=== Introduction ===
+
+Road and tram are constructed independently.
+You can build road with a certain Roadtype on a tile, and you can build tram with a certain tramtype on a tile.
+In general there are no implications between the two infrastructures, just like there are no implications to
+railtypes on levelcrossings, though rail-, road- and tramtypes can forbid levelcrossings.
+
+Each tile may have one Roadtype and one tramtype.
+
+=== Roadtype and Tramtype labels ===
+
+Roadtypes and Tramtypes are identified via 4-character labels between NewGRFs.
+Labels of the different entities are independent.
+You can have Roadtype "OTTD", Tramtype "OTTD", Railtype "OTTD", Cargotype "OTTD", ... independently of each other next to each other in the same game and NewGRF.
+
+By default OpenTTD knows these labels, and provides graphics for them:
+
+{| border="1" |-
+! !! Roadtype !! !! !! Tramtype
+|-
+|ROAD || Normal road || || RAIL || Tramway
+|-
+|ELRD || Electrified road || || ELRL || Electrified tramway
+|}
+
+Note, that catenary is not specific to tramtypes. Trolley busses are not trams.
+
+=== Compatibility/Poweredness ===
+
+This works the same as for railtypes.
+Vehicles have a specific road-/tramtype label.
+
+The road-/tramtypes specify, which other tracktypes their vehicles can drive on.
+
+==== Example 1 ====
+4 Roadtypes:
+* ROAD: Normal road
+* ELRD: Electrified road
+* OFFR: Off-road / dirt-road
+* HAUL: Heavy hauling road
+
+Compatibility:
+* Electrified road vehicles can drive on electrified road only.
+* Road vehicles can drive on road and electrified road.
+* Haul vehicles can drive on haul road only.
+* Off-road vehicle can drive on any road.
+
+Note: Technically the specs do not enforce any "transitivity" for the compatibility.
+That means, if A can drive on B and B can drive on C, A does not necessarily drive on C.
+
+[[File:en/Archive/Development/Nrt example1 dot.png]]
+
+==== Example 2 ====
+5 tramtypes:
+* RAIL: Normal rail
+* ELRL: Rail with catenary
+* 3RDR: Rail with 3rd rail
+* 3RDC: Rail with both catenary and 3rd rail
+* 3ORC: Vehicles which can switch between catenary or 3rd rail power supply.
+The last type "3rd rail or catenary" is technically no build-able tracktype, just a vehicle type. (This is currently not implemented)
+There are no vehicles which require obth 3rd rail and catenary.
+
+* Catenary powered vehicles can drive on track with catenary.
+* Third-rail powered vehicles can drive on track with third-rail.
+* Self-powered vehicle can drive on all tracks.
+
+[[File:en/Archive/Development/Nrt example2 dot.png]]
+
+== Sprite layers ==
+
+When drawing road/tram tiles, multiple sprites are drawn in layers over each other.
+
+General rules:
+* Pavement and roadsides (lamps, trees) are not part of any road- or tramtype. They are provided by the baseset only.
+* There is only one underlay, either from road or from tram. Road takes precedence.
+* Overlays are always drawn. (this is different to railtypes)
+* There is only one catenary, either from road of from tram. Road takes precedence.
+
+=== Regular tiles ===
+
+{| border="1" |-
+! Layer !! Source !! Road only !! Road and Tram !! Tram only
+|-
+| Foundation                     || baseset  || X || X || X
+|-
+| Grass or paved sidewalks       || baseset  || X || X || X
+|-
+| Underlay from Roadtype         || Roadtype || X || X ||
+|-
+| Underlay from TramType         || Roadtype ||   || - || X
+|-
+| Overlay from Roadtype          || Roadtype || X || X ||
+|-
+| Overlay from TramType          || Roadtype ||   || X || X
+|-
+| Oneway signs                   || baseset  || X || X ||
+|-
+| Roadworks                      || baseset  || X || X || X
+|-
+| Road catenary, back            || Roadtype || X || X ||
+|-
+| Tram catenary, back            || TramType ||   || - || X
+|-
+| Roadside (lamps, trees), back  || baseset  || X || X || X
+|-
+| Vehicles                       ||          || X || X || X
+|-
+| Roadside (lamps, trees), front || baseset  || X || X || X
+|-
+| Road catenary, front           || Roadtype || X || X || 
+|-
+| Tram catenary, front           || TramType ||   || - || X
+|}
+
+=== Level crossing ===
+
+{| border="1" |-
+! Layer !! Source !! Road only !! Road and Tram !! Tram only
+|-
+| Foundation                     || baseset  || X || X || X
+|-
+| Grass or paved sidewalks       || baseset  || X || X || X
+|-
+| Underlay from Roadtype         || Roadtype || X || X ||
+|-
+| Underlay from TramType         || Roadtype ||   || - || X
+|-
+| Overlay from Roadtype          || Roadtype || X || X ||
+|-
+| Overlay from TramType          || Roadtype ||   || X || X
+|-
+| Overlay from Roadtype          || Roadtype || X || X ||
+|-
+| Overlay from TramType          || Roadtype ||   || X || X
+|-
+| Rail overlay                   || RailType || X || X || X
+|-
+| Road catenary, back            || Roadtype || X || X ||
+|-
+| Tram catenary, back            || TramType ||   || - || X
+|-
+| Rail catenary, back            || RailType || X || X || X
+|-
+| Crossing bars, back            || RailType || X || X || X
+|-
+| Vehicles                       ||          || X || X || X
+|-
+| Crossing bars, front           || RailType || X || X || X
+|-
+| Rail catenary, front           || RailType || X || X || X
+|-
+| Road catenary, front           || Roadtype || X || X || 
+|-
+| Tram catenary, front           || TramType ||   || - || X
+|}
+
+=== Road depot ===
+
+{| border="1" |-
+! Layer !! Source !! Road only !! Road and Tram !! Tram only
+|-
+| Foundation                     || baseset       || X ||   || X
+|-
+| Depot, back                    || Road/TramType || X ||   || X
+|-
+| Road/Tram overlay (if default depot gfx) || Road/TramType || X ||   || X
+|-
+| Depot, front                   || Road/TramType || X ||   || X
+|}
+
+=== Drive-in road stop ===
+
+{| border="1" |-
+! Layer !! Source !! Road only !! Road and Tram !! Tram only
+|-
+| Foundation                     || baseset  || X ||   ||  
+|-
+| Station, back                  || baseset  || X ||   ||
+|-
+| Road overlay                   || Roadtype || X ||   ||
+|-
+| Road catenary, back            || Roadtype || X ||   ||
+|-
+| Vehicles                       ||          || X ||   ||
+|-
+| Station, front                 || baseset  || X ||   ||
+|-
+| Road catenary, front           || Roadtype || X ||   || 
+|}
+
+=== Drive-through road-stop ===
+
+... similar to regular tiles ...
+
+=== Bridge, Head ===
+
+... similar to regular tiles ...
+
+=== Bridge, Middle ===
+
+... similar to regular tiles ...
+
+=== Tunnel ===
+
+... similar to regular tiles ...
+
+== NewGRF format ==
+
+=== Global stuff ===
+
+Road-/TramType translation table:
+; NFO: Action 0 Feature 8 Properties 0x16 (Roadtypes) and 0x17 (tramtypes) work the same as 0x12 for railtypes
+; NML: "Roadtypetable" and "tramtypetable" work the same as "railtypetable"
+
+Testing for road-/tramtypes:
+; NFO: Action 7 tests 0x0F (Roadtype not defined), 0x10 (Roadtype defined), 0x11 (tramtype not defined), 0x12 (tramtype defined) work the same as 0x0D and 0x0E for railtypes.
+; NML: "Roadtype_available" and "tramtype_available" work the same as "railtype_available"
+
+=== Vehicle stuff ===
+
+==== Properties ====
+
+Road-/tramtype of vehicle:
+; NFO: Property 0x05 (byte) specifies the entry from the road-/tramtype translation table.
+; NML: "road_type", "tram_type" specifies the entry from the road-/tramtype translation table. ROADVEH_FLAG_TRAM must be set/cleared nevertheless.
+If the property is not set, then road vehicles default to "ROAD" and trams default to "ELRL".
+
+==== Variables ====
+
+Current road-/tramtype under vehicle:
+; NFO: Var 0x4A works the same as for trains. Bit 8 "is/would be powered" is always set.
+; NML: "current_Roadtype" and "current_tramtype" work the same as "current_railtype".
+
+=== Road-/Tramtype ===
+
+Feature:
+; NFO: 0x12 for Roadtypes, 0x13 for tramtypes
+; NML: FEAT_RoadtypeS, FEAT_TRAMTYPES
+There is no "parent" scope.
+
+There is a global limit of 15 Roadtypes and 15 tramtypes, including the default types.
+
+==== Properties ====
+
+{| border="1" |-
+! NFO !! NML !! Notes
+|-
+| 0x08 (dword) || label           ||
+|-
+| 0x09 (word)  || toolbar_caption ||
+|-
+| 0x0A (word)  || menu_text       ||
+|-
+| 0x0B (word)  || build_window_caption ||
+|-
+| 0x0C (word)  || autoreplace_text ||
+|-
+| 0x0D (word)  || new_engine_text ||
+|-
+| 0x0F (*)     || powered_Roadtype_list, powered_tramtype_list || there is no difference between "powered" and "compatible" for road-/tramtypes
+|-
+| 0x10 (byte)  || Roadtype_flags, tramtype_flags || 0x01 = Roadtype_FLAG_CATENARY = TRAMTYPE_FLAG_CATENARY, 0x02 = Roadtype_FLAG_NO_LEVEL_CROSSING = TRAMTYPE_FLAG_NO_LEVEL_CROSSING
+|-
+| 0x13 (word)  || construction_cost || Defaults: ROAD = 8, ELRD = 16, RAIL = 8, ELRL = 16
+|-
+| 0x14 (word)  || speed_limit || Unit is the same as for road vehicles. 0x100 = 128 km-ish/h = 80 mph
+|-
+| 0x16 (byte)  || map_colour || Defaults: 0x01 for all
+|-
+| 0x17 (dword) || introduction_date ||
+|-
+| 0x18 (*)     || requires_Roadtype_list, requires_tramtype_list ||
+|-
+| 0x19 (*)     || introduces_Roadtype_list, introduces_tramtype_list ||
+|-
+| 0x1A (byte)  || sort_order || Defaults: ROAD = 0x07, ELRD = 0x17, RAIL = 0x07, ELRL = 0x17
+|-
+| 0x1B (word)  || name ||
+|-
+| 0x1C (word)  || maintenance_cost || Defaults: ROAD = 16, ELRD = 24, RAIL = 16, ELRL = 24
+|-
+| 0x1D (*)     || alternative_Roadtype_list, alternative_tramtype_list ||
+|}
+
+==== Variables ====
+
+{| border="1" |-
+! NFO !! NML !! Notes
+|-
+| 0x40 (byte) || terrain_type ||
+|-
+| 0x42 (byte) || level_crossing_status || Level crossing sprites are provided by RailType only though.
+|-
+| 0x43 (dword) || build_date || Only available for road/tram depots.
+|-
+| 0x44 (byte) || town_zone || Currently not available for bridges and stations.
+|-
+| 0x5F (*) || random_bits || 2 pseudo random bits
+|}
+
+==== Graphics ====
+
+{| border="1" |-
+! NFO Action3 Id !! NML !! Required !! Sprites !! Notes !! Action 5 equivalent
+|-
+| 0x00 || gui             || optional                             || 6 + 6      || 6 gui icons, 6 cursors || 0-1, 4 new, 0-3, 4 new
+|-
+| 0x01 || track_overlay   || optional for road, required for tram || 11 + 4 + 4 || 11 roadbit combinations, 4 slopes, 4 dead ends || 4-22
+|-
+| 0x02 || underlay        || required                             || 11 + 4 + 4 || 11 roadbit combinations, 4 slopes, 4 dead ends || 27-45
+|-
+| 0x04 || catenary_front  || optional                             || 11 + 4 + 4 + 4 + 2 + 4 || 11 roadbit combinations, 4 slopes, 4 dead ends, 4 tunnels, 2 bridge middle, 4 bridge ramps || 56-62, 64-67, 72-75, 4 new, 80-83, 97-98, 103-106
+|-
+| 0x05 || catenary_back   || optional                             || 11 + 4 + 4 + 4 + 2 + 4 || 11 roadbit combinations, 4 slopes, 4 dead ends, 4 tunnels (unused), 2 bridge middle, 4 bridge ramps || 84-94, 68-71, 4 new, 4 new, 95-96, 99-102
+|-
+| 0x06 || bridge_surfaces || required                             || 6          || 2 bridge middle, 4 bridge ramps || 107-112
+|-
+| 0x08 || depots          || optional                             || 6          || if not present, the default depot sprites (depending on catenary flag) plus track overlay are drawn || 49-54
+|-
+| 0x0A || drive-in stops  || require for road, invalid for tram   || 4          || overlays for drive-in road stops || new
+|}
+
+== ToDo list ==
+
+* Shall depot sprites include the track overlay? Or should it be drawn separately?
+** Current status: Overlay is drawn if default depot sprites are used. Otherwise the depot sprites are expected to contain tracks.
+** Future: Flag to enable/disable this behaviour? Separate default depot sprites for ROAD, ELRD, RAIL and ELRL in BaseSet Action 5?
+* Which Roadtypes are build and used by towns?
+** Current status: Towns only build ROAD. Houses grow along all road- and tramtypes.
+** Future:
+*** Flag to enable houses along some road- or tramtypes. Disabled for default tramtypes.
+*** Flag to enable construction by towns. Which type do towns choose? The newest? What is the newest? How/when do they upgrade?
+* Disallow construction for drive-in stops:
+** Current status: Roadtypes have drive-in stops, tramtypes do not.
+** Future: Flag to disable drive-in stops for Roadtypes. Tramtypes remain always disabled.
+* Roadsides / fences
+** Current status: The default roadsides are always drawn.
+** Future:
+*** Flag to enable default pavement.
+*** Flag to enable default roadsides (lamps, trees).
+*** Optional sprites for rail-style fences (highway barriers, ...)
+* Independent movement for road vehicle and trams
+** Current status: Road vehicles and trams occupy the same space and block eachother's movement.
+** Future:
+*** Flag to enable trams to move independent of present road vehicles. (for example: suspension railway)
+**** Vehicles clip through each other and look weird.
+**** Track sprites would need drawing like catenary.
+**** Next step "regular tram under suspension rail" fails.
+* Non-constructible rail-/road-/tramtypes to model vehicle compatibility/poweredness:
+** Current status: Vehicles can only use defined tracktypes. Tracktypes are buildable, if a vehicle exists for them.
+** Future:
+*** Distinguish "track and vehicle type" and "vehicle-only type".
+*** "Vehicle-only types" are used by vehicles and reference other types for compatibility, but are not buildable themself.
+*** "Vehicle-only types" should not count towards the "maximum 15 types" limit.
+*** "Vehicle-only types" are visible in dropdowns that filter vehicles, like in the autoreplace GUI.
+*** See also [[#example-2 | Example 2]] above, and {{en/Flyspray|5006}}.
