@@ -404,6 +404,19 @@ If present, the depot sprites are expected to include track overlay graphics.
 *** Flag to enable default pavement.
 *** Flag to enable default roadsides (lamps, trees).
 *** Optional sprites for rail-style "fences" (highway barriers, trees, ...)
+* Draw underlay for both road and tram:
+** When there is both road and tram on a tile, and tram has some trackbits which road doesn't, then it currently looks like [https://www.tt-forums.net/download/file.php?id=196271 this].
+** Instead tram-underlay should also be drawn. The total order would be
+*** Grass ground
+*** Tram underlay
+*** Road underlay (drawn after tram, so it "takes precedence".)
+*** Road overlay
+*** Tram overlay
+** Problem is: The default roads do not provide road overlays. So this would need new Action5 sprites, and is not completely compatible with existing landscape and infrastructure NewGRFs and basesets.
+** The same applies to rail level crossings when using default railtypes. However, with NewRailTypes this is already better.
+** This can also be extended for smooth road-type transitions on junctions:
+*** If a roadtile connects to two tarmac road tiles and one dirt road tile, then it should draw the dirt underlay to the dirt tile and the tarmac underlay over it.
+*** Something similar is already done for catenary continuation.
 * Independent movement for road vehicle and trams
 ** Current status: Road vehicles and trams occupy the same space and block eachother's movement.
 ** Future:
