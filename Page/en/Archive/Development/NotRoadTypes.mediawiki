@@ -390,49 +390,75 @@ If present, the depot sprites are expected to include track overlay graphics.
 
 == ToDo list ==
 
-* Which roadtypes are build and used by towns?
-** Current status: Towns only build ROAD. Houses grow along all road- and tramtypes.
-** Future:
-*** Flag to enable houses along some road- or tramtypes. Disabled for default tramtypes.
-*** Flag to enable construction by towns. Which type do towns choose? The newest? What is the newest? How/when do they upgrade?
-* Disallow construction for drive-in stops:
-** Current status: Roadtypes have drive-in stops, tramtypes do not.
-** Future: Flag to disable drive-in stops for roadtypes. Tramtypes remain always disabled.
-* Roadsides / fences
-** Current status: The default roadsides are always drawn.
-** Future:
-*** Flag to enable default pavement.
-*** Flag to enable default roadsides (lamps, trees).
-*** Optional sprites for rail-style "fences" (highway barriers, trees, ...)
-* Draw underlay for both road and tram:
-** When there is both road and tram on a tile, and tram has some trackbits which road doesn't, then it currently looks like [https://www.tt-forums.net/download/file.php?id=196271 this].
-** Instead tram-underlay should also be drawn. The total order would be
-*** Grass ground
-*** Tram underlay
-*** Road underlay (drawn after tram, so it "takes precedence".)
-*** Road overlay
-*** Tram overlay
-** Problem is: The default roads do not provide road overlays. So this would need new Action5 sprites, and is not completely compatible with existing landscape and infrastructure NewGRFs and basesets.
-** The same applies to rail level crossings when using default railtypes. However, with NewRailTypes this is already better.
-** This can also be extended for smooth road-type transitions on junctions:
-*** If a roadtile connects to two tarmac road tiles and one dirt road tile, then it should draw the dirt underlay to the dirt tile and the tarmac underlay over it.
-*** Something similar is already done for catenary continuation.
-* Independent movement for road vehicle and trams
-** Current status: Road vehicles and trams occupy the same space and block eachother's movement.
-** Future:
-*** Flag to enable trams to move independent of present road vehicles. (for example: suspension railway)
-**** Vehicles clip through each other.
-**** Track sprites would need drawing like catenary.
-**** Next step "regular tram under suspension rail" fails.
-* Non-constructible rail-/road-/tramtypes to model vehicle compatibility/poweredness:
-** Current status: Vehicles can only use defined tracktypes. Tracktypes are buildable, if a vehicle exists for them.
-** Future:
-*** Distinguish "track and vehicle type" and "vehicle-only type".
-*** "Vehicle-only types" are used by vehicles and reference other types for compatibility, but are not buildable themself.
-*** "Vehicle-only types" should not count towards the "maximum 15 types" limit.
-*** "Vehicle-only types" are visible in dropdowns that filter vehicles, like in the autoreplace GUI.
-*** See also [[#example-2 | Example 2]] above, and {{en/Flyspray|5006}}.
-* Foundations
-** Current status: Road, tram and rail use the regular foundation sprites.
-** Future:
-*** Optional sprites for railtypes, roadtypes and tramtypes. (precedence in this order)
+=== Which roadtypes are build and used by towns? ===
+Current status:
+* Towns only build ROAD. Houses grow along all road- and tramtypes.
+
+Future:
+* Flag to enable houses along some road- or tramtypes. Disabled for default tramtypes.
+* Flag to enable construction by towns. Which type do towns choose? The newest? What is the newest? How/when do they upgrade?
+
+=== Disallow construction for drive-in stops ===
+Current status:
+* Roadtypes have drive-in stops, tramtypes do not.
+
+Future:
+* Flag to disable drive-in stops for roadtypes. Tramtypes remain always disabled.
+
+=== Roadsides / fences ===
+Current status:
+* The default roadsides are always drawn
+
+Future:
+* Flag to enable default pavement.
+* Flag to enable default roadsides (lamps, trees).
+* Optional sprites for rail-style "fences" (highway barriers, trees, ...)
+
+=== Draw underlay for both road and tram ===
+Current status:
+* When there is both road and tram on a tile, and tram has some trackbits which road doesn't, then it currently looks like [https://www.tt-forums.net/download/file.php?id=196271 this].
+
+Future:
+* Instead tram-underlay should also be drawn. The total order would be
+** Grass ground
+** Tram underlay
+** Road underlay (drawn after tram, so it "takes precedence".)
+** Road overlay
+** Tram overlay
+
+Problem: 
+* The default roads do not provide road overlays. So this would need new Action5 sprites, and is not completely compatible with existing landscape and infrastructure NewGRFs and basesets.
+
+Related:
+* The same applies to rail level crossings when using default railtypes. However, with NewRailTypes this is already better.
+* This can also be extended for smooth road-type transitions on junctions:
+** If a roadtile connects to two tarmac road tiles and one dirt road tile, then it should draw the dirt underlay to the dirt tile and the tarmac underlay over it.
+** Something similar is already done for catenary continuation.
+
+=== Independent movement for road vehicle and trams ===
+Current status:
+* Road vehicles and trams occupy the same space and block eachother's movement.
+
+Future:
+* Flag to enable trams to move independent of present road vehicles. (for example: suspension railway)
+** Vehicles clip through each other.
+** Track sprites would need drawing like catenary.
+** Next step "regular tram under suspension rail" fails.
+
+=== Non-constructible rail-/road-/tramtypes to model vehicle compatibility/poweredness ===
+Current status:
+* Vehicles can only use defined tracktypes. Tracktypes are buildable, if a vehicle exists for them.
+
+Future:
+* Distinguish "track and vehicle type" and "vehicle-only type".
+* "Vehicle-only types" are used by vehicles and reference other types for compatibility, but are not buildable themself.
+* "Vehicle-only types" should not count towards the "maximum 15 types" limit.
+* "Vehicle-only types" are visible in dropdowns that filter vehicles, like in the autoreplace GUI.
+* See also [[#example-2 | Example 2]] above, and {{en/Flyspray|5006}}.
+
+=== Foundations ===
+Current status:
+* Road, tram and rail use the regular foundation sprites.
+
+Future:
+* Optional sprites for railtypes, roadtypes and tramtypes. (precedence in this order)
