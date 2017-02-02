@@ -94,6 +94,19 @@ make
 sudo make install
 cd ..</pre>
 
+==Compiling harbuzz==
+You only need harfbuzz for new version of libicu, for example 58.2.
+
+<pre>
+wget https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.2.tar.bz2
+tar xvf harfbuzz-1.4.2.tar.bz2
+cd harfbuzz-1.4.2
+export PKG_CONFIG_PATH=/usr/local/i586-mingw32msvc/lib/pkgconfig
+./configure --host=x86_64-w64-mingw32 --prefix=/usr/local/i586-mingw32msvc --enable-static --disable-shared --with-glib=no --with-cairo=no --with-fontconfig=no --with-icu=no
+make LIBS="-lpng16 -lz"
+sudo make install
+</pre>
+
 ==Compiling libicu==
 libicu is an optional library used for handling of right-to-left scripts (e.g. Arabic and Persian) and the natural sorting of lists.
 
