@@ -146,10 +146,12 @@ Same as for standard Linux.
 # Note the missing slash at the end of the first argument, this is important
 sudo ln -s /usr/local/i586-mingw32msvc /mingw
 
+# This points pkg-config to our local mingw installation
+export PKG_CONFIG_PATH=/usr/local/i586-mingw32msvc/lib/pkgconfig
+
 # Configure, disable all libraries that are falsely detected, explicitly specify others
 ./configure --host=i586-mingw32msvc --prefix=/usr/local/i586-mingw32msvc CFLAGS="-I/usr/local/i586-mingw32msvc/include  --sysroot=/usr/i586-mingw32msvc" \ 
-LDFLAGS="-L/usr/local/i586-mingw32msvc/lib"  --without-sdl --without-icu --without-liblzo2 --with-png=/usr/local/i586-mingw32msvc/bin/libpng-config \ 
---with-freetype=/usr/local/i586-mingw32msvc/bin/freetype-config
+LDFLAGS="-L/usr/local/i586-mingw32msvc/lib"  --without-sdl --with-lzo2=/usr/local/i586-mingw32msvc/lib/liblzo2.a
 make</pre>
 
 Installing Wine and running 
