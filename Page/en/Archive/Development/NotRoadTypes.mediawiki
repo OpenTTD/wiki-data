@@ -462,3 +462,26 @@ Current status:
 
 Future:
 * Optional sprites for railtypes, roadtypes and tramtypes. (precedence in this order)
+
+=== Variable to test presence of road/tram ===
+To draw different graphics depending on whether there is another road/tramtype present on the tile, add a new variable:
+* Var 0x45, bit 0..7 "current_roadtype"
+** 00 - FD: Entry from road translation table.
+** FE: Road present, but not in translation table.
+** FF: No road present
+* Var 0x45, bit 8..15 "current_tramtype"
+** 00 - FD: Entry from tram translation table.
+** FE: Tram present, but not in translation table.
+** FF: No tram present
+TODO Other useful info, maybe rather 16bits per road/tram?
+
+=== More information for the overlay graphics ===
+Pass information about the tile context in var10, in particular for the overlay sprites:
+* Regular tile
+* Level crossing
+* Drive-through stop
+* Road depot
+* Bridge head
+* Bridge middle
+* Tunnel entry
+* ...
