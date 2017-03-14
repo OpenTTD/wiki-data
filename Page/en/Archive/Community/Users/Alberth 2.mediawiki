@@ -15,3 +15,62 @@ Pages that are done:
 
 Perhaps add scope: "scope(FEAT_ROADVEH) { .... }"  where all names in the scope are local to that scope. This solves "ID management" for a large part.
 Constant substitution can be done with "const edibles_cargoes = ['FRUT', 'WATR'];    self.label_refits_allowed = edible_cargoes;"
+
+
+frosch syntax ideas, make code more like functions
+
+    NML today:
+     
+    cargotable                                                            { }
+    template            identifier (...)                                  { }
+    spritset                       (identifier, ...)                      { }
+    spritegroup         identifier                                        { }
+    spritelayout        identifier                                        { }
+    tilelayout          identifier                                        { }
+    produce                        (identifier, ...)                      ;
+    switch                         (FEAT_ROADVEHS, SELF, identifier, ...) { }
+    random_switch                  (FEAT_ROADVEHS, SELF, identifier, ...) { }
+    item                           (FEAT_ROADVEHS, identifier, ...)       { }
+    replace             identifier (...)                                  { }
+    base_graphics       identifier (...)                                  { }
+    font_glyph          identifier (...)                                  { }
+    alternative_sprites            (identifier, ...)                      { }
+    town_names                     (identifier)                           { }
+     
+     
+    NML today summary:
+    type identifier(...) ;
+    type identifier(...) { }
+    type(identifer, ...) { }
+    type(meta, identifier, ...) {}
+     
+     
+    python for comparison:
+    class identifier(...):
+    def identifier(...):
+     
+     
+    bad alternatives:
+    identifier = type(...) {}   -> misleading because identifiers cannot be reassigned like parameters
+     
+     
+    NML how it should have been:
+    type identifier(meta, ...) ;
+    type identifier(meta, ...) {}
+     
+    i.e.:
+    cargotable                                                            { }      same
+    template            identifier (...)                                  { }      same
+    spritset            identifier (...)                                  { }      different
+    spritegroup         identifier                                        { }      same
+    spritelayout        identifier                                        { }      same
+    tilelayout          identifier                                        { }      same
+    produce             identifier (...)                                  ;        different
+    switch              identifier (FEAT_ROADVEHS, SELF, ...)             { }      different
+    random_switch       identifier (FEAT_ROADVEHS, SELF, ...)             { }      different
+    item                identifier (FEAT_ROADVEHS, ...)                   { }      different
+    replace             identifier (...)                                  { }      same
+    base_graphics       identifier (...)                                  { }      same
+    font_glyph          identifier (...)                                  { }      same
+    alternative_sprites identifier (...)                                  { }      different
+    town_names          identifier                                        { }      different
