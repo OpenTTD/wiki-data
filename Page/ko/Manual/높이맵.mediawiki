@@ -1,0 +1,83 @@
+[[Translation:en/Manual/Heightmap]]
+
+'''높이맵'''은 한 픽셀의 밝기를 이용해서 맵을 생성할 수 있는 컴퓨터 이미지를 말합니다. ([https://www.wikipedia.org/wiki/Heightmap 위키백과]를 참고하세요).
+
+==높이맵을 이용해서 맵 만들기==
+높이맵은 흑백 이미지로 간주되고, ('''#FFFFFF'''에 가까운) 가장 밝은 하얀색은 지도 상에서 가장 높은 지점으로 표현되고, ('''#000000'''에 가까운) 가장 어두운 검은색은 지도 상에서 가장 낮은 지점으로 표현됩니다. 더 정확한 정보에 대해서는 아래에 있는 [[#geureiseukeil-pyo|그레이스케일 표]]를 참고하세요.
+
+이미지 파일의 1개 픽셀은 게임 상에서 4개의 칸이 맞닿는 코너 하나로 대응됩니다. 따라서, 게임 상에서 1개의 칸이 갖고 있는 4개의 모서리를 모두 올리거나 내리고 싶다면 높이맵에서는 2x2 만큼의 픽셀을 밝거나 어둡게 칠해야 합니다.
+
+지도 맨 가장자리는 적어도 하나 이상의 칸은 반드시 해수면이어야 하므로, 높이맵의 가장 바깥쪽 1px의 테두리는 2px 넓이로 간주되어 지도에 표현될 것입니다.
+
+===지원하는 파일 포맷===
+* [https://www.wikipedia.org/wiki/Bitmap_Image BMP]
+* [https://www.wikipedia.org/wiki/PNG PNG]
+
+===예시===
+<gallery>
+File:en/Manual/Heightmap img.png|높이맵을 이런 식으로 만들게 된다면...
+File:en/Manual/Heightmap map.png|... 이런 식으로 게임 상에서 표현됩니다.
+</gallery>
+
+==그레이스케일 표==
+
+참고: r27010부터 OpenTTD는 (해수면을 포함하여) 255단계의 고도를 지원하고, 16단계 이하의 고도를 표현하기 위해 8비트 팔레트를 반드시 사용해야할 필요가 없어졌기 때문에, 아래의 표는 17단계 이상의 높이를 사용하는 경우에는 적용되지 않습니다.
+17단계 이상의 높이를 사용하는 경우에 고도에 따른 색상의 범위는, "n"이 설정에서 지정한 최대 고도 높이일 때, 255/n 만큼씩으로 구분됩니다. 또는 ''값 * 최대 고도 높이 / 255''로 구분됩니다. (255는 8비트 값의 최대 제한값)...
+
+{|
+! 16진수값
+! 높이
+|-
+| 00 - 0F
+| 0m (해수면)
+|-
+| 10 - 1F
+| 30m
+|-
+| 20 - 2F
+| 70m
+|-
+| 30 - 3F
+| 100m
+|-
+| 40 - 4F
+| 130m
+|-
+| 50 - 5F
+| 170m
+|-
+| 60 - 6F
+| 200m
+|-
+| 70 - 7F
+| 230m
+|-
+| 80 - 8F
+| 270m
+|-
+| 90 - 9F
+| 300m
+|-
+| A0 - AF
+| 330m
+|-
+| B0 - BF
+| 370m
+|-
+| C0 - CF
+| 400m
+|-
+| D0 - DF
+| 430m
+|-
+| E0 - EF
+| 470m
+|-
+| F0 - FF
+| 500m
+|}
+
+==외부 링크==
+*[http://www.tt-forums.net/viewtopic.php?t=27052 How To: Generate Superb Heightmaps :)]
+*[http://www.tt-forums.net/download/file.php?id=92633 Updated version (Jun 2008) of the HowTo by sootynz (Word Document)]
+*[http://www.tt-forums.net/viewtopic.php?t=29323 Heightmaps (available and on request) on the Forum]
