@@ -3,23 +3,94 @@
 
 This article covers questions regarding development of OpenTTD, e.g. using SVN, downloading the source, setting up compilers, etc..
 
-===State of the project===
-====What should I know about the current state of the project?====
-:* 
-
 ===Contributing to the project===
 ====What can I do to contribute to the project?====
-:* This depends on your talents. If you are good at coding, you might want to help implementing new features or fixing bugs. Also other help is always welcome, like [[en/Archive/Community/Internationalization|translating]] to other languages, drawing graphics, writing this manual, or making sounds and music.
+This depends on your talents.
+* Without coding
+** [[en/Archive/Community/Internationalization|Translating]] to other languages
+*** [https://translator.openttd.org Translating the main game]
+*** [https://translator.openttdcoop.org Translating add-ons]
+** Extend this Wiki, or better: Update out-dated stuff.
+** Graphics, sound and music: If you draw stuff, but you can't code; check out the forums for some project to contribute to. Note: If you do not cover all skills required for some project, it's smarter to join an existing project, than trying to find someone else to join your new project.
+* Add-on coding:
+** NewGRF:
+*** [[en/Development/NewGRF/Development Tools|Language and tools involved]]
+*** There are many projects on the DevZone which need new people to pick them up, especially the [https://dev.openttdcoop.org/projects/basedata base sets].
+** GameScripts and AIs: [[en/Manual/Game script]]
+* Main-game coding (C/C++):
+** See below.
+* Tool-chains for Add-ons (mostly python):
+** [https://dev.openttdcoop.org/projects/grf-tools Tools for NewGRF development]. Working on the toolchains requires to understand a lot of both the main game and the add-ons, it's probably the hardest challenge to get involved with them.
+** [https://dev.openttdcoop.org/projects/admintools Tools for operating OpenTTD servers]
 
-====What language is OpenTTD written in?====
-:* OpenTTD is programmed in C++, the ANSI-C flavor used by MS Visual Studio, to be specific. Read the [[en/Development/Coding style|coding style]] guidelines for reference how your code should be structured.
+====How to get in contact with people====
+Checkout the [[en/Community/Community|Community page]] for links to the various forums and platforms for each subject.
+
+====How does open-source work? What to expect from people?====
+As general advice, if you are new to open-source: Consider the different interests of people in the project.
+Don't expect people to have rational goals, or to share interests with you.
+Even if you seem to work on the same thing, some people are mainly interested in the result, while others are mainly
+interested in the path towards some result.
+
+This applies to both "inoffical add-ons" as for the "official branch":
+This is a volunteer project; everyone is here for fun, not for obligations.
+Some people develop stuff with the expectation that official maintainers are obliged to look at their stuff and include it
+into the main branch; but the truth is that people will only look at stuff when they are interested in it.
+
+In every volunteer project you will find posts like "this patch has been around for 10+ years, I want it so badly, why is it still not in the main branch?".
+But don't let that spoil your fun :)
+
+====Contributing to the main game====
+:*OpenTTD is programmed in C++, the ANSI-C flavor used by MS Visual Studio, to be specific. Read the [[en/Development/Coding style|coding style]] guidelines for reference how your code should be structured.
+:*You will need to know version control systems to share your work. The official branch is versioned with svn for the matter of having a linear version number, but otherwise that is irrelevant. Any serious development is made via git or hg.
+:** GitHub:  https://github.com/OpenTTD/OpenTTD.git
+:** Git: git://git.openttd.org/trunk.git
+:** Hg: http://hg.openttd.org/openttd/trunk.hg
+
+====What are the goals of the offical branch?====
+The main goals of the offical branch are:
+:* Replicate the original gameplay.
+:* Improve the user interface.
+:* Allow extending the gameplay with add-ons.
+In contrast, extending or altering the gameplay of the base game is not encouraged.
+
+The rationale behind these goals is that people have different opinions about what OpenTTD is, and what it should be.
+When it comes to gameplay there are at least these groups of people:
+:* Model railway (mostly singleplayer): Build "realistic" landscapes, rollplay a world, or even replicate historical scenarios.
+:* Economical challenge (mostly singleplayer): Run a business with economical challenges.
+:* Transport challenge (singleplayer or cooperative multiplayer): Build efficient track layouts with high cargo throughput and tons of vehicles.
+:* Competitive speed run (competitive multiplayer): Maximize some goal in some limited amount of time.
+When it comes to gameplay features there are at least these groups of interests:
+:* Control freak: Micromanagement like conditional orders, refitting and loading, ...
+:* Casual: Automatisation like cargodist, path based signalling, ...
+
+To please everyone, the offical branch tries to stay close to the original gameplay; after all that is what everyone brought here.
+The preferred method to alter and extent the gameplay is via add-ons like NewGRF and GameScripts.
+
+For the longest time, the official branch was also open to features which can be enabled/disabled, but the corner-cases
+that came with some configurations have rendered some parts of the code very complicated.
+Today new features have to work with all the already existing features, which is not only challenging in corner cases, but also requires
+spending considerable more work than just "making it work in the game mode, that I play".
+
+The preferred method to allow gameplay extensions is to extent the add-on interface. This moves conflict solving away from the codebase
+to the player picking from the add-on options. It is more accepted for add-ons not working together, than the base game not working with certain
+setting combinations.
+
+====I do not agree with the goals of the offical branch, what can I do instead?====
+There exist many "patches" for the main game which add "gameplay features", which are often combined into patch packs.
+If your interest is in altering the main game in C/C++, you will likely find your home here.
+
+The predominant version control system in this area is git. You may want to check out the forums for other
+people in this area.
+At the time of writing, "JGR's patch pack" is a good source for finding maintained patches to orientate at.
 
 ====I've fixed a bug / added a feature. How can I submit it to the codebase?====
 :*Make a diff file (aka patch file) of your changes and submit it to [http://bugs.openttd.org Flyspray]. Please watch the patch tracker carefully to see if the developers have any suggestions. If everything is OK with your patch, it will get merged into the SVN tree.
 :*You may also create a thread on [http://www.tt-forums.net/viewforum.php?f=33 our forum] and add your patch to [[en/Archive/Community/List of patches|the patch list]].
 
 ====I want to become an official OpenTTD developer! How?====
-:*The only way to get there is by constantly making patches, especially for fixing bugs. Check out the list of [http://bugs.openttd.org/index.php?string=&project=1&type=1 known bugs] and be aware of our preferred [[en/Development/Coding style|coding style]]. When the amount of time you spend with coding OpenTTD reaches our level, chances are high that you'll receive a SVN account and get added to the list.
+:*This is a matter of trust. OpenTTD has many complicated and arcane mechanics with lots of corner cases. You can join the official team by proving that you fix more than you break.
+:*The only way to get there is by constantly making patches, especially for fixing bugs. Check out the list of [http://bugs.openttd.org/index.php?string=&project=1&type=1 known bugs] and be aware of our preferred [[en/Development/Coding style|coding style]].
 
 ===Source code===
 ====What is source code?====
