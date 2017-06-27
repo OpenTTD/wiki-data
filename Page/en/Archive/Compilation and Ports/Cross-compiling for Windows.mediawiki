@@ -312,16 +312,19 @@ Detection of libraries is mostly performed by [https://www.wikipedia.org/wiki/pk
 
  PKG_CONFIG=i686-w64-mingw32.static-pkg-config
 
-to "configure" script. In case of OpenTTD, use
+to "configure" script. In case of OpenTTD, use following configuration option (full information on configuration options can be usually retrieved by running <code>./configure --help</code>)
 
  --pkg-config=i686-w64-mingw32.static-pkg-config
 
-configuration option (full information on configuration options can be usually retrieved by running <code>./configure --help</code>).
 
 
 Observe output of "configure" scripts and check whether libraries were detected properly. Falsely detected libraries can be disabled with options like <code>--without-feature</code> or <code>--disable-feature</code>.
 
 Also notice that sometimes libraries have to be linked in proper order. Thus adding missing libraries to "configure" scripts through <code>LDFLAGS</code> won't always work. This is the case for <code>-lharfbuzz</code>. It has to be linked after ICU so it must appear after flags like <code>-lsiculx</code>. Observe output and check what are the final <code>LDFLAGS</code> produced by "configure".
+
+
+Watch out when OpenTTD re-configures itself. It may happen i.e. when you modify the <code>source.list</code> file and run <code>make</code> (or simply run <code>make reconfigure</code>). OpenTTD will re-run <code>configure</code> with options provided previously, but the environment won't be preserved. You have to take care about it by yourself or manually re-run <code>configure</code> with properly set variables like $PATH or $PKG_CONFIG_LIBDIR.
+
 
 {{en/Todo|Instruct which lines of "configure" output should get most attention (each library separately).}}
 
