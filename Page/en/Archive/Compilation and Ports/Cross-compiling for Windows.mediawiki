@@ -388,8 +388,24 @@ If trying other way keep in mind that ICU Data may need to be linked in certain 
 To force linking ICU statically one may need to use <code>--static-icu</code> option (<code>--enable-static</code> is ignored in case of ICU). Otherwise we may end up with unresolved HarfBuzz symbols (because "--static" is not passed to pkg-config when detecting ICU which results in missing "-lharfbuzz"). However, <code>--static-icu</code> causes automatic renaming of everything which starts with "-licu*" into "-lsicu*". This causes "-licu-le-hb" to be changed into "-lsicu-le-hb" which is usually wrong.
 
 ; Workaround : Hardcode <code>pkg-config --static</code> as pkg-config utility for ICU. This will force using static libraries but without the automatic renaming that OpenTTD does when <code>--static-icu</code> is given, instead add these options when running OpenTTD 'configure':
+
  --with-icu-layout="pkg-config icu-lx --static"
  --with-icu-sort="pkg-config icu-i18n --static"
+
+{{en/Note|If you are using custom pkg-config utility, then use it instead of "pkg-config" in configuration options. See [[#final-notes-on-pkg-config-and-library-detection]].}}
+
+Entire OpenTTD configuration when using HarfBuzz may look like this (notice no <code>--static-icu</code>):
+
+ env PKG_CONFIG_LIBDIR=/usr/local/i686-w64-mingw32/lib/pkgconfig \
+     ./configure \
+     --host=i686-w64-mingw32 \
+     --prefix=/usr/local/i686-w64-mingw32 \
+     --enable-static \
+     --with-lzo2=/usr/local/i686-w64-mingw32/lib/liblzo2.a \
+     --with-icu-layout="pkg-config icu-lx --static" \
+     --with-icu-sort="pkg-config icu-i18n --static" \
+     CFLAGS="-I/usr/local/i686-w64-mingw32/include" \
+     LDFLAGS="-L/usr/local/i686-w64-mingw32/lib"
 
 === Troubleshooting ICU ===
 
