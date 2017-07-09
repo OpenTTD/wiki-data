@@ -94,11 +94,15 @@ Visit http://mingw-w64.org/doku.php/download for more options.
 
 === Installing cross compiler manually ===
 
-Alternatively you can try building from sources e.g. you can try older MinGW or [[#building-mxe|MXE]]. After you do so, you must make compiler "visible" in your system. Adjust the [https://www.wikipedia.org/wiki/PATH (variable) $PATH] environment variable e.g. if the compiler resides in <code>/usr/local/myrcrosscompiler</code> (usually it should contain <code>bin</code>, <code>include</code> and <code>lib</code> folders) then add <code>/usr/local/myrcrosscompiler/bin</code> to your $PATH:
+Alternatively you can try building from sources e.g. you can try older MinGW or [[#building-mxe|MXE]]. After you do so, you must make compiler "visible" in your system. Adjust the [https://www.wikipedia.org/wiki/PATH (variable) $PATH] environment variable e.g. if the compiler is <code>/usr/local/myrcrosscompiler/bin/myrcrosscompiler-gcc</code> then add <code>/usr/local/myrcrosscompiler/bin</code> to your $PATH:
 
  export PATH="/usr/local/myrcrosscompiler/bin:$PATH"
 
 Notice that this will affect only your current shell. Add it to something like [https://www.wikipedia.org/wiki/Bash (Unix shell)#Startup scripts .bashrc] if you wish to make it permanent.
+
+If you decide to modify $PATH permanently (through something .bashrc -like), this should have effect when sudo'ing (just don't use <code>-i</code> option when running <code>sudo</code>). However, if you don't do this, be aware that $PATH will not be passed to <code>sudo</code>. You may need to pass it manually when invoking <code>sudo</code> e.g.
+
+ sudo PATH="/usr/local/myrcrosscompiler/bin:$PATH" make install
 
 === Testing cross compiler ===
 
