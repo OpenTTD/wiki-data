@@ -1,0 +1,398 @@
+== Motivation ==
+
+The various NewGRF that were created for NotRoadTypes revealed several downsides with the current NRT specification:
+* Roadtypes are mostly used to change the visual appearance of the ground and walkways. Roadvehicle compatibility is neglible.
+* There is little use in tram types.
+** When used together with road, the tramtype hardly matters. It only affects a few pixels. Catenary, 3rd rail, that's about it.
+** When used alone, the same requirements for ground/walkway apply as for roadtypes.
+* Catenary is a problem. Do road and tram share their catenary? Are they exclusive?
+** If catenary is shared, does upgrading road to trolley road also upgrade tram to electrified tram?
+* Different speed limits for road and tram on the same tile are pointless when the movement is shared.
+
+So, in summary, the issues arise in areas shared by road and tram on a tile:
+* Ground
+* Sidewalks, decorations
+* Catenary, conversion/upgrades
+* Shared movement implies shared speed limit.
+
+Maybe the essential problem of NotRoadTypes is that it puts a main focus on RoadTypes.
+
+
+== Idea ==
+
+The focus is NotRoadTypesButGroundTypes.
+
+Split road stuff into four parts:
+* Groundtype: Defines the shared properties.
+** Ground
+** Sidewalks, decorations
+** Pedestrian access (house grow along)
+** Speed limit
+** Can forbid road or tram.
+* Roadtype: Defines roadvehicle compatibility.
+** Defines overlay sprites. Empty for default ROAD.
+* Tramtype: Defines tramvehicle compatibility.
+** Defines overlay sprites.
+* Catenary
+
+Groundtypes are meant to complement infrastructure with surrounding eye-candy.
+While they are introduced for road and tram for now, they also make sense for rail tracks and even canals. (think: fences, hedges, noise barriers, ... general eyecandy)
+However, the focus is on "infrastructure" being present on the tile and occupying most of the pixels. This makes groundtypes distinct from NewObjects and NewLandscape.
+
+Since most stuff is define by the groundtype, it's unlikely that there will be need for more than a hand full of road- and tramtypes. (just to give an order of magnitude)
+This has little technical implications but is important for the UI design: Many groundtypes, few road-/tramtypes.
+
+
+=== Catenary ===
+* Catenary is weird.
+** There is very little use in having different catenary graphics in a game.
+** One could imagine road cantenary, tram catenary and shared catenary.
+** Neither groundtype, roadtype or tramtype are suited to define custom catenary sprites.
+** So, best solution seems to be a single global catenary, which is used for all electrified road- and tramtiles.
+* By default catenary is shared. Converting tram between RAIL and ELRL also implies conversion between ROAD and ELRD, if present.
+* The catenary providing NewGRF can define that road and tram are electrified independently. It's the problem of the catenary GRF to properly visualise and communicate this to the player.
+
+
+=== Conversion and upgrades to road- and tramtypes, catenary complementing ===
+
+Road- and tramtypes on a tile can be converted or upgraded.
+* Conversions convert some type to some other type.
+* Upgrades convert some type to a "better" type, which supports all vehicles which the old type supported.
+
+Catenary-complementing:
+* Every road- and tramtype defines whether the global catenary shall be drawn for them.
+* Every road- and tramtype references a "catenary-complemented" road- and tramtype to which the type converts when catenary is added or removed, or whether there is no such type. Adding catenary must be an upgrade.
+* If the global catenary is shared, then conversions and upgrades to either road or tram which add/remove catenary also convert/upgrade the other road/tramtype to their catenary-complement. If no catenary-complement is defined, the conversion/upgrade fails.
+* If the global catenary is not shared, then conversion and upgrade to road and tram to not affect each other. Catenary-complements have no meaning then.
+
+For town-owned roads only upgrades are allowed.
+
+Implications:
+* Building ELRL on ROAD converts the road to ELRD. Removing tram again leaves ELRD behind.
+
+
+=== Conversion of groundtypes ===
+
+* The groundtype can be converted, if the groundtype allows the present road and tram.
+* Conversion does not affect the present road- and tramtype.
+* Conversion of town-owned tiles is generally allowed.
+
+Note: Speed limits are no criterion for/against changing the groundtype of town-owned tiles. This is different to bridges.
+
+TODO pedestrian-access should be a criterion?
+
+
+=== Default/built-in ground-, road- and tramtypes ===
+
+By default OpenTTD provides these types:
+* Roadtypes: ROAD, ELRD (catenary-complemented)
+* Tramtypes: RAIL, ELRL (catenary-complemented)
+* Groundtypes: DFLT? (sidewalks depending on townzone, underlay depending on "with road"/"tram only", no speed limit, pedestrian-accessible also in case of "tram only")
+* Shared catenary
+* Vehicles: Road vehicles default to ROAD, tram vehicles default to ELRL.
+
+ROAD, ELRD, RAIL and ELRL can be redefined/overridden by NewGRF, but can't be disabled.
+
+TODO suitable class label and class name for the default groundtype
+
+
+=== Town constructions ===
+
+Towns grow along pedestrian-accessible tile.
+
+Towns only build ROAD. If catenary is shared and electrified tram is already present, then ROAD is catenary-complemented to ELRD.
+
+Implications:
+* Town grow along tram-only tiles and branch-off with road-only, which results in a disconnected road network.
+
+
+=== Map array storage ===
+
+Neither ground-, road- or tramtype are stored directly in the map array.
+Instead each tile references a combined-type.
+The combined-type is dynamically added to a global pool, when needed, and references ground-, road- and tramtype.
+
+That is:
+* There is no explicit limit for either ground-, road- or tramtypes.
+* There is a limit on the ''used'' combinations (combined-types) of ground-, road- and tramtypes per game.
+* Using 8 or more bits per tile, we can reference 256 or more combined-types.
+
+
+=== Vehicle interaction ===
+* Vehicles have a road- or tramtype. This defines their minimum requirement for the track.
+* Vehicles can query the present road- or tramtype in VA2, and adjust their specs/visualisation. (minimum: road, bonus: electrified road)
+* Since road-/tramtypes are not directly stored in the map, it is easy to add "non-constructable" road-/tramtypes like "either catenary or 3rd rail" for additional compatibility rules.
+
+
+=== GUI ===
+
+There is (again) only one road/tram construction button in the main toolbar.
+The dropdown contains the most recent used combinations of groundtype and road- or tramtype.
+
+[[File:en/Archive/Development/Butgroundtypes gui.png]]
+
+The road/tram construction bar has these additional elements:
+* Label for current groundtype.
+* Button to select new groundtype.
+* Button for convert groundtype.
+* Toggle for road/tram construction.
+* Dropdown for road/tram type. (only constructable ones)
+* Button for convert road/tram type.
+
+Selecting a new groundtype is similar to station/object selection.
+The groundtype selection window can be kept open or closed during construction and conversions.
+
+TODO Behaviour if groundtype forbids road/tram:
+* Option 1:
+** Road/tram selection is switched to the supported type.
+** Road/tram toggles are disabled.
+* Option 2:
+** Road/tram selection is switched to the supported type.
+** Selecting the unsupported type switches the groundtype to "default".
+
+
+=== Behaviour of construction tools ===
+
+Build road/tram on empty land:
+* Use selected groundtype.
+* Build road or tram according to road/tram toggle and road-/tramtype selection.
+
+Add road/tram bits to existing road/tram tile:
+* Keep present groundtype.
+* Road-/tramtype:
+** Use the selected road-/tramtype, if it is an upgrade to the present one.
+** Use the present road-/tramtype, if it is an upgrade to the selected one.
+** Fail if selected and present road-/tramtype is incompatible.
+** The catenary-complementation rules apply for the other road/tram part.
+
+Remove road/tram bits:
+* Keep present groundtype.
+* Keep present road-/tramtype
+
+Depot construction:
+* TODO Are there visual selections for depots???
+* TODO Can depots be shared between road and tram?
+
+Station construction:
+* Same rules as for build road/tram or add/remove road/tram bits.
+
+Bridges:
+* Groundtype applies to bridge ramp ground tile, and can differ after conversion.
+* TODO Bridge-surface has no ground type???
+* Otherwise same rules as for build road/tram or add/remove road/tram bits.
+
+Tunnels:
+* Groundtype applies to tunnel entries, and can differ after conversion.
+* Otherwise same rules as for build road/tram or add/remove road/tram bits.
+
+Convert groundtype:
+* See above
+
+Toggle road/tram:
+* Dropdown content is swapped. Selected is the most recently used road-/tramtype.
+* Various captions and icons are swapped.
+
+Convert road-/tramtype:
+* See above
+
+
+=== Other GUIs ===
+* Autoreplace has a single filter dropdown which lists both road- and tramtypes, also listing non-constructable ones. (like in NRT)
+
+
+== Details ==
+
+=== Road/tramtype labels and compatibility ===
+
+Mostly same as in NRT. Additional:
+* Shared catenary and catenary-complementing road-/tramtypes.
+* Non-constructible road-/tramtypes for compatibility rules are easy.
+
+
+=== Sprite layers ===
+
+The tiles are composed using
+* Grass from baseset
+* Underlay from groundtype
+* Overlays from road- and tramtype
+* Roadsides from groundtype
+* Catenary from global catenary
+* Other stuff (oneway, ...) from baseset.
+
+==== Regular tiles ====
+
+{| border="1" |-
+! Layer !! Source !! Notes
+|-
+| Foundation || baseset ||
+|-
+| Grass || baseset (if requested by groundtype) ||
+|-
+| Underlay || groundtype || road-/trambits are ORed or provided separately
+|-
+| Road overlay || roadtype || empty for normal road
+|-
+| Tram overlay || tramtype ||
+|-
+| Oneway signs || baseset ||
+|-
+| Roadworks || baseset ||
+|-
+| Catenary, back || catenary ||
+|-
+| Roadside, back || groundtype ||
+|-
+| Vehicles || ||
+|-
+| Roadside, front || groundtype ||
+|-
+| Catenary, front || catenary ||
+|}
+
+
+==== Level crossing ====
+
+...
+
+
+==== Road depot ====
+
+TODO What sprites does the groundtype provide?
+
+Overlay from road-/tramtype.
+
+
+==== Drive-in road stop ====
+
+TODO What sprites does the groundtype provide?
+
+Overlay from road-/tramtype.
+
+
+==== Bridges ====
+
+TODO What sprites does the groundtype provide?
+
+==== Tunnels ====
+
+TODO What sprites does the groundtype provide?
+
+
+== NewGRF format ==
+
+=== Global stuff ===
+
+Road-/tramtype translation table: as in NRT
+
+Testing for road-/tramtypes: as in NRT
+
+Note: Nothing about groundtypes here.
+
+Action 5 tram graphics: as in NRT
+
+
+=== Vehicle stuff ===
+
+==== Properties ====
+
+Road-/tramtype: as in NRT
+
+==== Variables ====
+
+Query current road-/tramtypes: as in NRT
+
+Query compatibility with specific road/tramtype: (in nrt-todolist, also useful for railtypes)
+* Similar as testing current road-/tramtype, but with evaluation of compatibility rules.
+* Intention is to test for 3rd rail or catenary without having to test for all existing road-/tramtypes which may have catenary or 3rd rail.
+
+Note: Groundtypes are unknown to vehicles.
+
+=== Road-/tramtype ===
+
+Feature as in NRT
+
+==== Properties ====
+
+Same as in NRT:
+* label
+* name (main toolbar dropdown, road toolbar dropdown, autoreplace dropdown)
+* new_engine_text
+* powered_roadtype_list, powered_tramtype_list
+* roadtype_flags, tramtype_flags:
+** FLAG_CATENARY
+** FLAG_NO_DRIVE_IN_STOP ???
+* construction_cost
+* map_colour
+* introduction_date
+* requires_roadtype_list, requires_tramtype_list
+* introduces_roadtype_list, introduces_tramtype_list
+* sort_order
+* maintenance_cost
+* alternative_roadtype_list, alternative_tramtype_list
+
+New in BGT:
+* catenary-complementing label
+
+In NRT, but not in BGT:
+* menu_text, toolbar_caption, build_window_caption, autoreplace_text: look pointless, only use "name"
+* FLAG_NO_LEVEL_CROSSING: moved to groundtype
+
+==== Variables ====
+Same as in NRT, additionally:
+* Tiletype: regular, level crossing, drive-though stop, drive-in stop, road depot, bridge head, bridge-middle, tunnel-entry
+
+==== Graphics ====
+* track_overlay
+* drive-in stops
+
+
+=== Groundtype ===
+
+New Feature
+
+==== Properties ====
+* class (as for objects)
+* classname (as for objects)
+* name
+* flags
+** FLAG_NO_ROAD
+** FLAG_NO_TRAM
+** FLAG_NO_LEVEL_CROSSING
+** FLAG_NO_PEDESTRIANS (towns do not grow along)
+** FLAG_DEFAULT_PAVEMENT
+* speed_limit
+* construction_cost
+* introduction_date
+* sort_order
+* maintenance_cost
+
+
+==== Variables ====
+Same as for road/tramtype, additonally:
+* Presence of road/tram.
+* Presence of catenary.
+* Road and trambits
+
+==== Graphics ====
+* groundsprite: If it fails, then FLAG_DEFAULT_PAVEMENT decides between "pavement/grass according to townzone" or "always grass".
+* underlay
+* side_back: If it fails, then FLAG_DEFAULT_PAVEMENT decides between "lamps, trees according to townzone" or "nothing".
+* side_front
+* foundation
+
+TODO bridge surface
+TODO depots
+TODO drive-in stops
+TODO drive-though stops
+
+
+=== Global catenary ===
+
+* misc_grf_feature (global var 9E): bit to enable distinct road-/tram catenary (default: shared catenary)
+* sprites are provided via generic callback? (with spritegroup result :o )
+
+
+=== Not supported, but in NRT ===
+
+GUI sprites cannot be changed.
+Would they belong to road-/tramtype or groundtype? Who would want to change them anyway?
