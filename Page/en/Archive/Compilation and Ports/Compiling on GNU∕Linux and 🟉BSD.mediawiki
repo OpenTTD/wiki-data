@@ -138,6 +138,16 @@ If you are going to compile OpenTTD from subversion then again run:
 
 You should be asked for the root password once the code is compiled and ready for installation.
 
+=== OpenBSD ===
+
+As root, do (as root) <code>pkg_add gmake openttd</code> to install OpenTTD with its dependencies. If you only want the dependencies, run:
+
+<code>pkg_add gmake icu4c lzo2 png sdl xz</code>
+
+You may also want to <code>pkg_add subversion</code>.
+
+'''Warning:''' Since OpenBSD 6.2, amd64 and i386 users must configure OpenTTD to use clang. A plain <code>./configure</code> picks gcc, but the old gcc doesn't work with the ic4uc package. Use <code>./configure CC=clang CXX=clang++</code>
+
 == 2. Getting the source and applying patches ==
 === Releases ===
 You can download the .tar.gz source files from the [http://www.openttd.org/download-stable OpenTTD website]. Extracting tarball will give you a directory called openttd-<version>, where <version> is the version you downloaded. Enter this directory, and you're ready to proceed to step 3.
@@ -213,16 +223,16 @@ If this produces conflicts (files marked with "C"), tough luck, the patch doesn'
 
 <code>./configure</code>
 
-Your system's default compiler (usually GCC) will be used - if you want to use a specific compiler, temporarily set the CC and CXX environment variables accordingly: <code>$ CC=<command for C compiler> CXX=<command for C++ compiler> ./configure</code>
+Your system's default compiler (usually GCC) will be used -- if you want to use a specific compiler, export CC and CXX in the environment, or pass them as configure arguments. Example for clang: <code>$ ./configure CC=clang CXX=clang++</code>
 
 NOTE: Without a compiler configured, you will receive the "''please define the CC/CXX environment to where it is located''" message when running configure. Define (<code>export</code>) them, or pass them as given in the example above.
 
-This will create a Makefile, then run make.
+This will create a Makefile. The next step is to run <code>make</code>; BSD users may need to run <code>gmake</code> instead of make.
 If you have changed files or updated your source, only modified code will be recompiled. Now:
 
 <code>make --jobs=<#></code>
 
-On multi-core systems, using a high thread number (the #) can speed up compiling greatly; it's commonly recommended to use the number of logical cores (obtainable using <code>getconf _NPROCESSORS_ONLN</code> on Linux at least) plus one. (The theory behind this is that if one compiling thread is currently limited by I/O speed, the others should still fully saturate the available hardware threads.) 
+On multi-core systems, using a high thread number (the #) can speed up compiling greatly; it's commonly recommended to use the number of logical cores (obtainable using <code>getconf _NPROCESSORS_ONLN</code> on Linux at least; <code>sysctl hw.ncpu</code> on BSD) plus one. (The theory behind this is that if one compiling thread is currently limited by I/O speed, the others should still fully saturate the available hardware threads.) 
 For example, on an Intel i5 with two hyper-threaded cores (i.e. four logical ones), make --jobs=5 took 1 minute and 33 seconds, and plain make three minutes and 18 seconds.
 
 There should now be an OpenTTD executable in the ''bin'' subdirectory. To install the OpenTTD binary to a directory included in your PATH variable, so it can be run as only <code>openttd<code>, do a <code>make install</code> as root/using sudo.
@@ -240,6 +250,9 @@ Timidity wants to talk to ESD, so you will need to "enable software sound mixing
 '''In Arch Linux''':
  <code> pacman -S timidity++ timidity-freepats
   cp /etc/timidity++/timidity-freepats.cfg /etc/timidity++/timidity.cfg</code>
+
+'''In OpenBSD:'''
+ <code>pkg_add timidity--</code>
 
 == Debian package ==
 {{en/Todo|Doesn't actually work, at least not on Ubuntu 13.04.}}
