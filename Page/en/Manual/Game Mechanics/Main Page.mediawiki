@@ -90,9 +90,9 @@ This section shows the factors that affect the station rating. All calculations 
 |- style="background:#efefef"
 !Factor!!Condition!!Rating points!!Rating %
 |-
-| Max speed of last vehicle entering station (to a max of 255 km/h) || Above 85 km/h (52 mph)|| (Speed (km/h) - 85) / 4 || 0% to 17%
+| Max speed of last vehicle to load cargo (to a max of 255 km/h) <br> Divide speed by 2 if it was a road vehicle. || Above 85 km/h (52 mph)|| (Speed (km/h) - 85) / 4 || 0% to 17%
 |-
-|rowspan="3"|Age in years of last vehicle entering station || 2 || 10|| 4%
+|rowspan="3"|Age in years of last vehicle to load cargo || 2 || 10|| 4%
 |-
 | 1 || 20 || 8%
 |-
@@ -136,7 +136,7 @@ The amount of cargo that can be transported from an industry is fully reliant on
 
 Every 2.5 days station ratings are computed; ratings can't change by more than 2 points per cycle, except after crashes.
 
-'''Note:'''  The exact formula can be seen under "[http://git.openttd.org/?p=trunk.git;a=blob;f=src/station_cmd.cpp;h=eb90c29ab53427448a293b325ebbeb89f4834028;hb=HEAD#l3256 UpdateStationRating()]" in station_cmd.cpp.
+'''Note:'''  The exact formula can be seen under "[http://git.openttd.org/?p=trunk.git;a=blob;f=src/station_cmd.cpp;h=eb90c29ab53427448a293b325ebbeb89f4834028;hb=HEAD#l3256 UpdateStationRating()]" in station_cmd.cpp. This uses some values calculated in "[http://git.openttd.org/?p=trunk.git;a=blob;f=src/economy.cpp;h=e97f61d6e928c0f2e35ae05274901acb961d5c9e;hb=HEAD#l1595 LoadUnloadVehicle()]" in economy.cpp.
 
 '''Note:'''  If the rating gets less than 50%, the station starts losing cargo.
 
