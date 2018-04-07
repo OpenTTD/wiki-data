@@ -214,7 +214,9 @@ A player has a rating of -300, (Very Poor), 2 active stations and 1 inactive sta
 Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
 
 ==Industry production==
-Here is how the game determines how much cargo an industry produces per month.  This table lists possible starting productions governed by the  [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|smooth economy]] patch.  Production is a multiple of 8 or 9 (sometimes 10 with forests).
+Here is how the game determines how much cargo an industry produces per month.  Production of raw materials happens 8 or 9 times per month.  (It happens every 256 ticks.  There are 74 ticks in a day, and 28 to 31 days in a month ([http://git.openttd.org/?p=trunk.git;a=blob;f=src/date_type.h;hb=HEAD date_type.h]).  This means that only about 9% of industries will produce 9 times in a 28-day February, but about 96% of industries will produce 9 times in a 31-day month like March.)  The production will always be a multiple of 8 or 9, unless the industry changed production during that month.
+
+This table lists possible starting productions governed by the [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|smooth economy]] patch.  These numbers are multiples of 8.  When the game generates a new map, each industry produced 8 times and had no production changes in the December before the game started.
 
 {| {{en/Wikitable}}
 |- style="background:#efefef"
@@ -234,7 +236,7 @@ Here is how the game determines how much cargo an industry produces per month.  
 |-
 |[[en/Manual/Base Set/Industries/Iron Ore Mine]]||Iron Ore||40 to 112
 |-
-|[[en/Manual/Base Set/Industries/Bank]]||Valuables||24 to 64
+|[[en/Manual/Base Set/Industries/Bank]] (temperate)||Valuables||24 to 64
 |-
 |colspan="5"|
 |-
@@ -270,6 +272,8 @@ Here is how the game determines how much cargo an industry produces per month.  
 |-
 |[[en/Manual/Base Set/Industries/Sugar Mine]]||Sugar||40 to 128
 |}
+
+(To calculate this table, look under _origin_industry_specs in [http://git.openttd.org/?p=trunk.git;a=blob;f=src/table/build_industry.h;hb=HEAD table/build_industry.h] for the industry and its cargo.  The sugar mine has <code>CT_SUGAR, 11</code>, so the production starts at 11.  Apply the formula from DoCreateNewIndustry() in [http://git.openttd.org/?p=trunk.git;a=blob;f=src/industry_cmd.cpp;h=9c98b120c61a997fbe14e0bcbd1e73c041b6d4d9;hb=HEAD industry_cmd.cpp]: multiply the production by a random integer from 128 to 383, then divide by 256, rounding down.  So 11 becomes 5 to 16.  Finally, multiply it by 8 to get 40 to 128.)
 
 ===Production change===
 Each month the game randomly changes some industry productions.
