@@ -1,0 +1,93 @@
+{{en/-}}
+== Introduction ==
+This page contains guidelines for compiling OpenTTD for Win32 with '''MSYS2''', or '''MinGW'''.
+
+== Installing MSYS2 ==
+# Download and run the relevant MSYS2 installer from https://www.msys2.org/ . You'll likely want the x86_64 version, unless your computer is particularly old
+# Please note that MinGW should be installed to a directory path that doesn't contain any spaces. This page has been tested with, and assumes, a directory path of C:\msys64. If you change this, adjust the rest of the commands as appropriate)
+# Wait until every package has been downloaded and installation is finished.
+
+Note that while the installer gives you the option of opening MSYS, this is not the program we will be using - MSYS2 comes with MinGW32 & MinGW64 variants.
+
+For this tutorial we will be using the MinGW64 shell.
+
+== Setting up MSYS2 (optional) ==
+While the defaults for MSYS2 are perfectly fine for compiling OpenTTD, MSYS2 creates its own set of directories and you may want to merge a few of them into what you have already, e.g. your Unix home directory (<code>/home/<user>/</code>) with your Windows user directory (<code>C:\Users\<user>\</code>)
+Go to your MSYS2 folder (found at C:\msys64) and open etc\fstab with a text editor (for example Notepad++) and add the following line at the end of the file:
+<pre>C:\Users    /home</pre>
+
+== Testing MinGW/MSYS installation ==
+Open the MinGW64 shell (C:\msys64\mingw64.exe). It should open a terminal window.
+
+== Compilation and installation of the required packages ==
+For additional information about the libraries, check part 7.1) of OpenTTD Readme. To compile and install these packages and avoid the error '<code>wget: command not found</code>', first you need to install the following commands:
+(To compile on Windows 7, the service "application experience" must be activated and running)
+
+You can copy and paste into MingW windows by using CTRL+INS instead of CTRL+V
+
+== Installing dependencies ==
+
+MSYS2 uses the <code>pacman</code> program to download libraries and for package management. There is also the <code>pacboy</code> helper program for MinGW environments, such as the one we are using.
+
+First step is to ensure the system is fully up to date. Run:
+
+    pacman -Syu
+
+to update all system packages. It may ask you to exit the terminal window "without calling exit" - close the window and reopen it, then run the command again.
+
+OpenTTD requires a couple of programs in the MSYS subsystem, and most others in the relevant MinGW subsystem.
+
+You can install <code>git</code> and <code>make</code> with the following command:
+
+    pacman -S git make
+
+The following need to be installed in the relevant MinGW subsystem:
+
+* gcc
+* pkg-config
+* zlib
+* lzo2
+* xz
+* libpng
+* freetype
+
+You can either type out the full name of mingw-w64-<arch>-<pkg> for each package, or use pacboy to manage them for you:
+
+    pacboy -S gcc:x pkg-config:x zlib:x lzo2:x xz:x libpng:x freetype:x
+
+The ':x' on the end of each designates x86_64, or 64 bit, architecture. Swap it for ':i' if you want 32 bit.
+
+== Getting the source code ==
+Open the MinGW64 shell and run
+
+    git clone https://github.com/OpenTTD/OpenTTD
+
+The OpenTTD source code is now in the <code>OpenTTD</code> subdirectory of your MSYS home folder (C:\msys64\home\<user>\OpenTTD).
+
+== Compiling OpenTTD ==
+
+Start MinGW64, and run the following:
+
+    cd ~/OpenTTD # '~' means your home folder
+    ./configure --without-freetype
+    make
+
+(<code>--without-freetype</code> is specified due to an issue with freetype with MinGW as of 2018-06-17. Freetype is an optional library that enables use of custom fonts. See https://github.com/Alexpux/MINGW-packages/issues/3966 for more details)
+
+When OpenTTD has finished compiling an openttd.exe file is made. It will be copied to the <code>./bin</code> subfolder.
+
+To test your compilation you can run (from the same folder in which you compiled OpenTTD):<code>./bin/openttd</code>Don't forget to install a [http://wiki.openttd.org/Base_graphics base graphics set] before this step if you don't have one (the simplest solution is to install [http://wiki.openttd.org/Opengfx#Installing_OpenGFX_Manually OpenGFX])
+
+If you want to generate a installation bundle you can use: <code>make bundle</code>After this command is done you will find a complete OpenTTD ready for distribution in the ~/<path_to_source>/bundle folder.
+
+==Patching the source code==
+Place the patch you want to apply into the directory the OpenTTD source code is located in (C:\msys64\home\<your Windows user name>\OpenTTD in this example). Then, in the MINGW64 shell:
+
+    cd ~/OpenTTD
+    patch -p1/p0 < <patch name>
+
+Use p0 for Subversion style patches, p1 for all others (it's probably a good idea to try p1 first). Explanation of the difference: [[en/Development/FAQ development#how-to-apply-a-patch]]
+
+
+[[Category:en/Development/Compiling OpenTTD]]
+[[Category:en/Archive/Program Descriptions]]
