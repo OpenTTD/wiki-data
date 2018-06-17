@@ -14,7 +14,7 @@ For this tutorial we will be using the MinGW64 shell.
 == Setting up MSYS2 (optional) ==
 While the defaults for MSYS2 are perfectly fine for compiling OpenTTD, MSYS2 creates its own set of directories and you may want to merge a few of them into what you have already, e.g. your Unix home directory (<code>/home/<user>/</code>) with your Windows user directory (<code>C:\Users\<user>\</code>)
 Go to your MSYS2 folder (found at C:\msys64) and open etc\fstab with a text editor (for example Notepad++) and add the following line at the end of the file:
-<pre>C:\Users    /home</pre>
+<code>C:\Users    /home</code>
 
 == Testing MinGW/MSYS installation ==
 Open the MinGW64 shell (C:\msys64\mingw64.exe). It should open a terminal window.
@@ -31,7 +31,7 @@ MSYS2 uses the <code>pacman</code> program to download libraries and for package
 
 First step is to ensure the system is fully up to date. Run:
 
-    pacman -Syu
+ pacman -Syu
 
 to update all system packages. It may ask you to exit the terminal window "without calling exit" - close the window and reopen it, then run the command again.
 
@@ -39,7 +39,7 @@ OpenTTD requires a couple of programs in the MSYS subsystem, and most others in 
 
 You can install <code>git</code> and <code>make</code> with the following command:
 
-    pacman -S git make
+ pacman -S git make
 
 The following need to be installed in the relevant MinGW subsystem:
 
@@ -53,14 +53,14 @@ The following need to be installed in the relevant MinGW subsystem:
 
 You can either type out the full name of mingw-w64-<arch>-<pkg> for each package, or use pacboy to manage them for you:
 
-    pacboy -S gcc:x pkg-config:x zlib:x lzo2:x xz:x libpng:x freetype:x
+ pacboy -S gcc:x pkg-config:x zlib:x lzo2:x xz:x libpng:x freetype:x
 
 The ':x' on the end of each designates x86_64, or 64 bit, architecture. Swap it for ':i' if you want 32 bit.
 
 == Getting the source code ==
 Open the MinGW64 shell and run
 
-    git clone https://github.com/OpenTTD/OpenTTD
+ git clone https://github.com/OpenTTD/OpenTTD
 
 The OpenTTD source code is now in the <code>OpenTTD</code> subdirectory of your MSYS home folder (C:\msys64\home\<user>\OpenTTD).
 
@@ -68,9 +68,9 @@ The OpenTTD source code is now in the <code>OpenTTD</code> subdirectory of your 
 
 Start MinGW64, and run the following:
 
-    cd ~/OpenTTD # '~' means your home folder
-    ./configure --without-freetype
-    make
+ cd ~/OpenTTD # '~' means your home folder
+ ./configure --without-freetype
+ make
 
 (<code>--without-freetype</code> is specified due to an issue with freetype with MinGW as of 2018-06-17. Freetype is an optional library that enables use of custom fonts. See https://github.com/Alexpux/MINGW-packages/issues/3966 for more details)
 
@@ -83,8 +83,8 @@ If you want to generate a installation bundle you can use: <code>make bundle</co
 ==Patching the source code==
 Place the patch you want to apply into the directory the OpenTTD source code is located in (C:\msys64\home\<your Windows user name>\OpenTTD in this example). Then, in the MINGW64 shell:
 
-    cd ~/OpenTTD
-    patch -p1/p0 < <patch name>
+ cd ~/OpenTTD
+ patch -p1/p0 < <patch name>
 
 Use p0 for Subversion style patches, p1 for all others (it's probably a good idea to try p1 first). Explanation of the difference: [[en/Development/FAQ development#how-to-apply-a-patch]]
 
