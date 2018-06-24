@@ -3,18 +3,22 @@
 
 A quick guide to get started with OpenTTD development on Linux and other *nix-like systems. For help with compiling on various platforms, join [irc://irc.oftc.net/openttd.compile #openttd] on OFTC.
 
-==1. Required/recommended software and how to install it==
-* Compiler: gcc/g++ or CLang/CLang++ (this guide uses GCC). Required.
+==Step 1. Required/recommended software and how to install it==
+* Compiler: ''gcc/g++'' or ''clang/clang++'' (this guide uses GCC). Required.
+* Build tool: GNU ''make''. Required.
 * Libraries:
-** Graphics and sound: SDL and/or Allegro. Required except for dedicated servers. LibPNG (depends on ZLib) is also recommended, it allows making PNG screenshots.
-** Music: TiMidity, directly or with Allegro as a front-end. Other external MIDI players can also be used. Recommended; not strictly speaking a build requirement, but the only way to play music, since the music driver using the TiMidity library directly (libtimidity, http://sourceforge.net/projects/libtimidity/) doesn't work; the library itself hasn't been updated in years.
-** File compression/decompression: LZO2 (oldest saves), ZLib (most saves up to 1.0.5, as well as downloaded content), LZMA (newest saves). Strongly recommended.
-** Text: Freetype2, Fontconfig (TrueType fonts), ICU (list sorting). Recommended.
+** Graphics and sound: ''SDL'' and/or ''Allegro''. Required except for dedicated servers. ''LibPNG'' (depends on ''ZLib'') is also recommended, it allows making PNG screenshots.
+** Music: ''TiMidity'', directly or with Allegro as a front-end. Other external MIDI players can also be used. Recommended; not strictly speaking a build requirement, but the only way to play music, since the music driver using the TiMidity library directly (libtimidity, http://sourceforge.net/projects/libtimidity/) doesn't work; the library itself hasn't been updated in years.
+** File compression/decompression: ''LZO2'' (oldest saves), ''ZLib'' (most saves up to 1.0.5, as well as downloaded content), ''liblzma'' from XZ Utils (newest saves). Strongly recommended.
+** Text: ''Freetype2'', ''Fontconfig'' (TrueType fonts), ''icu4c'' from ICU (list sorting). Recommended.
 * Utility programs:
-** Version control system, if you want to keep your source recent: Mercurial, Subversion or Git. Subversion is fastest and is thus the one used in this guide.
+** Version control system, if you want to keep your source recent: ''Git''.
 ** To apply patches: the ''patch'' utility.
 
 Instructions for the various distributions should also be applicable to derivatives of them. Text that looks <code>like this</code> is a shell command.
+
+{{en/Todo|Update the instructions below to install Git, not Subversion.}}
+
 === Mandriva ===
 (tested on Mandriva 2009 Spring)
 
@@ -148,55 +152,58 @@ You may also want to <code>pkg_add subversion</code>.
 
 '''Warning:''' Since OpenBSD 6.2, amd64 and i386 users must configure OpenTTD to use clang. A plain <code>./configure</code> picks gcc, but the old gcc doesn't work with the ic4uc package. Use <code>./configure CC=clang CXX=clang++</code>
 
-== 2. Getting the source and applying patches ==
+== Step 2. Getting the source and applying patches ==
 === Releases ===
 You can download the .tar.gz source files from the [http://www.openttd.org/download-stable OpenTTD website]. Extracting tarball will give you a directory called openttd-<version>, where <version> is the version you downloaded. Enter this directory, and you're ready to proceed to step 3.
 
-=== Nightly builds ===
-Similar to the release option above, you can download the latest source snapshot (made every day at 1900 GMT) from the [http://www.openttd.org/download-trunk OpenTTD website]. Unpack and enter the directory in which it is unpacked. Now, proceed to step 3.
-
-=== Most current version (aka Trunk/SVN) ===
-The most current version of the official code is stored in our subversion repository. Subversion makes it easy to track various versions and provides an easily shareable single location for our code. For you as a user this means you can quickly get the newest sourcecode.
+=== Most current version (Git master) ===
+The most current version of the official code is stored in our Git repository (https://github.com/OpenTTD/OpenTTD). Git tracks various versions and shares our code. For you as a user this means you can quickly get the newest sourcecode.
 
 ==== Initial download ====
 
-To obtain the source code from the subversion server type:
+To obtain the source code from GitHub, type from command line:
 
-<code>svn checkout svn://svn.openttd.org/trunk openttd</code>
+<code>git clone https://github.com/OpenTTD/OpenTTD.git openttd</code>
 
-from command line to dump the code into the directory <code>openttd/</code>. We will refer to this directory as you "working copy" from now on. Also, all svn commands given from now on assume your working directory is the <code>openttd/</code> directory.
+This downloads the repository and makes a "working tree" in the directory <code>openttd/</code>. The working tree tracks the latest version of our "master" branch. All git commands given from now on assume your shell's working directory is the <code>openttd/</code> directory.
 
 You can now skip to step 3 if you just want to compile the latest version.
 
 ==== Updating ====
 
-If you have previously downloaded the code and a new version is available (iow, new revisions have been committed), you can update your working copy to the latest version. Inside your working copy run the following:
+If you have previously downloaded the repository and a new version is available on GitHub, you can update your working tree to the latest version. Inside your tree run the following:
 
-<code>svn update</code>
+<code>git pull</code>
 
-Also, if you have made any local changes to the source, these will be preserved and merged with changes in svn. If a conflict between the changes occurs, it will be flagged as conflicted (Marked "C" in <code>svn status</code>) (still preserving your local changes). For more information about resolving conflicts, look at the SVN Book at [http://subversion.tigris.org].
+This downloads the updates from GitHub, and "fast-forwards" your working tree to the latest version of master, or it tells you if your tree is already up to date.
+
+Also, if you have made any local changes to the source, these will be preserved. If your changes overlap with the pulled changes, then Git may prompt you to run <code>git stash</code> before <code>git pull</code>. This will move your changes to the stash. After the pull, you run <code>git stash pop</code> to merge your changes with the pulled changes.
+
+If a conflict between the changes occurs, then <code>git stash pop</code> will put conflict markers in your files. You must edit the files to resolve the conflict. Use <code>git status</code> to files with conflicts, and <code>git reset filename</code> to remove the conflict status. After you resolve the conflict, run <code>git stash drop</code> to clean the stash.
 
 ====Creating a patch file====
 
-If you have made changes to your source that you want to share or upload as a patch, you can ask svn to generate a diff file.
+{{en/Todo|Update this section to use git, not svn.}}
+If you have made changes to your source that you want to share or upload as a patch, you can ask svn to generate a diff.
 The command
 
 <code>svn diff > mypatch.diff</code>
 
 creates a diff file (also referred to as "patch") which you can submit to the developers to share your improvements.
 
-====Reverting====
+====Reverting local changes====
 
-You can undo changes to a file with:
+You can undo local changes to a file with
 
-<code>svn revert filename</code>
+<code>git checkout filename</code>
 
 or to your entire working directory with:
 
-<code>svn revert -R .</code>
+<code>git checkout .</code>
 
 ==== Applying a patch ====
 
+{{en/Todo|Update this section to use git, not svn.}}
 To apply a patch (diff file) to the source code, update your source code to the patch file's revision. Let's say the patch file has been made on r1234. You can see this in the first lines of the patch:
 <code>
  Index: foo.c
@@ -218,7 +225,7 @@ Now (optionally) update the source code to the newest revision with
 
 If this produces conflicts (files marked with "C"), tough luck, the patch doesn't work for the latest revision (you can always revert and retry the patching, skipping this last step and playing an older version).
 
-== 3. Compiling commands, running the compiled binary ==
+== Step 3. Compiling commands, running the compiled binary ==
 <code>cd <directory in which the OpenTTD source code is located></code> and
 
 <code>./configure</code>
