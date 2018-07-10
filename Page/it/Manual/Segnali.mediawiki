@@ -91,28 +91,63 @@ Ci sono due cose da sapere su questo segnale:
 |[[File:en/Manual/Yapp onewaypbssignal.png]]
 |'''Segnale di Percorso a senso unico''' (1W PS): i treni '''non possono''' passare questo segnale al contrario, come se dal lato opposto ci fosse un segnale permanentemente rosso.
 |}
-Il più delle volte sarà sufficiente usare un segnale di percorso normale,, as dato che passarlo al contrario viene penalizzato dal pathfinder, a meno che la destinazione (stazione o waypoint) sia subito dietro il segnale. Ad ogni modo, i segnali di percorso a senso unico possono essere usati in certi casi specifici.
+Il più delle volte sarà sufficiente usare un segnale di percorso normale, dato che passarlo al contrario viene penalizzato dal pathfinder, a meno che la destinazione (stazione o waypoint) sia subito dietro il segnale. Ad ogni modo, i segnali di percorso a senso unico possono essere usati in certi casi specifici.
 
+I due nuovi tipi di segnale si comportano in modo leggermente diverso rispetto a quelli a blocchi standard. Per impostazione predefinita, i segnali di percorso sono rossi e mostreranno il verde non appena un treno potrà prenotare un percorso e percorrerlo in sicurezza fino alla prossima posizione di attesa su quella tratta. Le posizioni di attesa sicure sono - per definizione - di fronte a segnali, depositi e fine binari. La parte posteriore di un segnale di percorso non è considerata una posizione di attesa sicura e quindi i percorsi sono riservati nel tratto compreso tra questi segnali.
+
+Poiché la parte anteriore di ogni segnale è definita come una posizione di attesa sicura, normalmente non posizioneremo un segnale immediatamente dietro un raccordo ma solo di fronte a un raccordo . Questo perché è assolutamente sicuro per un treno attendere di fronte a un raccordo. Non è sicuro invece per un treno attendere un segnale immediatamente dopo la giunzione prima che l'intero treno l'abbia liberata, in quanto bloccerebbe questo incrocio durante l'attesa, come illustrato nell'esempio seguente. Questo è un grande vantaggio rispetto ai tradizionali segnali di blocco, che è necessario posizionare prima e dopo i raccordi, per cui i treni causeranno il blocco di queste giunzioni durante l'attesa.
+
+{|class=wikitable style="margin:auto"
+|style="background:#fee"|[[File:en/Manual/Yapp unsafewaitinglocation.png|center]]
+''' Cattivo ''':Il segnale indicato dalla freccia è un pessimo luogo di attesa, poiché il treno nella giunzione ora blocca il percorso altrimenti libero del treno proveniente dall'alto. C'è una seconda cattiva posizione di attesa in questa immagine. Puoi trovarla?
+|style="background:#efe"|[[File:en/Manual/Yappgoodexample.png|center]]
+'''Buono''': Qui c'è abbastanza spazio dopo la giunzione affinchè un treno possa aspettare. Finché questo spazio non sarà disponibile il prossimo treno attenderà prima del nodo anziché bloccarlo. Ciò consentirà al treno proveniente dall'alto di procedere.
+|}
+
+<!--
 The two new signal types behave a bit differently than standard block signal types. The path signals are red by default, and will only show green as soon as a train can reserve a path to the next safe waiting position on its route. Safe waiting positions are - by definition - in front of signals, depots and track ends. The back of a path signal is not considered a safe waiting position, and therefore paths are reserved through these signals.
 
 Because the front of every signal is defined as a safe waiting position, you would normally not want to place a signal immediately behind a junction, only in front of a junction. This is because it is only safe for a train to wait in front of a junction. It is not safe for a a train to wait at a signal immediately after a junction before the whole train has cleared the junction, as it would be blocking the junction while waiting, as illustrated in the example below. This is a major advantage against traditional block signals, where you had to place signals before and after junctions, which caused trains to block junctions while waiting.
+
+
 {|class=wikitable style="margin:auto"
 |style="background:#fee"|[[File:en/Manual/Yapp unsafewaitinglocation.png|center]]
 '''Bad''': The signal indicated by the arrow is a bad waiting location, as the train in the junction now blocks the otherwise free path of the train coming from the top. There's a second bad waiting location in this picture. Can you find it?
 |style="background:#efe"|[[File:en/Manual/Yappgoodexample.png|center]]
 '''Good''': Here there is enough space after the juction for a train to wait. As long as this space is unavailable, the next train will wait before the junction rather than blocking it. This allows the train coming from the top to proceed.
 |}
+-->
 
+Questo è un altro esempio di cosa puoi fare con i segnali di percorso. Funziona molto meglio che usare i pre-segnali perché puoi lasciare due treni contemporaneamente alla stazione e condividere lo stesso deposito (non c'è modo di farlo con i pre-segnali, a causa della condivisione dei blocchi). In questo caso ci sono segnali di percorso unidirezionali per i treni che escono dalla stazione, e un segnale di percorso semplice per i treni che escono dal deposito.
+[[File:en/Manual/Pathsignal station exit.png|frame|center|Stazione a due uscite. Si noti che i segnali davanti al depositi non sono necessari, poiché i depositi hanno segnali integrati. Tuttavia, i segnali di percorso di fronte a depositi come questi danno ai treni che lo lasciano la priorità di deposito sui treni che vogliono entrarvi.]]
+
+Anche se dalla schermata sopra non si evince, non è necessario posizionare alcun segnale tra l'ingresso della stazione con diramazioni e la giunzione (effettivamente un "segnale di uscita" nella configurazione tradizionale del segnale di blocco) se il segnale dei binari di ingresso, di fronte alla giunzione, è segnale di percorso.
+
+[[File:en/Manual/Rpbs img10.png|center|frame|La stazione con diramazioni (Pass-through) non richiede il segnale di uscita di fronte all'ingresso della stazione, se tutti i segnali sono di tipo percorso.]]
+
+<!--
 This is one other example of what you can do with those path signals. This works far better than using pre-signals because you can have two trains leaving the station at the same time AND share the same depot (there is no way to make it with pre-signals, because of the block share). In this case there are one-way path signals for trains leaving the station, and simple path signal for trains leaving the depot.
 [[File:en/Manual/Pathsignal station exit.png|frame|center|Two exit station. Note that the signals in front of the depot are not required, as depots have built-in signals. However, path signals in front of depots like this give trains leaving the depot priority over trains wanting to enter the depot.]]
 
 Although the screen shot above does not show, it is unnecessary to place any signal between the pass-through station entrance and junction (effectively an "exit-signal" in the traditional block signal setup) if the signal of entrance tracks in front of the junction is path signal.
 
 [[File:en/Manual/Rpbs img10.png|center|frame|Pass-through station does not require exit signal in front of the station entrance, if all signals are path signal type.]]
+-->
 
+==== Impostazioni avanzate ====
+[[File:en/Manual/Yapp patch-options.png|frame|right|Impostazioni Avanzate YAPP]]
+Ci sono tre nuove [[en/Archive/Manual/Settings/Advanced Settings]] relative ai segnali di percorso.
+
+Un'opzione è quella di evidenziare le tracce riservate. Questa opzione è utile per controllare i tuoi raccordi con segnali di percorso, dato che ti evidenzierà quali percorsi i treni hanno riservato attraversand un raccordo.
+
+Le altre due opzioni, disponibili con la patch YAPP, controllano come dovrebbe comportarsi lo strumento costruzione segnale. È possibile impostare il tipo di segnale che dovrebbe essere costruito per impostazione predefinita quando si crea un nuovo segnale con lo strumento costruzione segnale, inoltre si può modificare il tipo di segnale da utilizzare ciclicamente su Ctrl-clic di un segnale già esistente.
+
+Ci sono altre opzioni relative al segnale di percorso che non sono disponibili attraverso la finestra Impostazioni avanzate. Quali sono queste opzioni e come modificarle è descritto in [[en/Archive/Manual/Settings/Advanced path signal options & features]].
+
+<!--
 ====Advanced Settings====
 [[File:en/Manual/Yapp patch-options.png|frame|right|YAPP Advanced Settings]]
-There are three new [[en/Archive/Manual/Settings/Advanced Settings]] related to path signals.
+There are three new [[Advanced Settings]] related to path signals.
 
 One option is to highlight reserved tracks. This option is useful to troubleshoot your path-signaled junctions, as you can see what paths trains have reserved through a junction.
 
@@ -120,7 +155,9 @@ The other two options control how the build signal tool should behave. You can s
 by default when building a new signal with the signal tool and change which signal types should be cycled through on ctrl-clicking
 an already existing signal.
 
-There are a few more path signal related options which are not available through the Advanced Settings window. What these options are, and how to edit them is covered under [[en/Archive/Manual/Settings/Advanced path signal options & features]].
+There are a few more path signal related options which are not available through the Advanced Settings window. What these options are, and how to edit them is covered under [[Advanced path signal options & features]].
+-->
+
 
 ===Basic examples of path signals===
 Below are some example track layouts which use the path signals. There are also [[en/Community/Junctionary/Advanced path signal layouts|Advanced track layouts]] that are not recommended for beginners.
