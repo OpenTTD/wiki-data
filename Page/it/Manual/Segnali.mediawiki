@@ -156,22 +156,53 @@ an already existing signal.
 There are a few more path signal related options which are not available through the Advanced Settings window. What these options are, and how to edit them is covered under [[Advanced path signal options & features]].
 -->
 
+=== Esempi basilari di uso dei segnali di percorso ===
+Di seguito sono riportati alcuni esempi di tracciato che utilizzano i segnali di percorso. Ci sono anche [[en/Community/Junctionary/Advanced path signal layouts|Schemi di tracciati avanzati]] che non sono raccomandati per i principianti.
 
+<!--
 ===Basic examples of path signals===
-Below are some example track layouts which use the path signals. There are also [[en/Community/Junctionary/Advanced path signal layouts|Advanced track layouts]] that are not recommended for beginners.
+Below are some example track layouts which use the path signals. There are also [[Advanced_path_signal_layouts|Advanced track layouts]] that are not recommended for beginners.
+-->
 
+==== Giunzione di base ====
+Questo incrocio di base attualmente ha un livello di attraversamento più alto perché i treni devono solo aspettare i treni in arrivo sulla stessa linea. Il treno proveniente da destra (che risale) di solito dovrebbe aspettare altri treni provenienti dai binari di sinistra. Ora dovrebbe solo aspettare se vuole cambiare linea. Notare i 6 segnali di delimitazione al "blocco di giunzione" e 3 segnali di percorso totali, uno a ciascun ingresso.
+
+[[File:en/Manual/Yapp basicjunction.png|frame|center|Giunzione base per treni (ottimizzata per la lunghezza di 3 tiles). I segnali di percorso sono presenti a tutti gli accessi al blocco di giunzione. Notare l'uso di segnali ordinari sul binario normale.]]
+
+<!--
 ====Basic junction====
 This basic junction now has a much higher throughput because trains only have to wait for trains running on the same line. The train coming from the right (going up) would usually have to wait for other trains coming back from the left tracks. It would now only have to wait if it wishes to switch lines. Note the 6 bounding signals to the 'junction block', and 3 total path signals, one at each entryway.
 
 [[File:en/Manual/Yapp basicjunction.png|frame|center|Basic junction for trains (optimised for 3-tile length). Path signals are present at all entries to the junction block. Note the use of normal signals on plain track.]]
+-->
 
+==== Stazione base a due vie ====
+Con questo tipo di stazione, i treni possono utilizzare entrambe le banchine quando provengono da ambedue le direzioni. Poiché i segnali di percorso non creano blocchi sul loro rovescio, il treno non può entrare finché non c'è un percorso libero fino al segnale sul lato "opposto" della banchina (che deve includere lo spazio stesso della banchina), permettendogli di fermarsi in sicurezza. Si noti che questa configurazione potrebbe alternativamente essere replicata con un insieme di presenze di uscita blocco davanti alla stazione.
+
+[[File:en/Manual/Yapp basicstation.png|frame|center|Stazione base a due vie.]]
+
+<!--
 ====Basic two-way station====
 With this station layout, trains can use both platforms when coming from either direction. Because path signals do not create blocks on their reverse, the train cannot enter until there is a clear path until the signal on the ''opposite'' side of the platform (which must include the platform space), allowing it to safely stop. Note that this setup could alternatively be replicated with a set of block-exit presignals in-front of the station.
 
 [[File:en/Manual/Yapp basicstation.png|frame|center|Basic station.]]
+-->
 
 {{en/Feature|0.7}}
 
+== Pre-segnali ==
+I pre-segnali sono un gruppo di segnali di blocco specializzati. Sono così chiamati perché l'ingresso pre-segnale di ingresso blocco proviene non solo dal binario nel blocco, ma da qualsiasi altro pre-segnale posto dall'altro lato del blocco (cioè esce da quel blocco). Sono utilizzati per limitare l'ingresso di treni in blocchi che non possono essere ostruiti o occupati. Nella maggior parte dei casi è possibile utilizzare segnali di percorso per risolvere situazioni in cui i treni possono scegliere tra più alternative, ad esempio in corrispondenza di stazioni o linee a binario singolo utilizzate dai treni in entrambe le direzioni.
+
+{|class=wikitable style="margin:auto"
+|[[File:en/Manual/Station no pre-signals.png|frame|none|Un problema con l'impostazione a segnale di blocco unico - il treno di sinistra può partire per primo ma potrebbe rimanere bloccato nel binario proprio dietro il treno a destra.]]
+|[[File:en/Manual/Station with pre-signals.png|frame|none|Il problema si può risolvere facilmente usando i pre-segnali]]
+|}
+
+L'immagine in alto a destra mostra una configurazione in cui l'ingresso a una stazione viene controllato utilizzando segnali ordinari. Quando almeno una piattaforma è vuota, questo funziona bene, poiché un treno in entrata è sempre diretto verso una piattaforma libera. Tuttavia, considera ciò che accade quando tutte le piattaforme sono piene, come nello screenshot. Tutti i rami stanno mostrando rosso, quindi il treno in entrata sceglie il percorso più breve - dritto. Ma supponiamo che il treno sulla piattaforma a destra sarà nella stazione per qualche tempo. Nel frattempo, il treno a sinistra parte. Il treno in arrivo si è impegnato su una piattaforma ed è bloccato tra i segnali, in attesa che un treno parta anche se ora è disponibile una piattaforma vuota. Dobbiamo fermare quel treno in arrivo prima che la pista si divida in modo che prenda la piattaforma vuota quando un treno parte. Per questo è possibile utilizzare i segnali di percorso, ma è anche possibile risolvere questa situazione con i pre-segnali. In effetti, questo era il modo di costruire stazioni prima dell'invenzione dei segnali di percorso.
+
+I pre-segnali fungono da segnali di blocco, ma decidono inoltre su quale colore mostrare dallo stato di altri pre-segnali nella stessa direzione lungo la traccia. Nello specifico, un pre-segnale di ingresso consente ai treni di entrare se, e solo se, c'è almeno un'uscita verde dal blocco adiacente / successivo. Tu, come pianificatore, devi identificare quali segnali devono essere i pre-segnali di ingresso blocco e quali identificare le uscite.
+
+<!--
 ==Pre-signals==
 Pre-signals are a group of specialised block signals. They are so named because block entry pre-signal input comes from not just the track in the block, but any other pre-signals placed on the other side of the block (that is to say exits from that block). They are used to limit the entry of trains into blocks that cannot be obstructed or occupied. In most cases you can use path signals to solve situations where trains can choose between multiple alternatives, for instance at stations or single-track lines that are used by trains in both directions.
 
@@ -182,6 +213,8 @@ Pre-signals are a group of specialised block signals. They are so named because 
 The image on the top right shows a setup where entry to a station is controlled using ordinary signals.  When at least one platform is empty, this works well, as an incoming train is always directed to a free platform. However, consider what happens when all platforms are full, as in the screenshot. All branches are showing red, so the incoming train picks the shortest path - straight on.  But suppose the train on the platform to the right is going to be in the station for some time. Meanwhile, the train on the left leaves.  The incoming train has committed itself to a platform and is stuck between the signals, waiting for a train to depart even though there is now an empty platform available. We need to stop that incoming train before the track splits so that it picks the empty platform when a train leaves. For this you can use path signals, but you can also solve this situation with pre-signals. In fact, this was the way to build stations before path signals were invented.
 
 Pre-signals function as block signals, but additionally decide on which colour to show by the status of other pre-signals in the same direction down the track.  Specifically, an entry pre-signal allows trains to enter if, and only if, there is at least one green exit out of the adjacent/following block.  You, as the planner, need to identify which signals are to be the block entry pre-signals and which are to identify exits.
+-->
+
 
 ====Block Entry Pre-signal====
 <div style="float:right">
