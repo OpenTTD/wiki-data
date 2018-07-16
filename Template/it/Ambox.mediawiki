@@ -1,0 +1,152 @@
+<noinclude>[[Translation:Template/en/Ambox]]</noinclude><!-- 
+      adattamento del codice Wiki Ambox
+-->
+
+<noinclude></noinclude><includeonly><div style="{{#IF: {{{stile|}}} | {{{stile}}} | margin: 0px 10% 0px 10%; border: 1px solid #aaa; border-left: 10px solid {{#switch:{{{tipo|}}} 
+  | cancella     =#b22222;
+  | contenuto    =#f28500;
+  | stile      =#f4c430;
+  | sposta       =#9932cc;
+  | protetto  =#bba;
+  | #default   =#1e90ff;
+}} padding: 4px 8px; background:#efefef; min-height: 44px;">}}
+<div style="position: absolute;">[[File:{{#if:{{{imamagine|}}}
+  | {{{immagine}}}
+  | {{#switch:{{{tipo|}}}
+    | cancellazione     =Deletion.png
+    | contenuto    =Content.png
+    | stile      =Edit-clear.png
+    | sposta      =Move.png
+    | protetto  =Protection.png
+    | #default   =Notice.png
+  }}
+}}|40px]]</div>
+<div style="border: none; padding: 2px 2px 2px 62px;">
+<span style="{{#IF: {{{stile-testo|}}} | {{{stile-testo}}} | }}"> {{{testo|}}} </span>
+</div></div><!-- 
+Rileva e segnala l'utilizzo errato [[Template:Ambox/It#Tipi di finestre di dialogo delle voci|"tipo"]] parametri:
+-->{{#switch:{{{tipo|}}}
+|            = <!--Nessun tipo fornito è considerato un input valido --> 
+| cancella     =
+| contenuto    = 
+| stile      =
+| sposta       =
+| protetto  =
+| notizia     =
+| #default   = <div style="text-align: center;">Questa finestra di dialogo utilizza un parametro non valido "tipo={{{tipo|}}}" e deve essere corretto.</div>[[Category:en/Sintassi errata]]
+}}</includeonly><noinclude>
+
+==Uso==
+Semplici esempio d'uso:
+<pre>
+{{it/Ambox| testo = Un qualche testo.}}
+</pre>
+{{it/Ambox| testo = Un qualche testo.}}
+
+Oppure:
+<pre>
+{{it/Ambox| tipo = contenuto
+| testo = Avviso - Un qualche testo.
+}}
+</pre>
+{{it/Ambox| tipo = contenuto | testo = Avviso - Un qualche testo.}}
+
+== Elenco dei parametri disponibili ==
+<pre>
+{{ambox
+| tipo       = cancella / contenuto / stile / avviso / muovi / protetto
+| imamagine      = Picture.Png / Picture.Png|alt=Picture (if the parameter does not present, default type icon will be supplied)
+| testo       = Testo per un grande box, per la parte superiore degli articoli.
+
+| stile      = Stili differenti (sarebe preferibile non usarli)
+| stile-testo = come sopra.
+</pre>
+
+=== Tipi di finestre di dialogo delle voci ===
+
+I seguenti esempi usano diversi parametri '''tipo''' ma non usano dei parametri immagine quindi usano le immagini di default per ogni tipo.
+<!--The following examples use different '''type''' parameters but use no image parameters thus they use the default images for each type.-->
+
+
+{{it/Ambox| tipo  = cancella
+| testo  = tipo=<u>cancella</u> – Problemi di cancellazione, come {{en/S|en/Cancella}}.
+}}
+{{it/Ambox| tipo  = contenuto
+| testo  = type=<u>contenuto</u> – Problemi di contenuto, come {{en/S|en/Avviso}}.
+}}
+{{it/Ambox| tipo  = stile
+| testo  = tipo=<u>stile</u> – Problemi di stile, come {{en/S|en/Pulizia}}.
+}}
+{{it/Ambox| tipo  = notizia
+| testo  = tipo=<u>notizia</u> – Notizie sulle voci, come {{en/S|en/Corrente}}.
+}}
+{{it/Ambox| tipo  = sposta
+| testo  = tipo=<u>sposta</u> – Proposte di fondere, dividere o tradurre come {{en/S|en/Dividere}}.
+}}
+{{it/Ambox| tipo  = protetto
+| testo  = tipo=<u>protetto</u> – Avvisi di protezione, come {{en/S|en/Storico}}.
+}}
+
+=== Altre immagini ===
+
+Le immagini predefinite mostrate sopra sono principalmente per comodità. In molti casi è più appropriato usare immagini più specifiche. Questi esempi usano il parametro '''immagine''' per specificare un'immagine diversa da quelle di default.
+
+<pre>{{en/Ambox| type  = notice
+| image = en/Manual/OpenttdManual.png
+| text  = Something Something Something 
+}}</pre>
+
+{{en/Ambox| type  = notice
+| image = en/Manual/OpenttdManual.png
+| text  = Something Something Something 
+}}
+
+[[Category:en/Templates|A]][[Category:en/Message boxes|A]]
+</noinclude><!--
+
+  CSS if the option will become available
+
+/* Article message box styles */
+table.ambox {
+    margin: 0px 10%;   /* 10% = Will not overlap with other elements */
+    border: 1px solid #aaa; 
+    border-left: 10px solid #1e90ff;    /* Default "notice" blue */
+    background: #fbfbfb; 
+}
+table.ambox + table.ambox {   /* Single border between stacked boxes. */
+    margin-top: -1px;
+}
+.ambox th.mbox-text, 
+.ambox td.mbox-text {            /* The message body cell(s) */
+    padding: 0.25em 0.5em;       /* 0.5em left/right */
+}
+.ambox td.mbox-image {           /* The left image cell */
+    padding: 2px 0 2px 0.5em;    /* 0.5em left, 0px right */
+}
+.ambox td.mbox-imageright {      /* The right image cell */
+    padding: 2px 0.5em 2px 0;    /* 0px left, 0.5em right */
+}
+
+table.ambox-notice {
+    border-left: 10px solid #1e90ff;    /* Blue */
+}
+table.ambox-speedy {
+    border-left: 10px solid #b22222;    /* Red */
+    background: #fee;                   /* Pink */
+}
+table.ambox-delete {
+    border-left: 10px solid #b22222;    /* Red */
+}
+table.ambox-content {
+    border-left: 10px solid #f28500;    /* Orange */
+}
+table.ambox-style {
+    border-left: 10px solid #f4c430;    /* Yellow */
+}
+table.ambox-move {
+    border-left: 10px solid #9932cc;    /* Purple */
+}
+table.ambox-protection {
+    border-left: 10px solid #bba;       /* Gray-gold */
+}
+-->
