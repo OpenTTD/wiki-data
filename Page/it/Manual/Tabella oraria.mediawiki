@@ -96,24 +96,37 @@ Il lato positivo è che uno dei maggiori, un importante coefficiente nel calcolo
 
 Tre autobus non sono neanche lontanamente sufficienti per servire la stazione di Overnfield, ma evitiamo una valutazione terribile (e la successiva ostruzione delle autorità locali di tutto ciò che facciamo nelle vicinanze) offrendo almeno un servizio frequente.
 
+=== Limitazioni ===
+Il modo in cui gli orari sono attualmente implementati, non esiste un quadro di riferimento globale per l'orario di un veicolo. Ogni orario è relativo al momento in cui l'orario del veicolo è stato resettato l'ultima volta. Questo rende alcuni compiti, per i quali gli orari del mondo reale potrebbero essere utilizzati, difficili o impossibili:
+* Pianificazione di un veicolo in partenza leggermente dopo l'arrivo di un servizio di collegamento.
+* Pianificazione di una piattaforma libera presso una stazione per un servizio espresso.
+* Pianificazione treni attraverso uno svincolo occupato in modo che pochi, eventualmente, devono aspettare.
+In effetti, più attività pianificate rispetto alla creazione di progressioni tra veicoli che operano su un singolo insieme di ordini condivisi sono difficili.
 
-=== Limitations ===
-The way that timetables are currently implemented, there is no global frame of reference for a vehicle's timetable.  Each timetable is relative to the time that vehicle's timetable was last reset.  This makes some tasks, for which real world timetables might be used, difficult or impossible:
-* Scheduling one vehicle to depart slightly after a connecting service arrives
-* Scheduling a free platform at a station for an express service
-* Scheduling trains through a busy junction such that few, if any, must wait
-In fact, most scheduling tasks other than creating headway between the vehicles operating to a single set of shared orders are difficult.
+=== Riepilogo ===
+* L'orario è sintonizzato su una determinata rotta e velocità del veicolo. Usalo per cose come gli autobus; i treni sono meglio serviti essendo istruiti ad aspettare un pieno carico. Usa ordini condivisi.
+* Usa l'impostazione automatica, pulsante '''Auto''', per ottenere una misurazione iniziale su cui basare il tuo orario.
+* Distanzia manualmente i tuoi veicoli. Resetta il ritardo una volta in posizione.
+* Aggiungi e ottimizza un po' di tempo in più per consentire loro di recuperare un eventuale ritardo.
+* Avvia i veicoli tutti assieme.
+* Ripeti la sincronizzazione quando esegui l'aggiornamento a veicoli più veloci.
 
-=== Summary ===
-* Timetabling is tuned to a particular route and vehicle speed. Use it for things like buses; trains are better served by being instructed to wait for a full load. Use shared orders.
-* Use '''Autofill''' to get an initial measurement to base your timetable upon.
-* Manually spread out your vehicles. Reset any late time once in position.
-* Add and tune a little slack time to allow them to catch up after delays.
-* Start the vehicles at the same time.
-* Repeat the tuning when upgrading to faster vehicles.
+== Spaziatura automatica ==
+Dalla versione 1.4.0 è stato possibile spaziare automaticamente i veicoli utilizzando la funzione di orario.
 
-== Automatic Spacing ==
-Since version 1.4.0 it has been possible to automatically space vehicles using the timetable feature.
+Il modo base in cui funziona è il seguente:
+* Il numero totale di giorni nell'orario è diviso per il numero di veicoli che condividono l'orario per ottenere una "cifra di intervallo".
+* La data di inizio di ciascun veicolo viene quindi aumentata della "cifra di intervallo" in modo che ogni veicolo inizi lo stesso numero di giorni dopo quello precedente.
+* Ogni veicolo accelera o rallenta a seconda che sia in ritardo o in anticipo secondo l'orario.
+* A patto che l'orario abbia un po' di margine temporale per tenere conto del traffico e delle stazioni trafficate, questo dovrebbe tenerli sincronizzati per sempre.
+
+Ad esempio, supponiamo tu abbia un autobus che impiega 100 giorni per completare il suo percorso. Se cloni questo bus nove volte avrai dieci bus che condividono gli ordini. La loro spaziatura automatica significa che ogni bus partirà 10 giorni dopo l'ultimo. Ogni stazione verrà visitata ogni 10 giorni.
+
+
+
+
+
+
 
 The basic way this works is as follows:
 * The total number of days in the timetable is divided by the number of vehicles sharing the timetable to get a "gap number".
