@@ -47,54 +47,7 @@ Gli orari sono stati introdotti in [[en/Archive/OpenTTD/OpenTTD 0.6.0]] (dalla b
 
 {{note|Expected/scheduled times are avaible only for complete timetables that have already started}} --->
 
-== Usare gli orari ==
-Gli orari sono utili per evitare che i veicoli si accodino. La distribuzione dei veicoli aiuta a mantenere un flusso di carico più uniforme tra una stazione e l'altra, ma guasti, traffico e ritardi di solito li portano a riunirsi in un'unica colonna.
 
-Come dimostrazione di ciò prenderemo in esame un caso semplice con tre autobus che percorrono un circuito tra tre città. Iniziamo con gli autobus e il percorso già impostati, utilizzando gli [[it/Manual/Ordini#ordini-condivisi| ordini condivisi]]. La condivisione degli ordini è ancora più utile in questo caso perché condivideranno anche gli orari.
-
-Per iniziare, visualizza il primo orario degli autobus e attiva '''Auto''' e fallo partire. Mentre il primo autobus completa ciascuna parte del suo percorso, la finestra dell'orario verrà compilata con il tempo richiesto a percorrerlo.
-
-[[File:en/Manual/Timetable-autofill.png|center|frame|L'opzione '''Auto''' rileverà quanto tempo impiega il tuo veicolo per percorrere ogni tratta del viaggio e quanto tempo trascorre nelle stazioni.]]
-
-Mentre il convoglio di nuovi autobus procede nel suo viaggio, ferma l'ultimo bus dopo ogni stazione, in modo che siano ben distribuiti lungo il percorso. (Se hai un numero diverso di veicoli alle stazioni, prova a stimare la spaziatura uguale, se qualcuno di loro dice di essere in ritardo una volta sul posto, elimina il ritardo con il pulsante '''Azzera ritardo'''.) Quando il primo bus ha completato un percorso completo verrà compilato l'orario e sarà possibile disattivare la compilazione automatica. Ferma gli autobus per ora.
-
-[[File:en/Manual/Timetable-autofilled.png|center|frame|Our example bus route, once automatically measured.]]
-
-A meno che tu non sia stato sfortunato, il tempo misurato sarà stato quello di una corsa perfetta: nessun guasto, nessun rallentamento da ingorghi, solo il bus che sfreccia a tutta velocità per tutta la strada. Probabilmente non avrà avuto molto da caricare o scarica, o viaggiatori da imbarcare e sbarcare, se anche le stazioni sono nuove.
-
-Ciò significa che la tabella oraria è estremamente ottimistica, in quanto rappresenta il "miglior caso possibile" piuttosto che il caso comune. Per correggere ciò, seleziona ciascun segmento dell'orario a turno, clicca su '''Cambia tempo''', quindi digita una nuova durata per aggiungere un po' di flessibilità all'orario.
-
-[[File:en/Manual/Timetable-slack.png|center|frame|Cambia le durate degli orari per distanzaire maggiormente i veicoli.]]
-
-Ora fai partire gli autobus! Puoi farlo mentre sei in pausa per assicurarti che partino tutti in una volta, altrimenti i tuoi precedenti sforzi per distanziarli saranno vanificati.
-
-Le probabilità sono, almeno all'inizio, di aver sbagliato il tempo di attesa delle fermate. Il cronometraggio è ancora un mestiere da imparare e lontano dall'essere una magica opzione "distribuisci automaticamente tutti veicoli con gli stessi ordini" ([http://bugs.openttd.org/task/1128 possibile soluzione]). 
-
-Lascia che gli autobus funzionino per un po' (deve essere un tempo abbastanza lungo per monitorare i guasti, diciamo circa un anno), e vedere cosa dicono le loro finestre degli orari.
-
-[[File:en/Manual/Timetable-runninglate.png|center|frame|Senza abbastanza distanziamento tra i veicoli guasti e altri ritardi porteranno ad accumulare ritardi.]]
-
-Certo otto giorni non sono molto, le differenze di ritardo dimostrano che i nostri autobus non sono più così ben distribuiti. Aggiungi un po 'più di flessibilità all'orario. '''Non farlo''' però cliccando su '''Azzera ritardo'''! Questo annullerà il distanziamento tra gli autobus poichè questi al contrario tenderanno a mantenere il loro raggruppamento attuale, quindi con il cattivo distanziamento.
-
-{{it/Nota|Se i tuoi autobus non sono mai in ritardo, e ti sembra che passino molto tempo in attesa alle stazioni senza trasferire passeggeri, probabilmente li hai ditanziati troppo.}}
-
-Adesso i bus dovrebbero essere configurati in modo abbastanza corretto e possiamo lasicarli lavorare mentre ci concentriamo su un'altra tratta. Ecco come il nostro esempio ci appare dopo cinque anni:
-
-[[File:en/Manual/Timetable-fiveyears.png|center|frame|Con la giusta spaziatura gli autobus sono ancora ben distribuiti dopo cinque anni.]]
-
-Nonostante i guasti ripetuti, sono ancora distribuiti uniformemente sul percorso ma cosa succede quando viene rilasciato un nuovo tipo di bus e [[it/Rimpiazzo veicoli|vanno aggiornati]]?
-
-[[File:en/Manual/Timetable-newbus.png|center|frame|I nuovi veicoli più veloci si atterranno al calendario non modificato aspettando intorno alle stazioni per recuperare l'anticipo.]]
-
-La buona notizia è che gli orari continueranno a funzionare, e le tue stazioni vedranno ancora gli autobus regolari, piuttosto che ore di attesa e poi tre in una volta. La cattiva notizia è che i tuoi nuovi autobus più veloci gireranno a vuoto aspettando il tempo necessario affinché si sincronizzino con un orario impostato per vecchi autobus lenti. Dato che questo non comporta nessun errore, in quanto gli autobus mantengono la loro spaziatura, consegnano il carico e fanno soldi, non riceverai neanche alcun avvertimento.
-
-Questo è il lato negativo delle tabelle orarie: devi aggiornare i tuoi orari quando aggiorni i veicoli. Quanto lavoro dipenderà da quanto usi più veicoli che non sono già controllati dalla velocità con altri meccanismi, come [[it/Archive/Unmapped/Ordini stazione#attendi-pieno-carico|pieno carico]], e quanto sei abile a stimare il gioco richiesto. Ti suggerisco di tenerlo solo per gli autobus e, eventualmente, per spedire i camion.
-
-Il lato positivo è che uno dei maggiori, un importante coefficiente nel calcolo della [[it/Manual/Game Mechanics/Main Page#valutazione-delle-stazioni|valutazione delle stazioni]] è l'intervallo di tempo tra i veicoli nelle stazioni. Alla gente non piace aspettare l'autobus, anche se l'autobus è in realtà un trenino di cinque grandi autobus veloci che porterà senza sforzo tutti i novecento passeggeri. Dopo circa dieci anni (e un piccolo trucco per saltare avanti ai nuovi progetti di autobus precedentemente citati), ecco le valutazioni delle stazioni per il nostro banale percorso:
-
-[[File:en/Manual/Timetable-ratings.png|center|frame|arrivi e partenze regolari degli autobus mantengono le valutazioni più alte rispetto ad un linea servita con irregolarità, anche se non riescono a tenere il passo con il trasferimento di passeggeri.]]
-
-Tre autobus non sono neanche lontanamente sufficienti per servire la stazione di Overnfield, ma evitiamo una valutazione terribile (e la successiva ostruzione delle autorità locali di tutto ciò che facciamo nelle vicinanze) offrendo almeno un servizio frequente.
 
 === Limitazioni ===
 Il modo in cui gli orari sono attualmente implementati, non esiste un quadro di riferimento globale per l'orario di un veicolo. Ogni orario è relativo al momento in cui l'orario del veicolo è stato resettato l'ultima volta. Questo rende alcuni compiti, per i quali gli orari del mondo reale potrebbero essere utilizzati, difficili o impossibili:
