@@ -274,6 +274,25 @@ try downgrading <code>freetype</code>. For example, if you are using macports, y
 
 Or use the <code>--without-freetype</code> configure option.
 
+* If you get an error that starts with something like this:
+
+<code>ISO C++ forbids forward references to 'enum' types</code>
+
+try adding <code>CFLAGS="-std=c++11"</code> to the end of your configure call.
+
+* If your error looks like this:
+
+ <code>Undefined symbols for architecture x86_64:
+ "_iconv", referenced from:
+ convert_tofrom_fs(void*, char const*) in unix.o
+ "_iconv_open", referenced from:
+ OTTD2FS(char const*) in unix.o
+ FS2OTTD(char const*) in unix.o
+ ld: symbol(s) not found for architecture x86_64
+</code>
+
+specify <code>LDFLAGS="-liconv"</code> (you may have to merge this with other used LDFLAGS).
+
 ===Compiling universal binaries===
 Compiling a universal binary is done by adding <code>--enable-universal</code> to configure:
  <code>./configure --enable-universal</code>
