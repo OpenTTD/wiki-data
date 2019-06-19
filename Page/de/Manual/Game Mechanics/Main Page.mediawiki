@@ -1,6 +1,6 @@
 [[Translation:en/Manual/Game Mechanics/Main Page]]
-{{de/Übersetzung|en/Manual/Game Mechanics/Main Page|0}}
-{{de/Manual/Inhaltsverzeichnis}}
+{{de/Übersetzung|en/Manual/Game Mechanics/Main Page|5}}
+
 
 Hier findest du Informationen darüber, wie OpenTTD Ingameberechnungen durchführt. Du wolltest wissen wie die Stationsbewertung zustande kommt oder wie die Warenverteilung funktioniert? Hier findest du diese Informationen!
 
@@ -32,86 +32,106 @@ Jeder Teil der Firmenbewertung ist eine lineare Funktion. Das bedeuted, dass z.B
 |- style="background:#efefef"
 ! Summe !!!! 0 Punkte !! 1000 Punkte !! 0 bis 100%
 |}
-
-<!-----------------------------------------------------------------------------------------------------------------------------------------
-
-
-{| {{Wikitable}}
-|- style="background:#efefef"
-! Component !! Target !! Points (min) !! Points (max) !! Percentage
-|-
-|Vehicle count||>=120||0 points for 0 vehicles||100 points for at least 120 vehicles||0 to 10%
-|-
-|Number of station parts company owns||>=80||0 points for 0 parts||100 points for at least 80 parts||0 to 10%
-|-
-|Lowest profit of vehicles at least two years old||>=£10,000||0 points for loss or £0||100 points for at least £10,000||0 to 10%
-|-
-|Lowest quarterly revenue earned in past 3 years||>=£50k||0 points for £0||50 points for at least £50k||0 to 5%
-|-
-|Highest quarterly revenue earned in past 3 years||>=£100k||0 points for £0||100 points for at least £100k||0 to 10%
-|-
-|Units of cargo delivered in past year||>=40,000||0 points for 0 units||400 points for at least 40,000 units||0 to 40%
-|-
-|Number of types of cargo delivered in past quarter||>=8||0 points for 0 cargo-types||50 points for at least 8 cargo-types ||0 to 5% 
-|-
-|Current cash in bank||>=£10m||0 points for £0||50 points for at least £10m||0 to 5%
-|-
-|Current loan from bank||£0||0 points for >£250k||50 points for £0||0 to 5%
-|- style="background:#efefef"
-! Totals !!!! 0 points !! 1000 points !! 0 to 100%
-|}
-
 <table>
 <tr valign="top"><td style="background:none; border:0px">
-{| {{Wikitable}}
+{| {{en/Wikitable}}
 |- style="background:#efefef"
-!colspan="2"|Company League Table ratings
+!colspan="2"|Firmenbewertungen
 |- style="background:#efefef"
-!Rating!!Title
+!Bewertung!!Titel
 |-
-|0 to 127||Engineer
+|0 bis 127||Engineer
 |-
-|128 to 255||Traffic Manager
+|128 bis 255||Traffic Manager
 |-
-|256 to 383||Transport Coordinator
+|256 bis 383||Transport Coordinator
 |-
-|384 to 511||Route Supervisor
+|384 bis 511||Route Supervisor
 |-
-|512 to 639||Director
+|512 bis 639||Director
 |-
-|640 to 767||Chief Executive
+|640 bis 767||Chief Executive
 |-
-|768 to 895||Chairman
+|768 bis 895||Chairman
 |-
-|896 to 959||President
+|896 bis 959||President
 |-
-|960 to 1000||Tycoon
+|960 bis 1000||Tycoon
 |}
 </td><td style="background:none; border:0px">
-{| {{Wikitable}}
+{| {{en/Wikitable}}
 |- style="background:#efefef"
-!colspan="2"|2050 High Score ratings
+!colspan="2"|2050 High Score Bewertungen
 |-
-!Rating!!Title
+!Bewertung!!Titel
 |-
-|0 to 319||Businessman
+|0 bis 319||Businessman
 |-
-|320 to 447||Entrepreneur
+|320 bis 447||Entrepreneur
 |-
-|448 to 575||Industrialist
+|448 bis 575||Industrialist
 |-
-|576 to 703||Capitalist
+|576 bis 703||Capitalist
 |-
-|704 to 831||Magnate
+|704 bis 831||Magnate
 |-
-|832 to 959||Mogul
+|832 bis 959||Mogul
 |-
-|960 to 1000||Tycoon of the Century
+|960 bis 1000||Tycoon of the Century
 |}
 </td></tr></table>
 
-==Station rating==
-This section shows the factors that affect the station rating. All calculations are done separately for each cargo type.
+==Stationsbewertung==
+Dieser Abschnitt zeigt die Faktoren welche die Stationsbewertung beeinflussen. Alle Berechnungen werden für jeden Frachttyp seperat durchgeführt.
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Einfluss!!Zustand!!Bewertungspunkte!!Bewertung in %
+|-
+| Max. Geschwindigkeit des letzten Fahrzeugs welches geladen wurde (bis max. 255 km/h)<br>Halbiere es wenn es ein Straßenfahrzeug ist. || Über 85 km/h (52 mph)|| (Geschwindigkeit [km/h] - 85) / 4 || 0% bis 17%
+|-
+|rowspan="3"|Alter in Jahren des letzten Fahrzeugs welches geladen wurde || 2 || 10|| 4%
+|-
+| 1 || 20 || 8%
+|-
+| 0 || 33 || 13%
+|-
+|rowspan="4"|Tage seit letzer Frachtabholung<br>Multipliziere die Tage in der "Zustand" Spalte mit 4 wenn das letzte Fahrzeug ein Schiff ist.<br><small>(Bemerkung: Wenn ein Fahrzeug bereit ist Fracht aufzunehmen, aber keine Fracht in der Station bereit lag, oder das Fahrzeug voll beladen war, so zählt es auch als Frachtabholung. [https://github.com/OpenTTD/OpenTTD/issues/7430 Dies könnte ein Bug sein].)</small>|| 30 to 52.5 || 25 || 10%
+|-
+| 15 to 30 || 50 || 20%
+|-
+| 7.5 to 15  || 95 || 37%
+|-
+| weniger als 7.5 || 130 || 51%
+|-
+|rowspan="6"|Frachteinheiten die in der Station warten<br><small>(Bemerkung: Wenn Fracht zu anderen Stationen transferiert wird, dann zählt die Menge die an der Transferstation mit den meisten Einheiten liegt.)</small>|| Mehr als 1500 || -90 || -35%
+|-
+| 1001 bis 1500 || -35 || -14%
+|-
+| 601 bis 1000 || 0 || 0%
+|-
+| 301 bis 600 || 10 || 4%
+|-
+| 101 bis 300 || 30 || 12%
+|-
+| weniger als 100 || 40 || 16%
+|-
+|Statue in town of station||Built||26|| 10%
+|-
+|Small advertising campaign||Station within 10 tiles of town center||+64|| +25%
+|-
+|Medium advertising campaign||Station within 15 tiles of town center||+112|| +44%
+|-
+|Large advertising campaign||Station within 20 tiles of town center||+160|| +63%
+|-
+|Road vehicle crashed||Station within 22 tiles of crash ||-160|| -63%
+|-
+|Train crashed||Station within 30 tiles of crash ||-160|| -63%
+|-
+|Town bribe failed<br><small>(Note: Only stations that belong to the company bribing the town in question are affected.)</small>||Station within town influence||-255||-100%
+|}
+<!-----------------------------------------------------------------------------------------------------------------------------------------
+
 
 {| {{Wikitable}}
 |- style="background:#efefef"
