@@ -1,0 +1,93 @@
+Idea: Let game scripts replace the performance rating calculation.
+
+== Use cases ==
+
+* Single-player scenarios with custom scoring
+* Citybuilder scripts can score players on their performance towards the goal
+* Able to offer improved/"fixed" scoring methods for the original scoring
+
+It could be possible to allow different companies to score by different rules, but that may not be a good idea.
+
+== Overview ==
+
+The original scoring consists of 9 components, these are described on the [[en/Manual/Game Mechanics/Main Page#company-rating]] page.
+In the base game, the score components add up to 1000 maximum score, this maximum score should be retained, but if the scoring components' maximum don't add up to this, the total is scaled as if it did.
+
+Scripts should be able to retain individual components of the original rating, remove original rating components, and add its own rating components.
+
+A rating component consists of a goal value, a score value, and a name + tooltip. Additionally, each company has a current value towards the goal.
+The goal value of a component can be negative, this makes the rating "inverse", the closer the company is to the goal value the worse its score. This is used in the original Loan rating component, although it's not expressed via a negative goal value, but via special-case coding.
+
+The original ratings are recalculated monthly in the game loop. Game scripts are generally not called back to handle specific things, but run asynchronously to the base game logic, it's likely safer to have the GS update the company ratings on its own time. The GS will be able to update a rating value for any company at any time, but should update all ratings at regular intervals. Each custom rating would need to keep track of not just its current value, but also when it was last updated, so GS authors can receive warnings about ratings not being updated often enough.
+
+Company ratings are not stored in the savegame, but recalculated during gameplay, and on demand. Game scripts should probably follow similar rules, having to set up the custom rating components and calculate all custom company ratings again on reload.
+
+== Proposed game commands ==
+
+=== Set rating component ===
+Parameters:
+* tile: unused
+* p1:
+** bit 0..11: score value
+** bit 12..15: score value unit
+** bit 16..22: rating id
+* p2: goal value (signed int32)
+* text: rating name
+
+Define up to 127 custom ratings, rating id 0 is invalid. Score value is how much the rating contributes to a company's final score. Goal value is what value the company must reach to get the full score value. The score value can be negative, in this case the company must reach zero to get the full score value.
+
+The score value unit (4 bit) determines how the score value is presented in the UI:
+* 0 = simple count
+* 1 = weight cargo measurement
+* 2 = volumetric cargo measurement
+* 8 = money
+* 9 = money x 1000 (since commands are limited to 32 bit values, extends range)
+* 10 = money x 1000000 (further extended range)
+* 15 = binary yes/no
+
+The GS assigns its own custom rating ids, there is no competition for them so it's free to choose whichever it likes. The script API could abstract this away with some automatic incremental assignment.
+
+=== Set rating component tooltip text ===
+Parameters:
+* tile: unused
+* p1: rating id
+* p2: unused
+* text: Tooltip text displayed for the rating in the performance rating details window
+
+This is simply provided since commands can only transmit a single text string. It could be skipped by using a way to pack multiple strings in one.
+
+=== Replace rating component ===
+Parameters:
+* tile: unused
+* p1:
+** bit 0..7: component position
+** bit 8..15: company id
+** bit 16..23: rating id (signed byte)
+* p2: unused
+* text: unused
+
+Component position is which position on the performance rating table is being replaced. Using position 0 to 8 replaces one of the original positions, position 9 and up add on the the list. Perhaps limit the range to 0..15 to prevent absurdly long UI.
+
+Company id is maybe not a good idea. If implemented with this, it allows setting different rating goals for each company. Specifying INVALID_COMPANY would replace the rating position on all companies. Allowing different rating goals for each company complicates things for the GS when new companies are created during gameplay, as it would have to rush to set up the rating goals for that company.
+
+Rating id is one of the following:
+* Positive 1..127: Use one of the custom defined ratings
+* Zero 0: Do not use this position (hide it and do not count it, the position remains)
+* Negative -9..-1: Use one of the original ratings
+
+Trying to set the same rating id on more than one position is an error.
+
+=== Set company rating value ===
+Parameters:
+* tile: unused
+* p1:
+** bit 0..7: company id
+** bit 8..14: rating id
+* p2: rating value (signed int32)
+* text: unused
+
+Update the actual score of a company for a custom rating id.
+
+If the custom rating uses one of the scaled money measurements, the rating value supplied here must also be scaled by the same factor.
+
+If the custom rating has a negative goal, the rating value supplied here must also be negative when the company has not yet completed the goal. Example: Goal is "Contaminated food past year", -1000 tons. If the player delivers 250 tons of contaminated food the rating value would be -250, causing the company to score 75% of the score value.
