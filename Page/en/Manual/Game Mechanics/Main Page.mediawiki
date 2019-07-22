@@ -106,7 +106,12 @@ This section shows the factors that affect the station rating. All calculations 
 |-
 | less than 7.5 || 130 || 51%
 |-
-|rowspan="6"|Units of cargo waiting at station<br><small>Note: if cargo has been transferred to other stations, then the game MAY consider the maximum cargo waiting at any of those stations as the waiting cargo for the source station: [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3258-L3278 TruncateCargo()]. This is triggered when the game truncates cargo: if cargo has not been picked up from any of those stations in 637.5 days [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3300-L3303] or if any of those stations has more than 4096 units of cargo waiting [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3401-L3420].</small>
+|rowspan="6"|Units of cargo waiting at station<br><small>Note: if cargo has been transferred to other stations, then the game MAY consider the maximum cargo waiting at any of those stations as the waiting cargo for the source station: [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3258-L3278 TruncateCargo()].
+This is triggered when the game truncates cargo (<tt>waiting_changed = true</tt>), which occurs when any of the stations meet the following conditions:
+* Cargo has not been picked up from any of those stations in 637.5 days. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3300-L3306]
+* Station has rating less than or equal to 25% AND has more than 200 units of cargo waiting. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3379-L3386]
+* Station has rating less than 50% AND more than 0 units of cargo waiting, happening with RANDOM PROBABILITY proportional to the station rating. I.E. if station rating is 50%, there is about a 0.7% chance, at 25% rating there ~50% chance, and at 0% stating rating there is a %100 chance. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3388-L3396]
+* Any of the stations has more than 4096 units of cargo waiting. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3398-L3411].</small>
 || More than 1500 || -90 || -35%
 |-
 | 1001 to 1500 || -35 || -14%
