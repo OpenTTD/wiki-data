@@ -87,7 +87,7 @@ Each part of the company rating is a linear function, ie. earning 50% of the tar
 This section shows the factors that affect the station rating. All calculations are done separately for each cargo type.
 
 {| {{en/Wikitable}}
-|- style="background:#efefef"
+|- style="background:#ddd"
 !Factor!!Condition!!Rating points!!Rating %
 |-
 | Max speed of last vehicle to load cargo (to a max of 255 km/h) <br> Divide speed by 2 if it was a road vehicle. || Above 85 km/h (52 mph)|| (Speed (km/h) - 85) / 4 || 0% to 17%
@@ -125,24 +125,28 @@ This is triggered when the game truncates cargo (<tt>waiting_changed = true</tt>
 | less than 100 || 40 || 16%
 |-
 |Statue in town of station||Built||26|| 10%
+|- style="background:#ddd"
+!Event!!Condition!!Rating points!!Rating %
 |-
-|Small advertising campaign||Station within 10 tiles of town center||+64|| +25%
+|Small advertising campaign bought||Station within 10 tiles of town center||+64|| +25%
 |-
-|Medium advertising campaign||Station within 15 tiles of town center||+112|| +44%
+|Medium advertising campaign bought||Station within 15 tiles of town center||+112|| +44%
 |-
-|Large advertising campaign||Station within 20 tiles of town center||+160|| +63%
+|Large advertising campaign bought||Station within 20 tiles of town center||+160|| +63%
 |-
 |Road vehicle crashed||Station within 22 tiles of crash ||-160|| -63%
 |-
 |Train crashed||Station within 30 tiles of crash ||-160|| -63%
 |-
-|Town bribe failed<br><small>(Note: Only stations that belong to the company bribing the town in question are affected.)</small>||Station within town influence||-255||-100%
+|Town bribe failed||Station within town influence||-255||-100%
 |}
-Divide the total rating points by 255 to get the percent rating. The maximum possible rating is 100%. Advertising campaigns give an instant, temporary boost to ratings of nearby stations. The boost will gradually fall down to the calculated rating. 
+Divide the total rating points by 255 to get the percent rating. The maximum possible rating is 100%.
 
-The amount of cargo that can be transported from an industry is fully reliant on the station rating. So if the amount of cargo transported from an industry is low, it is probably because the station rating is low, too. 
+Every 2.5 days station ratings are computed; ratings can't change by more than 2 points (0.78%) per cycle, except due to items under "Event".
+Events give an instant, temporary boost (or penalty) to ratings of nearby stations. The rating will gradually return to normal, following the 2% per 2.5 days rule.
 
-Every 2.5 days station ratings are computed; ratings can't change by more than 2 points (0.78%) per cycle, except due to advertising campaigns, crashes, and bribe failures.
+The amount of cargo that can be transported from an industry is fully reliant on the station rating. This means that if there is exactly one station serving an industry, on ticks when the industry produces cargo, exactly station rating % of the cargo will be moved to the station. So if the amount of cargo transported from an industry is low, it is probably because the station rating is low, too. 
+
 
 '''Note:'''  The exact formula can be seen under "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3262 UpdateStationRating()]" in station_cmd.cpp. This uses some values calculated in "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/economy.cpp#L1595 LoadUnloadVehicle()]" in economy.cpp.
 
