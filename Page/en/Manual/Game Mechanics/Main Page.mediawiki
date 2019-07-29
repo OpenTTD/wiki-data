@@ -329,9 +329,10 @@ To make things simple, let's look what are the chances for 256x256 maps (max. 1 
 
 
 *If a production change does occur:
-** For an industry that has poor or no service (less than 60% of its cargo is transported): '''33%''' chance of increase, '''67%''' chance of decrease
-** For an industry that has good (greater than 60%) service: '''67%''' chance of increase, '''33%''' chance of decrease
-** For an industry that has excellent (greater than 80%) service: '''83%''' chance of increase, '''17%''' chance of decrease
+** For an <code>only_decrease</code> industry (currently only Temperate terrain Oil Wells) '''0%''' chance of increase, '''100%''' chance of decrease.
+** For an industry that has poor or no service (less than 60% of its cargo is transported): '''33%''' chance of increase, '''67%''' chance of decrease.
+** For an industry that has good (greater than 60%) service: '''67%''' chance of increase, '''33%''' chance of decrease.
+** For an industry that has excellent (greater than 80%) service: '''83%''' chance of increase, '''17%''' chance of decrease.
 
 
 *These two are multiplied together, i.e. 4.5% * 33% = 1.5%:
@@ -343,6 +344,12 @@ To make things simple, let's look what are the chances for 256x256 maps (max. 1 
 *With the [[en/Archive/Manual/Settings/Smooth economy]] option enabled, production changes per month are between 3 and 23%
 **Industries with very low productions, (ie. 12-40 tonnes per month) will have higher changes.
 **Primary industries produce cargo 8 or 9 times a month. Monthly production is an industries 'base value' multiplied times 8 or 9.  For example, the base value for a coal mine is 15 tons, so the monthly production is 120 or 135 tons. This base value is capped at 255, so the maximum possible monthly production for any industry is 2040 or 2295. [http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
+
+=====Special Cases=====
+
+*[[en/Manual/Base Set/Industries/Oil Rig]] passenger production is limited to 16 passengers per production event, meaning a maximum of 144 or 128 passengers per month. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L2597-L2602]
+*[[en/Manual/Base Set/Industries/Lumber Mill]] is technically not a producing industry and is classified as a secondary industry in the code. Four or five times a month it will search outward in a 40 by 40 area in a spiral pattern looking for a fully-grown tree to cut down. If it finds one, the tile will be [[en/Manual/Landscaping|demolished]] and 45 tons of wood will be output. This means it has a maximum production of 225 or 180 tons of wood per month, solely dependent on the availability of trees.[https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L1094-L1111]
+*Temperate climate [[en/Manual/Base Set/Industries/Bank|Banks]] never change production (except due to the 8 vs 9 production events per month).
 
 ====Examples====
 If a coal mine has 70% of its output transported, there is a '''3%''' chance (4.5% * 67%) of a production increase from 3-23% and a '''1.5%''' chance (4.5% * 33%) of a production decrease from 3-23% (but 13% on average).
