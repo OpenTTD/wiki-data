@@ -150,9 +150,9 @@ The amount of cargo that can be transported from an industry is fully reliant on
 
 '''Note:'''  The exact formula can be seen under "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3262 UpdateStationRating()]" in station_cmd.cpp. This uses some values calculated in "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/economy.cpp#L1595 LoadUnloadVehicle()]" in economy.cpp.
 
-'''Note:'''  If the rating gets less than 50%, the station starts losing cargo.
+'''Note:'''  If the rating gets to be less than 50%, the station starts losing cargo.
 
-'''Note:'''  If the amount of cargo waiting is greater than 4096 units (or 4,096,000 liters), the station also starts losing cargo.
+'''Note:'''  If the amount of cargo waiting is greater than 4096 units (or 4,096,000 liters), the station also starts losing cargo. There is a hard cap of 32,768 units of cargo that can be waiting at a station. Any more than that completely disappears every few days. [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3380-L3393]
 
 ==Cargo delivery to stations==
 During each cycle of 2.5 days for each cargo type of the delivering industry a maximum of 2 stations can get cargo assigned. If there are more than 2 possible stations with the same maximum rating value for the current cargo type then it depends on internal ordering of the stations which ones get the cargo.
