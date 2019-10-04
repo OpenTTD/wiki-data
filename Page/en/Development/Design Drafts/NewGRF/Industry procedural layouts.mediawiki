@@ -1,0 +1,111 @@
+Allow industries to have procedurally generated layouts, composed from multiple sub-layouts. This can let industries fill out larger land areas but still be flexible around terrain shape.
+
+
+= Industry properties =
+
+These properties would be added to the GRF definition of an industry.
+
+
+== Define industry sub-layout (0A) ==
+
+This is the original industry layout property. When the other two properties are defined, the meaning of this property changes from defining full layouts to defining sub-layouts.
+
+The property definition allows up to 255 layouts to be defined. Each layout implicitly has an index from 0 to 254, called the sub-layout index.
+
+
+== Define sub-layout classes (29) ==
+
+Group the sub-layouts into classes of alternates. An example of alternates could be a mine shaft oriented either NE-SW or NW-SE, where either serves the same function. It could also be factory buildings with minor size variations, e.g. 2x3 or 2x4 tiles.
+
+{| |-
+!Size!!Variable!!Meaning
+|-
+|B||numclasses||The total number of sub-layout classes following
+|-
+|D||size||The size of the whole definition, excluding numclasses and size
+|-
+|V||classes||numclasses FF-terminated lists of sub-layout indexes
+|}
+
+Example:
+
+ \b3 \d9  00 FF  01 02 03 FF  02 04 FF
+
+This example defines 3 sub-layout classes, which get sub-layout class indexes 0, 1 and 2. Class 0 consists of only a single layout, sub-layout zero. Class 1 consists of three alternates, sub-layout 1, 2, and 3. Class 2 consists of two alternates, sub-layout 2 and 4. Note that the same sub-layout can be used in as many classes as wanted.
+
+Empty classes are not allowed should be an error.
+
+
+== Define master layouts (2A) ==
+
+Construct master layout rules by giving a series of sub-layout classes to construct for the industry.
+
+{| |-
+!Size!!Variable!!Meaning
+|-
+|B||numlayouts||The total number of sub-layout classes following
+|-
+|D||size||The size of the whole definition, excluding numlayouts and size
+|-
+|V||layouts||numlayouts FF-terminated lists of sub-layout class indexes
+|}
+
+Example:
+
+ \b4 \d17  00 01 01 FF  00 01 01 01 FF  00 02 01 FF  00 02 02 FF
+
+This example defines 4 master layouts. The first consists of one class 0 sub-layout and two class 1 sub-layouts. The second consists of one class 0 sub-layout and three class 1 sub-layouts. The third consists of one class 0 sub-layout, one class 2 sub-layout, and one class 1 sub-layout. The fourth consists of one class 0 sub-layout and two class 2 sub-layouts.
+
+Empty master layouts are not allowed and should be an error.
+
+== NML syntax ==
+
+ tilelayout factory_mainbuilding_A { /* ... */ }
+ tilelayout factory_workshed_A { /* ... */ }
+ tilelayout factory_workshed_B { /* ... */ }
+ tilelayout factory_workshed_C { /* ... */ }
+ tilelayout factory_machineshop_A { /* ... */ }
+ 
+ tilelayoutclass factory_mainbuilding {
+   factory_mainbuilding_a
+ }
+ tilelayoutclass factory_workshed {
+   factory_workshed_A, factory_workshed_B, factory_workshed_C
+ }
+ tilelayoutclass factory_machineshop {
+   factory_workshed_B, factory_machineshop_A
+ }
+ 
+ item(FEAT_INDUSTRIES, factory) {
+   property {
+     /* ... */
+     layouts: proclayout(
+       [factory_mainbuilding, factory_workshed, factory_workshed],
+       [factory_mainbuilding, factory_workshed, factory_workshed, factory_workshed],
+       [factory_mainbuilding, factory_machineshop, factory_workshed],
+       [factory_mainbuilding, factory_machineshop, factory_machineshop],
+     );
+   }
+ }
+
+This syntax idea implements the same as the combination of the above examples. The layouts property of the NML definition would expand to property 0A, 29, and 2A with all the appropriate values, when a proclayout() block is given.
+
+Classic, simple layouts would still be supported.
+
+= Algorithm =
+
+1. When an industry with both sub-layout classes and master layouts defined is to be built, the industry generator instead will select a master layout instead of a basic layout to build. The master layout is selected at random.
+
+2. Each item in the selected master layout is placed in order.
+
+3. The first sub-layout class specified becomes the main building, the position of this is considered the industry's overall location. The main building can be positioned anywhere on the map, as long as the industry's positioning requirements (flags and/or callback) are fulfilled. If placement of the main building fails, a new master layout is selects a new master layout at random and retries. The number of retries is limited.
+
+4. To place one item from a master layout, select a random sub-layout from inside the class. If this is the main building, make one attempt at positioning it on the map, as described in rule 3. Otherwise, for sub-buildings, attempt to place the sub-layout near the main building. If placement of the sub-layout fails, select a new sub-layout from the class and retry placement. The number of retries is limited.
+
+5. Industry positioning requirements (flags and/or callback) are *not* evaluated for sub-layouts, only for the main building.
+
+6. If placing a sub-layout fails, clear the current placements and select a new master layout and start placement over from the main building.
+
+7. When all the sub-layouts for the master layout have been placed, the industry can construct.
+
+8. Placing a sub-layout means verifying that all tiles in the layout can be built in the location required. When these requirements are verified, these tile positions are recorded in a summed industry layout array. Verifying tile positions requires checking first the summed layout array for any already-placed tiles of the new industry, and then checking the actual game map.
