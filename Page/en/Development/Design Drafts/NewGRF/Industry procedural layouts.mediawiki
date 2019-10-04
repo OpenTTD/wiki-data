@@ -1,20 +1,14 @@
 Allow industries to have procedurally generated layouts, composed from multiple sub-layouts. This can let industries fill out larger land areas but still be flexible around terrain shape.
 
-
 = Industry properties =
-
 These properties would be added to the GRF definition of an industry.
 
-
 == Define industry sub-layout (0A) ==
-
 This is the original industry layout property. When the other two properties are defined, the meaning of this property changes from defining full layouts to defining sub-layouts.
 
 The property definition allows up to 255 layouts to be defined. Each layout implicitly has an index from 0 to 254, called the sub-layout index.
 
-
 == Define sub-layout classes (29) ==
-
 Group the sub-layouts into classes of alternates. An example of alternates could be a mine shaft oriented either NE-SW or NW-SE, where either serves the same function. It could also be factory buildings with minor size variations, e.g. 2x3 or 2x4 tiles.
 
 {| |-
@@ -35,9 +29,7 @@ This example defines 3 sub-layout classes, which get sub-layout class indexes 0,
 
 Empty classes are not allowed should be an error.
 
-
 == Define master layouts (2A) ==
-
 Construct master layout rules by giving a series of sub-layout classes to construct for the industry.
 
 {| |-
@@ -59,7 +51,6 @@ This example defines 4 master layouts. The first consists of one class 0 sub-lay
 Empty master layouts are not allowed and should be an error.
 
 == NML syntax ==
-
  tilelayout factory_mainbuilding_A { /* ... */ }
  tilelayout factory_workshed_A { /* ... */ }
  tilelayout factory_workshed_B { /* ... */ }
@@ -93,7 +84,6 @@ This syntax idea implements the same as the combination of the above examples. T
 Classic, simple layouts would still be supported.
 
 = Algorithm =
-
 The following rules are used, roughly in order, for constructing an industry with procedural layouts.
 
 1. When an industry with both sub-layout classes and master layouts defined is to be built, the industry generator instead will select a master layout instead of a basic layout to build. The master layout is selected at random.
@@ -111,3 +101,8 @@ The following rules are used, roughly in order, for constructing an industry wit
 7. Placing a sub-layout means verifying that all tiles in the layout can be built in the location required. When these requirements are verified, these tile positions are recorded in a summed industry layout array. Verifying tile positions requires checking first the summed layout array for any already-placed tiles of the new industry, and then checking the actual game map.
 
 8. When all the sub-layouts for the master layout have been placed, the industry can construct. Construction happens by applying the summed industry layout array to the map, the same way a classic industry layout is applied to the map.
+
+== Range for sub-layout positioning ==
+Sub-layouts are positioned "near" the main building, but this is open to interpretation. A suggested search range for sub-layout positions is current difference between max and min coordinates in the summed layout array, plus largest coordinate of non-FF tiles in the sub-layout array. This range is added and subtracted from the center tile of the main building to generate the coordinate range for positioning the sub-layout.
+
+The X and Y coordinates can be considered independently for this range calculation. A side effect of this might be that the shape/orientation of the main building to some extent affects the overall shape of the industry.
