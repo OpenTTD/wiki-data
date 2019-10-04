@@ -94,6 +94,8 @@ Classic, simple layouts would still be supported.
 
 = Algorithm =
 
+The following rules are used, roughly in order, for constructing an industry with procedural layouts.
+
 1. When an industry with both sub-layout classes and master layouts defined is to be built, the industry generator instead will select a master layout instead of a basic layout to build. The master layout is selected at random.
 
 2. Each item in the selected master layout is placed in order.
@@ -106,6 +108,6 @@ Classic, simple layouts would still be supported.
 
 6. If placing a sub-layout fails, clear the current placements and select a new master layout and start placement over from the main building.
 
-7. When all the sub-layouts for the master layout have been placed, the industry can construct.
+7. Placing a sub-layout means verifying that all tiles in the layout can be built in the location required. When these requirements are verified, these tile positions are recorded in a summed industry layout array. Verifying tile positions requires checking first the summed layout array for any already-placed tiles of the new industry, and then checking the actual game map.
 
-8. Placing a sub-layout means verifying that all tiles in the layout can be built in the location required. When these requirements are verified, these tile positions are recorded in a summed industry layout array. Verifying tile positions requires checking first the summed layout array for any already-placed tiles of the new industry, and then checking the actual game map.
+8. When all the sub-layouts for the master layout have been placed, the industry can construct. Construction happens by applying the summed industry layout array to the map, the same way a classic industry layout is applied to the map.
