@@ -2,6 +2,8 @@
 
 === Introduction ===
 
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
+
 Road and tram are constructed independently.
 You can build road with a certain roadtype on a tile, and you can build tram with a certain tramtype on a tile.
 In general there are no implications between the two infrastructures, just like there are no implications to
@@ -10,6 +12,8 @@ railtypes on levelcrossings, though rail-, road- and tramtypes can forbid levelc
 Each tile may have one roadtype and one tramtype.
 
 === Roadtype and Tramtype labels ===
+
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
 
 Roadtypes and tramtypes are identified via 4-character labels between NewGRFs.
 Labels of the different entities are independent.
@@ -38,6 +42,8 @@ Note, that catenary is not specific to tramtypes. Trolley busses are not trams.
 [[File:en/Archive/Development/Nrt defaulttypes.png]]
 
 === Compatibility/Poweredness ===
+
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
 
 This works the same as for railtypes.
 Vehicles have a specific road-/tramtype label.
@@ -105,6 +111,8 @@ There are no vehicles which require both 3rd rail and catenary.
 
 == Sprite layers ==
 
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
+
 When drawing road/tram tiles, multiple sprites are drawn in layers over each other.
 
 General rules:
@@ -114,6 +122,8 @@ General rules:
 * Both road and tram can draw catenary.  Catenary sprites support company colour (1CC).  If company is NONE, grey will be used for company colour.
 
 === Regular tiles ===
+
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
 
 {| border="1" |-
 ! Layer !! Source !! Road only !! Road and Tram !! Tram only
@@ -152,6 +162,8 @@ General rules:
 |}
 
 === Level crossing ===
+
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
 
 {| border="1" |-
 ! Layer !! Source !! Road only !! Road and Tram !! Tram only
@@ -195,6 +207,8 @@ General rules:
 
 === Road depot ===
 
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
+
 {| border="1" |-
 ! Layer !! Source !! Road only !! Road and Tram !! Tram only
 |-
@@ -208,6 +222,8 @@ General rules:
 |}
 
 === Drive-in road stop ===
+
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
 
 {| border="1" |-
 ! Layer !! Source !! Road only !! Road and Tram !! Tram only
@@ -248,14 +264,23 @@ General rules:
 === Global stuff ===
 
 ==== Road-/Tramtype translation table ====
+
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
+
 ; NFO: Action 0 Feature 8 Properties 0x16 (roadtypes) and 0x17 (tramtypes) work the same as 0x12 for railtypes
 ; NML: "roadtypetable" and "tramtypetable" work the same as "railtypetable"
 
 ==== Testing for road-/tramtypes ====
+
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
+
 ; NFO: Action 7 tests 0x0F (roadtype not defined), 0x10 (roadtype defined), 0x11 (tramtype not defined), 0x12 (tramtype defined) work the same as 0x0D and 0x0E for railtypes.
 ; NML: "roadtype_available" and "tramtype_available" work the same as "railtype_available"
 
 ==== Action 5 tram graphics ====
+
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
+
 Type 0B is extended to now provide 119 sprites (6 more than before).
 
 Originally sprites 49..54 provided graphics for the electrified tram depot, which include the tram tracks.
@@ -270,6 +295,8 @@ The old sprites 49..54 are only used for compatibility, if no new sprites 113..1
 
 ==== Properties ====
 
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
+
 ''Road-/tramtype of vehicle:''
 ; NFO: Property 0x05 (byte) specifies the entry from the road-/tramtype translation table.
 ; NML: "road_type", "tram_type" specifies the entry from the road-/tramtype translation table. ROADVEH_FLAG_TRAM must be set/cleared nevertheless.
@@ -277,11 +304,15 @@ If the property is not set, then road vehicles default to "ROAD" and trams defau
 
 ==== Variables ====
 
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
+
 ''Current road-/tramtype under vehicle:''
 ; NFO: Var 0x4A works the same as for trains. Bit 8 "is/would be powered" is always set.
 ; NML: "current_roadtype" and "current_tramtype" work the same as "current_railtype".
 
 === Road-/Tramtype ===
+
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
 
 ''Feature:''
 ; NFO: 0x12 for roadtypes, 0x13 for tramtypes
@@ -291,6 +322,8 @@ There is no "parent" scope.
 There is a global limit of 15 roadtypes and 15 tramtypes, including the default types.
 
 ==== Properties ====
+
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
 
 {| border="1" |-
 ! NFO !! NML !! Notes
@@ -334,6 +367,8 @@ There is a global limit of 15 roadtypes and 15 tramtypes, including the default 
 
 ==== Variables ====
 
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
+
 {| border="1" |-
 ! NFO !! NML !! Notes
 |-
@@ -349,6 +384,8 @@ There is a global limit of 15 roadtypes and 15 tramtypes, including the default 
 |}
 
 ==== Graphics ====
+
+{{en/Outdated|This spec is from May 2017. The actual implementation in OpenTTD 1.10 differs to an extent unknown.}}
 
 {| border="1" |-
 ! NFO Action3 Id !! NML !! Required !! Notes !! Action 5 equivalent
