@@ -1,0 +1,66 @@
+Change the music set definition format to support more types of music, and better support special playlists, and user playlists consisting of tunes from multiple sets.
+
+= Concepts =
+
+A music set consists of:
+* Files
+* Tunes (a tune points to one or more files, possibly as a sub-track)
+* Playlists (ordered list of references to tunes)
+
+Additionally it has the following translatable strings:
+* Set description
+* "Where to get" text for each file, shown if the file is missing/corrupt
+* Title for each tune
+* Name for each playlist
+
+= Sections =
+
+== metadata ==
+Same as current OBM format metadata section.
+
+* ''name'' - Presented name of the set, not translated.
+* ''shortname'' - Four-letter name code of the set, not translated.
+* ''version'' - Version number of the set, not translated.
+* ''description'' - Single-line description of the set, translatable.
+
+== files ==
+Unlike the original format, there are no pre-defined valid keys in this section. Files must have a unique identifier (the key name within the section), but there is no requirement on them other than being valid in the INI format.
+
+== md5s ==
+Checksums of all the files in the set. Keys are the same as the keys in the files section.
+
+A file can be left out, or have a blank value, in this section to skip verification.
+
+== t-''n'' ==
+Multiple sections named as a literal "t", followed by a literal dash, followed by a decimal number. The numbering must start at 1 and must be consecutive.
+
+Each of these sections define a tune. The following basic keys are required, some formats might support or require more keys.
+* ''file'' - Identifier of the (primary) file for this tune.
+* ''format'' - Which format the music is in, initial support will be ''midi'' (Standard MIDI files) and ''catmidi'' (DOS TT music). Can later be extended to also have ''mp3'', ''ogg'', ''flac'', etc.
+* ''name'' - Display title for the tune, translatable. Optional, if left out the decoder can supply a name, and otherwise the file identifier will be used.
+
+For all MIDI formats, this additional key can be defined:
+* ''midistd'' - Which MIDI standard the tune uses, can be ''gm'', ''gs'', ''xg''. May later be extended with more standards (or non-standards) such as ''mt32'' or ''adlib''.
+
+For the ''catmidi'' format an additional key is required:
+* ''track'' - Index in the CAT file containing this track.
+
+== p-''n'' ==
+Multiple sections named as a literal "p", followed by a literal dash, followed by a decimal number. The numbering must start at 1 and must be consecutive.
+
+Each of these sections define a playlist. The following keys are defined for playlists:
+* ''name'' - Display name of the playlist, translatable. Can also be one of ''title'', ''all'', ''new'', ''old'', or ''ezy'', to define one of the "classic" playlists. Required.
+* ''order'' - List of tune indexes for the playlist. Decimal numbers separated by comma. No whitespace. Required, must not be empty.
+* ''year-from'' - Which game year the playlist is recommended to begin using at earliest. Optional, if left out there is no lower bound.
+* ''year-to'' - Which game year the playlist is recommended to no longer be used after. Optional, if left out there is no upper bound.
+
+If a playlist named ''title'' is supplied, it will be used for the title screen music. If the title playlist contains multiple tunes, they will play shuffled. If there is no ''title'' playlist, tune index 1 is used. The ''title'' playlist is not available from the in-game jukebox.
+
+If a playlist named ''all'' is supplied, it will be the default playlist for the set. Tunes not on this playlist can still be chosen from the music programme window. If there is no ''all'' playlist, it will be created from all tunes in definition order, except any used for the ''title'' playlist.
+
+If playlists named ''old'', ''new'', or ''ezy'' are supplied, they use the built-in strings for the original music playlists in the UI. If they are not supplied, the playlists are not available.
+
+Other playlist names should be short, ideally not more than two words.
+
+= MIDI standards =
+Specifying the appropriate MIDI standard for a tune lets the driver send an appropriate reset sequence and/or patch bank to the synth. It can also (with extensions to the MIDI drivers) allow the driver to select different output ports depending on configuration.
