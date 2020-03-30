@@ -1,0 +1,392 @@
+[[Translation:en/Manual/Console]]
+{{tr/Manual/İçindekiler}}
+{|
+|- valign="top"
+| style="background:none; border:0px" | Konsol, [[en/Çok oyunculu]] sohbet geçmişini görmenizi ve [[en/Manual/Main Page]]'de konsol komutlarını yapmanızı sağlar. Komutların çoğu çok oyunculu [[en/Manual/Server|sunucuları]] yapılandırmak için kullanılır.
+
+__TOC__
+| style="background:none; border:0px"|
+[[File:tr/Manual/Konsol.png|none|frame|OpenTTD Konsolu]]
+|}
+
+==Konsolu kullanma==
+Konsolu, ana klavyedeki '1'in solunda bulunan (") tuşuyla açın. Bazı [https://www.wikipedia.org/wiki/Keyboard layout uluslararası klavyelerde] sembol farklı olabilir (örn. [https://www.wikipedia.org/wiki/Keyboard layout#Germany and Austria (but not Switzerland) Almanca klavyede] "^"). Yardım menüsünde bir "Konsolu Aç/Kapat" seçeneği de vardır.<br />
+Konsol açıldıktan sonra, "help" gibi bir komut yazın ve Enter tuşuna basın.
+
+İpuçları:
+* Konsolu Shift+Yukarı/Aşağı kaydırın.
+* Yukarı/Aşağı ok tuşlarını kullanarak yazım geçmişinde ilerleyin.
+* Ctrl+Enter ile konsolu büyütün/yeniden küçültün.
+* Kopyalanmış metni Ctrl + V ile yapıştırın (yalnızca Windows).
+
+==Konsol komutları==
+İşte OpenTTD'de bulunan tüm konsol komutlarının bir listesi. Ayraçlar [], "isteğe bağlı" anlamına gelir. Dikey çizgi | "ya da " anlamına gelir. Komut adındaki _ alt çizgi isteğe bağlıdır. Liste, en kullanışlı komutlar üstte olacak şekilde düzenlenmiştir.  Bu liste [[en/Manual/Console Commands|alfabetik]] olarak da mevcuttur. Alıntı işaretlerinin konsolda da yazılması gerektiğini unutmayın!
+
+===Yardım komutları===
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Komut
+!Açıklama
+|-
+|help [<item>]
+|Temel konsol yardımını görüntüleyin, ilgili komut ya da değişkenle ilgili yardım için <item> belirtin.
+|-
+|list_cmds [<filter>]
+|Kullanılabilir tüm komutları listeleyin, isteğe bağlı olarak yalnızca <filter> ile başlayan komutları listeleyin.
+|-
+|list_settings [<filter>]
+|Kayıtlı tüm değişkenleri listeleyin, isteğe bağlı olarak yalnızca <filter> ile başlayan değişkenleri listeleyin.
+|-
+|list_aliases
+|Kullanılabilir tüm [[en/Manual/Console Aliases|takma adları]] listeleyin.
+|-
+|list_patches
+|Tüm [[tr/Archive/Manual/Settings/Ayarlar|Ayarlar]]'ı listeleyin.
+|}
+
+===Oyun komutları===
+Bu komutlar hem tek oyunculu oyunlarda hem de sunucularda çalışır.
+
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Komut
+!Açıklama
+|-
+|newgame
+|Yeni bir oyun başlatır.
+|-
+|restart
+|Oyunu yeniden başlatır.
+|-
+|connect <host>
+|<host> üzerinde çalışan bir ağ oyununa bağlanın. Sunucu için mevcut değil.
+|-
+|reconnect
+|Oynadığınız son sunucuya yeniden bağlanır. (R17466'da, yalnızca 1.0 ya da sonraki sürümlerde getirildi)
+|-
+|save <nowiki><number | file></nowiki>
+|Geçerli oyunu <number> ya da <file> olarak kaydeder.
+|-
+|load <nowiki><number | file></nowiki>
+|Kayıtlı oyunu <number> ya da <file> ile yükler.
+|-
+|part
+|Bir oyundan çıkın ve giriş menüsüne geri dönün. Sunucu için mevcut değil.
+|-
+|exit / quit
+|Oyundan çıkar.
+|}
+
+===Çok oyunculu oyun komutları===
+Bu komutlar çok oyunculu bir oyun [[en/Sunucusu]] çalıştırmak için kullanılır. Bazı komutlar biribirine bağlı istemciler için de çalışır.
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Komut
+!Açıklama
+!width="90"|İstemciler
+|-
+|kick <nowiki><ip | client-id></nowiki>
+|IP <ip> ya da <client-id> ile istemciyi atma.
+|Hayır
+|-
+|ban <nowiki><ip | client-id></nowiki>
+|IP <ip> ya da <client-id> ile istemciyi engelleme.
+|Hayır
+|-
+|unban <ip>
+|<ip> üzerinden engeli kaldırma.
+|Hayır
+|-
+|banlist
+|Engellenmiş istemcileri gösterir.
+|Hayır
+|-
+|[[en/Archive/Manual/Reset Company|reset_company]] <company-id>
+|<company-id> ile tanımlanan şirketi siler.
+|Hayır
+|-
+|pause
+|Oyunu durdurur.
+|Hayır
+|-
+|unpause
+|Oyunu devam ettirir.
+|Hayır
+|-
+|clients
+|Her istemcinin istemci kimliğini, adını, şirket kimliğini ve IP adresini listeler.
+|Evet
+|-
+|companies
+|Oyuncuların ve özelliklerinin bir listesini gösterin, ör. şirket adı, kredi değeri, araç sayısı vb.
+|Hayır
+|-
+|status
+|Şu anda bağlı olan tüm istemcilerde durum bilgilerini alın.
+|Hayır
+|-
+|server_info
+|Geçerli ve en yüksek istemci/oyuncu sınırlarını listeleyin.
+|Hayır
+|-
+|say "<msg>"
+|Tüm oyunculara <text> içeren bir sohbet iletisi gönderin.
+|Evet
+|-
+|say_client <client-id> "<msg>"
+|<client-id> ile tanımlanan istemciye <msg> içeren bir sohbet iletisi gönderin.
+|Evet
+|-
+|say_player <player-id> "<msg>"
+|Şirkette <player-id> (1-10) ile tanımlanan herkese <msg> içeren bir sohbet iletisi gönderin.
+|Evet
+|-
+|rcon <password> "<command>"
+|İstemci olarak bağlıyken <password> tarafından kimliği doğrulanan sunucuda <command> komutunu kullanın. Şifre, sunucuda yerel olarak "rcon_pw <password>" ile önceden ayarlanmalıdır.
+|Evet
+|-
+|join <company-id> [<password>]
+|Bir şirkete katılın, <password> yalnızca katılmak istediğiniz şirket şifre korumalı ise gereklidir
+|Evet
+|-
+|spectate
+|Gözlemciye katılma (diğer adıyla 255).
+|Evet
+|-
+|move <client-id> <company-id>
+|bir istemciyi herhangi bir şirkete taşıyın, istemciyi gözlemcilere taşımak için 255 şirket kimliğini kullanın
+|Hayır
+|-
+|client_name <client-id> <name>
+|Bir istemcinin kullanıcı adını yeniden adlandırıni örn. rahatsız edici bir kullanıcı adıyla katılabilir.
+|Hayır
+|-
+|list_ai
+|Sunucudaki kullanılabilir YZ'lerin listesi
+|Evet
+|-
+|start_ai <ai>[.<version>]
+|Mevcutsa, belirtilen sürümle birlikte kullanılabilir bir YZ başlatın
+|Hayır
+|-
+|stop_ai <company-id>
+|Mevcut bir YZ'yi durdurun, şirket daha sonra haritadan tamamen temizlenecek
+|Hayır
+|}
+
+===Dosya düzenleme komutları===
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Komut
+!Açıklama
+|-
+|cd <nowiki><directory | number></nowiki>
+|Çalışma dizinini <directory> ya da <number> olarak değiştirin.
+|-
+|ls / dir
+|Geçerli dizinin dosyalarını listeler.
+|-
+|pwd
+|Geçerli çalışma dizinini yazdırın.
+|-
+|rm <nowiki><number | file></nowiki>
+|Bir kayıt oyununu ada ya da dizine göre kaldırın.
+|}
+
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Komut
+!Açıklama
+|-
+|script <file>
+|<file> adlı dosyaya bir [[en/Archive/Manual/Scripts|komut dosyası]] kaydedin.
+|-
+|exec <script> <?>
+|Yerel bir komut dosyası çalıştırır.
+|-
+|return
+|Çalışan bir komut dosyasını durdurur.
+|}
+
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Komut
+!Açıklama
+|-
+|content update
+|Kullanılabilir çevrimiçi içerik listesini günceller.
+|-
+|content upgrade
+|Güncellenen tüm dosyaları seçin (yerel olarak mevcut dosyaların)
+|-
+|content select (ID / all)
+|İçeriği ID ya da tümüne seçin
+|-
+|content unselect (ID / all)
+|İçeriği ID'a göre ya da tümüne göre seçimden kaldırın
+|-
+|content state
+|Tüm içeriklerin durumunu (seçili olan/olmayan) göster
+|-
+|content download
+|Seçilen tüm çevrimiçi içeriği indir
+|}
+
+===Diğer komutlar===
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Komut
+!Açıklama
+|-
+|screenshot <nowiki>[big | giant | no_con]</nowiki>
+|Bir ekran görüntüsü alır. 'big' seçilen bir alanın ekran görüntüsünü yakınlaştırır. 'giant' tüm haritanın ekran görüntüsünü oluşturur. 'no_con' sıradan bir ekran görüntüsü oluşturmak için konsolu gizler.
+|-
+|alias <name> <command> 
+|<command> ile ilişkili <name> adlı bir [[en/Manual/Console Aliases|takma ad]] oluşturun.
+|-
+|set <setting_name> [<newvalue>]
+|Konsoldan ayarı alın ve düzenleyin. <newvalue> atlanırsa, geçerli değer yazdırılır. Kullanılabilir tüm ayarların bir listesi için bkz. [[Console_Settings|Konsol Ayarları].
+|-
+|dump_vars
+|Bilinen tüm değişkenleri ve değerlerini yazdırın.
+|-
+|getseed
+|Rastgele oluşturulan oyunlarda oyunu oluşturmak için kullanılan seed'e döner.  Seed, aynı başlangıç haritasını oluşturmak için kullanılabilir.
+|-
+|scrollto <tile>
+|<tile> numaralı kareye gider; onaltılık (0x ile önceden eklenmiş) ve ondalık değerleri kabul eder. Belirli bir karenin numarasını almak için arazi bilgi aracını kullanın.
+|-
+|clear
+|Konsol ekranını temizler.
+|-
+|echo <text>
+|Konsolda ki <text> yazsını yazdırır.
+|-
+|echoc <color> <text>
+|<text> metnini <color> rengiyle yazdırır. <color> 0 ile 255 arasında bir sayıdır.
+|-
+|info_cmd <command>
+|<command> komutunda teknik bilgileri gösterir.
+|-
+|info_var <variable>
+|<variable> değişkeniyle ilgili teknik bilgileri gösterir.
+|-
+|debug_level [<level>]
+|Oyunun farklı bölümlerinin hata ayıklama düzeylerini alın/ayarlayın.
+|-
+|resetengines
+|Lokomotiflerin tüm kullanım yaşını ve kullanılabilirliğini sıfırlar.
+|}
+
+==Değişkenler==
+İşte OpenTTD'de bulunan [https://www.wikipedia.org/wiki/variable değişkenlerin] listesi. '''''setting''''' ''variablename'' yazarak bir değişkenin değerini görün. '''''setting''''' ''variablename'' ve ardından yeni değeri yazarak değeri değiştirin. [https://www.wikipedia.org/wiki/Boolean_data_type boolean] değişkenlerini 'on' ya da 'off' olarak ayarlayın. * değerini yeni değer olarak kullanarak, metin değişkenini boş olarak sıfırlayın.
+
+===Sunucu değişkenleri===
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Değişken
+!Açıklama
+!width="90"|Varsayılan Değer
+|-
+|[[en/Archive/Manual/Settings/Autoclean companies|autoclean_companies]]
+|Etkin olmayan şirketleri diğer oyuncular için serbest bırakmak üzere otomatik olarak kapatır. 'autoclean_(un)protected' ve 'autoclean_novehicles' ile özelleştirilebilir.
+|off
+|-
+|[[en/Archive/Manual/Settings/Autoclean protected|autoclean_protected]]
+|Belirli bir ay sonra şifreyi, etkin olmayan bir şirketten otomatik olarak kaldırır.
+|36
+|-
+|[[en/Archive/Manual/Settings/Autoclean unprotected|autoclean_unprotected]]
+|Etkin olmayan şirketleri belirtilen aydan sonra otomatik olarak kapatır.
+|12
+|-
+|[[en/Archive/Manual/Settings/Autoclean novehicles|autoclean_novehicles]]
+|Belirtilen aydan sonra araçları olmayan şirketleri otomatik olarak kapatır.
+|0
+|-
+|max_clients
+|Sunucuda izin verilen en yüksek oyuncu sayısı
+|10
+|-
+|max_companies
+|Oyunda izin verilen en yüksek şirket sayısı
+|8
+|-
+|max_join_time
+|Bir istemcinin katılmasına izin verilen en yüksek süre (saniye)
+|500
+|-
+|max_spectators
+|Sunucuda izin verilen en yüksek gözlemci sayısı
+|10
+|-
+|min_active_clients
+|Etkin oyuncu sayısı bu miktardan az olduğunda oyunu otomatik olarak duraklatır.
+|0
+|-
+|net_frame_freq
+|Bir komutu çalıştırmadan önceki (gözle görülür) çerçeve sayısı
+|1
+|-
+|net_sync_freq
+|Oyunun eşgüdümlü olup olmadığını kontrol etmek için çerçeve sayısı
+|100
+|-
+|pause_on_join
+|İstemci katılırken sunucunun oyunu duraklatması gerekip gerekmediğini ayarlar. Bu, yavaş kullanıcılara yardımcı olabilir.
+|on
+|-
+|rcon_pw
+|İstemci olarak bağlıyken bir sunucuyu değiştirmek için kullanılan uzaktan bağlantı şifresi. Rcon'u devre dışı bırakmak için '*' kullanın.
+|
+|-
+|restart_game_year
+|Ayarlanan yılın 1 Ocak'ına ulaşıldığında sunucuyu otomatik olarak yeniden başlatır. Bunu devre dışı bırakmak için '0'ı kullanın.
+|0
+|-
+|server_advertise
+|Sunucunun ana sunucuya duyurulup duyurulmayacağını ayarlayın ve orada görünün.
+|on
+|-
+|server_ip
+|Sunucunun bağlandığı IP. Değişiklikler sunucuyu bir sonraki başlatışınızda geçerli olur. Herhangi bir IP'ye bağlanmak için 'all' ya da '0.0.0.0' kullanın.
+|0.0.0.0
+|-
+|server_name
+|Çok oyunculu sunucunun adı.
+|
+|-
+|server_port
+|Sunucu bağlantı noktası numarası; güvenlik duvarınız müdahale ederse bunu değiştirin. Değişiklikler sunucuyu bir sonraki başlatışınızda geçerli olur.
+|3979 (TCP & UDP)
+|-
+|server_password
+|Sunucunuzu korumak için sunucu şifresi; yalnızca şifreye sahip istemciler katılabilir. Şifreyi silmek için '*' kullanın.
+|
+|}
+
+===Diğer değişkenler===
+{| {{en/Wikitable}} width=100%
+|- style="background:#efefef"
+!width="225"|Değişken
+!Açıklama
+!width="90"|Varsayılan değer
+|-
+|name
+|Çok oyunculu için adınız
+|Player
+|-
+|company_pw
+|Şirketinizin şifresi; yalnızca şifreye sahip istemciler katılabilir. Şifreyi silmek için '*' kullanın.
+|
+|-
+|developer
+|Hata ayıklama penceresini konsoldan/komut satırından oyun içi konsola yeniden yönlendirin ('2' değeri).
+|1
+|}
+
+===Yol bulucu değişkenleri===
+YAPF ayar değişkenleri için bkz. [[en/Archive/Manual/Yet Another Pathfinder]]
+
+[[Category:en/Manual/Console]]
+[[Category:en/Manual/Multiplayer]]
