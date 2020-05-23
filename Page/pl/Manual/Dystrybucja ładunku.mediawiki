@@ -1,0 +1,60 @@
+[[Translation:en/Manual/Passenger and cargo distribution]]
+
+'''Dystrybucja [Ładunek/Pl|ładunku]] i [[pl/Manual/Base Set/Cargos/Pasażerowie|pasażerów]]''', powszechnie znana jako "Cargodist" (od angielskiego ''Passengers and '''cargo dist'''ribution''), jest funkcją, która umożliwia pasażerom, [[pl/Manual/Base Set/Cargos/Poczta|poczcie]] i wszystkim innym rodzajom ładunków określenie miejsca przeznaczenia. Ładunek wchodzi na pokład tylko tych pojazdów, które zmierzają do określonego miejsca przeznaczenia. Cargodist był pierwotnie patchem, ale od czerwca 2013 r. (wersja 1.4.0) Cargodist jest włączony do gry na stałe.
+
+==Wprowadzenie==
+
+W klasycznym OpenTTD trudno jest dystrybuować ładunki z jednego źródła do wielu miejsc docelowych. Musisz albo użyć różnych pojazdów dla każdego miejsca docelowego, albo skonfigurować skomplikowane systemy poleceń, aby to zrobić. Załóżmy, że masz pociąg jadący między miastami A i B. W każdym z tych miast masz sieć autobusową łączącą kilka przystanków ze stacją kolejową. Możesz chcieć, aby pasażerowie z któregokolwiek z przystanków lub stacji kolejowej w A podróżowali do wybranego przystanku lub stacji kolejowej w B i vice versa. W klasycznym OpenTTD możesz mieć autobusy w A, które odbierają pasażerów z różnych przystanków i przenoszą ich na dworzec kolejowy. Pociąg może ich odebrać i przewieźć na stacji kolejowej w B. Następnie możesz mieć autobusy w B, które rozdzielają pasażerów pomiędzy przystankami, jadąc tam i z powrotem pomiędzy stację kolejową a każdy przystanek w kształcie gwiazdy. Każdy z pojazdów używałby [[pl/Manual/Polecenia|poleceń]] "Przeładunek, pozostaw pusty", a to rozwiązanie nie pozwalałoby pasażerom jechać do B do A, ani do żadnej stacji kolejowej, ani między przystankami w obrębie jednego miasta. Możliwe jest dopuszczenie tych dodatkowych tras poprzez stworzenie jeszcze bardziej skomplikowanych systemów poleceń. Jednak im więcej stacji i pojazdów dodasz, tym bardziej skomplikowane, nieporęczne - a coraz mniej rentowne -  będą te systemy.
+
+Cargodist automatycznie zajmuje się przesiadkami i wyborem miejsca docelowego dla każdego pasażera. W powyższym przykładzie nie musiałbyś określać żadnych przeładunków, ani tworzyć sieci autobusów w kształcie gwiazdy. Każda sieć autobusowa w A i B z prostymi poleceniami będzie działać tak długo, jak długo jest podłączona do dworca kolejowego. Ponieważ jednak pasażerowie będą mieli swoje własne pomysły co do tego, dokąd jechać i jakimi pojazdami się zabrać, może się okazać, że na każdej stacji będzie więcej zatorów i ogólnie więcej pasażerów czekających.
+
+Było kilka innych łatek (''patches''), które starały się osiągnąć to samo wcześniej. W przeciwieństwie do projektu Cargod'''e'''st (od ''Passenger and '''cargo dest'''inations'' - ''Destynacje (cele podróży) ładunku i pasażerów''. Projekt nie jest już rozwijany, w języku angielskim można poczytać o nim [[en/Community/Patches/Passenger and cargo destinations|tutaj]]), w Cargod'''i'''st problemy związane z kierowaniem ładunku i równoważeniem jego ilości na różnych trasach są postrzegane jako nierozłączne i dlatego są rozwiązywane razem. Również definicja zapotrzebowania na transport jest postrzegana jako warunek wstępny rozwiązania powyższych problemów, i jest traktowana jako pierwsza. Główne różnice w stosunku do YACD (''Yet Another CargoDestinations'', w wolnym tłumaczeniu: ''Kolejne Miejsce Przeznaczenia Ładunku''. YACD nie ma swojej strony na wiki, można (po angielsku) poczytać o nim [https://www.tt-forums.net/viewtopic.php?f=33&t=54253 tutaj]) polegają na tym, że Cargodist a, ze względu na wydajność, traktuje tylko osiągalne miejsca docelowe, a nie całą mapę i b, wstępnie oblicza cały schemat tras w osobnych wątkach.
+
+Więcej informacji na ten temat znajduje się [http://www.tt-forums.net/viewtopic.php?f=33&t=41992&start=0 w temacie forum]. Jeśli masz jakieś pytania na temat Cargodist, zamieść je tam.
+
+
+==Tryby dystrybucji==
+[[File:pl/Manual/Cargodist-schematy.png|frame|Nakładki ze schematami połączeń]]
+[[File:pl/Manual/Cargodist-stacja.png|frame|Interfejs stacji]]
+
+Cargodist daje Ci trzy różne tryby dystrybucji dla ładunku lub pasażerów. W ustawieniach zaawansowanych możesz wybrać, który z nich ma być stosowany dla danego ładunku ("Dystrybucja towarów").
+
+* Dystrybucja ręczna oznacza, że ładunek nie jest w ogóle dystrybuowany automatycznie. Zachowuje się tak samo jak bez Cargodistu.
+* W przypadku dystrybucji symetrycznej algorytm dystrybucji próbuje wysłać tę samą ilość ładunku (lub pasażerów) w obie strony, pomiędzy dwoma stacjami. Nie zawsze się to uda. Jeśli masz jedną dużą stację, na której generowanych jest więcej pasażerów niż na wszystkich innych dodanych stacjach, to oczywiście nie ma dla nich rozkładu symetrycznego. Możesz wpłynąć na ścisłość algorytmu poprzez ustawienie "ilość powracającego ładunku". Im mniejszą wartość ustawisz, tym dystrybucja symetryczna bardziej będzie się zachowywać podobnie do asymetrycznej (przy ustawieniu 0% pomiędzy tymi trybami nie będzie różnicy)
+* Dystrybucja asymetryczna będzie rozprowadzać ładunek lub pasażerów w sieci bez takich ograniczeń. 
+
+==Rozszerzenia do widoku głównego i minimapy==
+
+Istnieje nakładka pokazująca schemat połączeń zarówno dla małej mapy, jak i głównej rzutni. Pokazuje on stacje i dostępne linie komunikacyjne. Połączenia są pokazane jako linie w różnych kolorach, w zależności od tego ile ładunku przewożą w stosunku do swoich możliwości. Żółte i czerwone odcienie są pokazane tylko wtedy, gdy dla wybranych ładunków włączony jest Cargodist i przy obliczaniu wykresu połączeń ustalono, że dane połączenie ma zbyt małą ładowność w stosunku do ilości ładunku, który ma być tam transportowany. W tym przypadku należy przypisać bardziej pojemne lub szybsze pojazdy do danego połączenia. Białe lub bladozielone odcienie pokazują, że łącze ma zbyt dużą pojemność dla transportowanego ładunku. W tym przypadku można wycofać niektóre pojazdy. Może to być jednak połączenie, w którym pojazdy celowo wracają puste po dostarczeniu na miejsce ładunku.
+
+Stacje są pokazane jako kwadraty w kolorze gracza. Im większe kwadraty, tym więcej ładunku jest produkowane i dostarczane do stacji przez okoliczne zakłady przemysłowe i domy. Legendę do schematu nałożonego na wykres widok główny można otworzyć z menu "mapa". Możesz wybrać, którzy gracze i które ładunki mają być tam wyświetlane. Nakładka na minimapę jest ograniczona do własnych połączeń. Istnieje również opcja wyboru dla których rodzajów ładunku mają być pokazywane połączenia na schemacie.
+
+==Rozszerzenia interfejsu stacji==
+
+Rozszerzony interfejs stacji pokazuje źródło, następnie "przez", czyli punkty przeładunkowe na trasie i "cel" - szacowane miejsce przeznaczenia dla ładunku oczekującego. Ostateczne miejsca przeznaczenia są tylko szacunkowe, nie oczekuj, że każda paczka ładunku pojedzie dokładnie w tym kierunku. Pakiety ładunków nigdy nie są dzielone na trasy, ale mogą być dzielone tak, aby pasowały do pojazdów różnych rozmiarów. Oznacza to, że bardzo trudno byłoby podać tutaj dokładne liczby. Na dłuższą metę jednak wszystko jest nadal wysyłane do właściwych miejsc przeznaczenia.
+
+Ładunek można '''grupować''' według stacji źródłowej, następnego skoku i celu podróży w dowolnej kolejności za pomocą rozwijanej listy "Group by" w górnym menu. Podgrupy są otwierane i zamykane za pomocą małych przycisków "+" i "-" na końcu linii. Możesz sortować wpisy w grupach i podgrupach według stacji, którą reprezentują lub według wyświetlanej ilości ładunku. Rozwijana powyżej rozwijana kolejność grupowania łączy w sobie wybór kryteriów sortowania z wyborem trybu wyświetlania (ładunek zaplanowany lub oczekujący).
+
+==Ustawienia zaawansowane==
+Po włączeniu automatycznej dystrybucji dla niektórych ładunków minie kilka dni gry, zanim ładunek zostanie faktycznie rozprowadzony. Dzieje się tak dlatego, że dystrybucja jest okresowo obliczana, a efekt można zobaczyć dopiero po pierwszym obliczeniu. Obliczenia wykonywane są na podstawie schematów połączeń. We wprowadzeniu wszystkie stacje w miastach A i B tworzyłyby jeden wykres połączeń. Jeśli w mieście C działa inna sieć autobusowa, która nie jest połączona z A ani B, to tworzy ona inny wykres połączeń. Im więcej wykresów połączeń istnieje w grze, tym dłużej trwa, zanim wszystkie zostaną obliczone.
+
+Możesz mieć wpływ na to, jak często będzie się rozpoczynać obliczanie nowego wykresu połączeń i ile czasu potrzeba na każde obliczenie z odpowiednimi ustawieniami w grupie "Dystrybucja towarów" w ustawieniach zaawansowanych. Pośrednio określa to maksymalną liczbę wykresów połączeń, które można obliczyć równolegle w dowolnym momencie. Obliczenia wykresów linków są wykonywane w osobnych sekcjach, oddzielonych od głównej gry. Wątki te są łączone w określonym czasie w celu utrzymania synchronizacji sieci. Dla większości gier na większości komputerów zarówno ustawienia interwału, jak i czasu mogą być nieco zmniejszone, aby zmniejszyć opóźnienie pomiędzy zmianami w rozkazach i reakcjach wykresu łącza. Jednak jeśli ustawisz je zbyt nisko, gra będzie regularnie zawieszać się w oczekiwaniu na zakończenie jakiegoś skryptu obliczającego schemat połączeń. Domyślne ustawienia są dostosowane do bardzo dużych gier na wolnych komputerach, tak aby to się nigdy nie wydarzyło. Jest jeszcze jedno ustawienie - określa ono dokładność obliczeń schematu. Im dokładniejsze obliczenia, tym dłużej trwa ich zakończenie. Jeśli zmienisz to ustawienie, powinieneś zrównoważyć je z ustawieniem czasu.
+
+Ustawienie "wpływ odległości na dystrybucję" określa, o ile więcej ładunku jest wysyłane do pobliskich stacji niż do stacji oddalonych. Prawdopodobnie nie będziesz chciał zmieniać ustawień nasycenia krótkiej ścieżki, z wyjątkiem celów debugowania. 
+
+==Ograniczenia==
+
+Cargodist nie bierze pod uwagę niektórych poleceń z atrybutami "rozładuj wszystko", "przeładunek", "nie rozładowuj" lub "nie ładować" podczas tworzenia schematu połączeń. Nadal nie można poprawnie oszacować przepustowości powiązanych połączeń, jeśli masz zarówno pojazdy z takimi ustawieniami, jak i bez nich na tej samej trasie. Sprawdzi on jednak, czy polecenia pozwalają w ogóle na transport ładunku z dowolnego źródła na tych połączeniach. Oznacza to, że nie powinno się być w stanie stworzyć przy pomocy tych poleceń nie dającego się przewieźć ładunku.
+
+Warunkowe skoki poleceń są z definicji problematyczne. Możesz stworzyć niezdefiniowany problem dla algorytmu tworzenia schematu połączeń poprzez uzależnienie poleceń pojazdu od procentu załadunku. Kształt schematu połączeń decyduje o tym, jaki ładunek będzie załadowany przez pojazd. Załadowany ładunek określa, w którą stronę pojazd zmierza, a to z kolei decyduje o kształcie wykresu połączeń. Niektóre z pozostałych warunków są bardzo trudne do przewidzenia z góry bez symulacji całej gry do momentu, w którym mają być one oceniane w praktyce. Algorytmy tworzenia wykresów połączeń i kierowania na trasy ładunków radzą sobie z tym problemem w sposób praktyczny i bez względu na okoliczności - zawsze chciwy. Oznacza to, że załadują ładunek do każdej stacji, do której potencjalnie można dotrzeć przy danych warunkach i nie rozładują ładunku, który trafia do jednej z tych stacji.
+
+Algorytm użyty do oceny warunków i załadowania/rozładowania bazował na tym, ale ta strategia była nieoptymalna, ponieważ ten sam ładunek byłby załadowany i rozładowany na tej samej stacji.
+
+Już od OpenTTD 1.4 bez problemu możesz tworzyć w poleceniach takie rzeczy:
+
+ Idź do LOADING STATION
+ Idź do DROP1
+ Kiedy procent załadowania jest równy 0 idź do LOADING STATION
+ Idź do DROP2
+ Kiedy procent załadowania jest równy 0 idź do LOADING STATION
+ Idź do DROP3
