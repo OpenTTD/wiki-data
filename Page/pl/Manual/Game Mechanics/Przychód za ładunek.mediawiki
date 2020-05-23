@@ -1,0 +1,132 @@
+[[Translation:en/Manual/Game Mechanics/Cargo income]]
+
+==W skrócie==
+
+O wysokości kwoty zarobionej przy dostawie [[pl/Manual/Ładunek|ładunku]] decydują cztery czynniki: rodzaj, kwota, odległość i dni w podróży. Innymi słowy, jest to iloczyn stawki opłaty za ładunek, ilości ładunku, odległości tranzytowej i czynnika czasu zależnego od ilości dni w podróży.
+
+Przed OpenTTD 1.0/r17437 przewóz [[pl/Manual/Base Set/Cargos/Kosztowności|kosztowności]] na odległość mniejszą niż 10 kratek nie dawał żadnych pieniędzy.
+
+Odległość tranzytowa jest mierzona po kratkach metodą Manhatańską ''[https://en.wikipedia.org/wiki/Taxicab_geometry (zobacz (po angielsku) na Wikipedii)]'' pomiędzy stacją początkową a docelową.
+
+Wskaźnik czasu karze powolny transport. Każdy rodzaj ładunku ma dwie liczby dni, ''Days1'' i ''Days2'', które wyznaczają granice między "szybkim", "średnim" i "wolnym" transportem.
+
+'''Uwaga:''' Jeden "dzień" na tej stronie to w rzeczywistości 2,5 dnia w grze. Więc jeśli days_in_transit = 4, to używasz 4 w kolejnych obliczeniach, ale w rzeczywistości ładunek jest już 10 dni w tranzycie. Jeśli chcemy otrzymać wynik (przychód za transport) w złotówkach, wartość w funtach należy pomnożyć przez 6.
+
+<!--
+<math>
+I(c,a,d,t)=c_\mathrm{Base} \cdot a \cdot d \cdot \max\left(31,
+\begin{cases}
+255 & t \le c_\mathrm{Days1} \\
+255 - (t-c_\mathrm{Days1}) & c_\mathrm{Days1} < t \le c_\mathrm{Days1} + c_\mathrm{Days2} \\
+255 - 2(t-c_\mathrm{Days1}) + c_\mathrm{Days2} & t > c_\mathrm{Days1} + c_\mathrm{Days2} 
+\end{cases}\right)\cdot\frac{1}{2^{21}}
+</math>
+-->
+
+[[File:en/Manual/Game Mechanics/Income Formula.png|Income Formula.png]]
+
+Dochód (ładunek, kwota, odległość, czas) = stawka płatności za ładunek ...
+
+Funkcja ta ma następującą postać:
+
+[[File:en/Manual/Game Mechanics/Income vs time.png]]
+
+==Stałe==
+
+{| class="wikitable sortable" style="text-align:right"
+! Cargo Type !! Base payment rate !! Days1 !! Days2
+|-
+|[[pl/Manual/Base Set/Cargos/Baterie|Baterie]]||4322||2||30
+|-
+|[[pl/Manual/Base Set/Cargos/Bąbelki|Bąbelki]]||5077||20||80
+|-
+|[[pl/Manual/Base Set/Cargos/Cola|Cola]]||4892||5||75
+|-
+|[[pl/Manual/Base Set/Cargos/Cukier|Cukier]]||4437||20||255
+|-
+|[[pl/Manual/Base Set/Cargos/Diamenty|Diamenty]]||5802||10||255
+|-
+|[[pl/Manual/Base Set/Cargos/Drewno|Drewno]]||5005||15||255
+|-
+|[[pl/Manual/Base Set/Cargos/Drewno|Drewno]] ''(w klimacie Tropikalnym)''||7964||15||255
+|-
+|[[pl/Manual/Base Set/Cargos/Kauczuk|Kauczuk]]||4437||2||20
+|-
+|[[pl/Manual/Base Set/Cargos/Kosztowności|Kosztowności]]||7509||1||32
+|-
+|[[pl/Manual/Base Set/Cargos/Kukurydza|Kukurydza]]||4322||4||40
+|-
+|[[pl/Manual/Base Set/Cargos/Napoje gazowane|Napoje gazowane]]||6250||30||50
+|-
+|[[pl/Manual/Base Set/Cargos/Owoce|Owoce]]||4209||0||15
+|-
+|[[pl/Manual/Base Set/Cargos/Papier|Papier]]||5461||7||60
+|-
+|[[pl/Manual/Base Set/Cargos/Pasażerowie|Pasażerowie]]||3185||0||24
+|-
+|[[pl/Manual/Base Set/Cargos/Plastik|Plastik]]||4664||30||255
+|-
+|[[pl/Manual/Base Set/Cargos/Poczta|Poczta]]||4550||20||90
+|-
+|[[pl/Manual/Base Set/Cargos/Pszenica|Pszenica]]||4778||4||40
+|-
+|[[pl/Manual/Base Set/Cargos/Ropa|Ropa]]||4437||25||255
+|-
+|[[pl/Manual/Base Set/Cargos/Ropa|Ropa]] ''(w klimacie tropikalnym)''||4892||25||255
+|-
+|[[pl/Manual/Base Set/Cargos/Ruda miedzi|Ruda miedzi]]||4892||12||255
+|-
+|[[pl/Manual/Base Set/Cargos/Ruda żelaza|Ruda żelaza]]||5120||9||255
+|-
+|[[pl/Manual/Base Set/Cargos/Słodycze|Słodycze]]||6144||8||40
+|-
+|[[pl/Manual/Base Set/Cargos/Stal|Stal]]||5688||7||255
+|-
+|[[pl/Manual/Base Set/Cargos/Toffi|Toffi]]||4778||14||60
+|-
+|[[pl/Manual/Base Set/Cargos/Towary|Towary]]||6144||5||28
+|-
+|[[pl/Manual/Base Set/Cargos/Wata cukrowa|Wata cukrowa]]||5005||10||25
+|-
+|[[pl/Manual/Base Set/Cargos/Węgiel|Węgiel]]||5916||7||255
+|-
+|[[pl/Manual/Base Set/Cargos/Woda|Woda]]||4664||20||80
+|-
+|[[pl/Manual/Base Set/Cargos/Zabawki|Zabawki]]||5574||25||255
+|-
+|[[pl/Manual/Base Set/Cargos/Zboże|Zboże]]||4778||4||40
+|-
+|[[pl/Manual/Base Set/Cargos/Złoto|Złoto]]||5802||10||40
+|-
+|[[pl/Manual/Base Set/Cargos/Żywiec|Żywiec]]||4322||4||18
+|-
+|[[pl/Manual/Base Set/Cargos/Żywność|Żywność]]||5688||0||30
+|}
+
+==Wizualizacja==
+
+Poniższy wykres przedstawia dochód z dostarczenia 20 pasażerów na odległość '''100''' kratek przy różnych prędkościach. Oś pionowa to dochód w £, a oś pozioma to prędkość w km/h.
+
+[[File:en/Manual/Game Mechanics/Speed vs income.png]]
+
+Jak widać, prędkość pojazdu ma zasadniczy wpływ do około 50 km/h, w którym to momencie zaczyna się wyrównywać. (Wzrost jest logarytmiczny.) Zgodnie z powyższym równaniem, dochód za pasażerów dostarczanych z prędkością 100 km/h wynosi 96,2% dochodu dostarczanego z prędkością 600 km/h. Ponieważ zwiększanie prędkości przynosi zwiększa zyski coraz wolniej, często lepiej jest zoptymalizować inne czynniki, takie jak pojemność pojazdu - zwłaszcza w przypadku samolotów (z których każdy znajduje się daleko na prawo od tego wykresu) lub krótszych tras (gdzie prędkość ma mniejszy wpływ, co wkrótce zobaczymy).
+
+Większe odległości są bardziej wrażliwe na prędkość. Przyjrzyjmy się dostawom pasażerów powyżej '''500''' kratek:
+
+[[File:en/Manual/Game Mechanics/Speed1.png]]
+
+Tym razem dochód przy 100 km/h wynosi tylko 67,1% dochodu przy 600 km/h, co oznacza, że szybszy pojazd znacznie zwiększy nasze dochody.
+
+Ponadto otrzymujemy bardzo ciekawy wykres, kiedy wykreślimy odległość w stosunku do dochodu (przy tej samej liczbie 20 pasażerów, przy prędkości 100 km/h):
+
+[[File:en/Manual/Game Mechanics/Distance vs income.png]]
+
+Co to oznacza? Przy około 600 kratkach zaczynamy zarabiać coraz mniej pieniędzy, ponieważ spadek wartości spowodowany wiekiem ładunku przezwycięża wzrost wartości spowodowany dłuższym dystansem. Ponadto, jeżeli dokładnie przeanalizujesz powyższe równanie, zauważysz, że jeżeli dostawa ładunku potrwa zbyt długo, składowa czasu nigdy nie będzie niższa niż 31. Oznacza to, że w przypadku bardzo długich tras składowa odległości przewyższa składową czasu, co w praktyce oznacza, że dni na trasie tranzytowej nie są już wliczane do wartości. (Należy pamiętać, że nie jest to długość pokonanej trasy, lecz odległość według metody wspomnianej powyżej).
+
+Co z tym zrobić? Jeśli pojazd jest szybszy, większe odległości mogą być osiągnięte bez spadku przychodów. Oto przykład pokazujący dochód dla pojazdu o prędkości 300 km/h na różnych odległościach:
+
+[[File:en/Manual/Game Mechanics/Distance vs income2.png]]
+
+Podobne wykresy można narysować w grze za pomocą nowego [http://www.tt-forums.net/viewtopic.php?f=33&t=31984 patcha do rysowania wykresów].
+
+[[Category:pl/Ładunek]]
