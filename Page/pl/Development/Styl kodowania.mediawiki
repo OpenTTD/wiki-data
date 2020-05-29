@@ -1,0 +1,481 @@
+[[Translation:en/Development/Coding style]]
+
+
+<!-- {{DevDoc}} -->
+{{pl/Development/Rozwój}}
+
+'''Dlaczego ustawiony styl kodowania jest ważny'''<br>
+Ten projekt jest projektem typu open source. Aby open source działał zgodnie z przeznaczeniem, wiele osób powinno być w stanie zrozumieć kod. Oznacza to, że istnieje dobrze udokumentowany i jednolity przepływ kodu.
+Nie musi to wcale oznaczać, że współtwórca nie powinien pisać zoptymalizowanego, ale tajemniczego kodu - zawsze należy dbać o wydajność. Jednak inni programiści muszą zrozumieć kod, co oznacza skomplikowane części kodu '''muszą''' mieć dobrą dokumentację.
+
+'''Dlaczego wymagamy, aby WSZYSTKO było udokumentowane'''<br>
+To, co dla niektórych jest proste, dla innych może wydawać się bardzo skomplikowane. Dokumentacja pomaga tym innym. Każdy powinien być w stanie poprawić kod. Ale głównym powodem jest to, że jeśli twórcy łatek chcą, aby ich łatki zostały dodane do wspólnej bazy kodu, kod musi zostać sprawdzony przez jednego lub więcej programistów. Dokumentacja znacznie ułatwia przeglądanie.
+
+== Styl kodowania dla OpenTTD ==
+=== Funkcje ===
+* Użyj nazw funkcji [http://www.wikipedia.org/wiki/Camelcase CamelCase] bez podkreślenia.
+* Otwieranie nawiasu klamrowego '''{''' dla funkcji zaczyna się w następnym wierszu.
+* Użyj Foo() zamiast Foo(void).
+<pre>
+void ThisIsAFunction()
+{
+}
+</pre>
+=== Zmienne ===
+* Nazwy zmiennych są pisane małymi literami i używają "_"  jako separatora.
+* Zmienne globalne są poprzedzone znakiem podkreślenia. ("_") Użyj nazw opisowych, ponieważ wiodące podkreślenia są często używane w zmiennych systemowych / kompilatorowych.
+* do własnych członków klas należy zawsze odwoływać się za pomocą "this->"
+* Wskaźniki i odniesienia powinny mieć symbol odniesienia obok nazwy (zgodność z bieżącym kodem).
+* Zmienne zadeklarowane jeden pod drugim powinny mieć swój typ, nazwę lub operator odniesienia oraz operator przypisania wyrównany spacjami.
+* Istnieje wiele nazw dla wielu zmiennych. Są to (ale nie wyłącznie): Vehicle *u, *v, *w; Stacja  *st; Miasto *t; Window *w; Silnik *e.
+* W przypadku wielu instancji użyj liczb "*t1, *t2" lub postfiksów "*st_from, *st_to" .
+* Deklaruj zmienne przy pierwszym użyciu.
+* Zadeklaruj iteratory w swojej pętli.
+* W „stałych wskaźnikach” występuje spacja między '*' a "const pointers"
+<pre>
+int     number         = 10;
+Vehicle *u_first_wagon = v->next;
+int     value          = v->value;
+
+uint32 _global_variable = 3750;
+
+static const char * const _global_array[] = {
+	"first string",
+	"second string",
+	"another string",
+	"last string followed by comma",
+};
+
+protected:
+	char protected_array[10];
+
+for (int i = 0;;);
+</pre>
+*Podaj zmienne nazwy celowe, to zwiększa czytelność kodu
+<pre>
+bool is_maglev_train = true;
+if (!is_maglev_train) DoSomething();
+</pre>
+*Niektóre osoby lubią wprowadzać kopie zmiennych w celu zwiększenia czytelności, co może marnować pamięć. Jednak w niektórych przypadkach, szczególnie w fragmentach kodu, które są często nazywane, sensowne jest buforowanie niektórych obliczonych zmiennych.
+<pre>
+/* Unoptimized code:
+ * foo is not touched inside the loop!
+ */
+for (uint8 i = 0; i < 100000; i++) {
+	/* Do something */
+	if (value_to_check == (foo * 4) % 5 + 6) DoSomething();
+	/* Do something else */
+}
+
+/* Better:
+ * The used value of foo is calculated outside the loop.
+ */
+const uint32 bar = (foo * 4) % 5 + 6;
+for (uint8 i = 0; i < 100000; i++) {
+	/* Do something */
+	if (value_to_check == bar) DoSomething();
+	/* Do something else */
+}
+</pre>
+
+=== Wyliczenia / stałe statyczne ===
+*Wyliczenia przechowują liczby całkowite, które należą do siebie logicznie (typy szyn, identyfikatory ciągów itp.).
+* Nazwy wyliczeń używają również CamelCase.
+* Wszystkie wyliczniki to wielkie litery ze słowami "_".
+* Wyliczenia nie są używane do przechowywania pojedynczych liczb.
+* Wyliczenia mają kolejne numery LUB (OR)
+* Wyliczenia mają następujące po sobie potęgi dwóch. Potęgi dwóch (bitów) są zapisywane szesnastkowo lub za pomocą operatora zmiany biegów.
+* Wyliczenia mogą mieć specjalne wyliczniki: "_BEGIN", "_END" i "INVALID_" ). Patrz przykład.
+* Nieprawidłowy zawsze ma wartość 0xFF, 0xFFFF, 0xFFFFFFFF.
+* Inne wartości specjalne są kolejno mniejsze niż nieprawidłowe.
+* Zmienne zawierające wyliczniki powinny mieć typ wyliczenia.
+<pre>
+enum DiagDirection {
+	DIAGDIR_BEGIN = 0,
+	DIAGDIR_NE  = 0,
+	DIAGDIR_SE  = 1,
+	DIAGDIR_SW  = 2,
+	DIAGDIR_NW  = 3,
+	DIAGDIR_END,
+	INVALID_DIAGDIR = 0xFF,
+	BROKEN_DIAGDIR = 0xFE,
+};
+
+enum {
+	DEPOT_SERVICE       = (1 << 0),
+	DEPOT_MASS_SEND     = (1 << 1),
+	DEPOT_DONT_CANCEL   = (1 << 2),
+	DEPOT_LOCATE_HANGAR = (1 << 3),
+};
+
+DiagDirection enterdir = DIAGDIR_NE;
+</pre>
+*Liczby przechowujące pojedyncze lub nieskorelowane dane są stałymi statycznymi. Mogą korzystać z konwencji nazewnictwa wyliczeń.
+Przykład:
+<pre>
+static const int MAXIMUM_STATIONS = 42;
+</pre>
+*Wyliczenia są przydatne w kodzie GUI: Gdy widżety są wyliczane, dostęp do nich jest łatwiejszy podczas wielu operacji. Dodatkowo zmiany spowodowane zmodyfikowanymi sekwencjami widgetów wymagają mniej adaptacji kodu. Jeśli widget jest używany w ten sposób, jego nazwa wyliczeniowa powinna być obecna w komentarzu za odpowiednią definicją widgetu.
+<pre>
+/** Enum referring to the widgets of the build rail depot window */
+enum BuildRailDepotWidgets {
+	BRDW_CLOSEBOX = 0,
+	BRDW_CAPTION,
+	BRDW_BACKGROUND,
+	BRDW_DEPOT_NE,
+	BRDW_DEPOT_SE,
+	BRDW_DEPOT_SW,
+	BRDW_DEPOT_NW,
+};
+/* ... */
+/** Widget definition of the build rail depot window */
+static const Widget _build_depot_widgets[] = {
+{   WWT_CLOSEBOX,   RESIZE_NONE,     7,     0,    10,     0,    13, STR_00C5, STR_..},   // BRDW_CLOSEBOX
+{    WWT_CAPTION,   RESIZE_NONE,     7,    11,   139,     0,    13, STR_...,  STR_...},  // BRDW_CAPTION
+{      WWT_PANEL,   RESIZE_NONE,     7,     0,   139,    14,   121, 0x0,      STR_NULL}, // BRDW_BACKGROUND
+{      WWT_PANEL,   RESIZE_NONE,    14,    71,   136,    17,    66, 0x0,      STR_..},   // BRDW_DEPOT_NE
+{      WWT_PANEL,   RESIZE_NONE,    14,    71,   136,    69,   118, 0x0,      STR_..},   // BRDW_DEPOT_SE
+{      WWT_PANEL,   RESIZE_NONE,    14,     3,    68,    69,   118, 0x0,      STR_..},   // BRDW_DEPOT_SW
+{      WWT_PANEL,   RESIZE_NONE,    14,     3,    68,    17,    66, 0x0,      STR_..},   // BRDW_DEPOT_NW
+{   WIDGETS_END},
+};
+</pre>
+*Komentarze do wartości wyliczeniowych powinny zaczynać się od "///<" , aby włączyć dokumentację doxygen
+<pre>
+enum SomeEnumeration {
+	SE_BEGIN = 0,        ///< Begin of the enumeration, used for iterations
+	SE_FOO = 0,          ///< Used for xy
+	SE_BAR,              ///< Another value of the enumeration
+	SE_SUB,              ///< Special case for z
+	SE_END,              ///< End of the enumeration, used for iterations
+};
+</pre>
+
+=== Kontrola przepływu ===
+* Przed nawiasami wstaw spację w instrukcjach '''if''', '''switch''', '''for''' i '''while''' .
+* Używaj nawiasów klamrowych i umieszczaj zawarte instrukcje w ich własnych wierszach (np. Nie umieszczaj ich bezpośrednio po '''if''' ).
+* Otwieranie nawiasów klamrowych '''{''' pozostaje na pierwszej linii, zamykanie nawiasów klamrowych '''}''' dostaje linię do siebie (z wyjątkiem '''}''' poprzedzającego '''else''' , który powinien znajdować się w tym samym wierszu, co '''else''' ).
+* Gdy zawarta jest tylko jedna instrukcja, nawiasy można pominąć. W takim przypadku umieść pojedynczą instrukcję w tym samym wierszu, co poprzednie słowo kluczowe ('''if''', '''while''' etc.). Należy pamiętać, że jest to dozwolone tylko w przypadku instrukcji bez klauzuli '''else''' .
+* Wszystkie upadki muszą być udokumentowane za pomocą komentarza „UPADEK PRZEZ” ( FALL THROUGH ).
+* Makra NOT_REACHED() można używać w domyślnych konstrukcjach, które nigdy nie powinny zostać osiągnięte.
+* Bezwarunkowe pętle są zapisywane za pomocą '''dla (;;) {'''
+
+<pre>
+if (a == b) {
+	Foo();
+} else {
+	Bar();
+}
+
+if (very_large_checks &&
+		spread_over_two_lines) {
+	Foo();
+}
+
+if (a == b) Foo();
+
+switch (a) {
+	case 0: DoSomethingShort(); break;
+
+	case 1:
+		DoSomething();
+		/* FALL THROUGH */
+
+	case 2:
+		DoMore();
+		b = a;
+		break;
+
+	case 3: {
+		int r = 2;
+
+		DoEvenMore(a);
+		/* FALL THROUGH */
+	}
+
+	case 4: {
+		int q = 345;
+
+		DoIt();
+		break;
+	}
+
+	default:
+		NOT_REACHED();
+}
+
+for (int i = 0; i < 10; i++) {
+	Foo();
+	Bar();
+}
+</pre>
+
+=== Klasy===
+* Nazwy klas również używają CamelCase.
+* Klasy powinny mieć sekcje „publiczne”, „chronione” i „prywatne” ( "public", "protected", i "private" ).
+* W tej sekcji kolejność jest następująca: typy, stałe elementy statyczne, elementy statyczne, elementy, konstruktory / destruktory, metody statyczne, metody.
+* Odchylenia od powyższej kolejności są dozwolone, gdy dyktuje to kod (np. Wymagana jest stała statyczna dla typedef)
+* Metody i elementy powinny być pogrupowane logicznie.
+* Wszystkie te reguły sortowania czasami są ze sobą sprzeczne. W takim przypadku należy kierować się zdrowym rozsądkiem, co zwiększa czytelność kodu.
+* Implementacja metody powinna wskazywać, czy jest ona wirtualna czy podobna za pomocą komentarza.
+* Bardzo krótkie metody mogą mieć definicję jednowierszową (jeśli są zdefiniowane w zakresie klasy).
+<pre>
+class ThisIsAClass {
+public:
+	typedef Titem_   *ItemPtr;
+private:
+	static const int MAX_SIZE = 500;
+	int              size;
+	ItemPtr          *items;
+
+public:
+	explicit ThisIsAClass();
+	~ThisIsAClass();
+
+	int GetSize() { return this->size; }
+	virtual void Method();
+};
+
+/*virtual*/ void Class::Method()
+{
+	this->size *= 2;
+}
+</pre>
+
+=== Szablony ===
+Szablony są bardzo potężnym narzędziem C++, ale mogą łatwo pomylić początkujących. A zatem:
+* Szablony należy dokumentować w bardzo jasny i pełny sposób. Nigdy nie zakładaj niczego w dokumentacji.
+* słowo kluczowe szablonu i układ szablonu mają osobną linię. nazwy typowe to "T" lub poprzedzone "T", liczby całkowite otrzymują pojedynczą wielką literę lub opisową nazwę poprzedzoną przez "T".
+<pre>
+template <typename T, typename Tsomething, int N, byte Tnumber_of_something>
+int Func();
+</pre>
+
+* Jeśli piszesz jedną lub więcej klas szablonów w dedykowanym pliku nagłówkowym, użyj file.hpp dla jego nazwy zamiast file.h. Dzięki temu inni dowiedzą się, że jest to biblioteka szablonów (obejmuje także implementację), a nie tylko nagłówek z deklaracjami.
+
+=== Inne ważne zasady ===
+* Umieść spację przed i po operatorach binarnych: "a + b", "a == b", "a & b", "a <<= b" etc. Wyjątek stanowią ".", "->" i "[]" (bez spacji) i ","  (tylko spacja po nim).
+* Umieść nawias w miejscu, które poprawia czytelność: "*(b++)" instead of "*b++", and "if ((a & b) && c == 2)" zamiast "if (a & b && c == 2)" .
+* Nie umieszczaj deklaracji zewnętrznych w plikach implementacyjnych (tj. cpp).
+* Używaj const tam, gdzie to możliwe.
+* Nie wpisuj wyliczeń i struktur.
+* Nie traktuj nie-flag jak flag: użyj "if (char_pointer != NULL && *char_pointer != '\0')", nie "if (char_pointer && *char_pointer)" .
+* Użyj "free(p)" zamiast „"if (p != NULL) free(p)". "free(NULL)" nikomu nie zaszkodzi.
+* Brak spacji końcowych. Serwer svn nie zezwala na tabulatory ani spacje na końcu linii.
+* Używaj tabulatorów tylko do wcięcia od początku linii.
+* Długość linii jest nieograniczona. W praktyce przydatne może być podzielenie długiej linii. Podczas dzielenia dodaj dwie zakładki przed drugą częścią.
+* '#' Instrukcji preprocesora przechodzi do pierwszej kolumny wiersza. Wcięcie odbywa się po znaku '#' (ponowne użycie tabulatorów).
+* Użyj /* */ do komentarzy jednowierszowych.
+* Użyj // na końcu wiersza poleceń, aby zaznaczyć komentarze.
+** Jednak użyj /* */ po # instrukcji preprocesora, ponieważ // powoduje ostrzeżenia w niektórych kompilatorach i/lub może mieć niepożądane skutki uboczne.
+* C++ jest definiowany przy użyciu zestawu znaków ASCII. Nie używaj innych zestawów znaków, nawet w komentarzach.
+* OpenTTD zawiera niektóre źródła Objective-C (*.mm, używane przez OSX), które mają specjalną składnię wywołania metody obiektowej: "[ obj doStuff:foo ]" . Proszę użyć spacji po wewnętrznej stronie nawiasów, aby odróżnić składnię tablicy C .
+
+== Dokumentacja ==
+Używamy [http://doxygen.org/ Doxygen] do automatycznego generowania dokumentacji z kodu źródłowego. Skanuje pliki źródłowe w poszukiwaniu „rozpoznawalnych” komentarzy. 
+*'''Uczyń swoje komentarze rozpoznawalnymi.'''
+Komentarze Doxygen zaczynają się od następującego stylu:
+ /**
+ ///<
+Użyj /** dla wieloliniowych bloków komentarzy. Użyj ///< dla komentarzy jednowierszowych dla zmiennych. Użyj //!< do komentarzy jednowierszowych w plikach .hpp  NoAI.
+W przypadku bloków komentarzy w funkcji zawsze używaj /* */ lub //. Użyj // tylko jeśli komentarz znajduje się w tym samym wierszu co instrukcja, w przeciwnym razie użyj /* */.
+
+=== Pliki ===
+*Umieść komendę @file w komentarzu w stylu JavaDoc na początku pliku, a następnie opis.
+<pre>
+/** 
+ * @file
+ * This is the brief description.
+ * This is the detailed description here and on the following lines.
+ */
+</pre>
+{{en/Warning|If a file lacks a '''file comment block''' then NO entities in that file will be documented by Doxygen!}}
+
+=== Funkcje ===
+*Dokumentacja powinna być jak najbliższa rzeczywistemu kodowi, aby zmaksymalizować szansę na synchronizację.
+** Komentarze do funkcji znajdują się w pliku .cpp.
+** Komentarze do wstawianych plików znajdują się w pliku .h/.hpp.
+* Małe wstawki mogą mieć krótki 3 lub 4-liniowy komentarz w stylu JavaDoc.
+* Dokumentuj całkowicie większe funkcje.
+* Dokumentuj również oczywiste parametry i zwracane wartości!
+
+<pre>
+/**
+ * A brief explanation of what the function does and/or what purpose it serves.
+ * Then follows a more detailed explanation of the function that can span multiple lines.
+ *
+ * @param foo Explanation of the foo parameter
+ * @param bar Explanation of the bar parameter
+ * @return The sum of foo and bar (@return can be omitted if the return type is void)
+ *
+ * @see SomeOtherFunc()
+ * @see SOME_ENUM
+ * 
+ * @bug Some bug description
+ * @bug Another bug description which continues in the next line
+ *           and ends with the following blank line
+ *
+ * @todo Some to-do entry
+ */
+static int FooBar(int foo, int bar)
+{
+	return foo + bar;
+}
+</pre>
+
+=== Klasy ===
+*Dokument struktury przypomina funkcje:
+<pre>
+/**
+ * A short description of the struct.
+ * More detailed description of the its usage.
+ *
+ * @see [link to anything of interest]
+ */
+struct foo {
+}
+</pre>
+
+=== Polecenia strukturalne JavaDoc ===
+
+Ta tabela pokazuje polecenia, których powinieneś używać z OpenTTD. Pełna lista to [http://www.stack.nl/~dimitri/doxygen/commands.html tutaj].
+
+{|
+!Command!!Action!!width="200"|Example
+|-
+|'''@attention'''||Starts a paragraph where a message that needs attention may be entered. The paragraph will be indented.||@attention Whales crossing!
+|-
+|'''@brief'''||Starts a paragraph that serves as a brief description. For classes and files the brief description will be used in lists and at the start of the documentation page. For class and file members, the brief description will be placed at the declaration of the member and prepended to the detailed description. A brief description may span several lines (although it is advised to keep it brief!).||@brief This is the brief description.
+|-
+|'''@bug'''||Starts a paragraph where one or more bugs may be reported. The paragraph will be indented. Multiple adjacent @bug commands will be joined into a single paragraph. Each bug description will start on a new line. Alternatively, one @bug command may mention several bugs.||@bug Memory leak in here?
+|-
+|'''@note'''||Starts a paragraph where a note can be entered. The paragraph will be indented.||@note Might be slow
+|-
+|'''@todo'''||Starts a paragraph where a TODO item is described. The description will also add an item to a separate TODO list. The two instances of the description will be cross-referenced. Each item in the TODO list will be preceded by a header that indicates the origin of the item.||@todo Better error checking
+|-
+|'''@warning'''||Starts a paragraph where one or more warning messages may be entered. The paragraph will be indented.||@warning Not thread safe!
+|-
+| ||<small>'''Function related commands'''</small>||
+|-
+|'''@return'''||Starts a return value description for a function.||@return a character pointer
+|-
+|'''@param'''||Starts a parameter description for a function parameter with name <parameter-name>. Followed by a description of the parameter. The existence of the parameter is checked and a warning is given if the documentation of this (or any other) parameter is missing or not present in the function declaration or definition.<br><br>The @param command has an optional attribute specifying the direction of the attribute. Possible values are "in" and "out".||@param  n    The number of bytes to copy<br>@param[out] dest The memory area to copy to.<br>@param[in]  src  The memory area to copy from.
+|-
+|'''@see'''||Starts a paragraph where one or more cross-references to classes, functions, methods, variables, files or URL may be specified. Two names joined by either :: or # are understood as referring to a class and one of its members. One of several overloaded methods or constructors may be selected by including a parenthesized list of argument types after the method name. [http://www.stack.nl/~dimitri/doxygen/autolink.html Here] you can find detailed information about this feature.||@see OtherFunc()
+|-
+|'''@b'''||Displays the following word using a bold font. Equivalent to &lt;b&gt;word&lt;/b&gt;. To put multiple words in bold use &lt;b&gt;multiple words&lt;/b&gt;.||...@b this and @b that...
+|-
+|'''@c / @p'''||Displays the parameter <word> using a typewriter font. You can use this command to refer to member function parameters in the running text. To have multiple words in typewriter font use &lt;tt&gt;multiple words&lt;/tt&gt;.||... the @p x and @p y coordinates are used to...
+|-
+|'''@arg / @li'''||This command has one argument that continues until the first blank line or until another @arg / @li is encountered. The command can be used to generate a simple, not nested list of arguments. Each argument should start with an @arg / @li command.||@arg @c AlignLeft left alignment.<br>@arg @c AlignCenter center alignment.<br>@arg @c AlignRight right alignment
+|-
+|'''@n'''||Forces a new line. Equivalent to and inspired by the printf function.||@n
+|}
+
+=== Więcej na temat Doxygen i JavaDoc ===
+
+Doxygen zna dwa różne rodzaje komentarzy:
+*''Brief descriptions'': one-liners , które z grubsza opisują tę funkcję ([http://docs.openttd.org/annotated.html przykład])
+*''Detailed descriptions'': jak sama nazwa wskazuje, zawierają one szczegółową funkcję/cel opisywanego bytu ([http://docs.openttd.org/structBridge.html przykład])
+Możesz pominąć jedno lub umieścić je w różnych miejscach, ale dla tego samego bytu dozwolony jest tylko jeden krótki i jeden szczegółowy opis.
+
+Doxygen zna trzy tryby dokumentowania bytu:
+* Przed entity
+* Po entity
+* W innym pliku
+Ten ostatni jest nieco trudniejszy w utrzymaniu, ponieważ prototyp encji, którą opisuje, jest przechowywany w kilku miejscach (np. Plik .h i plik z opisami). Oprócz tego, że kod jest łatwiejszy do odczytania, ułatwia także pominięcie ważnego kroku aktualizacji opisu bytu, jeśli został zmieniony - i wszyscy wiemy, dlaczego tak się nie stało ;)<br>
+Z tych powodów użyjemy tylko dwóch pierwszych schematów dokumentacji.
+
+
+Doxygen obsługuje style komentarzy Qt i JavaDoc:
+*Qt przykład stylu: '''int i; //!< Licznik dla głównej pętli'''
+*JavaDoc style example: '''int i; /**< Licznik dla głównej pętli */'''
+Obsługuje także więcej stylów komentarzy, ale te dwa są znormalizowane. W przypadku OTTD będziemy używać stylu JavaDoc. Jednym z powodów jest to, że ma funkcję, której nie oferuje styl Qt: bloki komentarzy w stylu JavaDoc automatycznie rozpoczną krótki opis, który kończy się na pierwszej kropce, po której następuje spacja lub nowy wiersz. Wszystko później będzie również częścią szczegółowego opisu. 
+
+
+Ogólna struktura komentarza w stylu JavaDoc to
+ /**
+  * This is the brief description. And this sentence contains some further explanations that will appear in the detailed description only.
+  */
+i wynikowe opisy tego bloku byłyby:
+*''Brief description'': To jest krótki opis.
+*''Detailed description'': To jest krótki opis. To zdanie zawiera dalsze wyjaśnienia, które pojawią się tylko w szczegółowym opisie.
+Rozróżnienia między krótkim i szczegółowym opisem dokonuje kropka, po której następuje spacja/nowa~linia, więc jeśli chcesz użyć tego w krótkim opisie, musisz uciec spacji/nowej~linii: 
+ /**
+  * This is a brief description (e.g.\ using only a few words). Details go here.
+  */
+
+Jeśli robisz komentarz w jednym wierszu, użyj:
+ int i; ///< This is the description.
+
+Również w bloku komentarza można dołączyć tak zwane polecenia strukturalne, które mówią Doxygenowi, co następuje. Zasadniczo ich obszar działania zaczyna się po słowie polecenia, a kończy po napotkaniu pustej linii lub innego polecenia. Również wiele wystąpień tego samego polecenia strukturalnego w bloku komentarza lub encji odsyłającej będzie zwykle dołączanych do danych wyjściowych dokumentacji.
+
+==Wiadomość Zatwierdzenia==
+Aby osiągnąć spójną całość i ułatwić pisanie dziennika zmian, oto kilka wskazówek dotyczących komunikatów zatwierdzania.
+Na serwerze git znajduje się skrypt kontrolny (dostępny również dla klientów, patrz poniżej), aby upewnić się, że wszyscy przestrzegamy tych zasad.
+
+Pierwszy wiersz wiadomości musi być zgodny: 
+ <keyword>( #<issue>| <commit>(, (<keyword> #<issue>|<commit>))*)?: ([<section])? <Details>
+
+Słowa kluczowe to:
+* Dodaj, funkcja: Dodawanie nowych rzeczy. Różnica między „Feature” a „Add” jest nieco subiektywna. „Funkcja” dla rzeczy z punktu widzenia użytkownika, „Dodaj” dla innych.
+* Zmiana: zmiana zachowania z punktu widzenia użytkownika.
+* Usuń: Usunięcie czegoś z punktu widzenia użytkownika.
+* Zmiana kodu, czyszczenie: zmiany bez zamierzonej zmiany zachowania z punktu widzenia użytkownika. Różnica między „zmianą kodu” a „porządkiem” jest dość subiektywna.
+* Napraw, przywróć: Naprawianie rzeczy.
+* Dokument, aktualizacja: zmiany w dokumentacji, przyrosty wersji, zatwierdzenia przez tłumacza.
+* Przygotuj: Przygotowanie do większych zmian. Rzadko używane.
+
+Jeśli zatwierdzisz poprawkę dla [https://github.com/OpenTTD/OpenTTD/issues issue], dodaj odpowiedni numer wydania w postaci #NNNN. Zrób to również, jeśli zaimplementujesz funkcję z pasującym wpisem.
+
+W przypadku poprawek błędów, jeśli wiesz, jaką poprawkę wprowadzono (np. Regresję), należy również wspomnieć o tej poprawce tuż po prefiksie. Znalezienie powodującej problemy rewizji jest bardzo zachęcane backporting/branching/releases - o wiele łatwiej.
+
+Aby dodatkowo ustrukturyzować dziennik zmian, możesz dodać sekcje. Przykładami są:
+* „Sieć” dla zmian specyficznych dla sieci
+* „NewGRF” dla dodatków NewGRF
+* „YAPP”, „NPF”, w przypadku zmian tych funkcji
+* „OSX”, „Debian”, „win32”, w przypadku zmian specyficznych dla systemu operacyjnego
+
+Dalsze wyjaśnienia, ogólne dziwki itp. Nie wchodzą w pierwszą linię. Użyj nowej linii dla nich.
+
+Kompletne przykłady:
+* Poprawka: [YAPF] Nieskończona pętla w pathfinderze.
+* Poprawka # 5926: [YAPF] Nieskończona pętla w pathfinderze.
+* Poprawka 80dffae130: Ostrzeżenie o niepodpisanym unarnym minusie.
+* Poprawka # 6673, 99bb3a95b4: Przechowuj ustawienia odmiany mapy w grze samej.
+* Revert d9065fbfbe, Poprawka nr 5922: ClientSizeChanged jest wywoływany tylko przez WndProcGdi, który ma już muteks.
+* Poprawka nr 1264, Poprawka nr 2037, Poprawka nr 2038, Poprawka nr 2110: Przepisz jądro autoreplace.
+
+
+==Inne wskazówki==
+===Usuń końcowe białe znaki===
+Aby dowiedzieć się, czy/gdzie masz końcowe białe znaki, możesz użyć następującego polecenia (unix/bash):
+<pre>grep -n -R --include "*.[ch]" '[ 	]$' * | grep --invert-match ".diff" | grep --invert-match ".patch"</pre>
+Automatically removing whitespace is also possible with the following shell script (Note that it only checks .c, .cpp, .h, .hpp and .mm files):
+<pre>
+#!/bin/sh
+IFS='
+'
+for i in Makefile `find . -name \*.c -o -name \*.cpp -o -name \*.h -o -name \*.hpp -o -name \*.mm`
+do
+  (
+    echo '%s/[ 	]\{1,\}$/'
+    echo w
+    echo q
+  ) | ed $i 2> /dev/null > /dev/null
+done
+</pre>
+
+===Zainstaluj haczyki zatwierdzania git po stronie klienta===
+
+Haki po stronie klienta wykonują różne kontrole, gdy zatwierdzasz zmiany lokalnie.
+* Sprawdzanie białych znaków i wcięć.
+* [[en/Development/Coding style]] sprawdzenie.
+
+Zdobądź haki:
+ git clone https://github.com/OpenTTD/OpenTTD-git-hooks.git openttd_hooks
+Install the hooks, assuming "openttd" is your work tree folder:
+ cd openttd/.git/hooks
+ ln -s -t . ../../../openttd_hooks/hooks/*
+
+[[Category:en/Development]] [[Category:pl/Rozwój]]
