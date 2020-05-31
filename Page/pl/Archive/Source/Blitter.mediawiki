@@ -1,0 +1,44 @@
+[[Translation:en/Archive/Source/Blitter]]
+
+
+<div style="float: right;">__TOC__</div>
+Głównym zadaniem blittera jest rysowanie duszków na ekranie. Musi obsługiwać odwzorowanie kolorów i efekty przezroczystości. Zapewniono dodatkowe metody wstępnego kodowania danych sprite'a w formacie preferowanym przez blittera.
+
+Następujące blitters istnieją w SVN:
+
+* '''32bpp-anim''': 32bpp Animation Blitter (palette animation)
+* '''32bpp-optimized''': 32bpp Optimized Blitter (no palette animation)
+* '''32bpp-simple''': 32bpp Simple Blitter (no palette animation)
+* '''32bpp-sse2''': 32bpp SSE2 Blitter (no palette animation)
+* '''32bpp-sse4''': 32bpp SSE4 Blitter (no palette animation)
+* '''32bpp-sse4-anim''': SSE4 Blitter (palette animation)
+* '''32bpp-ssse3''': 32bpp SSSE3 Blitter (no palette animation)
+* '''8bpp-optimized''': 8bpp Optimized Blitter (compression + all-ZoomLevel cache)
+* '''8bpp-simple''': 8bpp Simple Blitter (relative slow, but never wrong)
+* '''null''': Null Blitter (does nothing)
+
+== Metody ==
+
+=== uint8 GetScreenDepth() ===
+Uzyskaj głębię ekranu, dla której ten blitter działa. To jest albo: 8, 16, 24 or 32.
+
+=== void Draw(Blitter::BlitterParams *bp, BlitterMode mode, ZoomLevel zoom) ===
+
+Narysuj obraz na ekranie, biorąc pod uwagę liczbę parametrów zdefiniowanych powyżej.
+
+=== void DrawColorMappingRect(void *dst, int width, int height, int pal) ===
+
+Narysuj colortable na ekranie. Jest to: kolor ekranu jest odczytywany i przeglądany w palecie w celu dopasowania do nowego koloru, który następnie jest ponownie wyświetlany na ekranie.
+
+=== Sprite *Encode(SpriteLoader::Sprite *sprite, Blitter::AllocatorProc *allocator) ===
+
+Convert a sprite from the loader to our own format.
+
+[[en/Archive/Development/SpriteLoader]] wywołuje tę metodę dla każdego ładowanego prawdziwego duszka. Ta funkcja musi przekonwertować dane sprite z [[en/RGBAM format]] na preferowany format blittera. W przypadku blitterów 8bpp będzie to zwykle oznaczać upuszczenie danych RGBA i użycie tylko indeksowanej części M..
+
+=== const char *GetRenderer() ===
+
+Get the renderer this class depends on.
+
+[[Category:en/Development]] [[Category:pl/Rozwój]]
+[[Category:en/Archive/Graphics Development Documentation]] [[Category:pl/Dokumentacja rozwoju grafik]]
