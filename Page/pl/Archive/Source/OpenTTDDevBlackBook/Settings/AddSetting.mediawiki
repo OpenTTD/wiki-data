@@ -1,0 +1,241 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/Settings/AddSetting]]
+<!--{{DevDoc}}-->{{pl/Development/Rozwój}}
+
+W tym artykule krótko wyjaśniono, jak można utworzyć niestandardową zmienną ustawień, zmieniając kod źródłowy OpenTTD. Samouczek opisuje proces dodawania dwóch dodatkowych opcji do okna dialogowego ''Ustawienia zaawansowane'' - jednej opcji liczby całkowitej i jednej wartości logicznej.
+
+
+
+==Sections==
+The different settings categories can be seen from the ''Advanced Settings'' window:
+
+*[[en/Archive/Manual/Settings/Advanced Settings/Interface|Interface]]
+*[[en/Archive/Manual/Settings/Advanced Settings/Construction|Construction]]
+*[[en/Archive/Manual/Settings/Advanced Settings/Vehicles|Vehicles]]
+*[[en/Archive/Manual/Settings/Advanced Settings/Stations|Stations]]
+*[[en/Archive/Manual/Settings/Advanced Settings/Economy|Economy]]
+*[[en/Archive/Manual/Settings/Advanced Settings/Competitors|Competitors]]
+
+When adding the variables, minor single line settings get squeezed into their appropriate position in the list, while larger groups of settings are added at the end of the section. In this tutorial we are going to add two attributes to the Economy->Town section:
+
+* ''Enable Godzilla-mode'' (bool)
+* ''Number of Godzilla's'' (integer)
+
+It is strongly advised to use the [http://docs.openttd.org/ doxygen documentation] for reference while interacting with the source code.
+
+==Overview==
+During this tutorial, a number of files will be changed:
+
+* [http://svn.openttd.org/trunk/src/lang/english.txt english.txt]
+* [http://svn.openttd.org/trunk/src/settings_type.h settings_type.h]
+* [http://svn.openttd.org/trunk/src/settings_gui.cpp settings_gui.cpp]
+* [http://svn.openttd.org/trunk/src/table/settings.ini settings.ini]
+* [http://svn.openttd.org/trunk/src/saveload/saveload.cpp saveload.cpp]
+
+To understand this thoroughly - you are advised to look around in all these files and try to get a feeling with how they are structured and how things generally are done. 
+
+===Translation file - ''english.txt''===
+All text strings in OpenTTD are saved in language files. English is the only required translation - but if you know more languages you are welcome to add translations to those as well.
+
+We want to add 4 strings: 2 variable names, and 2 descriptions of those variables. Please note that all setting strings should have a ''STR_CONFIG_SETTING_'' prefix. extension. 
+
+<pre>
+STR_CONFIG_SETTING_ENABLE_GODZILLA                :{LTBLUE}Enable Godzilla mode {ORANGE}{STRING2}
+STR_CONFIG_SETTING_ENABLE_GODZILLA_HELPTEXT       :Enable/disable Godzilla mode
+STR_CONFIG_SETTING_NUMBER_GODZILLAS               :{LTBLUE}Number of Godzillas: {ORANGE}{STRING2} 
+STR_CONFIG_SETTING_NUMBER_GODZILLAS_HELPTEXT      :Enter how many Godzillas that should be present in the game (0-100)
+</pre>
+
+''(take a look at the [http://bundles.openttdcoop.org/eints/nightlies/LATEST/docs/index.html documentation for the Eints library] if you want to learn more about the string system)''
+
+These variables should be placed in a natural place - I put them just after <code>STR_CONFIG_SETTING_MODIFIED_ROAD_REBUILD_HELPTEXT</code>. Note that there are no tabs in this file, only spaces.
+
+===Variable declaration and settings section - ''settings_type.h''===
+The declaration of the variables are found in [http://svn.openttd.org/trunk/src/settings_type.h settings_type.h]. We need to find a suitable category - these are the choices:
+
+<code>
+ struct GameSettings {
+ 	 DifficultySettings   difficulty;         ///< settings related to the difficulty
+ 	 GameCreationSettings game_creation;      ///< settings used during the creation of a game (map)
+ 	 ConstructionSettings construction;       ///< construction of things in-game
+ 	 AISettings           ai;                 ///< what may the AI do?
+ 	 ScriptSettings       script;             ///< settings for scripts
+ 	 class AIConfig      *ai_config[MAX_COMPANIES]; ///< settings per company
+ 	 class GameConfig    *game_config;        ///< settings for gamescript
+ 	 PathfinderSettings   pf;                 ///< settings for all pathfinders
+ 	 OrderSettings        order;              ///< settings related to orders
+ 	 VehicleSettings      vehicle;            ///< options for vehicles
+ 	 EconomySettings      economy;            ///< settings to change the economy
+ 	 LinkGraphSettings    linkgraph;          ///< settings for link graph calculations
+ 	 StationSettings      station;            ///< settings related to station management
+ 	 LocaleSettings       locale;             ///< settings related to used currency/unit system in the current game
+ };
+</code>
+
+<code>EconomySettings</code> looks good - search for <code>struct EconomySettings</code> and add the declarations of the two variables:
+
+<code>
+ /** Settings related to the economy. */
+ struct EconomySettings {
+     // lots of other variables
+     bool godzilla_mode;            ///< Enables Godzilla mode
+     uint8 number_godzillas;        ///< Number of Godzillas
+ }
+</code>
+
+Note that the comments has a <code>/<</code> prefix for creating documentation with [http://docs.openttd.org/ doxygen]. 
+
+===Variable name in config file - ''settings_gui.cpp''===
+The name that the variable will have in [[en/Archive/Manual/Settings/Openttd.cfg]] are defined in [http://svn.openttd.org/trunk/src/settings_gui.cpp settings_gui.cpp]. Here the specific subpage the variable will be shown on is also chosen. 
+
+The Economy->Town looks like a good match, so we'll add these entries to <code>_settings_economy_towns[]</code>:
+
+<code>
+ SettingsPage *towns = environment->Add(new SettingsPage(STR_CONFIG_SETTING_ENVIRONMENT_TOWNS));
+ {
+     \\ lots of other entries
+     towns->Add(new SettingEntry("economy.godzilla_mode"));
+     towns->Add(new SettingEntry("economy.number_godzillas"));
+ }
+</code>
+
+===Variable specifics - ''settings.ini''===
+
+We need to add a set of instructions to OpenTTD so that it handles the data in the correct way. The way we are doing this is by adding blocks of data to [http://svn.openttd.org/trunk/src/table/settings.ini settings.ini] - each block representing one variable. 
+
+There are different data structures and advanced topics on this area, but we will focus on '''SDT_VAR''' and '''SDT_BOOL''' - the two most common used. Below is a sample configuration for our variables:
+
+<code>
+ [SDT_VAR]
+ base     = GameSettings
+ var      = economy.number_godzillas
+ type     = SLE_UINT8
+ from     = 189
+ to       = SL_MAX_VERSION
+ flags    = 0
+ guiflags = SGF_NEWGAME_ONLY
+ def      = 10
+ min      = 0
+ max      = 100
+ interval = 5
+ str      = STR_CONFIG_SETTING_NUMBER_GODZILLAS
+ strhelp  = STR_CONFIG_SETTING_NUMBER_GODZILLAS_HELPTEXT
+ strval   = STR_JUST_INT
+</code>
+
+Basically:
+
+*we have a variable that belongs to EconomySettings, which in turn belongs to GameSettings
+*the variable is called ''number_godzillas'' and is an 8-bit unsigned integer
+*the setting can only be changed before the game starts (hence the ''newgame'' guiflag)
+*default value is 10, min->max is 0-100 and each step is 5.
+*''STR_JUST_INT'' tells the game how to represent the data on screen.
+
+ [SDT_BOOL]
+ base     = GameSettings
+ var      = economy.godzilla_mode
+ from     = 189
+ to       = SL_MAX_VERSION
+ guiflags = 0
+ def      = false
+ str      = STR_CONFIG_SETTING_ENABLE_GODZILLA
+ strhelp  = STR_CONFIG_SETTING_ENABLE_GODZILLA_HELPTEXT
+
+The only change from above is that there is no gui flag - this setting may be altered inside a game. 
+
+Otherwise, if not specified, default values are used:
+
+ [defaults]
+ flags    = 0
+ guiflags = 0
+ interval = 0
+ str      = STR_NULL
+ strhelp  = STR_CONFIG_SETTING_NO_EXPLANATION_AVAILABLE_HELPTEXT
+ strval   = STR_NULL
+ proc     = NULL
+ load     = NULL
+ from     = 0
+ to       = SL_MAX_VERSION
+ cat      = SC_ADVANCED
+
+Try to find a natural place in the file for your settings. I placed it right below the ''economy.initial_city_size'' block.
+
+Below is a detailed explanation of some of the attributes:
+
+====Variable configuration options====
+
+* '''base''': GameSettings
+* '''var''': The variable name
+* '''type''': data size for the variable - not required for BOOL, but can be a variety of sizes; SLE_UINT8, SLE_INT16, SLE_UINT32, etc.   etc... pick what you need
+* '''flags''': Where to save data/network sync:
+
+{|
+|-
+| '''SLF_NOT_IN_SAVE''' - do not save with savegame, basically client-based
+|-
+| '''SLF_NOT_IN_CONFIG''' - do not save to config file
+|-
+| '''SLF_NO_NETWORK_SYNC''' - do not synchronize over network (but it is saved if SLF_NOT_IN_SAVE is not set)
+|-
+| '''SLF_ALLOW_CONTROL''' - allow control codes in the strings
+|-
+| '''SLF_ALLOW_NEWLINE''' - allow new lines in the strings
+|}
+* '''guiflags''': Affects how the option is displayed
+{|
+|-
+| '''SGF_0ISDISABLED''' - The feature is disabled (greyed out)
+|-
+| '''SGF_DISPLAY_ABS''' - display absolute value of the setting
+|-
+| '''SGF_MULTISTRING''' - the value represents a limited number of string-options (internally integer)
+|-
+| '''SGF_NETWORK_ONLY''' - this setting only applies to network games
+|-
+| '''SGF_CURRENCY''' - the number represents money, so when reading value multiply by exchange rate
+|-
+| '''SGF_NO_NETWORK''' - this setting does not apply to network games; it may not be changed during the game
+|-
+| '''SGF_NEWGAME_ONLY''' - this setting cannot be changed in a game
+|-
+| '''SGF_SCENEDIT_TOO''' - this setting can be changed in the scenario editor (only makes sense when SGF_NEWGAME_ONLY is set)
+|-
+| '''SGF_PER_COMPANY''' - this setting can be different for each company (saved in company struct)
+|}
+* '''def''': default value (true or false for BOOL, any valid value for VAR)
+* '''min''', '''max''', '''interval''': min value, max value and interval by which integer value increments/decrements when using the yellow arrows (only applicable to VAR, obviously) 
+* '''str''': the string used in the language file for the patch setting when displayed in the Patch Settings control panel. If you don't need to display it, just leave it as NULL.
+* '''strhelp''': the help string displayed when selecting the option in the menu.
+* '''strval''': What kind of value a SDT_VAL is. There are several options, but the most common are:
+** '''STR_JUST_INT''' - integer
+** '''STR_JUST_COMMA''' - float
+* '''proc''': the procedure to call when the value is changed.
+*'''from''', '''to''': Range of OpenTTD versions for which the setting is valid (see below)
+* '''cat''': Which category the setting belongs to. Defines if the setting is shown based on if basic, advanced or expert filtering is chosen in the filtering in the advanced settings menu.
+** SC_BASIC
+** SC_ADVANCED
+** SC_EXPERT
+
+====Making your build compatible with older savegames====
+[[File:en/Archive/Source/Setting tutorial small.png|right|frame|Final result]]
+
+If you don't use the flag <code>SLF_NOT_IN_SAVE</code>, OpenTTD will expect to find your variable in every savegame. Therefore, it's important to tell the game from which version this setting was added. The savegame version number is found near the start of [http://svn.openttd.org/trunk/src/saveload/saveload.cpp saveload.cpp]. 
+
+When OpenTTD loads a data chunk, it compares the savegame version it was compiled with, with the savegame version in the savegame. By checking the <code>to</code> and <code>from</code> attributes in the settings, it can see whether it supports the feature or not.
+
+This way, you can control whether your feature is saved, and if it is, whether that save is compatible with previous versions.
+
+'''Note:''' If you define any variables without the <code>SLF_NOT_IN_SAVE</code> flag in the settings, all saves made on your build will be incompatible with all other versions of OpenTTD. 
+
+To allow the opposite (load old games using your build), you'll have tell OpenTTD that you've introduced a new feature, and ''increase the savegame version''. If the current trunk is at version 160, and you have a new feature that to be saved along with the savefile, simply increase the savegame version. This is known as a ''savegame bump''.
+
+When a normal build of OpenTTD tries to load a savegame from your system, it will notice the savegame bump, and gracefully say ''Sorry, I cant load that - it's too new for me"''.
+
+However, when loading a game with a savegame version lower than the specified in your '''from''' attribute in your setting - OpenTTD will know that it wont find that setting in the savefile, and loading should go succeed.
+
+So for our example above, we bump the savegame to 189 in [http://svn.openttd.org/trunk/src/saveload/saveload.cpp saveload.cpp] and set <code>from</code> to 161 and <code>to</code> to <code>SL_MAX_VERSION</code> in both our blocks in [http://svn.openttd.org/trunk/src/table/settings.ini settings.ini].
+
+Now there's only one thing left to do - compile! I you've everything correct, you should see something similar as the picture to the right.
+
+
+[[Category:en/Archive/Source/OpenTTDDevBlackBook|P]] [[Category:pl/Archive/Source/OpenTTDDevBlackBook|P]]
+[[Category:en/Development]] [[Category:pl/Rozwój]]
