@@ -1,0 +1,442 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/Network/TCP]]
+ 
+<!--{{DevDoc}}-->{{pl/Development/Rozwój}}
+
+==Open TTD Protokół Sieciowy - TCP==
+===Lista pakietów===
+Lista pakietów jest uporządkowana w taki sam sposób, jak w definicji wyliczenia znajdującej się w ''network/core/tcp_game.h''
+{| border = "1"
+!Packet Name
+!Sent By
+!Function
+|-
+|PACKET_SERVER_FULL
+|Server
+|The network game has no more client left
+|-
+|PACKET_SERVER_BANNED
+|Server
+|Client IP appears in the ''openttd.cfg'' ban list
+|-
+|PACKET_CLIENT_JOIN
+|Client
+|Client is requesting to join the game
+|-
+|PACKET_SERVER_ERROR
+|Server
+|Inform that the client made an error
+|-
+|PACKET_CLIENT_COMPANY_INFO
+|Client
+|Client is requesting companies information
+|-
+|PACKET_SERVER_COMPANY_INFO
+|Server
+|Server Sends info about the companies
+|-
+|PACKET_SERVER_CLIENT_INFO
+|Server
+|Server Sends info about a client
+|-
+|PACKET_SERVER_NEED_PASSWORD
+|Server
+|Server is requesting a password from the Client
+|-
+|PACKET_CLIENT_PASSWORD
+|Client
+|Client is sending a password
+|-
+|PACKET_SERVER_WELCOME
+|Server
+|The client is joined and ready to receive his map
+|-
+|PACKET_CLIENT_GETMAP
+|Client
+|Client is requesting a map download
+|-
+|PACKET_SERVER_WAIT
+|Server
+|Server has something else to do, please wait
+|-
+|PACKET_SERVER_MAP
+|Server
+|Server is sending Map information
+|-
+|PACKET_CLIENT_MAP_OK
+|Client
+|Client has received the map
+|-
+|PACKET_SERVER_JOIN
+|Server
+|
+|-
+|PACKET_SERVER_FRAME
+|Server
+|Sends the current frame-counter to the client
+|-
+|PACKET_SERVER_SYNC
+|Server
+|Sends a sync-check to the client
+|-
+|PACKET_CLIENT_ACK
+|Client
+|
+|-
+|PACKET_CLIENT_COMMAND
+|Client
+|Client is sending a DoCommand to the Server
+|-
+|PACKET_SERVER_COMMAND
+|Server
+|Server is sending a DoCommand to the Client
+|-
+|PACKET_CLIENT_CHAT
+|Client
+|Client is sending Chat information
+|-
+|PACKET_SERVER_CHAT
+|Server
+|Server Sends a chat-packet to the client
+|-
+|PACKET_CLIENT_SET_PASSWORD
+|Client
+|Client is requesting a password change
+|-
+|PACKET_CLIENT_SET_NAME
+|Client
+|Client is requesting a name change
+|-
+|PACKET_CLIENT_QUIT
+|Client
+|Client quits the game
+|-
+|PACKET_CLIENT_ERROR
+|Client
+|
+|-
+|PACKET_SERVER_QUIT
+|Server
+|Server Informs connected clients that a client has left the game
+|-
+|PACKET_SERVER_ERROR_QUIT
+|Server
+|Server informs that a client made an error and is leaving the game
+|-
+|PACKET_SERVER_SHUTDOWN
+|Server
+|
+|-
+|PACKET_SERVER_NEWGAME
+|Server
+|
+|-
+|PACKET_SERVER_RCON
+|Server
+|Server sends remote console command results
+|-
+|PACKET_CLIENT_RCON
+|Client
+|Client sends a command to the console
+|-
+|PACKET_SERVER_CHECK_NEWGRFS
+|Server
+|Sends info about the used GRFs to the client
+|-
+|PACKET_CLIENT_NEWGRFS_CHECKED
+|Client
+|
+|-
+|PACKET_SERVER_MOVE
+|Server
+|
+|-
+|PACKET_CLIENT_MOVE
+|Client
+|
+|-
+|PACKET_SERVER_COMPANY_UPDATE
+|Server
+|This packet informs client what companies are passworded
+|-
+|PACKET_SERVER_CONFIG_UPDATE
+|Server
+|
+|-
+|PACKET_END
+|None
+|This packet is the last one in the enum
+|}
+
+
+===Packet Format===
+====Packets Sent by Server ====
+*PACKET_SERVER_CLIENT_INFO
+**uint32 Client Id
+**uint8 Client PlayAs
+**str Client Name
+
+
+*PACKET_SERVER_COMPANY_INFO
+**uint8 Network Company Info Version
+**bool More Data ?
+**uint8 Company Id
+**str Company Name
+**uint32 Inaugurated Year
+**uint64 Company Value
+**uint64 Money
+**uint64 Income
+**uint16 Performance
+**bool Password Protected
+**uint16[] Number of Vehicle per Type
+**uint16[] Number of Station per Type
+**str[] Client Name List
+
+
+*PACKET_SERVER_ERROR
+**uint8 Error Id (''network_data.h'')
+
+
+*PACKET_SERVER_CHECK_NEWGRFS
+**uint8 NewGrf Count
+**For Each Grf
+**uint32 Grf ID
+**uint8[16] Grf MD5 hash
+
+
+*PACKET_SERVER_NEED_PASSWORD
+**uint8 Password Type
+**uint32 Generation Seed
+**str Network Id
+
+
+*PACKET_SERVER_WELCOME
+**uint32 Client Id
+**uint32 Generation Seed
+**str Network Id
+
+
+*PACKET_SERVER_WAIT
+**uint8 Client Count waiting
+
+
+*PACKET_SERVER_MAP
+**uint8 Packet Map Type
+***MAP_PACKET_START
+****uint32 Frame Counter
+****uint32 Map Size
+***MAP_PACKET_NORMAL
+****[] Map information
+***MAP_END
+****nothing
+
+
+*PACKET_SERVER_JOIN
+**uint32 Client Id
+
+
+*PACKET_SERVER_FRAME
+**uint32 Frame Counter
+**uint32 Frame Counter Max
+
+
+*PACKET_SERVER_SYNC
+**uint32 Frame Counter
+**uint32 General Seed 1
+
+
+*PACKET_SERVER_COMMAND
+**uint8 Company Id
+**uint32 Command Id (''command.h'')
+**uint32 p1
+**uint32 p2
+**uint32 Tile
+**str Text
+**uint8 Call Back Id (''callback_table.c'')
+**uint32 Frame Number
+
+
+*PACKET_SERVER_CHAT
+**uint8 Action Id (''network_date.h'')
+**uint32 Client Id
+**str Message
+**uint64 Arbitrary Data
+
+
+*PACKET_SERVER_ERROR_QUIT
+**uint32 Client Id
+**uint8 Error Id (''network_data.h'' - NetworkErrorCode)
+
+
+*PACKET_SERVER_QUIT
+**uint32 Client Id
+
+
+*PACKET_SERVER_SHUTDOWN
+**nothing
+
+
+*PACKET_SERVER_NEWGAME
+**nothing
+
+
+*PACKET_SERVER_RCON
+**uint16 Colour
+**str Text
+
+
+*PACKET_SERVER_MOVE
+**uint32 Client Id
+**uint8 Company Id
+
+
+*PACKET_SERVER_COMPANY_UPDATE
+**uint16 Network Company Passworded
+
+
+*PACKET_SERVER_CONFIG_UPDATE
+**uint8 Max Companies
+**uint8 Max Spectators
+
+
+====Client Packets====
+
+*PACKET_CLIENT_COMPANY_INFO
+**nothing
+
+
+*PACKET_CLIENT_JOIN
+**str OpenTTD Revision (norev000 if no revision)
+**str Client Name (max NETWORK_NAME_LENGTH)
+**uint8 Play as Company id (1..MAX_COMPANIES)
+**uint8 Language ID
+**str Unique id to find the client back in server-listing
+
+
+*PACKET_CLIENT_NEWGRFS_CHECKED
+**nothing
+
+
+*PACKET_CLIENT_PASSWORD
+**uint8 NetworkPasswordType
+**str Password
+
+
+*PACKET_CLIENT_GETMAP
+**nothing
+
+
+*PACKET_CLIENT_MAP_OK
+**nothing
+
+
+*PACKET_CLIENT_ACK
+**uint32 current FrameCounter of the client
+
+
+*PACKET_CLIENT_COMMAND
+**uint8 CompanyID (0..MAX_COMPANIES-1)
+**uint32 CommandID (see command.h)
+**uint32 P1 (free variables used in DoCommand)
+**uint32 P2
+**uint32 Tile
+**str text
+**uint8 CallBackID (see callback_table.c)
+
+
+*PACKET_CLIENT_CHAT
+**uint8 ActionID (see network_data.h, NetworkAction)
+**uint8 Destination Type (see network_data.h, DestType);
+**uint32 Destination CompanyID/Client-identifier
+**str Message (max NETWORK_CHAT_LENGTH)
+**uint64 Some arbitrary number
+
+
+*PACKET_CLIENT_ERROR
+**uint8 ErrorID (see network_data.h, NetworkErrorCode)
+
+
+*PACKET_CLIENT_SET_PASSWORD
+**str Password
+
+
+*PACKET_CLIENT_SET_NAME
+**str Name
+
+
+*PACKET_CLIENT_QUIT
+**nothing
+
+
+*PACKET_CLIENT_RCON
+**str Password
+**str command
+
+
+*PACKET_CLIENT_MOVE
+**uint8 Company Id
+**str Password
+
+
+===Enumerate company information===
+This step is used by GUI in order to enumerate company information before connection to the server
+{| border = "1"
+!Client
+!Server
+|-
+|PACKET_CLIENT_COMPANY_INFO
+|&nbsp;
+|-
+|&nbsp;
+|PACKET_SERVER_COMPANY_INFO
+|}
+===Connecting to a server===
+This is a simple example of what is sent between client and server when joining a game.
+{| border = "1"
+!Client
+!Server
+|-
+|PACKET_CLIENT_JOIN
+|&nbsp;
+|-
+|&nbsp;
+|PACKET_SERVER_CHECK_NEWGRFS
+|-
+|PACKET_CLIENT_NEWGRFS_CHECKED
+|&nbsp;
+|-
+|&nbsp;
+|PACKET_SERVER_WELCOME
+|-
+|PACKET_CLIENT_GETMAP
+|&nbsp;
+|-
+|&nbsp;
+|PACKET_SERVER_MAP (multiple)
+|-
+|PACKET_CLIENT_MAP_OK
+|&nbsp;
+|-
+|&nbsp;
+|PACKET_SERVER_FRAME
+|-
+|PACKET_CLIENT_ACK
+|&nbsp;
+|-
+|&nbsp;
+|PACKET_SERVER_SYNC
+|-
+|&nbsp;
+|PACKET_SERVER_CLIENT_INFO
+|-
+|&nbsp;
+|PACKET_SERVER_JOIN
+|-
+|&nbsp;
+|PACKET_SERVER_CONFIG_UPDATE
+|-
+|&nbsp;
+|PACKET_SERVER_COMPANY_UPDATE
+|}
+===Utrzymanie połączenia z serwerem===
+<!--[[Category:Development]][[Category:OpenTTDDevBlackBook|N]]-->
+[[Category:pl/Rozwój]][[Category:pl/Archive/Source/OpenTTDDevBlackBook|N]]
