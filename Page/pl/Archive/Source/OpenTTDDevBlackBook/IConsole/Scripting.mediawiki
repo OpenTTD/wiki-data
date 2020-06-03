@@ -1,0 +1,97 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/IConsole/Scripting]]
+ 
+<!--{{DevDoc}}-->{{pl/Development/Rozwój}}
+W tym dokumencie wyjaśniono, jak korzystać ze skryptów konsoli.
+
+Jeśli chcesz przetestować poniższe skrypty, musisz je skompilować DEBUG=1.
+
+==Komendy==
+Komendy [also called Functions] są używane, aby umożliwić scripterowi dostęp do określonego aspektu kodu źródłowego OpenTTD. Obecnie zaimplementowano tylko niektóre podstawowe komendy. Dlatego obecnie mamy tylko pewien dostęp do funkcji OpenTTD.
+
+<pre>
+]screenshot
+</pre>
+Ta komenda powoduje, że OpenTTD robi zrzut ekranu bieżącego ekranu. Jest wykonywany natychmiast i nie zwraca wyniku.
+
+<pre>
+]random
+result = 41
+</pre>
+Ta koemnda powoduje, że system generuje liczbę losową. Jest wykonywany natychmiast i zwraca wynik. Jeśli wynik nie zostanie przypisany do zmiennej, zostanie zrzucony do konsoli. Jeśli chcesz dodać komende do konsoli, przeczytaj [[en/Archive/Source/OpenTTDDevBlackBook/IConsole/AddFunctions|HOWTO - Add Functions/Commands do Konsoli]]
+
+==Zmienne==
+Zmienne są używane do
+* Dostęp do zmiennych C zdefiniowanych w OpenTTD
+* Przechowuj informacje używane przez twój skrypt
+
+Język skryptowy może obsługiwać następujące typy zmiennych:
+* BOOLEAN [direct memory access]
+* BYTE [direct memory access]
+* UINT16 [direct memory access]
+* INT16 [direct memory access]
+* UINT32 [direct memory access]
+* INT32 [direct memory access]
+* POINTER [direct memory access]
+* STRING [instance based]
+
+Bezpośredni dostęp do pamięci? Na podstawie instancji? Uhm? <br>
+Bezpośredni dostęp do pamięci oznacza, że ​​pozycja pamięci zmiennej jest stała. Daje to możliwość zmiany zmiennych będących własnością OpenTTD bezpośrednio z konsoli.
+Na podstawie instancji oznacza, że ​​jeśli zmienna zostanie zmieniona z konsoli, otrzyma nowy adres pamięci, który wskazuje na nowo przydzielone miejsce w pamięci. Stare miejsce w pamięci jest zwalniane tylko wtedy, gdy zmienna jest używana tylko przez konsolę. Więc jeśli dodasz zmienną bajtową * OpenTTD do konsoli i spróbujesz zmienić jej zawartość .. nie zmienisz ciągu używanego przez OpenTTD, ale zmienisz zmienną w konsoli.
+
+Poniżej nazwy zmiennych są oznaczone symbolem "*" 
+
+<pre>
+]*temp_uint16
+*temp_uint16 = 0
+]*temp_uint16 ++
+*temp_uint16 = 1
+]*temp_uint16 --
+*temp_uint16 = 0
+]*temp_uint16 = 32
+*temp_uint16 = 32
+</pre>
+
+Większość typów zmiennych ma możliwość wykonywania różnych działań:
+
+{|
+| function || description
+|-
+|&nbsp;++ || increments the value
+|-
+|&nbsp;-- || decrements the value
+|-
+|&nbsp;= || assigns another value [dont try to use this to copy the value of one variable to another variable]
+|}
+
+Jeśli chcesz wiedzieć, jak dodawać zmienne do konsoli, przeczytaj [[en/Archive/Source/OpenTTDDevBlackBook/IConsole/AddVariables|HOWTO - Dodawanie Zmiennych do Konsoli]]
+
+=Funkcje [Commands with return values]=
+W niektórych przypadkach konieczne jest:
+* skopiuj wartość zwracaną przez komendę
+* przekaż wskaźnik zmiennej do Komendy [implemented in console rev 3]
+* skopiuj wartość jednej zmiennej do drugiej [implemented in console rev 3]
+
+==skopiuj wartość zwracaną przez komendę==
+<pre>
+]*temp_uint16 << random
+*temp_uint16 = 41
+</pre>
+But:
+<pre>
+]*temp_uint32 << random
+ERROR: variable type missmatch
+</pre>
+Ten błąd wystąpi, jeśli zwrócona wartość polecenia nie będzie tego samego typu co zmienna. Dobrze zakodowana funkcja [random is no example for this :D] może zrobić sztuczkę, aby wykryć, jaki typ zmiennej ma zwrócić. [token shifting] Czytaj [[en/Archive/Source/OpenTTDDevBlackBook/IConsole/AddFunctions|HOWTO - Dodanie Funkcji/Kommendy do Konsoli]]
+
+==przekazanie wskaźnika zmiennej do komendy==
+<pre>
+]varinfo @*temp_uint16
+</pre>
+
+==skopiowanie wartość jednej zmiennej do drugiej==
+<pre>
+*temp_uint16 << *temp_uint16_2
+</pre>
+
+<!--[[Category:OpenTTDDevBlackBook|S]]--> [[Category:pl/Archive/Source/OpenTTDDevBlackBook|S]]
+<!--[[Category:Console]]--> [[Category:pl/Manual/Konsola]]
