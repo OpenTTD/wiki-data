@@ -1,0 +1,53 @@
+[[Translation:en/Development/Server Admin Port Development]]
+ 
+<!--{{DevDoc}}-->{{pl/Development/Rozwój}}
+= Przegląd =
+Do portu administratora serwera można podłączyć się z dowolnego języka programowania obsługującego gniazda. Dokumentacja zawarta na tej stronie ma na celu pomóc w rozpoczęciu tworzenia klienta (lub biblioteki).
+
+Dokumenty OpenTTD GitHub zawierają przewodnik po [https://github.com/OpenTTD/OpenTTD/blob/master/docs/admin_network.md OpenTTD's admin network].
+
+== Biblioteki ==
+# [http://dev.openttdcoop.org/projects/joan JOAN] to przykład napisany w Javie, który może zrobić prawie wszystko, co oferuje Port Administratora.<br />
+# [http://dev.openttdcoop.org/projects/coan COAN] jest przykładem napisanym w języku C#, który jest bardziej ograniczony w swoich możliwościach, ale wciąż oferuje podstawy.<br /> 
+Oba te projekty są typu open source, więc mogą swobodnie korzystać z niego każdy, kto chce napisać własnego klienta dla portu administratora serwera OpenTTD. <br />
+(Dodaj własną do tej listy, jeśli są one dostępne bezpłatnie i/lub Open Source)
+
+== Podstawy ==
+Aby móc połączyć się z portem administratora na serwerze, musisz zrobić kilka rzeczy.
+
+# Będziesz musiał ustawić server_admin_port w [[pl/Archive/Manual/Settings/Openttd.cfg]]. Może to być gdzieś pomiędzy 0-65535, ale *NIE* musi być używane przez inne programy
+# Musisz także upewnić się, że ustawiłeś [[en/Archive/Manual/Settings/Admin password]]
+#* Jest to bardzo ważne, ponieważ jeśli nie ustawisz hasła administratora, OpenTTD *NIE* uruchomi nasłuchiwania dla portu administratora
+
+== Łączenie z portem administracyjnym ==
+Po skonfigurowaniu powyższych podstaw możesz teraz połączyć się. <br />
+Na tym etapie możesz utworzyć własną bibliotekę, jeśli nie ma jeszcze jednego wybranego języka lub możesz użyć jednej z istniejących bibliotek (patrz biblioteki powyżej). <br />
+JOAN zawiera przykład w postaci SimpleConsole, która rozszerza klasę OpenTTD. Podczas gdy COAN ma bardzo ograniczoną aplikację WinForms do zabawy.
+
+=== Tworzenie własnego ===
+Połączenie z portem administratora wymaga wysłania pakietu ADMIN_PACKET_ADMIN_JOIN na serwer.
+
+== Pakiety ==
+Oczekuje się, że format pakietów wysyłanych do Portu Admin.: <br />
+SIZE | TYPE | DATA <br />
+Gdy chcesz się połączyć, twój pakiet będzie podobny:
+0x1B 0x00 + 0x00 + "password" + 0x00 + "botname" + 0x00 + "version" + 0x00
+{|
+!Pole!!Rozmiar
+|-
+|Size||2 bajty
+|-
+|type||1 bajt
+|-
+!colspan="2"|Przykładowe dane
+|-
+|"password"||9 bajtów
+|-
+|"botname"||8 bajtów
+|- 
+|"version"|| 7 bytów
+|-
+|Total Size|| 27 Bajtów (0x1B)
+|}
+
+'''''Bardzo ważne jest, aby pamiętać o dodaniu pakietu do rozmiaru pakietu (pamiętaj, że +2 dla bajtów rozmiaru pakietu).''''' W powyższym przykładzie ładunek (typ i dane to 25 bajtów. +2 dla rozmiaru pakietu oznacza 27)
