@@ -1,0 +1,32 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/Map/SaveGame]]
+ 
+<!--{{DevDoc}}-->{{pl/Development/Rozwój}}
+<!--{{warning|The following information has not been confirmed for accuracy and may not be correct}}-->
+{{pl/Uwaga|Poniższe informacje nie zostały potwierdzone pod względem dokładności i mogą być niepoprawne}}
+
+== Format pliku zapisu ==
+Pliki zapisu (w tym pliki scenariuszy) składają się z 8-bajtowego nagłówka, po którym znajdują się rzeczywiste dane zapisu w formie skompresowanej lub zwykłej. Do tej pory OpenTTD obsługuje cztery typy formatów plików.
+
+=== Header ===
+
+{|
+| '''Offset''' || '''Rozmiar''' || '''Opis'''
+|-
+| 0 || 4 bajty || Tag formatu zapisu w postaci zwykłego tekstu (patrz poniżej)
+|-
+| 4 || uint32 || Wersja do zapisu w dużym formacie endian (obecnie jest SAVEGAME_VERSION * 0x10000)
+|}
+
+=== Tag formatu zapisu ===
+
+{|
+| '''Tag''' || '''Format treści zapisu'''
+|-
+| OTTD || Dane skompresowane przy użyciu LZO
+|-
+| OTTN || Zwykłe dane
+|-
+| OTTZ || Dane skompresowane przy użyciu Zlib
+|-
+| OTTX || Dane skompresowane przy użyciu LZMA
+|}
