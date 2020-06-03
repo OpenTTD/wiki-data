@@ -1,0 +1,89 @@
+[[Translation:en/Development/GUI Style Guide]]
+ 
+<!--{{DevDoc}}-->{{pl/Development/Rozwój}}
+<!--{{Incomplete}}-->{{en/Incomplete}}
+
+Ważny jest spójny wygląd interfejsu użytkownika.
+Ta strona dokumentuje, w jaki sposób program powinien prezentować się użytkownikowi i jak powinien reagować na interakcje użytkownika.
+
+== Układ okna ==
+Ponieważ OpenTTD jest grą z lat 90., powinien również mieć taki wygląd.
+
+{|
+| [[File:en/Development/Train depot example.png|frame|Train depot example]] || [[File:en/Development/Manufacturer offer.png|frame|Message window example]]
+|}
+
+Ponieważ w tym czasie na ekranie było mało miejsca, okna powinny być zwarte. Każdy element okna służy do wyświetlania informacji lub udostępniania
+interakcja użytkownika. W przypadku okien z mniejszą ilością informacji reguły te są nieco poluzowane, okno po prostu zadające pytanie tak/nie musi być ostatecznie zwarte.
+
+== Widgets ==
+A window should have a '''title bar'''. The title bar displays a text stating the contents of the window. Also note that the text string in the title bar is normally centred. For windows displaying data of a comapny, the background colour must be in the company colour. It can also be used to drag the window to a different position at the screen, and shade and unshade the window by using the mouse wheel. 
+
+At the left of the title bar, a '''closebox''' should exist to allow the user to close the window (a notable exception is the window in the intro screen). Preferably, that button should also be the only way to remove the window. If unsaved changes exist when the user closes the window, he should be made aware, so he can take appropriate action.
+
+At the right of the title bar, a grf debug button, a shading button, and sticky button may be positioned.
+A '''grf debug button''' (normally hidden, but enabled by a setting) is used to open a development window for monitoring the internal state of the grf. The button should only be added to the window if it displays an game object that has a grf to control its behaviour or appearance.
+
+A '''shading button''' is used to fold the window to just its title bar (and unfold it again to its full contents) to save screen space for windows that are not always needed. The button should only be used for windows that may stay open for a longer time.
+
+At the far right of the window, a '''sticky button''' may be added. It prevents a window from being closed when using the ''delete'' key (which closes all non-sticky, non-essential windows). Like the shading button, a sticky button should only be added for windows that may stay open for a longer time.
+
+If the window may be changed in size by the user, a '''resizebox''' should be available at the bottom right.
+
+A '''[[en/Archive/Source/OpenTTDDevBlackBook/Window/TextEdit|Text edit box]]''' is used to let users edit/type a text string. To edit the contents of an edit box, the user needs to click on the edit box to give it focus. Focused edit boxes has a flashing caret. When the user is done editing the edit box it is a good idea if it clicks on a button/panel etc. to unfocus the edit box since it is not possible to use hotkeys while the edit box is [[en/Archive/Source/OpenTTDDevBlackBook/Window/WidgetFocus#focus-levels|globally focused]]. There can only be maximum one edit box per window.
+
+
+{{en/Todo|panels, buttons}}
+
+== Focus ==
+W niektórych oknach warto domyślnie ustawić fokus na polu edycyjnym, ale jest z tym problem: gdy pola edycyjne są fokusowe, nie można używać żadnych klawiszy skrótu, ponieważ wszystkie dane z klawiatury są wysyłane do pola edycyjnego.
+
+Dlatego większość okien domyślnie nie powinna skupiać się na polach edycyjnych. Wyjątkiem są okna takie jak okno ciągu zapytania, którego jedynym celem jest umożliwienie użytkownikom edycji ciągu.
+
+Zobacz [[en/Archive/Source/OpenTTDDevBlackBook/Window/WidgetFocus|Widget Focus]] artykuł, aby uzyskać więcej informacji na temat działania systemu ustawiania ostrości. Local vs. global focus etc.
+
+== Kolory okien ==
+Kolor okna wskazuje rodzaj informacji, które są wyświetlane i nimi manipulowane.
+
+{| class="wikitable" border="1" style="margin: 1em auto 1em auto"
+|-
+! Colour     !! Kind of window
+|-
+| Brown      || Game setup, neutral windows (smallmap, town/industry list)
+|-
+| Purple     || Options and settings
+|-
+| Grey       || Company windows (vehicles, finances), developer tools (newgrf debug, AI debug), save/load windows
+|-
+| Green      || Construction windows, toolbars
+|-
+| Light blue || Multi player selection (network windows)
+|-
+| Light red  || Other authorities (towns, industries)
+|-
+| Blue       || Non-urgent messages
+|-
+| Red        || Messages requiring attention (errors, quit message)
+|-
+| White      || News paper
+|-
+|}
+
+== Mouse actions ==
+A user should be able to do as much as possible with just a '''single left mouse click'''. For lists, such a click means selection of an item in the
+list. For buttons, a click means executing the action attached to the button. For related actions that also occur often, the combination of holding down the CTRL button and clicking with the left mouse button may trigger the related action.
+However, such a click should only be used as a short-cut. Not all users know that you can use the CTRL key, and such a user should be able to perform the same action without using the CTRL key, in some way.
+
+A '''double left click''' is useful to execute an action with a selected item in a list. As with the CTRL key, not all users may understand that double clicking is possible, so it is preferable to also have an other means (for example a button) to achieve the same action (eg by pressing a button).
+
+'''Pressing the right mouse button''' should pop up a help text about the part of the window that the mouse pointer is. If the part has special interaction possibilities, such as double clicking or use of the CTRL key, it should be mentioned in the help text.
+
+'''Dragging the mouse''' while holding down the left mouse button should be used to denote movement of the item pointed to at the start of the drag, to the position of the mouse when the button is released. Typcial use is to move an item to another position (for example, a wagon).
+
+The '''mouse wheel''' should be used to express a up and/or down motion. Typical use is with moving up and down of scroll bars and lists, but it is also used with shading and unshading of windows (by using the mouse wheel at the title bar).
+Another use is zoom and unzoom.
+
+== Działania klawiatury ==
+
+* '''delete''' klawisz zamyka wszystkie nietypowe okna.
+* '''control''' klawisz w połączeniu z gestem myszy wzmacnia ten gest.
