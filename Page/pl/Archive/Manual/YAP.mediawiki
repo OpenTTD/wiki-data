@@ -9,7 +9,7 @@ YAPF to trzecia próba stworzenia algorytmu pathfinder dla OpenTTD. Pierwszym no
 == Opcje konfiguracji ==
 <!--{{Expand|Expand the configuration}}--> {{pl/Rozbudowa|Rozwiń konfigurację}}
 
-== See Also ==
+== Zobacz też ==
 * [[en/Archive/Manual/Settings/New train pathfinding]]
 * [[en/Archive/Manual/Settings/New global pathfinding]]
 
@@ -17,52 +17,52 @@ YAPF to trzecia próba stworzenia algorytmu pathfinder dla OpenTTD. Pierwszym no
 <!--{{Note|The remainder of this article is meant for developers.}}-->
 {{pl/Informacja|Pozostała część tego artykułu jest przeznaczona dla programistów.}}
 
-=== Improvements over NPF ===
-According to a [http://www.tt-forums.net/viewtopic.php?t=32774 forum post by KUDr], there are 3 major improvements in YAPF compared to NPF:
+=== Ulepszenia w porównaniu do NPF ===
+Według [http://www.tt-forums.net/viewtopic.php?t=32774 forum post by KUDr], istnieją 3 główne ulepszenia w YAPF w porównaniu do NPF:
 
-*NPF creates a node for each tile while YAPF extends the node by following the tile/trackdir until something important (station, waypoint, choice, etc.) is seen. This node extension is called a "segment".
-*YAPF caches its segments - begin/end tile/trackdir, cost, last signal tile/trackdir, etc.
-*YAPF has a much more complex structure - it is template based to allow the compiler to optimize calls between YAPF modules by inlining.
+*NPF tworzy węzeł dla każdego kafelka, podczas gdy YAPF rozszerza węzeł, postępując zgodnie z kafelkiem / trackdir, aż zobaczysz coś ważnego (stacja, punkt trasy, wybór itp.). To rozszerzenie węzła nazywa się "segment".
+*YAPF buforuje swoje segmenty - początek/koniec kafelek/trackdir, koszt, ostatni kafelek sygnału/trackdir itp.
+* YAPF ma znacznie bardziej złożoną strukturę - jest oparty na szablonach, aby umożliwić kompilatorowi optymalizację połączeń między modułami YAPF poprzez wstawianie.
 
-These improvements increase the performance of YAPF over NPF but also make the code more complex and harder to understand.
+Te ulepszenia zwiększają wydajność YAPF w porównaniu z NPF, ale także sprawiają, że kod jest bardziej złożony i trudniejszy do zrozumienia.
 
-=== Tuning ===
-Several options of YAPF can be tuned up. I will not describe all of them because they are clear what they do.<br>
-There are 4 options (3 actually) that are quite mysterious:
+=== Strojenie''(Tuning)'' ===
+Można dostosować kilka opcji YAPF. Nie opiszę ich wszystkich, ponieważ są jasne, co robią .<br>
+Istnieją 4 opcje (właściwie 3), które są dość tajemnicze:
 
 rail_look_ahead_max_signals = 10<br/>
 rail_look_ahead_signal_p0 = 500<br/>
 rail_look_ahead_signal_p1 = -100<br/>
 rail_look_ahead_signal_p2 = 5<br/>
 
-First one checks how many signals YAPF have look ahead of our train. The next options are used to calculate penalty array using following formula, where the parameter "i" is the value of the rail_look_ahead_max_signals:
+Najpierw sprawdza się, ile sygnałów YAPF patrzy przed naszym pociągiem. Kolejne opcje są używane do obliczania tablicy kar za pomocą następującego wzoru, w którym parametr "i" jest wartością sygnałów:
 
 p=p0 + p1*i + p2*i*i
 
-So, we have following array of signal penalties for the specified number in rail_look_ahead_max_signals as result:
+Tak więc mamy następującą tablicę kar sygnałowych dla określonej liczby w wyniku rail_look_ahead_max_signals:
 
 p[]={500,405,320,245,180,125,80,45,20,5}
 
-Now some examples:
+Teraz kilka przykładów:
 
 For (the first) 3 signals: Red,Red,Red: penalty=500+405+320=1225<br/>
 For (the first) 4 signals: Red,Green,Red,Green: penalty=500+0+320+0=820<br/>
 
-The final cost will be added to path cost. This can help to reduce traffic jams when we have some trains blocking a way (4 semaphores ahead) and we have alternate way.
+Ostateczny koszt zostanie dodany do kosztu ścieżki. Może to pomóc w zmniejszeniu korków, gdy mamy pociągi blokujące drogę (4 semafory przed nami) i mamy alternatywny sposób.
 
-This is internal YAPF stuff and is not supposed to be tuned really. Developer put a lot of effort to calculate right values into p0,p1,p2.
+To jest wewnętrzny materiał YAPF i nie powinien być dostrajany. Deweloper włożył wiele wysiłku w obliczenie właściwych wartości w p0, p1, p2.
 
-The only tunable value is p1 penalty. Fine value range is from -100 to -90. If you go outside that range, penalty array will have weird values and trains would start to go not as you expect.
+Jedyną regulowaną wartością jest kara p1. Dokładny zakres wartości wynosi od -100 do -90. Jeśli wyjdziesz poza ten zakres, tablica kar będzie miała dziwne wartości i pociągi zaczną jechać inaczej niż się spodziewasz.
 
-If you want more agresive load balancing go for p1=-90 and you will get following array:
+Jeśli chcesz bardziej agresywnego równoważenia obciążenia, wybierz p1 = -90, a otrzymasz następującą tablicę:
 
 p[]={500,415,340,275,220,175,140,115,100,95}
 
-=== Dependent Projects ===
-Pathfinding is very important part of OpenTTD, and introducing a new pathfinder means extensive changes in the code. This was the reason, why development of some new features had been put on hold, until YAPF was finished. As YAPF is now fully introduced, these projects may again be developed.
+=== Projekty zależne ===
+Odnajdywanie ścieżek jest bardzo ważną częścią OpenTTD, a wprowadzenie nowego pathfindera oznacza duże zmiany w kodzie. To był powód, dla którego wstrzymano rozwój niektórych nowych funkcji, dopóki YAPF nie został ukończony. Ponieważ YAPF jest już w pełni wprowadzony, projekty te mogą zostać ponownie opracowane.
 
-==== Speed Signs ====
-There was a modest project to control which trains go on which tracks based on their speed, [http://www.tt-forums.net/viewtopic.php?t=24187 Speed Signs]. So far this project hasn't been picked up after implementing YAPF. Other patches that allow player to control train pathfinding can be found in [http://www.tt-forums.net/viewforum.php?f=33 development forums].
+==== Znaki prędkości ====
+Był skromny projekt kontrolujący, które pociągi jeżdżą po których torach w zależności od ich prędkości, [http://www.tt-forums.net/viewtopic.php?t=24187 Speed Signs]. Jak dotąd ten projekt nie został odebrany po wdrożeniu YAPF. Inne łatki, które pozwalają graczowi kontrolować identyfikację trasy pociągu, można znaleźć w [http://www.tt-forums.net/viewforum.php?f=33 development forums].
 
-[[Category:en/Manual/Settings & Preferences]] [[Category:pl/Manual/Ustawienia]]
-[[Category:en/Manual/Vehicles]] [[Category:pl/Manual/Pojazdy]]
+<!--[[Category:Settings & Preferences]]--> [[Category:pl/Manual/Ustawienia]]
+<!--[[Category:Vehicles]]--> [[Category:pl/Manual/Pojazdy]]
