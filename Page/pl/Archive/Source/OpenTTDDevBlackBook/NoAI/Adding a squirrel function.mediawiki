@@ -1,0 +1,21 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/NoAI/Adding a squirrel function]]
+ 
+<!--{{DevDoc}}-->{{pl/Development/Rozwój}}
+
+==Dodanie funkcji squirrel==
+Aby udostępnić nową funkcję C + w kodzie Squirrel frameworku NoAI, wykonaj:
+* Zaimplementuj funkcję
+** Dodaj deklarację funkcji do jednej z klas w ''src/ai/api/ai_*.hpp'' , 
+** Dodaj także implementację do pliku ''.cpp'' ,
+** Aby uświadomić Squirrel o zmianach, wygeneruj nowy plik interfejsu Squirrel za pomocą ''squirrel_export.sh'' . Wywołaj ten skrypt z katalogu ''src/ai/api'' .
+* Ponownie skompiluj OpenTTD w zwykły sposób, aby udostępnić nową funkcję środowisku NoAI.
+* Napisz przypadki testowe dla nowej funkcji w ''bin/ai/regression'' .
+** W ''regression.nut'' , dodaj kod Squirrel, który testuje twoją nową funkcję i wyświetla wyniki.
+** W ''regression.txt'' , dodaj nowe oczekiwane wyjście.
+* Uruchom test regresji, wykonując polecenie ''make regression'' . Po znalezieniu różnic zostaną one wyświetlone.
+* Dodaj funkcję do dziennika zmian NoAI w ''src/ai/api/ai_changelog.hpp'' .
+
+Gdy wszystko działa zgodnie z oczekiwaniami, możesz napisać kod wiewiórki, aby cieszyć się nową funkcją.
+
+<!--[[Category:OpenTTDDevBlackBook|N]]--> [[Category:pl/Archive/Source/OpenTTDDevBlackBook|N]]
+<!--[[Category:Development]]--> [[Category:pl/Rozwój]]
