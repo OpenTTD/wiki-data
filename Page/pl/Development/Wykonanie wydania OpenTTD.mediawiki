@@ -1,0 +1,55 @@
+[[Translation:en/Development/Doing an OpenTTD release]]
+ 
+<!--{{DevDoc}}-->{{pl/Development/Rozwój}}
+
+Te rzeczy należy zrobić dla każdego wydania:
+
+==Wersja wstępna ''(Prerelease)''==
+* backportowanie wszystkich poprawek
+
+* uruchomienie "make regression"
+
+* zaktualizowanie wszystkie ciągi wersji wydania, szczególnie w następujących plikach:
+** readme.txt
+** os/debian/changelog
+** os/rpm/openttd.spec
+** os/windows/installer/install.nsi
+** os/os2/installer/make_installer.cmd
+** src/script/api/ai_changelog.hpp
+** src/script/api/game_changelog.hpp
+* aktualizacja changelog.txt
+** uporządkowanie sortowania: Feature, Codechange, Zreperuj wtedy malejący revision numer
+** format: - (Feature|Codechange|Fix): ([<subsection (like OSX)>])? <message> ([FS#XXX])? (rXXXXX)
+** scalanie elementów , które rozwiązują jeden cel
+* zaktualizowanie known-bugs.txt
+
+==Release==
+* Stworzenie Tag via GitHub.
+
+==Po wydaniu''(Post release)''==
+* oczekiwanie na "farmę"
+* umieszczenie ''(put)'' wiadomość na stronie internetowej
+* ogłoszenie na forum
+* zrobienie tweeta @openttdnews
+* zaktualizowanie tematu IRC 
+* przekazanie/scalenie zmiany wprowadzone we wstępnej wersji
+* dla wersji non-RC:
+** utworzenie strony wiki i zaktualizowanie [[en/Archive/OpenTTD/Main Page|release history]] oraz [[Template:en/Archive/OpenTTD/Navigation|template]]
+** zaktualizowanie szablonów wiki: [[Template:en/Version]]
+** Dodanie nowej wersji do listy wersji minimalnych/maksymalnych "bananów"
+** opiekowanie pakietów poke na IRC: blathijs (debian), heffer (fedora)
+
+==Po utworzeniu ''branch'' dla nowej wersji==
+* Zastosowanie zmiany podobnej do [https://github.com/OpenTTD/OpenTTD/pull/7319 PR#7319] (a67ee025294278f9113a1c8bcb5ee91d9e174f69)
+** Dodanie nowe (empty) AI compatibility script w bin/ai/
+** Dodanie nowe version to CheckAPIVersion in src/ai/ai_info.cpp + src/script/api/script_info_docs.hpp
+** Dodanie nowe version to src/script/api/ai_changelog.hpp
+** Zaktualizowanie version of regression in bin/ai/regression/regression_info.nut
+** Zaktualizowanie installers (debian/changelog, os2/installer/make_installer.cmd, rpm/openttd.spec, windows/installer/install.nsi)
+** Zaktualizowanie version in src/rev.cpp.in
+** Zaktualizowanie version in src/os/windows/ottdres.rc.in
+** Dodanie notatki do src/saveload/saveload.h o tym, która wersja zapisu jest używana w gałęxi.
+* Backport changelog (and debian/changelog) do master branch
+* Zaktualizowanie strony wiki: [[Template:en/VersionBox]]
+
+<!--[[Category:Development]]--> [[Category:pl/Rozwój]]
