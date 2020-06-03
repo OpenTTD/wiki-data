@@ -1,0 +1,172 @@
+[[Translation:en/Archive/Source/OpenTTDDevBlackBook/Window/UseWindows]]
+ 
+<!--{{DevDoc}}-->{{pl/Development/Rozwój}}
+
+Na każdym ekranie rysuje się okno <code>WE_PAINT</code> [[en/OpenTTDDevBlackBook/Window/WindowEvents|window event]].
+
+==Opening a window==
+Creating a new struct of a window opens a new window. It should be provided with a doxygen comment explaining the function.
+
+;<nowiki>Example:</nowiki>
+
+<pre>
+/**
+ * Opens a new instance of a MyNew window.
+ * @param void Any parameters required by window
+ */
+void ShowMyNewWindow(void)
+{
+	DeleteWindowByClass(window class);
+	new MyNewWindow(void);
+}
+</pre>
+
+==Describing a window==
+
+Set up a <code>WindowDesc</code> with the name you gave <code>this->CreateNestedTree()</code> and <code>this->FinishInitNested()</code>.
+
+;<nowiki>Syntax:</nowiki>
+
+<pre>
+/** Window description for my new window. */
+static const WindowDesc _mywindow_desc(
+	window positioning,
+        default width,
+        default height,
+        window class,
+        parent window class,
+        window flags
+        widget parts,
+        lengthof(widget parts)
+);
+</pre>
+
+You will also need a struct describing
+You can find plenty of examples in the source code, look in a ''*_gui.cpp'' file.
+
+===Window positioning===
+The window positioning is one of the values of the ''WindowPosition'' enum defined in src/window_gui.h.
+
+===Window classes===
+A window class is a unique number that represents a (set of) windows, for example a window that displays a town has class ''WC_TOWN_VIEW''. To differentiate which town is displayed by an actual window, the latter has an additional window number.
+
+The list of available window classes is defined by the ''WindowClass'' enum, in ''src/window_type.h''.
+
+==Setting up widgets==
+
+:;<nowiki>Syntax:</nowiki>
+
+<pre>
+static const NWidgetPart _nested_mywindow_widgets[] = {
+        NWidget(nwid),
+                 NWidget(wwt, colour, wid), SetDataTip(STR_NULL, STR_TOOLTIP_WINDOW_TITLE_DRAG_THIS),
+        EndContainer(),
+};
+</pre>
+
+:;<nowiki>Example:</nowiki>
+
+<pre>
+static const NWidgetPart _nested_mywindow_widgets[] = {
+	NWidget(NWID_HORIZONTAL),
+		NWidget(WWT_TEXT, COLOUR_MAUVE), SetDataTip(STR_NEWGRF_SETTINGS_SELECT_PRESET, STR_NULL),
+				SetPadding(0, WD_FRAMETEXT_RIGHT, 0, 0),
+		NWidget(WWT_DROPDOWN, COLOUR_YELLOW, WID_NS_PRESET_LIST), SetFill(1, 0), SetResize(1, 0),
+				SetDataTip(STR_JUST_STRING, STR_NEWGRF_SETTINGS_PRESET_LIST_TOOLTIP),
+	EndContainer(),
+};
+</pre>
+
+===Widget types===
+
+;<code>WWT_EMPTY</code>
+:
+{{en/Todo|-Include an explanation.}}
+
+;<code>WWT_PANEL</code>
+:A simple depressed panel.
+
+;<code>WWT_INSET</code>
+:A depressed panel, most commonly used as a combo box text area.
+
+;<code>WWT_IMGBTN</code>
+:Image button.
+
+;<code>WWT_IMGBTN_2</code>
+:Image button. Image changes when button is pressed.
+
+;<code>WWT_TEXTBTN</code>
+:Text button.
+
+;<code>WWT_TEXTBTN_2</code>
+:Text button. Text changes when button is pressed.
+
+;<code>WWT_LABEL</code>
+:A centered label.
+
+;<code>WWT_MATRIX</code>
+:
+{{en/Todo|-Include an explanation.}}
+
+;<code>WWT_SCROLLBAR</code>
+:
+{{en/Todo|-Include an explanation.}}
+
+;<code>WWT_FRAME</code>
+:
+{{en/Todo|-Include an explanation.}}
+
+;<code>WWT_CAPTION</code>
+:
+{{en/Todo|-Include an explanation.}}
+
+;<code>WWT_HSCROLLBAR</code>
+:
+{{en/Todo|-Include an explanation.}}
+
+;<code>WWT_STICKYBOX</code>
+:The button for stickying a window.
+
+;<code>WWT_SCROLL2BAR</code>
+:
+{{en/Todo|-Include an explanation.}}
+
+;<code>WWT_RESIZEBOX</code>
+:The button for resizing a window.
+
+;<code>WWT_CLOSEBOX</code>
+:The button for closing a window.
+
+;<code>WWT_PUSHBTN</code>
+:
+{{en/Todo|-Include an explanation.}}
+
+;<code>WWT_PUSHTXTBTN</code>
+:
+{{en/Todo|-Include an explanation.}}
+
+;<code>WWT_PUSHIMGBTN</code>
+:
+{{en/Todo|-Include an explanation.}}
+
+===Colours===
+
+''For a list of available colors, see [[en/Archive/Source/OpenTTDDevBlackBook/Window/Colours]].''
+
+==Maintaining the window==
+
+Define what to do with the window in a struct, with a constructor
+
+:;<nowiki>Example:</nowiki>
+
+<pre>
+struct MyNewWindow {
+        MyNewWindow()
+        {
+        }
+        ....
+}
+</pre>
+
+<!--[[Category:Development]]--> [[Category:pl/Rozwój]]
+<!--[[Category:OpenTTDDevBlackBook|W]]--> [[Category:pl/Archive/Source/OpenTTDDevBlackBook|W]]
