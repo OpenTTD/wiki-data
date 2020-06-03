@@ -1,18 +1,18 @@
 [[Translation:en/Archive/Source/OpenTTDDevBlackBook/Window/WidgetFocus]]
  
-<!--{{DevDoc}}-->{{pl/Rozój}}
+<!--{{DevDoc}}-->{{pl/Development/Rozwój}}
 
 Ten dokument ma na celu krótkie wprowadzenie do systemu fokusowania widgetów. 
 
-== Focus levels ==
-The focus system in OpenTTD has two levels. First there is a pointer that keeps track of which window has focus. Then each window instance keeps track of which widget is focused within that window. This means that a window that is not focused will still remember which widget was globally focused before another window stole the window focus. This widget might later become the globally focused widget if its window gets focused without changing the focused widget. (for example by clicking on the title bar)
+== Focus poziomy ==
+System fokusowy w OpenTTD ma dwa poziomy. Najpierw jest wskaźnik, który śledzi, które okno ma fokus. Następnie każde wystąpienie okna śledzi, który widget jest ustawiony w tym oknie. Oznacza to, że okno, które nie jest aktywne, nadal pamięta, który widżet był globalnie ustawiony, zanim inne okno nie ukradło go. Ten widget może później stać się widgetem zorientowanym globalnie, jeśli jego okno zostanie zogniskowane bez zmiany tego widgetu. (na przykład klikając pasek tytułu)
 
 The term '''globally focused widget''' refers to the focused widget of the focused window. <code>Window::IsWidgetGloballyFocused</code> will only return if given widget as well as the window instance is focused. <code>Window::IsWidgetFocused</code> on the other hand only requires that the given widget is focused within the window instance, but the window itself does not need to be focused.
 
 The term '''local focus''' refers to focus within a window regardless if the window is focused or not.
 
-== How to interact with the focus system ==
-For the last and most accurate details please refer to the source code.
+== Jak wchodzić w interakcje z systemem ustawiania ostrości ==
+Ostatnie i najdokładniejsze szczegóły znajdują się w kodzie źródłowym.
 
 === Global functions ===
 * <code>SetFocusedWindow(Window *w)</code> : Sets the focused window
@@ -24,14 +24,14 @@ For the last and most accurate details please refer to the source code.
 * <code>UnfocusFocusedWidget()</code> : Set local widget focus to null
 
 === Unfocus ===
-If you want to unfocus the currently locally focused widget but does not want to give another widget focus then you have to use the following code: (written as how to write from within a Window)
+Jeśli chcesz cofnąć fokus na aktualnie lokalnie skoncentrowanym widżecie, ale nie chcesz nadawać innego fokusa widżetowi, musisz użyć następującego kodu: (napisany jako sposób pisania z poziomu okna)
  if (this->nested_focus != NULL) {
    this->nested_focus->SetDirty(this);
    this->nested_focus = NULL;
  }
 
 
-If the window however uses the old non-nested widget system the code above becomes:
+Jeśli jednak okno używa starego nie zagnieżdżonego systemu widgetów, powyższy kod staje się:
  if (this->focused_widget != NULL) {
    this->InvalidateWidget(this->focused_widget - this->widget);
    this->focused_widget = NULL;
