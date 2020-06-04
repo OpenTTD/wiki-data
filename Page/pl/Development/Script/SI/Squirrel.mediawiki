@@ -1,0 +1,78 @@
+[[Translation:en/Development/Script/Squirrel]]
+<!--{{NoAI}}-->{{pl/Development/Script/NoAI}}
+OpenTTD używa squirrel 2.2.5.
+
+Niektóre przykłady znaczników Squirrel można znaleźć na stronie [http://squirrel-lang.org/ Squirrel Language Website].
+
+Aby wyświetlić podstawową dokumentację Squirrel , pobierz lub przejrzyj [http://www.squirrel-lang.org/doc/squirrel2.html documentation], chociaż nie wszystkie standardowe biblioteki są włączone.
+
+== Przekształcone funkcje Squirrel ==
+
+Niektóre podstawowe funkcje są zawarte w frameworku Squirrel, ale mogą się różnić. Wszystko, co nie zostało tutaj wyraźnie wymienione lub w dokumentacji AI, może nie działać. To są:
+
+=== print() ===
+
+Avoid using. Rather use <code>[http://devs.openttd.org/~noai/aidocs/classAILog.html AILog::Info()]</code> or <code>[http://devs.openttd.org/~noai/aidocs/classAILog.html AILog::Warning()]</code> to send messages. They are captured nicely and printed in the AI Debug Window (as well as all normal debug outputs).
+
+=== abs() ===
+
+<code>abs()</code> returns the absolute value of an integer/float value. For example:
+
+ print("abs(-5) is: " + abs(-5));
+
+Will print:
+
+ abs(-5) is: 5
+
+=== require() ===
+
+Zawiera fragment kodu z innego pliku. Ścieżka jest względna i natychmiast załaduje kod z tego pliku. Pamiętaj, że każdy plik musi być kompilowany samodzielnie.
+
+ require("test.nut");
+
+=== _cmp() ===
+
+<code>_cmp</code> is a meta-method that allows comparison operations (<, >, <=, >=) on an class instance to be overridden. The method takes a single argument of it's parent class's type, and should return an integer describing whether the argument is less than, equal to, or greater than the instance.
+
+ class Node {
+   cost = 0;
+ 
+   constructor(cost) {
+     this.cost = cost;
+   }
+ }
+ 
+ function Node::_cmp(node) {
+   if(this.cost < node.cost) return -1;
+   if(this.cost > node.cost) return 1;
+   return 0;
+ }
+ 
+ local a = Node(7);
+ local b = Node(3);
+ local cheapest = (a < b) ? a : b;
+ 
+ AILog.Info(cheapest.cost) // Will print "3"
+
+Counter-intuitively, <code>_cmp</code> is NOT used for the equality operator (==). It can be used to test for equality however, by using the following trick...
+
+ local equal = nodeA <= nodeB && nodeA >= nodeB;
+
+== Narzędzia programistyczne ==
+
+Squirrel to język skryptowy, więc nie będziesz musiał kompilować AI, jednak istnieją narzędzia, które ułatwią programowanie, w tym funkcje takie jak podświetlanie składni i sprawdzanie błędów.
+
+=== Eclipse i SQDEV ===
+
+Eclipse to dobrze znane środowisko IDE oparte na Javie. SQDEV to wtyczka Eclipse ułatwiająca rozwój Squirrel. Aby korzystać z SQDEV, będziesz potrzebować [http://java.sun.com/javase/downloads/index.jsp Java 5] i [http://www.eclipse.org/ Eclipse 3.2] or higher. Chociaż Eclipse twierdzi, że potrzebuje tylko JRE (Java Runtime Environment), lepiej zainstalować JDK (Java Development Kit), aby uniknąć pewnych błędów biblioteki. Aby zainstalować SQDEV, wykonaj następujące kroki.
+
+#In Eclipse, select ''Help'' > ''Software Update'' > ''Find and Install...'' 
+#Select "Search for new features to install" 
+#Select "New Remote Site" and enter the following: Name: SQDev Update Site, URL: '''http://sqdev.sf.net/update/''' 
+#Make sure the new update site is checked. (Note: You might need to uncheck "Ignore features not applicable to this environment" to make it work) 
+#Click "Finish" and follow the prompts. 
+#When finished, please restart the workbench when asked. 
+
+To enable the Squirrel perspective form the main eclipse menu ''Window'' > ''Open Perspective'' > ''Others'' and select ''Squirrel''
+
+Ta informacja pochodzi z wiki Squirrel [http://wiki.squirrel-lang.org/default.aspx/SquirrelWiki/SQDEV.html tutaj].
