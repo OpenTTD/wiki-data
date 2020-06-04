@@ -1,0 +1,44 @@
+[[Translation:en/Development/Script/WrightAI]]
+
+
+<!--{{NoAI}}-->{{pl/Development/Script/NoAI}}
+
+WrightAI to prosty przykład AI. Obecnie dostępnych jest wiele lepszych AI, ale jeśli chcesz zacząć pisać własne AI, to dobry punkt wyjścia.
+WrightAI było pierwszą działającą sztuczną inteligencją dla frameworka NoAI, który faktycznie buduje coś użytecznego i stąd pochodzi nazwa (wright to archaiczny angielski dla rzemieślnika lub konstruktora).
+
+== Opis działania ==
+Pierwszą rzeczą, jaką robi po uruchomieniu, jest spanie o jednym tiku, ponieważ tworzenie firmy AI jest postrzegane jako DoCommand, więc nie można wykonywać żadnych innych DoCommands na tym tiku. Ale jeśli to zrobisz, OpenTTD zgłasza błąd asercji i ulega awarii.
+
+Następnie nazywa się ''WrightAI #x'' (gdzie x jest liczbą bezpłatną) i wyświetla wiadomość powitalną:
+
+    
+   /* Give the boy a name */
+   if (!AICompany.SetCompanyName("WrightAI")) {
+      local i = 2;
+      while (!AICompany.SetCompanyName("WrightAI #" + i)) {
+         i++;
+      }
+   }
+   this.name = AICompany.GetCompanyName(AICompany.MY_COMPANY);
+   
+   /* Say hello to the user */
+   print(this.name + ": Welcome to WrightAI. I will be building airports all day long.");
+
+Następnie bierze pożyczkę, tworzy system płatności i oblicza czas, w którym może spać za każdym razem i tworzy pętlę:
+   while(true) {
+      /* Loop is executed here */
+      Sleep(sleepingtime);
+      ticker += sleepingtime;
+   }
+
+Pętla zawiera następujące rzeczy:
+* Przy pierwszym tyknięciu, a następnie co 1000 tyknięć, próbuje zbudować trasę, jeśli ma dość pieniędzy.
+* Sprawdza wszystkie lotniska i ich pojazdy co 2000 tyknięć.
+* Stara się spłacać pożyczkę co 5000 tyknięć.
+* Sprawdza nowe zdarzenia (rozbite samoloty) co 100 tyknięć.
+* Następnie domyślnie śpi 100 tyknięć, a następnie budzi się, aby powtórzyć te rzeczy.
+
+Aby sprawdzić, gdzie można zbudować lotnisko, buduje siatkę obejmującą 10 najlepszych miast o liczbie mieszkańców powyżej 500 i sprawdza, czy może zbudować lotnisko na którymkolwiek z tych pól siatki.
+
+== Zobacz także ==
+* [http://noai.openttd.org/projects/show/ai-wrightai Witryna deweloperska]
