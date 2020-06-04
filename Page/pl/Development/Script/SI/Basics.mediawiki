@@ -1,0 +1,68 @@
+[[Translation:en/Development/Script/Basics]]
+
+
+<!--{{NoAI}}-->{{en/Development/Script/Navigation}}
+
+Zakładamy, że przeczytałeś  [[en/Development/Script/Introduction|Introduction]] , który wyjaśnia, jak dodać AI do OpenTTD. Ta strona wyjaśni, jak dodać kilka prostych rzeczy, aby sztuczna inteligencja mogła coś zrobić. Wynik znajduje się w przykładzie AI.
+
+==Nazywanie firmy==
+
+Oczywiście pierwszą rzeczą, którą chcesz zrobić, to nazwać swoją firmę. Chcesz się promować, prawda? Aby zmienić nazwę firmy, musisz załadować klasę AICompany. W Squirrel''`u'' wszystkie klasy są wstępnie załadowane, więc możesz z nich korzystać bezpośrednio.
+
+Teraz zmieńmy nazwę naszej firmy. Funkcja, aby to zrobić, jak mówi nam interfejs API, to <code>SetName</code>. Ten parametr jest ciągiem. Więc rozumiemy:
+ 
+ function MyNewAI::Start()
+ {
+   AICompany.SetName("MyNewAI");
+ }
+ 
+Now if you payed a bit of attention, you immediately notice that this goes against a rule you learn in the [[en/Development/Script/Introduction|Introduction]]: the <code>Start()</code> returns, therefore your AI dies. But, this is just for illustration, so it will do fine for now.
+
+Uruchom OpenTTD, uruchom nową mapę i zobacz, jak twoja SI zmienia nazwę firmy nowego gracza na ''MyNewAI''.
+
+==Naming your company (advanced)==
+
+But now what happens if your AI starts two times. You can't have two AIs with the same company-name. If you run it, you will see that the second name stays ''Unnamed''. That sucks. Lucky we can check the result of the function if it went okay. So let's extend it a bit, and check the result. If it fails, let's find ourselves an other name.
+
+ function MyNewAI::Start()
+ {
+   if (!AICompany.SetName("MyNewAI")) {
+     local i = 2;
+     while (!AICompany.SetName("MyNewAI #" + i)) {
+       i = i + 1;
+     }
+   }
+ }
+
+What happens here, is that if naming the AI to ''MyNewAI'' fails, it tries ''MyNewAI #2''. If that fails, it tries ''MyNewAI #3'', etc etc. At some point it should work, or rather, that is the idea. So there you have it, your first AI that does something ingame.
+
+==Printing debug output==
+
+To print output to the [[en/Development/Script/Need To Know#logging-and-debug-panel|AI Debug Panel]], you can use <code>[http://noai.openttd.org/docs/trunk/classAILog.html AILog]</code>. These messages are also written to the console (<code>AILog.Info</code> with ai debug level 4 or higher, <code>AILog.Warning</code> with level 3 or higher and <code>AILog.Error</code> with level 1 or higher). Note that these functions only accept a string as parameter. If you want to print anything else, convert it to a string first. The easiest way to do that is appending an empty string, for example:
+
+ AILog.Info(some_integer + "");
+
+==System zdarzeń ''event''==
+
+
+System zdarzeń jest prostym systemem ankiet. Będziesz musiał od czasu do czasu sondować kontroler zdarzeń, aby sprawdzić, czy na stosie są jakieś odpowiednie zdarzenia. Jest to względnie łatwe:
+
+ while (AIEventController.IsEventWaiting()) {
+   local e = AIEventController.GetNextEvent();
+   switch (e.GetEventType()) {
+     case AIEvent.ET_VEHICLE_CRASHED:
+       local ec = AIEventVehicleCrashed.Convert(e);
+       local v  = ec.GetVehicleID();
+       AILog.Info("We have a crashed vehicle (" + v + ")");
+       /* Handle the crashed vehicle */
+       break;
+   }
+ }
+
+==Co teraz?==
+
+How to proceed next depends very much on what you want your AI to do. The best thing to do is to start browsing through the [http://noai.openttd.org/docs/ API]. We suggest to start with a road-vehicle-only AI. We know it is really boring, but you can really make a lot of money with them, if done correctly. Also, it is much easier to create and understand than trains are. Ships and aircraft are also very doable, but more boring than road-vehicles.
+
+For example, if you want to build road and road-stations, check <code>AIRoad</code> documentation. You will find the right functions there. For station information check <code>AIStation</code>. For vehicle-building and settings orders, check <code>AIVehicle</code> and <code>AIOrder</code>. Sounds all pretty logical, doesn't it?
+
+Oczywiście jest wiele rzeczy, które ułatwiają ci życie. Jest na przykład fragment kodu, który ustawia wszystkie twoje polecenia w kolejce na dużej liście i od razu zaczyna je wykonywać na żądanie. Teraz, jeśli ktoś zawiedzie, czego wcześniej nie robił, wszystko cofa. Jest to bardzo przydatne od czasu do czasu, ponieważ przy planowaniu trasy zbudowanie jej mogło wydawać się bezproblemowe, ale do czasu umieszczenia fragmentu drogi może się zdarzyć, że inna firma już zabrała płytkę. Takie fragmenty kodu ułatwiają radzenie sobie w takich sytuacjach. Innymi przykładami są identyfikatory ścieżek i wiele innych.
