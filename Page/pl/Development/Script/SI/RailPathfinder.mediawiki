@@ -1,0 +1,119 @@
+[[Translation:en/Development/Script/RailPathfinder]]
+
+
+<!--{{NoAI}}-->{{pl/Development/Script/NoAI}}
+== Warunki wstępne ==
+Zanim zadzwonisz do pathfindera, musisz wybrać typ szyny, którego chcesz użyć. Jest to bezpieczny sposób, w jaki Zutty sugeruje wybór pierwszego rodzaju szyny z listy.
+
+  local types = AIRailTypeList();
+  AIRail.SetCurrentRailType(types.Begin());
+
+== Inicjalizacja ==
+
+Podobnie jak w przypadku każdej biblioteki, zanim będzie można jej użyć, należy ją zaimportować. Możesz to zrobić, umieszczając następujący wiersz w górnej części kodu.
+
+ import("pathfinder.rail", "RailPathFinder", 1);
+
+Spowoduje to zaimportowanie identyfikatora ścieżki kolejowej w wersji 1 i nadanie mu nazwy <code>RailPathFinder</code> . Możesz teraz instalizować to jak każdą inną klasę:
+
+ local pathfinder = RailPathFinder();
+
+Zanim zaczniesz znajdować trasę, możesz najpierw ustawić niektóre parametry. Dostępne parametry to:
+
+{| class="wikitable"
+|-
+! Name
+! Default value
+! Meaning
+|-
+| cost.max_cost
+| 2000000000
+| The maximum cost for a route.
+|-
+| cost.tile
+| 100
+| The cost for a non-diagonal track.
+|-
+| cost.diagonal_tile
+| 70
+| The cost for a diagonal track.
+|-
+| cost.turn
+| 50
+| The cost that is added to _cost_tile / _cost_diagonal_tile if the direction changes.
+|-
+| cost.slope
+| 100
+| The extra cost if a rail tile is sloped.
+|-
+| cost.bridge_per_tile
+| 150
+| The cost per tile of a new bridge, this is added to _cost_tile.
+|-
+| cost.tunnel_per_tile
+| 120
+| The cost per tile of a new tunnel, this is added to _cost_tile.
+|-
+| cost.coast
+| 20
+| The extra cost for a coast tile.
+|-
+| cost.max_bridge_length
+| 6
+| The maximum length of a bridge that will be build.
+|-
+| cost.max_tunnel_length
+| 6
+| The maximum length of a tunnel that will be build.
+|}
+
+Aby ustawić parametr, wystarczy użyć:
+
+ pathfinder.cost.tile = 100;
+
+== Planowanie trasy ==
+
+Tak więc, teraz wiemy, jak stworzyć instancję pathfindera i ustawić funkcje kosztów, nadszedł czas, aby tę wiedzę wykorzystać. Zaplanujmy naszą pierwszą linię kolejową. Najpierw potrzebujemy jednego (lub więcej) kafelków źródła i jednego (lub więcej) kafelków celu. Na razie załóżmy, że już je mamy, ponieważ wykraczanie poza zakres tej strony wyjaśnia, jak je zdobyć. Powiedzmy na przykład, że chcemy zbudować szynę między dwiema stacjami st_a i st_b. W tym przykładzie założymy, że kierunek stacji to NE_SW i chcemy połączyć stronę NE stacji. Najpierw wywołujemy <code>InitializePath</code> na naszym obiekcie pathfinder:
+
+ local tile_a = AIStation.GetLocation(st_a);
+ local tile_b = AIStation.GetLocation(st_b);
+ pathfinder.InitializePath(<nowiki>[[tile_a, tile_a + AIMap.GetTileIndex(-1, 0)]], [[tile_b + AIMap.GetTileIndex(-1, 0), tile_b]]</nowiki>);
+
+Pathfinder oczekuje tablicy tablic [start_tile, tile_before_start] -arrays i tablicy [last_tile, tile_after_end] -arrays. ponieważ mamy tylko jedno źródło i jedną płytkę celu, po prostu utworzymy dwie tablice z jednym elementem. Teraz pathfinder jest gotowy do znalezienia ścieżki.
+
+ local path = pathfinder.FindPath(-1);
+
+The parameter <code>FindPath</code> accepts is the number of iterations it should do before returning. -1 means looping until a path is found. When it's done, it returns either the path it found or null to indicate no route exists.
+
+== Building the planned route ==
+
+Suppose the pathfinder returned a path, how do start building it? For a start, it's nice to know that <code>FindPath</code> returns an instance of the <code>AyStar.Path</code> class. To view the documentation, open <code>bin/ai/library/graph/aystar/main.nut</code>. Basically, it has three functions: <code>GetParent()</code>, <code>GetCost()</code> and <code>GetTile()</code>. <code>GetCost()</code> isn't useful for now, so we'll just use <code>GetParent()</code> and <code>GetTile()</code>. To build the route found by the pathfinder, we call <code>path.GetParent()</code> until it returns null. As the pathfinder can also return bridges / tunnels, we need to check the distance between the current node and the previous node. If that distance is more than 1, we should build a bridge / tunnel.
+
+ local prev = null;
+ local prevprev = null;
+ while (path != null) {
+   if (prevprev != null) {
+     if (AIMap.DistanceManhattan(prev, path.GetTile()) > 1) {
+       if (AITunnel.GetOtherTunnelEnd(prev) == path.GetTile()) {
+         AITunnel.BuildTunnel(AIVehicle.VT_RAIL, prev);
+       } else {
+         local bridge_list = AIBridgeList_Length(AIMap.DistanceManhattan(path.GetTile(), prev) + 1);
+         bridge_list.Valuate(AIBridge.GetMaxSpeed);
+         bridge_list.Sort(AIAbstractList.SORT_BY_VALUE, false);
+         AIBridge.BuildBridge(AIVehicle.VT_RAIL, bridge_list.Begin(), prev, path.GetTile());
+       }
+       prevprev = prev;
+       prev = path.GetTile();
+       path = path.GetParent();
+     } else {
+       AIRail.BuildRail(prevprev, prev, path.GetTile());
+     }
+   }
+   if (path != null) {
+     prevprev = prev;
+     prev = path.GetTile();
+     path = path.GetParent();
+   }
+ }
+
+Ten kod zapętla się na całej trasie. Dla każdego elementu próbuje zbudować most / tunel lub kawałek szyny. Pamiętaj, że w prawdziwej sztucznej inteligencji prawdopodobnie będziesz chciał sprawdzić, czy <code>AIRail.BuildRail</code> zwraca true, a jeśli nie, ponownie uruchom wyszukiwanie ścieżki.
