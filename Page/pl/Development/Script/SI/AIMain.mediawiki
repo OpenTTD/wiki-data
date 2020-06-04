@@ -1,0 +1,53 @@
+[[Translation:en/Development/Script/AIMain]]
+
+
+<!--{{NoAI}}-->{{pl/Development/Script/NoAI}}
+
+'''main.nut''' jest wymaganym plikiem dla AI wraz z [[en/Development/Script/AIInfo|info.nut]]. [[en/Development/Script/TestAI]] pokazuje przykład w pełni uformowanego (ale nie rób nic) main.nut .
+
+==struktura main.nut ==
+main.nut musi utrzymać klasę, z której korzysta AIController do uruchomienia AI. Jest to klasa wiewiórki, której nazwa zwraca wartość funkcji info.nut CreateInstance.
+
+ function CreateInstance() { return "'''MyNewAI'''"; }
+
+
+Jeśli miałeś MyNewAI, twój main.nut musiałby zadeklarować klasę o tej samej nazwie. Musisz także rozszerzyć kontroler AI.
+
+ class '''MyNewAI''' extends AIController
+ { 
+   constructor()
+   {
+     //constructor is a special, optional function that will be called as soon as your AI is instantiated.
+     //You can scan the map, get settings and set variables here, but you can't do anything that affects the game.
+     //Make sure your AI doesn't take too long or it'll be killed.
+   }
+ }
+
+==Wymagane funkcje==
+Gra będzie próbowała uruchomić niektóre specjalne funkcje w twojej sztucznej inteligencji i spowoduje awarię lub zażalenie twojej sztucznej inteligencji, jeśli ich nie masz. Są to Start(), Save() i Load(). Z wyjątkiem Start() mogą być puste, dopóki nie zaimplementujesz tej funkcji.
+
+W squirrel`''u'' możesz zadeklarować funkcję na dwa sposoby. Wewnątrz deklaracji klasowej lub na zewnątrz. Możesz wybrać, co chcesz.
+
+ class '''MyNewAI''' extends AIController
+ {
+   
+   function Start()
+   {
+     //This function is inside the class declaration.
+   }
+    
+   //These are optional prototypes. Notice the ; at the end rather than {}.
+   //Squirrel doesn't require it, but some programmers like to use them.
+   function Save();
+   function Load(version, data);
+ }
+ 
+ function MyNewAI::Save()
+ {
+    //This function is outside the class declaration and requires the name of the class so squirrel can assign it to the right place.
+    return {};
+ }
+ 
+ function MyNewAI::Load(version, data)
+ {
+ }
