@@ -669,7 +669,7 @@ As of OpenTTD 1.6.1, given power in hp, max tractive effort in kN, total weight 
 ; force = min((max_te * 1000), floor((power * 746) / (current_speed * 5/18)))    [N]
 ; slope_force = weight_on_upslope * slope_steepness * 100 - weight_on_downslope * slope_steepness * 100    [N]
 ; axle_friction = total_weight * 10    [N]
-; rolling_friction = total_weight * 15 * (1 + floor(current_speed / 512))    [N]
+; rolling_friction = floor((current_speed + 512) * 15 / 512) * total_weight    [N]
 ; air_drag_coefficient = 14 * floor(air_drag_value * (1 + number_of_parts * 3/20)) / 1000
 ; air_drag = floor(air_drag_coefficient * current_speed^2)   [N]
 ; acceleration = (force - (slope_force + axle_friction + rolling_friction + air_drag)) / (total_weight * 4) [256th of a km/h per half-tick]
