@@ -3,14 +3,14 @@
 <!--{{DevDoc}}-->{{pl/Development/Rozwój}}
 W tym dokumencie wyjaśniono, jak dodawać funkcje konsoli.
 
-==the first step==
-the first thing you ll need if you want to do anything within the console is
+==pierwszy krok==
+pierwszą rzeczą, której potrzebujesz, jeśli chcesz coś zrobić w konsoli, jest
 <pre>
 include "console.h"
 </pre>
-this gives you the ability to access all IConsole functions and structures you will have to use if you are intending to add Commands/Functions/Variables to the Console.
+daje to dostęp do wszystkich funkcji i struktur IConsole, z których będziesz musiał korzystać, jeśli zamierzasz dodawać komendy/funkcje/zmienne ''(Commands/Functions/Variables)'' do konsoli.
 
-==creating the commands c++ function==
+==tworzenie komend funkcji c++==
 <pre>
 static _iconsole_var * MyLittleConsoleFunction(byte argc, byte* argv[], byte argt[]) {
 	if (argc<2) return NULL;
@@ -19,30 +19,30 @@ static _iconsole_var * MyLittleConsoleFunction(byte argc, byte* argv[], byte arg
 }
 </pre>
 {|
-| parameter || meaning
+| parametr || znaczenie
 |-
-| argc || the count of parameters the parser overloaded to the function
+| argc || liczba parametrów przeciążonych przez parser do funkcji
 |-
-| argv || the parameters itself
+| argv || parametry itself ''(samo)''
 |-
-| argt || the parameters types (ICONSOLE_VAR_UNKNOWN, ICONSOLE_VAR_BYTE, ICONSOLE_VAR_STRING, ...)
+| argt || typy parametrów (ICONSOLE_VAR_UNKNOWN, ICONSOLE_VAR_BYTE, ICONSOLE_VAR_STRING, ...)
 |-
 |}
-parameters passed directly from out of the console have the type ICONSOLE_VAR_UNKNOWN by default. ICONSOLE_VAR_UNKNOWN is an string but it could contain an integer or something like that. it depends on what way the c++ function is handling it. if someone has used something like this:
+parametry przekazywane bezpośrednio z konsoli mają domyślnie typ ICONSOLE_VAR_UNKNOWN. ICONSOLE_VAR_UNKNOWN jest łańcuchem, ale może zawierać liczbę całkowitą lub coś w tym rodzaju. zależy to od sposobu, w jaki obsługuje to funkcja c++. jeśli ktoś użył czegoś takiego:
 <pre>
 ]printf "%i" *temp_uint_16
 31291
 </pre>
-the first parameter is passed as ICONSOLE_VAR_UNKNOWN and the second one is passed as ICONSOLE_VAR_UINT16. only variables which were passed to the commands have the ability to be in an other type as ICONSOLE_VAR_UNKNOWN.
+pierwszy parametr jest przekazywany jako ICONSOLE_VAR_UNKNOWN, a drugi jest przekazywany jako ICONSOLE_VAR_UINT16. tylko zmienne, które zostały przekazane do komend , mogą być innego typu, jak ICONSOLE_VAR_UNKNOWN.
 
-==using variable references==
-if someone has passed a variable by its reference:
+==używanie preferencji zmiennych==
+jeśli ktoś przekazał zmienną przez jej odwołanie:
 <pre>
 ]dosomething @*temp_uint_16
 did something with temp_uint_16
 </pre>
-the type of this first parameter will be ICONSOLE_VAR_REFERENCE.
-example how to write dosomething command:
+typ tego pierwszego parametru to ICONSOLE_VAR_REFERENCE.
+przykład jak napisać polecenie dosomething:
 <pre>
 static _iconsole_var * IConsoleStdLibRandom(byte argc, byte* argv[], byte argt[]) {
 if (argt[1]==ICONSOLE_VAR_REFERENCE) {
@@ -54,7 +54,7 @@ return NULL;
 }
 </pre>
 
-==returning a value within your function==
+==zwracanie wartości w ramach funkcji==
 <pre>
 static _iconsole_var * IConsoleStdLibRandom(byte argc, byte* argv[], byte argt[]) {
 _iconsole_var * result;
@@ -64,19 +64,19 @@ return result;
 }
 </pre>
 <pre>_iconsole_var * IConsoleVarAlloc(byte type);</pre>
-used to allocate some memory for an _iconsole_var structure.
+służy do przydzielania pamięci dla struktury _iconsole_var.
 <pre>void IConsoleVarSetValue(_iconsole_var * var, int value);</pre>
-used to easyly set a value of an _iconsole_var structure
+służy do łatwego ustawiania wartości struktury _iconsole_var
 <pre>void IConsoleVarSetString(_iconsole_var * var, byte * string);</pre>
-IConsoleVarSetString is used to assign a string to the value
+IConsoleVarSetString służy do przypisania ciągu do wartości
 
-==registering the command==
-somewhere in your code you should add a line like this ... this should be done during the initalization of openttd: [review the first example]
+==rejestracja komendy==
+gdzieś w kodzie powinieneś dodać taką linię ... należy to zrobić podczas inicjalizacji openttd: [review the first example]
 <pre>
 IConsoleCmdRegister("mylittlefunction",MyLittleConsoleFunction);
 </pre>
-this registers your command as an console command named mylittlefunction. you also can add one c++ function with different console command names... just give it a try...
-if everything went fine you should see the following:
+rejestruje to polecenie jako polecenie konsoli o nazwie mylittlefunction. możesz także dodać jedną funkcję c++ z różnymi nazwami poleceń konsoli ... po prostu spróbuj ...
+jeśli wszystko poszło dobrze, powinieneś zobaczyć następujące informacje:
 <pre>
 ]list_cmds
 echo
