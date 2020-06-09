@@ -5,25 +5,25 @@
 
 Na sposób interakcji użytkowników z polami edycyjnymi ma wpływ [[pl/Archive/Source/OpenTTDDevBlackBook/Window/WidgetFocus|widget focus system]]. Ta strona opisuje, jakie modyfikacje są konieczne, aby dodać pole tekstowe do okna, które jeszcze go nie ma. 
 
-== Checklist for adding a text box to a window ==
+== Lista kontrolna dodawania pola tekstowego do okna ==
 
-* Add a constant for the widget index eg. OP_WIDGET_NUM_PIZZAS_EDIT (OP = Order Pizza window). Follow the naming pattern of the other widgets in the same window.
-* Add an edit box to the nested widget array:
- NWidget(WWT_EDITBOX, COLOUR_WHITE, OP_WIDGET_NUM_PIZZAS_EDIT), 
+* Dodawanie stałej do indeksu widżetów, np. OP_WIDGET_NUM_PIZZAS_EDIT (OP = okno zamówienia pizzy). Postępuj zgodnie z wzorcem nazewnictwa innych widżetów w tym samym oknie.
+* Dodaj pole edycji do zagnieżdżonej tablicy widżetów:
+ NWidget(WWT_EDITBOX, COLOUR_WHITE, OP_WIDGET_NUM_PIZZAS_EDIT),
    SetDataTip(STR_ORDER_PIZZA_NUM_PIZZAS_OSKTITLE, STR_ORDER_PIZZA_NUM_PIZZAS_TOOLTIP),
-(should be on one line, but has been broken up on two lines here on the wiki to avoid horizontal scrolling)
-* Add a QueryString member variable to the window class, and initialise it in the constructor with the maximum desired text length.
- QueryString filter_editbox; ///< Filter editbox;
-* In your constructor (after FinishInitNested resp. InitNested) link the editbox with the QueryString:
- /* Initialize the text edit widget */
+(powinien znajdować się w jednej linii, ale został podzielony na dwie linie tutaj na wiki, aby uniknąć przewijania w poziomie)
+* Dodaj zmienną składową QueryString do klasy okna i zainicjuj ją w konstruktorze z maksymalną pożądaną długością tekstu.
+ QueryString filter_editbox; ///<Filtr pola edycji;
+* W swoim konstruktorze (po FinishInitNested lub InitNested) połącz pole edycyjne z QueryString:
+ /* Inicjacja edycji tekstu widget`u */
  this->querystrings[WID_SIL_FILTER_TEXT] = &this->filter_editbox;
-* If needed, assign special behaviour to ENTER/ESC keys, resp OK/CANCEL buttons in the OSK window. For filter editboxes it is expected that ESC clears the editbox:
+* W razie potrzeby przypisz specjalne zachowanie klawiszom ENTER/ESC , resp OK/CANCEL przyciski w oknie OSK. W przypadku pól edycji filtrów oczekuje się, że ESC wyczyści pole edycji:
  this->filter_editbox.ok_button = WID_SIL_FILTER_ENTER_BTN;
  this->filter_editbox.cancel_button = QueryString::ACTION_CLEAR;
-* Via the QueryString you can set some other properties, like restricting the accepted character set to digits etc.
-* If you want to focus the edit box by default when the window opens, call the SetFocusedWidget function:
+* Za pomocą QueryString możesz ustawić inne właściwości, takie jak ograniczenie akceptowanego zestawu znaków do cyfr itp.
+* Jeśli chcesz domyślnie skoncentrować pole edycji, gdy okno się otworzy, wywołaj funkcję SetFocusedWidget:
  this->SetFocusedWidget(OP_WIDGET_NUM_PIZZAS_EDIT);
-* If you want editing the editbox trigger some functionality, override the window member function:
+* Jeśli chcesz edytować pole edycji wyzwalające niektóre funkcje, zastąp funkcję elementu okna:
  virtual void OnEditboxChanged(int widget)
 
 == Powiązane artykuły ==
