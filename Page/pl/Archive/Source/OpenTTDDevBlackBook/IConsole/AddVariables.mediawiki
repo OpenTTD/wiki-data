@@ -4,22 +4,22 @@
 
 W tym dokumencie wyjaśniono, jak dodawać zmienne do konsoli.
 
-==the first step==
-the first thing you ll need if you want to do anything within the console is
+==pierwszy krok==
+pierwszą rzeczą, której potrzebujesz, jeśli chcesz coś zrobić w konsoli, jest
 <pre>
 include "console.h"
 </pre>
-this gives you the ability to access all IConsole functions and structures you will have to use if you are intending to add Commands/Functions/Variables to the Console.
+daje to dostęp do wszystkich funkcji i struktur IConsole, z których będziesz musiał korzystać, jeśli zamierzasz dodawać komendy/funkcje/zmienne ''(Commands/Functions/Variables)'' do konsoli.
 
-==adding a c++ variable==
-to add an c++ variable to the console variable list you only need to put this somewhere in your sourcecode where it is executed during the openttd initialization process:
+==dodanie zmiennej c++==
+aby dodać zmienną c++ do listy zmiennych konsoli, wystarczy umieścić ją gdzieś w kodzie źródłowym, gdzie jest wykonywana podczas procesu inicjalizacji openttd:
 <pre>
 IConsoleVarRegister("myvar",(void *) &my_static_var,ICONSOLE_VAR_BYTE);
 </pre>
-ICONSOLE_VAR_BYTE can be replaced with another variable type according to your c++ variable definition.
+ICONSOLE_VAR_BYTE można zastąpić innym typem zmiennej zgodnie z definicją zmiennej c++ .
 
-==adding a virtual c++ variable==
-this is as easy as the procedure for adding an c++ variable.
+==dodanie wirtualnej zmiennej c++ ==
+jest to tak proste, jak procedura dodawania zmiennej c++ .
 <pre>
 _iconsole_var * var;
 var = IConsoleVarAlloc(ICONSOLE_VAR_BOOLEAN);
@@ -27,10 +27,10 @@ IConsoleVarInsert(var,"temp_bool");
 var = IConsoleVarAlloc(ICONSOLE_VAR_INT16);
 IConsoleVarInsert(var,"temp_int16");
 </pre>
-this adds two virtual variables.. virtual variables arent mapped to an c++ variable so they were only accessable over the console or from within c++ over
+dodaje to dwie zmienne wirtualne.. Zmienne wirtualne nie są mapowane na zmienną c++ , więc były dostępne tylko z poziomu konsoli lub z poziomu c++ przez
 <pre>
 _iconsole_var * IConsoleVarGet(byte * name);
 </pre>
-this allows the usage of instance based strings in c++. for a description of instance based strings read [[en/Archive/Source/OpenTTDDevBlackBook/IConsole/Scripting|Using Console Scripting]]
+pozwala to na użycie ciągów opartych na instancjach w c++ . opis przeczytanych ciągów opartych na instancjach [[pl/Archive/Source/OpenTTDDevBlackBook/IConsole/Scripting|Korzystanie ze skryptów konsoli]]
 
 <!--[[Category:OpenTTDDevBlackBook|V]]--> [[Category:pl/Archive/Source/OpenTTDDevBlackBook|V]]
