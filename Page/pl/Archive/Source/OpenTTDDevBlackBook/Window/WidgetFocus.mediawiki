@@ -7,21 +7,21 @@ Ten dokument ma na celu krótkie wprowadzenie do systemu fokusowania widgetów.
 == Focus poziomy ==
 System fokusowy w OpenTTD ma dwa poziomy. Najpierw jest wskaźnik, który śledzi, które okno ma fokus. Następnie każde wystąpienie okna śledzi, który widget jest ustawiony w tym oknie. Oznacza to, że okno, które nie jest aktywne, nadal pamięta, który widżet był globalnie ustawiony, zanim inne okno nie ukradło go. Ten widget może później stać się widgetem zorientowanym globalnie, jeśli jego okno zostanie zogniskowane bez zmiany tego widgetu. (na przykład klikając pasek tytułu)
 
-The term '''globally focused widget''' refers to the focused widget of the focused window. <code>Window::IsWidgetGloballyFocused</code> will only return if given widget as well as the window instance is focused. <code>Window::IsWidgetFocused</code> on the other hand only requires that the given widget is focused within the window instance, but the window itself does not need to be focused.
+Termin '''globally focused widget''' odnosi się do skupionego widżetu skoncentrowanego okna. <code>Window::IsWidgetGloballyFocused</code> zwróci tylko, jeśli dany widget, a także instancja okna jest skoncentrowana. Z drugiej strony <code>Window::IsWidgetFocused</code> wymaga tylko, aby dany widżet był zogniskowany w instancji okna, ale samo okno nie musi być zogniskowane.
 
-The term '''local focus''' refers to focus within a window regardless if the window is focused or not.
+Termin '''local focus''' odnosi się do fokusa w oknie, niezależnie od tego, czy okno jest aktywne, czy nie.
 
 == Jak wchodzić w interakcje z systemem ustawiania ostrości ==
 Ostatnie i najdokładniejsze szczegóły znajdują się w kodzie źródłowym.
 
-=== Global functions ===
-* <code>SetFocusedWindow(Window *w)</code> : Sets the focused window
+=== Funkcje globalne ===
+* <code>SetFocusedWindow(Window *w)</code> : Ustawia skoncentrowane ''(focused)'' okno
 
-=== Window members ===
-* <code>IsWidgetFocused(byte widget_index)</code> : Checks if given widget is focused within window
-* <code>IsWidgetGloballyFocused(byte widget_index)</code> : Checks if given widget is globally focused
-* <code>SetFocusedWidget(byte widget_index)</code> : Set local widget focus to given widget
-* <code>UnfocusFocusedWidget()</code> : Set local widget focus to null
+=== Okno members ===
+* <code>IsWidgetFocused(byte widget_index)</code> : Sprawdza, czy dany widżet jest ustawiony w oknie
+* <code>IsWidgetGloballyFocused(byte widget_index)</code> : Sprawdza, czy dany widżet jest globalnie skoncentrowany
+* <code>SetFocusedWidget(byte widget_index)</code> : Ustaw fokus lokalnego widgetu na dany widget
+* <code>UnfocusFocusedWidget()</code> : Ustaw fokus lokalnego widgetu na null
 
 === Unfocus ===
 Jeśli chcesz cofnąć fokus na aktualnie lokalnie skoncentrowanym widżecie, ale nie chcesz nadawać innego fokusa widżetowi, musisz użyć następującego kodu: (napisany jako sposób pisania z poziomu okna)
