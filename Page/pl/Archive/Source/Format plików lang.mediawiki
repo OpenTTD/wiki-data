@@ -66,8 +66,8 @@ Pragmy zaczynają się od dwóch znaków skrótu (#). Poniższa tabela zawiera l
 |-
 |}
 
-===List of plural types===
-The table below states the allowed code values on how a plural is being formed: 
+===Lista rodzajów liczby mnogiej===
+Poniższa tabela zawiera dozwolone wartości kodu dotyczące tworzenia liczby mnogiej: 
 {| border=1
 |-
 ! rowspan="2"| Code Value !! Description !!
@@ -111,8 +111,8 @@ The table below states the allowed code values on how a plural is being formed:
 | Slovanian
 |}
 
-===Example===
-The standard language file '''english.txt''' starts with the following pragmas:
+===Przykład===
+Standardowy plik językowy '''english.txt''' zaczyna się od następujących pragm:
 <pre>
 ##name English (UK)
 ##ownname English (UK)
@@ -123,41 +123,41 @@ The standard language file '''english.txt''' starts with the following pragmas:
 ##id 0x0000
 </pre>
 
-== Translations ==
+== Tłumaczenia ==
 <span id="translations_section"></span>
 
-Translations consist of a key and a translation. They are separated by a colon (:).
+Tłumaczenia składają się z klucza i tłumaczenia. Dzieli je dwukropek (:).
 
-=== Keys ===
+=== Klucze ===
 
-The key can only contain uppercase letters, numbers and the underscore (_). Each key starts with "STR_" followed by one or more well describing words.
+Klucz może zawierać tylko wielkie litery, cyfry i znak podkreślenia (_). Każdy klawisz zaczyna się od "STR_" , po którym następuje co najmniej jedno dobrze opisujące słowo.
 
  STR_MAPSIZE
  STR_000F_PASSENGERS
  STR_SORT_BY_DATE
  STR_0196_SHOW_LAND_OWNERS_ON_MAP
 
-=== Translations ===
+=== Tłumaczenia ===
 
-Using curly braces {}, special commands can be inserted into the translations, which are substituted either by strgen or while the string is drawn on the screen. For a full list of commands is available at [[en/Archive/Source/OpenTTDDevBlackBook/Special strings|Special Strings]]. Besides <tt>{STRING'''x'''}</tt> and <tt>{RAW_STRING}</tt> it is recommended to leave those special strings untouched by default. The special commands may substitute values or other strings at where the Special Strings are placed. Translators may have influence on the sequence of these replacements to allow a fluent language.
+Za pomocą nawiasów klamrowych {} do tłumaczeń można wstawiać specjalne polecenia, które są zastępowane albo przez strgen, albo gdy ciąg jest narysowany na ekranie. Pełna lista poleceń jest dostępna w [[pl/Archive/Source/OpenTTDDevBlackBook/Special strings|Specjalne ciągi znakowe]] . Oprócz <tt>{STRING'''x'''}</tt> i <tt>{RAW_STRING}</tt> zaleca się pozostawienie tych specjalnych ciągów domyślnie nienaruszonych. Polecenia specjalne mogą zastępować wartości lub inne ciągi, w których umieszczane są ciągi specjalne. Tłumacze mogą mieć wpływ na kolejność tych zamian, aby umożliwić płynny język.
 
-=== Changing word order ===
+=== Zmiana kolejności słów ===
 
-Parameter replacements can be made swappable too.  This will allow one parameter that is usually at position 0 (as in : the first one ) in the translated string to be used in fact at position 1, thus swapping place with no 1.
+Zamiana parametrów może być również wymienna. Umożliwi to użycie jednego parametru, który zwykle znajduje się w pozycji 0 (jak w: pierwszym) w przetłumaczonym ciągu znaków, w rzeczywistości na pozycji 1, zamieniając w ten sposób miejsce bez 1.
 
-As an example : STR_INDUSTRY_PROD_GOUP.
+Jako przykład : STR_INDUSTRY_PROD_GOUP.
 
-In English, the string reads as "{BLACK}{BIGFONT}'''{STRING}''' production at '''{INDUSTRY}''' increases {COMMA}%!"
+W języku angielskim ciąg brzmi jak "{BLACK}{BIGFONT}'''{STRING}''' production at '''{INDUSTRY}''' increases {COMMA}%!"
 
-In Finnish, same string is now "{BLACK}{BIGFONT}'''{1:INDUSTRY}''' tuottaa '''{0:STRING}''' {2:COMMA}{NBSP}% entistä enemmän!"
+W języku fińskim ten sam ciąg znaków jest teraz "{BLACK}{BIGFONT}'''{1:INDUSTRY}''' tuottaa '''{0:STRING}''' {2:COMMA}{NBSP}% entistä enemmän!"
 
 <!-- {{todo|Finish and correct this}} --> {{pl/Do poprawki|Zakończenie i skorygowanie tego}} 
 
 == Cases ==
 
-After each key, there can be a custom suffix case separated by the period (.). The case must be defined first at the beginning of the file by ##case pragma.
+Po każdym kluczu może istnieć niestandardowa wielkość liter oddzielona kropką (.) . Sprawa musi zostać zdefiniowana na początku pliku przez ##case pragma.
 
-In the following example from the Czech language file, you can see how to define the cases. The Czech language has 7 cases and there is an extra "case" for capitalizing cargo name in the Subsidies dialog.
+W poniższym przykładzie z pliku w języku czeskim możesz zobaczyć, jak zdefiniować przypadki. W języku czeskim jest 7 przypadków, a w oknie dialogowym Subsydia występuje dodatkowy "case" ''(przypadek)'' do wpisywania dużej nazwy ładunku.
 
  ##case nom gen dat acc voc loc ins big
 
@@ -165,7 +165,7 @@ In the following example from the Czech language file, you can see how to define
  STR_0011_MAIL.big                  :Pošta
  STR_0011_MAIL.gen                  :pošty
 
-The generic usage of cases is to append a period and the case name to the STRING command. In the paragraph "Dotace dopravy {STRING.gen} z{NBSP}{STRING} do {STRING} nebude dále nabízena." a genitive case is necessary.
+Ogólnym zastosowaniem przypadków jest dodanie kropki i nazwy sprawy do polecenia STRING. W akapicie "Dotace dopravy {STRING.gen} z {NBSP} {STRING} do {STRING} nebude dále nabízena." niezbędna jest sprawa dopełniacza.
 
  STR_202E_OFFER_OF_SUBSIDY_EXPIRED  :{BLACK}{BIGFONT}Nabídka dotace přepravy vypršela:{}{}Dotace dopravy {STRING.gen} z{NBSP}{STRING} do {STRING} nebude dále nabízena.
  STR_2027_FROM_TO                   :{ORANGE}{STRING.big} z {STRING} do {STRING}
@@ -173,30 +173,30 @@ The generic usage of cases is to append a period and the case name to the STRING
 == Liczba mnoga ==
 <span id="plural_form"></span>
 
-==== Introduction ====
-In most languages singular and plural forms are a bit different.
-Every word may be divided into two parts - one part does not change in both singular and plural form, but the second part differs in singular and plural. Let's call them '''core''' and '''suffix'''.
+==== Wprowadzenie ====
+W większości języków formy liczby pojedynczej i mnogiej są nieco inne.
+Każde słowo można podzielić na dwie części - jedna część nie zmienia się zarówno w liczbie pojedynczej, jak i mnogiej, ale druga część różni się liczbą pojedynczą i mnogą. Nazwijmy je '''core''' ''(rdzeniem)'' i '''suffix'''.
 
-Let's take basic example in English language, which is basic because it has two forms: singular and plural.
+Weźmy podstawowy przykład w języku angielskim, który jest podstawowy, ponieważ ma dwie formy: pojedynczą i mnogą.
 
-There is "'''1 train'''", but there are "'''2 trains'''".
+Jest "'''1 train'''", ale tutaj są "'''2 trains'''".
 
-Now, let's divide this word into part that does not change and part that changes:
+Podzielmy teraz to słowo na część, która się nie zmienia, i część, która się zmienia:
 
 *Core: "'''train'''"
 *Suffix for singular: ""
 *Suffix for plural: "'''s'''"
 
-==== Writing the string ====
-As I said before, there are two forms in English language.
+==== Pisanie ciągu ====
+Jak powiedziałem wcześniej, istnieją dwie formy w języku angielskim.
 
-The basic structure for plural form in English is <pre>core{P suffix1 suffix2}</pre>where suffix1 is suffix for signular and suffix2 is suffix for plural.
+Podstawową strukturą liczby mnogiej w języku angielskim jest <pre>core{P suffix1 suffix2}</pre> , gdzie sufiks1 jest sufiksem dla znaku, a sufiks2 jest przyrostkiem liczby mnogiej.
 
-Keep in mind, that plural forms work only if there is proper parameter in the string.
+Należy pamiętać, że formy liczby mnogiej działają tylko wtedy, gdy w ciągu znajduje się odpowiedni parametr.
 
-{COMMA} and {NUM}, along with other numeric params work well in determining plural form.
+{COMMA} i {NUM}, wraz z innymi parametrami liczbowymi, dobrze sprawdzają się w określaniu liczby mnogiej.
 
-Let's make a string that displays number of lamps in the room. Form of "lamp" would depend on supplied amount via {NUM} parameter.
+Zróbmy ciąg, który wyświetla liczbę lamp w pokoju. Forma "lampy" zależałaby od ilości dostarczonej za pomocą parametru {NUM}.
 
 ==== Example ====
  STR_SENTENCE : I have {NUM} lamp{P "" s}
@@ -241,18 +241,18 @@ Let's see how the string would change when we change supplied parameter.
 *56 - 56 items of livestock
 
 
-Now let's take a look at string without given parameter.<pre>STR_WAGONS : Wagons</pre>No plural form may be applied here. Wagon{P "" s} will not work here.
+Spójrzmy teraz na ciąg bez podanego parametru. <pre>STR_WAGONS : Wagons</pre> Nie można tutaj zastosować liczby mnogiej. Wagon {P "" s} nie będzie tu działał.
 
-Why? Because there is no parameter given.
+Dlaczego? Ponieważ nie podano żadnego parametru.
 
-You can just leave this string as it is.
+Możesz po prostu zostawić ten ciąg bez zmian.
 
-==== Other plural types ====
-Find your language on '''List of plural-types''' table below. Languages are being groupped depending on behaviour of words with different amounts.
+==== Inne typy liczby mnogiej ====
+Znajdź swój język w poniższej tabeli  '''Lista typów mnogich''' . Języki są grupowane w zależności od zachowania słów w różnych ilościach.
 
-Suffixes are being ordered ascending, with ''any other number'' at end:
+Przyrostki są uporządkowane rosnąco, z ''dowolnym innym numerem'' na końcu:
 
-*First suffix is always singular.
+* Pierwszy przyrostek jest zawsze liczbą pojedynczą.
 *Second suffix may be for ''any other number'' (English), or depending on your language, for other numbers. For example in Polish language the second form applies for numbers that end with 2, 3 or 4, .but excluding -teen numbers.
 *If the second suffix was not for ''any other number'', the third one is for ''any other number''.
 
@@ -268,26 +268,26 @@ Now take a look at description above, and guess how would the string look for {N
 
 == Płcie ==
 <span id="genders_special_string"></span>
-==== Introduction ====
-Some languages feature genders. Each noun (like factory, calculator, dragon) has its gender.
-Adjectives (green, new, beautiful) and sometimes verbs (to fall, to eat) are being affected by gender.
+==== Wprowadzenie ====
+Niektóre języki zawierają płeć. Każdy rzeczownik (jak fabryka, kalkulator, smok) ma swoją płeć.
+Przymiotniki (zielone, nowe, piękne), a czasem czasowniki (spadać, jeść) mają wpływ na płeć.
 
-First of all, think of your language's gender.
+Przede wszystkim pomyśl o płci swojego języka.
 Then, open the Web Translator 2, go to "Manage" page of your language and check the dropdown list of genders. If there are no genders yet, hit "+" button and supply short forms of your genders ('''m f n''' for ''male female neutral'' is good).
 
-When you've done this, think of strings in OpenTTD that may require genders. News report that new industry is being founded is good, because industry is a noun and some words in the string should change depending on gender.
+Kiedy to zrobisz, pomyśl o ciągach w OpenTTD, które mogą wymagać płci. Wiadomości informują, że powstaje nowy przemysł, jest dobry, ponieważ przemysł jest rzeczownikiem, a niektóre słowa w ciągu powinny się zmieniać w zależności od płci.
 
-==== Writing the string ====
-To set string's gender, insert {G=*} tag before first word of the string, where * is name of the gender you sent before.
+==== Zapisywanie ciągu ====
+Aby ustawić płeć łańcucha, wstaw znacznik {G=*} przed pierwszym słowem łańcucha, gdzie * to nazwa płci, którą wcześniej wysłałeś.
 
-In the string that may change depending on genders, use {G suffix1 suffix2 suffix3} structure, where each suffix corresponds to the right gender (gender order is in the "Manage" section of your language, in the dropdown list)
+W ciągu, który może się zmieniać w zależności od płci, użyj struktury {G suffix1 suffix2 suffix3}  , w którym każdy sufiks odpowiada właściwej płci (kolejność według płci znajduje się w sekcji "Zarządzanie" Twojego języka na liście rozwijanej)
 
-==== Example ====
-I'll use The Latin language in examples, because it is well-known, and of course, uses genders.
+==== Przykład ====
+Użyję języka łacińskiego w przykładach, ponieważ jest on dobrze znany i oczywiście używa płci.
 
-Latin language has three genders, we will call them '''m''', '''f''' and '''n'''.
+Język łaciński ma trzy rodzaje, nazwiemy je '''m''', '''f''' i '''n'''.
 
-Let's guess some nouns we will use in examples.
+Zgadnijmy rzeczowniki, których użyjemy w przykładach.
 *'''puteus''' m - ''a well, pit''
 *'''officina''' f - ''a workshop, factory''
 *'''forum''' n - - ''an open square, marketplace''
@@ -299,12 +299,12 @@ Let's take some adjective and find its core and suffixes:
 As you can see, '''magn''' is the core, and suffixes are '''us''', '''a''' and '''um''' respectively for male, female and neutral gender.
 
 
-And this is how would the example string work:
+I tak działałby przykładowy ciąg:
 <pre>STR_WELL : {G=m}Puteus
 STR_FACTORY : {G=f}Officina
 STR_SQUARE : {G=n}Forum
 STR_IS_BIG : {STRING} magn{G us a um} est</pre>
-Do you imagine how will the result look like? Here is the answer:
+Czy wyobrażasz sobie, jak będzie wyglądał wynik? Oto odpowiedź:
 *Puteus magnus est
 *Officina magna est
 *Forum magnum est
@@ -331,7 +331,7 @@ In the following example we use two genders: male and female
 <pre>Mis{G ter s} {STRING} is shocked by h{G 0 is er} grand{G 2 son daughter} who flamed mis{G ter s} {STRING} yesterday. The bad {G boy girl}'s name is {STRING}</pre>
 Now I'll explain why some {G...}'s have numbers and other do not:
 *First, fourth and fifth do '''not''' have number, because they fetch gender of next string (default behaviour)
-*Second and third do have number, because they fetch gender of a string that is not after the tag. We need to tell game engine which {STRING}'s gender we want to take. The first number is zero, because it's ID of first {STRING}. The next number is two, because it's ID of third {STRING}
+*Drugi i trzeci mają numer, ponieważ pobierają płeć ciągu, który nie jest po znaczniku. Musimy powiedzieć silnikowi gry, której płci {STRING} chcemy wybrać. Pierwsza liczba to zero, ponieważ jest to ID pierwszego {STRING} . Następny numer to dwa, ponieważ jest to ID trzeciego {STRING}
 
 <!-- {{todo|this section may be clumsy, feel free to improve it}} --> {{pl/Do poprawki|ta sekcja może być niezdarna, można ją ulepszyć}}
 
