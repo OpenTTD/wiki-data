@@ -198,44 +198,44 @@ Należy pamiętać, że formy liczby mnogiej działają tylko wtedy, gdy w ciąg
 
 Zróbmy ciąg, który wyświetla liczbę lamp w pokoju. Forma "lampy" zależałaby od ilości dostarczonej za pomocą parametru {NUM}.
 
-==== Example ====
+==== Przykład ====
  STR_SENTENCE : I have {NUM} lamp{P "" s}
-Do you see the core? Yes, it is the word '''lamp'''.
+Czy widzisz rdzeń? Tak, to jest słowo '''lamp'''.
 
-Later you see '''{P'''. This is the indicator that suffixes will come next.
+Później widzisz '''{P'''. Jest to wskaźnik, że sufiksy nadejdą w następnej kolejności.
 
-'''""''' means there is no suffix. OpenTTD needs to know that - If there is no suffix, just write two quotation marks. So this is the first suffix, which will be used when {NUM} is equal to 1
+'''""''' oznacza, że ​​nie ma przyrostka. OpenTTD musi o tym wiedzieć - jeśli nie ma przyrostka, po prostu wpisz dwa znaki cudzysłowu. To jest pierwszy przyrostek, który zostanie użyty, gdy {NUM} będzie równe 1
 
-'''s''' is the second suffix. This one will be displayed when {NUM} is bigger than 1.
+'''s''' jest drugim przyrostkiem. Ten zostanie wyświetlony, gdy {NUM} jest większe niż 1.
 
 
-Let's proceed to more advanced plural forms. Let's take '''mouse'''. Its plural form is '''mice'''.
+Przejdźmy do bardziej zaawansowanych form liczby mnogiej. Weźmy '''mouse'''. Jego liczba mnoga to '''mice'''.
 
-First of all, imagine the sentence with different parameters.
+Przede wszystkim wyobraź sobie zdanie o różnych parametrach.
 *0 - Mum, there are 0 mice in the room!
 *1 - Mum, there is 1 mouse in the room!
 *3 - Mum, there are 3 mice in the room!
 *23 - Mum, there are 23 mice in the room!
-When you are ready, you can write the string.
+Kiedy będziesz gotowy, możesz napisać ciąg.
  STR_SENTENCE : Mum, there {P 0 is are} {NUM} m{P ouse ice} in the room!
-As you may have noticed, the first '''{P''' contains an extra number before the suffixes. This is used to specify which parameter should be used to determine the plural form. When no number is given, the previous parameter is used, but in this case there is no previous parameter, that's why we need to specify it.
+Jak zapewne zauważyłeś, pierwsza '''{P''' zawiera dodatkową liczbę przed przyrostkami. Służy do określania, który parametr należy zastosować do określenia liczby mnogiej. Jeśli nie podano żadnej liczby, używany jest poprzedni parametr, ale w tym przypadku nie ma poprzedniego parametru, dlatego musimy go określić.
 <!-- {{todo|check if it is not wrong}} --> {{pl/Do poprawki|sprawdzenie, czy nie jest źle}} 
 
-Mind that the singluar (1) is special in this plural definition. The plural form is used for all numbers >1 but also for 0. (Mum, there are 0 mice in the room).
+Pamiętaj, że singluar (1) jest wyjątkowy w tej definicji liczby mnogiej. Liczba mnoga jest używana dla wszystkich liczb> 1, ale także dla 0. (Mamo, w pokoju jest 0 mysz).
 
-==== String as number ====
+==== Ciąg jako liczba ====
 
-If the argument that affects a plural form is given as {STRING} then you need to use a special parameter for '''{P''':
- Flat area around industries: {ORANGE}{STRING} tile{P 0:1 "" s}
+Jeśli argument dotyczący liczby mnogiej jest podany jako {STRING}, musisz użyć specjalnego parametru dla '''{P''':
+ Płaski obszar wokół branż: {ORANGE}{STRING} tile{P 0:1 "" s}
 
-==== OpenTTD usage ====
-Now you understand basics of plural forms. Let's take some example from English translation.
+==== OpenTTD używanie ====
+Teraz rozumiesz podstawy liczby mnogiej. Weźmy przykład z tłumaczenia na angielski.
  STR_QUANTITY_LIVESTOCK : {COMMA} item{P "" s} of livestock
 
-This text is being displayed at stations when there is livestock cargo awaiting.
+Ten tekst jest wyświetlany na stacjach, gdy oczekuje na ładunek żywego inwentarza.
 
-As you can see, {COMMA} parameter is given. Thanks to that parameter, we can change form of '''item'''.
-Let's see how the string would change when we change supplied parameter.
+Jak widać, podano parametr {COMMA}. Dzięki temu parametrowi możemy zmienić formę '''item'''.
+Zobaczmy, jak zmieni się ciąg, gdy zmienimy podany parametr.
 *1 - 1 item of livestock
 *4 - 4 items of livestock
 *56 - 56 items of livestock
@@ -253,12 +253,12 @@ Znajdź swój język w poniższej tabeli  '''Lista typów mnogich''' . Języki s
 Przyrostki są uporządkowane rosnąco, z ''dowolnym innym numerem'' na końcu:
 
 * Pierwszy przyrostek jest zawsze liczbą pojedynczą.
-*Second suffix may be for ''any other number'' (English), or depending on your language, for other numbers. For example in Polish language the second form applies for numbers that end with 2, 3 or 4, .but excluding -teen numbers.
-*If the second suffix was not for ''any other number'', the third one is for ''any other number''.
+*Drugi sufiks może oznaczać ''any other number'' (English) lub, w zależności od języka, inne numery. Na przykład w języku polskim drugi formularz dotyczy liczb kończących się na 2, 3 lub 4, ale z wyłączeniem -nastu liczb.
+*Jeśli drugi sufiks nie był dla ''any other number'' , trzeci jest dla ''any other number''.
 
-Let's take Polish language and invent some dummy string
+Weźmy język polski i wymyślmy jakiś ciąg
  STR_CARS : {NUM} aut{P o a ""}
-Now take a look at description above, and guess how would the string look for {NUM} equal to 1, 2, 5, 13, 23, 38?
+Teraz spójrz na opis powyżej i zgadnij, jak wyglądałby łańcuch znaków {NUM} równy 1, 2, 5, 13, 23, 38?
 *1 auto (first suffix used)
 *2 auta (second suffix used - number ends with 2, 3 or 4)
 *5 aut  (third suffix used - ''any other number'')
@@ -292,11 +292,11 @@ Zgadnijmy rzeczowniki, których użyjemy w przykładach.
 *'''officina''' f - ''a workshop, factory''
 *'''forum''' n - - ''an open square, marketplace''
 
-Let's take some adjective and find its core and suffixes:
+Weźmy przymiotnik i znajdźmy jego rdzeń i przyrostki:
 
 '''magnus''', '''magna''', '''magnum''' - ''large'' (male, female, neutral)
 
-As you can see, '''magn''' is the core, and suffixes are '''us''', '''a''' and '''um''' respectively for male, female and neutral gender.
+Jak widzisz, '''magn''' jest rdzeniem, a przyrostki są '''us''', '''a''' and '''um''' odpowiednio dla mężczyzn, kobiet i płci neutralnej.
 
 
 I tak działałby przykładowy ciąg:
@@ -308,29 +308,29 @@ Czy wyobrażasz sobie, jak będzie wyglądał wynik? Oto odpowiedź:
 *Puteus magnus est
 *Officina magna est
 *Forum magnum est
-Again, as with plural form, if there is no suffix, write "". Use always as many suffixes as there are genders.
+Ponownie, jak w przypadku liczby mnogiej, jeśli nie ma przyrostka, napisz "" . Zawsze używaj tyle sufiksów, ile jest rodzajów.
 <!-- {{todo|How about the order of the suffixes? Do you have to use the same order as defined in the pragma?}} --> {{pl/Do poprawki|Co powiesz na kolejność przyrostków? Czy koniecznie używać tej samej kolejności, jak zdefiniowano w pragmie?}} 
 
-==== Advanced use ====
-{G...} tag bases on gender of {STRING} after the tag.
-However, if you need to change suffix of a word which is after {STRING} (before tag), you have to write ID of string you want to retrieve gender from.
-This may sound clumsy, so let's take a look at example:
+==== Zaawansowane użycie ====
+{G...} tag bazuje na płci ''gender''{STRING} po tag'u.
+Jeśli jednak chcesz zmienić sufiks słowa po {STRING} (przed tagiem), musisz wpisać identyfikator ciągu, z którego chcesz pobrać płeć.
+Może to zabrzmieć niezręcznie, więc spójrzmy na przykład:
 
 <pre>{BLACK}{BIGFONT}Now{G y a e} {STRING} został{G "" a o} posadzon{G y a e} blisko {TOWN}!</pre>
-Second and third {G...} will not work, because there is no {STRING} after them to get gender from.
+Drugi i trzeci {G...} nie będą działać, ponieważ nie ma po nich {STRING}, od którego można uzyskać płeć.
 
-We want to retrieve gender from first (and the only one) {STRING} tag. First tag has ID=0, second tag has ID=1 and so on. Here is how to do that:
+Chcemy pobrać płeć z pierwszego (i jedynego) tagu {STRING}. Pierwszy tag ma ID=0, drugi tag ma ID=1 i tak dalej. Oto jak to zrobić:
 
 <pre>{BLACK}{BIGFONT}Now{G y a e} {STRING} został{G 0 "" a o} posadzon{G 0 y a e} blisko {TOWN}!</pre>
-Adding IDs resolved the problem. The string works as expected.
+Dodanie ID rozwiązało problem. Ciąg działa zgodnie z oczekiwaniami.
 
 
-What if there are more {STRING}s? ( <!-- {{todo|I'm not sure, please verify this}} --> {{pl/Do poprawki|Nie jestem pewien, prośba zweryfikowamia tego}} )
-In the following example we use two genders: male and female
+Co jeśli jest ich więcej {STRING} s?  ( <!-- {{todo|I'm not sure, please verify this}} --> {{pl/Do poprawki|Nie jestem pewien, prośba zweryfikowamia tego}} )
+W poniższym przykładzie używamy dwóch płci: męskiej i żeńskiej
 
 <pre>Mis{G ter s} {STRING} is shocked by h{G 0 is er} grand{G 2 son daughter} who flamed mis{G ter s} {STRING} yesterday. The bad {G boy girl}'s name is {STRING}</pre>
-Now I'll explain why some {G...}'s have numbers and other do not:
-*First, fourth and fifth do '''not''' have number, because they fetch gender of next string (default behaviour)
+Teraz wyjaśnię, dlaczego niektóre {G...} mają numery, a inne nie:
+*Pierwszy, czwarty i piąty '''nie''' mają numeru, ponieważ pobierają płeć następnego ciągu (zachowanie domyślne)
 *Drugi i trzeci mają numer, ponieważ pobierają płeć ciągu, który nie jest po znaczniku. Musimy powiedzieć silnikowi gry, której płci {STRING} chcemy wybrać. Pierwsza liczba to zero, ponieważ jest to ID pierwszego {STRING} . Następny numer to dwa, ponieważ jest to ID trzeciego {STRING}
 
 <!-- {{todo|this section may be clumsy, feel free to improve it}} --> {{pl/Do poprawki|ta sekcja może być niezdarna, można ją ulepszyć}}
