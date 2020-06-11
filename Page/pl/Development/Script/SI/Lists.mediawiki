@@ -8,7 +8,7 @@ Listy są podstawową częścią interfejsu API NoAI. Pozwalają na szybką i ł
 === Elementy / Wartości ''(Items / Values)'' ===
 AIList to zestaw par element-wartość. Element to zazwyczaj dane, które chcesz zapisać na liście. Na przykład identyfikatory miast. Wartość to niektóre informacje związane z pozycją. Na przykład możesz mieć liczbę mieszkańców miasta jako wartość.
 
-=== Valuators ===
+=== Valuators <small></small> ===
 Aby filtrować, możesz zastosować rzeczoznawców na liście za pomocą <code><list>.Valuate(<valuator>)</code> , odpowiednio zmieniają wartość wpisu na liście.
 Pierwszym parametrem tej funkcji jest funkcja, której chcesz użyć do wyceny pozycji na liście. Powinien zaakceptować co najmniej jedną liczbę całkowitą, która zostanie ustawiona dla elementu, i powinien zwrócić liczbę całkowitą, która stanie się wartością elementu. Możliwe są dodatkowe parametry, wówczas należy je również dodać do Valuatora. Przykład:
 
@@ -29,11 +29,11 @@ To start, <code>AIList()</code> is the most primary list we have. It doesn't dep
 
 === AITownList() ===
 
-Of course you want to know which towns are in the map, and most likely: which town has to most population, and what the location is. For that we have <code>AITownList()</code>. If you create an instance of it, it immediately fills itself with all towns. You can walk them like this:
+Oczywiście chcesz wiedzieć, które miasta znajdują się na mapie i najprawdopodobniej: które miasto ma najwięcej mieszkańców i jaka jest jego lokalizacja. Do tego mamy <code>AITownList()</code> . Jeśli utworzysz jego instancję, natychmiast wypełni się ona wszystkimi miastami. Możesz chodzić po nich w ten sposób:
 
  foreach (town, value in townlist) { }
 
-This walks all the towns inside the list. Of course knowing the towns is only part of <code>AITownList()</code>, you can also make it find data for you. For example, we want to know all towns with population higher than 500. First we call a valuator that gets the population per town for us, and then we filter all the towns with a lower population than 500 out of the list. What is left, is a list of towns that have more than 500 people in them.
+To prowadzi wszystkie miasta na liście. Oczywiście, wiedząc, że miasta są tylko częścią  <code>AITownList()</code> , możesz również sprawić, że znajdziesz dane dla Ciebie. Na przykład chcemy poznać wszystkie miasta o liczbie mieszkańców powyżej 500. Najpierw nazywamy rzeczoznawcę, który pobiera za nas liczbę mieszkańców na miasto, a następnie odfiltrowujemy z listy wszystkie miasta o liczbie mieszkańców poniżej 500. Pozostała lista miast, w których mieszka ponad 500 osób.
 
  townlist.Valuate(AITown.GetPopulation);
  townlist.KeepAboveValue(500);
@@ -44,7 +44,7 @@ Jeśli teraz wydrukujesz listę, zobaczysz tylko miasta o liczbie mieszkańców 
 
 Oznacza to jedynie, że liczba ludności przypadająca na miasto jest tracona i zastępowana przez lokalizację.
 
-AIList()s are automatically sorted. Normally this is down by value, descending (so highest first). You can change the sort order with the <code>Sort()</code> functions (see API documentation). You can see if a list is empty with <code>Empty()</code>, or find the amount of towns with <code>Count()</code>. For more details, see API documentation.
+AIList() ''Listy AI'' są automatycznie sortowane. Zwykle jest to wartość malejąca, malejąca (najpierw najwyższa). Możesz zmienić porządek sortowania za pomocą funkcji <code>Sort()</code> (patrz dokumentacja API). Możesz sprawdzić, czy lista jest pusta za pomocą <code>Empty()</code> , lub znaleźć liczbę miast za pomocą <code>Count()</code> . Aby uzyskać więcej informacji, zobacz dokumentację API.
 
 === AITileList() ===
 
