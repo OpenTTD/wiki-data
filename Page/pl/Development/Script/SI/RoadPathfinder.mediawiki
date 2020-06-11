@@ -13,7 +13,7 @@ Podobnie jak w przypadku każdej biblioteki, zanim będzie można jej użyć, na
 
  import("pathfinder.road", "RoadPathFinder", 3);
 
-This imports the road pathfinder version 3 and names it <code>RoadPathFinder</code>. You can now instance it like any other class:
+Spowoduje to zaimportowanie pathfinder wersji 3 i nadanie mu nazwy <code>RoadPathFinder</code> . Możesz teraz instalizować to jak każdą inną klasę:
 
  local pathfinder = RoadPathFinder();
 
@@ -25,9 +25,9 @@ Zanim zaczniesz znajdować trasę, możesz najpierw ustawić niektóre parametry
 
 {| class="wikitable"
 |-
-! Name
-! Default value
-! Meaning
+! Nazwa
+! Domyślna wartość
+! Znaczenie
 |-
 | cost.max_cost
 | 2000000000
@@ -70,7 +70,7 @@ Zanim zaczniesz znajdować trasę, możesz najpierw ustawić niektóre parametry
 | The maximum length of a tunnel that will be build. Note that all existing tunnels will be explored, regardless of their length.
 |}
 
-To set a parameter, you just use:
+Aby ustawić parametr, wystarczy użyć:
 
  pathfinder.cost.tile = 100;
 
@@ -88,11 +88,11 @@ Pathfinder oczekuje tablicy płytek źródłowych i tablicy płytek bramkowych, 
    AIController.Sleep(1);
  }
 
-The parameter <code>FindPath</code> accepts is the number of iterations it should do before returning. 100 is just fine. Don't make that value too big, as you'll notice slowdowns in OpenTTD. The <code>AIController.Sleep(1);</code> line is really needed. <code>FindPath</code> returns false if it isn't finished with pathfinding. When it's done, it returns either the path it found or null to indicate no route exists.
+Parametr <code>FindPath</code> accepts to liczba iteracji, które powinien wykonać przed zwróceniem. 100 jest w porządku. Nie zwiększaj tej wartości, bo zauważysz spowolnienia w OpenTTD. Wiersz <code>AIController.Sleep(1);</code> jest naprawdę potrzebny. <code>FindPath</code> zwraca false, jeśli nie jest zakończone wyszukiwaniem ścieżek. Po zakończeniu zwraca albo znalezioną ścieżkę, albo zero, aby wskazać, że nie istnieje żadna trasa.
 
-== Building the planned route ==
+== Budowanie zaplanowanej trasy ==
 
-Suppose the pathfinder returned a path, how do start building it? For a start, it's nice to know that <code>FindPath</code> returns an instance of the <code>AyStar.Path</code> class. To view the documentation, open <code>bin/ai/library/graph/aystar/main.nut</code>. Basically, it has three functions: <code>GetParent()</code>, <code>GetCost()</code> and <code>GetTile()</code>. <code>GetCost()</code> isn't useful for now, so we'll just use <code>GetParent()</code> and <code>GetTile()</code>. To build the route found by the pathfinder, we call <code>path.GetParent()</code> until it returns null. As the pathfinder can also return bridges / tunnels, we need to check the distance between the current node and the previous node. If that distance is more than 1, we should build a bridge / tunnel.
+Załóżmy, że pathfinder zwrócił ścieżkę, jak zacząć ją budować? Na początek miło jest wiedzieć, że <code>FindPath</code> zwraca instancję klasy <code>AyStar.Path</code>. Aby wyświetlić dokumentację, otwórz <code>bin/ai/library/graph/aystar/main.nut</code> . Zasadniczo ma trzy funkcje: <code>GetParent()</code>, <code>GetCost()</code> i <code>GetTile()</code>. <code>GetCost()</code> na razie nie jest użyteczny, więc użyjemy po prostu <code>GetParent()</code> i <code>GetTile()</code>. Aby zbudować trasę znalezioną przez pathfinder, wywołujemy <code>path.GetParent()</code>, aż zwróci null. Ponieważ pathfinder może również zwracać mosty / tunele, musimy sprawdzić odległość między bieżącym węzłem a poprzednim węzłem. Jeśli ta odległość jest większa niż 1, powinniśmy zbudować most / tunel .
 
  while (path != null) {
    local par = path.GetParent();
@@ -128,7 +128,7 @@ Suppose the pathfinder returned a path, how do start building it? For a start, i
 
 Ten kod zapętla się na całej trasie. Dla każdego elementu sprawdza, czy jest już połączony z poprzednim kafelkiem drogą lub mostem. Jeśli nie jest połączone, próbuje zbudować drogę. Zauważ, że w prawdziwej sztucznej inteligencji prawdopodobnie będziesz chciał sprawdzić, czy <code>AIRoad.BuildRoad</code> zwraca true, a jeśli nie, ponownie uruchom wyszukiwanie ścieżki.
 
-'''Note''': do not use parent as variable name for <code>GetParent</code>, it's a keyword, giving peculiar results.
+'''Note''': nie używaj rodzica jako nazwy zmiennej dla <code>GetParent</code>, jest to słowo kluczowe, dające dziwne wyniki.
 
 == A sample AI ==
  import("pathfinder.road", "RoadPathFinder", 3);
