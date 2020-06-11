@@ -21,11 +21,11 @@ Aby skorzystać z istniejącej biblioteki, wystarczy załadować ją do swojej A
    priority_queue/
    fibonacci_heap/
 
-Say you want to use the [[en/Development/Script/Library#priority-queue|Priority Queue]], you simply do:
+Powiedz, że chcesz użyć [[pl/Development/Script/SI/Library#priority-queue|Priority Queue]], po prostu to robisz:
 
  import("queue.priority_queue", "PriorityQueue", 2);
 
-The first parameter is the category and the implementation, divided with a dot ('.'). The next parameter is the name the library you import will have, in this case <code>PriorityQueue</code>. It can be anything you like, as long as it doesn't exist yet. The last parameter is the version you expect the library to be. To get the current version of a library, open library.nut from the corresponding directory. 
+Pierwszy parametr to kategoria i implementacja podzielone kropką ('.') . Następny parametr to nazwa importowanej biblioteki, w tym przypadku <code>PriorityQueue</code> . Może to być dowolne, o ile jeszcze nie istnieje. Ostatni parametr to wersja, której spodziewasz się w bibliotece. Aby pobrać bieżącą wersję biblioteki, otwórz plik library.nut z odpowiedniego katalogu. 
 
 Sprawdzenie wersji jest bardzo ważne. Jeśli spodziewasz się wersji 1, ale na komputerze niektórych użytkowników biblioteka znajduje się w wersji 2, twoja sztuczna inteligencja odmówi załadowania. To dobra rzecz, ponieważ nowa wersja oznacza, że ​​coś się zmieniło w stosunku do istniejących funkcji, a twoja sztuczna inteligencja najprawdopodobniej zareaguje, jeśli z niej skorzystasz. Ten system wczesnego wykrywania problemów powinien uniknąć wielu konfliktów w przyszłości.
 
@@ -38,7 +38,7 @@ Oczywiście zależy od biblioteki, jakie parametry należy podać konstruktorowi
 
 == Tworzenie biblioteki ==
 
-Creating a library is like creating an AI. You create a directory in a category in <code>bin/ai/library</code>, and you put in it a file called '<code>library.nut</code>'. Now this is almost identical with '<code>info.nut</code>', as you put in your AI directory, but instead of extending <code>AIInfo</code>, it extends <code>AILibrary</code>, and instead of calling <code>RegisterAI</code>, you need to call <code>RegisterLibrary</code>. All makes sense, not? An example:
+Tworzenie biblioteki jest jak tworzenie SI . Tworzysz katalog w kategorii w <code>bin/ai/library</code> i umieszczasz w nim plik o nazwie '<code>library.nut</code>' . Teraz jest to prawie identyczne z '<code>info.nut</code>' , jak umieszczasz w swoim katalogu AI, ale zamiast rozszerzać <code>AIInfo</code>, rozszerza on <code>AILibrary</code> , a zamiast dzwonić do <code>RegisterAI</code>, musisz zadzwonić do <code>RegisterLibrary</code>. Wszystko ma sens, prawda? Przykład:
 
  class PriorityQueue extends AILibrary {
    function GetAuthor()      { return "OpenTTD NoAI Developers Team"; }
@@ -53,75 +53,75 @@ Creating a library is like creating an AI. You create a directory in a category 
  
  RegisterLibrary(PriorityQueue());
 
-Now what you need to do is to create a file called '<code>main.nut</code>'. It should contain a class you named at <code>CreateInstance()</code>, like in your AI. Then the same rules apply as an AI. <code>require()</code> works as you expect, and you can define your class how ever you like.
+Teraz musisz utworzyć plik o nazwie '<code>main.nut</code>' . Powinien zawierać klasę, którą nazwałeś w <code>CreateInstance()</code>, tak jak w twojej sztucznej inteligencji. Wtedy te same zasady obowiązują jak AI. <code>require()</code> działa zgodnie z oczekiwaniami i możesz zdefiniować swoją klasę, jak tylko chcesz.
 
-There are some things you can not do:
+Są rzeczy, których nie możesz zrobić:
 
-* Register 2 libraries in one <code>library.nut</code>
-* Define more than 1 class in the <code>main.nut</code> (or any required file). However, you can define sub-classes. Say you need an extra class in <code>PriorityQueue</code>. You can name it <code>PriorityQueue.Subclass</code>. To access it from within your main class, use <code>this.Subclass</code>. See <code>[[en/Development/Script/Library#aystar|graph.AyStar]]</code> for an example how it's done.
+* Zarejestruj 2 biblioteki w jednym <code>library.nut</code>
+* Zdefiniuj więcej niż 1 klasę w <code>main.nut</code> (lub dowolnym wymaganym pliku). Możesz jednak zdefiniować podklasy ''(sub-classes)''. Powiedz, że potrzebujesz dodatkowej klasy w <code>PriorityQueue</code>. Możesz go nazwać <code>PriorityQueue.Subclass</code> . Aby uzyskać do niego dostęp z głównej klasy, użyj <code>this.Subclass</code>. Zobacz <code>[[pl/Development/Script/SI/Library#aystar|graph.AyStar]]</code> , aby zobaczyć, jak to się robi.
 
-== Multiple libraries of different versions ==
+== Wiele bibliotek różnych wersji ==
 
-It will happen to all of us that you have one AI using version 1 of a library, and an other using version 2. For example we take pathfinder.road. Now version 2 will be in ai/library/pathfinder/road, but where should you put version 1? For that we created a method:
+Wszystkim nam się stanie, że masz jedną sztuczną inteligencję używającą wersji 1 biblioteki, a drugą używającą wersji 2. Na przykład bierzemy pathfinder.road. Teraz wersja 2 będzie w ai/library/pathfinder/road , ale gdzie należy umieścić wersję 1? W tym celu stworzyliśmy metodę:
 
-In the directory-name of the library, everything behind any '.' (dot) is ignored. So you can call 'road' 'road.blabla', or 'road.2', it doesn't matter for the internals. Now this also allows multiple libraries of the same name, and different versions. For example, if you put version 1 of the pathfinder.road in 'pathfinder/road.1', and keep version 2 in 'pathfinder/road'. The system will load both, and based on your import line, pick one of them (or throws an error if the version you requested doesn't exist ;)).
+W nazwie katalogu biblioteki wszystko kryje się za dowolnym '.' (kropka) jest ignorowany. Możesz więc nazwać 'road' 'road.blabla', lub 'road.2' , to nie ma znaczenia dla elementów wewnętrznych. Teraz pozwala to również na wiele bibliotek o tej samej nazwie i różnych wersjach. Na przykład, jeśli umieścisz wersję 1 pathfinder.road w 'pathfinder/road.1' , a wersję 2 zachowaj w 'pathfinder/road' . System załaduje oba i na podstawie linii importu wybierz jedną z nich (lub zgłasza błąd, jeśli żądana wersja nie istnieje;)).
 
-The collision system still works. So if you put version 2 in both 'pathfinder/road' and 'pathfinder/road.2', it will complain it found two equal libraries.
+System kolizji nadal działa. Więc jeśli umieścisz wersję 2 zarówno w 'pathfinder/road' jak i  'pathfinder/road.2' , narzeka, że ​​znalazła dwie równe biblioteki.
 
-= Standard libraries =
+= Standardowe biblioteki =
 
-There are several libraries for common tasks bundled together with NoAI. These have been prepared by 'OpenTTD NoAI Developers Team'.
+Istnieje kilka bibliotek dla typowych zadań w pakiecie z NoAI. Zostały one przygotowane przez 'Zespół programistów OpenTTD NoAI' ''(OpenTTD NoAI Developers Team)''.
 
-== Category: Graph ==
+== Kategoria: Wykres ==
 
 === AyStar ===
 
-This is an implementation of [https://www.wikipedia.org/wiki/A* AyStar pathfinding algorithm]. It solves graphs by finding the fastest route from one point to the other.
+To implementacja [https://www.wikipedia.org/wiki/A* AyStar pathfinding algorithm] . Rozwiązuje wykresy, znajdując najszybszą trasę z jednego punktu do drugiego.
 
-'''Required libraries:''' <code>[[en/Development/Script/Library#binary-heap|queue.binary_heap]]</code>
+'''Wymagane biblioteki:''' <code>[[pl/Development/Script/SI/Library#binary-heap|queue.binary_heap]]</code>
 
-'''Version History''':
+'''Historia wersji''':
 * aystar.1: r13461
 * aystar.2: r13463
 * aystar.3: r13496
 * aystar.4: current
 
-== Category: Pathfinder ==
+== Kategoria: Pathfinder ==
 
-=== Road ===
+=== Droga ===
 
-This is an implementation of a basic road pathfinder. You can use it to find the length of existing routes and / or to build new routes. Since version 3 building of tunnels / bridges is supported. For more information, see [[en/Development/Script/RoadPathfinder]]
+Jest to implementacja podstawowego identyfikatora drogi. Możesz go użyć, aby znaleźć długość istniejących tras i / lub zbudować nowe trasy. Od wersji 3 obsługiwane jest budowanie tuneli / mostów. Aby uzyskać więcej informacji, zobacz [[pl/Development/Script/SI/RoadPathfinder|AI:RoadPathfinder]]
 
-'''Required libraries:''' <code>[[en/Development/Script/Library#aystar|graph.aystar]]</code>
+'''Wymagane biblioteki:''' <code>[[pl/Development/Script/SI/Library#aystar|graph.aystar]]</code>
 
-'''Version History''':
+'''Historia wersji''':
 * road.1: r13500
 * road.2: r13570
 * road.3: current
 
-=== Rail ===
+=== Kolej ===
 
-This is an implementation of a basic rail pathfinder. You can use it to find a path for new railways. For more information, see [[en/Development/Script/RailPathfinder]]
+Jest to implementacja podstawowego identyfikatora torów kolejowych. Możesz go użyć, aby znaleźć ścieżkę dla nowych kolei. Aby uzyskać więcej informacji, zobacz [[pl/Development/Script/SI/RailPathfinder|AI:RailPathfinder]]
 
-'''Required libraries:''' <code>[[en/Development/Script/Library#aystar|graph.aystar]]</code>
+'''Wymagane biblioteki:''' <code>[[pl/Development/Script/SI/Library#aystar|graph.aystar]]</code>
 
-'''Version History''':
+'''Historia Wersji''':
 * rail.1: r14382
 
-== Category: Queue ==
+== Kategoria: Queue ==
 
 === Binary Heap ===
 
-This is an implementation of [https://www.wikipedia.org/wiki/Binary_heap binary heap] data structure.
+To jest data structure '(struktura danych)' implementacji [https://www.wikipedia.org/wiki/Binary_heap binary heap] .
 
-'''Version History''':
+'''Historia Wersji''':
 * binary_heap.1: current
 
 === Priority Queue ===
 
-This is an implementation of [https://www.wikipedia.org/wiki/Priority_queue priority queue] data structure.
+To jest data structure implementacji [https://www.wikipedia.org/wiki/Priority_queue priority queue] .
 
-'''Version History''':
+'''Historia Wersji''':
 * priority_queue.1: r13440
 * priority_queue.2: r13447
 
@@ -129,5 +129,5 @@ This is an implementation of [https://www.wikipedia.org/wiki/Priority_queue prio
 
 To jest data structure implementacji [https://www.wikipedia.org/wiki/Fibonacci_heap fibonacci heap] .
 
-'''Version History''':
+'''Historia Wersji''':
 * Fibonacci_heap.1: 14380
