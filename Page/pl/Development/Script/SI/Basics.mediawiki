@@ -3,7 +3,7 @@
 
 <!--{{NoAI}}-->{{pl/Development/Script/NoAI}}
 
-Zakładamy, że przeczytałeś  [[en/Development/Script/Introduction|Introduction]] , który wyjaśnia, jak dodać AI do OpenTTD. Ta strona wyjaśni, jak dodać kilka prostych rzeczy, aby sztuczna inteligencja mogła coś zrobić. Wynik znajduje się w przykładzie AI.
+Zakładamy, że przeczytałeś  [[pl/Development/Script/SI/Introduction|Introduction]] , który wyjaśnia, jak dodać AI do OpenTTD. Ta strona wyjaśni, jak dodać kilka prostych rzeczy, aby sztuczna inteligencja mogła coś zrobić. Wynik znajduje się w przykładzie AI.
 
 ==Nazywanie firmy==
 
@@ -16,13 +16,13 @@ Teraz zmieńmy nazwę naszej firmy. Funkcja, aby to zrobić, jak mówi nam inter
    AICompany.SetName("MyNewAI");
  }
  
-Now if you payed a bit of attention, you immediately notice that this goes against a rule you learn in the [[en/Development/Script/Introduction|Introduction]]: the <code>Start()</code> returns, therefore your AI dies. But, this is just for illustration, so it will do fine for now.
+Teraz, jeśli zwróciłeś trochę uwagi, natychmiast zauważysz, że jest to sprzeczne z regułą, której uczysz się w  [[en/Development/Script/Introduction|Introduction]]: zwraca <code>Start()</code> , dlatego twoja AI umiera. Ale to tylko dla ilustracji, więc na razie będzie dobrze.
 
-Uruchom OpenTTD, uruchom nową mapę i zobacz, jak twoja SI zmienia nazwę firmy nowego gracza na ''MyNewAI''.
+Uruchom OpenTTD, uruchom nową mapę i zobacz, jak twoja SI zmienia firmę nowych narzędzi na  ''MyNewAI'' .
 
-==Naming your company (advanced)==
+==Nazywanie firmy (zaawansowane)==
 
-But now what happens if your AI starts two times. You can't have two AIs with the same company-name. If you run it, you will see that the second name stays ''Unnamed''. That sucks. Lucky we can check the result of the function if it went okay. So let's extend it a bit, and check the result. If it fails, let's find ourselves an other name.
+Ale teraz co się stanie, jeśli twoja AI uruchomi się dwa razy. Nie możesz mieć dwóch AI o tej samej nazwie firmy. Jeśli go uruchomisz, zobaczysz, że drugie imię pozostaje ''Bez nazwy'' ('Unnamed'). To jest do bani. Na szczęście możemy sprawdzić wynik działania funkcji, jeśli zadziałała poprawnie. Rozwińmy to trochę i sprawdź wynik. Jeśli to się nie powiedzie, znajdźmy inne imię.
 
  function MyNewAI::Start()
  {
@@ -34,18 +34,18 @@ But now what happens if your AI starts two times. You can't have two AIs with th
    }
  }
 
-What happens here, is that if naming the AI to ''MyNewAI'' fails, it tries ''MyNewAI #2''. If that fails, it tries ''MyNewAI #3'', etc etc. At some point it should work, or rather, that is the idea. So there you have it, your first AI that does something ingame.
+To, co się tutaj dzieje, polega na tym, że jeśli nazywanie AI ''MyNewAI'' nie powiedzie się, spróbuje ''MyNewAI #2'' . Jeśli to się nie powiedzie, próbuje ''MyNewAI #3'' etc itd. W pewnym momencie powinno to zadziałać, a raczej taki jest pomysł. Masz więc swoją pierwszą sztuczną inteligencję, która robi coś w grze.
 
-==Printing debug output==
+== Drukowanie wyników debugowania ==
 
-To print output to the [[en/Development/Script/Need To Know#logging-and-debug-panel|AI Debug Panel]], you can use <code>[http://noai.openttd.org/docs/trunk/classAILog.html AILog]</code>. These messages are also written to the console (<code>AILog.Info</code> with ai debug level 4 or higher, <code>AILog.Warning</code> with level 3 or higher and <code>AILog.Error</code> with level 1 or higher). Note that these functions only accept a string as parameter. If you want to print anything else, convert it to a string first. The easiest way to do that is appending an empty string, for example:
+Aby wydrukować dane wyjściowe do [[pl/Development/Script/SI/Need To Know#logging-and-debug-panel|AI Debug Panel]] , możesz użyć <code>[http://noai.openttd.org/docs/trunk/classAILog.html AILog]</code> . Te komunikaty są również zapisywane w konsoli ( <code>AILog.Info</code> z ai debugowaniem na poziomie 4 lub wyższym,  <code>AILog.Warning</code> z poziomem 3 lub wyższym i <code>AILog.Error</code> z poziomem 1 lub wyższym). Zauważ, że te funkcje akceptują tylko ciąg jako parametr. Jeśli chcesz wydrukować cokolwiek innego, najpierw przekonwertuj go na ciąg. Najłatwiej to zrobić, dodając pusty ciąg, na przykład:
 
- AILog.Info(some_integer + "");
+ AILog.Info (some_integer + "");
 
 ==System zdarzeń ''event''==
 
 
-System zdarzeń jest prostym systemem ankiet. Będziesz musiał od czasu do czasu sondować kontroler zdarzeń, aby sprawdzić, czy na stosie są jakieś odpowiednie zdarzenia. Jest to względnie łatwe:
+System zdarzeń jest prostym systemem ankiet. Będziesz musiał od czasu do czasu sondować kontroler zdarzeń, aby sprawdzić, czy na stosie są jakieś odpowiednie zdarzenia. Jest to względnie łatwe
 
  while (AIEventController.IsEventWaiting()) {
    local e = AIEventController.GetNextEvent();
@@ -61,8 +61,8 @@ System zdarzeń jest prostym systemem ankiet. Będziesz musiał od czasu do czas
 
 ==Co teraz?==
 
-How to proceed next depends very much on what you want your AI to do. The best thing to do is to start browsing through the [http://noai.openttd.org/docs/ API]. We suggest to start with a road-vehicle-only AI. We know it is really boring, but you can really make a lot of money with them, if done correctly. Also, it is much easier to create and understand than trains are. Ships and aircraft are also very doable, but more boring than road-vehicles.
+To, jak postępować dalej, zależy w dużej mierze od tego, co chcesz zrobić. Najlepiej jest zacząć przeglądać [http://noai.openttd.org/docs/ API] . Sugerujemy zacząć od sztucznej inteligencji wyłącznie dla pojazdów drogowych. Wiemy, że to jest naprawdę nudne, ale możesz naprawdę zarobić na nich dużo pieniędzy, jeśli zrobisz to poprawnie. Łatwiej jest też tworzyć i rozumieć niż pociągi. Statki i samoloty są również bardzo wykonalne, ale bardziej nudne niż pojazdy drogowe.
 
-For example, if you want to build road and road-stations, check <code>AIRoad</code> documentation. You will find the right functions there. For station information check <code>AIStation</code>. For vehicle-building and settings orders, check <code>AIVehicle</code> and <code>AIOrder</code>. Sounds all pretty logical, doesn't it?
+Na przykład, jeśli chcesz zbudować drogę i stacje drogowe, sprawdź dokumentację <code>AIRoad</code> . Znajdziesz tam odpowiednie funkcje. Aby uzyskać informacje o stacji, sprawdź  <code>AIStation</code> . W przypadku zamówień budowy pojazdów i ustawień sprawdź <code>AIVehicle</code> i  <code>AIOrder</code> . Brzmi całkiem logicznie, prawda?
 
 Oczywiście jest wiele rzeczy, które ułatwiają ci życie. Jest na przykład fragment kodu, który ustawia wszystkie twoje polecenia w kolejce na dużej liście i od razu zaczyna je wykonywać na żądanie. Teraz, jeśli ktoś zawiedzie, czego wcześniej nie robił, wszystko cofa. Jest to bardzo przydatne od czasu do czasu, ponieważ przy planowaniu trasy zbudowanie jej mogło wydawać się bezproblemowe, ale do czasu umieszczenia fragmentu drogi może się zdarzyć, że inna firma już zabrała płytkę. Takie fragmenty kodu ułatwiają radzenie sobie w takich sytuacjach. Innymi przykładami są identyfikatory ścieżek i wiele innych.
