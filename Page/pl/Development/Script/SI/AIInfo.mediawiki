@@ -3,13 +3,13 @@
 
 <!--{{NoAI}}-->{{pl/Development/Script/NoAI}}
 
-'''info.nut''' to plik, w którym mówisz NoAI podstawowe rzeczy o swojej sztucznej inteligencji. Kiedyś był częścią <code>main.nut</code>, ale został oddzielony, aby ułatwić debugowanie ([[en/Archive/Development/AI Development milestones#20-may-2008-main-nut-is-split-in-two|Spójrz tutaj]] jeśli jesteś zainteresowany szczegółami).
+'''info.nut''' to plik, w którym mówisz NoAI podstawowe rzeczy o swojej sztucznej inteligencji. Kiedyś był częścią <code>main.nut</code>, ale został oddzielony, aby ułatwić debugowanie ([[pl/Archive/Development/SI/Development milestones#20-may-2008-main-nut-jest-podzielony-na-dwie-czesci|Spójrz tutaj]] jeśli jesteś zainteresowany szczegółami).
 
 Zobacz też http://noai.openttd.org/docs/trunk/classAIInfo.html dla lepszego (i pełnego) opisu wszystkich funkcji.
 
-== info.nut structure ==
+== info.nut struktura ==
 
-The internal structure of <code>info.nut</code> is very simple and follows a template presented below.
+Wewnętrzna struktura <code>info.nut</code> jest bardzo prosta i jest zgodna z szablonem przedstawionym poniżej.
 
  class '''MyNewAI''' extends AIInfo 
  {
@@ -27,11 +27,11 @@ The internal structure of <code>info.nut</code> is very simple and follows a tem
  /* Tell the core we are an AI */
  RegisterAI('''MyNewAI'''());
 
-Where of course you should change the names however you like to call everything. Just don't forget the <code>RegisterAI()</code>, and don't forget to extend <code>AIInfo</code>. If something goes wrong, check if you did: <code>RegisterAI(MyNewAI())</code>. Mind the <code>()</code> after <code>MyNewAI</code>!
+Gdzie oczywiście powinieneś zmienić nazwy, jakkolwiek chcesz nazywać wszystko. Po prostu nie zapomnij <code>RegisterAI()</code> i nie zapomnij rozszerzyć <code>AIInfo</code> . Jeśli coś pójdzie nie tak, sprawdź, czy zrobiłeś: <code>RegisterAI(MyNewAI())</code> . Zwróć uwagę na <code>()</code> po <code>MyNewAI</code> !
 
-== Settings ==
+== Ustawienia ==
 
-It is possible to allow users to change settings in your AI. The only requirement is that you tell them which settings. You can do this by altering your <code>info.nut</code> in the following way:
+Możliwe jest zezwolenie użytkownikom na zmianę ustawień w twojej AI. Jedynym wymaganiem jest to, abyś powiedział im, które ustawienia. Możesz to zrobić, zmieniając swój <code>info.nut</code> w następujący sposób:
 
  class '''MyNewAI''' extends AIInfo 
  {
@@ -69,15 +69,15 @@ It is possible to allow users to change settings in your AI. The only requiremen
  /* Tell the core we are an AI */
  RegisterAI('''MyNewAI'''());
 
-The new lines of course are those about Settings. In SetSetting it is important to define all properties. If not, an error will be given. Now in the GUI on your AI there will be an option to alter NameOfSetting between the values of 0 and 10, or a preset value if your have a difficulty setting different than 'Custom'. [[en/Development/Script/TestAI]] also shows simple examples of using bool (on/off) settings.
+Nowe wiersze oczywiście dotyczą Ustawień. W SetSetting ważne jest zdefiniowanie wszystkich właściwości. Jeśli nie, zostanie podany błąd. Teraz w graficznym interfejsie użytkownika na AI będzie dostępna opcja zmiany NameOfSetting między wartościami 0 i 10 lub wstępnie ustawionej wartości, jeśli masz trudności z ustawieniem innym niż 'Custom' . [[pl/Development/Script/SI/TestAI|AI:TestAI]] pokazuje również proste przykłady użycia ustawień bool (włącz/wyłącz ~ ''on/off'').
 
-Available parameters for AddSetting:
+Dostępne parametry dla AddSetting:
 {|
 |-
-! Name
-! Type
-! Required
-! Description
+! Nazwa
+! Typ
+! Wymagane
+! Opis
 |-
 | name
 | string
@@ -136,11 +136,11 @@ Available parameters for AddSetting:
 |}
 
 
-=== Flags ===
+=== Flagi ===
 {|
 |-
-! Flag
-! Description
+! Flaga
+! Opis
 |-
 | AICONFIG_BOOLEAN
 | Makes the setting a boolean choice. If you set this flag, don't specify min_value or max_value. All of easy_value, medium_value, hard_value and custom_value should be either 0 or 1 (not false/true).
@@ -158,7 +158,7 @@ Available parameters for AddSetting:
 It's possible to combine two or more settings together. For example this makes a random boolean: flags = AICONFIG_BOOLEAN | AICONFIG_RANDOM
 
 === AddLabels ===
-AddLabels akceptuje dwa parametry, pierwszy to nazwa ustawienia definiującego etykiety, a drugi to tabela z odwzorowaniem wartości na etykiety. Ponieważ identyfikatory nie mogą zaczynać się cyfrą, pierwszy znak jest ignorowany (podkreślenie w przykładzie). Reszta identyfikatora powinna być liczbą, dla której chcesz zdefiniować etykietę. Jeśli nie zdefiniujesz etykiety, numer jest wyświetlany jako liczba. Te etykiety są tylko dla użytkowników, w AI nadal będziesz otrzymywać wartości liczbowe, jeśli użyjesz GetSetting().
+AddLabels akceptuje dwa parametry, pierwszy do nazwy ustawień definiujących etykiety, a drugi do tabeli z odwzorowaniem wartości na etykiety. Ponieważ identyfikacja nie może zaczynać się cyfrą, pierwszy znak jest ignorowany (podkreślenie w programie). Reszta identyfikatora powinna być rozszerzona, dla tych, które chcesz zdefiniować etykietę. Jeśli nie ma znaczenia, etykieta jest częścią jako liczba. Te etykiety są tylko dla użytkowników, w AI nadal będziesz używać wartości liczbowych, jeśli użyjesz GetSetting().
 
 
 === Odczytywanie wartości ustawień ===
