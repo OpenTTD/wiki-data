@@ -5,8 +5,8 @@
 
 OpenTTD to gra w czasie rzeczywistym, więc żaden program nie może przewidzieć, czy pewne zaplanowane działanie zakończy się niepowodzeniem, czy też się powiedzie, dopóki nie zostanie wykonane. Pozwalając SI budować mosty, pojazdy, przekierowuj samoloty, ponieważ niektóre z tych poleceń zawiodą z jakiegoś powodu. Samolot może się rozbić, może być wymagane więcej pieniędzy, a inni przeciwnicy mogą zakłócać jego plany. Na razie NoAI nie może zgłaszać, czy polecenie zostało wykonane pomyślnie, jednak jeśli polecenie nie powiodło się, nie może zgłosić przyczyny niepowodzenia. Ta strona jest zarówno instrukcją dla pisarzy AI, ponieważ zawiera wskazówki dotyczące kodowania dla programistów, którzy chcą pomóc w aktualizacji tej funkcji i naprawianiu błędów.
 
-== Code ==
-Every error code in OpenTTD has its own ID (StringID) and is used to translate the error into one of the various languages to notify the user through a message on the GUI. In order to translate these errors we have to translate these StringIDs into error messages and expose them through the NoAI API. The last error message can be acquired by calling <code>AIError.GetLastError()</code>, and error messages can be checked by:
+== Kod ==
+Każdy kod błędu w OpenTTD ma swój własny identyfikator (StringID) i służy do przetłumaczenia błędu na jeden z różnych języków w celu powiadomienia użytkownika za pomocą komunikatu w GUI. Aby przetłumaczyć te błędy, musimy przetłumaczyć te identyfikatory StringID na komunikaty o błędach i udostępnić je za pomocą interfejsu API NoAI. Ostatni komunikat o błędzie można uzyskać, wywołując <code>AIError.GetLastError()</code> , a komunikaty o błędach można sprawdzić za pomocą:
 
  if (!AIAirport.BuildAirport(...)) {
    switch(AIError.GetLastError()) {
@@ -26,11 +26,11 @@ Every error code in OpenTTD has its own ID (StringID) and is used to translate t
    }
  }
 
-Internally error messages are mapped to both enum constants (like <code>AIError.ERR_NOT_ENOUGH_CASH</code>) and a string representation. The string representation can be acquired by calling <code>AIError.GetLastErrorString</code> and will match with the name of the enum constant, note that this is meant to be used for debug purposes only! The API documentation lists all errors per method that can occur by invoking it. There are however some exceptions, the following errors will not be listed as they apply to (nearly) all methods:
+Wewnętrzne komunikaty o błędach są odwzorowywane na obie stałe wyliczeniowe (takie jak <code>AIError.ERR_NOT_ENOUGH_CASH</code> ) i reprezentację ciągu. Reprezentację ciągu można uzyskać, wywołując <code>AIError.GetLastErrorString</code> i będzie pasować do nazwy stałej wyliczającej, zwróć uwagę, że jest ona przeznaczona wyłącznie do celów debugowania! Dokumentacja interfejsu API zawiera listę wszystkich błędów według metod, które mogą wystąpić po jej wywołaniu. Istnieją jednak pewne wyjątki, następujące błędy nie zostaną wymienione, ponieważ dotyczą (prawie) wszystkich metod:
 
-* <code>AIError.ERR_UNKNOWN</code>: There has been an error which hasn't been mapped to NoAI. This can either mean 2 things, there is no StringID for this error or we forgot to map it. In the latter case please file a bug report and tell us about it so we can fix it.
-* <code>AIError.ERR_PRECONDITION_FAILED</code>: You violated one of the preconditions of the method, no call to the underlaying system has been made.
-* <code>AIError.ERR_NEWGRF_SUPPLIED_ERROR</code>: This error is NewGRF specific and we're unable to trace it down and map it.
-* <code>AIError.ERR_NOT_ENOUGH_CASH</code>: You don't have enough money for the given action. This error is always checked for ''after'' other error conditions. This means that the operation would have succeed if there had been enough funds available.
+* <code>AIError.ERR_UNKNOWN</code>: Wystąpił błąd, który nie został odwzorowany na NoAI. Może to oznaczać 2 rzeczy, nie ma StringID dla tego błędu lub zapomnieliśmy go zmapować. W drugim przypadku zgłoś raport o błędzie i powiedz nam o tym, abyśmy mogli go naprawić.
+* <code>AIError.ERR_PRECONDITION_FAILED</code>: Naruszono jeden z warunków wstępnych metody, nie wykonano żadnego wywołania do systemu podkładania.
+* <code>AIError.ERR_NEWGRF_SUPPLIED_ERROR</code>: Ten błąd jest specyficzny dla NewGRF i nie możemy go prześledzić i zmapować.
+* <code>AIError.ERR_NOT_ENOUGH_CASH</code>: Nie masz wystarczających środków na dane działanie. Ten błąd jest zawsze sprawdzany ''po'' ('after') innych warunkach błędu. Oznacza to, że operacja powiodłaby się, gdyby było wystarczających środków.
 
 Znaczenie innych komunikatów o błędach można sprawdzić w [http://noai.openttd.org/docs/ API].
