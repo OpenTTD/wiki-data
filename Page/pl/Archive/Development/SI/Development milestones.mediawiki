@@ -10,7 +10,7 @@ NoAI jest scalony w trunk. Tak!
 
 == 20 lipca 2008 r. - Nowy sposób przypisywania sztucznej inteligencji firmie (funkcjonalnej) ==
 
-Stan na 2008-08-20 (r13771), nowa metoda określania, która sztuczna inteligencja powinna kontrolować, która firma i przy jakich ustawieniach. Because of that, the '-a' command line option is removed. Soon a GUI will be added to ease up editing, but for now you will need to open up 'openttd.cfg' and add/change the next section:
+Stan na 2008-08-20 (r13771), nowa metoda określania, która sztuczna inteligencja powinna kontrolować, która firma i przy jakich ustawieniach. Z tego powodu opcja wiersza polecenia '-a' została usunięta. Wkrótce zostanie dodany interfejs GUI, aby ułatwić edycję, ale na razie musisz otworzyć plik  'openttd.cfg' i dodać / zmienić następną sekcję:
 
  [ai_players]
  none = 
@@ -18,13 +18,13 @@ Stan na 2008-08-20 (r13771), nowa metoda określania, która sztuczna inteligenc
 
 Możesz zdefiniować do 8 miejsc. Dla każdej AI rozpoczynającej się w tym gnieździe (firmie), ta przypisana AI zostanie uruchomiona. Jeśli gracz ludzki zakłada firmę na tym polu, informacje AI są ignorowane. 'none' ''(brak)'' oznacza firmę ludzką.
 
-== 20 May 2008 - main.nut is split in two ==
+== 20 May 2008 - main.nut jest podzielony na dwie części ==
 
-As of 2008-05-20 (r13194), a new method of registering your AI is in place. This method solves many of the old problems. Like if you have a compile-problem now in your <code>main.nut</code>, at start-up this no longer gives an error. The error shows up when the AI wants to start, and this way we can redirect it to the AI Debug window. This solves the problem where the user had no idea why the AI didn't show up (as many (Windows) users never look at the console). The only thing important now, is that at start-up your <code>info.nut</code> is correct. Which should not be too difficult for most people.
+W dniu 2008-05-20 (r13194) wprowadzono nową metodę rejestracji AI. Ta metoda rozwiązuje wiele starych problemów. Na przykład, jeśli masz teraz problem z kompilacją w <code>main.nut</code> , przy uruchomieniu nie powoduje to już błędu. Błąd pojawia się, gdy AI chce się uruchomić, i w ten sposób możemy przekierować go do okna debugowania AI. Rozwiązuje to problem polegający na tym, że użytkownik nie miał pojęcia, dlaczego sztuczna inteligencja się nie pojawiła (wielu użytkowników (Windows) nigdy nie patrzy na konsolę). Teraz jedyną ważną rzeczą jest to, że podczas uruchamiania twój <code>info.nut</code> jest poprawny. Co nie powinno być zbyt trudne dla większości ludzi.
 
-===Upgrading from the old system===
+===Aktualizacja ze starego systemu===
 
-Basically, what you should do, is move a small part of your <code>main.nut</code> to <code>info.nut</code>. Example:
+Zasadniczo powinieneś przenieść niewielką część swojego <code>main.nut</code> do <code>info.nut</code>. Przykład:
 
  class FWrightAI extends '''AIFactory''' {
  	function GetAuthor()      { return "OpenTTD Dev Team"; }
@@ -38,7 +38,7 @@ Basically, what you should do, is move a small part of your <code>main.nut</code
  /* Tell the core we are an AI */
  '''iFWrightAI <- FWrightAI();'''
 
-Should be removed and <code>info.nut</code> should get:
+Powinien zostać usunięty i powinien otrzymać  <code>info.nut</code> :
 
  class WrightAI extends '''AIInfo''' {
  	function GetAuthor()      { return "OpenTTD Dev Team"; }
@@ -51,9 +51,9 @@ Should be removed and <code>info.nut</code> should get:
  
  '''RegisterAI(WrightAI());'''
 
-Things to remember:
-* the <code><-</code> line becomes <code>RegisterAI</code>
-* <code>AIFactory</code> becomes <code>AIInfo</code>.
+Rzeczy do zapamiętania:
+* <code><-</code> linia staje się <code>RegisterAI</code>
+* <code>AIFactory</code> staje się <code>AIInfo</code>.
 
 == 17 marca 2008 r. - Porzucono obsługę C ++ ==
 
