@@ -14,28 +14,28 @@ Jeśli utworzysz funkcję <code>Save()</code> w swojej sztucznej inteligencji, m
 
 Instancji zajęć nie można zapisać. Należy pamiętać, że obejmuje to AIList, więc jeśli chcesz przechowywać AIList, musisz przekonwertować go na tablicę lub tabelę podczas zapisywania i przekonwertować z powrotem przy ładowaniu.
 
-As soon as the user saves the game, the <code>Save()</code> function of your AI is called. This happens while your AI is still active doing whatever you made it do. For example, in the middle of a pathfinding, or maybe when you are changing an internal array. The point here is, that your AI won't notice it, besides the fact that the <code>Save()</code> is called for a moment. When you return from that function, your AI continues like nothing happened. Warning: if you change a variable that you also store, and want to make absolutely sure no race-conditions happen, do it right after a <code>Sleep()</code>. The chances of the Squirrel fair-scheduler kicking in just after a <code>Sleep()</code> are very slim, so you should be relatively safe.
+Gdy tylko użytkownik zapisze grę, wywoływana jest funkcja <code>Save()</code> twojej sztucznej inteligencji. Dzieje się tak, gdy twoja sztuczna inteligencja jest nadal aktywna i robi wszystko, co do niej wykonałeś. Na przykład w środku szukania ścieżki, a może podczas zmiany tablicy wewnętrznej. Chodzi o to, że twoja sztuczna inteligencja tego nie zauważy, poza tym, że <code>Save()</code> jest wywoływane na chwilę. Kiedy wrócisz z tej funkcji, twoja sztuczna inteligencja trwa, jakby nic się nie wydarzyło. Ostrzeżenie: jeśli zmienisz zmienną, którą również przechowujesz i chcesz mieć absolutną pewność, że nie wystąpią żadne warunki wyścigu, zrób to zaraz po <code>Sleep()</code> . Szanse na uruchomienie rzetelnego harmonogramu Squirrel zaraz po <code>Sleep()</code> są bardzo niewielkie, więc powinieneś być względnie bezpieczny.
 
-'''Note:''' No other information is saved, so for example all pending events are lost as soon as the game is loaded. To circumvent this you can store all events (converted to allowed types) in the savegame yourself. However, the game will continue normally after the <code>Save()</code> function is called, so you also need to handle those events.
+'''Nota:''' Żadne inne informacje nie są zapisywane, więc na przykład wszystkie oczekujące zdarzenia zostaną utracone, gdy tylko gra się załaduje. Aby to obejść, możesz samodzielnie zapisać wszystkie zdarzenia (przekonwertowane na dozwolone typy). Jednak gra będzie normalnie kontynuowana po wywołaniu funkcji <code>Save()</code> , więc musisz także obsłużyć te zdarzenia.
 
-== Load ==
-If a savegame with an AI in it is loaded, OpenTTD tries the following. As soon as one step succeeds, the sequence is stopped:
-* Try to load the exact same version of the same AI.
-* Try to load the latest version of the same AI that supports loading data from the saved version. (version of saved AI >= return value of MinVersionToLoad)
-* Load the latest version of the same AI.
-* Load a random AI.
-* Load the dummy AI.
+== Załadowanie ==
+Jeśli zostanie zapisana gra zapisana z AI, OpenTTD spróbuje wykonać następujące czynności. Gdy tylko jeden krok się powiedzie, sekwencja jest zatrzymywana:
+* Spróbuj załadować dokładnie tę samą wersję tego samego AI.
+* Spróbuj załadować najnowszą wersję tego samego AI, która obsługuje ładowanie danych z zapisanej wersji. (wersja zapisanej AI >= zwracana wartość MinVersionToLoad)
+* Załaduj najnowszą wersję tego samego AI.
+* Załaduj losową AI.
+* Załaduj sztuczny ''(dummy)'' AI.
 
-First the constructor of your AI is called (to create an instance of the AI). Then your <code>Load(version, data)</code> function is called with the version number of the AI used to save and the saved data itself, and finally the <code>Start()</code> function is called to start the program. If an AI didn't save any data, the <code>Load()</code> function is not called. (The constructor is called to make an instance, and then <code>Start()</code> is called.)
+Najpierw nazywa się konstruktor AI (aby utworzyć instancję AI). Następnie wywoływana jest funkcja <code>Load(version, data)</code> z numerem wersji AI użytej do zapisania i samych zapisanych danych, a na koniec funkcja <code>Start()</code> jest wywoływana aby uruchomić program. Jeśli AI nie zapisała żadnych danych, funkcja <code>Load()</code> nie jest wywoływana. (Konstruktor jest wywoływany w celu utworzenia instancji, a następnie wywoływana jest funkcja <code>Start()</code> .)
 
 == Jakie dane zapisać? ==
 Oczywiście, jakie dane dokładnie zapiszesz, zależy od ciebie, ale zasadniczo nie powinieneś zapisywać niczego, co można łatwo wykryć, czytając mapę ponownie. Możesz więc zapisać mapowanie stacji ciężarówek do przemysłu, ale przechowywanie tylko listy stacji jest bezużyteczne.
 
-== What you can't do in your Save() and Load() function ==
-Both the Save() and Load function() are called from within the main thread. This means that it is not possible to execute any command that builds / removes / changes something in the game. You can execute some API functions, but only those that fetch data. Please try to minimize the code in Save() and Load(), as the user has to wait for those functions everytime they save and load a game.
+== Czego nie można zrobić w funkcji Save() i Load() ==
+Zarówno Save(), jak i Load function() są wywoływane z głównego wątku. Oznacza to, że nie można wykonać żadnego polecenia, które buduje / usuwa / zmienia coś w grze. Możesz wykonać niektóre funkcje API, ale tylko te, które pobierają dane. Spróbuj zminimalizować kod w Save() i Load(), ponieważ użytkownik musi czekać na te funkcje za każdym razem, gdy zapisuje i ładuje grę.
 
-== Handling of save versions ==
-When a game is saved, the name and version of each AI is saved. When OpenTTD loads a game it tries to find a version of the same AI that can load the game state from the version of the AI that was used in the save. By declaring <code>MinVersionToLoad()</code> in your info.nut and make it return the minimum version of your AI from which it can load the data.
+== Obsługa wersji zapisu ==
+Po zapisaniu gry zostaje zapisana nazwa i wersja każdej AI. Gdy OpenTTD ładuje grę, próbuje znaleźć wersję tego samego AI, która może załadować stan gry z wersji AI, która została użyta w składowaniu. Deklarując <code>MinVersionToLoad()</code> w swoim info.nut i spraw, aby zwrócił minimalną wersję twojej AI, z której może załadować dane.
 
 Dodatkowo istnieje argument wersji Load(), który informuje funkcję load, która wersja twojej AI została użyta do zapisania stanu gry.
 
@@ -92,11 +92,11 @@ Ponieważ różne newgrfs mogą zmieniać wiele różnych typów identyfikatoró
 
 {| border="1"
 |-
-! ID type
-! Meaning
-! Store in savegames
-! Hardcode into AIs
-! Note
+! typ ID 
+! Znaczenie
+! Przechowywane w savegames
+! Kod na AI
+! Nota
 |-
 | BridgeID
 | Type of bridge (ex. tubular)
