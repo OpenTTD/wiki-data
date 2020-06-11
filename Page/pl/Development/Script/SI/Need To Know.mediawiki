@@ -11,27 +11,27 @@ Najprostszym sposobem jest ustawienie liczby AI na zero w oknie dialogowym Ustaw
 
  start_ai <the name of your AI>
 
-The AI of your choice will start immediately.
+Wybrana sztuczna inteligencja rozpocznie się natychmiast.
 
-To list all the AIs in-game, type in the console:
+Aby wyświetlić listę wszystkich AI w grze, wpisz w konsoli:
 
  list_ai
 
-The list of AIs detected by OpenTTD is also available via:
+Dostępna jest także lista AI wykrytych przez OpenTTD via:
 
  ./openttd --help
 
-=== Loading and restarting AI's ===
+=== Ładowanie i restartowanie AI ===
 
-All AIs are reloaded when starting a new game. There is no need to restart the game; abandoning the current level and starting again is usually the easiest method to restart the AI from a scratch map (try <code>newgame</code> from console), or loading a scenario setup to be the same each time. The AI Debug Window also allows restarting individual AIs.
+Wszystkie AI są ponownie ładowane po rozpoczęciu nowej gry. Nie ma potrzeby ponownego uruchamiania gry; porzucenie obecnego poziomu i rozpoczęcie od nowa jest zwykle najłatwiejszym sposobem na ponowne uruchomienie sztucznej inteligencji z mapy scratch (spróbuj <code>newgame</code> z konsoli) lub załadowanie konfiguracji scenariusza za każdym razem tak samo. Okno debugowania AI umożliwia również restartowanie poszczególnych AI.
 
-To load a specific scenario immediately, use:
+Aby natychmiast załadować określony scenariusz, użyj:
 
  ./openttd -g relative/path/to/scenario.scn
 
-=== Logging and Debug Panel ===
+=== Panel Logowania i Debugowania ===
 
-AI Debug panel is accessible from the Land Area Information (red question mark) labelled "AI Debug Console". All outputs of <code>AILog.XXX()</code> go to here, and can be selected per AI. The AI can also be restarted here. When restarting, the company of that AI is removed (with all his property), and a new AI controlled by the same script (which is reloaded from disk) is started. So when changing the AI, it is enough to just hit the Reload button to get your new AI to work.
+Panel AI Debugowania jest dostępny z Informacji o obszarze lądowym (czerwony znak zapytania) oznaczonej "Konsola Debugowania SI" ''('AI Debug Console')''. Wszystkie wyjścia <code>AILog.XXX()</code> znajdują się tutaj i można je wybrać według AI. AI można również zrestartować tutaj. Podczas ponownego uruchamiania firma tego AI jest usuwana (wraz z całą jego własnością) i uruchamiana jest nowa AI kontrolowana przez ten sam skrypt (który jest ponownie ładowany z dysku). Dlatego przy zmianie AI wystarczy nacisnąć przycisk Przeładuj, aby uruchomić nową sztuczną inteligencję.
 
 [[File:en/Development/Script/Ai-debug-panel.png|frame|none|AI Debug Panel]]
 
@@ -39,43 +39,43 @@ AI Debug panel is accessible from the Land Area Information (red question mark) 
 <!--{{Feature|1.1}}-->{{pl/Zgodne Wersje|1.1}}
 Od wersji r19544 na dole panelu debugowania dodano kilka nowych elementów sterujących do łamania AI, gdy pojawią się pewne komunikaty dziennika. Aby go użyć, wpisz ciąg znaków w polu tekstowym, a gdy AI wydrukuje komunikat dziennika pasujący do tego ciągu, AI zostanie zawieszony po wywołaniu AILog, a na końcu bieżącego tiku OpenTTD zostanie wstrzymany. Po naciśnięciu przycisku kontynuowania lub zwykłego przycisku pauzy AI będzie nadal działać. Jeśli chcesz tymczasowo wyłączyć dopasowanie bez usuwania pola edycji, możesz użyć małego przycisku przełączania po lewej stronie pola edycji.
 
-To enable this feature you need to have the setting "gui.ai_developer_tools" enabled. To enable it you can open the in-game console and enter "set gui.ai_developer_tools 1".
+Aby włączyć tę funkcję, musisz włączyć ustawienie "gui.ai_developer_tools" enabled. Aby ją włączyć, możesz otworzyć konsolę w grze i wpisać "set gui.ai_developer_tools 1".
 
-[[File:en/Development/Script/AIDebug break on.png|frame|none|AI Debug Panel - break on string]]
+[[File:en/Development/Script/AIDebug break on.png|frame|none|AI Debug Panel - zatrzymanie na ciągu]]
 
 ==== AIController::Break ====
-[http://noai.openttd.org/api/trunk/classAIController.html#9a99eff898d772565ee61029c596f484 From documentation]: Break execution of the script when script developer tools are active (setting "gui.ai_developer_tools" is enabled). For other users, nothing will happen when you call this function. To resume the script, you have to click on the continue button in the AI debug window.
+[http://noai.openttd.org/api/trunk/classAIController.html#9a99eff898d772565ee61029c596f484 From documentation]: Przerwij wykonywanie skryptu, gdy aktywne są narzędzia programistyczne skryptów (ustawienie "gui.ai_developer_tools" jest włączone). W przypadku innych użytkowników nic się nie stanie po wywołaniu tej funkcji. Aby wznowić skrypt, kliknij przycisk Kontynuuj w oknie debugowania AI.
 
-==== Developer Console Usage ====
+==== Wykorzystanie Konsoli Programisty ====
 
-The console is accessed using the ` key (next to "1") on the keyboard, and appears in the top part of the screen. This can be scrolled by using the Shift + Page Up/Down.
+Dostęp do konsoli uzyskuje się za pomocą klawisza `(obok "1" ) na klawiaturze i pojawia się w górnej części ekranu. Można to przewijać za pomocą Shift + Page Up/Down .
 
-To get a separate window (Windows Only) use the <code>-d</code> parameter by itself (use <code>-d script=5</code> to get only AI information) on a shortcut:
+Aby uzyskać osobne okno (tylko Windows), użyj parametru <code>-d</code> (użyj <code>-d script=5</code> , aby uzyskać tylko informacje AI) na skrócie:
 
  ./openttd -d
 
-This provides this output (Windows Only):
+Zapewnia to wyjście (tylko Windows):
 
-[[File:en/Development/Script/Openttd -d.png|frame|none|Zuu's example of the developer console -d version outputting AI errors.]]
+[[File:en/Development/Script/Openttd -d.png|frame|none|Przykład Zuu dotyczący wersji -d konsoli programisty wyświetlającej błędy AI.]]
 
-For linux, using <code>-d script=5</code> will send all information to the stdout.
+W systemie Linux użycie <code>-d script=5</code> wyśle ​​wszystkie informacje na standardowe wyjście.
 
-==== Logging ====
+==== Logging ''(Logowanie)'' ====
 
-<code>AILog.XXX()</code> commands can be output to the developer console directly by:
+<code>AILog.XXX()</code> polecenia mogą być wysyłane bezpośrednio do konsoli programisty przez:
 
  ./openttd -d script=5
  openttd.exe -d script=5
 
-Or by inputting <code>debug_level script=5</code> in the console.
+Lub wpisując <code>debug_level script=5</code> w konsoli.
 
-== AI Fundamentals ==
+== AI Fundamenty ==
 
 === GetTick() ===
 
-When your <code>Start()</code> is called for the first time, <code>GetTick()</code> always returns 1. It is not an important value. It is just meant to give an indication of time, as we always find it useful to know when an AI spit out a message (was it ages ago, or was it recent). This said, you of course want to know when its value is changed by the game:
+Po pierwszym wywołaniu  <code>Start()</code> , <code>GetTick()</code> zawsze zwraca 1. Nie jest to ważna wartość. Ma on jedynie na celu wskazanie czasu, ponieważ zawsze uważamy, że warto wiedzieć, kiedy sztuczna inteligencja wypluła wiadomość (czy to było dawno temu, czy niedawno). To powiedziawszy, oczywiście chcesz wiedzieć, kiedy jego wartość zmienia się w grze:
 
-Of course it changes when you do <code>Sleep()</code>, and with the exact value you specified in the <code>Sleep()</code>. But it also changes when you execute a command. This has to do that in networking it takes time to do something, and as you want to know if something really built, we have to wait till we get a signal back from the server. Now to make your life easier, we made singleplayer and multiplayer simular: they both delay. In singleplayer this is always 1 tick, unless you configured it with <code>SetDelay()</code>. In multiplayer it is at least 1 tick, but depends on the server-configuration. If you set <code>SetDelay()</code> lower than the server-configuration, the server-configuration wins, and else <code>SetDelay()</code> does.
+Oczywiście zmienia się to, gdy wykonasz <code>Sleep()</code> i z dokładną wartością określoną w <code>Sleep()</code> . Ale zmienia się również po wykonaniu polecenia. Musi to zrobić w sieci, aby coś zrobić, a jeśli chcesz wiedzieć, czy coś naprawdę zbudowano, musimy poczekać, aż otrzymamy sygnał z serwera. Teraz, aby ułatwić Ci życie, stworzyliśmy grę jedno i wieloosobową: oba opóźniają się. W trybie dla jednego gracza jest to zawsze 1 tik, chyba że skonfigurowałeś go za pomocą <code>SetDelay()</code> . W grze wieloosobowej jest to co najmniej 1 tik, ale zależy to od konfiguracji serwera. Jeśli ustawisz <code>SetDelay()</code> na niższą niż konfiguracja serwera, konfiguracja serwera wygrywa, a także <code>SetDelay()</code> .
 
 Co to znaczy?:
 
@@ -83,42 +83,42 @@ Co to znaczy?:
  SetCompanyName()
  GetTick() -> 4 (or higher)
 
-As you might notice, you can't use <code>GetTick()</code> for anything else but debugging. It isn't a good indicator of time, it isn't usable to do something every 10 ticks or something, nothing of that. You will need to make such a system yourself.
+Jak można zauważyć, nie można używać <code>GetTick()</code> do niczego innego niż debugowanie. To nie jest dobry wskaźnik czasu, nie można robić czegoś co 10 tyknięć czy coś, nic z tego. Musisz sam stworzyć taki system.
 
-=== Opcodes ===
+=== Kody ''(Opcodes)''===
 
-Remember back in the [[en/Development/Script/Introduction#your-first-ai|Introduction]] when we told you that the AI would be suspended after X opcodes? Well, that was an half-truth. To dwell a little in the details, an opcode is, basically, one squirrel instruction. The framework simply counts the number of squirrel instructions your AI does and puts it to sleep after a certain amount. What's insidious about this is that it is possible to call C++ code from within squirrel, which instructions aren't counted because, well, it's not squirrel. 
+Pamiętasz w [[pl/Development/Script/SI/Introduction#twoje-pierwsze-ai|Introduction]]  , kiedy powiedzieliśmy ci, że AI zostanie zawieszone po X kodach? To była półprawda. Aby zagłębić się trochę w szczegóły, kod operacyjny to w zasadzie jedna instrukcja squirrel . Struktura po prostu liczy liczbę instrukcji squirrel, które wykonuje twoja sztuczna inteligencja, i uśpia ją po określonej ilości. Podstępne w tym jest to, że można wywołać kod C++ z poziomu squirrel, których instrukcje nie są liczone, ponieważ, cóż, to nie jest squirrel.
 
-For example, if I were to play on a 2048x2048 map and make use of a Valuator to valuate all tiles on the map using a valuator written in C++, I would steal all the CPU resources and "freeze" the game for some time. (Thanks to [http://www.tt-forums.net/viewtopic.php?p=892576#p892576 Morloth] for the explanation and example!)
+Na przykład, gdybym grał na mapie 2048 x 2048 i używał Valuatora do wyceny wszystkich kafelków na mapie za pomocą kalkulatora napisanego w C++, ukradłbym wszystkie zasoby procesora i zawiesiłby grę na jakiś czas. (Dzięki [http://www.tt-forums.net/viewtopic.php?p=892576#p892576 Morloth] za wyjaśnienie i przykład!)
 
 == Mechanika gry ==
 
-=== Map Coordinates ===
+=== Współrzędne mapy ===
 
-[[File:en/Development/Script/Ai-placed-coordinate-of-airport.png|frame|right|The AI placed this airport, using the top right most coordinate, which is also its returned location. The airport size is X=4, Y=3]]
+[[File:en/Development/Script/Ai-placed-coordinate-of-airport.png|frame|right|AI umieściło to lotnisko, używając współrzędnej w prawym górnym rogu, która jest również jego zwróconą lokalizacją. Rozmiar lotniska wynosi X=4, Y=3]]
 
-Map (X, Y) coordinates are done from the top to the bottom - the top-most coordinate is (0,0), the bottom-most coordinate is (Max_X-1, Max_Y-1). X is increased by going SW, and Y increased by going SE. Any time a more than one tile dimension object is returned, it'll be the most top coordinate, tending towards the top right.
+Współrzędne mapy (X, Y) są wykonywane od góry do dołu - najwyższa współrzędna to (0,0), najniższa współrzędna to (Max_X-1, Max_Y-1). X zwiększa się, przechodząc w SW, a Y zwiększa się, przechodząc w SE. Za każdym razem, gdy zwracany jest więcej niż jeden obiekt wymiaru płytki, będzie to najwyższa współrzędna górna, zmierzająca w kierunku prawego górnego rogu.
 
-However, an AI cannot access all coordinates as tiles. The outside edge of the map is reserved as non-buildable tiles. These are tiles in which the X or Y value is either 0, Max_X-1 (if X), or Max_Y-1 (if Y). The API will treat tiles with these coordinates as invalid.
+Jednak AI nie może uzyskać dostępu do wszystkich współrzędnych jako kafelków. Zewnętrzna krawędź mapy jest zarezerwowana jako płytki, których nie można zbudować. Są to kafelki, w których wartość X lub Y wynosi 0, Max_X-1 (jeśli X) lub Max_Y-1 (jeśli Y). Interfejs API potraktuje płytki o tych współrzędnych jako nieprawidłowe.
 
-This behavior varies, however, if the freeform_edges option is enabled. If freeform_edges is turned off, then the upper two edges (those where X or Y is 0) become accessible.
+To zachowanie różni się jednak, jeśli włączona jest opcja freeform_edges. Jeśli freeform_edges jest wyłączony, wówczas górne dwie krawędzie (te, gdzie X lub Y wynosi 0) stają się dostępne.
 
-So with freeform_edges on, the top-most tile the AI can use is (1, 1). But with freeform_edges off, the top-most tile is (0, 0).
+Zatem przy włączonych elementach freeform najwyższy kafelek, jaki AI może użyć, to (1, 1). Ale przy wyłączonych elementach freeform najwyższy kafelek to (0, 0).
 
-The bottom-most tile accessible to the AI is always (Max_X-2, Max_Y-2).
+Najniższy kafelek dostępny dla AI to zawsze (Max_X-2, Max_Y-2).
 
-To get Max_X and Max_Y, the <code>AIMap.GetMapSizeX()</code> and <code>AIMap.GetMapSizeY()</code> functions can be used, respectively.
+Aby uzyskać Max_X i Max_Y, można użyć odpowiednio funkcji<code>AIMap.GetMapSizeX()</code> i <code>AIMap.GetMapSizeY()</code> .
 
-When using <code>AITile.IsBuildableRectangle</code> with [[en/Development/Script/Lists|Lists]], the list will contain those tiles where you can build an object of the size specified, where the returned tile is the one with the lowest X and Y value of the rectangle (or rather: the tile most North).
+Gdy używasz <code>AITile.IsBuildableRectangle</code> z [[pl/Development/Script/SI/Lists|Listy]] , lista będzie zawierać te kafelki, w których możesz zbudować obiekt o określonym rozmiarze, w którym zwrócona płytka jest tą o najniższej wartości Wartość X i Y prostokąta (a raczej: kafelek najbardziej na północ).
 
-=== Distance Calculations ===
+=== Obliczenia odległości ===
 
-All in-game distances use [http://en.wikipedia.org/wiki/Taxicab_geometry Manhattan distance] calculations, so the distance between (3,3) and (5,5) calculated by the game is 4:
+Wszystkie odległości w grze wykorzystują obliczenia [http://en.wikipedia.org/wiki/Taxicab_geometry Manhattan distance] , więc odległość między (3,3) a (5,5) obliczona przez grę wynosi 4:
  abs(3-5)  + abs(3-5) = 4
-Use <code>AITile.GetDistanceManhattanToTile</code> to get this distance between tiles. <code>AITile.GetDistanceSquareToTile</code> is much less necessary, calculating the same distance as 8:
+Użyj <code>AITile.GetDistanceManhattanToTile</code> , aby uzyskać odległość między kafelkami.  <code>AITile.GetDistanceSquareToTile</code> jest znacznie mniej potrzebny, obliczając tę ​​samą odległość co 8:
  (3-5)^2 + (3-5)^2 = 8
 
-The distance might not be exactly what a "plane would fly", since planes, boats and trains with the correct tracks can move diagonally, lowering the direct distance taken between tiles. Buses always must move Manhattan distances however due to having no type of diagonal roads. For an AI, you'll nearly always want to use <code>AITile.GetDistanceManhattanToTile</code>, as that is the function OpenTTD uses internally for distance calculations.
+Odległość może nie być dokładnie taka, jak "samolot leciałby" ''(plane would fly)'' , ponieważ samoloty, łodzie i pociągi z prawidłowymi torami mogą poruszać się po przekątnej, zmniejszając bezpośrednią odległość między płytkami. Autobusy zawsze muszą poruszać się na odległość Manhattanu, ponieważ nie mają one rodzaju ukośnych dróg. W przypadku sztucznej inteligencji prawie zawsze będziesz chciał użyć  <code>AITile.GetDistanceManhattanToTile</code> , ponieważ jest to funkcja używana wewnętrznie przez OpenTTD do obliczania odległości.
 
 ==== Tile Arithmetic ====
 
