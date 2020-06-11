@@ -44,7 +44,7 @@ Aby włączyć tę funkcję, musisz włączyć ustawienie "gui.ai_developer_tool
 [[File:en/Development/Script/AIDebug break on.png|frame|none|AI Debug Panel - zatrzymanie na ciągu]]
 
 ==== AIController::Break ====
-[http://noai.openttd.org/api/trunk/classAIController.html#9a99eff898d772565ee61029c596f484 From documentation]: Przerwij wykonywanie skryptu, gdy aktywne są narzędzia programistyczne skryptów (ustawienie "gui.ai_developer_tools" jest włączone). W przypadku innych użytkowników nic się nie stanie po wywołaniu tej funkcji. Aby wznowić skrypt, kliknij przycisk Kontynuuj w oknie debugowania AI.
+[http://noai.openttd.org/api/trunk/classAIController.html#9a99eff898d772565ee61029c596f484 Z dokumentacji]: Przerwij wykonywanie skryptu, gdy aktywne są narzędzia programistyczne skryptów (ustawienie "gui.ai_developer_tools" jest włączone). W przypadku innych użytkowników nic się nie stanie po wywołaniu tej funkcji. Aby wznowić skrypt, kliknij przycisk Kontynuuj w oknie debugowania AI.
 
 ==== Wykorzystanie Konsoli Programisty ====
 
@@ -120,11 +120,11 @@ Użyj <code>AITile.GetDistanceManhattanToTile</code> , aby uzyskać odległość
 
 Odległość może nie być dokładnie taka, jak "samolot leciałby" ''(plane would fly)'' , ponieważ samoloty, łodzie i pociągi z prawidłowymi torami mogą poruszać się po przekątnej, zmniejszając bezpośrednią odległość między płytkami. Autobusy zawsze muszą poruszać się na odległość Manhattanu, ponieważ nie mają one rodzaju ukośnych dróg. W przypadku sztucznej inteligencji prawie zawsze będziesz chciał użyć  <code>AITile.GetDistanceManhattanToTile</code> , ponieważ jest to funkcja używana wewnętrznie przez OpenTTD do obliczania odległości.
 
-==== Tile Arithmetic ====
+==== Arytmetyka kafla ''(tile)'' ====
 
-As part of various applications (e.g. pathfinding), an AI will need the ability to move around the map. Because of the way tile indices are represented, you can perform simple arithmetic on a tile index to find a new tile relative to its position. Adding or subtracting the result of <code>AIMap.GetTileIndex(x, y)</code> to a tile will yield the index of the tile ''x'' and ''y'' tiles from the original position.
+W ramach różnych aplikacji (np. Odnajdywania ścieżek ~ ''pathfinding'') AI będzie musiała móc poruszać się po mapie. Ze względu na sposób reprezentowania wskaźników kafelków można wykonać prostą arytmetykę na indeksie kafelków, aby znaleźć nowy kafelek względem jego pozycji. Dodanie lub odjęcie wyniku <code>AIMap.GetTileIndex(x, y)</code> do kafelka spowoduje wyświetlenie indeksu kafelków  ''x'' i ''y'' z pierwotnej pozycji.
 
-For instance, the following code snippet will create a list of tiles directly adjacent to ''tile''...
+Na przykład poniższy fragment kodu utworzy listę kafelków bezpośrednio przylegających do ''tile''...
 
  local adjacent = AITileList();
  adjacent.AddTile(tile - AIMap.GetTileIndex(1,0));
@@ -132,7 +132,7 @@ For instance, the following code snippet will create a list of tiles directly ad
  adjacent.AddTile(tile - AIMap.GetTileIndex(-1,0));
  adjacent.AddTile(tile - AIMap.GetTileIndex(0,-1));
 
-This snippet creates a list containing all tiles within an 11x11 square area centered around ''tile''...
+Ten fragment tworzy listę zawierającą wszystkie kafelki w obszarze kwadratu 11x11 pośrodku ''tile''...
 
  local area = AITileList();
  area.AddRectangle(tile - AIMap.GetTileIndex(5, 5), tile + AIMap.GetTileIndex(5, 5));
@@ -149,7 +149,7 @@ Najpierw utwórz listę ładunków:
 
  local list = AICargoList();
  
-Now filter what we want.. we want non-freight (short: mail, passengers, ... everything that doesn't go to industry).
+Teraz filtruj to, czego chcemy. Chcemy przesyłek nie-towarowych (krótko: poczta, pasażerowie, ... wszystko, co nie trafia do przemysłu).
 
  list.Valuate(AICargo.IsFreight);
  list.KeepValue(0);
@@ -162,10 +162,10 @@ Teraz najlepszym ładunkiem do transportu jest pierwszy wpis na liście:
 
  local cargo = list.Begin();
 
-When using this method, you can get other types of cargo when loading certain NewGRFs. Nevertheless, there is always a cargo you can transport from and to towns, and there is always one that is most profitable. So it is not important if it is passengers or not. It doesn't matter what your AI transports as long as it makes profit (>=20k USD).
+Korzystając z tej metody, możesz uzyskać inne rodzaje ładunku podczas ładowania niektórych NewGRF. Niemniej jednak zawsze istnieje ładunek, który można przewieźć zi do miast, i zawsze taki, który jest najbardziej opłacalny. Dlatego nie jest ważne, czy są to pasażerowie, czy nie. Nie ma znaczenia, co twoja AI transportuje, o ile przynosi zysk (>=20k USD).
 
 
-Of course it is also possible to find a cargo based on the class of the cargo. Don't just use value '0' for passengers, it might not hold for all NewGRFs. What is safe to do, is find the cargo that belongs to <code>AICargo.CC_PASSENGERS</code>. To give a simple code snippet which illustrates this:
+Oczywiście możliwe jest również znalezienie ładunku na podstawie klasy ładunku. Nie używaj po prostu wartości '0' dla pasażerów, może ona nie obowiązywać dla wszystkich NewGRF . Bezpiecznie jest znaleźć ładunek należący do <code>AICargo.CC_PASSENGERS</code> . Aby dać prosty fragment kodu, który to ilustruje:
 
  local list = AICargoList();
  local pass_cargo = -1;
@@ -177,7 +177,7 @@ Of course it is also possible to find a cargo based on the class of the cargo. D
  }
  if (pass_cargo == -1) AILog.Error("Your game doesn't have any passengers cargo, and as we are a passenger only AI, we can't do anything");
 
-An alternative way:
+Alternatywny sposób:
 
  local cargoList = AICargoList();
  cargoList.Valuate(AICargo.HasCargoClass, AICargo.CC_PASSENGERS);
@@ -185,11 +185,11 @@ An alternative way:
  if (cargoList.Count() == 0) AILog.Error("Your game doesn't have any passengers cargo, and as we are a passenger only AI, we can't do anything");
  local paxCargo = cargoList.Begin();
 
-At the end, either it gave an error, or pass_cargo is the value of the first cargo belonging to the <code>CC_PASSENGERS</code> class. More complex solutions are possible by using the Valuator and find that cargo belonging to the <code>CC_PASSENGERS</code> class that gives the most profit. Of course, without any NewGRFs this is always Passengers.
+Na koniec albo dał błąd, albo pass_cargo jest wartością pierwszego ładunku należącego do klasy <code>CC_PASSENGERS</code> . Przy pomocy Valuatora możliwe są bardziej złożone rozwiązania i stwierdzenie, że ładunek należący do klasy <code>CC_PASSENGERS</code> daje największe zyski. Oczywiście bez żadnych NewGRF zawsze są to Pasażerowie.
 
-==== Bus station or Truck station ====
+==== Dworzec autobusowy lub stacja ciężarówki ====
 
-There is one simple way to find out if the cargo you want to transport should go to a bus station or a truck station. And it is the most obvious: if the cargo belongs to the <code>CC_PASSENGERS</code> class, it needs a bus station. All other cases need a truck station. So:
+Jest jeden prosty sposób, aby dowiedzieć się, czy ładunek, który chcesz przewieźć, powinien trafić na dworzec autobusowy lub ciężarówkę. I jest to najbardziej oczywiste: jeśli ładunek należy do klasy <code>CC_PASSENGERS</code> , potrzebuje dworca autobusowego. Wszystkie pozostałe skrzynie wymagają stacji ciężarówek. Więc:
 
  local truck_station = !AICargo.HasCargoClass(cargo, AICargo.CC_PASSENGERS);
 
