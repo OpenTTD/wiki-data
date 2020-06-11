@@ -25,14 +25,14 @@ Upewnij się, że zainicjowałeś wszystkie swoje niestatystyczne zmienne klas w
      // ...
  }
 
-== Function declarations ==
-Also note that function declarations in a class happens ''outside'' the block belonging to the class. 
+== Deklaracje funkcji ==
+Zauważ też, że deklaracje funkcji w klasie zdarzają się ''poza'' ('outside') blokiem należącym do klasy. 
  class Util{
      function Util::GetMsg(){
          return "Test";
      }	
  }
-will make the AI crash when loading, while 
+spowoduje awarię AI podczas ładowania, podczas gdy 
  class Util{
      	
  }
@@ -40,15 +40,15 @@ will make the AI crash when loading, while
     return "Test";
  }
 
-will work as expected.
+będzie działać zgodnie z oczekiwaniami.
 
 == Squirrel nie ma sposobu na oznaczenie metod jako statycznych lub prywatnych ==
 
 W innych językach obiektowych możesz ograniczyć sposób wywoływania funkcji podczas ich deklarowania. W wiewiórce jedyną różnicą między funkcją instancji a funkcją statyczną jest sposób ich wywoływania. W innych językach możesz także ustawić metody publiczne lub prywatne. Wszystkie metody wiewiórki są publiczne.
 
-There are two ways to call functions. You may call them from the '''instance''' or you may call them '''staticly'''. When you call a function from the instance you either preface the call with the the keyword '''this''' or you don't prefix it at all.
+Istnieją dwa sposoby wywoływania funkcji. Możesz zadzwonić do nich z  '''instancji''' ''(instance)'' lub możesz nazwać je '''statycznie''' ''(staticly)'' . Kiedy wywołujesz funkcję z instancji, albo poprzedzasz połączenie słowem kluczowym '''this''' ''(to)'', albo wcale go nie poprzedzasz.
 
-The AIFoo.Valuate() methods always call your methods statically. So any custom valuators should be self contained.
+Metody AAIFoo.Valuate() zawsze wywołują twoje metody statycznie. Więc każdy niestandardowy rzeczoznawca powinien być niezależny.
 
 '''instance'''
   function MyNewAI::Start()
@@ -88,10 +88,10 @@ Aby wywołać instancję statyczną, należy poprzedzić metodę nazwą klasy.
   
 Pamiętaj, że twoje funkcje można wywoływać w dowolny sposób. Od osoby dzwoniącej zależy, jak korzystać z tej funkcji.
 
-== Assignment statements that take long time ==
-Assume that ''good_pairs'' is a member variable of your main class. Assume that there is a method ''FindGoodPairs'' that finds new pairs and that this method takes some time to return.
+== Instrukcje przydziału, które zajmują dużo czasu ==
+Załóżmy, że ''good_pairs'' jest zmienną składową twojej głównej klasy. Załóżmy, że istnieje metoda  ''FindGoodPairs'' , która wyszukuje nowe pary i że ta metoda wymaga czasu.
 
-You may think that this is a good way to update good_pairs:
+Możesz pomyśleć, że to dobry sposób na aktualizację good_pairs:
   this.good_pairs = FindGoodPairs();
 
 Now lets assume FindGoodPairs look some thing like this:
