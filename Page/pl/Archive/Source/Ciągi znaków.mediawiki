@@ -59,25 +59,25 @@ Oprócz '''SetDParam(uint n, uint32 v)''' dostępne są inne funkcje '''SetDPara
 ! Uwagi
 |-
 | <code>SetDParam(uint n, uint32 v)</code>
-| Set the variable value at index ''n'' to value ''v''. 
-| see above
-| Depending on the variable used, the value is interpreted differently.
+| Ustaw wartość zmiennej w indeksie ''n'' na wartość ''v''. 
+| patrz wyżej
+| W zależności od użytej zmiennej wartość jest interpretowana w różny sposób.
 |-
 | <span id="using_raw_string"><code>SetDParamStr(uint n, const char *str)</code></span>
-| Use the verbatim string ''str'' to apply it to the variable at index ''n''. 
+| Użyj pełnego łańcucha ''str'' , aby zastosować go do zmiennej o indeksie ''n'' . 
 | Assume that it is <code>STR_XYZ: Hello World - {RAW_STRING}</code> in ''english.txt'' and <code>STR_XYZ: Hallo Welt - {RAW_STRING}</code> in ''german.txt''. The coding <pre>char *hello = 'Hello World!';
 SetDParamStr(0, hello);
 DrawStringRightAligned(x, y, STR_XYZ, colour);
 </pre> would produce <code>Hello World - Hello World!</code> in English and <code>Hallo Welt - Hello World!</code> in German.
-| Note that ''str'' is being used in a verbatim manner, i.e. the variable value is printed "as is" without any translation lookup in between (typically used for providing non-translated names to variables). Only use <code>{RAW_STRING}</code> as variable!
+| Zauważ, że ''str'' jest używane dosłownie, tzn. Wartość zmiennej jest drukowana "as is" ''(jak jest)'' bez żadnego wyszukiwania pomiędzy nimi (zwykle używana do dostarczania nieprzetłumaczonych nazw zmiennych). Używaj tylko <code>{RAW_STRING}</code> jako zmiennej!
 |-
 | <code>SetDParamMaxDigits(uint n, uint count)</code>
-| '''available since {{en/Revision|24801}}''': Emulate the variable value at index ''n'', which is of an integer type, by creating a number which has ''count'' maximal-width digits.
+| '''available since {{en/Revision|24801}}''': Emuluj wartość zmiennej przy indeksie ''n'', który jest liczbą całkowitą, tworząc liczbę, która ma ''count'' cyfry o maksymalnej szerokości.
 | Assume that for the current font, the digit ''8'' is the digit with the largest font width. If you call <code>SetDParamMaxDigits(1, 4)</code>, this would be equivalent to calling <code>SetDParam(1, 8888)</code>.
-| rowspan="2" | These functions are typically used when there is a need to guess the maximal width of a certain string, such as in '''UpdateWidgetSize'''. Make use of this function, if you know an upper boundary of your variable and calculating the exact value may be expensive, but you just need a "good guess" for the total width of your final string.
+| rowspan="2" | Te funkcje są zwykle używane, gdy istnieje potrzeba odgadnięcia maksymalnej szerokości określonego łańcucha, na przykład w '''UpdateWidgetSize'''. Skorzystaj z tej funkcji, jeśli znasz górną granicę zmiennej i obliczenie dokładnej wartości może być kosztowne, ale potrzebujesz tylko "dobrego odgadnięcia" ''(good guess)'' dla całkowitej szerokości końcowego łańcucha.
 |-
 | <code>SetDParamMaxValue(uint n, uint64 max_value, uint min_count = 0)</code>
-| '''available since {{en/Revision|24801}}''': Emulate the variable value at index ''n'', which is of an integer type, by creating a number with as many maximal-width digits as ''max_value'' provides. If ''min_count'' is provided, ensure that at least ''min_count'' digits are created.
+| '''available since {{en/Revision|24801}}''': Emuluj wartość zmiennej przy indeksie ''n'', który jest liczbą całkowitą, tworząc liczbę z tyloma cyframi o maksymalnej szerokości, ile zapewnia ''max_value'' . Jeśli podano ''min_count'' upewnij się , że utworzono co najmniej cyfry ''min_count'' .
 | Assume that for the current font, the digit ''8'' is the digit with the largest font width. If you call <code>SetDParamMaxValue(1, 1234)</code>, this would be equivalent to calling <code>SetDParam(1, 8888)</code>, because ''1234'' consists of four digits. If you call <code>SetDParamMaxValue(2, 123, 5)</code>, this would be equivalent to calling <code>SetDParam(2, 88888)</code>, because ''123'' has only three digits, but you requested to have five digits at minimum.
 |}
 
