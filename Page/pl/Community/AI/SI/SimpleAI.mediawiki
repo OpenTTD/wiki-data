@@ -7,81 +7,81 @@ SimpleAI korzysta z pociągów, pojazdów drogowych i samolotów i jest kompatyb
 
 __TOC__
 
-==General information==
+==Information Ogólne==
 
-* '''Author:''' Brumi
-* '''First release:''' January 4, 2010
-* '''Latest release:''' January 20, 2019
-* '''License:''' GPL v2
-* '''Download link:''' [http://binaries.openttd.org/bananas/ai/SimpleAI-14.tar.gz SimpleAI-14.tar.gz]
-* '''Forum thread:''' [http://www.tt-forums.net/viewtopic.php?f=65&t=44809 link] (report bugs here)
+* '''Autor:''' Brumi
+* '''Pierwsze wydanie:''' January 4, 2010
+* '''Ostatnie wydanie:''' January 20, 2019
+* '''Licencja:''' GPL v2
+* '''Link do pobrania:''' [http://binaries.openttd.org/bananas/ai/SimpleAI-14.tar.gz SimpleAI-14.tar.gz]
+* '''Wątek na forum:''' [http://www.tt-forums.net/viewtopic.php?f=65&t=44809 link] (report bugs here)
 
-==Building style==
+==Styl budowli ''(Building)''==
 
-The following pictures show the characteristic style of SimpleAI:
+Poniższe zdjęcia pokazują charakterystyczny styl SimpleAI:
 {|
-|[[File:en/Community/AI/Simpleai.png|frame|none|A railway station and a lorry loading bay]]
-|[[File:en/Community/AI/Simpleai passinglane.png|frame|none|Passing lanes built by the AI]]
+|[[File:en/Community/AI/Simpleai.png|frame|none|Stacja kolejowa i miejsce załadunku ciężarówki]]
+|[[File:en/Community/AI/Simpleai passinglane.png|frame|none|Mijanie linii zbudowanych przez AI]]
 |}
-Road vehicle stations are built together with depots, and usually 5-25 road vehicles can run on a single route (the upper limit is configurable). The AI doesn't use trams nor articulated vehicles, because it only builds terminus style stations.
+Stacje pojazdów drogowych są budowane razem z magazynami i zwykle 5-25 pojazdów drogowych może jechać na jednej trasie (górna granica jest konfigurowalna). AI nie korzysta z tramwajów ani pojazdów przegubowych, ponieważ buduje tylko stacje w stylu terminalowym.
 
-Railways can be ''single'' or ''double'': On ''single'' railways, only one train runs which is 2 or 3 tiles long, depending on the length of the route. The stations have one platform each. On ''double'' railways, two 3-tile long trains run on the route, and there are two passing lane sections where the trains can pass each other. The rest of the rail line is not doubled. The stations have two platforms each.
+Koleje mogą być ''pojedyncze'' lub ''podwójne'' : na kolejach ''pojedynczych'' tylko jeden pociąg jeździ po 2 lub 3 płytkach, w zależności od długości trasy. Każda ze stacji ma jedną platformę. Na ''podwójnych'' kolejach na trasie kursują dwa pociągi o długości 3 kafelków, a dwa odcinki pasów przechodzą obok siebie. Reszta linii kolejowej nie jest podwojona. Każda ze stacji ma dwie platformy.
 
-The AI uses airplanes as well, and tries to re-use airports if more than one air route is connected to the same town.
+AI korzysta również z samolotów i próbuje ponownie wykorzystać lotniska, jeśli więcej niż jedna trasa lotnicza jest połączona z tym samym miastem.
 
-==Behaviour==
+==Zachowanie ''(Behaviour)''==
 
-SimpleAI builds its routes randomly, so it is suitable for running multiple instances of itself, it usually won't compete with itself at the same locations. Although it goes for subsidies, so if there are mutiple instances of SimpleAI, it is advisable to turn down the frequency of going after subsidies (this setting is described later).
+SimpleAI buduje trasy losowo, więc nadaje się do uruchamiania wielu instancji samego siebie, zwykle nie konkuruje ze sobą w tych samych lokalizacjach. Chociaż dotyczy to dotacji, więc jeśli występują różne przypadki SimpleAI, zaleca się zmniejszenie częstotliwości korzystania z dotacji (ustawienie to opisano później).
 
-By default, the AI won't compete with other companies at industries where the service is already good enough. The limit over which a service is considered 'good enough' can be configured through the settings.
+Domyślnie AI nie będzie konkurować z innymi firmami w branżach, w których usługa jest już wystarczająco dobra. Limit, powyżej którego usługa jest uważana za  'wystarczająco dobrą' , można skonfigurować za pomocą ustawień.
 
-The AI manages its routes after they're built, which means that unprofitable vehicles are sold, old vehicles are replaced, and crashed vehicles are re-built. It will also remove unused stations (for example, if all vehicles using the station were unprofitable and got sold).
+AI zarządza swoimi trasami po ich zbudowaniu, co oznacza, że ​​nierentowne pojazdy są sprzedawane, stare pojazdy są wymieniane, a rozbite pojazdy są odbudowywane. Usunie również nieużywane stacje (na przykład, jeśli wszystkie pojazdy korzystające ze stacji były nierentowne i zostały sprzedane).
 
-The AI will try to avoid building level crossings if possible.
+AI będzie starać się unikać przejazdów kolejowych, jeśli to możliwe.
 
-==NewGRF compatibility==
+==Zgodność z NewGRF==
 
-SimpleAI is mostly compatibile with NewGRF vehicle and industry sets. It has been tested with the ECS Vectors and the FIRS Industry Replacement set, and various vehicle sets including eGRVTS, UKRS, NARS, the 2cc Trainset, the Aviators Aircraft set, and the OpenGFX+ vehicle sets. Itt will try to transport all cargoes available, and it will build NewGRF railway stations if available (for example, the Industrial Stations Renewal).
+SimpleAI jest głównie kompatybilny z pojazdami i zestawami branżowymi NewGRF. Został przetestowany z wektorem ECS i zestawem przemysłowym FIRS oraz różnymi zestawami pojazdów, w tym eGRVTS, UKRS, NARS, zestawem pociągów 2 cm3, zestawem samolotów Aviators i zestawami pojazdów OpenGFX +. Spróbuje przetransportować wszystkie dostępne ładunki i zbuduje stacje kolejowe NewGRF, jeśli są one dostępne (na przykład Odnowienie stacji przemysłowych).
 
-However, the AI has problems with NewGRFs that include additional railway types, and may have financial problems if certain vehicles have high running costs.
+Jednak AI ma problemy z NewGRF, które obejmują dodatkowe typy kolei, i mogą mieć problemy finansowe, jeśli niektóre pojazdy mają wysokie koszty eksploatacji.
 
-[[File:en/Community/AI/Simpleai firs.png|frame|none|SimpleAI with the FIRS Industry Replacement Set, the UK Renewal Set and the Industrial Stations Renewal]]
+[[File:en/Community/AI/Simpleai firs.png|frame|none|SimpleAI z przemysłowym zestawem zastępczym FIRS, brytyjskim zestawem do odnawiania i odnawianiem stacji przemysłowych]]
 
-==Configuration==
+==Konfiguracja==
 
-[[File:en/Community/AI/Simpleai configuration.png|frame|none|The configuration window of SimpleAI]]
+[[File:en/Community/AI/Simpleai configuration.png|frame|none|Okno konfiguracji SimpleAI]]
 
-* '''Number of days to start this AI after the previous one (give or take)''': This is a setting which appears with all AIs, here you can configure the waiting time before the AI is started.
+* '''Number of days to start this AI after the previous one (give or take)''': Jest to ustawienie, które pojawia się we wszystkich AI, tutaj możesz skonfigurować czas oczekiwania przed uruchomieniem AI.
 
-* '''Use trains / road vehicles / aircraft''': Configure whether this instance of SimpleAI will use these types of transport.
+* '''Use trains / road vehicles / aircraft''': Skonfiguruj, czy to wystąpienie SimpleAI będzie używać tego rodzaju transportu.
 
-* '''Build new routes if transported percentage is smaller than this value''': Here you can configure how competitive SimpleAI will be, the higher the setting, the more competitive. For example, if this is set to 60, the AI will refrain from competition at industries where 60% of the produced cargo is already transported.
+* '''Build new routes if transported percentage is smaller than this value''': Tutaj możesz skonfigurować, jak konkurencyjny będzie SimpleAI, im wyższe ustawienie, tym bardziej konkurencyjny. Na przykład, jeśli jest ustawiony na 60, AI powstrzyma się od konkurencji w branżach, w których 60% wyprodukowanego ładunku jest już transportowane.
 
-* '''The chance of taking subsidies''': Here you can configure how frequently the AI will go for subsidies, the higher the setting, the more frequently.
+* '''The chance of taking subsidies''': Tutaj możesz skonfigurować, jak często sztuczna inteligencja będzie chodzić o dotacje, im wyższe ustawienie, tym częściej.
 
-* '''The maximum number of road vehicles on a route''': The AI won't build more road vehicles on a route than this number, regardless of how profitable the route is.
+* '''The maximum number of road vehicles on a route''': AI nie zbuduje większej liczby pojazdów drogowych na trasie niż ta liczba, niezależnie od opłacalności trasy.
 
-* '''Days to wait betweeen building two routes''': With this setting, the AI can be configured to build new routes slower.
+* '''Days to wait betweeen building two routes''': Przy tym ustawieniu AI można skonfigurować tak, aby budować nowe trasy wolniej.
 
-* '''Slowdown effect (how much the AI will become slower over time)''': If enabled, the AI will wait more and more between building two routes as time progresses. With this you can prevent SimpleAI from continuously building new routes at the later stages of the game.
+* '''Slowdown effect (how much the AI will become slower over time)''': Jeśli ta opcja jest włączona, sztuczna inteligencja będzie w miarę upływu czasu czekać między budowaniem dwóch tras. Dzięki temu możesz uniemożliwić SimpleAI ciągłe budowanie nowych tras na późniejszych etapach gry.
 
-* '''Build company headquarters near towns''': If enabled, the HQ will be built in a town. If disabled, the HQ will be built near the first station the AI builds (this is the behaviour of the old AI).
+* '''Build company headquarters near towns''': Jeśli ta opcja jest włączona, centrala zostanie zbudowana w mieście. Jeśli wyłączone, kwatera główna zostanie zbudowana w pobliżu pierwszej stacji, którą zbuduje AI (jest to zachowanie starej AI).
 
-* '''Use a custom company name''': If enabled, the AI will use a new naming scheme instead of the default "<town name> Transport".
+* '''Use a custom company name''': Jeśli ta opcja jest włączona, AI będzie używać nowego schematu nazewnictwa zamiast domyślnego "<town name> Transport".
 
-* '''Signal type to be used''': You can set the type of signal the AI will use: one-way block signals (default), two-way block signals (original Transport Tycoon behaviour) or path signals (which will make level crossings safer for road vehicles as the crossings will close in advance).
+* '''Signal type to be used''': Możesz ustawić rodzaj sygnału, który będzie używał AI: jednokierunkowe sygnały blokowe (domyślnie), dwukierunkowe sygnały blokowe (oryginalne zachowanie Transport Tycoon) lub sygnały ścieżkowe (które sprawią, że przejazdy kolejowe będą bezpieczniejsze dla pojazdów drogowych po ich zamknięciu z góry).
 
-* '''Use NewGRF rail staions if available''': If this setting is on, the AI will build different rail stations based on the cargo type, for example, with the Industrial Stations Renewal.
+* '''Use NewGRF rail staions if available''': Jeśli to ustawienie jest włączone, AI zbuduje różne stacje kolejowe w zależności od rodzaju ładunku, na przykład przy odnowie stacji przemysłowych.
 
-==Limitations==
+==Ograniczenia==
 
-SimpleAI is not a competitive AI, so it doesn't build routes which have the highest profit, instead it builds randomly. It may get into financial trouble if running costs are too high (due to a NewGRF), inflation is enabled or infrastructure maintenance costs are enabled.
+SimpleAI nie jest konkurencyjną AI, więc nie buduje tras, które mają najwyższy zysk, zamiast tego buduje losowo. Może mieć problemy finansowe, jeśli koszty eksploatacji są zbyt wysokie (z powodu NewGRF), włączona jest inflacja lub włączone są koszty utrzymania infrastruktury.
 
-It is advisable to enable 90 degree turns for railways when using SimpleAI, as the default (old AI-style) station pattern includes a 90 degree turn when the train is leaving the depot in the direction og the other station. If 90 degree turns are disabled, the train leaving the depot will go to the station first, turn around there and leave afterwards.
+Podczas korzystania z SimpleAI zaleca się włączenie kolei o 90 stopni dla kolei, ponieważ domyślny wzór stacji (stary styl AI) obejmuje zwrot o 90 stopni, gdy pociąg opuszcza zajezdnię w kierunku drugiej stacji. Jeśli zakręty o 90 stopni są wyłączone, pociąg opuszczający zajezdnię najpierw jedzie na stację, zawraca i odjeżdża.
 
-[[File:en/Community/AI/Simpleai 90degturn.png|frame|none|90 degree turn]]
+[[File:en/Community/AI/Simpleai 90degturn.png|frame|none|Obrót o 90 stopni]]
 
-It is also advisable to have the ''build on slopes'' setting on, as the AI will not do any terraforming while building routes.
+Wskazane jest również włączenie ustawienia  ''buduj na zboczach'' , ponieważ AI nie wykona żadnego terraformowania podczas budowania tras.
 
 ==Zobacz też==
 
