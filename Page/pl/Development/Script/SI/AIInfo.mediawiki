@@ -82,57 +82,57 @@ Dostępne parametry dla AddSetting:
 | name
 | string
 | yes
-| The name of the setting which you reference in your AI in this.GetSetting(name) (member of AIController). The characters ',' and '=' are not allowed.
+| Nazwa ustawienia, do którego odwołujesz się w tym AI, this.GetSetting(name) (member AIController). Znaki ',' i '=' są niedozwolone.
 |-
 | description
 | string
 | yes
-| A description of what the setting does. Visible for the user in the AI Settings window.
+| Opis działania tego ustawienia. Widoczny dla użytkownika w oknie Ustawienia AI.
 |-
 | min_value
 | integer
 | Only if flags doesn't contain AICONFIG_RANDOM.
-| The minimum value of the setting
+| Minimalna wartość ustawienia
 |-
 | max_value
 | integer
 | Only if flags doesn't contain AICONFIG_RANDOM.
-| The maximum value of the setting.
+| Maksymalna wartość ustawienia.
 |-
 | easy_value
 | integer
 | yes
-| The default value on the easy difficulty level.
+| Wartość domyślna na łatwym poziomie trudności.
 |-
 | medium_value
 | integer
 | yes
-| The default value on the medium difficulty level.
+| Wartość domyślna na średnim poziomie trudności.
 |-
 | hard_value
 | integer
 | yes
-| The default value on the hard difficulty level.
+| Wartość domyślna na poziomie trudności trudnej.
 |-
 | custom_value
 | integer
 | yes
-| The default value on the custom difficulty level.
+| Wartość domyślna na niestandardowym poziomie trudności.
 |-
 | random_deviation
 | integer
 | no, forbidden if flags contain AICONFIG_RANDOM
-| When the game is started, the value for the setting will be randomized between user_specified_value - random_deviation and user_specified_value + random_deviation. 
+| Po uruchomieniu gry wartość ustawienia będzie losowana między wartością_określoną_użytkownika - odchylenie_losowe i wartość_określoną_przez_użytkownika + odchylenie_losowe <small>''(user_specified_value - random_deviation and user_specified_value + random_deviation)''</small>. 
 |-
 | step_size
 | integer
 | no
-| The amount the value is changed for every time the user clicks one of the buttons.
+| Wielkość zmiany wartości za każdym razem, gdy użytkownik kliknie jeden z przycisków.
 |-
 | flags
 | bitset
 | yes
-| You can specify the following flags (combine via the binary or operator): AICONFIG_RANDOM, AICONFIG_BOOLEAN and AICONFIG_INGAME. See below for a description about what they do.
+| Możesz określić następujące flagi (łączenie za pomocą pliku binarnego lub operatora): AICONFIG_RANDOM, AICONFIG_BOOLEAN i AICONFIG_INGAME. Poniżej znajduje się opis tego, co robią.
 |}
 
 
@@ -143,16 +143,16 @@ Dostępne parametry dla AddSetting:
 ! Opis
 |-
 | AICONFIG_BOOLEAN
-| Makes the setting a boolean choice. If you set this flag, don't specify min_value or max_value. All of easy_value, medium_value, hard_value and custom_value should be either 0 or 1 (not false/true).
+| Sprawia, że ​​ustawienie staje się wyborem logicznym. Jeśli ustawisz tę flagę, nie określaj wartości min_value lub max_value. Wszystkie wartości easy_value, medium_value, hard_value i custom_value powinny mieć wartość 0 lub 1 (nie fałsz/prawda).
 |-
 | AICONFIG_RANDOM
-| Users won't explicitly set the value, it'll get a random value between min_value and max_value.
+| Użytkownicy nie ustawią jawnie tej wartości, otrzyma losową wartość między wartością min_value a max_value.
 |-
 | AICONFIG_INGAME
-| Only settings with this flag set will be allowed to be changed in a running game.
+| Tylko ustawienia z tym zestawem flagi będą mogły zostać zmienione w uruchomionej grze.
 |-
 | AICONFIG_AI_DEVELOPER
-| Since r23169, hides setting unless ai_developer_tools is set to true.
+| Od r23169 ukrywa ustawienie, chyba że ai_developer_tools ma wartość true.
 |}
 
 It's possible to combine two or more settings together. For example this makes a random boolean: flags = AICONFIG_BOOLEAN | AICONFIG_RANDOM
