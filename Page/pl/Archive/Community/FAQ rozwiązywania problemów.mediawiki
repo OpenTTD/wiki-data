@@ -20,103 +20,103 @@ Na komputerach * nix, jeśli skopiowałeś pliki z, powiedzmy, partycji Windows,
 ponieważ nie masz odpowiednich uprawnień do odczytu plików jako zwykły użytkownik. (jeśli tak jest, nadal możesz
 uruchom OpenTTD jako root; jednak prawdopodobnie powinieneś naprawić uprawnienia do plików)
 
-=== ... it crashes on Win98(SE) ===
-:* Windows98/98SE has problems with DirectX and DirectMusic. Try to start the game with: <pre>openttd.exe -m win32</pre>
+=== ... ulega awarii na Win98 (SE) ===
+:* Windows98/98SE ma problemy z DirectX i DirectMusic. Spróbuj rozpocząć grę z: <pre>openttd.exe -m win32</pre>
 
-=== ... it outputs an error ''MD5 of <filename> is ****INCORRECT**** - File Corrupt'' ===
-:*This error comes about if you have a corrupt or changed GRF file. OpenTTD only checks the ones for the original TTD game, either DOS or Windows version, and if it finds that the file is corrupted, it presents this message. You should copy the file from your original TTD disk again.
-:*This message will also appear if you are using modified GRF files (but only if they modify the original TTD files).  Other GRF's are not checked for corruption. The message was incorporated to make sure that any problems within the game are caused by the error you report rather than corrupt files on the disk.
+=== ... generuje błąd ''MD5 of <filename> is ****INCORRECT**** - File Corrupt'' ===
+:*Ten błąd pojawia się, jeśli masz uszkodzony lub zmieniony plik GRF. OpenTTD sprawdza tylko te z oryginalnej gry TTD, zarówno w wersji DOS, jak i Windows, a jeśli stwierdzi, że plik jest uszkodzony, wyświetla ten komunikat. Należy ponownie skopiować plik z oryginalnego dysku TTD.
+:*Ten komunikat pojawi się również, jeśli używasz zmodyfikowanych plików GRF (ale tylko jeśli modyfikują oryginalne pliki TTD). Inne GRF nie są sprawdzane pod kątem uszkodzeń. Wiadomość została włączona, aby upewnić się, że wszelkie problemy w grze są spowodowane zgłaszanym błędem, a nie uszkodzonymi plikami na dysku.
 
-=== ... it shows a white screen on MacOS X Leopard ===
-:* OpenTTD 0.6.0 running on Leopard has sometimes a problem with the color profile of the current display. The error message "Could not get system colour space. You may need to calibrate your monitor." can appear on OpenTTD 0.7.2 too. Please make sure the at least one color profile is selected in the 'Monitor Preferences'. If that doesn't work, please create a new color profile by calibrating the old one. This is not a OpenTTD bug, it's more a Leopard bug and it's very rare. After setting the color profile, restart the computer and try running OpenTTD again.
+=== ... pokazuje biały ekran na MacOS X Leopard ===
+:* OpenTTD 0.6.0 działający na systemie Leopard czasami ma problem z profilem kolorów bieżącego wyświetlacza. Komunikat o błędzie  "Nie można uzyskać systemowej przestrzeni kolorów. Może być konieczne skalibrowanie monitora." może pojawić się również w OpenTTD 0.7.2. Upewnij się, że co najmniej jeden profil kolorów jest wybrany w 'Preferencjach monitorowania' . Jeśli to nie zadziała, utwórz nowy profil kolorów, kalibrując stary. To nie jest błąd OpenTTD, to raczej błąd Leoparda i jest to bardzo rzadkie. Po ustawieniu profilu kolorów uruchom ponownie komputer i spróbuj ponownie uruchomić OpenTTD.
 
-=== ... it outputs an error 'Error: Unable to load driver 'sdl'. The error was: Couldn't open X11 display' ===
-:* When running xdm on Linux, this error may occur. This is an SDL issue. One can simply do <code>xhost +</code> before starting OpenTTD to work around this problem. Once OpenTTD is running you should do <code>xhost -</code>.
+=== ... generuje błąd 'Error: Unable to load driver 'sdl'. Błąd był: Couldn't open X11 display' ===
+:* Podczas uruchamiania xdm w systemie Linux może wystąpić ten błąd. To jest problem SDL. Można po prostu zrobić <code>xhost +</code> przed uruchomieniem OpenTTD w celu obejścia tego problemu. Po uruchomieniu OpenTTD powinieneś to zrobić <code>xhost -</code>.
 
-== When I start game in fullscreen mode, the refresh rate is changed to 60Hz! (Windows) ==
-:*It's because you haven't configured DirectX properly. For the same reason it may happen that the game runs with a higher refresh rate than your monitor supports. Try to download "DirectX Control Panel" from microsoft.com, copy it into /windows/system32, open the dialog in the Control Panel, go to DirectDraw tab, and set the "Forced Refresh Rate" to the maximum what your monitor can show.
-:*You can set '''display_hz''' to have correct refreshrate. This item is in '''[win32]''' group of [[pl/Archive/Manual/Settings/Openttd.cfg|openttd.cfg]].
+== Kiedy zaczynam grę w trybie pełnoekranowym, częstotliwość odświeżania zmienia się na 60Hz! (Windows) ==
+:*To dlatego, że nie skonfigurowałeś poprawnie DirectX. Z tego samego powodu może się zdarzyć, że gra działa z wyższą częstotliwością odświeżania niż monitor obsługuje. Spróbuj pobrać "DirectX Control Panel" z microsoft.com, skopiuj to do /windows/system32, otwórz okno dialogowe w Panelu sterowania, przejdź do zakładki DirectDraw i ustaw "Forced Refresh Rate" maksymalnie, co może pokazać Twój monitor.
+:*Możesz ustawić '''display_hz''' mieć prawidłowe odświeżanie. Ten przedmiot jest w '''[win32]''' Grupy [[pl/Archive/Manual/Settings/Openttd.cfg|openttd.cfg]].
 
-== Cursor is hidden in fullscreen modes under Linux ==
-* OpenTTD is playable in window mode.
-* Ensure you have the latest ATi propetiary drivers installed correctly, follow [http://xoomer.virgilio.it/flavio.stanchina/debian/fglrx-installer.html this guide].
+== Kursor jest ukryty w trybach pełnoekranowych pod Linux ==
+* OpenTTD można odtwarzać w trybie okienkowym.
+* Upewnij się, że masz najnowsze zainstalowane sterowniki ATi, postępuj zgodnie z [http://xoomer.virgilio.it/flavio.stanchina/debian/fglrx-installer.html tym przewodnikiem].
 
-== The Jukebox won't play any music/skips through tracks really fast ==
-First of all, have you put all of the *.gm or *.mid files into the 'gm' or 'baseset' directory?
-=== What 'gm' directory? ===
-For OpenTTD up to version 1.1.5, there should be one in the same directory as your OTTD program file. If there isn't, then create it and transfer the .gm files from your original TTD install/CD.
-If you only have the DOS version of the game, and you do not see any .gm files anywhere, then you may not have them. Sorry, no cheesy midi for you unless you find them elsewhere :( 
-=== What 'baseset' directory? ===
-For OpenTTD 1.2.0 and later, there should be a '/baseset' directory that contains your base graphics and sound files, in the same directory as your OpenTTD program files. If there isn't, then you may not have properly installed OpenTTD or copied the files properly. You can then copy the .gm files from your original TTD install/CD, or any General MIDI-standard .mid file into the /baseset directory, or any subdirectory. 
-=== I copied the files, still isn't working ===
-It has been reported that the music will not play if you have any parent directories with spaces or special characters in them (eg. 'C:\\Program files\ottd\gm', note the space in 'program files'.).
-Try putting your install into a path without spaces and special characters (like é).
+== Jukebox nie odtwarza muzyki/przeskakuje utwory naprawdę szybko ==
+Przede wszystkim, czy umieściłeś wszystkie pliki *.gm lub *.mid w katalogu 'gm' lub 'baseset' ?
+=== Jaki katalog 'gm' ? ===
+W przypadku OpenTTD do wersji 1.1.5 powinien znajdować się jeden w tym samym katalogu, co plik programu OTTD. Jeśli nie, utwórz go i przenieś pliki .gm z oryginalnej instalacji / płyty CD TTD.
+Jeśli masz tylko wersję DOS gry i nigdzie nie widzisz żadnych plików .gm, możesz ich nie mieć. Niestety, nie ma dla ciebie tandetnego midi, chyba że znajdziesz je gdzie indziej :(
+=== Jaki katalog 'baseset' ? ===
+W przypadku OpenTTD 1.2.0 i nowszych powinien znajdować się katalog '/baseset' zawierający podstawowe pliki graficzne i dźwiękowe, w tym samym katalogu, co pliki programu OpenTTD. Jeśli nie, oznacza to, że być może nie zainstalowałeś poprawnie OpenTTD lub nie skopiowałeś plików. Następnie możesz skopiować pliki .gm z oryginalnej płyty instalacyjnej / CD TTD lub dowolnego pliku .mid w standardzie MIDI do katalogu /baseset lub dowolnego podkatalogu.
+=== Skopiowałem pliki, nadal nie działa ===
+Zgłoszono, że muzyka nie będzie odtwarzana, jeśli masz katalogi nadrzędne ze spacjami lub znakami specjalnymi (np. 'C:\\Program files\ottd\gm' , zwróć uwagę na spację w 'program files' .).
+Spróbuj umieścić swoją instalację na ścieżce bez spacji i znaków specjalnych (np. é ).
 
-Also, there are sometimes issues with file permissions, especially if you have copied the files across direct from CD.
-Try setting all the file permissions to read/write:
-* OS X; go to 'gm' directory, select all files [cmd]+[a], select file->'get info' (or [cmd]+[i]), under 'owner permissions' select 'read and write'.
-* Windows; go to 'gm' directory, select all files [ctrl]+[a], select file->properties, uncheck 'read only'.
+Ponadto czasami występują problemy z uprawnieniami do plików, zwłaszcza jeśli pliki zostały skopiowane bezpośrednio z dysku CD.
+Spróbuj ustawić wszystkie uprawnienia do plików do odczytu/zapisu:
+* OS X; przejdź do katalogu 'gm' , wybierz wszystkie pliki [cmd]+[a] , wybierz plik->'weź informacje' (lub [cmd]+[i] ), w obszarze  'uprawnienia właściciela' wybierz 'odczyt i zapis' .
+* Windows; przejdź do katalogu „gm”, wybierz wszystkie pliki [ctrl]+[a], wybierz plik->właściwości, odznacz 'tylko do odczytu' .
 
-Also, '''check the next question''' if on Linux.
+Ponadto, '''sprawdź następne pytanie''' , jeśli w systemie Linux.
 
-== There is no sound or no music on Linux ==
-This is a known issue for some systems. Consult your distribution's documentation regarding the following.
-* Your system needs to be configured to play MIDI, either via telling the sound driver about the hardware's builtin soundfont or installing a MIDI controller such as Timidity or Fluidsynth along with a soundfont such as Freepats or FluidR3.
-* Your system needs to be configured to mix separate sound sources together, either through telling the system to use the hardware mixer in your sound card or through a software mixer such as '''dmix''' for ALSA. By default, only one application can send to the sound driver.
-* Check that the music plays through the ingame Jazz Jukebox; in some installations the music is not automatically queued for playback, and using Jazz Jukebox forces the recalculation.
+== Brak dźwięku lub muzyki w systemie Linux ==
+Jest to znany problem niektórych systemów. Zapoznaj się z dokumentacją dystrybucji dotyczącą następujących kwestii.
+* Twój system musi być skonfigurowany do odtwarzania MIDI, albo poprzez poinformowanie sterownika dźwięku o wbudowanym soundfontie sprzętu lub zainstalowanie kontrolera MIDI, takiego jak Timidity lub Fluidsynth, wraz z dźwiękiem, takim jak Freepats lub FluidR3.
+* Twój system musi być skonfigurowany do miksowania oddzielnych źródeł dźwięku razem, poprzez nakazanie systemowi użycia miksera sprzętowego na karcie dźwiękowej lub poprzez mikser programowy, taki jak „dmix” dla ALSA. Domyślnie tylko jedna aplikacja może wysłać do sterownika dźwięku.
+* Sprawdź, czy muzyka jest odtwarzana w grze Jazz Jukebox; w niektórych instalacjach muzyka nie jest automatycznie umieszczana w kolejce do odtwarzania, a użycie Jazz Jukebox wymusza ponowne obliczenie.
 
 === Emu10k1 ===
 
-If you have an emu10k-based soundcard, you can use its built in wavetable synth to play music.
-You will need a General MIDI SF2 bank (such as 8MBGMGS.SF2), asfxload and pmidi, and the following commands:
+Jeśli masz kartę dźwiękową opartą na emu10k, możesz użyć jej wbudowanego syntezatora wavetable do odtwarzania muzyki.
+Będziesz potrzebował ogólnego banku MIDI SF2 (takiego jak 8MBGMGS.SF2), asfxload i pmidi oraz następujących komend:
 
 <pre>asfxload sf2file.sf2
 export ALSA_OUTPUT_PORTS=`pmidi -l | awk '/Emu/ { print $1; exit }'`
 openttd -m extmidi:cmd=pmidi</pre>
 
-If you get this working, you can put the first two commands to execute on start up, or login, and adjust the musicdriver configuration option, to make the settings permanent.
+Jeśli to zadziała, możesz umieścić dwa pierwsze polecenia do uruchomienia przy uruchamianiu lub zalogować się i dostosować opcję konfiguracji Musicdriver, aby ustawienia były trwałe.
 
-See [[en/Archive/Compilation and Ports/Linux SB Live Wavetable Support]] for more details.
+Zobacz [[en/Archive/Compilation and Ports/Linux SB Live Wavetable Support]] po więcej szczegółów.
 
-== The game keeps scrolling on my IBM ThinkPad Laptop ==
-This seems to be a common problem with these laptops. The workaround for this problem is the following:
-In the "Pass 0 rules" section of (either) %SYSTEM_ROOT%\System32\tp4table.dat or %SYSTEM_ROOT%\System32\tp4scrol.dat, add:
+== Gra przewija się na moim laptopie IBM ThinkPad ==
+Wydaje się, że jest to powszechny problem z tymi laptopami. Obejście tego problemu jest następujące:
+W "Pass 0 rules" sekcji (either) %SYSTEM_ROOT%\System32\tp4table.dat or %SYSTEM_ROOT%\System32\tp4scrol.dat, add:
 
 <pre>*,*,openttd.exe,*,*,*,WheelStd,0,9</pre>
-Thank you Sam for your helpful comment on the bugtracker [https://github.com/OpenTTD/OpenTTD/issues/345 issue #345]
+Dziękuję Sam za pomocny komentarz na temat bugtrackera  [https://github.com/OpenTTD/OpenTTD/issues/345 issue #345]
 
-== My mouse is not sensitive enough (SDL / Fullscreen) ==
-OpenTTD does nothing with the mouse sensitivity, SDL takes full control over the mouse. Some people might feel it is not doing a good job about this; but luckily you can change SDL's mouse setting. Please read the doc over at [ftp://ptah.lnf.kth.se/pub/misc/sdl-env-vars].
+== Moja mysz nie jest wystarczająco czuła (SDL / Pełny ekran) ==
+OpenTTD nie robi nic z czułością myszy, SDL przejmuje pełną kontrolę nad myszą. Niektórzy ludzie mogą czuć, że nie robi to dobrze; ale na szczęście możesz zmienić ustawienia myszy SDL. Proszę przeczytać dokument w [ftp://ptah.lnf.kth.se/pub/misc/sdl-env-vars].
 
-The necessary environment variable is SDL_VIDEO_X11_MOUSEACCEL.<br>
-I found that setting SDL_VIDEO_X11_MOUSEACCEL didn't work for me without setting SDL_MOUSE_RELATIVE=0 too.
+Niezbędna zmienna środowiskowa to SDL_VIDEO_X11_MOUSEACCEL.<br>
+Znalazłem to ustawienie SDL_VIDEO_X11_MOUSEACCEL nie działało dla mnie bez ustawienia SDL_MOUSE_RELATIVE=0 też.
 
-So, for example:
+Na przykład:
 <pre>
 $ SDL_MOUSE_RELATIVE=0 SDL_VIDEO_X11_MOUSEACCEL=6/1/0 openttd
 </pre>
-There are other reports which suggest that
+Istnieją inne raporty, które to sugerują
 <pre>
 $ SDL_VIDEO_X11_DGAMOUSE=0
 </pre>
-might work.
+może zadziałać.
 
-== OpenTTD crashes iTunes ==
-OpenTTD can cause iTunes to crash. This is due to iTunes not being compatible with the 256 screen colours OpenTTD will use by default. This can be corrected by setting OpenTTD to use the 32bpp blitter, or by running OpenTTD windowed as opposed to fullscreen. To activate the 32bpp blitter, use this parameter on the shortcut to OpenTTD or through the command prompt "-b32bpp-optimized". You can also use "-b32bpp-anim" if you wish to retain water animation and such. 
+== OpenTTD powoduje awarię iTunes ==
+OpenTTD może spowodować awarię iTunes. Wynika to z niezgodności iTunes z 256 kolorami ekranu, z których domyślnie korzysta OpenTTD. Można to skorygować, ustawiając OpenTTD tak, aby używał blittera 32bpp, lub uruchamiając OpenTTD w oknie, w przeciwieństwie do pełnego ekranu. Aby aktywować blittera 32bpp, użyj tego parametru w skrócie do OpenTTD lub w wierszu polecenia "-b32bpp-optimized" ''(zoptymalizowany b32bpp)''. Możesz także użyć "-b32bpp-anim" , jeśli chcesz zachować animację wody i tym podobne.
 
-This may also correct issues with other programs that crash randomly when OpenTTD launches, if the issue of 256 colors also affects it.
+Może to również rozwiązać problemy z innymi programami, które powodują awarię losowo podczas uruchamiania OpenTTD, jeśli dotyczy to również 256 kolorów.
 
-== My User Interface is too small to read / My font is unreadable or faulty ==
-The default font is part of the base graphics set you're using, for languages with non-latin letters a fallback font is selected automatically from the fonts available on your system.
+== Mój interfejs użytkownika jest zbyt mały, aby go odczytać / Moja czcionka jest nieczytelna lub wadliwa ==
+Domyślna czcionka jest częścią podstawowego zestawu graficznego, którego używasz, w przypadku języków z literami niełacińskimi automatycznie wybierana jest czcionka zastępcza spośród czcionek dostępnych w systemie.
 
-To use a different font quit OpenTTD and modify the ''small_font'', ''medium_font'', ''large_font'', ''mono_font'', ''small_size'', ''medium_size'', ''large_size'' and ''mono_size'' settings in your ''[[pl/Archive/Manual/Settings/Openttd.cfg|openttd.cfg]]'' file. Here you may set a different font face and size for each of the four font types available in OpenTTD. 
+Aby użyć innego fontu , zamknij OpenTTD i zmodyfikuj opcje ''small_font'' , ''medium_font'', ''large_font'', ''mono_font'', ''small_size'', ''medium_size'', ''large_size'' i ''mono_size'' w pliku ''[[pl/Archive/Manual/Settings/Openttd.cfg|openttd.cfg]]'' . Tutaj możesz ustawić inną czcionkę i rozmiar dla każdego z czterech typów czcionek dostępnych w OpenTTD.
 
-You can set any font face available on your system. What face and size works best for you, is a matter of trial-and-error. Note that you must change both the font and size entries for your changes to have any effect (however you can change for instance only the small font by setting ''small_font'' and ''small_size'' while keeping medium and large fonts from your base graphics set).
+Możesz ustawić dowolną czcionkę dostępną w twoim systemie. To, która twarz i rozmiar najlepiej Ci odpowiada, jest kwestią prób i błędów. Pamiętaj, że musisz zmienić zarówno czcionkę, jak i rozmiar, aby zmiany odniosły jakikolwiek efekt (możesz jednak zmienić na przykład tylko małą czcionkę, ustawiając opcje  ''small_font'' i ''small_size'' , zachowując jednocześnie średnie i duże czcionki podstawowy zestaw grafiki).
 
-See also: [[en/Archive/Manual/Settings/Unicode]]
+Zobacz także: [[en/Archive/Manual/Settings/Unicode]]
 
-=== Linux/Mac ===
-Linux and Mac users can set the font using the (localized!) name or the path of a font that exists on your system, for example with English locale:
+=== Linux / Mac ===
+Użytkownicy systemów Linux i Mac mogą ustawić czcionkę za pomocą nazwy (zlokalizowanej!) Lub ścieżki czcionki istniejącej w systemie, na przykład w języku angielskim:
 
 <pre>
 small_font = DejaVu Sans
@@ -129,7 +129,7 @@ large_size = 16
 mono_size = 12
 </pre>
 
-Mac system and user fonts are typically found in "/Library/Fonts" and "~/Library/Fonts" respectively
+System Mac i czcionki użytkownika zwykle znajdują się w "/Library/Fonts" i "~/Library/Fonts" odpowiednio
 
 === Windows ===
 Użytkownicy systemu Windows mogą ustawić tylko nazwę czcionki zainstalowanej w systemie; nie trzeba używać ścieżki do pliku czcionek.
@@ -182,12 +182,12 @@ Jeśli nie chcesz obniżać rozdzielczości ekranu, nie chcesz odtwarzać na pe�
 
 [http://www.tt-forums.net/viewtopic.php?uid=36464&f=29&t=51506&start=0 source]
 
-== Where are the ''difficulty settings'' and ''news settings'' in OpenTTD 1.3 or later? ==
+== Gdzie są ''ustawienia trudności'' i ''ustawienia wiadomości'' w OpenTTD 1.3 lub nowszym? ==
 
-OpenTTD had a lot of different places to change settings. In 1.3, the ''difficulty settings'', and the ''news settings'' have been moved to the ''advanced settings''.
-In addition, the ''advanced settings'' have been made better accessible, you can select to display only a subset of settings, and use a filter to further reduce the number of shown settings.
+OpenTTD miał wiele różnych miejsc do zmiany ustawień. W 1.3 ''Ustawienia trudności'' i ''Ustawienia wiadomości'' zostały przeniesione do ''Ustawień zaawansowanych'' .
+Ponadto ''zaawansowane ustawienia'' zostały lepiej dostępne, możesz wybrać wyświetlanie tylko podzbioru ustawień i użyć filtra, aby jeszcze bardziej zmniejszyć liczbę wyświetlanych ustawień.
 
-See also [http://www.tt-forums.net/viewtopic.php?f=31&t=68283 No Difficulty button on Startup Menu with 1.3.2]
+Zobacz też [http://www.tt-forums.net/viewtopic.php?f=31&t=68283 Brak Przycisku trudności w menu startowym z 1.3.2]
 
 == Mój system jest strasznie wolny z OpenTTD 1.5 lub nowszym ==
 
@@ -218,4 +218,4 @@ Jeśli grasz w trybie pełnoekranowym (full-screen), możesz także wypróbować
  blitter = 8bpp-optimized
 
 
-[[Category:en/FAQs]] [[Category:pl/FAQs]]
+<!--[[Category:FAQs]]--> [[Category:pl/FAQs]]
