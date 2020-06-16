@@ -1,0 +1,48 @@
+[[Translation:en/Community/Patches/Compiling and installing the unofficial Android port]]
+ 
+<!--[[Category:Compiling OpenTTD]]-->[[Category:en/Kompilowanie OpenTTD]]
+<!--{{Template:Todo|Very sparse}}-->{{pl/Do poprawki|Bardzo rzadkie}}
+Dokumentuje pelya, jak zbudować i zainstalować nieoficjalny port Android SDL 1.2 / OpenTTD .
+
+== Czynności wstępne <small>''(Preliminaries)''</small> ==
+
+* Uniksowe środowisko wiersza poleceń (w systemie Windows Cygwin powinien działać, MinGW też może)
+* Środowisko programistyczne Androida (duże pliki do pobrania!):
+** Pobierz zestaw Android SDK i NDK dla swojego systemu operacyjnego i rozpakuj je w dowolnym miejscu.
+** Zainstaluj JDK. W przeciwieństwie do oficjalnej strony Android SDK, nie potrzebujesz Oracle JDK; wersja 6 lub nowsza Oracle JDK lub OpenJDK na pewno będzie działać.
+** Zainstaluj Apache Ant.
+* Pobieranie archiwum źródłowego [https://sourceforge.net/projects/libsdl-android/files/apk/OpenTTD/  było na stronie sourceforge ] .
+* Jeśli chcesz mieć wersję przedpremierową, zainstaluj Git i użyj go do klonowania [https://github.com/pelya/commandergenius SDL repository]: '''git clone https://github.com/pelya/commandergenius sdl-android'''.
+* Uruchom komendę '''git submodule update --init project/jni/application/openttd/src''' z katalogu  '''sdl-android''' , spowoduje to pobranie źródeł OpenTTD z modyfikacjami Androida.
+
+<!-->== Modifying the source code ==
+
+Full OpenTTD source code (latest stable version) will be located in '''sdl-android/project/jni/application/openttd/src'''</!-->
+
+== Wyświetlanie zmian w Androidzie ==
+
+Aby zobaczyć różnice między kompilacją oficjalną a Androidem, uruchom polecenia z katalogu '''sdl-android/project/jni/application/openttd/src''':
+
+* git remote add upstream git://git.openttd.org/openttd/trunk
+* git fetch upstream
+* git diff upstream/master
+* git format-patch upstream/master
+
+== Budowanie ==
+* Dodaj katalog główny NDK i <SDK root directory>/tools do zmiennej PATH.
+* Przejdź do katalogu głównego sklonowanego repozytorium Git.
+* <code>ln -s openttd project/jni/application/src</code>
+* <code>./changeAppSettings.sh -a</code>
+* <code>android update project -p project</code>
+* <code>./build.sh</code>
+
+W katalogu  <code>project/bin</code> będzie teraz plik o nazwie MainActivity-debug.apk. Oto, co musisz zainstalować.
+
+Jeśli nie budujesz po raz pierwszy, wystarczy uruchomić build.sh.
+
+== Instalowanie ==
+Jeśli masz już zainstalowany OpenTTD na urządzeniu z Androidem, nie będziesz mógł zainstalować utworzonego pakietu APK jako aktualizacji i najpierw musisz odinstalować oryginalną aplikację. Wynika to z faktu, że masz wbudowany pakiet debugujący, który jest podpisany innym kluczem kryptograficznym niż wersje ze Sklepu Play. Wykonaj także kopię zapasową danych aplikacji, które znajdują się w <internal storage>/Android/data/org.openttd.sdl.
+
+Teraz skopiuj plik APK na urządzenie i zainstaluj go z włączoną opcją "Install from unknown sources"  lub uruchom <code>adb install project/bin/MainActivity-debug.apk</code> z podłączonym urządzeniem, włączonym debugowaniem i katalog z plikiem wykonywalnym ADB w zmiennej PATH.
+
+Ikona OpenTTD będzie teraz widoczna na ekranie głównym. Przywróć teraz kopię zapasową danych aplikacji lub wszystkie niezbędne pliki danych zostaną ponownie pobrane.
