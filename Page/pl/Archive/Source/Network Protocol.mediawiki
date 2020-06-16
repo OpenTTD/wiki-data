@@ -1,0 +1,292 @@
+[[Translation:en/Archive/Source/Network Protocol]]
+
+<!--{{warning|This document is out-dated and might not represent the current truth! Handle with caution.}}-->{{pl/Uwaga|Ten dokument jest przestarzały i może nie odzwierciedlać obecnej prawdy! Postępuj ostrożnie.}}
+
+Poniżej opisano, jak działa protokół sieciowy. 
+
+Protokół został zaprojektowany w taki sposób, aby był stabilny, mało lub bez desynchronii, a jednocześnie szybki i odtwarzalny za pomocą modemu telefonicznego. Wierzymy, że nam się to udało.
+
+OpenTTD używa głównie TCP. Korzysta również z UDP, ale poniżej możesz przeczytać więcej na ten temat.
+
+== OpenTTD - TCP ==
+
+Cała główna komunikacja odbywa się za pośrednictwem protokołu TCP. Dlaczego nie UDP, możesz zapytać. Bardzo proste: TCP jest protokołem pakietowym. Jeden pakiet zależy od drugiego. W TCP jesteśmy całkowicie pewni, że klient lub serwer otrzyma określony pakiet. Z UDP nie jesteśmy. Oczywiście możesz zbudować warstwę na UDP, która to robi, ale po prostu przerobisz TCP.
+
+Dlaczego więc potrzebujemy protokołu pakietów. Pozwól mi spróbować wyjaśnić:
+
+== protokół Pakietów ==
+
+Wszystko, co budujesz w OpenTTD lub zmieniasz, jest obsługiwane wewnętrznie za pomocą tzw. DoCommand. Zamiast wysyłania różnic pamięci co 10 ms lub czegoś w celu synchronizacji klientów i serwerów, korzystamy z tego DoCommand. W chwili, gdy klient wykonuje polecenie DoCommand, nie wykonuje go jeszcze, ale polecenie jest wysyłane do serwera. Serwer wybiera ramkę wykonania dla DoCommand i wysyła te informacje do wszystkich klientów. Gdy klienci uderzą w tę ramkę, wykonuje polecenie DoCommand. W ten sposób wszyscy klienci i serwer utrzymują synchronizację. Ale jak można zrozumieć, konieczne jest, aby wszystkie pakiety były odbierane, zarówno przez serwer, jak i klientów. Dlatego korzystamy z protokołu pakietów.
+
+== Jak to działa? ==
+
+Jak przeczytałeś powyżej, wysyłamy DoCommands. Teraz w normalnych warunkach serwer wysyła pakiet FRAME co ramkę. W tej ramce mówi, do jakiej ramki klient może 'chodzić' <small>''(walk)''</small>. Tuż przed tym serwer wysłał wszystkie DoCommands dla maksymalnej ramki w pakiecie FRAME. W ten sposób wszyscy klienci „przechodzą” do ramki maksymalnej, a następnie wykonują wszystkie polecenia DoCommands. Ponieważ klient nigdy nie może znajdować się poza maksymalną ramką, podobnie jak serwer, wszystkie DoCommands są wykonywane w tej samej ramce. Jest to bardzo potrzebne, w przeciwnym razie otrzymamy ogromne desynchronie. Czasami konieczne jest zwiększenie częstotliwości. tego pakietu FRAME (np. wiele wolnych połączeń). To, co się dzieje, jest następujące: serwer wysyła pakiet FRAME co X sekund, zawierający maks. Ramkę częstotliwości X +. Ponadto wszystkie DoCommands mają ustawioną ramkę wykonania na X + freq. Ponownie, w ten sposób jesteśmy pewni, że wszystkie DoCommands są obsługiwane w tym samym momencie (nawet w tej samej kolejności). Co to znaczy? Bardzo proste: na przykład, gdy budujesz szynę, może ona zająć ramki 'freq' , zanim się pojawi. Jak rozumiesz, ten „freq” nie może być zbyt wysoki. Niektóre statystyki:
+
+{| border="1"
+|+ Network Speed per Client <!--{{warning|NEEDS UPDATING!}}-->{{pl/Uwaga|POTRZEBUJE AKTUALIZACJI!}}
+|-
+! net_frame_freq !! Upstream !! Downstream
+|-
+| 1 || 1.2 kbyte/sec || 1.2 kbyte/sec
+|-
+| 2 || 0.8 kbyte/sec || 0.8 kbyte/sec
+|}
+
+As you can see, your connection has to be really slow to adjust the frame_freq. You can change the frame_freq in the console with: <code>setting frame_freq <number></code>
+
+== Co to jest desync? ==
+
+'''Desync'''hronizacja ma miejsce, gdy klient nie jest zsynchronizowany z serwerem. Jak to wykrywamy? Całkiem proste: gra może być inna, gdy DoCommands nie są obsługiwane, ale nawet gorzej: gdy Los nie jest taki sam. OpenTTD ma Randomizera do budowania w domu, co oznacza, że ​​na każdej maszynie podaje te same losowe liczby z określonego ziarna. Więc gdy seed = 1 i robimy losowo, dostajemy się na każdej maszynie, na przykład 534523 z powrotem. To jest bardzo przydatne. Raz w sync_freq sprawdzamy, czy nasiona na klientach i serwerze są takie same. Jeśli to nie to samo, oznacza to, że serwer lub jeden z klientów losowo zrobił za dużo lub za mało. Ponieważ nie możemy sprawdzić, który z nich popełnił błąd, ten klient jest następnie wyrzucany z serwera i może ponownie dołączyć do ponownej synchronizacji.
+
+W starym protokole zdarzało się to często, głównie z powodu złego protokołu sieciowego. Pakiety nie zawsze były wysyłane w kolejności, a klienci mogli przechodzić 100 ramek przed serwerem i odbierać, w losowych ramkach, DoCommands. To było przyczyną 99% czasu desynchronizacji. Zostało to teraz naprawione. Nie pamiętam, żeby ktoś narzekał na desynchronizację w tym nowym protokole, po prostu dlatego, że jest prawie niemożliwe, aby mieć inne losowe ziarno.
+
+Domyślnie nasiona są sprawdzane raz na 100 klatek. Możesz to zmienić za pomocą '*net_sync_freq = <number>' . Nie zmniejszaj tej liczby, ponieważ znacznie zwiększa ona przepustowość.
+
+== Endian ==
+
+Protokół sieciowy jest w 100% bezpieczny dla Endian. Umożliwiliśmy to, tworząc, że tak powiem, nasz endian. Nie wysyłamy pakietów, ale wysyłamy bajty przez sieć. Na przykład, gdy chcemy wysłać int64, wysyłamy najpierw bajt 1, następnie bajt 2 i tak dalej. Tak więc kolejność bajtów wynosi ZAWSZE 1 2 3 4. W ten sposób wiemy, że każdy klient może dołączyć do każdego serwera, jeśli chodzi o endianness.
+
+== Wykrywanie LAN ==
+
+OpenTTD ma funkcję wykrywającą serwery LAN. Odbywa się to za pośrednictwem UDP. W momencie wybrania trybu LAN na serwerze serwer uruchamia również moduł nasłuchujący UDP. Gdy klient w tej samej sieci LAN naciśnie Find Server w trybie LAN, wysyła transmisję UDP. Jest to jedna z najlepszych rzeczy, jakie ma UDP: transmisja. Serwer odbiera je i wysyła swoją game_info z powrotem do klienta. W ten sposób klient może wykryć serwer w lokalnej sieci LAN. Jest to jedyne miejsce, w którym stosuje się UDP.
+
+== Dołączanie ==
+
+Gdy klient dołącza, najpierw pobiera niektóre dane z serwera (informacje o grze). Następnie weryfikuje się, podaje swoje imię i, w razie potrzeby, hasła. Następnie prosi o kopię bieżącej mapy. Robimy to, ponieważ potrzebujemy początku. Na mapie zapisywane są również losowe nasiona, a także wysyłamy, z której ramki jest mapa. Serwer tworzy kopię mapy i rozpoczyna wysyłanie jej do klienta. W tym momencie serwer ustawia w kolejce wszystkie nowe DoCommands dla tego klienta. Kiedy klient kończy odbieranie i informuje serwer, że ładowanie mapy również się kończy, serwery usuwają z pamięci wszystkie DoCommands, a klient ma trochę czasu, aby wrócić do ramki, w której aktualnie znajduje się serwer (oczywiście czas upłynął między rozpoczęcie odbioru i zakończenie ładowania. Jeszcze więcej na wolnych połączeniach). Gdy klient wskaże, że zostało to wykonane za pomocą dequeue, klient jest zsynchronizowany i może cieszyć się grą.
+
+== DO ZROBIENIA ==
+
+Jak zawsze nie wszystko jest zrobione. Niektóre rzeczy, które należy zrobić:
+ - GUI Banu graczy
+ - MOTD
+
+== Protokół ==
+
+Poniżej opisano, które pakiety są wysyłane (dla prawdziwego identyfikatora pakietu, sprawdź network_data.h (enum PacketType)) do lub z serwera. Dodaje się również, które dane mają się tam znajdować.
+
+Klient może uzyskać informacje o serwerze bez autoryzacji. Ale zanim otrzyma mapę, potrzebuje autoryzacji. Po otrzymaniu mapy rozpoczyna się gra, a także gracz zostaje ogłoszony innym klientom.
+
+Poniżej najpierw pakiety, które klient może wysłać na serwer. Następnie pakiety, które serwer może wysłać do klienta.
+
+Trochę informacji:
+* UintX to bity X, które razem zawierają niepodpisane coś. Dlatego uint8 jest tylko bajtem, a uint32 to cztery bajty w liczbie 1 2 3 4, które razem zawierają niepodpisany int32.
+* Ciąg znaków składa się z wielu znaków. Musisz iść przeczytać, aż osiągniesz zero. Nie obejmuje informacji o długości.
+
+
+{| border="1"
+|+ Client Network Protocol
+|-
+! Packet name !! Info !! Data
+|-
+| PACKET_CLIENT_GAME_INFO
+| Request server-info (first packet, always needed)
+| 
+  <none>
+|-
+| PACKET_CLIENT_JOIN
+| Try to join the server
+| 
+  - String: OpenTTD revision of the client (norev000 if no revision)
+  - String[40]: Playername
+  - Uint8: Playas (between 1 and MAX_PLAYERS)
+  - Uint8: LanguageID
+|-
+| PACKET_CLIENT_PASSWORD
+| Send a password to the server to authorize ourself
+|
+  - Uint8: Type of password (Game-Password (0) or Company-Password (1))
+  - String[20]: Password
+|-
+| PACKET_CLIENT_GETMAP
+| Request the map from the server
+|
+  <none>
+|-
+| PACKET_CLIENT_MAP_OK
+| Tell the server that we are done receiving/loading the map
+|
+  <none>
+|-
+| PACKET_CLIENT_ACK
+| Tell the server we are done with this frame
+|
+  - Uint32: _frame_counter of the client
+|-
+| PACKET_CLIENT_COMMAND
+| Send a DoCommand to the Server
+|
+  - Uint8: PlayerID (0..MAX_PLAYERS-1)
+  - Uint32: CommandID (see command.h)
+  - Uint32: P1 (free variables used in DoCommand)
+  - Uint32: P2
+  - Uint32: Tile (tile of DoCommand)
+  - Uint32: decode_params
+  < 10 times the last one (lengthof(cp->dp)) >
+  - Uint8: CallBackID (see callback_table.c)
+|-
+| PACKET_CLIENT_CHAT
+| Send a chat-packet to the server
+|
+  - Uint8: ActionID (see network_data.h, NetworkAction)
+  - Uint8: Destination Type (see network_data.h, DestType);
+  - Uint8: Destination Player (1..MAX_PLAYERS)
+  - String[MAX_TEXT_MSG_LEN]: Message
+|-
+| PACKET_CLIENT_ERROR
+| The client made an error and is quiting the game
+|
+  - Uint8: ErrorID (see network_data.h, NetworkErrorCode)
+|-
+| PACKET_CLIENT_SET_PASSWORD
+| Set the password for the clients current company
+|
+  - String[20]: Password
+|-
+| PACKET_CLIENT_QUIT
+| The client is quiting the game
+|
+  - String[100]: Leave message
+|}
+
+
+{| border="1"
+|+ Server Network Protocol
+|-
+! Packet name !! Info !! Data
+|-
+| PACKET_SERVER_CLIENT_INFO
+| Sends info about a client (you receive this packet during the whole game (whenever someone joins or changes his name)
+|
+  - Uint8: The index of the client (always unique on a server. 1 = server)
+  - Uint8: As which player the client is playing
+  - String[40]: The name of the client
+|-
+| PACKET_SERVER_GAME_INFO
+| Sends info about the server
+|
+  - Uint8: Version of this GAME_INFO packet (current version is 4)
+    From version 4:
+  - Uint8: Number of active newgrfs (let number be NG)
+  - NG x (Uint32, Int256): GrfID and MD5sum of active newgrf.  NOTE - these have opposite endianness!  THey are big-endian numbers.
+    From version 3:
+  - Uint32: Current game date
+  - Uint32: Start date
+    From version 2:
+  - Uint8: Maximum number of companies
+  - Uint8: Current number of companies
+  - Uint8: Maximum number of spectators
+    From version 1:
+  - String: The servername
+  - String: The revision of the server (norev000 if not supported)
+  - Uint8: The LangaugeID of the server
+  - Uint8: If the server is using a password
+  - Uint8: Max allowed clients on the server
+  - Uint8: Current clients
+  - Uint8: Current spectators
+  - Uint16: Current game-date of the server (pre-version 3 only)
+  - Uint16: Start date of the game (pre-version 3 only)
+  - String: Name of the current map (Random is random)
+  - Uint16: Width of the map
+  - Uint16: Height of the map
+  - Uint8: Set of the map (0..3)
+  - Uint8: Set if the server is dedicated
+|-
+| PACKET_SERVER_ERROR
+| The client, who receives this message, made an error
+|
+  - Uint8: ErrorID (see network_data.h, NetworkErrorCode)
+|-
+| PACKET_SERVER_NEED_PASSWORD
+| Indication to the client that the server needs a password
+|
+  - Uint8: Type of password (game-password (0) or company-password (1))
+|-
+| PACKET_SERVER_WELCOME
+| The client is joined and ready to receive his map
+|
+  - Uint8: own ClientID (unique number per server session)
+|-
+| PACKET_SERVER_WAIT
+| The client can not receive the map at the moment because someone else is already receiving the map
+|
+  - Uint8: Clients awaiting map
+|-
+| PACKET_SERVER_MAP
+| Sends the map to the client, or a part of it (it is splitted in a lot of multiple packets)
+|
+  - uint8: packet-type (MAP_PACKET_START, MAP_PACKET_NORMAL and MAP_PACKET_END)
+   if MAP_PACKET_START:
+    - uint32: The current FrameCounter
+   if MAP_PACKET_NORMAL:
+    - uint8[SEND_MTU]: piece of the map (till max-size of packet)
+   if MAP_PACKET_END:
+    - uint32: seed0 of player
+    - uint32: seed1 of player
+    < last 2 are repeated MAX_PLAYERS time >
+|-
+| PACKET_SERVER_JOIN
+| A client is joined (also the client who just joined receives this message)
+|
+  - Uint8: ClientID
+|-
+| PACKET_SERVER_FRAME
+| Sends the current frame-counter to the client
+|
+  - Uint32: Frame Counter
+  - Uint32: Frame Counter Max (how far may the client walk?)
+  - [Uint32: general-seed-1]
+  - [Uint32: general-seed-2]
+    (last two depends on compile-settings, and are not default settings)  
+|-
+| PACKET_SERVER_SYNC
+| Sends a sync-check to the client
+|
+  - Uint32: Frame Counter
+  - Uint32: General-seed-1
+  - [Uint32: general-seed-2]
+    (last one depends on compile-settings, and are not default settings)
+|-
+| PACKET_SERVER_COMMAND
+| Sends a DoCommand to the client
+|
+  - Uint8: PlayerID (0..MAX_PLAYERS-1)
+  - Uint32: CommandID (see command.h)
+  - Uint32: P1 (free variables used in DoCommand)
+  - Uint32: P2
+  - Uint32: Tile (tile of DoCommand)
+  - Uint32: decode_params
+  < 10 times the last one (lengthof(cp->dp)) >
+  - Uint8: CallBackID (see callback_table.c)
+  - Uint32: Frame of execution
+|-
+| PACKET_SERVER_CHAT
+| Sends a chat-packet to the client
+|
+  - Uint8: ActionID (see network_data.h, NetworkAction)
+  - Uint8: ClientID
+  - String[MAX_TEXT_MSG_LEN]: Message
+|-
+| PACKET_SERVER_ERROR_QUIT
+| One of the clients made an error and is quiting the game. This packet informs the other clients of that.
+|
+  - Uint8: ClientID
+  - Uint8: ErrorID (see network_data.h, NetworkErrorCode)
+|-
+| PACKET_SERVER_QUIT
+| A client left the game, and this packets informs the other clients of that.
+|
+  - Uint8: ClientID
+  - String: Leave message
+|-
+| PACKET_SERVER_SHUTDOWN
+| Let the clients know that the server is closing
+|
+  <none>
+|-
+| PACKET_SERVER_NEWGAME
+| Let the clients know that the server is loading a new map
+|
+  <none>
+|}
+
+<!--[[Category:Development]]-->[[Category:pl/Rozwój]]
