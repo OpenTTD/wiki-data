@@ -1,0 +1,115 @@
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;"><!--
+--><div style="display:inline-block; height: 3em; width: 26px; text-align:center;"><!--
+--><!-- === Link do strony oryginalnej =========== --><!--
+-->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/Action11 | alt=en | 22x16px | frameless]]<br/><!--
+-->[http://newgrf-specs.tt-wiki.net/wiki/Action11 EN] 
+</div><!--
+--><!-- === szablon =========== --><!--
+--> </div>
+[[Category:pl/Artykuły w języku polskim]]
+<br>{{en/Ambox| text = w trakcie edycji.}}
+
+==Wprowadzenie==
+{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 57}}
+
+Ta akcja pozwala na zdefiniowanie binarnych próbek dźwięku.
+
+Działanie 11 może pojawić się tylko raz na plik .grf.
+Nowo zdefiniowane dźwięki będą numerowane kolejno, zaczynając od 73 (49h) (liczby 0..72 reprezentują oryginalne dźwięki). Kiedy będziesz musiał odwołać się do swoich nowych dźwięków, będziesz musiał użyć tej numeracji.
+
+== Syntax ==
+
+The data looks as follows:
+
+<pre><sprite-number> * <length> 11 <number></pre>
+
+{|
+!Element !![[en/GRFActionsDetailed|Size]] !! Description
+|-
+|<sprite-number> ||dec ||A sequential sprite number
+|-
+|<length> ||dec||The total number of bytes in the action
+|-
+|11 ||B||Action 11
+|-
+|<number> ||W ||Number of binary include sprites that follow
+|}
+
+
+== Description ==
+
+=== sprite-number ===
+
+The current sprite number.
+
+=== length ===
+
+The total number of bytes in this action 11.
+
+=== number ===
+
+This defines the number of binary include sprites that follow.
+
+These can only be added using GRFCodec 0.9.7 or later, using the following format:
+
+<pre>17 ** sounds/e67_horn.wav
+18 ** sounds/sheep.wav</pre>
+
+All files included this way must use WAV format, PCM encoding:
+* mono
+* 8-bit or {{en/Ottdp|1.0|no}} 16-bit
+* 11025 Hz, 22050 Hz, or {{en/Ottdp|1.0|no}} 44100 Hz <ref>Technically OpenTTD 0.6 already supported resampling of any sample rate, but playback only used 11025 Hz anyway. Since OpenTTD 1.0 the default playback rate is 44100 Hz.</ref>
+When using [[en/Version numbers#grf-container-version|GRF container version 1]], the file size cannot exceed 64 kB.
+
+<references/>
+
+For those need to know or are inordinately curious, the actual encoding of a binary include is the same as a pseudosprite:
+
+<pre><sprite-number> * <length> FF <name-len> <name> 00 <data></pre>
+
+{|
+!Element !![[en/GRFActionsDetailed|Size]] !! Description
+|-
+|<name-len> ||B ||The return value of strlen(<name>);
+|-
+|<name> ||S ||The name of the included file, with any leading directories stripped
+|-
+|00 ||B ||Null byte terminating the string (not included in size)
+|-
+|<data> ||V ||A byte-for-byte copy of the contents of the file
+|}
+
+== Importing sound effects from other grf files ==
+{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 61}}
+Since TTDPatch 2.0.1 alpha 61, it is possible to import sound effects from other grf files (or even the current file). &nbsp;This does not copy the sound effect data (thus reducing memory usage), but does provide a new sound effect entry with its own action 0 properties.
+
+This is a way of either combining useful sound effects in a single grf file and using them in several, or to duplicate sounds with different amplification or priority settings without doubling the memory usage.
+
+The referenced grf file can be anywhere in newgrf(w).cfg and does not have to be active. &nbsp;If it is not loaded, no sound will be played but that is not an error condition. This makes it possible to separate sound effects and graphics into two files, to allow people with little memory to not load the sound effects yet get working graphics.
+
+The format of such an import sprite is the following (replacing a "**" binary sprite within the action 11 sprite block):
+
+<pre><sprite-number> * <length> FE 00 <GRFID> <number></pre>
+
+{|
+!Element !![[en/GRFActionsDetailed|Size]] !! Description
+|-
+|<sprite-number> ||dec ||A sequential sprite number
+|-
+|<length> ||dec||The total number of bytes in the action
+|-
+|FE ||B ||Code to identify a non-binary sprite in an action 11 block
+|-
+|00 ||B ||Code to identify a sound effect import
+|-
+|<GRFID> ||D ||GRFID of grf file to import sound effect from, may be the current one too
+|-
+|<number> ||W ||Sound effect number to import
+|}
+
+Note that unlike most other reference to sound numbers, the number here is simply the number within the referenced grf file's action 11 block, and does not refer to TTD's samples for numbers 0..72. Also, when importing the sound effect, the action 0 properties are not imported and have to be set separately.
+
+== Przykład ==
+
+Zajrzyj na stronę tt-fora, aby dowiedzieć się, jak dodawać dźwięki do pociągu: [http://www.tt-forums.net/viewtopic.php?f=26&t=5033&p=735013#p735013]
