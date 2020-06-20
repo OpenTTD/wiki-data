@@ -1,0 +1,291 @@
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;"><!--
+--><div style="display:inline-block; height: 3em; width: 26px; text-align:center;"><!--
+--><!-- === Link do strony oryginalnej =========== --><!--
+-->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/Action7 | alt=en | 22x16px | frameless]]<br/><!--
+-->[http://newgrf-specs.tt-wiki.net/wiki/Action7 EN] 
+</div><!--
+--><!-- === szablon =========== --><!--
+--> </div>
+[[Category:pl/Artykuły w języku polskim]]
+<br>{{en/Ambox| text = w trakcie edycji.}}
+== Wprowadzenie ==
+
+Działanie 7 i Działanie 9
+
+Warunkowo pomiń 'sprites' lub przejdź do etykiety
+
+== Description ==
+
+These two actions allow you to skip a specified number or all following sprites in this .grf file. This can be used to have, for example, climate-specific graphics, patch-version checks and error messages, and deactivating in the presence of other active .grf files.
+
+== Syntax ==
+
+The data looks as follows:
+
+ <sprite-number> * <length> [07/09] <variable> <varsize> <condition-type> <value> <num-sprites> 
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+|-
+|<sprite-number>||dec||A sequential sprite number
+|-
+|<length>||dec||The total number of bytes in the action
+|-
+|07/09||B||Action type.  In this case, 07 or 09
+|-
+|<variable>||B||Which variable to base the decision on
+|-
+|<varsize>||B||How many bytes to read from the variable
+|-
+|<condition-type>||B||What condition to check
+|-
+|<value>||V||Value to compare with (size equals <varsize>)
+|-
+|<num-sprites>||B||How many sprites to skip
+|}
+
+== Filling in the terms ==
+
+=== sprite-number ===
+
+The current sprite number.
+
+=== length ===
+
+The total number of bytes in this action 7 or 9.
+
+=== action ===
+
+The type of action this pseudo-sprites defines. It is either 07 or 09, depending if you are using action 7 or action 9.
+
+Both have identical format, the only difference is whether sprites will be skipped during the initialisation of the TTDPatch graphics system, or only when the .grf file becomes active.
+
+Action 9 is always executed, both during initialisation and activation, but action 7 is executed only during activation.
+
+Depending on the action(s) you want to skip, you cannot always use both actions. If in doubt, use action 7 except to skip an action 6 or F. You must not skip an action 2 at all unless skipping the entire rest of the file. Instead, skip the action 3 that refers to it.
+
+Here's a table showing this whole action 7/9 issue:
+{|
+!Action to skip!!with 7!!with 9!!notes
+|-
+|0 (new props)||yes||yes||To skip new properties unknown to old OpenTTD or TTDPatch you have to use Action 9.
+|-
+|1 (sprite blk)||yes||yes||
+|-
+|2 (cargo ID)||n/a*||no||* skip the corresponding action 3 instead
+|-
+|3 (veh ID map)||yes*||no||* can't skip a livery override without skipping the main engine action 3 as well
+|-
+|4 (veh names)||yes||no||
+|-
+|5 (sprite blk)||yes||yes||
+|-
+|6 (apply param)||n/a*||yes||* "yes" since TTDPatch 2.0.1 alpha 51
+|-
+|7 (skip sprite)||yes||yes||
+|-
+|8 (GRFID)||yes||yes||
+|-
+|9 (skip sprite)||yes*||yes||* not during initialization, of course
+|-
+|A (repl.sprite)||yes||yes||
+|-
+|B (error msg)||yes||yes||
+|-
+|C (NOP)||yes||yes||
+|-
+|D (set param)||yes*||yes||* not if parameter will be used in action 6 (except for TTDPatch 2.0.1 alpha 51 and higher)
+|-
+|E (deact.GRFs)||yes||yes||
+|-
+|F (town names)||n/a||yes||
+|-
+|10 (goto labels)||n/a||no||
+|-
+|11 (sound fx)||n/a||no||
+|-
+|12 (glyphs)||yes||yes||
+|-
+|13 (translate)||yes||yes||
+|-
+|14 (static info)||n/a||n/a|| 
+|}
+
+Yes=safe to skip
+
+No=not safe to skip, will break the grf file or TTDPatch
+
+N/A=not applicable; it won't break anything, but it won't actually be skipped either (in other words, its definitions will continue to be used)
+
+=== variable ===
+
+This sets the variable to base the decision on. It can be either one of the GRF parameters (see [[en/Action6|action 6]]), or a built-in patch variable. If it's a GRF parameter that wasn't specified in the newgrf(w).cfg file, or variable 88 with a GRFID that doesn't exist, the action 7 or 9 is ignored and no sprites are skipped, the only exception being condition type 0A which will skip the sprites if the GRFID doesn't exist as well.
+
+{| |-
+!Variables!!Description
+|-
+|00-7F||GRF parameters, see [[en/Action6]].
+|-
+|80-BF||See [[en/GlobalVariables| global variables page]].
+|-
+|C0-FF||Reserved. Do not use.
+|}
+
+=== varsize ===
+
+For GRF parameters, this is the same as <param-size> in [[en/Action6#param-size|action 6]]. For built-in variables, it depends on the variable, see the above table.
+
+For bit tests, this size is ignored. Value must be a BYTE for bit tests, no matter what the size of the variable being tested.
+
+Since r1384 it is possible to set this to 8 bytes with Variable 88 thus allowing the use of a bit mask. This is useful for if only a few bits change over several grfs.
+
+=== condition-type ===
+
+There are several conditions you can choose from to test against. This has an escape sequence for each valid value. See [[en/GRFActionsDetailed#byte-order|the discussion of escape sequences]] for further information on escape sequences in general. For your convenience they are summed up in yet another table:
+{|
+!Condition type!!Escape!!Version!!Description
+|-
+|00||\71||{{en/Ottdp|0.6| }}||Test for bit given by value being set
+|-
+|01||\70||{{en/Ottdp|0.6| }}||Test for bit given by value being clear
+|-
+|02||\7=||{{en/Ottdp|0.6| }}||Parameter is equal to value
+|-
+|03||\7!||{{en/Ottdp|0.6| }}||Parameter is not equal to value
+|-
+|04||\7<||{{en/Ottdp|0.6| }}||Parameter is less than value
+|-
+|05||\7>||{{en/Ottdp|0.6| }}||Parameter is greater than value
+|-
+|06||\7G||{{en/Ottdp|0.6| }}||GRFID (see [[en/Action8|action 8]]) is active (for variable 88 only)
+|-
+|07||\7g||{{en/Ottdp|0.6| }}||GRFID is not active (for variable 88 only)
+|-
+|08||\7gG||{{en/Ottdp|0.6| }}||GRFID is not active yet but will be activated (variable 88 only)
+|-
+|09||\7GG||{{en/Ottdp|0.6| }}||GRFID is or will be active (variable 88 only)
+|-
+|0A||\7gg||{{en/Ottdp|0.6| |ottdrev=r11358}}||GRFID is not nor will it be active (variable 88 only)
+|-
+|0B||\7c||{{en/Ottdp|0.6| |ottdrev=r11358}}||Cargo type is not available (variable is ignored; value is the label)
+|-
+|0C||\7C||{{en/Ottdp|0.6| |ottdrev=r11358}}||Cargo type is available (variable is ignored; value is the label)
+|-
+|0D|| ||{{en/Ottdp|0.7|no|ottdrev=r15418}}||Railtype label is not defined (variable is ignored; value is the label)
+|-
+|0E|| ||{{en/Ottdp|0.7|no|ottdrev=r15418}}||Railtype label is defined (variable is ignored; value is the label)
+|-
+|0F|| ||{{en/Ottdp|1.10|no|}}||Roadtype label is not defined (variable is ignored; value is the label)
+|-
+|10|| ||{{en/Ottdp|1.10|no|}}||Roadtype label is defined (variable is ignored; value is the label)
+|-
+|11|| ||{{en/Ottdp|1.10|no|}}||Tramtype label is not defined (variable is ignored; value is the label)
+|-
+|12|| ||{{en/Ottdp|1.10|no|}}||Tramtype label is defined (variable is ignored; value is the label)
+|}
+
+Note that for the characters, a capital letter means available, and a lowercase character means not available. For the two character GRFID sequences, the first character is its current state, and the second is its future state.
+
+The tests for variable 88 depend on the current [[en/GrfLoadingStages|GRF Loading Stage]], the order GRFs are loaded, and of course whether they are present or were disabled (by themself or by other GRFs). Consider two GRFs A and B (loaded in that order):
+
+{| |-
+!rowspan="2"| Condition
+!colspan="2"| Initialisation
+!colspan="2"| Reservation/Activation
+!rowspan="2"| Tested GRF not present
+|-
+! A testing for B !! B testing for A !! A testing for B !! B testing for A
+|-
+|-
+|06  \7G   || always false          || always false          || always false          || A not disabled?       || always false
+|-
+|07  \7g   || always true           || always true           || always true           || A disabled?           || always false
+|-
+|08  \7gG  || always false          || A not (yet) disabled? || B not (yet) disabled? || always false          || always false
+|-
+|09  \7GG  || always false          || A not (yet) disabled? || B not (yet) disabled? || A not disabled?       || always false
+|-
+|0A  \7gg  || B (already) disabled? || A (already) disabled? || B (already) disabled? || A disabled?           || always true
+|}
+
+If the tested GRF is not present, conditions 06 to 09 always evaluate to "false". For condition 0A "disabled" and "not present" are the same, i.e. it always evaluates to "true".
+
+=== value ===
+
+This term is what the variable is compared to. Its size is given by <varsize>.
+
+For bit tests (condition types 00 or 01), it must always be a single BYTE for bit tests and specifies the bit to test.
+
+For conditions 0B, 0C, 0D and 0E the value specifies directly the cargo/railtype label; it is no index into a translation table.
+
+For conditions 0B and {{en/Ottdp| |2.5|ttdprev=alpha 72}} 0C, the variable given is ignored (but must be a valid variable nonetheless), the varsize must be 4 and the value must be the cargo label to check for. If no cargo with this label is defined in case of condition 0B, the given number of sprites are skipped. For condition 0C, the sprites are skipped if the cargo label has been defined. Both tests work irrespective of the order of .grf files in newgrf(w).cfg; the cargo is considered to be available even if it is defined by a later grf file. For this to work correctly, you ''must not'' skip a cargo definition with conditions 0B or 0C.
+
+The same holds for conditions 0D and 0E wrt. railtypes and their reservation.
+
+Since {{en/Ottdp| |2.5|ttdprev=r1384}}, setting varsize to 8, changes value slightly, the first 4 bytes are the value (generalised GRFID), and the next 4 bytes are a bit mask for the GRFIDs to check. Please note you should make sure any masked bits are also not in the GRFID to check, as value to check against is not currently masked.
+
+=== num-sprites ===
+
+This element sets how many sprites will be skipped if the condition is true. If num-sprites is zero, the entire rest of the .grf file will be skipped, otherwise exactly that many sprites will be skipped. If this causes action 8 to be skipped, the .grf file will be deemed inactive.
+
+If the condition is false, processing continues at the following sprite.
+
+Starting from TTDPatch 2.0.1 alpha 49, it is possible to jump to a certain position in the grf file by defining labels with [[en/Action10|action 10]]. If num-sprites is the number of a label defined somewhere in the file, then processing of the grf file resumes with the sprite following the label, instead of skipping that many sprites. This is the only way to skip more than 255 sprites at once.
+
+Since TTDPatch 2.0.1 alpha 70, duplicate labels are fully supported. The jump will always be to the first matching label that follows. If no matching label follows, the first matching label in the file will be used instead.
+
+Note that it is generally not safe to skip backwards, i.e. to an earlier position. While the patch will happily do that, you will get strange results if certain actions are repeated. Only action 0, 6, 7, 9, C and D are reasonably safe to execute more than once.
+
+== Examples ==
+
+Let's start with an easy Action 7:
+
+ 47 * 6 07 83 01 03 00 00
+
+What does this Action 7 tells the program to do with the fictional .grf file?
+{|
+!Byte!!Meaning
+|-
+|47||<sprite-number>
+|-
+|6||<length> of the action in bytes; start counting at 07 (<action>)
+|-
+|07||<action>: sets this pseudo-sprite to function as action 7
+|-
+|83||<variable> 83 refers to the 4 different climates
+|-
+|01||<varsize>: amount of bytes to compare; a single byte for the climate
+|-
+|03||<condition-type> 03 means skip if the variable is not equal to the <value>
+|-
+|00||<value> 00 equals temperate climate for this variable
+|-
+|00||<num-sprites> 00 means to skip the whole .grf file if the condition is true, i.e. for all climates except temperate in this case
+|}
+
+Therefore, this action 7 skips the rest of the file if it is being loaded in a climate other than the temperate climate.
+
+=== Check for a specific TTDPatch version ===
+
+Due to action 7 being skipped during initalization, and action B severity bit 7 not working before TTDPatch 2.0.1 alpha 66, the best way to check for the required patch version is the following sequence:
+
+  // Check for TTDPatch 2.0.1 alpha 57, skip action B if present
+ 1 * 9       09 8B 04 05 39 02 0A 02 01
+  // Abort with fatal action B if not (during its first activation)
+ 2 * 19      0B 03 1F 00 32 2E 30 2E 31 20 61 6C 70 68 61 20 35 37 00
+  // Action 8
+ 3 * ...     08 06 ...
+  // Skip rest of file if not TTDPatch 2.0.1 alpha 57,
+  // to prevent meaningless "invalid sprite" errors
+ 4 * 9       09 8B 04 04 3A 02 0A 02 00
+
+This way the GRF Status entry shows the proper error message as well as the correct name and description because the action 8 is still being processed during initialization, and all unknown sprites are skipped so that the "invalid sprites" error message is not shown first (or else it would become the permanent message shown in the GRF Status Window).
+
+=== Bezwarunkowy skok ===
+
+Var 9A zawsze ma ustawione wszystkie bity, więc aby wykonać bezwarunkowy skok, możesz użyć trochę testu:
+
+ 1 * 7   07 9A 01 00 00 01 resp.
+ 1 * 7   07 9A 01 \71 00 01
+
+W ten sposób sprawdza się, czy bit 0 z pierwszego bajtu zmiennej 9A jest ustawiony (którym zawsze jest), więc duszek, który umieścisz po tej akcji 7, jest zawsze pomijany.
