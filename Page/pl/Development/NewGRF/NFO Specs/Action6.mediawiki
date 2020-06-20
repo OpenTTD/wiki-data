@@ -1,0 +1,118 @@
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;"><!--
+--><div style="display:inline-block; height: 3em; width: 26px; text-align:center;"><!--
+--><!-- === Link do strony oryginalnej =========== --><!--
+-->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/Action6 | alt=en | 22x16px | frameless]]<br/><!--
+-->[http://newgrf-specs.tt-wiki.net/wiki/Action6 EN] 
+</div><!--
+--><!-- === szablon =========== --><!--
+--> </div>
+[[Category:pl/Artykuły w języku polskim]]
+<br>{{en/Ambox| text = w trakcie edycji.}}
+==Wprowadzenie ==
+
+Działanie 6 pozwala modyfikować zawartość następującego 'sprite'. Wykorzystuje wartości parametrów grf i zapisuje je w danych następnego 'sprite'.
+
+Ta akcja jest przetwarzana tylko raz podczas inicjowania pliku .grf i jest ignorowana podczas kolejnych aktywacji za każdym razem, gdy gra jest uruchamiana lub ładowana. &nbsp;Dlatego, aby warunkowo pominąć tę akcję, musisz użyć akcji 9, a nie akcji 7.
+
+Od wersji TTDPatch 2.0.1 alfa 51 nie jest to już prawdą, działanie 6 zostanie zastosowane zarówno podczas inicjalizacji, jak i aktywacji. Możesz więc użyć akcji 7 lub 9, aby ją pominąć, w zależności od tego, co jest odpowiednie.
+
+== Format ==
+
+The data looks as follows:
+
+ <sprite-number> * <Length> 06 (<param-num> <param-size> <offset>){n} FF
+
+{| |-
+!'''Element'''!![[en/GRFActionsDetailed|'''Size''']]!!'''Description'''
+|-
+|<sprite-number>||dec||A sequential sprite number
+|-
+|<length>||dec||The total number of bytes used in this action
+|-
+|06||B||Defines action 06
+|-
+|<param-num>||B||Which grf parameter to apply
+|-
+|<param-size>||B||How many bytes to overwrite
+|-
+|<offset>||B*||Which byte to overwrite
+|-
+|<FF>||B||Marks the end of the list
+|}
+
+The triplet of <param-num> <param-size> <offset> can be repeated as often as desired.
+
+== Description ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== param-num ===
+
+This is the parameter number from the newgrf(w).cfg parameters to apply to the following sprite data. It can of course be the result of an ActionD calculation as well. The first parameter has number 00.
+
+The modification is not carried out if the parameter has not been defined yet.
+
+=== param-size ===
+
+How many bytes of the parameter to use. If this is larger than 4 (the size of a parameter), the bytes of the following parameter are used. In that case, all required parameters must be defined or no modification will be done.
+
+If this value has bit 7 set, the parameter is ''added'' to the destination value, instead of simply stored. This is useful especially when allocating sprites using the GRF Resource Management, because one typically allocates more than one sprite, but the parameter can only hold a single number, the first sprite allocated. &nbsp;Thus, to apply several sprite numbers properly (such that it works for several activations, not just the first one), use an algorithm like the following:
+* Suppose you have a sprite number <nowiki><s></nowiki> to which you want to add <nowiki><i></nowiki> (where <nowiki><i></nowiki> is returned by the GRF Resource Management)
+* To make this work several times (whenever the grf is activated), you cannot simply add <nowiki><i></nowiki> to <nowiki><s></nowiki> directly
+* Instead, use [[en/ActionD]] to define a new, otherwise unused parameter <j>, and store in it the value of <nowiki><i></nowiki> before it is set by Action D, i.e. <j> holds the previous value of <nowiki><i></nowiki>.
+* Next, after setting <nowiki><i></nowiki> with the GRF Resource Management, calculate <j> = <nowiki><i></nowiki> - <j> (i.e. subtract the previous value of i from the new value of i and store in j).
+* Use Action 6 to add the value of <j> to <nowiki><s></nowiki>, instead of adding the value of <nowiki><i></nowiki> directly.
+* This way, the new value <nowiki><s></nowiki> is the current value of <nowiki><s></nowiki> plus the new <nowiki><i></nowiki> minus the old <nowiki><i></nowiki>, which is the initial value of <nowiki><s></nowiki> plus the new <nowiki><i></nowiki>, just what we wanted.
+* Skip the action D's as well as both action 6 and the action it modifies during the [[en/GrfLoadingStages|"test" stage]] by skipping these actions if action 7 var 84 has bit 10 set.
+* Make sure that when using action 7/9, that either ''both'' or ''none'' of the above two operations are skipped. if only one but not the other is skipped, the values will go out of synch.
+
+See below for an example.
+
+=== offset ===
+
+Number of byte in the following sprite to modify. The counting starts with 0 at the action byte and can go up to the length of the sprite. It is not possible to add data at the end of the sprite.
+
+Since {{en/Ottdp| |2.5|ttdprev=alpha 51}}, this is an extended byte (see [[en/GRFActionsDetailed]]).
+
+== Przykład ==
+
+To jest przykład zastosowania liczb sprite zwróconych przez GRF Resource Management do akcji 0:
+
+<pre>// First, set param 1 (<j>) to the old value of param 0 (<i>)
+
+&nbsp; -1 * 5 &nbsp; &nbsp; &nbsp; &nbsp;0D 01 00 00 00
+
+// Then, use the GRF Resource Management to reserve 3 sprites
+
+&nbsp; -1 * 9 &nbsp; &nbsp; &nbsp; &nbsp;0D 00 00 00 FE FF 08 03 00
+
+// Now calculate <j> = <i> - <j>
+
+&nbsp; -1 * 5 &nbsp; &nbsp; &nbsp; &nbsp;0D 01 02 00 01
+
+// So <j> = new <i> - old <i>
+
+// Use Action 6 to add <j> to the sprite numbers in the sample sprite layout
+
+&nbsp; -1 * 11 &nbsp; &nbsp; &nbsp; 06 01 84 07 01 84 11 01 84 1B FF
+
+&nbsp; -1 * 32 &nbsp; &nbsp; &nbsp; 00 04 01 01 00 09
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;01
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;00 00 00 00 &nbsp; &nbsp; // first allocated sprite
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;00 00 00 &nbsp;10 05 02 &nbsp;01 00 00 00 // second allocated sprite
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;00 0B 00 &nbsp;10 05 02 &nbsp;02 00 00 00 // third
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;80
+
+</pre>
