@@ -1,0 +1,350 @@
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;">
+<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
+<!-- === Link do strony oryginalnej =========== -->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/Action14 | alt=en | 22x16px | frameless]]<br/>
+[http://newgrf-specs.tt-wiki.net/wiki/Action14 EN]
+</div>
+<!-- === Link do strony Polskiej =========== -->
+<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">[[File:pl/Flag.png|link=User:{{PAGENAME}}<!--/Pl--> | alt=pl | 22x16px | frameless]]<br/>
+[[User:{{PAGENAME}}<!--/Pl-->|PL]] </div>
+<!-- === Link do strony głównej =========== -->
+<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
+[[File:en/Openttd.ico.png|link=pl/Main Page| 22x21px | frameless]]<br/>[[pl/Main Page|gł]] </div> </div>
+[[Category:pl/Artykuły w języku polskim]]
+{{en/-}}<br>{{en/Ambox| text = w trakcie edycji.}}
+
+'''''Static GRF Information'''''
+
+== Wprowadzenie ==
+
+Informacje statyczne GRF
+
+Ta akcja pozwala określić dodatkowe informacje o GRF. Każda informacja jest uważana za opcjonalną i nieistotną, dlatego OpenTTD/TTDPatch zignoruje nieznane części i nie wyświetli żadnego błędu. Działanie to ma również umożliwić interfejsowanie nieoficjalnych rozszerzeń/poprawek dla OpenTTD.
+
+Obecnie tej akcji można użyć do zdefiniowania
+* {{en/Ottdp|1.1|no|ottdrev=r20250}} tłumaczenia nazwy i opisu GRF. (Te z działania 8)
+* {{en/Ottdp|1.1|no|ottdrev=r20254}} paleta (domyślnie (=DOS), starsza wersja (=Windows)), której potrzebuje GRF, lub czy paleta nie ma znaczenia.
+* {{en/Ottdp|1.2|no|ottdrev=r23001}} głębia kolorów (8bpp, 32bpp), jakiej potrzebuje GRF
+* {{en/Ottdp|1.1|no|ottdrev=r20255}} liczba, format i cel parametrów GRF. (dozwolone wartości, nazwy, opisy, ...)
+* {{en/Ottdp|1.1|no|ottdrev=r20960}} informacje o wersji i zgodność ze starszymi wersjami tego samego GRF.
+* {{en/Ottdp|1.2|no|ottdrev=r23494}} adres strony internetowej, który można otworzyć w grze.
+
+Sama akcja jest dostępna od OpenTTD r20250. TTDPatch ignoruje działanie od r2334, więc pominięcie nie jest potrzebne. Ta akcja jest dozwolona tylko dla GRF w wersji 7 lub wyższej.
+
+Akcja jest przetwarzana podczas skanowania w poszukiwaniu GRF i ich opisów czynności 8. To skanowanie zatrzymuje się po napotkaniu akcji 8, dlatego akcja 14 musi pojawić się wcześniej w GRF.
+
+== Syntax ==
+
+The data is provided using nestable chunks, and looks as follows:
+
+<pre><sprite-number> * <length> 14 <chunks ...> 00</pre>
+
+Where <chunks ...> is one or a sequence of
+
+<pre>"C" <identifier> <chunks ...> 00</pre>
+
+<pre>"B" <identifier> <length> <binary-data></pre>
+
+<pre>"T" <identifier> <language-id> <text> 00</pre>
+
+These three types of chunks define branch nodes (containers) and binary and textual leafs in a tree-like information structure. A piece of information is identified by the path in the information tree. E.g. the text leaf node at "INFO" -> "DESC" provides translatable descriptions for the GRF. It does not matter how many action 14 appear in a GRF, and which information is defined in which. Information with different identifier paths or same identifier paths (but e.g. different language-ids) can be set in the same action 14 or in multiple. If information is assigned to the same identifier-path multiple times, the information adds up resp. the last set information wins.
+
+Chunks with unknown identifiers are just skipped including their subchunks. Following chunks are processed nevertheless.
+
+{| class="wikitable"
+|-
+! '''Element'''
+! [[en/GRFActionsDetailed|'''Size''']]
+! '''Description'''
+|-
+| <sprite-number>
+| dec
+| A sequential sprite number
+|-
+| <length>
+| dec
+| The total number of bytes in the action
+|-
+| 14
+| B
+| Action 14
+|-
+| <chunks ...>
+| *
+| Any number of sub chunks.
+|-
+| "C"/"B"/"T"
+| B
+| chunk type (container/binary/text)
+|-
+| <identifier>
+| 4*B
+| Unique identifier for the chunk (see below)
+|-
+| <length>
+| W
+| Number of bytes of binary data following.
+|-
+| <binary-data>
+| length*B
+| Binary data
+|-
+| <language-id>
+| B
+| Which of TTD's languages the text is used for, see [[en/Action4]]. (only GRF version >= 7 language codes allowed)
+|-
+| <text>
+| S
+| Text data
+|}
+
+== Descriptions ==
+=== Custom information for non-official extensions/patches ("CSTM" -> <extension-id> -> ...) ===
+
+<pre>-1 * -1   14 "C" "CSTM"
+                 "C" <extension-id>
+                     ... whatever suits you ...
+                     00
+                 00
+             00</pre>
+
+Due to the purely-optional character of action 14 it is especially meant for non-official extensions/patches. However, to avoid conflicts custom additions should go into the "CSTM" chunk. Every extension may define its own subchunk with its own custom 4 byte <extension-id> below the "CSTM" chunk. The format of the subchunks below the <extension-id> chunk is freely defineable.
+
+The information there could be used e.g. to notify an extension that the GRF knows about it. Consecutively the extension might then enable custom GRF features and notify the GRF about their existance e.g. via variable 8D. Versions of OpenTTD without the extension will then just skip the "CSTM" chunk and return the usual value in variable 8D.
+
+=== GRF name ("INFO" -> "NAME") and description ("INFO" -> "DESC") ===
+{{en/Ottdp|1.1|no|ottdrev=r20250}}
+<pre>-1 * -1   14 "C" "INFO"
+                 "T" "NAME" <language-id> "Translatable GRF name" 00
+                 "T" "DESC" <language-id> "Translatable GRF description" 00
+                 00
+             00</pre>
+
+Below the top-level chunk "INFO" you can use the leaf-chunks "NAME" and "DESC" to define name and description for additional languages. The information provided in action 8 is used for "other" languages (id 7F).
+
+=== GRF website ("INFO" -> "URL_") ===
+{{en/Ottdp|1.2|no|ottdrev=r23494}}
+<pre>-1 * -1   14 "C" "INFO"
+                 "T" "URL_" <language-id> "http://www.example.org" 00
+                 00
+             00</pre>
+
+You can use the "URL_" chunk to provide an url for this grf. You can translate this like the name and description to provide a localized website.
+
+
+=== GRF palette ("INFO" -> "PALS") ===
+{{en/Ottdp|1.1|no|ottdrev=r20254}}
+<pre>-1 * -1   14 "C" "INFO"
+                 "B" "PALS" \w1 <palette>
+                 00
+             00</pre>
+
+Specifies the palette the sprites in the GRF are meant for.
+
+{| class="wikitable"
+|-
+!'''<palette>'''
+!'''Meaning'''
+|-
+|"D"
+|Default (DOS) palette
+|-
+|"W"
+|Legacy (Windows) palette
+|-
+|"A"
+|Any palette. (e.g. when the GRF does not contain any sprites)
+|}
+
+=== GRF colour depth ("INFO" -> "BLTR") ===
+{{en/Ottdp|1.2|no|ottdrev=r23001}}
+<pre>-1 * -1   14 "C" "INFO"
+                 "B" "BLTR" \w1 <blitter>
+                 00
+             00</pre>
+
+Specifies the preferred blitter for a NewGRF. If not given, it will default to the 8 bpp blitter.
+
+This is only a hint, OpenTTD may still select another blitter if necessary. Only 8 bpp sprites are guaranteed to work with any blitter.
+
+{| class="wikitable"
+|-
+!'''<blitter>'''
+!'''Meaning'''
+|-
+|"8"
+|8 bpp blitter
+|-
+|"3"
+|32 bpp blitter
+|}
+
+=== GRF version ("INFO" -> "VRSN") ===
+{{en/Ottdp|1.1|no|ottdrev=r20259}}
+<pre>-1 * -1   14 "C" "INFO"
+                 "B" "VRSN" \w4 \d<version>
+                 00
+             00</pre>
+
+Specifies the [[en/Version numbers#version-of-a-specific-newgrf|version of the GRF]]. This version is then used (by OpenTTD) to internally order GRFs with the same GRFID. That order will determine which GRF is loading as "compatible" GRF and which GRFs to show in the list of GRFs. By default a GRF has version 0.
+
+If all GRFs (with the same GRFID) have version 0 all will be shown in the list of GRFs. If the highest version is shared by multiple GRFs one is randomly chosen as "compatible" GRF. As such it is important to prevent releasing multiple GRFs with the same version number.
+
+If you set a version for the GRF, you should also set the 'minimal compatible version' MINV! Else it will default to the value of VRSN, which results in the GRF only being considered compatible to itself (resp. same version).
+
+=== Minimal compatible GRF version ("INFO" -> "MINV") ===
+{{en/Ottdp|1.1|no|ottdrev=r20960}}
+<pre>-1 * -1   14 "C" "INFO"
+                 "B" "MINV" \w4 \d<version>
+                 00
+             00</pre>
+
+Specifies the minimal [[en/Version numbers#version-of-a-specific-newgrf|version of GRFs]] with the same GRFID this GRF is still compatible with.
+
+You have to set MINV after VRSN, and MINV has to be smaller or equal to VRSN.
+
+When loading a game which used an older version of your GRF which is no longer installed, the newest installed version of your GRF will be picked which is still compatible to the version used before. Older GRFs are never considered compatible to GRFs with newer versions though.
+
+If you do not set MINV, but set VRSN, then the GRF is only considered compatible to GRFs with the same version.
+
+If you set MINV to 0, the GRF is also considered compatible to old GRFs without any version information (VRSN).
+
+=== GRF parameters ===
+
+This section describes how to specify information about GRF parameters, and what settings are stored in them. By default a GRF comes with 128 settings, that is a dword setting for every of the 128 GRF parameters.
+
+==== Number of settings ("INFO" -> "NPAR") ====
+{{en/Ottdp|1.1|no|ottdrev=r20251}}
+<pre>-1 * -1   14 "C" "INFO"
+                 "B" "NPAR" \w1 <number-of-settings>
+                 00
+             00</pre>
+Defines the number of settings a GRF provides. This is independant from the number of allowed GRF parameters, as multiple settings might go into the same GRF parameter (e.g. bitmasks).
+
+==== Setting name ("INFO" -> "PARA" -> <setting-number> -> "NAME") and description ("INFO" -> "PARA" -> <setting-number> -> "DESC") ====
+{{en/Ottdp|1.1|no|ottdrev=r20255}}
+<pre>-1 * -1   14 "C" "INFO"
+                 "C" "PARA"
+                     "C" \d<setting-number>
+                         "T" "NAME" <language-id> "Name of setting" 00
+                         "T" "DESC" <language-id> "Setting description" 00
+                         00
+                     00
+                 00
+             00</pre>
+
+Defines a name for a setting.
+
+The settings are numbered and identified using <setting-number>. Valid values are 0 up to ("INFO" -> "NPAR") - 1.
+
+==== Setting to GRF parameter mapping ("INFO" -> "PARA" -> <setting-number> -> "MASK") ====
+{{en/Ottdp|1.1|no|ottdrev=r20255}}
+<pre>-1 * -1   14 "C" "INFO"
+                 "C" "PARA"
+                     "C" \d<setting-number>
+                         "B" "MASK" \w<length> \b <grf-parameter> [ \b <first-bit> [ \b <num-bit> ] ]
+                         00
+                     00
+                 00
+             00</pre>
+
+Specifies which GRF parameter is used to store a setting in.
+
+{| class="wikitable"
+|-
+|<length>
+|A chunk length of 1 to 3 is allowed.
+|-
+|<grf-parameter>
+|GRF parameter (0 to 127) to store the setting in. Default value is the same as <setting-number>.
+|-
+|<first-bit>
+|First bit in the GRF parameter to use for the setting. Default value is "0".
+|-
+|<num-bit>
+|Number of bits to use for the setting in the GRF parameter. Default value is "32".
+|}
+
+If you do not specify <first-bit> and <num-bit> the setting uses the whole GRF parameter by default. If you do not specify any "MASK" chunk at all, the setting will use the GRF parameter with the same number as <setting-number>.
+
+So if you do not need to store multiple settings in one parameter, you do not need "MASK" chunks.
+
+Note: You cannot store a setting across/using multiple GRF parameters.
+
+==== Setting type ("INFO" -> "PARA" -> <setting-number> -> "TYPE") ====
+{{en/Ottdp|1.1|no|ottdrev=r20255}}
+<pre>-1 * -1   14 "C" "INFO"
+                 "C" "PARA"
+                     "C" \d<setting-number>
+                         "B" "TYPE" \w1 <setting-type>
+                         00
+                     00
+                 00
+             00</pre>
+
+Specifies the type of a setting.
+
+{| class="wikitable"
+|-
+!'''<setting-type>
+!'''Meaning'''
+|-
+|0
+|Integer (unsigned) or enumeration. The GUI displays "<" and ">" buttons to change the setting resp. allows entering a value from a query window.
+|-
+|1
+|Boolean. The GUI displays a toggle button to switch the setting on or off.
+|}
+
+
+The defaut value is "0".
+
+==== Allowed value range ("INFO" -> "PARA" -> <setting-number> -> "LIMI") ====
+{{en/Ottdp|1.1|no|ottdrev=r20255}}
+<pre>-1 * -1   14 "C" "INFO"
+                 "C" "PARA"
+                     "C" \d<setting-number>
+                         "B" "LIMI" \w8 \d<minimum-value> \d<maximum-value>
+                         00
+                     00
+                 00
+             00</pre>
+
+Sets minimal and maximal allowed value for integer/enumeration settings.
+
+The default values are "0" resp. "2^32 - 1".
+
+==== Enumeration values ("INFO" -> "PARA" -> <setting-number> -> "VALU") ====
+{{en/Ottdp|1.1|no|ottdrev=r20255}}
+<pre>-1 * -1   14 "C" "INFO"
+                 "C" "PARA"
+                     "C" \d<setting-number>
+                         "C" "VALU"
+                             "T" \d<setting-value> <language-id> "Enumeration value" 00
+                             ...
+                             00
+                         00
+                     00
+                 00
+             00</pre>
+
+This chunk allows you to specify texts to display instead of the raw value for integer/enumeration. You can also specify texts only for some of the valid values. So if a setting e.g. allows values betweeen 0 to 42 you can instruct the GUI to show "none" instead of "0".
+
+{{en/Ottdp|1.3|no}} If you specify texts for all allowed values (according to "LIMI"), then a dropdown box is displayed instead of [<][>] buttons.
+
+==== Domyślna wartość ("INFO" -> "PARA" -> <setting-number> -> "DFLT") ====
+{{en/Ottdp|1.1|no|ottdrev=r20602}}
+<pre>-1 * -1   14 "C" "INFO"
+                 "C" "PARA"
+                     "C" \d<setting-number>
+                         "B" "DFLT" \w4 \d<value>
+                         00
+                     00
+                 00
+             00</pre>
+
+Ustawia wartość domyślną dla ustawienia.
+
+Jeśli ustawisz "DFLT" dla dowolnego ustawienia, zmieni się zachowanie funkcji "reset" . Zwykle rozbroiłoby wszystkie parametry. Jeśli masz dowolne pole "DFLT" w swoim NewGRF, wówczas wszystkie parametry są rozbrojone, po czym wszystkie ustawienia są ustawiane na wartości domyślne lub na 0, jeśli nie podano wartości domyślnej. Oznacza to, że użycie ActionD z opcode + 80 nie działa dla żadnego parametru zmienianego przez użytkownika, gdy używasz pola "DFLT" .
+
+Ta funkcja "reset" ma miejsce podczas dodawania NewGRF do konfiguracji lub gdy użytkownik naciska przycisk resetowania w oknie parametrów.
