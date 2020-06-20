@@ -52,19 +52,19 @@ The data looks as follows:
 
 Whether &lt;offset&gt; is a '''BYTE''' (extended byte in openttd for vehicles) or a '''WORD''' is decided by bit 7 of &lt;language-id&gt;, see below.
 
-== Descriptions ==
+== Opisy ==
 
 === Sprite-number ===
 
-This is just the number you are at.
+To tylko numer, na którym jesteś.
 
-=== Length ===
+=== Długość ===
 
-Count the number of bytes in this action.
+Policz liczbę bajtów w tej akcji.
 
-=== Feature ===
+=== Funkcja ===
 
-This sets the type of [[en/Features|feature]] that you wish to change. Set it to:
+To ustawia typ [[en/Features|feature]] które chcesz zmienić. Ustaw na:
 
 {|- |
 !Value!![[en/Features|Feature]]
@@ -98,8 +98,8 @@ This sets the type of [[en/Features|feature]] that you wish to change. Set it to
 |48||Original strings; see [[en/TextIDs]] for a list of TTD's text IDs.
 |}
 
-=== language IDs ===
-The meaning of this byte depends on the GRF version of the .grf file as set in [[en/Action8#version|action 8]].
+=== ID języka ===
+Znaczenie tego bajtu zależy od wersji GRF pliku .grf ustawionej w [[en/Action8#version|action 8]].
 
 {{en/GrfTill|6}} Up to version 6, this is a bit mask of the following bits:
 
@@ -119,13 +119,13 @@ The meaning of this byte depends on the GRF version of the .grf file as set in [
 |7||80||Flag for 16 bit string IDs
 |}
 
-Add the bits of all languages for which the following strings apply. Bit 7 controls, whether the following string ID consists of 16 or 8 bit. Unknown languages will use the American strings as fallback. Otherwise the string would remain undefined for these languages. To actually define strings for any new language, you must use grf version 7.
+Dodaj bity wszystkich języków, których dotyczą następujące ciągi. Bit 7 kontroluje, czy następujący identyfikator ciągu składa się z 16 czy 8 bitów. Nieznane języki będą używać ciągów amerykańskich jako rezerwowych. W przeciwnym razie ciąg znaków pozostałby niezdefiniowany dla tych języków. Aby faktycznie zdefiniować ciągi znaków dla dowolnego nowego języka, musisz użyć grf w wersji 7.
 
 {{en/GrfFrom|7}} For version 7 and higher, it is a simple language ID from the list below. (This has changed with TTDPatch 2.5 beta 4). Bit 7 has the same meaning as in the earlier versions above.
 
-In either scheme, you can use the value 7F or FF, respectively, to define strings shown for languages that you do not provide translation for. First set all strings to a default value using this, and later override the language specific ones if they exist. 
+W obu schematach można użyć odpowiednio wartości 7F lub FF, aby zdefiniować ciągi znaków dla języków, dla których tłumaczenie nie jest zapewniane. Najpierw ustaw wszystkie ciągi znaków na wartość domyślną, a następnie zastąp te specyficzne dla języka, jeśli istnieją. 
 
-Set bit7 (add 0x80 to the languageID as in the table below) in order to use 16 bit string IDs.
+Ustaw bit7 (dodaj 0x80 do languageID jak w poniższej tabeli), aby użyć 16-bitowych ID`y ciągu.
 
 For a list of plural forms see [[en/StringCodes]]. As the assignment of plural forms to languages is in fact not as fixed as one might expect, the used plural form is defined by each GRF separately for its strings using [[en/Action0/Global Settings]] property 15.
 
@@ -139,18 +139,18 @@ How many consecutive entries to change.
 
 === offset ===
 
-The ID of the first string to change.
+ID pierwszego ciągu do zmiany.
 
-When language-id bit 7 is clear, this is a byte value; For OpenTTD since r13482, where it is an extended byte value for vehicles.
+Gdy bit 7 identyfikatora języka jest czysty, jest to wartość bajtowa; Dla OpenTTD od r13482, gdzie jest to wartość rozszerzonego bajtu dla pojazdów.
 
-When language-id bit 7 is set, this is a word value in little endian notation, e.g. 8134 becomes 34 81.
+Gdy ustawiony jest bit 7 id-języka, jest to wartość słowa w małej notacji endian, np. 8134 staje się 34 81.
 
-The 8 bit version is only allowed for vehicles to set their name, in which case the text ID is just the vehicle ID.
-To replace original texts, or to define texts for usage in callbacks or properties of vehicles, stations, houses or industries you have to use the 16 bit version. However, town names are changed with [[en/ActionF|Action F]].
+Wersja 8-bitowa jest dozwolona tylko dla pojazdów, aby ustawić swoją nazwę, w którym to przypadku tekstowy ID jest tylko ID pojazdu.
+Aby zastąpić oryginalne teksty lub zdefiniować teksty do wykorzystania w wywołaniach zwrotnych lub właściwościach pojazdów, stacji, domów lub gałęzi przemysłu, musisz użyć wersji 16-bitowej. Jednak nazwy miast są zmieniane za pomocą [[en/ActionF|Action F]].
 
-For the usable 16 bit text IDs see the table below, resp. for feature 48 see [[en/TextIDs]].
+Przydatne 16-bitowe ID`y tekstowe znajdują się w tabeli poniżej, odpowiednio. dla funkcji 48 patrz [[en/TextIDs]].
 
-Though these ranges are shared across all features, you should still set the proper feature you are using them for.
+Chociaż zakresy te są wspólne dla wszystkich funkcji, nadal należy ustawić odpowiednią funkcję, w której ich używasz.
 
 {| |-
 !ID!!Content
