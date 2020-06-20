@@ -1,13 +1,17 @@
-<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;"><!--
---><div style="display:inline-block; height: 3em; width: 26px; text-align:center;"><!--
---><!-- === Link do strony oryginalnej =========== --><!--
--->
-[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/ActionF | alt=en | 22x16px | frameless]]<br/><!--
--->[http://newgrf-specs.tt-wiki.net/wiki/ActionF EN] 
-</div><!--
---><!-- === szablon =========== --><!--
---> </div>
-<br>{{en/Ambox| text = w trakcie edycji.}}
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;">
+<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
+<!-- === Link do strony oryginalnej =========== -->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/ActionF | alt=en | 22x16px | frameless]]<br/>
+[http://newgrf-specs.tt-wiki.net/wiki/ActionF EN]
+</div>
+<!-- === Link do strony Polskiej =========== -->
+<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">[[File:pl/Flag.png|link=User:{{PAGENAME}}<!--/Pl--> | alt=pl | 22x16px | frameless]]<br/>
+[[User:{{PAGENAME}}<!--/Pl-->|PL]] </div>
+<!-- === Link do strony głównej =========== -->
+<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
+[[File:en/Openttd.ico.png|link=pl/Main Page| 22x21px | frameless]]<br/>[[pl/Main Page|gł]] </div> </div>
+[[Category:pl/Artykuły w języku polskim]]
+{{en/-}}<br>{{en/Ambox| text = w trakcie edycji.}}
 
 == Wprowadzenie ==
 
@@ -84,11 +88,11 @@ The following fields are repeated for every part (num-parts times):
 |bitcount||B||How many bits are used for determining the value of this part
 |}
 
-Every town has 32 random bits for random naming. You can use the <firstbit> field to make the decisions for every part linearly independent, or at least as independent as possible.
+Każde miasto ma 32 losowe bity do losowego nazywania. Możesz użyć pola <firstbit> , aby podejmować decyzje dla każdej części liniowo niezależne lub przynajmniej tak niezależne, jak to możliwe.
 
 The minimal number for the <bitcount> field should be the lowest power of 2 that is higher than the sum of all probabilities (e.g. 2 if the sum is <=4, 3 if it's <=8, 4 if <=16 and so on), but allowing more bits can make the distribution of decisions smoother.
 
-The following fields are repeated for every text (textcount times) in every part:
+Następujące pola są powtarzane dla każdego tekstu (razy licznik tekstu) w każdej części:
 
 {|
 !Element!![[en/GRFActionsDetailed|Size]]!!Meaning
@@ -105,13 +109,13 @@ The following fields are repeated for every text (textcount times) in every part
 
 === Notes ===
 
-That town name styles are special since they have to be available on the title screen as well, where the graphics files aren't activated yet. This means they're processed at the initialization stage only, and can be skipped only by action 9, but doing so will prevent them from working for the rest of the game. The only way to disable a new town name style once it's loaded is to disable the entire GRF file it's situated in (by using the "New GRF status" window or by putting an exclamation mark next to the filename in newgrf(w).txt).
+Te style nazw miast są wyjątkowe, ponieważ muszą być dostępne również na ekranie tytułowym, gdzie pliki graficzne nie są jeszcze aktywowane. Oznacza to, że są przetwarzane tylko na etapie inicjalizacji i mogą zostać pominięte tylko przez akcję 9, ale spowoduje to, że nie będą działać przez resztę gry. Jedynym sposobem na wyłączenie nowego stylu nazwy miasta po załadowaniu jest wyłączenie całego pliku GRF, w którym się on znajduje (za pomocą okna "New GRF status" lub umieszczając wykrzyknik obok nazwy pliku w newgrf(w).txt ).
 
-A town name generated this way must meet some requirements to be accepted by TTD: it can't be empty (so you don't have to worry even if your chain can generate an empty string), can't be a name that's already given to a town (to avoid duplicate town names), can't be longer than 31 characters and its displayed form can't be wider than 130 pixels. If a generated name doesn't meet all these requirements, TTD tries again with a different random value. For this reason, your town name style must be able to generate at least 70 different acceptable combinations, since this is the maximum number of towns possible on a map, and TTD may deadlock if it can't find different names for every town on the map.
+Nazwa miasta wygenerowana w ten sposób musi spełniać pewne wymagania, aby mogła zostać zaakceptowana przez TTD: nie może być pusta (więc nie musisz się martwić, nawet jeśli Twój łańcuch może wygenerować pusty ciąg znaków), nie może być nazwą, która już jest podana miastu (aby uniknąć zduplikowanych nazw miejscowości), nie może być dłuższa niż 31 znaków, a wyświetlana postać nie może być szersza niż 130 pikseli. Jeśli wygenerowana nazwa nie spełnia wszystkich tych wymagań, TTD próbuje ponownie z inną losową wartością. Z tego powodu styl nazwy miasta musi być w stanie wygenerować co najmniej 70 różnych akceptowalnych kombinacji, ponieważ jest to maksymalna możliwa liczba miast na mapie, a TTD może zostać zakleszczone, jeśli nie będzie w stanie znaleźć różnych nazw dla każdego miasta w mapa.
 
-The town name style dropdown menu doesn't support more than 19 entries, and since six entries are already reserved for the old styles, only 13 remain for new styles. If there are more than 13 final style definitions available, only the first 13 will be displayed in the dropdown menu, and therefore be selectable. The other definitions will still be available (e.g. they'll show up in games started with them), but cannot be selected from the user interface.
+Menu rozwijane stylu nazwy miasta nie obsługuje więcej niż 19 pozycji, a ponieważ sześć pozycji jest już zarezerwowanych dla starych stylów, pozostało tylko 13 dla nowych stylów. Jeśli dostępnych jest więcej niż 13 ostatecznych definicji stylów, tylko pierwsze 13 zostanie wyświetlonych w menu rozwijanym, a zatem będzie można je wybrać. Pozostałe definicje będą nadal dostępne (np. Pojawią się w grach, które się z nimi rozpoczęły), ale nie można ich wybrać w interfejsie użytkownika.
 
-If your GRF isn't available while its name style definition is used in a savegame, the town name style reverts back to German, but the towns get both English and German names; they appear in the wrong order in the town list and duplicate town names may appear. However, no data loss occurs, so the correct names are restored as soon as your definition becomes available again.
+Jeśli twój GRF nie jest dostępny, gdy jego nazwa stylu jest używana w grze zapisanej, styl nazwy miasta powraca do Niemieckiego, ale miasta otrzymują zarówno Angielską, jak i Niemiecką nazwę; pojawiają się w niewłaściwej kolejności na liście miast i mogą pojawiać się zduplikowane nazwy miast. Jednak nie następuje utrata danych, więc poprawne nazwy zostaną przywrócone, gdy tylko definicja będzie ponownie dostępna.
 
 == Przykład ==
 
