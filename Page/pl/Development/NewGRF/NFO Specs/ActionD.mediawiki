@@ -1,0 +1,136 @@
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;"><!--
+--><div style="display:inline-block; height: 3em; width: 26px; text-align:center;"><!--
+--><!-- === Link do strony oryginalnej =========== --><!--
+-->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/ActionD | alt=en | 22x16px | frameless]]<br/><!--
+-->[http://newgrf-specs.tt-wiki.net/wiki/ActionD EN] 
+</div><!--
+--><!-- === szablon =========== --><!--
+--> </div>
+[[Category:pl/Artykuły w języku polskim]]
+<br>{{en/Ambox| text = w trakcie edycji.}}
+== Wprowadzenie ==
+
+
+Przypisz parametry i oblicz wyniki.
+
+
+
+Działanie D pozwala ustawić wartość parametru grf (tj. Te, które zwykle ustawia się jako opcje w pliku newgrf (w) .cfg), a także wykonać na nich matematykę.
+
+== Syntax ==
+
+The data looks as follows:
+
+ <Sprite-number> * <Length> 0D <target> <operation> <source1> <source2> [<data>]
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+
+|-
+|<Sprite-number>||dec||A sequential sprite number
+
+|-
+|<length>||dec||The total number of bytes used in this action
+
+|-
+|0D||B||Defines action 0D
+
+|-
+|<target>||B||Target parameter
+
+|-
+|<operation>||B||Calculation to carry out
+
+|-
+|<source1>||B||First argument
+
+|-
+|<source2>||B||Second argument
+
+|-
+|<data>||D||Value to use as source if not parameter
+|}
+
+== Description ==
+
+=== target, source1, source2 ===
+
+These bytes specify the target parameter and source parameters. They can either be simply the numbers of grf parameters, or they can be a [[en/GlobalVariables| global variable]].
+
+If either source1 or source2 is FF, the value from <data> is used instead of a parameter value.
+
+If <source2> is FE, then this action D will perform one of the following special variable accesses. In this case, <operation> must be assignment and <data> is an argument to the data access, not a source value.
+
+* [[en/ReadingOtherGRFParameters | Read parameters of another GRF]]
+* [[en/ReadingPatchVariables | Read game configuration settings]]
+* [[en/GRFResourceManagement | Reserve GRF resources to prevent conflicts with other GRFs]]
+
+=== operation ===
+
+The operation to carry out on the source arguments. This byte has an escape sequence for each of its possible values, as listed below. See [[en/GRFActionsDetailed#byte-order|the discussion of escape sequences]] for further information on escape sequences in general. The result of this calculation will be stored in the target parameter.
+
+{|
+!Operation!!Escape!!Version!!Name!!Result
+
+|-
+|00||\D=||{{en/Ottdp| | }}||Assignment||target = source1
+
+|-
+|01||\D+||{{en/Ottdp| | }}||Addition||target = source1 + source2
+
+|-
+|02||\D-||{{en/Ottdp| | }}||Subtraction||target = source1 - source2
+
+|-
+|03||\Du*||{{en/Ottdp| | }}||Unsigned multiplication||target = source1 * source2, with both sources being considered to be unsigned
+
+|-
+|04||\D*||{{en/Ottdp| | }}||Signed multiplication||target = source1 * source2, with both sources considered signed
+
+|-
+|05||\Du<<||{{en/Ottdp| | }}||Unsigned bit shift||target = source1 << source2 if source2>0, or target = source1 >> abs(source2) if source2 < 0. source1 is considered to be unsigned
+
+|-
+|06||\D<<||{{en/Ottdp| | }}||Signed bit shift||same as 05, but source1 is considered signed)
+
+|-
+|07||\D&||{{en/Ottdp| |2.5|ttdprev=alpha 48}}||Bitwise AND||target = source1 AND source2
+
+|-
+|08||\D||{{en/Ottdp| |2.5|ttdprev=alpha 48}}|||Bitwise OR||target = source1 OR source2
+
+|-
+|09||\Du/||{{en/Ottdp| |2.5|ttdprev=alpha 59}}||Unsigned division||target = source1 / source2
+
+|-
+|0A||\D/||{{en/Ottdp| |2.5|ttdprev=alpha 59}}||Signed division||target = source1 / source2
+
+|-
+|0B||\Du%||{{en/Ottdp| |2.5|ttdprev=alpha 59}}||Unsigned modulo||target = source1 % source2
+
+|-
+|0C||\D%||{{en/Ottdp| |2.5|ttdprev=alpha 59}}||Signed modulo||target = source1 % source2
+|}
+
+You can add 80 to the operation number to make it apply only if the target is not defined yet. In this respect, a parameter is taken to be defined if any of the following applies:
+* it has been set to any value in the newgrf(w).cfg parameter list
+* it '''or a parameter with higher number''' has been set to any value by an earlier action D
+
+If, for example, parameters 0 and 1 are set in the newgrf(w).cfg file, and action D sets parameter 4, then parameters 2 and 3 automatically become defined and get a value of zero.
+
+=== Notes ===
+
+You can do a bitwise NOT of <param> by calculating "-1 - <param>", i.e. operation=02, source1=FF, source2=param, data=FF FF FF FF.
+
+The target operand can also refer to the special variables from action 7, see below for the list of variables that it is valid to write to.
+
+Because the patch has to reallocate memory for the whole parameter list whenever a new parameter is added, you should set the parameter with the highest number first (whenever possible, at least) so that all memory can be allocated right away.
+
+Note that parameters are never reset after the game has started, therefore you must not modify newgrf(w).cfg parameters with any kind of irreversible operation. It is valid to, for example, add a value to a parameter only if the same value is later subtracted, to keep the parameter the same across loading or starting several games.
+
+Those global variables which can be written to are indicated in a separate column in the [[en/GlobalVariables| global variable list]]. Note that Action D only supports writing dword values. The size given there is merely used to convey how much of that dword value will be used by the game, i.e. what the maximum value is.
+
+== Przykład ==
+
+<span style='color:#808080'>Something to go here</span>
