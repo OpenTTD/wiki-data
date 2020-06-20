@@ -1,0 +1,105 @@
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;"><!--
+--><div style="display:inline-block; height: 3em; width: 26px; text-align:center;"><!--
+--><!-- === Link do strony oryginalnej =========== --><!--
+-->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/Action12 | alt=en | 22x16px | frameless]]<br/><!--
+-->[http://newgrf-specs.tt-wiki.net/wiki/Action12 EN] 
+</div><!--
+--><!-- === szablon =========== --><!--
+--> </div>
+<!--[[Category:Artykuły w języku polskim/Pl]]-->
+<br>{{en/Ambox| text = w trakcie edycji.}}
+
+==Wprowadzenie==
+{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 73}}
+Ta akcja umożliwia ładowanie i definiowanie glifów dla dowolnego [http://www.unicode.org/ Unicode] znak w BMP (Basic Multilingual Plane), tj. do U+FFFF .
+
+''Note'': Jeśli załadowany zostanie jakikolwiek plik .grf zawierający akcję 12 (nawet jeśli jest nieaktywny), TTDPatch przechodzi w tryb UTF-8. Zmienia to sposób przetwarzania wprowadzania znaków i sposób przechowywania niestandardowych ciągów w grze (są one konwertowane na kodowanie UTF-8). Nie można temu zapobiec, a ze względu na możliwe błędy w trybie UTF-8 zaleca się umieszczanie wszystkich glifów czcionek w osobnych plikach .grf, aby nie były ładowane w przypadku problemów.
+
+== Format ==
+
+The data looks as follows:
+
+ <sprite-number> * <length> 12 <num-def> <nowiki>(<font> <num-char> <base-char>){n}</nowiki>
+
+{| |-
+!'''Element'''!![[en/GRFActionsDetailed|'''Size''']]!!'''Description'''
+|-
+|<sprite-number>||dec||A sequential sprite number
+|-
+|<length>||dec||The total number of bytes in the action
+|-
+|12||B||Action 12
+|-
+|num-def||B||Number of definitions
+|-
+|font||B||Font for which to provide glyphs
+|-
+|num-char||B||Number of consecutive glyphs
+|-
+|base-char||W||First Unicode character for which to provide glyphs
+|}
+
+Following the action 12 must be the real sprites for all glyphs, as many sprites as all <num-char> added up.
+
+Glyphs sprites may only use colors 00 (transparent), 01 (foreground) and 02 (shadow). A sprite that uses the shadow color MUST NOT use the [[en/RealSprites#compression|chunked data format]].
+
+== Description ==
+
+=== sprite-number ===
+
+The current sprite number.
+
+=== length ===
+
+The total number of bytes in this action 12.
+
+=== num-def ===
+
+This specifies how many definitions follow, each having <nowiki><font></nowiki>, <num-char> and <base-char>.
+
+=== font ===
+
+The font to define glyphs for. The value can be 0 for the normal size proportional font, 1 for the small size proportional font, 2 for the large size proportional font, or {{en/Ottdp|1.2|no|ottdrev=23274}} 3 for the normal size non-proportional font.
+
+=== num-char ===
+
+The number of characters in the range.
+
+=== base-char ===
+
+The first Unicode character in a range to provide glyphs for. &nbsp;This can be any Unicode character in the BMP.
+
+Note that all characters of a definition (i.e., <nowiki><font></nowiki> <num-char> <base-char> triplet) must fit within a "block" of 128 characters, i.e. you cannot define characters U+00E0..U+011F with one definition; instead you must split it into U+00E0..U+00FF and U+0100..U+011F because those are two different blocks.
+
+== Example ==
+
+ 583 * 10 12 02 00 08 F8 00 00 0C 00 01
+
+{| |-
+!'''Byte'''!!'''Meaning'''
+|-
+|583||<sprite-number>
+|-
+|10||<length> of the action in bytes; start counting at 12 (<action>)
+|-
+|12||<action>: sets this pseudo-sprite to function as action 12
+|-
+|02||<num-def>: we're defining two ranges of characters
+|-
+|00||<nowiki><font></nowiki>: first range, defining font 0 (normal size)
+|-
+|08||<num-char>: defining 8 characters in a row
+|-
+|F8 00||<base-char>: character U+00F8 is the first character
+|-
+|00||<nowiki><font></nowiki>: second range, also defining font 0 (normal size)
+|-
+|0C||<num-char>: defining another 12 characters
+|-
+|00 01||<base-char>: character U+0100 is the first character
+|}
+
+Dlatego działanie 12 określa glify znaków Unicode U+00F8..U+010B. Są one podzielone na dwie definicje, ponieważ definicja nie może przekroczyć granicy bloku.
+
+Po tej akcji 12 śledzi 20 prawdziwych duszków zawierających glify dla powyższych postaci.
