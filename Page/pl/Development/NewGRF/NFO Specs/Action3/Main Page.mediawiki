@@ -1,0 +1,215 @@
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;">
+<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
+<!-- === Link do strony oryginalnej =========== -->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/Action3 | alt=en | 22x16px | frameless]]<br/>
+[http://newgrf-specs.tt-wiki.net/wiki/Action3 EN]
+</div>
+<!-- === Link do strony Polskiej =========== -->
+<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">[[File:pl/Flag.png|link={{PAGENAME}}<!--/Pl--> | alt=pl | 22x16px | frameless]]<br/>
+[[{{PAGENAME}}<!--/Pl-->|PL]] </div>
+<!-- === Link do strony głównej =========== -->
+<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
+[[File:en/Openttd.ico.png|link=pl/Main Page| 22x21px | frameless]]<br/>[[pl/Main Page|gł]] </div> </div>
+[[Category:pl/Artykuły w języku polskim]]
+{{en/-}}<br>{{en/Ambox| text = w trakcie edycji.}}
+== Wprowadzenie ==
+
+Działanie 3 przypisuje zestawy graficzne (do których odnoszą się (łańcuchy) [[Action2 | akcja 2 (s)]) do identyfikatorów funkcji (pojazdy, stacje, domy, branże, ...).
+
+== Format ==
+
+The format of the data is feature-dependent.
+
+The data is:
+
+<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 03 &lt;feature&gt; &lt;n-id&gt; &lt;ids...&gt; &lt;num-cid&gt; (&lt;cargo-type&gt; &lt;set-ID&gt;)... &lt;default set-ID&gt;</pre>
+
+{| class="wikitable"
+|-
+!'''Element'''
+![[en/GRFActionsDetailed|'''Size''']]
+!'''Description'''
+|-
+|&lt;Sprite-number&gt;
+|dec
+|A sequential sprite number
+|-
+|&lt;length&gt;
+|dec
+|The total number of bytes used in this action
+|-
+|03
+|B
+|Defines action 03
+|-
+|&lt;feature&gt;
+|B
+|What type of feature the IDs refer to
+|-
+|&lt;n-id&gt;
+|B
+|Number of IDs this action 3 associates graphics with
+|-
+|&lt;ids...&gt;
+|B/B*
+|IDs of the current feature this action 3 associates graphics with. There must be as many IDs as &lt;n-id&gt; specifies
+|-
+|&lt;num-cid&gt;
+|B
+|Number of different cargo types to support
+|-
+|&lt;cargo-type&gt;
+|B
+|Cargo type for which to use the following set-ID
+|-
+|&lt;set-ID&gt;
+|W
+|Set-ID (from action 2 or from a varaction2 chain) to use for this cargo type
+|-
+|&lt;default set-ID&gt;
+|W
+|Default set-ID to use if none of the above matches
+|}
+
+== Description ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== Feature ===
+
+This sets the type of [[en/Features|feature]] that you wish to change. Set it to:
+
+{|- |
+!Value!![[en/Features|Feature]]
+|-
+|00||Trains
+|-
+|01||Road Vehicles
+|-
+|02||Ships
+|-
+|03||Aircraft
+|-
+|04||Stations
+|-
+|05||[[en/Action3/Canals|Canals/Rivers]]
+|-
+|07||Houses
+|-
+|09||Industry Tiles
+|-
+|0A||Industries
+|-
+|0B||Cargos
+|-
+|0C||Sound Effects (generic callback only)
+|-
+|0D||Airports
+|-
+|0E||Signals (generic callback only)
+|-
+|0F||Objects
+|-
+|10||[[en/Action3/Railtypes|Railtypes]]
+|-
+|11||Airport Tiles
+|-
+|12||[[en/Action3/Roadtypes|Roadtypes]]
+|-
+|13||[[en/Action3/Tramtypes|Tramtypes]]
+|}
+
+=== n-id ===
+
+How many items of the current feature this action 3 defines new graphics for. If this is more than one, all items listed will get the same graphics. If this value has bit 7 set (i.e. 80 added), it is a wagon override. See [[en/Action3LiveryOverride|Action 3 - Livery Override]] for more info on this feature.
+
+You can make a definition with n-id equal to zero (and thus no ids that follow). &nbsp;This creates a generic feature-specific definition not associated with any particular item. &nbsp;At the moment, this is used for generic callbacks, but might be extended to other functions eventually.
+
+=== ids ===
+
+Feature IDs to use this action 3 for. All IDs are counted from the first of their class, i.e. the first road vehicle has 00, as does the first plane, the first ship, and the first train vehicle.
+
+In OpenTTD since r13482, each ID is an extended byte for vehicles, otherwise the ID is a regular byte.
+
+For canals and rivers the id has a special meaning, see its [[en/Action3/Canals|own Action 3 page]]
+
+For town buildings, the IDs are the house IDs, and specifying a house ID that haven't been defined before (by setting its property 08) doesn't do anything, but doesn't cause an error, either. Note that you don't necessarily have to assign a set-ID to a house ID, the old TTD sprite of the substitute type will be used if you don't do so. &nbsp;Industry tile IDs work in the same manner.
+
+=== num-cid ===
+
+Number of cargo type definitions that follow. Can be zero if only the default follows.
+
+For features 05 (canals/rivers), 07 (houses), 09 (industry tiles), 0A (industries), and 0B (cargoes) this must always be zero.
+
+=== cargo-type ===
+
+<u>For vehicles (features 00 .. 03) and stations (feature 04)</u>
+
+The cargo-type for which the set-ID applies. &nbsp;If the item is built to use this type of cargo, or if it is refitted for it, the given set-ID is used as its graphics. &nbsp;See column "type A" in the table at [[en/CargoTypes]] for a list of cargo-type values.
+
+If the grf file has installed a [[en/Action0/Global Settings#cargo-translation-table-09|cargo translation table]], the cargo type here refers to the cargo with the label in the given slot of the translation table, e.g. if you use cargo-type=08, it refers to the cargo that has the label in the ninth slot (numbered 08) in the translation table.
+
+If defined, cargo-type FF is used for graphics shown in the purchase or construction window.
+: Note that for dual-headed trains (prop 13) special rules for the purchase menu sprite apply: two sprites are drawn (for front and back) as if the vehicle is normally constructed. If you supply one purchase menu sprite, it will be used for both vehicle parts in the purchase menu. Provide a set of 8 sprites, and the 7th resp. 3rd sprite will be drawn; provide a set of 8 blank sprites except the 7th if you want to fully control a single purchase menu sprite for a dual-headed engine.
+
+For stations, you can additionally define a special cargo-type of FE which prevents the default from being used (which would show the sum of all cargo). &nbsp;Instead, the given set-ID is displayed with no cargo at all.
+
+<u>Railtypes are available only in OpenTTD &gt; r19056 and its action 3 re-uses the 'cargo'-type definition.</u>
+
+For details see its [[en/Action3/Railtypes|own Action 3 page]]
+
+Since OpenTTD 1.10 this is also the case for [[en/Action3/Roadtypes|Roadtypes]] and [[en/Action3/Tramtypes|Tramtypes]]
+
+<u>For canals/rivers, houses, industry tiles, industries and cargoes (features 05, 07, 09, 0A and 0B)</u>
+
+As &lt;num-cid&gt; is zero for features 05 (canals/rivers), 07 (houses), 09 (industry tiles), 0A (industries), and 0B (cargoes), &lt;cargo-type&gt; and &lt;set-ID&gt; need to be skipped and you only have to set &lt;default set-ID&gt;.
+
+<u>For objects (feature 0F)</u>
+
+Objects support a buy menu sprite similar to vehicles (cargo-type FF).
+
+=== default set-ID ===
+
+Default set-ID if no entry from the cargo-type list above matches, or if there are no special cargo-types listed at all.
+
+== Przykład ==
+
+Poniżej znajduje się przykład tego, jak mogłaby wyglądać pseudo-duszka 3 akcji dla silnika pociągu.
+
+<pre> 13 * 7 &nbsp; 03 00 01 02 00 00 00</pre>
+
+{| class="wikitable"
+|-
+!'''Byte'''
+!'''Meaning'''
+|-
+|13
+|&lt;sprite-number&gt;
+|-
+|7
+|&lt;length&gt; of the action in bytes; start counting at 03 (&lt;action&gt;)
+|-
+|03
+|&lt;action&gt;: sets this pseudo-sprite to function as action 3
+|-
+|00
+|&lt;feature&gt;: 00 for trains
+|-
+|01
+|&lt;n-id&gt;: One ID to change in this case
+|-
+|02
+|&lt;ids...&gt;: vehicle ID (02 - Ploddyphut Choo-Choo)
+|-
+|00
+|&lt;num-cid&gt;: this engine doesn't have cargo-specific graphics
+|-
+|00 00
+|&lt;default set-ID&gt;: Use action 2 ID 00, because it is a word value you add 00
+|}
