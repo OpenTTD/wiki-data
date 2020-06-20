@@ -1,0 +1,422 @@
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;"><!--
+--><div style="display:inline-block; height: 3em; width: 26px; text-align:center;"><!--
+--><!-- === Link do strony oryginalnej =========== --><!--
+-->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/Action5 | alt=en | 22x16px | frameless]]<br/><!--
+-->[http://newgrf-specs.tt-wiki.net/wiki/Action5 EN] 
+</div><!--
+--><!-- === szablon =========== --><!--
+--> </div>
+
+[[Category:pl/Artykuły w języku polskim]]
+<br>{{en/Ambox| text = w trakcie edycji.}}
+== Wprowadzenie ==
+
+
+Zdefiniuj podstawowe zestawy graficzne
+
+
+Działanie 5 służy do definiowania grafiki dla kilku nowych funkcji OpenTTD i TTDPatch. Jest to podobne do działania 1.
+
+== Syntax ==
+
+The data looks as follows:
+
+ <Sprite-number> * <Length> 05 <type> <num-sprites> [<offset>]
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+
+|-
+|<Sprite-number>||dec||A sequential sprite number
+
+|-
+|<length>||dec||The total number of bytes used in this action
+
+|-
+|05||B||Defines action 05
+
+|-
+|<type>||B||What type of graphics follow
+
+|-
+|<num-sprites>||B*||How many regular sprites follow
+
+|-
+|<offset>||B*||Offset in the Action 5 assignable block of sprites
+|}
+
+The following num-sprites sprites in the .nfo file have to be RealSprites that will be used as graphics for the given TTDPatch feature, except for type 0A, which requires RecolorSprites.
+
+{{en/Ottdp|0.7|2.5|ttdprev=alpha 19}}Action 5 entries in a .grf file which has a regular GRFID (not FFFFFFFF) will always override those from .grf files with a GRFID of FFFFFFFF.
+
+== Description ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== type ===
+
+This sets the type of feature that the graphics are for. If bit 7 is set, the offset variable needs to be set. Bit 7 may only be set if the type supports it. The type can be one of:
+
+{|
+!Type!!Version!!Feature!!num-sprites (decimal)
+
+|-
+|04||{{en/Ottdp|0.6|2.0}}||Pre-signal graphics||48
+
+|-
+|04||{{en/Ottdp|0.6|2.0}}||Pre-signal and semaphore graphics||112
+
+|-
+|04,84<ref name="offset">Offset allowed since {{en/Ottdp|1.2|no|ottdrev=r23005}}</ref>||{{en/Ottdp| |2.5|ttdprev=alpha 41}}||Pre-signal, semaphore, and [[en/PathBasedSignalling|PBS]] graphics||240
+
+|-
+|05,85<ref name="offset" />||{{en/Ottdp|0.6|2.0}}||Overhead wires and pylon graphics||48
+
+|-
+|06 ||{{en/Ottdp|0.6| }}||Foundations (retaining walls) for BuildOnSlopes ||74
+
+|-
+|06,86<ref name="offset" />||{{en/Ottdp|0.6|no|ottdrev=r11321}}||Foundations for BuildOnSlopes and half tiles (NS and EW foundations) ||90
+
+|-
+|07||{{en/Ottdp|no|2.5|ttdprev=alpha 43}}||TTDPatch GUI sprites||93 <ref>Type 07 only requires 73 sprites in the stable (2.5 branch); the extra sprites are the clone train and build canal cursors.</ref>
+
+|-
+|08,88<ref name="offset" />||{{en/Ottdp|0.6|no}}<ref>TTDPatch supported canals via Action5 from 2.0.1 alpha 17 up to alpha 25. In alpha 26 it was removed again in favour of an action-1-2-3 method; see [[en/Action3/Canals|Action3]]. The method via Action5 is no longer supported by TTDpatch 2.0.1 alpha 26 and newer.</ref>||Canals||65
+
+|-
+|09,89<ref name="offset" />||{{en/Ottdp|0.6|2.5|ttdprev=alpha 58}}||One-way road arrows||6
+
+|-
+|0A,8A<ref name="offset" />||{{en/Ottdp|0.6|2.5|ttdprev=alpha 67}}||Two company color translation maps||256
+
+|-
+|0B,8B<ref name="offset" />||{{en/Ottdp|0.6|2.5|ttdprev=alpha 68}}||Tram tracks||113 {{en/Ottdp|1.10|no}}119
+
+|-
+|0C||{{en/Ottdp|no|2.5|ttdprev=alpha 74}}||Snowy temperate trees||133
+
+|-
+|0D||{{en/Ottdp|0.6|2.5|ottdrev=r7325 (r11726)|ttdprev=beta 5}}||Coast Tile graphics||16 (18)
+
+|-
+|0E||{{en/Ottdp|no|2.6|ttdprev=r1247}}||New Signals||Any
+
+|-
+|0F,8F<ref name="offset" />||{{en/Ottdp|0.7|2.6|ottdrev=r13469|ttdprev=r1487}}||Sprites for marking tracks on slopes (for track reservation systems like PBS or YAPP)||Up to 12
+
+|-
+|10,90<ref name="offset" />||{{en/Ottdp|0.6|no|ottdrev=r9645}}||Additional airport graphics||15
+
+|-
+|11,91<ref name="offset" />||{{en/Ottdp|0.6|2.6|ottdrev=r9645|ttdprev=r1589}}||Road stop graphics||8
+
+|-
+|12,92<ref name="offset" />||{{en/Ottdp|0.7|2.6|ottdrev=r13464|ttdprev=r1498}}||Aqueduct graphics||8
+
+|-
+|13,93<ref name="offset" />||{{en/Ottdp|0.6|no|ottdrev=r11433}}||Autorail sprites||55
+
+|-
+|14,94||{{en/Ottdp|0.6|no|ottdrev=11433}}||Flag sprites||Up to 36
+
+|-
+|15,95||{{en/Ottdp|0.6|no|ottdrev=r11433}}||OpenTTD GUI sprites||Up to 184
+
+|-
+|16,96||{{en/Ottdp|1.1|no|ottdrev=r20370}}||Airport preview sprites||Up to 9
+
+|-
+|17,97||{{en/Ottdp|1.2|no|ottdrev=r23952}}||Railtype tunnel base sprites||16
+
+|-
+|18,98||{{en/Ottdp|1.5|no|ottdrev=r26869}}||Extra all black palette||1
+|}
+
+<references/>
+
+==== 04 Signal graphics. ====
+
+Signal graphics come in groups of 16. These groups contain sprites in the same order as sprites 1275-1290 in trg1[r].grf; red, then green, for each of: SW-facing, NE-facing, NW-facing, SE-facing, E-facing, W-facing, S-facing, N-facing.
+
+{|
+!Group(s)!!Contents
+
+|-
+|0||lighted entrance signals
+
+|-
+|1||lighted exit signals
+
+|-
+|2||lighted combo signals
+
+|-
+|3||standard (non-pre-signal) semaphore signals
+
+|-
+|4..6||repeat 0..2 for semaphores
+
+|-
+|7||standard lighted PBS signals
+
+|-
+|8..14||repeat 0..6 for PBS signals
+|}
+
+==== 0C Snowy temperate trees ====
+
+If the temperate snow line is enabled, you can use this to specify the snowy versions of temperate trees. The sprites must be the snowy versions of sprites 1576-1708 from TRG1.GRF, in the same order as they appear there.
+
+==== 0D Coast tile sprites ====
+
+===== In NewGRFs =====
+If diagonal flooding is enabled then due to new corner coasts, you can use this to give a complete set of replacement coast tile sprites. There are 16 in total, 8 original Transport Tycoon Deluxe sprites and 8 for the corner slopes. Order of the sprites<ref name=numbers>Sprite numbers from trg1(r).pcx.</ref> is as follows:
+
+ 3997, 4063, 4064, 4068, 4062, 3998, 4066, 3988,
+ 4065, 4069, 3996, 3992, 4067, 3994, 3995, 3999.
+
+<references />
+
+[[File:en/Action5Coast16Sprites.png]]
+
+''The 16 sprites for feature 0D''
+
+===== In Base Set's extra grf =====
+Additionally, OpenTTD (since r11726) supports another method of supplying all additional coast tile sprites, but this is only allowed in the ''extra'' NewGRF of [http://wiki.openttd.org/Base_graphics Base Graphic Sets]. In this, only 10 sprites are supplied in the same order as the 16 sprites above, but without the coast sprites already in the base grf. Note that the 10 sprites version supplies two additional slopes, but they are not used, and are currently unlikely to be ever used.
+
+[[File:en/Action5Coast10Sprites.png]]
+
+''Only 10 sprites are required for OpenTTD base graphic sets''
+
+''In OpenTTD 10 sprites for type 0D is enough in base graphic sets. The 16 sprites version should not be used for base graphics.''
+
+The reason for the existence of a 10 sprite version is to remove the need for including original graphics, and to keep compatibility with old NewGRFs that replace the original shore graphics using Action A without adding new shores using Action 5: When a NewGRF uses the 16 sprites version it takes precedence above any NewGRF replacing the shore graphics using Action A; when a NewGRF uses Action A to replace shore graphics it takes precedence above a 10-sprite Action 5, effectively disabling diagonal flooding. Also due to compatibility the 10 sprites version is invalid for normal NewGRFs, which are not the "extra" NewGRF of some Base Graphics Set.
+
+==== 0E New Signals ====
+
+Any number of real and recolour sprites can be specified in the action in any order.
+
+Sprites are referenced by their offset into the action5 block by a [[en/VarAction2NewSignals]], hence a logically easily calculable order is advised.
+
+As of TTDPatch 2.6 alpha 0 r1346, the action 5 block defined in the same GRF file as the varaction2, will be used as the base sprite block for the offsets returned by the callback even if it is overridden by a higher priority GRF action 5 definition of the same feature (0E).
+
+==== 0F Tracks for Slopes ====
+
+This should be in the same order as sprites 1031 to 1035 (1). These should only be the rails, basically the same format as sprites 1005 to 1010 (1). There should be 3 groups of these sprites, one for each rail type (railroad, monorail, maglev).
+
+(1) Sprite numbers from trg1r.pcx / ogfx1_base.grf
+
+==== 11 Road stop graphics ====
+
+Road stop graphics consist of 2 groups of 4 sprites. The first group contains graphics for bus stops, second for truck stops. In each group, the sprites are in the following order: SW, NE, NW, SE.
+
+SW and NE sprites are used with road going along the Y axis ( .\' ), NW and SE with road along the X axis( '/. ).
+
+Internally, the stations are defined using the following station layouts:
+
+<pre>\d1313
+
+\b13 \b0 \b0 \b3 \b16 \b16 <SW sprite>
+
+\b0 \b0 \b0 \b3 \b16 \b16 <NE sprite>
+
+80</pre>
+
+and
+
+<pre>\d1314
+
+\b0 \b0 \b0 \b16 \b3 \b16 <NW sprite>
+
+\b0 \b13 \b0 \b16 \b3 \b16 <SE sprite>
+
+80</pre>
+
+where 1313 and 1314 are town road sprites.
+
+[[File:en/Roadstops.png]]
+
+Further sprites can be found in '''openttd.grf''' (OpenTTD), '''ogfxe_extra.grf''' (OpenGFX) or '''ttdpbase(w).grf''' (TTDPatch).
+
+'''Note''': As of OpenTTD r10185, the behaviour of this feature is identical in both games.
+
+==== 12 Aqueducts ====
+
+8 real sprites should be given. Firstly: 4 bridge end sprites in the order: SW, SE, NE, NW, where the direction is that heading onto the aqueduct. Then 2 middle part sprites for the X and Y directions. Followed by two pillar sprites for the X and Y directions. For examples of where the division between middle sprites and pillars should be made see sprites 2437 to 2592 (1), or an existing aqueduct GRF. Note, that for higher bridges to work effectively, pillars should be approximately 8px in height.
+
+[[File:en/Manual/Aqueduct.png]]
+
+==== 15 / 95 OpenTTD GUI sprites ====
+
+OpenTTD defines 184 GUI sprites. Additional sprites not needed by an OpenTTD are simply ignored, so that new(er) base sets can be used by old OpenTTD versions. One can (re-)define a subset of the GUI sprites by giving an offset into the GUI sprites. The sprites are:
+{|
+!Offset !! Meaning
+|-
+|0 .. 11|| Halftile selections
+|-
+|12 .. 13 || Title screen letters E and D
+|-
+|14 .. 37 || Bridge piers colours 1 .. 4
+|-
+|38 || square indicating NewGRF compatibility
+|-
+|39 || blob indicating server compatibility
+|-
+|40 || lock icon
+|-
+|41 || empty check box
+|-
+|42 || checked check box
+|-
+|43 || warning sign
+|-
+|44 || window resize right
+|-
+|45 .. 48|| arrows
+|-
+|49 || house
+|-
+|50 || shared orders
+|-
+|51 .. 52 || pin / pinned
+|-
+|53 .. 62 || rail build icons and cursors
+|-
+|63 .. 68 || monorail build icons and cursors
+|-
+|69 .. 74 || maglev build icons and cursors
+|-
+|75 || ??
+|-
+|76 .. 77 || waypoint toolbar and cursor icon
+|-
+|78 .. 81 || waypoint buildings
+|-
+|82 .. 85 || autoroad toobar and cursor for road and trams
+|-
+|86 || helipad
+|-
+|87 || build ship lift cursor
+|-
+|88 .. 89 || build canal toolbar and cursor
+|-
+|90 || fast forward
+|-
+|91 .. 92 || level land toolbar and cursor
+|-
+|93 .. 96 || sell vehicle
+|-
+|97 .. 100 || sell all vehicles
+|-
+|101 .. 104 || replace vehicle
+|-
+|105 || sell chain of rail vehicles
+|-
+|106 .. 113 || clone vehicles button and cursors
+|-
+|114 .. 117 || create vehicle group button
+|-
+|118 .. 121 || delete vehicle group button
+|-
+|122 .. 125 || rename vehicle group button
+|-
+|126 .. 133 || group replace on / off button
+|-
+|134 || road toolbar: build one-way roads
+|-
+|135 || signal toolbar: convert signals
+|-
+|136 .. 137|| build rivers toolbar and cursor
+|-
+|138 .. 143 || OSK
+|-
+|144 || switch toolbar
+|-
+|145 .. 146 || build aqueduct toolbar and cursor
+|-
+|147 .. 148 || (+) and (-) icon
+|-
+|149 || window resize left
+|-
+|150 || play music right-to-left languages
+|-
+|151 .. 152 || shade / unshade
+|-
+|153 || debug
+|-
+|154 .. 157 || vehicle profit icons
+|-
+|158 || unread news
+|-
+|159 || exclusive transport rights
+|-
+|160 || autoreplace protection
+|-
+|161 || autoreplace defined
+|-
+|162 .. 165 || Town happiness indicator: N/A, appalling, mediocre and good
+|-
+|166 .. 167 || Icons for delete to the left resp. right
+|-
+|168 || Default window size
+|-
+|169 .. 173 || Story book: Main toolbar icon, goto place, unfinished goal, finished goal, broken goal
+|-
+|174 || Smallmap cargoflow button
+|-
+|175 .. 178 || Icons for group livery selection
+|-
+|179 .. 183 || NotRoadTypes toolbar and cursor icons
+|}
+
+==== 16 / 96 Airport preview sprites ====
+[[File:en/Airport preview commuter.png|right]]
+Preview sprites for the airports in the order
+# Small airport
+# City airport
+# Heliport
+# Metropolitan airport
+# International airport
+# Commuter airport
+# Heli depot
+# Intercontinental airport
+# Heli station
+
+Sprites are without any offsets and should all be the same size. Make sure so by using the forbid cropping.
+
+==== 17 / 97 Tunnel overlay sprites ====
+[[File:en/Tunnel overlays.png|right]]
+The sprites provide the ground for the tunnel sprites to be used by railtype NewGRFs which only need to provide the tunnel portals. They must be provided for both terrain types which could be used in any given climate (grass; grass+snow; grass+desert; grass).
+
+=== num-sprites ===
+
+The number of sprites that follow.
+
+Since TTDPatch 2.0.1 alpha 49, this value is an extended byte.
+
+Note that it is not generally an error to provide more sprites than required, but this does expend sprite slots unnecessarily.
+
+=== offset ===
+
+The offset in the Action 5 assignable block of sprites. This term is only read when bit 7 of the type has been set. It can be used to only replace a subset of sprites from a set.
+
+'''Note:''' When creating a TTDPatch compatible grf, you have to skip the OpenTTD specific Action 05's using an Action 09 rather than an Action 07. Using the latter will result in an error on your Action 05 when using the grf in TTDPatch.
+
+'''Note:''' NFORenum distinguishes Action5 with no offset and Action5 with offset 0. While they have technically the same effect, NFORenum assumes an Action5 with no offset has the intention to replace all sprites and checks the number of sprites accordingly. An Action5 with offset is considered to only replace a subset of the sprites, so the sprites are not checked for completeness.
+
+== Przykład ==
+
+<pre>
+// Replace the piers for the aqueduct
+ 1457 * 3        05 12 02 06 // action5, type 12, 2 sprites, at offset 6 into that type
+    9 sprites/png/terrain/waterfeatures.png 546 8 09 23 33 -26 0
+   10 sprites/png/terrain/waterfeatures.png 594 8 09 23 33 -5 0
+</pre>
