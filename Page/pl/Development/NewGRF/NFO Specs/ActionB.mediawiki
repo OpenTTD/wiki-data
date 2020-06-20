@@ -1,0 +1,215 @@
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;"><!--
+--><div style="display:inline-block; height: 3em; width: 26px; text-align:center;"><!--
+--><!-- === Link do strony oryginalnej =========== --><!--
+-->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/ActionB | alt=en | 22x16px | frameless]]<br/><!--
+-->[http://newgrf-specs.tt-wiki.net/wiki/ActionB EN] 
+</div><!--
+--><!-- === szablon =========== --><!--
+--> </div>
+[[Category:pl/Artykuły w języku polskim]]
+<br>{{en/Ambox| text = w trakcie edycji.}}
+== Wprowadzenie ==
+
+
+Generuj komunikaty o błędach.
+
+
+Za pomocą tej akcji możesz ostrzec użytkownika o problemach związanych ze sposobem ładowania pliku grf, np. niewłaściwa kolejność, niewłaściwa wersja łaty lub złe parametry.
+
+== Syntax ==
+
+The data looks as follows:
+
+ <Sprite-number> * <Length> 0B <severity> <language-id> <message-id> [<message>] [<data> [<parnum> [<parnum>]]]
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+
+|-
+|<Sprite-number>||dec||A sequential sprite number
+
+|-
+|<length>||dec||The total number of bytes used in this action
+
+|-
+|0B||B||Defines action 0B
+
+|-
+|<severity>||B||How severe the message is (notice/warning/error/fatal error)
+
+|-
+|<language-id>||B||What languages to display this message for
+
+|-
+|<message-id>||B||What message to show
+
+|-
+|<message>||S||Text of a custom message, only present if <message-id>==FF
+
+|-
+|<data>||S||String to insert in built-in or custom messages
+
+|-
+|<parnum>||B||GRF parameter(s) to display in message
+|}
+
+== Description ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== severity ===
+
+This sets how severe the message is.
+
+{|
+!Severity!!Meaning!!Prefix!!Action taken
+
+|-
+|00||Notice||(none)||continue loading grf file
+
+|-
+|01||Warning||"Warning: "||continue loading grf file
+
+|-
+|02||Error||"Error: "||continue loading grf file
+
+|-
+|03||Fatal error||"Error: "||abort loading of grf file
+|}
+
+Normally Action B is ignored during initialization. If the severity has bit 7 set, a fatal action B will be applied even during initialization. This can be useful to prevent errors due to invalid sprites during initialization. Note that this only works properly since TTDPatch 2.0.1 alpha 66, for earlier versions the error popup that is shown is corrupted if bit 7 is set.
+
+Messages are shown with a "/!\" sign in the [[en/GRFStatusWindow|GRF Status window]]. The first fatal message during each activation is shown as a red popup box as well.
+
+=== language-id ===
+
+This has the same format as the [[en/Action4#language-id|language-id in action 4]].
+
+Use 7F (all languages) for built-in messages, because they are automatically using the right language.
+
+=== message-id ===
+
+Set what kind of message to show. You have the following options:
+
+{|
+!Message ID!!Content
+
+|-
+|00||80 " requires at least TTDPatch version " 80 00
+
+|-
+|01||80 " is for the " 80 " version of TTD." 00
+
+|-
+|||<data> should be "DOS" or "Windows"
+
+|-
+|02||80 " is designed to be used with " 80 00
+
+|-
+|||<data> should be a switchname + value, e.g. "multihead 0"
+
+|-
+|03||"Invalid parameter for " 80 ": parameter " 80 " (" 7B ")" 00
+
+|-
+|||<data> should be the switch number written out ("5")
+
+|-
+|04||80 " must be loaded before " 80 "." 00
+
+|-
+|05||80 " must be loaded after " 80 "." 00
+
+|-
+|06||80 " requires OpenTTD version " 80 " or better." 00
+
+|-
+|FF||Custom message, use text from <message>
+|}
+
+Message IDs 04 and 05 are available since TTDPatch 2.6 alpha 1 (r858).
+
+Message ID 06 is available since OpenTTD r11330. This message should only be used when Action 7/9 variable 9D is 1 (OpenTTD).
+
+=== message ===
+
+Custom message text to show.
+
+=== parnum ===
+
+Parameter numbers (up to two) to display instead of 7B in the message text.
+
+=== Notes ===
+
+In all messages (built-in and custom), the first 80 is replaced by the filename of the grf file, the second 80 is replaced by the content of <data>. After the two 80 bytes, you may have one or two 7B bytes that are replaced by the value of the parameter(s) specified by <parnum>. Note that it is invalid to have a 7B before exactly two 80 bytes were encountered. This means the following combinations of special bytes are allowed:
+
+<pre>(none)
+
+80
+
+80 80
+
+80 80 7B
+
+80 80 7B 7B</pre>
+
+Before, after, or in-between the bytes you may have arbitrary characters.
+
+The advantage of the built-in messages is that they can be translated using the mkpttxt mechanism, whereas custom messages will only be available in the languages that come with the grf file.
+
+Note that if several grf files attempt to show fatal error messages, only the first message is actually shown at the moment since TTD does not have a queue for the red error popups. All others will however be shown in the GRF Status window.
+
+Also note that since this action has only been introduced in TTDPatch 2.0.1 alpha 13, it makes no sense to check whether the version is at least alpha 13 if you want to use the error message 00. In earlier versions, the patch will display the "invalid sprite" error message anyway because the action is unknown.
+
+== Przykład ==
+
+Poniżej znajduje się przykład tego, jak mogłaby wyglądać pseudo-sprite' Action B wraz z [[en/Action7|Action 7]] wymagane, aby pominąć go w odpowiednich okolicznościach.
+
+<pre>2 * 6  07 85 01 01 37 01
+
+3 * 17 0B 03 7F 02 "newtrains on" 00</pre>
+
+{|
+!Byte(s)!!Name!!Meaning
+
+|-
+|07||<action>||Sets this pseudo-sprite to function as action 7
+
+|-
+|85||<variable>||Check [[en/TTDPatchFlags|patch flags]]
+
+|-
+|01||<size>||variable size; ignored because this is a bit test
+
+|-
+|01||<cond>||skip if bit is set
+
+|-
+|37||<val>||check bit 37 (newtrains)
+
+|-
+|01||<num-sprites>||skip one sprite
+
+|-
+|0B||<action>||Sets this pseudo-sprite to function as action B
+
+|-
+|03||<severity>||Sets this to a fatal error
+
+|-
+|7F||<language-id>||Execute this sprite for all languages
+
+|-
+|02||<message-id>||Use message 02 (80 " is designed to be used with " 80)
+
+|-
+|"newtrains on" 00||<data>||String to insert in place of the second 80 in the message
+|}
