@@ -1,0 +1,134 @@
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;"><!--
+--><div style="display:inline-block; height: 3em; width: 26px; text-align:center;"><!--
+--><!-- === Link do strony oryginalnej =========== --><!--
+-->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/ActionA | alt=en | 22x16px | frameless]]<br/><!--
+-->[http://newgrf-specs.tt-wiki.net/wiki/ActionA EN] 
+</div><!--
+--><!-- === szablon =========== --><!--
+--> </div>
+[[Category:pl/Artykuły w języku polskim]]
+<br>{{en/Ambox| text = w trakcie edycji.}}
+== Wprowadzenie ==
+
+
+Zmodyfikuj 'sprites' TTD.
+
+
+W przeciwieństwie do akcji 1 i 5, które dodają nowe 'sprites' dla nowych funkcji lub pojazdów, akcja A modyfikuje wbudowane 'sprites' TTD.
+
+== Syntax ==
+
+The data looks as follows:
+
+ <Sprite-number> * <Length> 0A <num-sets> ( <num-sprites> <first-sprite> )...
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+
+|-
+|<Sprite-number>||dec||A sequential sprite number
+
+|-
+|<length>||dec||The total number of bytes used in this action
+
+|-
+|0A||B||Defines action 0A
+
+|-
+|<num-sets>||B||How many sets of sprites to replace
+
+|-
+|<num-sprites>||B||How many consecutive sprites in this set
+
+|-
+|<first-sprite>||W||Number of first sprite in this set
+|}
+
+The set of <num-sprites> and <first-sprite> is repeated as often as <num-sets> specifies.
+
+The following sprites will be RealSprites or RecolorSprites that replace the given TTD sprites. There must be as many of them as num-sprites of all sets added up.
+
+== Description ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== num-sets ===
+
+This sets how many different sets of sprites to replace. Each set are a number of consecutive sprites.
+
+=== num-sprites ===
+
+How many consecutive sprites to replace in this particular set.
+
+=== first-sprite ===
+
+The first sprite number to replace in this set.
+
+=== Notes ===
+
+You can find the sprite numbers by looking in trg1.pcx, they're the little numbers above each sprite, except for the climate-specific sprites which are more complicated.
+
+Unlike actions 1 and 5, the real sprites of action A do not count towards the sprite limit.
+
+To replace sprites in other climates, you first need to find out what the sprite number is trg1.grf.
+
+You set it to replace that number and add an Action7 which turns it off if it is not in the right climate.
+
+== Przykład ==
+
+Poniżej znajduje się przykład tego, jak mogłaby wyglądać prawdziwa pseudo-duszka z wpisami duszka pod nią.
+
+<pre>3 * 5     0A 01 0C 3A 08
+
+4 c:\ttd\sprites\farmset.pcx 66 8 09 31 64 -31 0
+
+5 c:\ttd\sprites\farmset.pcx 146 8 09 31 64 -31 0
+
+6 c:\ttd\sprites\farmset.pcx 226 8 09 45 48 -15 -11
+
+7 c:\ttd\sprites\farmset.pcx 290 8 09 33 22 1 -10
+
+8 c:\ttd\sprites\farmset.pcx 322 8 09 31 64 -31 0
+
+9 c:\ttd\sprites\farmset.pcx 402 8 09 29 57 -26 -4
+
+10 c:\ttd\sprites\farmset.pcx 466 8 09 31 64 -31 0
+
+11 c:\ttd\sprites\farmset.pcx 546 8 09 31 39 -19 -6
+
+12 c:\ttd\sprites\farmset.pcx 594 8 09 31 64 -31 0
+
+13 c:\ttd\sprites\farmset.pcx 674 8 09 49 28 -6 -28
+
+14 c:\ttd\sprites\farmset.pcx 722 8 09 31 64 -31 0
+
+15 c:\ttd\sprites\farmset.pcx 2 72 09 30 55 -29 0</pre>
+
+{|
+!Byte!!Meaning
+
+|-
+|3||<sprite-number>
+
+|-
+|5||<length> of the action in bytes; start counting at 0A (<action>)
+
+|-
+|0A||<action>: sets this pseudo-sprite to function as action A
+
+|-
+|01||<num-sets>: sets it to 1 set to replace
+
+|-
+|0C||<num-sprites>: sets it to 12 sprites in this set.
+
+|-
+|3A 08||<first-sprite>: First Sprite of the set (3A 08 - Farms)
+|}
