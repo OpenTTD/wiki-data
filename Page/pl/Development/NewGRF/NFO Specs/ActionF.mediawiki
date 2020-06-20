@@ -1,0 +1,191 @@
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;"><!--
+--><div style="display:inline-block; height: 3em; width: 26px; text-align:center;"><!--
+--><!-- === Link do strony oryginalnej =========== --><!--
+-->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/ActionF | alt=en | 22x16px | frameless]]<br/><!--
+-->[http://newgrf-specs.tt-wiki.net/wiki/ActionF EN] 
+</div><!--
+--><!-- === szablon =========== --><!--
+--> </div>
+[[Category:pl/Artykuły w języku polskim]]
+<br>{{en/Ambox| text = w trakcie edycji.}}
+== Wprowadzenie ==
+
+
+Zdefiniuj nowe style nazw miejscowości
+
+
+Tej akcji można użyć do zdefiniowania nowych stylów nazw miejscowości dla losowych gier i losowych miast umieszczonych w edytorze scenariuszy.
+
+== Syntax ==
+
+The data looks as follows:
+
+ <Sprite-number> * <Length> 0F <ID> <stylenames> <num-parts> <parts>...
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+
+|-
+|<Sprite-number>||dec||A sequential sprite number
+
+|-
+|<length>||dec||The total number of bytes used in this action.
+
+|-
+|<ID>||B||    ID of this definition in the bottom 7 bits. If bit 7 is set, this is a final definition (it will be displayed in the Options window), if it's clear, this is an intermediate definition that can be used to create more complex decision chains, see below. Final and intermediate definitions share the same 128 IDs, so 01h and 81h define the same ID for different usages, and not two separate IDs.
+
+|-
+|<style-names>||V||This is only present in final definitions, see below for the format
+
+|-
+|<num-parts>||B||How many parts this name is put together from.
+
+|-
+|<parts>||V||Data about the various parts, see below
+|}
+
+== Style names ==
+
+This item is only present if bit 7 is set in the ID. Its contents are in the format:
+
+ [<langs> <name>]... 00
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Meaning
+
+|-
+|langs||B||Language ID definition, see below
+
+|-
+|name||S||Null-terminated style name to be displayed in the Options window.
+|}
+
+There can be any number of style names, until a literal "00" terminates the style name definition. If no appliable name is found, "(unnamed style)" will be displayed in the Options window.
+
+The language selection works the same as the [[en/Action4#language-id|action 4 language ID]], including the difference for grf version 7 and up, however bit 7 is ignored. This means that there is an ambiguity whether a value of "00" is a list terminator, or the ID of the American language. To resolve this, the first style name definition is never a list terminator (starting with TTDPatch 2.5 beta 4). This means that the definition of the American language name must be the first in the list. Alternatively, since bit 7 is ignored, it is valid to use the value "80" for the ID of the American language as well, but putting it first in the list is the preferred way of defining it.
+
+== Parts ==
+
+The following fields are repeated for every part (num-parts times):
+
+  <textcount> <firstbit> <bitcount> [ <probability> <part/ID> ]... 
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Meaning
+
+|-
+|textcount||B||The number of possible values for this part
+
+|-
+|firstbit||B||Number of the lowest bit that counts for determining the value of the part
+
+|-
+|bitcount||B||How many bits are used for determining the value of this part
+|}
+
+Every town has 32 random bits for random naming. You can use the <firstbit> field to make the decisions for every part linearly independent, or at least as independent as possible.
+
+The minimal number for the <bitcount> field should be the lowest power of 2 that is higher than the sum of all probabilities (e.g. 2 if the sum is <=4, 3 if it's <=8, 4 if <=16 and so on), but allowing more bits can make the distribution of decisions smoother.
+
+The following fields are repeated for every text (textcount times) in every part:
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Meaning
+
+|-
+|probability||B||The relative probability of the following name to appear in the bottom 7 bits. Bit 7 decides the meaning of the following field.
+
+|-
+|part||S||If bit 7 of probability is clear, the following field is a null-terminated string containing a name part itself. This can be an empty string (just a plain zero byte) to avoid generating this part. (This can be useful for an optional part: give a high probability to an empty part to appear, and low probablities to many non-empty parts, so you effectively decrease the chance that the part appears at all)
+
+|-
+|ID||B||If bit 7 of the probability is set, the following byte is an ID for an intermediate action F. The random name defined by the given ID is generated, then inserted into the current name as a name part. Specifying an ID that isn't defined yet results in an error and therefore disabling all town name definitions in the file.
+|}
+
+=== Notes ===
+
+That town name styles are special since they have to be available on the title screen as well, where the graphics files aren't activated yet. This means they're processed at the initialization stage only, and can be skipped only by action 9, but doing so will prevent them from working for the rest of the game. The only way to disable a new town name style once it's loaded is to disable the entire GRF file it's situated in (by using the "New GRF status" window or by putting an exclamation mark next to the filename in newgrf(w).txt).
+
+A town name generated this way must meet some requirements to be accepted by TTD: it can't be empty (so you don't have to worry even if your chain can generate an empty string), can't be a name that's already given to a town (to avoid duplicate town names), can't be longer than 31 characters and its displayed form can't be wider than 130 pixels. If a generated name doesn't meet all these requirements, TTD tries again with a different random value. For this reason, your town name style must be able to generate at least 70 different acceptable combinations, since this is the maximum number of towns possible on a map, and TTD may deadlock if it can't find different names for every town on the map.
+
+The town name style dropdown menu doesn't support more than 19 entries, and since six entries are already reserved for the old styles, only 13 remain for new styles. If there are more than 13 final style definitions available, only the first 13 will be displayed in the dropdown menu, and therefore be selectable. The other definitions will still be available (e.g. they'll show up in games started with them), but cannot be selected from the user interface.
+
+If your GRF isn't available while its name style definition is used in a savegame, the town name style reverts back to German, but the towns get both English and German names; they appear in the wrong order in the town list and duplicate town names may appear. However, no data loss occurs, so the correct names are restored as soon as your definition becomes available again.
+
+== Przykład ==
+
+  2 * 52 0F 80 7F "Mars" 00 00 02
+
+ 02 00 02
+     03 "Alpha" 00 01 "Beta" 00
+ 03 02 04
+     01 " Andromedæ" 00 01 " Carinæ" 00 81 01 
+
+{|
+!Byte(s)!!Meaning
+
+|-
+|0F||Action F
+
+|-
+|80||<ID> Final definition; show in town-name list.
+
+|-
+|7F||<lang-id>: Name for all languages follows
+
+|-
+|"Mars" 00||Style name
+
+|-
+|00||End of style names
+
+|-
+|02||<num-parts>: Two <parts> fields follow:
+
+'''First <parts> field:'''
+
+|-
+|02||<textcount>: two options for this part.
+
+|-
+|00||<firstbit>: start with bit 0, and
+
+|-
+|02||<bitcount>: use two bits (sum of probabilities is 04; minimum number of bits is 2)
+
+|-
+|03||<probability> (probability is 3/4)
+
+|-
+|"Alpha" 00||<part>: First option for first part
+
+|-
+|01 "Beta" 00||<probability>/<part>: Second option for first part, probability 1/4
+
+'''Second <parts> field:'''
+
+|-
+|03||<textcount>: three options for this part:
+
+|-
+|02||<firstbit>: start with bit 2, and
+
+|-
+|04||<bitcount>: use four bits (sum of probabilities is 3; minimum number of bits is 2)
+
+|-
+|01 " Andromedæ" 00 ||<probability>/<part>: First option for second part, probability ~1/3
+
+|-
+|01 " Carinæ" 00 ||<probability>/<part>: Second option for second part, probability ~1/3
+
+|-
+|81 01||<probability>/<ID>: Third option, chain to the action F with ID 01, probability ~1/3
+|}
+
+Notes:
+# ID 01 (a każda akcja F powiązana z ID 01 powinna mieć <pierwsze> s 06 lub wyższe, ponieważ bity 00..05 były używane przez ID 00, a jeśli zostaną użyte ponownie, decyzja będzie związana z decyzją w ID 00.
+# O ile ID 01 nie wygeneruje co najmniej 33 (dek) różnych ciągów znaków, nie zapewni to wystarczającej liczby nazw miejscowości.
+# Drugi <parts> wykorzystuje cztery bity; prawdopodobieństwa dla każdego <part> wynoszą 5/16, 5/16 i 6/16, które są rozsądnie zbliżone do 1/3 i znacznie lepsze niż 1/4, 1/4, 1/2, które spowodowałyby gdyby zastosowano tylko dwa bity. Nie ma wiarygodnego określenia, które <part> uzyska dodatkowe prawdopodobieństwo; jeśli chcesz wiedzieć na pewno, które będą miały dodatkowe prawdopodobieństwo, zakoduj działanie F, aby niektóre <part> miały wyższe lub niższe prawdopodobieństwo niż inne.
+# The <probability>/<ID> para 81 01 może również połączyć się z działaniem F o ID 81, ale prawdopodobnie nie jest to pożądany wynik.
