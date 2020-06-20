@@ -1,0 +1,129 @@
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;"><!--
+--><div style="display:inline-block; height: 3em; width: 26px; text-align:center;"><!--
+--><!-- === Link do strony oryginalnej =========== --><!--
+-->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/ActionE | alt=en | 22x16px | frameless]]<br/><!--
+-->[http://newgrf-specs.tt-wiki.net/wiki/ActionE EN] 
+</div><!--
+--><!-- === szablon =========== --><!--
+--> </div>
+[[Category:pl/Artykuły w języku polskim]]
+<br>{{en/Ambox| text = w trakcie edycji.}}
+== Wprowadzenie ==
+
+
+Dezaktywuj inne pliki graficzne lub wymuś aktywację bieżącego pliku.
+
+
+Zwykle należy używać plików graficznych [[en/Action7]] do dezaktywacji, jeśli okaże się, że załadowano inną niekompatybilną grafikę.
+
+Jednak po pojawieniu się nowych zestawów często nie jest możliwa zmiana wszystkich istniejących zestawów, aby mogły wykryć nowy zestaw. Ta akcja pozwala zatem nowemu zestawowi graficznemu dezaktywować starsze zestawy, z którymi jest niezgodny.
+
+== Syntax ==
+
+The data looks as follows:
+
+ <Sprite-number> * <Length> 0E <num> <GRFIDs...>
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+
+|-
+|<Sprite-number>||dec||A sequential sprite number
+
+|-
+|<length>||dec||The total number of bytes used in this action.
+
+|-
+|0E||B||Defines action 0E
+
+|-
+|<num>||B||Number of sets which should be deactivated
+
+|-
+|<GRFIDs...>||4*B||GRFIDs of the sets to deactivate
+|}
+
+== Description ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== num ===
+
+This is the number of sets you want to deactivate.
+
+=== GRFIDs ===
+
+Here you give the list of GRFIDs, in the same format as in [[en/Action8]], which should be deactivated.
+
+=== Notes ===
+
+Note that it is invalid to attempt the deactivation of already active graphics files. You can only prevent files lower down the newgrf(w).cfg from becoming active later. Therefore, you must check that none of the GRFIDs in this list are active already using the appropriate action 7. If the deactivation of an already active set is attempted, the current set is considered invalid and will be disabled.
+
+If you attempt to deactivate a set that isn't loaded, nothing happens.
+
+To handle the cases of incompatible sets being loaded and activated earlier, you can either attempt to overwrite all their settings and graphics, or simply deactivate this set in turn.
+
+{{en/Ottdp|no| }} If the given GRFID is identical to the GRFID of the file currently being processed, the current file is force-activated. This is most useful for making changes to the title screen menu, which would otherwise not be possible. It is strongly recommended not to use this feature in any way other than in combination with an action 7 that checks variable 92 (game mode) so that the activation only happens in the title screen. Otherwise the GRF Status Windows (de)activation is bypassed entirely. It is best to limit this forced activation to as few actions as possible for maximum compatibility. Forced activation is not supported by OpenTTD.
+
+In principle, there can be four cases and your .grf file must be able to handle all of them properly:
+* The .grf file is active and can not be deactivated.
+: You cannot use action E in this case.
+* The .grf file is inactive but will be activated.
+: This is the only case in which action E is useful, the .grf file coming below the current one in newgrf(w).cfg but being set to be activated. Action E will set it to not be activated when it is processed.
+* The .grf file is inactive and will not be activated.
+: This can happen because it has been processed already (it comes earlier in newgrf(w).cfg) and was deactivated, either by default or manually.
+
+== Przykład ==
+
+Oto przykład dezaktywacji GRFID 54570105, jeśli to możliwe, i dezaktywacja bieżącego pliku, jeśli nie.
+
+ 47 * 9 07 88 04 06 54 57 01 05 02
+ 48 * 9 07 88 04 08 54 57 01 05 03
+ 49 * 6 07 83 01 03 7F 04
+ 50 * x 0B 01 1F FF ... (e.g. "This file is deactivated because incompatible graphics are active.")
+ 51 * 6 07 83 01 03 7F 00
+ 52 * x 0B 01 1F FF ... (e.g. "Deactivating GRFID 54570105.")
+ 53 * 6 0E 01 54 57 01 05
+
+Wykonuje to następujące instrukcje:
+
+<pre>47: if (GRFID 54570105 is active) goto 50
+
+48: if (GRFID 54570105 is inactive but will be activated) goto 52
+
+49: goto 54
+
+50: showmessage("This file is deactivated because incompatible graphics are active.")
+
+51: deactivate_current_file
+
+52: showmessage("Deactivating GRFID 54570105.")
+
+53: deactivate(54570105);
+
+continue_with_current_file;</pre>
+
+Powodem tej szczególnej kolejności pseudo-sprite' jest to, że akcja 7 nie zajmie gałęzi, jeśli w ogóle nie ma zapytanego GRFID. W takim przypadku oba 'sprites' 47 i 48 wypadają, co oznacza, że ​​skok w 49 jest wykonywany, a plik wznawia przetwarzanie. Bezwarunkowe gotos w 49 i 51 są w rzeczywistości uwarunkowane tym, że klimat nie jest 7F, co nigdy nie może być.
+
+Conceptually, without goto-logic, the code could be described by
+
+<pre>if (GRFID 54570105 is active) {
+
+ showerror("This file is deactivated because incompatible graphics are active.")
+
+deactivate_current_file
+
+} else if (GRFID 54570105 is inactive but will be activated) {
+
+showmessage("Deactivating GRFID 54570105.")
+
+deactivate(54570105);
+
+}</pre>
