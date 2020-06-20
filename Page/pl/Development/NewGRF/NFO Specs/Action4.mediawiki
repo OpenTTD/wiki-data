@@ -1,0 +1,227 @@
+<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;"><!--
+--><div style="display:inline-block; height: 3em; width: 26px; text-align:center;"><!--
+--><!-- === Link do strony oryginalnej =========== --><!--
+-->
+[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/Action4 | alt=en | 22x16px | frameless]]<br/><!--
+-->[http://newgrf-specs.tt-wiki.net/wiki/Action4 EN] 
+</div><!--
+--><!-- === Link do strony Polskiej =========== --><!--
+--><!--<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">--><!--
+--><!--[[File:pl/Flag.png|link={{PAGENAME}}--><!--/Pl--><!-- | alt=pl | 22x16px | frameless]]<br/>
+[[{{PAGENAME}}--><!--/Pl--><!--|PL]]--><!--</div>--><!--
+--><!--
+--><!-- === Link do strony głównej =========== --><!--
+--><!--<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
+[[File:en/Openttd.ico.png|link=Strona główna/Pl| 22x21px | frameless]]<br/>[[Strona główna/Pl|gł]] </div> --> </div>
+
+[[Category:pl/Artykuły w języku polskim]]
+<br>{{en/Ambox| text = w trakcie edycji.}}
+==Wprowadzenie ==
+Zdefiniuj ciągi znaków, np. Nazwy pojazdu, domu lub branży
+
+Tworząc nowe grafiki pojazdów, musisz także nazwać nowe pojazdy, w przeciwnym razie pojawią się z oryginalną nazwą z TTD.
+Jednak niestandardowe nazwy pojazdów przypisane przez gracza w grze (lub dla TTDPatch również za pośrednictwem TTD pojazdu.dat) zawsze będą miały pierwszeństwo.
+
+W TTDPatch możesz również użyć tej akcji, aby zmienić większość ciągów tekstowych TTD.
+
+== Syntax ==
+
+The data looks as follows:
+
+ &lt;Sprite-number&gt; * &lt;Length&gt; '''04''' &lt;feature&gt; &lt;language-id&gt; &lt;num-ent&gt; &lt;offset&gt; &lt;text&gt;
+
+{| |-
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+|-
+|&lt;Sprite-number&gt;||dec||A sequential sprite number
+|-
+|&lt;length&gt;||dec||The total number of bytes used in this action.
+|-
+|04||B||Defines action 04
+|-
+|&lt;feature&gt;||B||For what type of vehicle/station should this definition be used?
+|-
+|&lt;language-id&gt;||B||Which of TTD's languages this name is for
+|-
+|&lt;num-ent&gt;||B||Number of consecutive strings to change
+|-
+|&lt;offset&gt;||B/W||First ID to change
+|-
+|&lt;text&gt;||S||New text strings
+|}
+
+Whether &lt;offset&gt; is a '''BYTE''' (extended byte in openttd for vehicles) or a '''WORD''' is decided by bit 7 of &lt;language-id&gt;, see below.
+
+== Descriptions ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== Feature ===
+
+This sets the type of [[en/Features|feature]] that you wish to change. Set it to:
+
+{|- |
+!Value!![[en/Features|Feature]]
+|-
+|00||Trains
+|-
+|01||Road Vehicles
+|-
+|02||Ships
+|-
+|03||Aircraft
+|-
+|04||Stations
+|-
+|07||Houses
+|-
+|0A||Industries
+|-
+|0B||Cargos
+|-
+|0D||Airports
+|-
+|0F||Objects
+|-
+|10||Railtypes
+|-
+|12||Roadtypes
+|-
+|13||Tramtypes
+|-
+|48||Original strings; see [[en/TextIDs]] for a list of TTD's text IDs.
+|}
+
+=== language IDs ===
+The meaning of this byte depends on the GRF version of the .grf file as set in [[en/Action8#version|action 8]].
+
+{{en/GrfTill|6}} Up to version 6, this is a bit mask of the following bits:
+
+{| |-
+!Bit!!Value!!Meaning
+|-
+|0||01||American or "other"
+|-
+|1||02||English
+|-
+|2||04||German
+|-
+|3||08||French
+|-
+|4||10||Spanish
+|-
+|7||80||Flag for 16 bit string IDs
+|}
+
+Add the bits of all languages for which the following strings apply. Bit 7 controls, whether the following string ID consists of 16 or 8 bit. Unknown languages will use the American strings as fallback. Otherwise the string would remain undefined for these languages. To actually define strings for any new language, you must use grf version 7.
+
+{{en/GrfFrom|7}} For version 7 and higher, it is a simple language ID from the list below. (This has changed with TTDPatch 2.5 beta 4). Bit 7 has the same meaning as in the earlier versions above.
+
+In either scheme, you can use the value 7F or FF, respectively, to define strings shown for languages that you do not provide translation for. First set all strings to a default value using this, and later override the language specific ones if they exist. 
+
+Set bit7 (add 0x80 to the languageID as in the table below) in order to use 16 bit string IDs.
+
+For a list of plural forms see [[en/StringCodes]]. As the assignment of plural forms to languages is in fact not as fixed as one might expect, the used plural form is defined by each GRF separately for its strings using [[en/Action0/Global Settings]] property 15.
+
+{{en/Language IDs}}
+
+When translating for a new language, please simply edit the [[en/Language IDs|language list]] and add the new definition here.
+
+=== num-ent ===
+
+How many consecutive entries to change.
+
+=== offset ===
+
+The ID of the first string to change.
+
+When language-id bit 7 is clear, this is a byte value; For OpenTTD since r13482, where it is an extended byte value for vehicles.
+
+When language-id bit 7 is set, this is a word value in little endian notation, e.g. 8134 becomes 34 81.
+
+The 8 bit version is only allowed for vehicles to set their name, in which case the text ID is just the vehicle ID.
+To replace original texts, or to define texts for usage in callbacks or properties of vehicles, stations, houses or industries you have to use the 16 bit version. However, town names are changed with [[en/ActionF|Action F]].
+
+For the usable 16 bit text IDs see the table below, resp. for feature 48 see [[en/TextIDs]].
+
+Though these ranges are shared across all features, you should still set the proper feature you are using them for.
+
+{| |-
+!ID!!Content
+|-
+|C4xx||Set name of station class associated with station ID xx; this is the text above the preview (where otherwise TTD shows "Orientation")
+|-
+|C5xx||New station names, this changes the text "number of platforms" into the given text when the station with this ID from the current set is selected (i.e. xx=station-id from action 3 and 0)
+|-
+|C9xx||Name of the house type of this ID. If both property 12 and this is set, the latest definition is used always. You should prefer setting [[en/Action0/Houses#building-name-id-12|property 12]] instead of this, so executables translated with TTD Translator will show the name in the current language. However, if you can't find any suitable old TTD texts, this can be used to specify your custom name. Don't forget to set the same text for all parts of a multi-tile building.
+|-
+|D0xx||Miscellaneous graphics texts, unique to each .grf file. Used for several callbacks. Some callbacks support IDs up to D3FF.
+|-
+|D4xx||'''Never use in Action4''', only for displaying textids in range D000-D3FF (grf specific), see [[en/TextIDs]]
+|-
+|D8xx
+|{{en/Ottd|1.7|rev=r27769}} Useable like DCxx in Action 0 and for inclusion via string codes 0x80 and 0x81.
+{{en/Ttdp|}}'''Never use in Action4''', only usable in Action0 features, see [[en/TextIDs]]
+|-
+|DCxx||Set miscellaneous persistent GRF texts. Useable in Action 0 and for inclusion via string codes 0x80 and 0x81.
+{{en/Ttdp|}} Unlike the D0xx GRF texts, these IDs can be used to set properties. The text ID must be set before any [[en/Action0/Houses|action 0]] references it.
+|}
+
+{{en/Ttdp|}} The DCxx IDs are allocated internally when defined, and are persistent in the savegame data. Each .grf file gets its own separate map of these internal IDs and thus may set all 256 of them. &nbsp;However, only 1024 IDs are available in total, to be shared by all .grf files ever activated in the savegame. This means these IDs should be used as sparingly as possible. But use them when they are useful!
+
+=== text ===
+
+Jest to lista ciągów zakończonych zerem, musi być tyle ciągów, ile określa num-ent.
+
+Grfcodec w wersji 0.9.6 lub nowszej akceptuje ciągi literalne w .nfo. Są one kodowane dokładnie tak, jak napisano, niezależnie od tego, jakie kodowanie wykorzystuje Twój edytor tekstu; jeśli potrzebujesz 00, umieść go bezpośrednio po literałowym ciągu.
+Aby zapoznać się z obsługiwanymi kodowaniami, formatem i ograniczeniami dotyczącymi używanych znaków, zobacz [[en/GRFActionsDetailed#strings|GRFActionsDetailed]] i StringCodes.
+
+Duża liczba oryginalnych ciągów TTD wymaga kodu koloru przed rzeczywistym ciągiem. Możesz także użyć tych kodów kolorów w większości niestandardowych ciągów znaków. Korzystaj z nich mądrze! W przypadku, gdy ciąg wymaga kodu koloru, zostanie wyświetlony kod przed domyślnym tekstem wymienionym w [[en/TextIDs]].Zazwyczaj ciąg kodowany kolorem rozpoczyna się znakiem ucieczki (odwrotnym ukośnikiem), po którym następuje bajt szesnastkowy, a następnie sam ciąg tekstowy. To znaczy. ciąg 0001 ("\94Off edge of map") ma kod koloru 0x94 przed ciągiem tekstowym, który pokoloruje go na biało. Możesz także umieścić zwykły bajt szesnastkowy poza cytowanym ciągiem bez konieczności ucieczki. ''94 "Off edge of map"'' byłby taki sam jak ''"\94Off edge of map"''
+
+Dostępne są następujące kody kolorów:
+
+{| |-
+!'''Code'''!!'''Colour'''!!'''Pallete Colour'''
+|-
+|88||Blue|| <div style="background:#3890E8;width:2em;">&nbsp;</div>
+|-
+|89||Silver|| <div style="background:#C8C8C8;width:2em;">&nbsp;</div>
+|-
+|8A||Golden|| <div style="background:#FCC000;width:2em;">&nbsp;</div>
+|-
+|8B||Red|| <div style="background:#FC0000;width:2em;">&nbsp;</div>
+|-
+|8C||Purple|| <div style="background:#A888E0;width:2em;">&nbsp;</div>
+|-
+|8D||Light Brown|| <div style="background:#B0B084;width:2em;">&nbsp;</div>
+|-
+|8E||Orange|| <div style="background:#FCB030;width:2em;">&nbsp;</div>
+|-
+|8F||Green|| <div style="background:#90E05C;width:2em;">&nbsp;</div>
+|-
+|90||Yellow|| <div style="background:#FCF880;width:2em;">&nbsp;</div>
+|-
+|91||Dark Green|| <div style="background:#B4CC7C;width:2em;">&nbsp;</div>
+|-
+|92||Cream|| <div style="background:#D49480;width:2em;">&nbsp;</div>
+|-
+|93||Brown|| <div style="background:#A46040;width:2em;">&nbsp;</div>
+|-
+|94||White|| <div style="background:#FCFCFC;width:2em;">&nbsp;</div>
+|-
+|95||Light Blue|| <div style="background:#80C4FC;width:2em;">&nbsp;</div>
+|-
+|96||Grey|| <div style="background:#626562;width:2em;">&nbsp;</div>
+|-
+|97||Dark Blue|| <div style="background:#8484A4;width:2em;">&nbsp;</div>
+|-
+|98||Black|| <div style="background:#101010;width:2em;">&nbsp;</div>
+|}
+
+==Przykład==
