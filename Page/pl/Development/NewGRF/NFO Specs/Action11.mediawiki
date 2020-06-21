@@ -1,20 +1,8 @@
-<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;">
-<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
-<!-- === Link do strony oryginalnej =========== -->
-[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/Action11 | alt=en | 22x16px | frameless]]<br/>
-[http://newgrf-specs.tt-wiki.net/wiki/Action11 EN]
-</div>
-<!-- === Link do strony Polskiej =========== -->
-<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">[[File:pl/Flag.png|link=User:{{PAGENAME}}<!--/Pl--> | alt=pl | 22x16px | frameless]]<br/>
-[[User:{{PAGENAME}}<!--/Pl-->|PL]] </div>
-<!-- === Link do strony głównej =========== -->
-<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
-[[File:en/Openttd.ico.png|link=pl/Main Page| 22x21px | frameless]]<br/>[[pl/Main Page|gł]] </div> </div>
-[[Category:pl/Artykuły w języku polskim]]
-{{en/-}}<br>{{en/Ambox| text = w trakcie edycji.}}
+
+<!--{{-}}<br>{{ambox | text = w trakcie edycji.}}-->
 
 ==Wprowadzenie==
-{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 57}}
+{{Page:pl/Extrazi/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 57}}
 
 Ta akcja pozwala na zdefiniowanie binarnych próbek dźwięku.
 
@@ -23,7 +11,7 @@ Nowo zdefiniowane dźwięki będą numerowane kolejno, zaczynając od 73 (49h) (
 
 == Syntax ==
 
-The data looks as follows:
+Dane wyglądają następująco:
 
 <pre><sprite-number> * <length> 11 <number></pre>
 
@@ -59,15 +47,15 @@ These can only be added using GRFCodec 0.9.7 or later, using the following forma
 <pre>17 ** sounds/e67_horn.wav
 18 ** sounds/sheep.wav</pre>
 
-All files included this way must use WAV format, PCM encoding:
+Wszystkie pliki zawarte w ten sposób muszą używać formatu WAV, kodowania PCM:
 * mono
-* 8-bit or {{en/Ottdp|1.0|no}} 16-bit
-* 11025 Hz, 22050 Hz, or {{en/Ottdp|1.0|no}} 44100 Hz <ref>Technically OpenTTD 0.6 already supported resampling of any sample rate, but playback only used 11025 Hz anyway. Since OpenTTD 1.0 the default playback rate is 44100 Hz.</ref>
+* 8-bit or {{Page:pl/Extrazi/ottdp|1.0|no}} 16-bit
+* 11025 Hz, 22050 Hz, or {{Page:pl/Extrazi/ottdp|1.0|no}} 44100 Hz <ref>Technically OpenTTD 0.6 already supported resampling of any sample rate, but playback only used 11025 Hz anyway. Since OpenTTD 1.0 the default playback rate is 44100 Hz.</ref>
 When using [[en/Version numbers#grf-container-version|GRF container version 1]], the file size cannot exceed 64 kB.
 
 <references/>
 
-For those need to know or are inordinately curious, the actual encoding of a binary include is the same as a pseudosprite:
+Dla tych, którzy muszą wiedzieć lub są niezwykle ciekawi, faktyczne kodowanie binarnego włączenia jest takie samo jak pseudosprite:
 
 <pre><sprite-number> * <length> FF <name-len> <name> 00 <data></pre>
 
@@ -84,14 +72,14 @@ For those need to know or are inordinately curious, the actual encoding of a bin
 |}
 
 == Importing sound effects from other grf files ==
-{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 61}}
+{{Page:pl/Extrazi/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 61}}
 Since TTDPatch 2.0.1 alpha 61, it is possible to import sound effects from other grf files (or even the current file). &nbsp;This does not copy the sound effect data (thus reducing memory usage), but does provide a new sound effect entry with its own action 0 properties.
 
-This is a way of either combining useful sound effects in a single grf file and using them in several, or to duplicate sounds with different amplification or priority settings without doubling the memory usage.
+Jest to sposób na łączenie użytecznych efektów dźwiękowych w jednym pliku GRF i używanie ich w kilku lub duplikowanie dźwięków o różnych ustawieniach wzmocnienia lub priorytetu bez podwajania zużycia pamięci.
 
 The referenced grf file can be anywhere in newgrf(w).cfg and does not have to be active. &nbsp;If it is not loaded, no sound will be played but that is not an error condition. This makes it possible to separate sound effects and graphics into two files, to allow people with little memory to not load the sound effects yet get working graphics.
 
-The format of such an import sprite is the following (replacing a "**" binary sprite within the action 11 sprite block):
+Format takiego 'sprite' importu jest następujący (zastępując duszka binarnego "**"  w bloku duszka akcji 11):
 
 <pre><sprite-number> * <length> FE 00 <GRFID> <number></pre>
 
@@ -111,7 +99,7 @@ The format of such an import sprite is the following (replacing a "**" binary sp
 |<number> ||W ||Sound effect number to import
 |}
 
-Note that unlike most other reference to sound numbers, the number here is simply the number within the referenced grf file's action 11 block, and does not refer to TTD's samples for numbers 0..72. Also, when importing the sound effect, the action 0 properties are not imported and have to be set separately.
+Zauważ, że w przeciwieństwie do większości innych odniesień do liczb dźwiękowych, liczba tutaj jest po prostu liczbą w bloku działania 11 przywołanego pliku grf i nie odnosi się do próbek TTD dla liczb 0..72. Ponadto podczas importowania efektu dźwiękowego właściwości akcji 0 nie są importowane i muszą być ustawione osobno.
 
 == Przykład ==
 
