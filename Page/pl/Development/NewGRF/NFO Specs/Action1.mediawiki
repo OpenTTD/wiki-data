@@ -1,0 +1,169 @@
+
+<!--[[Category:Artykuły w języku polskim/Pl]]-->
+{{en/-}}<br>{{en/Ambox| text = w trakcie edycji.}}
+
+==Wprowadzenie==
+Definiowanie zestawu prawdziwych 'sprites'.
+Działanie 01 służy do definiowania zestawów prawdziwych 'sprites' (w przeciwieństwie do pseudo-'sprites'). Można go później umieścić w dowolnym miejscu pliku .nfo [[en/Action8|Action 8]].
+
+== Syntax ==
+
+=== Basic format ===
+{{en/Ottdp|0.6|2.0}}
+ <sprite-number> * <length> '''01''' <feature> <num-sets> <num-ent>
+
+{| |-
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+|-
+|<sprite-number>||dec||A sequential sprite number
+|-
+|<length>||dec||The total number of bytes used in this action
+|-
+|01||B||Defines action 01
+|-
+|<feature>||B||The feature that following sprites should be used for (s.b.)
+|-
+|<num-sets>||B||The number of sprite sets you have (one sprite set is one vehicle/station/ship etc). Setting this to 00 makes it an extended format (see below).
+|-
+|<num-ent>||B*||The number of views the sprite has
+|}
+
+Blok danych, który zawsze następuje po akcji 01, powinien składać się z num-sets * num-ent RealSprites lub RecolorSprites.
+
+=== Extended format ===
+{{en/Ottdp|1.2.2|no|ottdrev=r24361}} 
+ <sprite-number> * <length> '''01''' <feature> '''00''' <first-set> <num-sets> <num-ent>
+
+{| |-
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+|-
+|<sprite-number>||dec||A sequential sprite number
+|-
+|<length>||dec||The total number of bytes used in this action
+|-
+|01||B||Defines action 01
+|-
+|<feature>||B||The feature that following sprites should be used for (s.b.)
+|-
+|00||B||Identfies the extended format.
+|-
+|<first-set>||B*||The ID of the first spriteset to define
+|-
+|<num-sets>||B*||The number of sprite sets you have (one sprite set is one vehicle/station/ship etc)
+|-
+|<num-ent>||B*||The number of views the sprite has
+|}
+
+Blok danych, który zawsze następuje po akcji 01, powinien składać się z num-sets * num-ent RealSprites lub RecolorSprites.
+
+== Description ==
+
+=== sprite-number ===
+
+To tylko numer, na którym jesteś.
+
+=== length ===
+
+Policz liczbę bajtów w tej akcji.
+
+===Feature===
+
+Ustawia to rodzaj [[en/Features|feature]] , który chcesz zmienić. Ustaw na:
+
+{|- |
+!Value!![[en/Features|Feature]]
+|-
+|00||Trains
+|-
+|01||Road Vehicles
+|-
+|02||Ships
+|-
+|03||Aircraft
+|-
+|04||Stations
+|-
+|05||Canals/Rivers
+|-
+|07||Houses
+|-
+|09||Industry Tiles
+|-
+|0A||Industries
+|-
+|0B||Cargos
+|-
+|0D||Airports
+|-
+|0F||Objects
+|-
+|10||Railtypes
+|-
+|11||Airport Tiles
+|-
+|12||Roadtypes
+|-
+|13||Tramtypes
+|}
+
+=== first-set ===
+This specifies the first set ID to define.
+
+{{en/Ottdp|1.2|no|ottdrev=r22925}} Ponieważ zestawy sprite OpenTTD r22925 pozostają ważne w wielu akcjach Action1. Oznacza to, że jeśli jedna akcja 1 definiuje zestawy sprajtu od 0 do 4, a później druga akcja 1 ponownie definiuje zestaw spriterzy 0, zestawy duszków 1 do 4 nadal odnoszą się do pierwszej akcji 1. Zestawy spritesetów są specyficzne dla poszczególnych funkcji, każda funkcja utrzymuje własne mapowanie identyfikatorów do spritesetów Action1. (W wersjach wcześniejszych niż OpenTTD r22925 i TTDPatch tylko zestawy sprite z pojedynczej akcji Action1 były jednocześnie powiązane z operacją Action2. Odwoływanie się do akcji Action1 z inną funkcją niż Action2 jest błędem).
+
+This behaviour of Action1 applies to both the basic as well as the extended format. 
+
+{{en/Ottdp|1.2|no|ottdrev=r22926}} In addition the extended format allows to specify an ID for the first spriteset to define. That way individual spritesets and be redefined individually. 
+
+There are no restriction on the order the spritesets are defined. If you define spritesets 23..25 in one Action 1, define spritesets 0..5 in another Action 1, then an Action 2 can access sets 0..5 and 23..25. Later another Action 1 can redefine spritesets 2..3, and following Action 2 could access spritesets 0..1, 2..3, 4, 23..25 from various Action 1.
+
+Zauważ, że wszystkie zestawy 'sprites' zdefiniowane w pojedynczej akcji 1 mają taką samą liczbę 'sprites' na zestaw 'sprites' . Za pomocą wielu akcji 1 możesz zdefiniować zestaw ikon z różnymi ilościami ikon na zestaw. Action2 indywidualnie użyje rozmiaru każdego odnośnika spriteset. Nie ma wymogu spójnej liczby duszków w Action2 lub spritelayoutach.
+
+=== num-sets ===
+The amount of stations, vehicles, ships, etc that the following sprites represent (be warned, one spriteset can be used for more as one vehicle, or truck; you will see this when you reach [[en/Action2|Action 2]] and [[en/Action3|Action 3]])
+
+=== num-ent ===
+
+Określa, ile różnych widoków ma każdy wpis.
+
+W przypadku pojazdów odpowiada to różnym kierunkom, w których może się poruszać. Jeśli twój pojazd jest symetryczny, potrzebujesz 4 widoków, a jeśli nie jest symetryczny, użyj 8 widoków.
+
+Stacja powinna normalnie mieć 12 (hex), ponieważ stacja składa się z 18 (dziesiętnych) 'sprites', chociaż jeśli użyjesz innego układu 'sprites' dla swojej stacji, liczba ta może się różnić.
+W przypadku kanałów zależy to od funkcji kanału, patrz [[en/Action3|Action 3]].
+
+For houses and industry tiles, this should be between 1 and 4 and specifies the number of different construction stages. Sprites after the first four are always ignored. See also action 2 and 3.
+
+For cargos, this should always be 1. The following sprites should be no larger than 10x10 pixels or they won't fit into the station window correctly.
+
+{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 49}} Since TTDPatch 2.0.1 alpha 49, this value is a so-called "extended byte" (see [[en/GRFActionsDetailed]]).
+
+{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 63}} Since TTDPatch 2.0.1 alpha 63, it is possible to have <num-ent>=0. This is useful for defining an action 1/2 combination that only serves as invalid callback result. If the .grf file defines no graphics otherwise, this way callbacks can return an explicit failure code without needing any actual sprites to be allocated. This is also needed if the feature has [[en/Action2/Only Callback Failure | no graphics at all]].
+
+== Example ==
+
+Below is an example of what a real Action 1 pseudo-sprite could look like with the sprite entries under it.
+
+ 2 * 4 01 00 01 08
+ 3 C:\TTD\SPRITES\mytrain.pcx 66 8 01 18 8 -3 -10
+ 4 C:\TTD\SPRITES\mytrain.pcx 82 8 09 15 20 -14 -6
+ 5 C:\TTD\SPRITES\mytrain.pcx 114 8 01 12 28 -14 -6
+ 6 C:\TTD\SPRITES\mytrain.pcx 162 8 09 16 20 -4 -8
+ 7 C:\TTD\SPRITES\mytrain.pcx 194 8 01 18 8 -3 -10
+ 8 C:\TTD\SPRITES\mytrain.pcx 210 8 09 16 20 -14 -7
+ 9 C:\TTD\SPRITES\mytrain.pcx 242 8 01 12 28 -14 -6
+ 10 C:\TTD\SPRITES\mytrain.pcx 290 8 09 15 20 -4 -7
+
+{| |-
+!'''Byte'''!!'''Meaning'''
+|-
+|2||<sprite-number>
+|-
+|4||<length> of the action in bytes; start counting at 01 (<action>)
+|-
+|01||<action>: sets this pseudo-sprite to function as action 1
+|-
+|00||<feature>: In this case Train
+|-
+|01||<num-sets>: 1 Set of views
+|-
+|08||<num-ent>: 8 views of this train
