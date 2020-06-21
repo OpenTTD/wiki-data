@@ -1,17 +1,5 @@
-<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;">
-<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
-<!-- === Link do strony oryginalnej =========== -->
-[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/Action14 | alt=en | 22x16px | frameless]]<br/>
-[http://newgrf-specs.tt-wiki.net/wiki/Action14 EN]
-</div>
-<!-- === Link do strony Polskiej =========== -->
-<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">[[File:pl/Flag.png|link=User:{{PAGENAME}}<!--/Pl--> | alt=pl | 22x16px | frameless]]<br/>
-[[User:{{PAGENAME}}<!--/Pl-->|PL]] </div>
-<!-- === Link do strony głównej =========== -->
-<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
-[[File:en/Openttd.ico.png|link=pl/Main Page| 22x21px | frameless]]<br/>[[pl/Main Page|gł]] </div> </div>
-[[Category:pl/Artykuły w języku polskim]]
-{{en/-}}<br>{{en/Ambox| text = w trakcie edycji.}}
+
+<!--{{-}}<br>{{ambox | text = w trakcie edycji.}}-->
 
 '''''Static GRF Information'''''
 
@@ -22,12 +10,12 @@ Informacje statyczne GRF
 Ta akcja pozwala określić dodatkowe informacje o GRF. Każda informacja jest uważana za opcjonalną i nieistotną, dlatego OpenTTD/TTDPatch zignoruje nieznane części i nie wyświetli żadnego błędu. Działanie to ma również umożliwić interfejsowanie nieoficjalnych rozszerzeń/poprawek dla OpenTTD.
 
 Obecnie tej akcji można użyć do zdefiniowania
-* {{en/Ottdp|1.1|no|ottdrev=r20250}} tłumaczenia nazwy i opisu GRF. (Te z działania 8)
-* {{en/Ottdp|1.1|no|ottdrev=r20254}} paleta (domyślnie (=DOS), starsza wersja (=Windows)), której potrzebuje GRF, lub czy paleta nie ma znaczenia.
-* {{en/Ottdp|1.2|no|ottdrev=r23001}} głębia kolorów (8bpp, 32bpp), jakiej potrzebuje GRF
-* {{en/Ottdp|1.1|no|ottdrev=r20255}} liczba, format i cel parametrów GRF. (dozwolone wartości, nazwy, opisy, ...)
-* {{en/Ottdp|1.1|no|ottdrev=r20960}} informacje o wersji i zgodność ze starszymi wersjami tego samego GRF.
-* {{en/Ottdp|1.2|no|ottdrev=r23494}} adres strony internetowej, który można otworzyć w grze.
+* {{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20250}} tłumaczenia nazwy i opisu GRF. (Te z działania 8)
+* {{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20254}} paleta (domyślnie (=DOS), starsza wersja (=Windows)), której potrzebuje GRF, lub czy paleta nie ma znaczenia.
+* {{Page:pl/Extrazi/ottdp|1.2|no|ottdrev=r23001}} głębia kolorów (8bpp, 32bpp), jakiej potrzebuje GRF
+* {{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20255}} liczba, format i cel parametrów GRF. (dozwolone wartości, nazwy, opisy, ...)
+* {{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20960}} informacje o wersji i zgodność ze starszymi wersjami tego samego GRF.
+* {{Page:pl/Extrazi/ottdp|1.2|no|ottdrev=r23494}} adres strony internetowej, który można otworzyć w grze.
 
 Sama akcja jest dostępna od OpenTTD r20250. TTDPatch ignoruje działanie od r2334, więc pominięcie nie jest potrzebne. Ta akcja jest dozwolona tylko dla GRF w wersji 7 lub wyższej.
 
@@ -35,7 +23,7 @@ Akcja jest przetwarzana podczas skanowania w poszukiwaniu GRF i ich opisów czyn
 
 == Syntax ==
 
-The data is provided using nestable chunks, and looks as follows:
+Dane są dostarczane za pomocą zagnieżdżonych porcji i wyglądają następująco:
 
 <pre><sprite-number> * <length> 14 <chunks ...> 00</pre>
 
@@ -47,9 +35,9 @@ Where <chunks ...> is one or a sequence of
 
 <pre>"T" <identifier> <language-id> <text> 00</pre>
 
-These three types of chunks define branch nodes (containers) and binary and textual leafs in a tree-like information structure. A piece of information is identified by the path in the information tree. E.g. the text leaf node at "INFO" -> "DESC" provides translatable descriptions for the GRF. It does not matter how many action 14 appear in a GRF, and which information is defined in which. Information with different identifier paths or same identifier paths (but e.g. different language-ids) can be set in the same action 14 or in multiple. If information is assigned to the same identifier-path multiple times, the information adds up resp. the last set information wins.
+Te trzy typy fragmentów definiują węzły gałęzi (kontenery) oraz liście binarne i tekstowe w strukturze informacji przypominającej drzewo. Fragment informacji jest identyfikowany przez ścieżkę w drzewie informacyjnym. Na przykład. węzeł liścia tekstowego w "INFO" -> "DESC" zapewnia przetłumaczalne opisy dla GRF. Nie ma znaczenia, ile akcji 14 pojawia się w GRF i jakie informacje są zdefiniowane w którym. Informacje z różnymi ścieżkami identyfikacyjnymi lub tymi samymi ścieżkami identyfikacyjnymi (ale np. Różnymi identyfikatorami języków) można ustawić w tej samej akcji 14 lub w wielu. Jeżeli informacje są przypisane do tej samej ścieżki identyfikatora wiele razy, to sumuje się odpowiednio. ostatni zestaw informacji wygrywa.
 
-Chunks with unknown identifiers are just skipped including their subchunks. Following chunks are processed nevertheless.
+Fragmenty o nieznanych identyfikatorach są po prostu pomijane, w tym ich podsekcje. Następujące fragmenty są jednak przetwarzane.
 
 {| class="wikitable"
 |-
@@ -99,7 +87,7 @@ Chunks with unknown identifiers are just skipped including their subchunks. Foll
 |}
 
 == Descriptions ==
-=== Custom information for non-official extensions/patches ("CSTM" -> <extension-id> -> ...) ===
+=== Informacje niestandardowe dla nieoficjalnych rozszerzeń / poprawek ("CSTM" -> <extension-id> -> ...) ===
 
 <pre>-1 * -1   14 "C" "CSTM"
                  "C" <extension-id>
@@ -108,38 +96,38 @@ Chunks with unknown identifiers are just skipped including their subchunks. Foll
                  00
              00</pre>
 
-Due to the purely-optional character of action 14 it is especially meant for non-official extensions/patches. However, to avoid conflicts custom additions should go into the "CSTM" chunk. Every extension may define its own subchunk with its own custom 4 byte <extension-id> below the "CSTM" chunk. The format of the subchunks below the <extension-id> chunk is freely defineable.
+Ze względu na całkowicie opcjonalny charakter akcji 14 jest szczególnie przeznaczony do nieoficjalnych rozszerzeń/łatek. Jednak, aby uniknąć konfliktów, niestandardowe dodatki powinny znaleźć się w części "CSTM" . Każde rozszerzenie może zdefiniować swój własny podrozdział z własnym niestandardowym 4-bajtowym <extension-id> poniżej fragmentu "CSTM" . Format podrozdziałów poniżej fragmentu <extension-id> można dowolnie definiować.
 
-The information there could be used e.g. to notify an extension that the GRF knows about it. Consecutively the extension might then enable custom GRF features and notify the GRF about their existance e.g. via variable 8D. Versions of OpenTTD without the extension will then just skip the "CSTM" chunk and return the usual value in variable 8D.
+Informacje tam można wykorzystać np. aby powiadomić rozszerzenie, o którym GRF wie o tym. Po kolei rozszerzenie może następnie włączyć niestandardowe funkcje GRF i powiadomić GRF o ich istnieniu, np. poprzez zmienną 8D. Wersje OpenTTD bez rozszerzenia po prostu pomijają fragment "CSTM" i zwracają zwykłą wartość w zmiennej 8D.
 
 === GRF name ("INFO" -> "NAME") and description ("INFO" -> "DESC") ===
-{{en/Ottdp|1.1|no|ottdrev=r20250}}
+{{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20250}}
 <pre>-1 * -1   14 "C" "INFO"
                  "T" "NAME" <language-id> "Translatable GRF name" 00
                  "T" "DESC" <language-id> "Translatable GRF description" 00
                  00
              00</pre>
 
-Below the top-level chunk "INFO" you can use the leaf-chunks "NAME" and "DESC" to define name and description for additional languages. The information provided in action 8 is used for "other" languages (id 7F).
+Poniżej fragmentu najwyższego poziomu "INFO" można użyć fragmentów liści "NAME" i "DESC" , aby zdefiniować nazwę i opis dla dodatkowych języków. Informacje podane w działaniu 8 są używane w "other" językach (id 7F).
 
 === GRF website ("INFO" -> "URL_") ===
-{{en/Ottdp|1.2|no|ottdrev=r23494}}
+{{Page:pl/Extrazi/ottdp|1.2|no|ottdrev=r23494}}
 <pre>-1 * -1   14 "C" "INFO"
                  "T" "URL_" <language-id> "http://www.example.org" 00
                  00
              00</pre>
 
-You can use the "URL_" chunk to provide an url for this grf. You can translate this like the name and description to provide a localized website.
+Możesz użyć fragmentu "URL_" , aby podać adres URL tego GRF. Możesz przetłumaczyć to jak nazwa i opis, aby zapewnić zlokalizowaną stronę internetową.
 
 
 === GRF palette ("INFO" -> "PALS") ===
-{{en/Ottdp|1.1|no|ottdrev=r20254}}
+{{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20254}}
 <pre>-1 * -1   14 "C" "INFO"
                  "B" "PALS" \w1 <palette>
                  00
              00</pre>
 
-Specifies the palette the sprites in the GRF are meant for.
+Określa paletę, dla której przeznaczone są duszki w GRF.
 
 {| class="wikitable"
 |-
@@ -157,15 +145,15 @@ Specifies the palette the sprites in the GRF are meant for.
 |}
 
 === GRF colour depth ("INFO" -> "BLTR") ===
-{{en/Ottdp|1.2|no|ottdrev=r23001}}
+{{Page:pl/Extrazi/ottdp|1.2|no|ottdrev=r23001}}
 <pre>-1 * -1   14 "C" "INFO"
                  "B" "BLTR" \w1 <blitter>
                  00
              00</pre>
 
-Specifies the preferred blitter for a NewGRF. If not given, it will default to the 8 bpp blitter.
+Określa preferowany blitter dla NewGRF. Jeśli nie zostanie podany, domyślnie będzie to blitter 8 pz.
 
-This is only a hint, OpenTTD may still select another blitter if necessary. Only 8 bpp sprites are guaranteed to work with any blitter.
+To tylko wskazówka, OpenTTD może nadal wybrać inny blitter, jeśli to konieczne. Gwarantowane jest działanie tylko 8 ikonek bpp z dowolnym blitterem.
 
 {| class="wikitable"
 |-
@@ -180,7 +168,7 @@ This is only a hint, OpenTTD may still select another blitter if necessary. Only
 |}
 
 === GRF version ("INFO" -> "VRSN") ===
-{{en/Ottdp|1.1|no|ottdrev=r20259}}
+{{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20259}}
 <pre>-1 * -1   14 "C" "INFO"
                  "B" "VRSN" \w4 \d<version>
                  00
@@ -193,7 +181,7 @@ If all GRFs (with the same GRFID) have version 0 all will be shown in the list o
 If you set a version for the GRF, you should also set the 'minimal compatible version' MINV! Else it will default to the value of VRSN, which results in the GRF only being considered compatible to itself (resp. same version).
 
 === Minimal compatible GRF version ("INFO" -> "MINV") ===
-{{en/Ottdp|1.1|no|ottdrev=r20960}}
+{{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20960}}
 <pre>-1 * -1   14 "C" "INFO"
                  "B" "MINV" \w4 \d<version>
                  00
@@ -201,28 +189,28 @@ If you set a version for the GRF, you should also set the 'minimal compatible ve
 
 Specifies the minimal [[en/Version numbers#version-of-a-specific-newgrf|version of GRFs]] with the same GRFID this GRF is still compatible with.
 
-You have to set MINV after VRSN, and MINV has to be smaller or equal to VRSN.
+Musisz ustawić MINV po VRSN, a MINV musi być mniejszy lub równy VRSN.
 
-When loading a game which used an older version of your GRF which is no longer installed, the newest installed version of your GRF will be picked which is still compatible to the version used before. Older GRFs are never considered compatible to GRFs with newer versions though.
+Podczas ładowania gry, która używała starszej wersji GRF, która nie jest już zainstalowana, wybierana jest najnowsza zainstalowana wersja GRF, która jest nadal zgodna z wersją używaną wcześniej. Starsze GRF nigdy nie są uważane za kompatybilne z GRF z nowszymi wersjami.
 
-If you do not set MINV, but set VRSN, then the GRF is only considered compatible to GRFs with the same version.
+Jeśli nie ustawisz MINV, ale ustawisz VRSN, wówczas GRF będzie uważany za zgodny tylko z GRF z tą samą wersją.
 
-If you set MINV to 0, the GRF is also considered compatible to old GRFs without any version information (VRSN).
+Jeśli ustawisz MINV na 0, GRF jest również uważany za zgodny ze starymi GRF bez żadnych informacji o wersji (VRSN).
 
 === GRF parameters ===
 
-This section describes how to specify information about GRF parameters, and what settings are stored in them. By default a GRF comes with 128 settings, that is a dword setting for every of the 128 GRF parameters.
+W tej sekcji opisano, jak określić informacje o parametrach GRF i jakie ustawienia są w nich przechowywane. Domyślnie GRF ma 128 ustawień, co jest ustawieniem dwordowym dla każdego z 128 parametrów GRF.
 
 ==== Number of settings ("INFO" -> "NPAR") ====
-{{en/Ottdp|1.1|no|ottdrev=r20251}}
+{{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20251}}
 <pre>-1 * -1   14 "C" "INFO"
                  "B" "NPAR" \w1 <number-of-settings>
                  00
              00</pre>
-Defines the number of settings a GRF provides. This is independant from the number of allowed GRF parameters, as multiple settings might go into the same GRF parameter (e.g. bitmasks).
+Określa liczbę ustawień zapewnianych przez GRF. Jest to niezależne od liczby dozwolonych parametrów GRF, ponieważ wiele ustawień może przejść do tego samego parametru GRF (np. Maski bitów <small>''~ bitmasks''</small> ).
 
 ==== Setting name ("INFO" -> "PARA" -> <setting-number> -> "NAME") and description ("INFO" -> "PARA" -> <setting-number> -> "DESC") ====
-{{en/Ottdp|1.1|no|ottdrev=r20255}}
+{{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20255}}
 <pre>-1 * -1   14 "C" "INFO"
                  "C" "PARA"
                      "C" \d<setting-number>
@@ -233,12 +221,12 @@ Defines the number of settings a GRF provides. This is independant from the numb
                  00
              00</pre>
 
-Defines a name for a setting.
+Definiuje nazwę ustawienia.
 
 The settings are numbered and identified using <setting-number>. Valid values are 0 up to ("INFO" -> "NPAR") - 1.
 
 ==== Setting to GRF parameter mapping ("INFO" -> "PARA" -> <setting-number> -> "MASK") ====
-{{en/Ottdp|1.1|no|ottdrev=r20255}}
+{{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20255}}
 <pre>-1 * -1   14 "C" "INFO"
                  "C" "PARA"
                      "C" \d<setting-number>
@@ -265,14 +253,14 @@ Specifies which GRF parameter is used to store a setting in.
 |Number of bits to use for the setting in the GRF parameter. Default value is "32".
 |}
 
-If you do not specify <first-bit> and <num-bit> the setting uses the whole GRF parameter by default. If you do not specify any "MASK" chunk at all, the setting will use the GRF parameter with the same number as <setting-number>.
+Jeśli nie określisz <first-bit> i <num-bit> , ustawienie domyślnie wykorzystuje cały parametr GRF. Jeśli w ogóle nie określisz fragmentu "MASK" , ustawienie użyje parametru GRF o tym samym numerze, co <setting-number> .
 
-So if you do not need to store multiple settings in one parameter, you do not need "MASK" chunks.
+Jeśli więc nie musisz przechowywać wielu ustawień w jednym parametrze, nie potrzebujesz fragmentów "MASK" .
 
-Note: You cannot store a setting across/using multiple GRF parameters.
+Uwaga: Nie można zapisać ustawienia w / przy użyciu wielu parametrów GRF.
 
 ==== Setting type ("INFO" -> "PARA" -> <setting-number> -> "TYPE") ====
-{{en/Ottdp|1.1|no|ottdrev=r20255}}
+{{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20255}}
 <pre>-1 * -1   14 "C" "INFO"
                  "C" "PARA"
                      "C" \d<setting-number>
@@ -282,7 +270,7 @@ Note: You cannot store a setting across/using multiple GRF parameters.
                  00
              00</pre>
 
-Specifies the type of a setting.
+Określa typ ustawienia.
 
 {| class="wikitable"
 |-
@@ -297,10 +285,10 @@ Specifies the type of a setting.
 |}
 
 
-The defaut value is "0".
+Wartość defaut wynosi "0".
 
 ==== Allowed value range ("INFO" -> "PARA" -> <setting-number> -> "LIMI") ====
-{{en/Ottdp|1.1|no|ottdrev=r20255}}
+{{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20255}}
 <pre>-1 * -1   14 "C" "INFO"
                  "C" "PARA"
                      "C" \d<setting-number>
@@ -310,12 +298,12 @@ The defaut value is "0".
                  00
              00</pre>
 
-Sets minimal and maximal allowed value for integer/enumeration settings.
+Ustawia minimalną i maksymalną dozwoloną wartość dla ustawień liczb całkowitych / wyliczenia.
 
-The default values are "0" resp. "2^32 - 1".
+Domyślne wartości to "0" lub <small>''(resp.)''</small> "2^32 - 1".
 
 ==== Enumeration values ("INFO" -> "PARA" -> <setting-number> -> "VALU") ====
-{{en/Ottdp|1.1|no|ottdrev=r20255}}
+{{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20255}}
 <pre>-1 * -1   14 "C" "INFO"
                  "C" "PARA"
                      "C" \d<setting-number>
@@ -328,12 +316,12 @@ The default values are "0" resp. "2^32 - 1".
                  00
              00</pre>
 
-This chunk allows you to specify texts to display instead of the raw value for integer/enumeration. You can also specify texts only for some of the valid values. So if a setting e.g. allows values betweeen 0 to 42 you can instruct the GUI to show "none" instead of "0".
+Ta porcja pozwala określić tekst do wyświetlenia zamiast surowej wartości dla liczby całkowitej / wyliczenia. Możesz także określić teksty tylko dla niektórych prawidłowych wartości. Więc jeśli ustawienie np. dopuszcza wartości od 0 do 42, możesz poinstruować GUI, aby pokazywał „brak” zamiast "0" .
 
-{{en/Ottdp|1.3|no}} If you specify texts for all allowed values (according to "LIMI"), then a dropdown box is displayed instead of [<][>] buttons.
+{{Page:pl/Extrazi/ottdp|1.3|no}} If you specify texts for all allowed values (according to "LIMI"), then a dropdown box is displayed instead of [<][>] buttons.
 
 ==== Domyślna wartość ("INFO" -> "PARA" -> <setting-number> -> "DFLT") ====
-{{en/Ottdp|1.1|no|ottdrev=r20602}}
+{{Page:pl/Extrazi/ottdp|1.1|no|ottdrev=r20602}}
 <pre>-1 * -1   14 "C" "INFO"
                  "C" "PARA"
                      "C" \d<setting-number>
