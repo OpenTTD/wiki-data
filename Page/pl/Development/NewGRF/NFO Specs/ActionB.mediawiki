@@ -1,16 +1,4 @@
-<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;">
-<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
-<!-- === Link do strony oryginalnej =========== -->
-[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/ActionB | alt=en | 22x16px | frameless]]<br/>
-[http://newgrf-specs.tt-wiki.net/wiki/ActionB EN]
-</div>
-<!-- === Link do strony Polskiej =========== -->
-<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">[[File:pl/Flag.png|link=User:{{PAGENAME}}<!--/Pl--> | alt=pl | 22x16px | frameless]]<br/>
-[[User:{{PAGENAME}}<!--/Pl-->|PL]] </div>
-<!-- === Link do strony głównej =========== -->
-<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
-[[File:en/Openttd.ico.png|link=pl/Main Page| 22x21px | frameless]]<br/>[[pl/Main Page|gł]] </div> </div>
-[[Category:pl/Artykuły w języku polskim]]
+
 {{en/-}}<br>{{en/Ambox| text = w trakcie edycji.}}
 
 == Wprowadzenie ==
@@ -23,7 +11,7 @@ Za pomocą tej akcji możesz ostrzec użytkownika o problemach związanych ze sp
 
 == Syntax ==
 
-The data looks as follows:
+Dane wyglądają następująco:
 
  <Sprite-number> * <Length> 0B <severity> <language-id> <message-id> [<message>] [<data> [<parnum> [<parnum>]]]
 
@@ -62,15 +50,15 @@ The data looks as follows:
 
 === Sprite-number ===
 
-This is just the number you are at.
+To tylko numer, na którym jesteś.
 
 === Length ===
 
-Count the number of bytes in this action.
+Policz liczbę bajtów w tej akcji.
 
 === severity ===
 
-This sets how severe the message is.
+Określa to, jak poważna jest wiadomość.
 
 {|
 !Severity!!Meaning!!Prefix!!Action taken
@@ -88,19 +76,19 @@ This sets how severe the message is.
 |03||Fatal error||"Error: "||abort loading of grf file
 |}
 
-Normally Action B is ignored during initialization. If the severity has bit 7 set, a fatal action B will be applied even during initialization. This can be useful to prevent errors due to invalid sprites during initialization. Note that this only works properly since TTDPatch 2.0.1 alpha 66, for earlier versions the error popup that is shown is corrupted if bit 7 is set.
+Zwykle Akcja B jest ignorowana podczas inicjalizacji. Jeśli istotność ma ustawiony bit 7, działanie krytyczne B zostanie zastosowane nawet podczas inicjalizacji. Może to być przydatne, aby zapobiec błędom spowodowanym przez nieprawidłowe duszki podczas inicjalizacji. Zauważ, że działa to poprawnie tylko od TTDPatch 2.0.1 alpha 66, we wcześniejszych wersjach pokazane okienko błędu jest uszkodzone, jeśli ustawiony jest bit 7.
 
 Messages are shown with a "/!\" sign in the [[en/GRFStatusWindow|GRF Status window]]. The first fatal message during each activation is shown as a red popup box as well.
 
 === language-id ===
 
-This has the same format as the [[en/Action4#language-id|language-id in action 4]].
+Ma ten sam format, co [[en/Action4#language-id|language-id in action 4]].
 
-Use 7F (all languages) for built-in messages, because they are automatically using the right language.
+Użyj 7F (wszystkie języki) dla wbudowanych wiadomości, ponieważ automatycznie używają właściwego języka.
 
 === message-id ===
 
-Set what kind of message to show. You have the following options:
+Ustaw rodzaj wiadomości do wyświetlenia. Masz następujące opcje:
 
 {|
 !Message ID!!Content
@@ -139,21 +127,21 @@ Set what kind of message to show. You have the following options:
 |FF||Custom message, use text from <message>
 |}
 
-Message IDs 04 and 05 are available since TTDPatch 2.6 alpha 1 (r858).
+ID''`y'' wiadomości 04 i 05 są dostępne od TTDPatch 2.6 alfa 1 (r858).
 
-Message ID 06 is available since OpenTTD r11330. This message should only be used when Action 7/9 variable 9D is 1 (OpenTTD).
+Wiadomość ID 06 jest dostępna od OpenTTD r11330. Tego komunikatu należy używać tylko wtedy, gdy zmienna 9D Działania 7/9 ma wartość 1 (OpenTTD).
 
 === message ===
 
-Custom message text to show.
+Niestandardowy tekst wiadomości do wyświetlenia.
 
 === parnum ===
 
-Parameter numbers (up to two) to display instead of 7B in the message text.
+Numery parametrów (maksymalnie dwa) do wyświetlenia zamiast 7B w tekście wiadomości.
 
 === Notes ===
 
-In all messages (built-in and custom), the first 80 is replaced by the filename of the grf file, the second 80 is replaced by the content of <data>. After the two 80 bytes, you may have one or two 7B bytes that are replaced by the value of the parameter(s) specified by <parnum>. Note that it is invalid to have a 7B before exactly two 80 bytes were encountered. This means the following combinations of special bytes are allowed:
+We wszystkich komunikatach (wbudowanych i niestandardowych) pierwsze 80 jest zastąpione nazwą pliku pliku grf, drugie 80 jest zastąpione treścią <data>. Po dwóch 80 bajtach możesz mieć jeden lub dwa bajty 7B, które są zastąpione wartością parametru (parametrów) określoną przez <parnum>. Zauważ, że posiadanie 7B jest nieprawidłowe przed napotkaniem dokładnie dwóch 80 bajtów. Oznacza to, że dozwolone są następujące kombinacje bajtów specjalnych:
 
 <pre>(none)
 
@@ -165,13 +153,13 @@ In all messages (built-in and custom), the first 80 is replaced by the filename 
 
 80 80 7B 7B</pre>
 
-Before, after, or in-between the bytes you may have arbitrary characters.
+Przed, po lub pomiędzy bajtami możesz mieć dowolne znaki.
 
-The advantage of the built-in messages is that they can be translated using the mkpttxt mechanism, whereas custom messages will only be available in the languages that come with the grf file.
+Zaletą wbudowanych komunikatów jest to, że można je tłumaczyć przy użyciu mechanizmu mkpttxt, podczas gdy niestandardowe komunikaty będą dostępne tylko w językach dostarczonych z plikiem grf.
 
-Note that if several grf files attempt to show fatal error messages, only the first message is actually shown at the moment since TTD does not have a queue for the red error popups. All others will however be shown in the GRF Status window.
+Zauważ, że jeśli kilka plików grf próbuje wyświetlić krytyczne komunikaty o błędach, w tej chwili jest pokazywany tylko pierwszy komunikat, ponieważ TTD nie ma kolejki dla wyskakujących czerwonych błędów. Wszystkie pozostałe zostaną jednak wyświetlone w oknie Status GRF.
 
-Also note that since this action has only been introduced in TTDPatch 2.0.1 alpha 13, it makes no sense to check whether the version is at least alpha 13 if you want to use the error message 00. In earlier versions, the patch will display the "invalid sprite" error message anyway because the action is unknown.
+Należy również pamiętać, że ponieważ ta akcja została wprowadzona tylko w TTDPatch 2.0.1 alpha 13, nie ma sensu sprawdzać, czy wersja jest co najmniej alfa 13, jeśli chcesz użyć komunikatu o błędzie 00. We wcześniejszych wersjach łatka wyświetla się komunikat o błędzie "invalid sprite" ''(nieprawidłowy)'' , ponieważ działanie jest nieznane.
 
 == Przykład ==
 
