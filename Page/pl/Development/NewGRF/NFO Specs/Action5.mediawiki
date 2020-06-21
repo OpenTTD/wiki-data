@@ -1,6 +1,6 @@
 
 [[Category:pl/Artykuły w języku polskim]]
-{{en/-}}<br>{{en/Ambox| text = w trakcie edycji.}}
+<!--{{-}}<br>{{ambox | text = w trakcie edycji.}}-->
 
 == Wprowadzenie ==
 
@@ -12,7 +12,7 @@ Działanie 5 służy do definiowania grafiki dla kilku nowych funkcji OpenTTD i 
 
 == Syntax ==
 
-The data looks as follows:
+Dane wyglądają następująco:
 
  <Sprite-number> * <Length> 05 <type> <num-sprites> [<offset>]
 
@@ -165,12 +165,12 @@ Grafiki sygnałów występują w grupach po 16. Grupy te zawierają 'sprites' w 
 
 ==== 0C Snowy temperate trees ====
 
-If the temperate snow line is enabled, you can use this to specify the snowy versions of temperate trees. The sprites must be the snowy versions of sprites 1576-1708 from TRG1.GRF, in the same order as they appear there.
+Jeśli włączona jest linia umiarkowanego śniegu, możesz jej użyć do określenia śnieżnych wersji drzew umiarkowanych. 'Sprites' muszą być zaśnieżonymi wersjami 'sprites' 1576-1708 z TRG1.GRF, w tej samej kolejności, w jakiej się tam pojawiają.
 
 ==== 0D Coast tile sprites ====
 
 ===== In NewGRFs =====
-If diagonal flooding is enabled then due to new corner coasts, you can use this to give a complete set of replacement coast tile sprites. There are 16 in total, 8 original Transport Tycoon Deluxe sprites and 8 for the corner slopes. Order of the sprites<ref name=numbers>Sprite numbers from trg1(r).pcx.</ref> is as follows:
+Jeśli włączone jest zalewanie po przekątnej, to ze względu na nowe wybrzeża narożne, możesz użyć tego, aby uzyskać kompletny zestaw zastępczych kafelków wybrzeża. W sumie jest 16, 8 oryginalnych  'sprites' Transport Tycoon Deluxe i 8 na stoki narożne. Kolejność ikonek<ref name=numbers> Liczby ikonek z trg1(r).pcx. </ref> jest następująca:
 
  3997, 4063, 4064, 4068, 4062, 3998, 4066, 3988,
  4065, 4069, 3996, 3992, 4067, 3994, 3995, 3999.
@@ -182,37 +182,37 @@ If diagonal flooding is enabled then due to new corner coasts, you can use this 
 ''The 16 sprites for feature 0D''
 
 ===== In Base Set's extra grf =====
-Additionally, OpenTTD (since r11726) supports another method of supplying all additional coast tile sprites, but this is only allowed in the ''extra'' NewGRF of [http://wiki.openttd.org/Base_graphics Base Graphic Sets]. In this, only 10 sprites are supplied in the same order as the 16 sprites above, but without the coast sprites already in the base grf. Note that the 10 sprites version supplies two additional slopes, but they are not used, and are currently unlikely to be ever used.
+Dodatkowo OpenTTD (od r11726) obsługuje inną metodę dostarczania wszystkich dodatkowych duszków kafelków wybrzeża, ale jest to dozwolone tylko w „dodatkowym” NewGRF z  [http://wiki.openttd.org/Base_graphics Base Graphic Sets] . W ten sposób dostarczanych jest tylko 10 duszków w tej samej kolejności co 16 duszków powyżej, ale bez duszków brzegowych już w bazie grf. Należy pamiętać, że wersja 10 duszków zapewnia dwa dodatkowe stoki, ale nie są one używane i obecnie jest mało prawdopodobne, aby kiedykolwiek były używane.
 
 [[File:en/Action5Coast10Sprites.png]]
 
-''Only 10 sprites are required for OpenTTD base graphic sets''
+''Wymagane jest tylko 10 duszków dla podstawowych zestawów graficznych OpenTTD''
 
-''In OpenTTD 10 sprites for type 0D is enough in base graphic sets. The 16 sprites version should not be used for base graphics.''
+''W OpenTTD 10 duszków dla typu 0D wystarcza w podstawowych zestawach graficznych. Wersja 16 duszków nie powinna być używana do grafiki podstawowej.''
 
-The reason for the existence of a 10 sprite version is to remove the need for including original graphics, and to keep compatibility with old NewGRFs that replace the original shore graphics using Action A without adding new shores using Action 5: When a NewGRF uses the 16 sprites version it takes precedence above any NewGRF replacing the shore graphics using Action A; when a NewGRF uses Action A to replace shore graphics it takes precedence above a 10-sprite Action 5, effectively disabling diagonal flooding. Also due to compatibility the 10 sprites version is invalid for normal NewGRFs, which are not the "extra" NewGRF of some Base Graphics Set.
+Powodem istnienia wersji 10 sprite jest wyeliminowanie potrzeby dołączania oryginalnej grafiki i utrzymanie zgodności ze starymi NewGRF, które zastępują oryginalną grafikę brzegową za pomocą Akcji A bez dodawania nowych brzegów za pomocą Akcji 5: Gdy NewGRF używa 16 wersja sprites ma pierwszeństwo przed wszystkimi NewGRF zastępującymi grafikę brzegową za pomocą Akcji A; gdy NewGRF używa Akcji A do zastąpienia grafiki brzegowej, ma pierwszeństwo przed Akcją 5 z 10 duszków, skutecznie wyłączając zalewanie po przekątnej. Również ze względu na kompatybilność wersja 10 duszków jest nieważna dla normalnych NewGRF, które nie są "extra" NewGRF niektórych Podstawowych Zestawów Graficznych.
 
 ==== 0E New Signals ====
 
-Any number of real and recolour sprites can be specified in the action in any order.
+W akcji można podać dowolną liczbę prawdziwych i zmieniających kolor duszków w dowolnej kolejności.
 
-Sprites are referenced by their offset into the action5 block by a [[en/VarAction2NewSignals]], hence a logically easily calculable order is advised.
+Sprites są przywoływane przez ich przesunięcie do bloku action5 przez [[en/VarAction2NewSignals]] , dlatego zaleca się logicznie łatwą do obliczenia kolejność.
 
-As of TTDPatch 2.6 alpha 0 r1346, the action 5 block defined in the same GRF file as the varaction2, will be used as the base sprite block for the offsets returned by the callback even if it is overridden by a higher priority GRF action 5 definition of the same feature (0E).
+Począwszy od TTDPatch 2.6 alfa 0 r1346, blok akcji 5 zdefiniowany w tym samym pliku GRF co varaction2, będzie używany jako podstawowy blok sprite dla przesunięć zwróconych przez wywołanie zwrotne, nawet jeśli zostanie zastąpiony definicją akcji GRF o wyższym priorytecie tej samej funkcji (0E).
 
 ==== 0F Tracks for Slopes ====
 
-This should be in the same order as sprites 1031 to 1035 (1). These should only be the rails, basically the same format as sprites 1005 to 1010 (1). There should be 3 groups of these sprites, one for each rail type (railroad, monorail, maglev).
+Powinno to być w tej samej kolejności co duszki od 1031 do 1035 (1). Powinny to być tylko szyny, w zasadzie taki sam format jak duszki od 1005 do 1010 (1). Powinny istnieć 3 grupy tych duszków, po jednej dla każdego rodzaju kolei (kolej, kolej jednoszynowa, maglev).
 
-(1) Sprite numbers from trg1r.pcx / ogfx1_base.grf
+(1) Numery sprite z trg1r.pcx / ogfx1_base.grf
 
 ==== 11 Road stop graphics ====
 
-Road stop graphics consist of 2 groups of 4 sprites. The first group contains graphics for bus stops, second for truck stops. In each group, the sprites are in the following order: SW, NE, NW, SE.
+Grafika przystanku składa się z 2 grup 4 'sprites' . Pierwsza grupa zawiera grafiki dla przystanków autobusowych, druga dla przystanków dla ciężarówek. W każdej grupie 'sprites' są w następującej kolejności: SW, NE, NW, SE.
 
 SW and NE sprites are used with road going along the Y axis ( .\' ), NW and SE with road along the X axis( '/. ).
 
-Internally, the stations are defined using the following station layouts:
+Wewnętrznie stacje są definiowane przy użyciu następujących układów stacji:
 
 <pre>\d1313
 
@@ -242,13 +242,13 @@ Further sprites can be found in '''openttd.grf''' (OpenTTD), '''ogfxe_extra.grf'
 
 ==== 12 Aqueducts ====
 
-8 real sprites should be given. Firstly: 4 bridge end sprites in the order: SW, SE, NE, NW, where the direction is that heading onto the aqueduct. Then 2 middle part sprites for the X and Y directions. Followed by two pillar sprites for the X and Y directions. For examples of where the division between middle sprites and pillars should be made see sprites 2437 to 2592 (1), or an existing aqueduct GRF. Note, that for higher bridges to work effectively, pillars should be approximately 8px in height.
+Należy podać 8 prawdziwych duszków. Po pierwsze: 4 duszki na końcu mostka w kolejności: SW, SE, NE, NW, gdzie kierunek jest skierowany na akwedukt. Następnie 2 sprity środkowej części dla kierunków X i Y. Następują dwa duszki filaru dla kierunków X i Y. Przykłady miejsc, w których należy dokonać podziału między środkowymi duszkami i słupami, znajdują się w duszkach od 2437 do 2592 (1) lub istniejącym akwedukcie GRF. Pamiętaj, że aby wyższe mosty działały skutecznie, słupy powinny mieć wysokość około 8 pikseli.
 
 [[File:en/Manual/Aqueduct.png]]
 
 ==== 15 / 95 OpenTTD GUI sprites ====
 
-OpenTTD defines 184 GUI sprites. Additional sprites not needed by an OpenTTD are simply ignored, so that new(er) base sets can be used by old OpenTTD versions. One can (re-)define a subset of the GUI sprites by giving an offset into the GUI sprites. The sprites are:
+OpenTTD definiuje 'sprites' 184 GUI. Dodatkowe 'sprites' niepotrzebne przez OpenTTD są po prostu ignorowane, dzięki czemu nowe(er)  zestawy podstawowe mogą być używane przez stare wersje OpenTTD. Można (ponownie) zdefiniować <small>''(re-)define''</small> podzbiór 'sprites' GUI, podając przesunięcie 'sprites' GUI. 'Sprites' są:
 {|
 !Offset !! Meaning
 |-
@@ -371,7 +371,7 @@ OpenTTD defines 184 GUI sprites. Additional sprites not needed by an OpenTTD are
 
 ==== 16 / 96 Airport preview sprites ====
 [[File:en/Airport preview commuter.png|right]]
-Preview sprites for the airports in the order
+Podgląd 'sprites' dla lotnisk w kolejności
 # Small airport
 # City airport
 # Heliport
@@ -382,27 +382,27 @@ Preview sprites for the airports in the order
 # Intercontinental airport
 # Heli station
 
-Sprites are without any offsets and should all be the same size. Make sure so by using the forbid cropping.
+'Sprites'nie mają żadnych przesunięć i powinny być tego samego rozmiaru. Upewnij się, że tak, używając zakazanego kadrowania.
 
 ==== 17 / 97 Tunnel overlay sprites ====
 [[File:en/Tunnel overlays.png|right]]
-The sprites provide the ground for the tunnel sprites to be used by railtype NewGRFs which only need to provide the tunnel portals. They must be provided for both terrain types which could be used in any given climate (grass; grass+snow; grass+desert; grass).
+Duszki zapewniają grunt dla duszków tunelowych do użytku przez szyny NewGRF typu kolejowego, które muszą jedynie zapewniać portale tunelowe. Muszą być zapewnione dla obu typów terenu, które mogą być użyte w danym klimacie (trawa; trawa+śnieg; trawa+pustynia; trawa).
 
 === num-sprites ===
 
-The number of sprites that follow.
+Liczba następujących duszków.
 
-Since TTDPatch 2.0.1 alpha 49, this value is an extended byte.
+Od wersji TTDPatch 2.0.1 alfa 49 ta wartość jest rozszerzonym bajtem.
 
-Note that it is not generally an error to provide more sprites than required, but this does expend sprite slots unnecessarily.
+Zauważ, że generalnie nie jest błędem dostarczenie większej liczby duszków niż jest to wymagane, ale powoduje to niepotrzebne zużycie gniazd duszków.
 
 === offset ===
 
-The offset in the Action 5 assignable block of sprites. This term is only read when bit 7 of the type has been set. It can be used to only replace a subset of sprites from a set.
+Przesunięcie w bloku 'sprites' , które można przypisać do Akcji 5. Ten termin jest odczytywany tylko wtedy, gdy ustawiony jest bit 7 typu. Można go użyć tylko do zastąpienia podzbioru 'sprites' z zestawu.
 
-'''Note:''' When creating a TTDPatch compatible grf, you have to skip the OpenTTD specific Action 05's using an Action 09 rather than an Action 07. Using the latter will result in an error on your Action 05 when using the grf in TTDPatch.
+'''Note:''' Podczas tworzenia grf kompatybilnego z TTDPatch, musisz pominąć akcję 05 specyficzną dla OpenTTD, używając Akcji 09 zamiast Akcji 07. Użycie tej drugiej spowoduje błąd na Akcji 05 podczas używania grf w TTDPatch.
 
-'''Note:''' NFORenum distinguishes Action5 with no offset and Action5 with offset 0. While they have technically the same effect, NFORenum assumes an Action5 with no offset has the intention to replace all sprites and checks the number of sprites accordingly. An Action5 with offset is considered to only replace a subset of the sprites, so the sprites are not checked for completeness.
+'''Note:''' NFORenum rozróżnia Action5 bez przesunięcia i Action5 z przesunięciem 0. Chociaż technicznie mają ten sam efekt, NFORenum zakłada, że ​​Action5 bez przesunięcia ma zamiar zastąpić wszystkie 'sprites' i odpowiednio sprawdzić ich liczbę. Uważa się, że Action5 z przesunięciem <small>''(offset )''</small> zastępuje tylko podzbiór 'sprites' , więc nie są sprawdzane pod kątem kompletności.
 
 == Przykład ==
 
