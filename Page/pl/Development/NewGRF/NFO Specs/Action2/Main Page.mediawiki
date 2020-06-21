@@ -1,0 +1,107 @@
+
+<!--[[Category:Artykuły w języku polskim/Pl]]-->
+{{en/-}}<br>{{en/Ambox| text = w trakcie edycji.}}
+
+== Wprowadzenie ==
+
+Definiowanie ID`''y'' zestawu graficznego.
+
+Action2 służy do grupowania zestawów 'sprites' z poprzedniego [[en/Action1]] razem i udostępniania ich za pomocą [[en/VariationalAction2 | variational]] lub [[en/RandomAction2 | losowe działanie 2]] (łańcuch) lub [[en/Action3]] .
+
+Nie pomijaj Action2 za pomocą [[en/Action9]] (chyba że pomija cały plik). Action2 nie może być pomijane przez Action9, ponieważ TTDPatch najprawdopodobniej ulegnie awarii. Zamiast tego pomiń lub zmodyfikuj [[en/Action3]]. Pominięcie czynności 2 za pomocą [[en/Action7]] nie ma żadnego efektu.
+
+== Syntax ==
+
+Ogólnie dane wyglądają następująco. Niektóre funkcje używają jednak innej składni (patrz tabela poniżej).
+
+ <Sprite-number> * <Length> 02 <feature> <set-id> <num-ent1> <num-ent2> <entries...>
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+|-
+|<Sprite-number>||dec||A sequential sprite number
+|-
+|<length>||dec||The total number of bytes used in this action
+|-
+|02||B||Defines action 02
+|-
+|<feature>||B||For what type of feature should the following sprites be used?
+|-
+|<set-id>||B||What set-ID this action 2 defines
+|-
+|<num-ent1>||B||First number of entries, depends on feature
+|-
+|<num-ent2>||B||Second number of entries, depends on feature
+|-
+|<entries...>||W||Entry numbers, depends on the feature
+|}
+
+== Descriptions ==
+
+=== Sprite-number ===
+
+To tylko numer, na którym jesteś.
+
+=== Length ===
+
+Policz liczbę bajtów w tej akcji.
+
+=== Feature ===
+
+Ustawia to rodzaj [[en/Features|feature]] , który chcesz zmienić. Ustaw na:
+
+{|- |
+!Value!![[en/Features|Feature]]
+|-
+|00||[[en/Action2/Vehicles | Trains]]
+|-
+|01||[[en/Action2/Vehicles | Road Vehicles]]
+|-
+|02||[[en/Action2/Vehicles | Ships]]
+|-
+|03||[[en/Action2/Vehicles | Aircraft]]
+|-
+|04||[[en/Action2/Stations | Stations]]
+|-
+|05||[[en/Action2/Single Set | Canals/Rivers]]
+|-
+|07||[[en/Action2/Sprite Layout | Houses]] (special Sprite Layout format)
+|-
+|09||[[en/Action2/Sprite Layout | Industry Tiles]] (special Sprite Layout format)
+|-
+|0A||[[en/Action2/Industries | Industries]] (special Production Callback format)
+|-
+|0B||[[en/Action2/Single Set | Cargos]]
+|-
+|0C||[[en/Action2/Only Callback Failure | Sound Effects]] (callback failure only)
+|-
+|0D||[[en/Action2/Single Set | Airports]]
+|-
+|0E||[[en/Action2/Only Callback Failure | Signals]] (callback failure only)
+|-
+|0F||[[en/Action2/Sprite Layout | Objects]] (special Sprite Layout format)
+|-
+|10||[[en/Action2/Single Set | Railtypes]]
+|-
+|11||[[en/Action2/Sprite Layout | Airport Tiles]] (special Sprite Layout format)
+|-
+|12||[[en/Action2/Single Set | Roadtypes]]
+|-
+|13||[[en/Action2/Single Set | Tramtypes]]
+|}
+
+=== set-id ===
+
+This defines the ID of the current action 2. This ID will later be referred to by [[en/Action3|action 3]], or a variational/random action 2.
+
+You can reuse action 2 IDs, and there's no restriction on the order in which they are defined.
+
+=== num-ent1, num-ent2 ===
+
+Each feature has two different graphics ranges, but their exact meaning differs from feature to feature. For example, for vehicles, the first set is used while moving, and the second while loading/unloading in a station.
+
+=== wpisy <small>''(entries)''</small> ===
+
+To jest lista zestawów akcji 1 do użycia, najpierw num-ent1 dla pierwszego zakresu, a następnie wpisy num-ent2 dla drugiego zakresu.
+
+==Przykład==
