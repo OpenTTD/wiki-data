@@ -1,16 +1,5 @@
-<div style="float: right; border: 1px solid #c7c8fe; background-color: #EEE; padding:0px;">
-<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
-<!-- === Link do strony oryginalnej =========== -->
-[[File:en/Flag.png|link=http://newgrf-specs.tt-wiki.net/wiki/Action6 | alt=en | 22x16px | frameless]]<br/>
-[http://newgrf-specs.tt-wiki.net/wiki/Action6 EN]
-</div>
-<!-- === Link do strony Polskiej =========== -->
-<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">[[File:pl/Flag.png|link=User:{{PAGENAME}}<!--/Pl--> | alt=pl | 22x16px | frameless]]<br/>
-[[User:{{PAGENAME}}<!--/Pl-->|PL]] </div>
-<!-- === Link do strony głównej =========== -->
-<div style="display:inline-block; height: 3em; width: 26px; text-align:center;">
-[[File:en/Openttd.ico.png|link=pl/Main Page| 22x21px | frameless]]<br/>[[pl/Main Page|gł]] </div> </div>
-[[Category:pl/Artykuły w języku polskim]]
+
+<!--[[Category:Artykuły w języku polskim/Pl]]-->
 {{en/-}}<br>{{en/Ambox| text = w trakcie edycji.}}
 
 ==Wprowadzenie ==
@@ -23,7 +12,7 @@ Od wersji TTDPatch 2.0.1 alfa 51 nie jest to już prawdą, działanie 6 zostanie
 
 == Format ==
 
-The data looks as follows:
+Dane wyglądają następująco:
 
  <sprite-number> * <Length> 06 (<param-num> <param-size> <offset>){n} FF
 
@@ -45,27 +34,27 @@ The data looks as follows:
 |<FF>||B||Marks the end of the list
 |}
 
-The triplet of <param-num> <param-size> <offset> can be repeated as often as desired.
+Triplet <param-num> <param-size> <offset> można powtarzać tak często, jak to pożądane.
 
 == Description ==
 
 === Sprite-number ===
 
-This is just the number you are at.
+To tylko numer, na którym jesteś.
 
 === Length ===
 
-Count the number of bytes in this action.
+Policz liczbę bajtów w tej akcji.
 
 === param-num ===
 
-This is the parameter number from the newgrf(w).cfg parameters to apply to the following sprite data. It can of course be the result of an ActionD calculation as well. The first parameter has number 00.
+Jest to numer parametru z parametrów newgrf(w).cfg, który ma zastosowanie do następujących danych duszka. Może to oczywiście wynikać również z obliczeń ActionD. Pierwszy parametr ma numer 00.
 
-The modification is not carried out if the parameter has not been defined yet.
+Modyfikacja nie jest przeprowadzana, jeśli parametr nie został jeszcze zdefiniowany.
 
 === param-size ===
 
-How many bytes of the parameter to use. If this is larger than 4 (the size of a parameter), the bytes of the following parameter are used. In that case, all required parameters must be defined or no modification will be done.
+Ile bajtów parametru użyć. Jeśli jest to więcej niż 4 (rozmiar parametru), używane są bajty następującego parametru. W takim przypadku należy zdefiniować wszystkie wymagane parametry, w przeciwnym razie nie zostaną wykonane żadne modyfikacje.
 
 If this value has bit 7 set, the parameter is ''added'' to the destination value, instead of simply stored. This is useful especially when allocating sprites using the GRF Resource Management, because one typically allocates more than one sprite, but the parameter can only hold a single number, the first sprite allocated. &nbsp;Thus, to apply several sprite numbers properly (such that it works for several activations, not just the first one), use an algorithm like the following:
 * Suppose you have a sprite number <nowiki><s></nowiki> to which you want to add <nowiki><i></nowiki> (where <nowiki><i></nowiki> is returned by the GRF Resource Management)
@@ -77,13 +66,13 @@ If this value has bit 7 set, the parameter is ''added'' to the destination value
 * Skip the action D's as well as both action 6 and the action it modifies during the [[en/GrfLoadingStages|"test" stage]] by skipping these actions if action 7 var 84 has bit 10 set.
 * Make sure that when using action 7/9, that either ''both'' or ''none'' of the above two operations are skipped. if only one but not the other is skipped, the values will go out of synch.
 
-See below for an example.
+Przykład poniżej.
 
 === offset ===
 
-Number of byte in the following sprite to modify. The counting starts with 0 at the action byte and can go up to the length of the sprite. It is not possible to add data at the end of the sprite.
+Liczba bajtów w poniższym ikonce do zmodyfikowania. Liczenie zaczyna się od 0 w bajcie akcji i może wzrosnąć do długości duszka. Nie ma możliwości dodania danych na końcu duszka.
 
-Since {{en/Ottdp| |2.5|ttdprev=alpha 51}}, this is an extended byte (see [[en/GRFActionsDetailed]]).
+Since {{Page:pl/Extrazi/ottdp| |2.5|ttdprev=alpha 51}}, this is an extended byte (see [[en/GRFActionsDetailed]]).
 
 == Przykład ==
 
