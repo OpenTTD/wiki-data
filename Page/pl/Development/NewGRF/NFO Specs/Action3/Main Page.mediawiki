@@ -1,6 +1,6 @@
 
 <!--[[Category:Artykuły w języku polskim/Pl]]-->
-{{en/-}}<br>{{en/Ambox| text = w trakcie edycji.}}
+<!--{{-}}<br>{{ambox | text = w trakcie edycji.}}-->
 
 == Wprowadzenie ==
 
@@ -117,44 +117,44 @@ Ustawia to rodzaj [[en/Features|feature]] , który chcesz zmienić. Ustaw na:
 
 === n-id ===
 
-How many items of the current feature this action 3 defines new graphics for. If this is more than one, all items listed will get the same graphics. If this value has bit 7 set (i.e. 80 added), it is a wagon override. See [[en/Action3LiveryOverride|Action 3 - Livery Override]] for more info on this feature.
+Ile elementów bieżącej funkcji to działanie 3 określa nową grafikę. Jeśli jest więcej niż jeden, wszystkie wymienione elementy otrzymają tę samą grafikę. Jeśli ta wartość ma ustawiony bit 7 (tj. Dodano 80), oznacza to pominięcie wagonu. Zobacz  [[en/Action3LiveryOverride|Action 3 - Livery Override]] , aby uzyskać więcej informacji na temat tej funkcji.
 
-You can make a definition with n-id equal to zero (and thus no ids that follow). &nbsp;This creates a generic feature-specific definition not associated with any particular item. &nbsp;At the moment, this is used for generic callbacks, but might be extended to other functions eventually.
+Możesz utworzyć definicję z n-id równym zero (a zatem bez id idących dalej). &nbsp;Tworzy to ogólną definicję specyficzną dla funkcji niepowiązaną z żadnym konkretnym elementem. &nbsp;W tej chwili jest to używane do ogólnych wywołań zwrotnych, ale ostatecznie może zostać rozszerzone na inne funkcje.
 
 === ids ===
 
-Feature IDs to use this action 3 for. All IDs are counted from the first of their class, i.e. the first road vehicle has 00, as does the first plane, the first ship, and the first train vehicle.
+ID''`y'' funkcji, dla których należy użyć tej akcji 3. Wszystkie identyfikatory są liczone od pierwszego w swojej klasie, tj. Pierwszy pojazd drogowy ma 00, podobnie jak pierwszy samolot, pierwszy statek i pierwszy pojazd kolejowy.
 
-In OpenTTD since r13482, each ID is an extended byte for vehicles, otherwise the ID is a regular byte.
+W OpenTTD od r13482 każdy identyfikator jest rozszerzonym bajtem dla pojazdów, w przeciwnym razie identyfikator jest zwykłym bajtem.
 
-For canals and rivers the id has a special meaning, see its [[en/Action3/Canals|own Action 3 page]]
+Dla kanałów i rzek identyfikator ma specjalne znaczenie, patrz jego [[en/Action3/Canals|own Action 3 page]]
 
-For town buildings, the IDs are the house IDs, and specifying a house ID that haven't been defined before (by setting its property 08) doesn't do anything, but doesn't cause an error, either. Note that you don't necessarily have to assign a set-ID to a house ID, the old TTD sprite of the substitute type will be used if you don't do so. &nbsp;Industry tile IDs work in the same manner.
+W przypadku budynków miejskich identyfikatorami są identyfikatory domów, a określenie identyfikatora domu, który nie został wcześniej zdefiniowany (poprzez ustawienie jego właściwości 08), nic nie robi, ale również nie powoduje błędu. Zauważ, że niekoniecznie musisz przypisać ID zestawu do ID domu, jeśli nie zrobisz tego, użyjesz starego duszka TTD typu zastępczego. &nbsp;ID''`y'' kafelków branżowych działają w ten sam sposób.
 
 === num-cid ===
 
-Number of cargo type definitions that follow. Can be zero if only the default follows.
+Liczba następujących definicji rodzajów ładunku. Może wynosić zero, jeśli następuje tylko wartość domyślna.
 
-For features 05 (canals/rivers), 07 (houses), 09 (industry tiles), 0A (industries), and 0B (cargoes) this must always be zero.
+W przypadku cech 05 (kanały/rzeki), 07 (domy), 09 (kafle przemysłowe), 0A (branże) i 0B (ładunki) zawsze musi wynosić zero.
 
 === cargo-type ===
 
 <u>For vehicles (features 00 .. 03) and stations (feature 04)</u>
 
-The cargo-type for which the set-ID applies. &nbsp;If the item is built to use this type of cargo, or if it is refitted for it, the given set-ID is used as its graphics. &nbsp;See column "type A" in the table at [[en/CargoTypes]] for a list of cargo-type values.
+Rodzaj ładunku, którego dotyczy ustalony ID <small>(set-ID)''</small>). &nbsp;If the item is built to use this type of cargo, or if it is refitted for it, the given set-ID is used as its graphics. &nbsp;See column "type A" in the table at [[en/CargoTypes]] for a list of cargo-type values.
 
-If the grf file has installed a [[en/Action0/Global Settings#cargo-translation-table-09|cargo translation table]], the cargo type here refers to the cargo with the label in the given slot of the translation table, e.g. if you use cargo-type=08, it refers to the cargo that has the label in the ninth slot (numbered 08) in the translation table.
+Jeśli plik grf ma zainstalowaną  [[en/Action0/Global Settings#cargo-translation-table-09|cargo translation table]] , rodzaj ładunku tutaj odnosi się do ładunku z etykietą w danym polu tabeli tłumaczeń, np. jeśli użyjesz cargo-type=08 , odnosi się to do ładunku, który ma etykietę w dziewiątym polu (numer 08) w tabeli translacji.
 
-If defined, cargo-type FF is used for graphics shown in the purchase or construction window.
-: Note that for dual-headed trains (prop 13) special rules for the purchase menu sprite apply: two sprites are drawn (for front and back) as if the vehicle is normally constructed. If you supply one purchase menu sprite, it will be used for both vehicle parts in the purchase menu. Provide a set of 8 sprites, and the 7th resp. 3rd sprite will be drawn; provide a set of 8 blank sprites except the 7th if you want to fully control a single purchase menu sprite for a dual-headed engine.
+Jeśli zdefiniowano, FF typu ładunkowego <small>''(cargo-type)''</small> jest używany do grafiki wyświetlanej w oknie zakupu lub budowy.
+: Należy pamiętać, że w przypadku pociągów dwugłowych (prop 13) obowiązują specjalne zasady dla menu zakupu: sprite są rysowane (dla przodu i tyłu) tak, jakby pojazd był normalnie zbudowany. Jeśli dostarczysz jedną ikonkę menu zakupów, będzie ona używana dla obu części pojazdu w menu zakupów. Podaj zestaw 8 duszków i siódmego resp. 3. duszek zostanie wylosowany; zapewnij zestaw 8 pustych duszków oprócz siódmej, jeśli chcesz w pełni kontrolować duszka menu pojedynczego zakupu dla silnika z dwiema głowicami.
 
-For stations, you can additionally define a special cargo-type of FE which prevents the default from being used (which would show the sum of all cargo). &nbsp;Instead, the given set-ID is displayed with no cargo at all.
+W przypadku stacji można dodatkowo zdefiniować specjalny rodzaj ładunku FE, który uniemożliwia użycie wartości domyślnej (która wyświetlałaby sumę wszystkich ładunków). &nbsp;Zamiast tego podany identyfikator zestawu jest wyświetlany bez ładunku.
 
 <u>Railtypes are available only in OpenTTD &gt; r19056 and its action 3 re-uses the 'cargo'-type definition.</u>
 
-For details see its [[en/Action3/Railtypes|own Action 3 page]]
+Aby uzyskać szczegółowe informacje, zobacz jego [[en/Action3/Railtypes|own Action 3 page]]
 
-Since OpenTTD 1.10 this is also the case for [[en/Action3/Roadtypes|Roadtypes]] and [[en/Action3/Tramtypes|Tramtypes]]
+Od OpenTTD 1.10 tak też jest [[en/Action3/Roadtypes|Roadtypes]] i [[en/Action3/Tramtypes|Tramtypes]]
 
 <u>For canals/rivers, houses, industry tiles, industries and cargoes (features 05, 07, 09, 0A and 0B)</u>
 
@@ -162,11 +162,11 @@ As &lt;num-cid&gt; is zero for features 05 (canals/rivers), 07 (houses), 09 (ind
 
 <u>For objects (feature 0F)</u>
 
-Objects support a buy menu sprite similar to vehicles (cargo-type FF).
+Obiekty obsługują duszka menu zakupu podobne do pojazdów (FF typu ładunkowego).
 
 === default set-ID ===
 
-Default set-ID if no entry from the cargo-type list above matches, or if there are no special cargo-types listed at all.
+Domyślny ID zestawu <small>''(set-ID)''</small>, jeśli nie ma wpisu z listy rodzajów ładunku powyżej pasujących lub jeśli w ogóle nie ma żadnych specjalnych rodzajów ładunku.
 
 == Przykład ==
 
