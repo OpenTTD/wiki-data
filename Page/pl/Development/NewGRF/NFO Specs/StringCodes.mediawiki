@@ -1,0 +1,430 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+=Kody ciągów =
+
+Teksty w TTD są głównie w zestawie znaków Latin-1 (ISO-8859-1) (z wyjątkiem kodowania UTF-8; patrz poniżej), jednak kilka znaków jest różnych. Ponadto niektóre postacie mają specjalne znaczenie. Zostały one wyjaśnione w poniższej tabeli.
+
+{| |-
+!Range, hex!!Version!!Meaning
+|-
+|00..1F||||Control characters, unused except for the following:
+|-
+|||{{en/Ottdp|0.6-1.3.1|2.0}}||01 X offset in next byte of string (variable space). Removed from OpenTTD since 1.3.2.
+|-
+|||{{en/Ottdp|0.6|2.0}}||0D New line
+|-
+|||{{en/Ottdp|0.6|2.0}}||0E Set small font size
+|-
+|||{{en/Ottdp|0.6|2.0}}||0F Set large font size
+|-
+|||{{en/Ottdp|0.6-1.3.1|2.0}}||1F X and Y offsets in next two bytes of string. Removed from OpenTTD since 1.3.2.
+|-
+|20..7A||{{en/Ottdp|0.6|2.0}}|| Latin-1/ASCII characters, from space " " up to lower case "z"
+|-
+|7B..87|||| Formatting instructions, all take their argument from the stack if not otherwise specified
+|-
+|||{{en/Ottdp|0.6|2.0}}||7B Print signed dword
+|-
+|||{{en/Ottdp|0.6|2.0}}||7C Print signed word
+|-
+|||{{en/Ottdp|0.6|2.0}}||7D Print signed byte
+|-
+|||{{en/Ottdp|0.6|2.0}}||7E Print unsigned word
+|-
+|||{{en/Ottdp|0.6|2.0}}||7F Print dword in currency units
+|-
+|||{{en/Ottdp|0.6|2.0}}||80 Print substring (text ID from stack)
+|-
+|||{{en/Ottdp|0.6|2.0}}||81 Print substring (text ID in next 2 bytes of string)
+|-
+|||{{en/Ottdp|0.6|2.0}}||82 Print date (day, month, year) (based on year 1920)
+|-
+|||{{en/Ottdp|0.6|2.0}}||83 Print short date (month and year) (based on year 1920)
+|-
+|||{{en/Ottdp|0.6|2.0}}||84 Print signed word in speed units
+|-
+|||{{en/Ottdp|0.6|2.0}}||85 Discard next word from stack
+|-
+|||{{en/Ottdp|0.6|2.0}}||86 Rotate down top 4 words on stack
+|-
+|||{{en/Ottdp|0.6|2.0}}||87 Print signed word in litres
+|-
+|88..98||||Colour codes
+|-
+|||{{en/Ottdp|0.6|2.0}}||88 Blue
+|-
+|||{{en/Ottdp|0.6|2.0}}||89 Light Gray
+|-
+|||{{en/Ottdp|0.6|2.0}}||8A Light Orange ("Gold")
+|-
+|||{{en/Ottdp|0.6|2.0}}||8B Red
+|-
+|||{{en/Ottdp|0.6|2.0}}||8C Purple
+|-
+|||{{en/Ottdp|0.6|2.0}}||8D Gray-Green
+|-
+|||{{en/Ottdp|0.6|2.0}}||8E Orange
+|-
+|||{{en/Ottdp|0.6|2.0}}||8F Green
+|-
+|||{{en/Ottdp|0.6|2.0}}||90 Yellow
+|-
+|||{{en/Ottdp|0.6|2.0}}||91 Light Green
+|-
+|||{{en/Ottdp|0.6|2.0}}||92 Red-Brown
+|-
+|||{{en/Ottdp|0.6|2.0}}||93 Brown
+|-
+|||{{en/Ottdp|0.6|2.0}}||94 White
+|-
+|||{{en/Ottdp|0.6|2.0}}||95 Light Blue
+|-
+|||{{en/Ottdp|0.6|2.0}}||96 Dark Gray
+|-
+|||{{en/Ottdp|0.6|2.0}}||97 Mauve (grayish purple)
+|-
+|||{{en/Ottdp|0.6|2.0}}||98 Black
+|-
+|99||{{en/Ottdp|no|2.5|ttdprev=2.0.1 alpha 1}}||Switch to company colour that follows in next byte (enabled by enhancegui)
+|-
+|9A||||Extended format code in next byte:
+|-
+|||{{en/Ottdp|0.6|2.5}}||9A 00 -or- 9A 01 Display 64-bit value from stack in currency units
+|-
+|||{{en/Ottdp|no|2.6}}||9A 02 Ignore next colour byte. Multiple instances will skip multiple colour bytes.
+|-
+|||{{en/Ottdp|0.6|2.6}}||9A 03 WORD Push WORD onto the textref stack
+|-
+|||{{en/Ottdp|0.6|2.6}}||9A 04 BYTE Un-print the previous BYTE characters.
+|-
+|||{{en/Ottdp|no|2.6}}||9A 05 For internal use only. Not valid in GRF files.
+|-
+|||{{en/Ottdp|0.7|2.6|ttdprev=r2007}}||9A 06 Print byte in hex
+|-
+|||{{en/Ottdp|0.7|2.6|ttdprev=r2007}}||9A 07 Print word in hex
+|-
+|||{{en/Ottdp|0.7|2.6|ttdprev=r2007}}||9A 08 Print dword in hex
+|-
+|||{{en/Ottdp|no|2.6|ttdprev=r2128}}||9A 09 For internal use only. Usage in NewGRFs will most likely crash TTDPatch.
+|-
+|||{{en/Ottdp|no|2.6|ttdprev=r2128}}||9A 0A For internal use only. Usage in NewGRFs will most likely crash TTDPatch.
+|-
+|||{{en/Ottdp|1.0|2.6|ttdprev=r2178}}||9A 0B Print 64-bit value in hex
+|-
+|||{{en/Ottdp|1.1|2.6|ttdprev=r2178}}||9A 0C Print name of station with id in next textrefstack word
+|-
+|||{{en/Ottdp|1.1|ottdrev=r21086}}||9A 0D Print unsigned word in tonnes
+|-
+|||{{en/Ottdp|1.1|ottdrev=r21209}}||9A 0E Set gender of string, NewGRF internal ID in next byte. Must be first in a string. <ref name="gendercasedef">See [[#setting-genders-and-cases|Setting genders and cases]].</ref>
+|-
+|||{{en/Ottdp|1.1|ottdrev=r21209}}||9A 0F Select case for next substring, NewGRF internal ID in next byte. <ref name="gendercasedef"/>
+|-
+|||{{en/Ottdp|1.1|ottdrev=r21211}}||9A 10 Begin choice list value, NewGRF internal ID in next byte. <ref name="choices">See [[#choosing-strings-depending-on-required-gender-or-case|Choosing strings depending on required gender or case]].</ref>
+|-
+|||{{en/Ottdp|1.1|ottdrev=r21211}}||9A 11 Begin choice list default <ref name="choices"/>
+|-
+|||{{en/Ottdp|1.1|ottdrev=r21211}}||9A 12 End choice list <ref name="choices"/>
+|-
+|||{{en/Ottdp|1.1|ottdrev=r21211}}||9A 13 Begin gender choice list, stack offset of substring to get gender from in next byte. <ref name="choices"/>
+|-
+|||{{en/Ottdp|1.1|ottdrev=r21211}}||9A 14 Begin case choice list <ref name="choices"/>
+|-
+|||{{en/Ottdp|1.1|ottdrev=r21216}}||9A 15 Begin plural choice list, stack offset of value to get plural for in next byte. <ref>See [[#using-plural-forms|Using plural forms]].</ref>
+|-
+|||{{en/Ottdp|1.2|ottdrev=r22778}}||9A 16 Print dword as date (day, month, year) (based on year 0)
+|-
+|||{{en/Ottdp|1.2|ottdrev=r22778}}||9A 17 Print dword as short date (month and year) (based on year 0)
+|-
+|||{{en/Ottdp|1.2|ottdrev=r22779}}||9A 18 Print unsigned word in horse power
+|-
+|||{{en/Ottdp|1.2|ottdrev=r23063}}||9A 19 Print unsigned word as short volume
+|-
+|||{{en/Ottdp|1.2|ottdrev=r23063}}||9A 1A Print unsigned word as short weight
+|-
+|||{{en/Ottdp|1.4|ottdrev=r26244}}||9A 1B Use two words to print an amount of cargo (long form: "10 bags of mail"). First word is cargo type (translated for GRF version >= 7), second word is amount. The amount is automatically converted according to unit/locale settings.
+|-
+|||{{en/Ottdp|1.4|ottdrev=r26244}}||9A 1C Use two words to print an amount of cargo (short form: "10 bags"). First word is cargo type (translated for GRF version >= 7), second word is amount. The amount is automatically converted according to unit/locale settings.
+|-
+|||{{en/Ottdp|1.4|ottdrev=r26244}}||9A 1D Use two words to print an amount of cargo (tiny form: "10"). First word is cargo type (translated for GRF version >= 7), second word is amount. The amount is automatically converted according to unit/locale settings.
+|-
+|||{{en/Ottdp|1.7|ottdrev=r27706}}||9A 1E Print unsigned word as name of a cargo type (translated for GRF version >= 7).
+|-
+|||{{en/Ottdp|1.10|ottdrev=gd2b6176cdf}}||9A 1F Push current colour onto colour stack. Use this if you need to switch colour and restore later.
+|-
+|||{{en/Ottdp|1.10|ottdrev=gd2b6176cdf}}||9A 20 Pop last colour from colour stack. Use this to restore previous colour.
+|-
+|9B..9D||||Reserved
+|-
+|9E..FF||{{en/Ottdp|0.6|2.0}}||Latin-1 characters, except for the following:
+|-
+|||{{en/Ottdp|0.6|2.0}}||9E Euro character "&euro;"
+|-
+|||{{en/Ottdp|0.6|2.0}}||9F Capital Y umlaut "&Yuml;"
+|-
+|||{{en/Ottdp|0.6|2.0}}||A0 Scroll button up
+|-
+|||{{en/Ottdp|0.6|2.0}}||AA Scroll button down
+|-
+|||{{en/Ottdp|0.6|2.0}}||AC Tick mark
+|-
+|||{{en/Ottdp|0.6|2.0}}||AD X mark
+|-
+|||{{en/Ottdp|0.6|2.0}}||AF Scroll button right
+|-
+|||{{en/Ottdp|0.6|2.0}}||B4 Train symbol
+|-
+|||{{en/Ottdp|0.6|2.0}}||B5 Truck symbol
+|-
+|||{{en/Ottdp|0.6|2.0}}||B6 Bus symbol
+|-
+|||{{en/Ottdp|0.6|2.0}}||B7 Plane symbol
+|-
+|||{{en/Ottdp|0.6|2.0}}||B8 Ship symbol
+|-
+|||{{en/Ottdp|0.6|2.0}}||B9 Superscript -1
+|-
+|||{{en/Ottdp|0.6|2.0}}||BC Small scroll button up
+|-
+|||{{en/Ottdp|0.6|2.0}}||BD Small scroll button down
+|}
+<references/>
+
+The formatting instructions must not be used except in strings that expect them, and then they may not be out of order (with the possible exception of code 86 shuffling the internal stack). When used improperly, they will most likely crash TTD. Code 81 is always safe to use (provided that the referenced text ID uses no unsafe formatting instructions either), and will insert the given text ID (e.g. "\81\3D\A0" will insert text ID A03D, "\98Refit Aircraft"). Note however that if you want to include e.g. ID D000/D400, the 00 byte will be considered the end of string, and this will therefore break if additional texts are supposed to follow in the action 4. DCxx IDs must not be included; neither codes 80 nor 81 correctly access DCxx IDs.
+
+Each formatting instructions removes its argument from the stack, so that the next one will receive the following bytes as arguments. Code 86 takes the top four words from the stack, let's call them W1 through W4, and reorders them as W4 W1 W2 W3. This is used for languages in which industries or stations should be named not "Flinfingbury Power Plant" but "Power Plant Flinfingbury".
+
+==Using genders and cases==
+{{en/Ottdp|1.1}} When multiple strings are combined to form a single sentence, the parts affect each other in various languages. E.g. you might have some string "The <industrytype> closes due to next month.", where <industrytype> is replaced by a name of some industry (e.g "brewery", "textile mill"). In German however the gender of the <industrytype> affects the string it is inserted into. For "brewery" ("Brauerei") the article "The" is translated with "Die", for "textile mill" ("Textilwerk") "The" is translated with "Das".
+
+In OpenTTD these interactions of strings are called "genders" and "cases". While these names refer to the common grammatical constructions in various languages, there is a technical definition of these term wrt. OpenTTD. These might match the grammatical usages of genders and cases in some languages, or they might be used to deal with other grammatical constructions.
+
+Generally, when a string I is inserted into a string O:
+* If the inner string I affects the outer O:
+** I is said to have a gender, and 
+** O chooses different texts depending on that gender.
+* If the outer string O affects the inner I:
+** O sets a case for I, and 
+** I chooses different texts depending on the required case.
+
+===Setting genders and cases===
+{{en/Ottdp|1.1}} String codes 9A 0E and 9A 0F map a NewGRF internal gender or case ID to an OpenTTD gender or case. The internal ID is resolved to the appropriate OpenTTD gender or case at load time by means of the mapping. The first internal ID in the mapping that matches the ID from the string and has an existing OpenTTD gender or case is taken, i.e. the list of mappings is filtered by internal ID and existance of the OpenTTD gender/case and then the top element is used. When the gender or case ID is not known, or there is no existing OpenTTD gender or case with the mapped names the whole mapping is ignored and the default gender or case is taken.
+
+'''Example of gender translation table'''
+
+<pre>
+// Gender translation table
+// Current OpenTTD German translation uses m, w, n and p but
+// support a (fictitious) previous version that used masculine,
+// feminine, neuter and plural as gender names.
+ 0 * 56     00 08 01 01 02
+            13
+            01 "m" 00
+            01 "masculine" 00
+            02 "w" 00
+            02 "feminine" 00
+            03 "n" 00
+            03 "neuter" 00
+            04 "p" 00
+            04 "plural" 00
+            00
+
+// Brauerei is a female word in German; this sets it as female.
+ 1 * 40     04 0A 82 01 73 DC C3 9E 9A 0E 02 "Brauerei" 00
+</pre>
+
+In this case OpenTTD would look for NewGRF internal ID 2 in the gender table. This would yield "w" and "feminine" as OpenTTD gender names. In current OpenTTD this would match "w", in the fictitious older version of OpenTTD it will match "feminine".
+
+===Choosing strings depending on required gender or case===
+{{en/Ottdp|1.1}} String codes 9A 10 to 9A 14 map an OpenTTD gender or case to the NewGRF internal gender or case ID. The mapping is resolved at load time by going through all cases or genders OpenTTD's translation knows an mapping these to NewGRF internal IDs. If mapping is found the default choice list item is chosen. This happens by filtering the mapping on the gender or case name and then the NewGRF internal ID of the top element is used.
+
+The choice list string codes are related and must be used in a specific manner:
+
+Genders: 9A 13 &lt;offset&gt; (9A 10 &lt;index&gt; &lt;string&gt;)+ 9A 11 &lt;default&gt; 9A 12
+
+Cases: 9A 14 (9A 10 &lt;ndex&gt; &lt;string&gt;)+ 9A 11 &lt;default&gt; 9A 12
+
+Plurals: 9A 13 &lt;offset&gt; (9A 10 &lt;index&gt; &lt;string&gt;)+ 9A 11 &lt;default&gt; 9A 12
+
+The offset is the stack location of the substring/value you want to get the gender/plural for. This is the real offset plus 80, i.e. an offset of 0 becomes 80 and an offset of 1 becomes 81 in the NFO.
+
+'''Example of gender-dependent string'''
+
+<pre>
+// Assuming the translation table of the previous example
+// A string with a gender choice list and a stack item that gets resolved
+ 2 * 29     04 0A FF 01 1A DC "D" 9A 13 80 9A 10 1 "er" 9A 10 3 "as" 9A 11 "ie" 9A 12 " " 80 00
+</pre>
+
+Imagine the "Brauerei" from the previous example being, as substring, on the stack. Then this string would resolve to "Die Brauerei".
+
+What happens in OpenTTD is that whenever the "begin gender choice list" string code is found it will resolve the string at the given stack location. Of that resolved string the first character is compared to the "set gender" string code and if that is the case the (mapped) OpenTTD gender is retrieved. When there is "set gender" string code the first OpenTTD gender is used. After resolving the OpenTTD gender that gender is reverse mapped to a NewGRF internal ID. If that NewGRF internal ID exists in one of the "choice list values" that (sub)string is taken (up till the next choice list value/default). If there is no reverse mapping the string at the "choice list default" string code is used up till the "end choice list" string code. Further processing of the string happens after the choice list, i.e. the (sub)strings in the choice list may not contain any special string codes except colour codes.
+
+Case choice lists work in a similar matter, except that instead of resolving a case from a (sub)string we "are" the substring; the string that includes this substring has set a case using the "select case" string code. As such no offset has to be given to the choice list, but the rest works in the same way as gender choice lists.
+
+==Using plural forms==
+{{en/Ottdp|1.1}} The plural list works like a gender list, however you have to choose one "mapping" from value to plural index by setting the plural form using [[en/Action0/Global Settings]] property 15.
+
+If, for example, plural form 0 is chosen using the [[en/Action0/Global Settings]] property 15, then there are 2 plural indices. If the value at the stack with the given offset equals 1 you get plural index 1, otherwise plural index 2. These plural indices are the indices that are used in the choice lists.
+
+{| |-
+!Plural form!!Plural index!!Description
+|-
+|0||Two forms:
+|-
+|||1||1
+|-
+|||2||rest
+|-
+|1||Only one form:
+|-
+|||1||every form
+|-
+|2||Two forms:
+|-
+|||1||0 or 1
+|-
+|||2||rest
+|-
+|3||Three forms:
+|-
+|||1||ending in 1, but not ending in 11
+|-
+|||2||0
+|-
+|||3||rest
+|-
+|4||Five forms:
+|-
+|||1||1
+|-
+|||2||2
+|-
+|||3||3-6
+|-
+|||4||7-10
+|-
+|||5||rest
+|-
+|5||Three forms:
+|-
+|||1||ending in 1, but not ending in 11
+|-
+|||2||ending in 2-9, but not ending in 1[2-9]
+|-
+|||3||rest
+|-
+|6||Three forms:
+|-
+|||1||ending in 1, but not ending in 11
+|-
+|||2||ending in 2-4, but not ending in 1[2-4]
+|-
+|||3||rest
+|-
+|7||Three forms:
+|-
+|||1||0
+|-
+|||2||ending in 2-4, but not ending in 1[2-4]
+|-
+|||3||rest
+|-
+|8||Four forms:
+|-
+|||1||ending in 01
+|-
+|||2||ending in 02
+|-
+|||3||ending in 03 or ending in 04
+|-
+|||4||rest
+|-
+|9||Two forms:
+|-
+|||1||ending in 1, but not ending in 11
+|-
+|||2||ret
+|-
+|10||Three forms:
+|-
+|||1||1
+|-
+|||2||2-4
+|-
+|||3||rest
+|-
+|11||Two forms:
+|-
+|||1||ending in 0, 1, 3, 6, 7 and 8
+|-
+|||2||ending in 2, 4, 5 and 9
+|-
+|12||Four forms:
+|-
+|||1||1
+|-
+|||2||0 or ending in 02-10
+|-
+|||3||ending in 11-19
+|-
+|||4||rest
+|-
+|13||Four forms:
+|-
+|||1||1, 11
+|-
+|||2||2, 12
+|-
+|||3||3..10, 13..19
+|-
+|||4||rest
+|-
+|}
+
+'''Example of string using plural forms'''
+
+<pre>
+// Set the plural type to type 0
+ 0 * 7      00 08 01 01 02 15 00
+// In case of the first stack item being 1 use "Tonne", otherwise use "Tonnen"
+ 1 * 34     04 0B 82 01 1A DC C3 9E "\UE07C Tonne" 9A 15 80 9A 10 01 "" 9A 11 "n" 9A 12 " Sand" 00
+</pre>
+
+=UTF-8 support=
+{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 68}}
+Since TTDPatch 2.0.1 alpha 68, TTDPatch supports UTF-8 encoded input strings. Use [[en/Action12|action 12]] to define glyphs for the characters which do not exist in TTD's .grf files (possible since TTDPatch 2.0.1 alpha 73).
+
+To indicate that a given string is in UTF-8 encoding, start it with a capital thorn (U+00DE, "&THORN;"), encoded in UTF-8 as usual with the bytes C3 9E. Everything in that string is then assumed to be in UTF-8 encoding, with the following exception: if characters appear that are not valid UTF-8 sequences, they are assumed to be one of the above control codes. This way, it is still possible to write, e.g. "&THORN;Capacity: " 87 "litres", without encoding the 87 in UTF-8 (which would instead refer to a character installed at codepoint U+0087).
+
+In addition, this allows using the non-Unicode characters 9E, 9F, A0, AA, AC, AD, AF, B4..B9, BC and BD from the above list, which when encoded with UTF-8 would refer to their respective Unicode characters instead. To use the TTD characters, simply do not encode them using UTF-8 but enter them directly as bytes. This causes them to be an invalid UTF-8 sequence and allows TTDPatch to use the correct symbol from TTD's fonts.
+
+Alternatively, these symbols (in fact, the TTD character set from 20 to FF) are also mapped into the Unicode Private Use Area at U+E0xx, so to encode the truck symbol, you may use character U+E0B5 as well, although this will probably be an unprintable character in most text editors.
+
+Finally, characters 7B..7F no longer function as the above formatting instructions, but will display regular glyphs instead (provided they are installed; by default TTD has none at these codepoints). Instead, to use these formatting instructions in UTF-8 mode, you need to use their Private Use Area codepoint at U+E0xx.
+
+Basically there are three possibilities:
+# Characters U+E020..U+E0FF in the E0xx Private Use Area do what their respective character xx would do in TTD, as do the control characters below U+0020
+# All other valid UTF-8 sequences display actual glyphs, if they are available
+# All invalid UTF-8 sequences do what their individual bytes would do in TTD
+
+Podsumowując, oto przydatna tabela:
+
+{| |-
+!Character!!Encoding in UTF-8 mode!!Meaning
+|-
+|7E||7E||Unicode Character 'TILDE' (~)
+|-
+|82||82 (invalid UTF-8)||Print date (day, month, year)
+|-
+|82||C2 82||Display glyph for U+0082
+|-
+|AC||AC (invalid UTF-8)||Tick mark
+|-
+|AC||C2 AC||Unicode Character 'NOT SIGN' (&not;)
+|-
+|E07E||EE 81 BE||Print unsigned word
+|-
+|E082||EE 82 82||Print date (day, month, year)
+|-
+|E0AC||EE 82 AC||Tick mark
+|}
