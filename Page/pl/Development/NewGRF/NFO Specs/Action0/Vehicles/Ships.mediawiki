@@ -1,0 +1,130 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+<div style="float:right; padding-left:12px; background:none;">{{en/NFONavVehicles}}</div>
+
+== Wprowadzenie ==
+
+Definiowanie właściwości statków.
+== Properties ==
+
+{| |-
+!Number!![[en/GRFActionsDetailed|Size]]!!Version!!Description
+|-
+|08||B||{{en/Ottdp|0.6|2.0}}||Sprite (FF for new graphics)
+|-
+|09||B||{{en/Ottdp|0.6|2.0}}||Refittable (0 no, 1 yes)
+|-
+|0A||B||{{en/Ottdp|0.6|2.0}}||Cost factor
+|-
+|0B||B||{{en/Ottdp|0.6|2.0}}||Speed in mph*3.2
+|-
+|0C||B||{{en/Ottdp|0.6|2.0}}||Cargo type, see [[en/CargoTypes]]<br/>
+{{en/GrfTill|7}} For GRF version 7 and below: Type B 'cargo slot'<br/>
+{{en/GrfFrom|8}} For GRF version 8 and above: Type A '(translated) cargo bit'
+|-
+|0D||W||{{en/Ottdp|0.6|2.0}}||Capacity
+|-
+|0F||B||{{en/Ottdp|0.6|2.0}}||Running cost factor
+|-
+|10||B||{{en/Ottdp|0.6|2.0}}||Sound effect type (4=cargo ship, 5=passenger ship)<br/>{{en/Ottdp|1.6|no|ottdrev=r27507}} Since OpenTTD r27507 also custom sound effects from Action11 are allowed here.
+|-
+|11||D||{{en/Ottdp|0.6|2.0}} {{en/GrfFrom|1}}||Bit mask of cargo types available for refitting, see column 2 (bit values) in [[en/CargoTypes]]
+|-
+|12||B||{{en/Ottdp|0.6|2.5}} {{en/GrfFrom|6}}||Callback flags bit mask, see below
+|-
+|13||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 30}}||Refit cost, using 1/32 of the default refit cost base
+|-
+|14||B||{{en/Ottdp|1.2|2.5|ttdprev=alpha 44|ottdrev=r22639}}||Ocean speed fraction, sets fraction of top speed available in the ocean; e.g. 00=100%, 80=50%, FF=0.4%
+|-
+|15||B||{{en/Ottdp|1.2|2.5|ttdprev=alpha 44|ottdrev=r22639}}||Canal speed fraction, same as above but for canals and rivers
+|-
+|16||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 44}}||Retire vehicle early, this many years before the end of phase 2 (see [[en/Action0General]])
+|-
+|17||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 55}}||Miscellaneous vehicle flags
+|-
+|18||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 55}}||Refittable cargo classes, see [[en/Action0Trains#cargo-classes-28-29|train prop. 28]]
+|-
+|19||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 55}}||Non-refittable cargo classes, see [[en/Action0Trains#cargo-classes-28-29|train prop. 29]]
+|-
+|1A||D||{{en/Ottdp|0.6|2.6|ttdprev=r1210|ottdrev=r7191}}||Long format introduction date
+|-
+|1B||B*||{{en/Ottdp|0.7|no|ottdrev=r13831}}||Sort the purchase list
+|-
+|1C||B||{{en/Ottdp|1.1|no|ottdrev=r21240}}||Visual effect
+|-
+|1D||W||{{en/Ottdp|1.2|no|ottdrev=r22713}}||Custom cargo ageing period
+|-
+|1E||B n*B||{{en/Ottdp|1.2|no|ottdrev=r23291}}||List of always refittable cargo types, see [[en/Action0/Vehicles/Trains#list-of-always-refittable-cargo-types-2c-2d|train property 2C]]
+|-
+|1F||B n*B||{{en/Ottdp|1.2|no|ottdrev=r23291}}||List of never refittable cargo types, see [[en/Action0/Vehicles/Trains#list-of-always-refittable-cargo-types-2c-2d|train property 2D]]
+|}
+
+== Descriptions ==
+
+=== Callbacks (12) ===
+For ships, the following [[en/Callbacks]] have to be enabled by setting the corresponding bit in property 12 (certain other, not as frequently used callbacks are available without setting a bit here):
+
+{| |-
+!Bit!!Value!!Variable 0C value!!Callback
+|-
+|2||4||12||Load amount
+|-
+|3||8||15||Set refitted capacity
+|-
+|5||20||19||show a suffix after the cargo type name
+|-
+|6||40||2D||Select color mapping for vehicle
+|-
+|7||80||33||Sound effect callbacks
+|}
+
+Bit is the bit you have to set, you do this by adding all the values for all the bits. Variable 0C value is what variable 0C will be set to, for checking it in the VarAction2 for callbacks.
+
+=== Refit cost (13) ===
+
+Refit cost, using 1/32 of the default refit cost base. This property can be overridden by callback 15E.
+
+{{en/Ottdp|1.2|no|ottdrev=r23087}} If the refit cost factor is set to zero and bit 4 of the miscellaneous flags (17) is set, auto-refitting is allowed.
+
+=== Miscellaneous flags (17) ===
+
+This is a bit mask, with the following bits:
+
+{| |-
+!Bit!!Value!!Meaning
+|-
+|0||1||reserved, do not use
+|-
+|1||2||Uses two company colors
+|-
+|2||4||reserved, do not use
+|-
+|3||8||reserved, do not use
+|-
+|4||10||{{en/Ottdp|1.2|no|ottdrev=r23087}} Auto-refitting is enabled for refits where callback 15E allows it or prop 13 specifies zero cost.
+|-
+|5||   20||{{en/Ottdp|1.2|no|ottdrev=r23861}} Use cargo multiplier for default cargo. See page about [[en/VehicleRefitting#misc-vehicle-flag-5-use-of-capacity-multiplier-for-default-cargo-set|vehicle refitting]].
+|-
+|6||   40||{{en/Ottdp|1.3|no|ottdrev=r24124}} Disable breakdown smoke effect.
+|-
+|7||   80||{{en/Ottdp|1.7|no|ottdrev=r27668}} [[en/Action2/Vehicles#composing-vehicles-from-multiple-sprites|Compose vehicle from multiple sprites.]]
+|}
+
+=== Long format introduction date (1A) ===
+
+Set the vehicle introduction date, in days since the year 0. This takes account of leap years; dividable by 4, but not 100 unless 400. A start date of 1920-01-01 is obtained with a value of 701265 (51 B3 0A 00). This property must be set after property 00 to take effect.
+
+{{en/Ottdp|no|}} In TTDPatch, dates after 2044 will be limited to 2044.
+
+=== Sort vehicle list (1B) ===
+See sort vehicle list for [[en/Action0Trains#sort-vehicle-list-1a|trains]] for details.
+
+=== Visual effect (1C) ===
+See the equivalent [[en/Action0Trains#visual-effects-and-wagon-power-22|train property]] for information about the meaning of all bits. There is no default effect for ships, therefore values of 00..0F will show no visual effect. Bit 7 (disable wagon power) currently has no meaning and should be left at 0.
+
+=== Custom cargo ageing period (1D) ===
+See custom cargo ageing period for [[en/Action0Trains#custom-cargo-ageing-period-2b|trains]] for details.
+
+== Przykład ==
+
+Do napisania
