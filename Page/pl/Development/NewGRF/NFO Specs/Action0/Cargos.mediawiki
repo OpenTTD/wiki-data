@@ -1,0 +1,371 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+== Wprowadzenie ==
+
+Przełącznik [[en/NewCargos]] TTDPatch pozwala modyfikować istniejące 12 ładunków na klimat, a także dodawać 20 nowych ładunków na klimat. Te przedziały ładunkowe są ponumerowane od 0 do 31, gdzie przedziały 0-11 są domyślnie używane ładunki TTD, a przedziały 12-31 domyślnie zawierają niezainicjowane śmieci (więc nie możesz ufać im, że mają sensowne informacje, musisz ustawić wszystkie ich właściwości ).
+
+{{en/Ottdp|1.9|no|ottdrev=11ab3c4e}} OpenTTD 1.9 zwiększa liczbę ładunków do 64.
+
+== Properties ==
+
+{| |-
+!Number!![[en/GRFActionsDetailed|Size]]!!Version!!Description
+|-
+|08||B||{{en/Ottdp|0.6|2.5}}||Bit number for bitmasks
+|-
+|09||W||{{en/Ottdp|0.6|2.5}}||TextID for the cargo type name
+|-
+|0A||W||{{en/Ottdp|0.6|2.5}}||TextID for the name of one unit from the cargo type
+|-
+|0B||W||{{en/Ottdp|0.6|2.5}}||TextID to be displayed for 1 unit of cargo
+|-
+|0C||W||{{en/Ottdp|0.6|2.5}}||TextID to be displayed for multiple units of cargo
+|-
+|0D||W||{{en/Ottdp|0.6|2.5}}||TextID for cargo type abbreviation
+|-
+|0E||W||{{en/Ottdp|0.6|2.5}}||Sprite number for the icon of the cargo
+|-
+|0F||B||{{en/Ottdp|0.6|2.5}}||Weight of one unit of the cargo
+|-
+|10,11||B||{{en/Ottdp|0.6|2.5}}||Penalty times
+|-
+|12||D||{{en/Ottdp|0.6|2.5}}||Base price
+|-
+|13||B||{{en/Ottdp|0.6|2.5}}||Color for the station list window
+|-
+|14||B||{{en/Ottdp|0.6|2.5}}||Color for the cargo payment list window
+|-
+|15||B||{{en/Ottdp|0.6|2.5}}||Freight status (for [[en/FreightTrains]] switch); 0=not freight, 1=is freight
+|-
+|16||W||{{en/Ottdp|0.6|2.5}}||Cargo classes
+|-
+|17||D||{{en/Ottdp|0.6|2.5}}||Cargo label
+|-
+|18||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 72}}||Substitute type for town growth
+|-
+|19||W||{{en/Ottdp|no|2.5|ttdprev=alpha 72}}||Multiplier for town growth
+|-
+|1A||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 72}}||Callback flags
+|-
+|1B||W||{{en/Ottdp|1.1|no|ottdrev=r21224}}||TextID for displaying the units of a cargo
+|-
+|1C||W||{{en/Ottdp|1.1|no|ottdrev=r21224}}||TextID for displaying the amount of cargo
+|-
+|1D||W||{{en/Ottdp|1.2|no|ottdrev=r23860}}||Capacity mulitplier
+|}
+
+== Descriptions ==
+
+=== Bit number for bitmasks (08) ===
+
+This value must be used in [[en/Action3]] and in cargo bit mask properties such as refit masks. Values 1C-1F should be safe to use (if they aren't already taken, of course) if you intend to maintain compatibility with GRFs unaware of the newcargos switch. Further assuming that no active GRFs support the toyland climate, you can use values 11-1A as well.
+
+Additionally, you can use the value FFh to disable the given cargo slot. This way, it won't appear in cargo type lists, but it won't be removed from things already on the map. If you disable a cargo, you'll probably want to zero out the cargo label (property 17) as well.
+
+This property only affects GRFs which do not have a [[en/Action0/Global Settings#cargo-translation-table-09 | cargo translation table]]. GRFs with such a table generally use the index of the cargo in the table instead of the value of this property to access a cargo. As such this property is more or less a default value for GRFs without cargo translation table. If you are unsure what value to assign to this property, set it to the same value as the cargo slot ID.
+
+=== TextID for the cargo type name (09) ===
+
+This textID should refer to the name of the cargo, capitalized, to match the TTD style (e.g. "Passengers", "Coal", "Gold Ore", "Milk")
+
+You can reuse existing [[en/TextIDs]] or create custom strings using [[en/Action4]] with an offset in the DCxx range. Note that you need to set language-id bit 7 as well in the Action4 for a custom string. (Also applies to properties 0A to 0D)
+
+=== TextID for one unit of the type (0A) ===
+
+This textID should refer to the cargo type name in the singular. Currently, this ID is used only in subsidy messages ("First Passenger service..." instead of "First Passengers service...", for example)
+
+=== TextID for 1 unit of cargo (0B) ===
+
+This textID will be used to display the amount of the cargo if there's exactly 1 unit waiting. Although there's only one unit waiting, you'll still have to use either the special character 7C (print signed word) or 87 (print amount in litres and add suffix " litres") so TTD removes the amount from its internal reference stack. For example, if you have a new cargo named "gold ore", this should be "\7C ton of gold ore", which will expand to "1 ton of gold ore". On the other hand, a liquid cargo named "milk" should be something like "\87 of milk", which will expand to either "100 litres of milk" or "1,000 litres of milk" (The multiplier for liquid cargos depends on miscmods.dontfixlitres. If it's on, the multiplier is 100, otherwise it's 1000)
+
+=== TextID for multiple units of cargo (0C) ===
+
+This textID will be used to display the amount of cargo if the amount waiting isn't exactly 1. You'll need the same special characters as above, but now they will be expanded according to the actual cargo waiting. Sticking to the example above, you'll need "\7C tons of gold ore" and "\87 of milk", which can expand to "42 tons of gold ore" and "42,000 litres of milk", accordingly. You will note that liquid cargos can have the same textID for both property 0B and 0C since they always use the plural form.
+
+=== TextID for cargo type abbreviation (0D) ===
+
+This textID will be used in the station list window to represent the cargo waiting. It should be a two-letter abbreviation prefixed by the special character 0E to switch to the microscopic font. The microscopic font has every letter capitalized, so capitalization isn't important here. Continuing the above example, gold ore could have this as "GO" and milk as "MK" ("ML" is already taken by mail).
+
+=== Sprite number for icon (0E) ===
+
+This is a sprite number of an old TTD sprite to be displayed in the station window for this cargo, or FFFFh if the icon should be found by following the action 3 associated with this cargo. The icon must not be bigger than 10x10 pixels. One icon will be shown for every 10 units of the cargo waiting, up to 23 icons, which is the maximum.
+
+=== Weight of one unit of the cargo (0F) ===
+
+This property defines the weight of 1 unit from the cargo, which will be used to calculate the weight of the vehicles when loaded. The unit is 1/16 ton (which is 62.5 kg). With the examples above, gold ore should have this as 16 (since 1 ton of gold ore should weigh exactly 1 ton), while milk should have this slightly above 16 (milk is denser than water).
+
+=== Penalty times and price factor (10,11,12) ===
+
+These three values define how much is paid for the delivery of the cargo type. The price factor is subject to inflation, but GRFs needn't care about this, the programme will adjust the price for them.
+
+The income generated from cargo delivery is calculated as:
+
+income=((((distance/2) * timefactor * amount_moved) >> 7) * cargopricefactor) >> 13
+
+where
+
+; a >> b : means a is arithmetically shifted right by b bits
+; distance : is the Manhattan distance between the two station signs
+; amount_moved : is the number of cargo units moved
+; cargopricefactor : is the value you set in property 12. Inflation will be applied automatically on it.
+; timefactor : is a multiplier in the range 0..255, calculated in the following way: (T1 is the value of property 10, T2 is the value of property 11, t is the time the delivery took, the unit is 185 game ticks (roughly 2.5 game days) )
+
+
+    if t<=T1 then timefactor=255
+    else if t<=(T1+T2) then timefactor=255-(t-T1)
+    else timefactor=255-(t-T1)-(t-T1-T2)
+    if the above rules result in a timefactor less than 31, 31 is used instead. 
+
+
+=== Color for the station list window (13) ===
+
+This color index will be used to draw the rectangle representing the amount waiting from the current cargo type in the station list window. The index should be given for the DOS palette. OpenTTD and TTDPatch will automatically translate the index for the Windows palette, if they use the windows base graphics.
+
+=== Color for the cargo payment list window (14) ===
+
+The graph of the current cargo will be drawn using this color in the cargo payment rates graph. The index should be given for the DOS palette, the Windows version of TTDPatch will automatically translate the index for the Windows palette.
+
+=== CargoClasses (16) ===
+
+See [[en/Action0Trains#cargo-classes-28-29|train prop. 28/29]] for a description of the utility of this property.
+
+This is a bit mask of all cargo classes to which this cargo could belong.
+The following classes are available:
+
+{| class="wikitable
+|-
+!bit
+!value
+!class name
+!wagon type<ref name=vehicle>Suggestion for vehicle types which transport this cargo</ref>
+!usage<ref name=refitusage>Suggestion how to best make use of this class in the refit masks of vehicles<br>OR to be included in the 'allowed classes' (train prop. 28), AND NOT in the 'disallowed classes' (train prop. 29)</ref>
+!vehicle tips<ref name=vehicleuse>Suggestions this class should be used in the property which excludes a class of cargos from a vehicle. One specific type of cargo could appear both as liquid or as piece goods (e.g. milk), which depends on the actual representation. Thus excluding the other would disallow refit to that cargo.</ref>
+!industry tips
+|-
+|0
+|1
+|Passengers
+|passenger wagon
+|OR
+|never exclude
+|do not combine with other flags
+|-
+|1
+|2
+|Mail
+|closed or mail wagon
+|OR
+|never exclude
+|do not combine with other flags
+|-
+|2
+|4
+|Express
+|closed or mail wagon
+|OR
+|never exclude, suitable for airplane or maglev
+|
+|-
+|3
+|8
+|Armored
+|armored or mail wagon
+|OR
+|never exclude
+|do not combine with other flags
+|-
+|4
+|10
+|Bulk (Uncountable)
+|open or hopper wagon
+|OR
+|never exclude
+|may be combined with Piece Goods or Liquid to simulate multiple modes of transport
+|-
+|5
+|20
+|Piece Goods (Countable)
+|closed or open wagon
+|OR
+|never exclude
+|may be combined with Bulk or Liquid to simulate multiple modes of transport
+|-
+|6
+|40
+|Liquid
+|tank wagon
+|OR
+|never exclude
+|may be combined with Piece Goods or Bulk to simulate multiple modes of transport
+|-
+|7
+|80
+|Refrigerated
+|refrigerated wagon
+|OR/AND NOT
+|only exclude, when Piece Goods included
+|also set Piece Goods
+|-
+|8
+|100
+|Hazardous
+|unknown
+|OR/AND NOT
+|only exclude, when special wagons are provided.
+|combine with Piece Goods, Liquid, Bulk or Express
+|-
+|9
+|200
+|Covered (weather protected)
+|closed wagon, any other wagon with tarpaulin or weather cover
+|OR/AND NOT
+|do not exclude for Liquid
+|combine with Piece Goods or Bulk
+|-
+|10
+|400
+|Oversized
+|stake/flatbed wagon
+|OR/AND NOT
+|only exclude, when Piece Goods included
+|combine with Piece Goods
+|-
+|11
+|800
+|Powderized (moist protected)
+|powder/silo wagon
+|OR/AND NOT
+|only exclude, when Bulk included
+|combine with Bulk
+|-
+|12
+|1000
+|Not Pourable
+|open wagon, but not hopper wagon
+|AND NOT
+|only exclude, when Bulk included
+|combine with Bulk
+|-
+|13
+|2000
+|reserved. No canonical specification
+| -
+| -
+| -
+| -
+|-
+|14
+|4000
+|reserved. No canonical specification
+| -
+| -
+| -
+| -
+|-
+|15
+|8000
+|special
+|and not
+|none
+|special use
+|do not set
+|}
+
+<references />
+
+Only cargos which are in class 0 (passengers) will appear in bus stations. Only cargos which are ''not'' in class 0 will appear in truck stations.
+
+Disclaimer: there is no guarantee that classes won't vary over time or between sets.  The classes of a cargo may change between different versions of a specific industry/cargo newgrf, or different classes may be set for the same cargo label by different industry/cargo newgrfs.   Feel free to use classes in your set for conveniently refitting to cargos, but if you - the vehicle author - care about specific cargos being transported in specific vehicles, use label based refits (changing labels without a very good reason is considered to be bad practice).
+
+=== Cargo label (17) ===
+
+Cargo labels are globally [[en/CargoTypes#cargo-labels|unique identifiers]] for a cargo type. They are used to allow vehicle grfs to easily support many cargo types, whether they are active or not and no matter what slot or bit they are using.
+
+Read about the [[en/Action0/Global Settings#cargo-translation-table-09|cargo translation table]] for further info.
+
+=== Substitute type and multiplier for town growth (18, 19) ===
+
+These properties allow you to modify how a cargo type affects town growth. Property 18 can contain one of the following values:
+
+{| |-
+!Value!!Meaning!!{{en/Ottdp|0.7|no}} Details<ref>This is the interpretation of OpenTTD. For TTDPatch see [http://www.tt-wiki.net/wiki/NewTownGrowthSwitches NewTownGrowthMechanism], which is quite different/unrelated.</ref>
+|-
+|00||Affect towns as passengers do||Cargo produced by houses is added to the statistics in the town GUI.
+|-
+|02||Affect towns as mail does||Cargo produced by houses is added to the statistics in the town GUI.
+|-
+|05||Affect towns as goods/candy does||See note about subsidies below.
+|-
+|09||Affect towns as water does||Second required cargo for towngrowth in the desert
+|-
+|0B||Affect towns as food/fizzy drinks do||First required cargo for towngrowth in desert/above snowline. Alse see note about subsidies below.
+|-
+|FF||Don't affect town growth (default)|| 
+|}
+
+<references />
+
+The incoming cargo amount is multiplied by property 19, then divided by 256 before it is added to the town statistics. This allows you to have smaller or bigger impact than original cargoes do. Please note that cargoes accepted by industries affect the closest town as well; for example, if you have an industry that accepts passengers, every passenger brought to the industry affects the town just like if they were transported to the town directly. Usually, it's not a good idea to have industries that process such cargoes; they should be accepted by towns only.
+
+{{en/Ottdp|0.6-1.1|no}} In OpenTTD up to 1.1 (not 1.2) property 18 also affects the creation of subsidies. Usually subsidies apply to cargo transportation between two industries. For cargos with substitution-type 05 or 0B the destination will be a town instead. Independent of property 18 subsidies from town to town are only created for cargo slot 0 (Passengers).
+
+=== Callback flags (1A) ===
+
+{| |-
+!Bit!!Value!!Var. 0C!!Callback
+|-
+|0||1||39||Custom profit calculation
+|-
+|1||2||145||Custom station rating calculation
+|}
+
+=== TextID for displaying the units of a cargo (1B) ===
+
+This textID is used by OpenTTD to show the "short cargo" form for cargo units, e.g. "10 litres" or "10 tonnes". This textID must be set after property 0B. The text this textID refers to should properly handle plurals, e.g. "\7B item\9A\15\80\9A\10\9A\11s\9A\12".
+
+The default for this textID depends on the default for property 0B; if the default 0B string has "litre", then the default for this textID will be the unit for litres. OpenTTD maps the following textIDs so you don't need to provide translations:
+
+{| |-
+!textID!!String
+|-
+|004f||<num> passenger(s)
+|-
+|0050||<num> tonne(s)
+|-
+|0051||<num> bag(s)
+|-
+|0052||<num> litre(s)
+|-
+|0053||<num> item(s)
+|-
+|0054||<num> crate(s)
+|}
+
+The "tonne" and "litre" strings (textID 0050 and 0052) are automatically updated based on the user settings of unit display, e.g. they "tonne" might become "kg". The "(s)" is for display purposes; in reality that is a choice list.
+
+=== TextID for displaying the amount of cargo (1C) ===
+
+This textID is used by OpenTTD to show the "long cargo" form for cargo units, e.g. "10 litres of water" or "10 tonnes of coal". This textID must be set after property 0c. The text this textID refers to should properly handle plurals, e.g. "\7B item\9A\15\80\9A\10\9A\11s\9A\12 of livestock".
+
+The default for this textID depends on the default for property 0C, but with support for plurals. For "X litre(s)" or "X tonne(s)" you should respectively use string codes 87 and 9A 0D.
+
+=== Capacity multiplier (1D) ===
+
+This defines the capacity (and indirectly loading speed) of vehicles carrying this cargo type, if the vehicle sets no specific capacity to this specific cargo type.
+
+Set this property to the amount of cargo a vehicle shall carry, which can carry 0x100 (256) tons of coal or 0x100 (256) thousand litres of water (whatever comparison is more suitable for your cargotype). Depending on whether your cargo type is light or heavy you should set this property either comparing the weight or the volume.
+
+The default value of this property is:
+{| |-
+! Cargo slot !! Default cargo in this slot !! Property 1D !! Meaning
+|-
+| 00 || PASS || 0x400 || A vehicle carrying 1 ton of coal, can carry 4 passengers.
+|-
+| 02 || MAIL || 0x200 || A vehicle carrying 1 ton of coal, can carry 2 bags of mail.
+|-
+| 05 || GOOD, SWET || 0x200 || A vehicle carrying 1 ton of coal, can carry 2 crates of goods/sweets.
+|-
+| xx || (everything else) || 0x100 || All other slots default to 0x100, i.e. 1 unit of cargo equals 1 ton of coal.
+|}
+
+== Przykład ==
