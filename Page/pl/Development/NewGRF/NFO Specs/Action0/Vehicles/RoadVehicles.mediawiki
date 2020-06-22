@@ -1,0 +1,218 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+<div style="float:right; padding-left:12px; background:none;">{{en/NFONavVehicles}}</div>
+
+== Wprowadzenie ==
+
+Definiowanie właściwości pojazdów drogowych.
+
+== Properties ==
+
+{| |-
+!Number!![[en/GRFActionsDetailed|Size]]!!Version!!Description!!Available for articulated parts
+|-
+|05||B||{{en/Ottdp|1.10|no}}||Roadtype / tramtype (see below)||should be same as front
+|-
+|08||B||{{en/Ottdp|0.6|2.0}}||Speed in mph*3.2||no
+|-
+|09||B||{{en/Ottdp|0.6|2.0}}||Running cost factor||should be zero
+|-
+|0A||D||{{en/Ottdp|0.6|2.0}}||Running cost base, see below||should be zero
+|-
+|0E||B||{{en/Ottdp|0.6|2.0}}||Sprite ID (FF for new graphics)||yes
+|-
+|0F||B||{{en/Ottdp|0.6|2.0}}||Capacity||yes
+|-
+|10||B||{{en/Ottdp|0.6|2.0}}||Cargo type, see [[en/CargoTypes]]<br/>
+{{en/GrfTill|7}} For GRF version 7 and below: Type B 'cargo slot'<br/>
+{{en/GrfFrom|8}} For GRF version 8 and above: Type A '(translated) cargo bit'
+||yes
+|-
+|11||B||{{en/Ottdp|0.6|2.0}}||Cost factor||should be zero
+|-
+|12||B||{{en/Ottdp|0.6|2.0}}||Sound effect: 17/19/1A for regular, 3C/3E for toyland<br/>{{en/Ottdp|1.6|no|ottdrev=r27507}} Since OpenTTD r27507 also custom sound effects from Action11 are allowed here.||no
+|-
+|13||B||{{en/Ottdp|1.1|2.0}} {{en/GrfFrom|2}}||Power in 10 hp, see below||should be zero
+|-
+|14||B||{{en/Ottdp|1.1|2.0}} {{en/GrfFrom|2}}||Weight in 1/4 tons, see below||should be zero
+|-
+|15||B||{{en/Ottdp|0.7|2.0}} {{en/GrfFrom|2}}||Speed in mph*0.8, see below||no
+|-
+|16||D||{{en/Ottdp|0.6|2.0}} {{en/GrfFrom|2}}||Bit mask of cargo types available for refitting (not refittable if 0 or unset), see column 2 (bit values) in [[en/CargoTypes]]||yes
+|-
+|17||B||{{en/Ottdp|0.6|2.5}} {{en/GrfFrom|6}}||Callback flags bit mask, see below||yes
+|-
+|18||B||{{en/Ottdp|1.1|2.5|ttdprev=alpha 30}}||Coefficient of tractive effort||should be zero
+|-
+|19||B||{{en/Ottdp|1.1|2.5|ttdprev=alpha 30}}||Coefficient of air drag||should be zero
+|-
+|1A||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 30}}||Refit cost, using 25% of the [[en/BaseCosts|purchase price cost base]]||yes
+|-
+|1B||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 44}}||Retire vehicle early, this many years before the end of phase 2 (see [[en/Action0General]])||no
+|-
+|1C||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 58}}||Miscellaneous vehicle flags||partly ("tram" should be same as front)
+|-
+|1D||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 58}}||Refittable cargo classes, see [[en/Action0Trains#cargo-classes-28-29|train prop. 28]]||yes
+|-
+|1E||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 58}}||Non-refittable cargo classes, see [[en/Action0Trains#cargo-classes-28-29|train prop. 29]]||yes
+|-
+|1F||D||{{en/Ottdp|0.6|2.5|ttdprev=r1210|ottdrev=r7191}}||Long format introduction date||no
+|-
+|20||B*||{{en/Ottdp|0.7|no|ottdrev=r13831}}||Sort the purchase list||no
+|-
+|21||B||{{en/Ottdp|1.1|no|ottdrev=r21240}}||Visual effect||yes
+|-
+|22||W||{{en/Ottdp|1.2|no|ottdrev=r22713}}||Custom cargo ageing period||yes
+|-
+|23||B||{{en/Ottdp|1.2|no|ottdrev=r23164}}||Make vehicle shorter, see [[en/Action0/Vehicles/Trains#shorter-train-vehicles-21|train property 21]]||yes
+|-
+|24||B n*B||{{en/Ottdp|1.2|no|ottdrev=r23291}}||List of always refittable cargo types, see [[en/Action0/Vehicles/Trains#list-of-always-refittable-cargo-types-2c-2d|train property 2C]]||yes
+|-
+|25||B n*B||{{en/Ottdp|1.2|no|ottdrev=r23291}}||List of never refittable cargo types, see [[en/Action0/Vehicles/Trains#list-of-always-refittable-cargo-types-2c-2d|train property 2D]]||yes
+|}
+
+== Description ==
+
+=== Roadtype or tramtype (05) ===
+{{en/Ottdp|1.10|no}} Roadtype or tramtype for the vehicle.  This is an index into the [[en/Action0Roadtypes|roadtype]] or [[en/Action0Roadtypes|tramtype]] translation table.
+
+This property:
+* will use property 1C bit 0 (flag 'vehicle is tram') to determine whether to use a roadtype or tramtype table
+* requires an appropriate roadtype or tramtype table to be loaded
+
+=== Running cost base (0A) and factor (09) ===
+
+TTD calculates all costs by multiplying a 48-bit base amount with an 8-bit factor. &nbsp;The base amount is changed according to inflation, whereas the factor remains constant.
+
+For the running costs of road vehicles, the following base amounts are available:
+
+{| |-
+!Type!!Value!!in little-endian notation
+|-
+|Road vehicle running cost base||4C48||48 4C 00 00
+|}
+
+Theoretically, you could use pointers to other [[en/BaseCosts|base amounts]] available in TTD, but these are the numbers TTD uses for road vehicles.
+
+=== Cost factor (11) ===
+
+The cost factor is a bit-coded value which determines how expensive a vehicle is. The table below gives you some values to use for finding the right price for your vehicles.
+
+{| |-
+!Cost factor!!Price
+|-
+|00||$ 0
+|-
+|01||$ 108
+|-
+|10||$ 1,750
+|-
+|20||$ 3,500
+|-
+|80||$ 14,000
+|-
+|FF||$ 27,890
+|}
+
+=== Realistic acceleration properties (13, 14, 15) ===
+
+Using property 15 to set the speed, it is possible to achieve speeds larger than 80 mph (127 km/h), to which property 08 is limited. When setting property 15, always set property 08 as well, so that the vehicle works reasonably well whether realistic acceleration is turned on or off. If property 15 is not set, the value from property 08 is used instead.
+
+{{en/Ttdp|}} TTDPatch uses these properties only if road vehicles are set to realistic acceleration in the NewCurveAndMountainHandling switch. They are ignored otherwise.
+
+{{en/Ottd|}} OpenTTD uses these properties always, if they are defined and gives the speed defined here precedence over the one defined in property 08.
+
+=== Callbacks (17) ===
+
+For road vehicles, the following [[en/Callbacks]] have to be enabled by setting the corresponding bit in property 17 (certain other, not as frequently used callbacks are available without setting a bit here):
+
+{| |-
+!Bit!!Value!!Variable 0C value!!Callback
+|-
+|1||2||11||Wagon length
+|-
+|2||4||12||Load amount
+|-
+|3||8||15||Set refitted capacity
+|-
+|4||10||16||Build articulated vehicle
+|-
+|5||20||19||show a suffix after the cargo type name
+|-
+|6||40||2D||Select color mapping for vehicle
+|-
+|7||80||33||Sound effect callbacks
+|}
+
+Bit is the bit you have to set, you do this by adding all the values for all the bits. Variable 0C value is what variable 0C will be set to, for checking it in the VarAction2 for callbacks.
+
+=== Coefficient of tractive effort (18) ===
+
+This cofficient sets what fraction of the vehicle weight is equal to the maximum tractive effort. &nbsp;This includes the effect of having some unpowered axles, as well as the coefficient of friction that is available.
+
+For a value of FF, the tractive effort is equal to the vehicle weight, for 80, it is half, and so on. &nbsp;If not set, a default of 4C is used, for a fraction of 0.30, corresponding to W<sub>adh</sub>=W and a coefficient of friction of 0.30, which is the value used by the patch before TTDPatch 2.0.1 alpha 19.
+
+=== Coefficient of air drag (19) ===
+
+This property sets the air drag coefficient c2 used for the realistic acceleration model, from 01 (no airdrag) to FF (most air drag) in arbitrary units. &nbsp;00 means to use the default value that depends on the top speed (to simulate the fact that high-speed engines are more streamlined).
+
+The default values are the following:
+
+{| |-
+!top speed (mph/1.6)!!&lt;16!!16!!24!!32!!48!!64!!96!!128!!192!!256!!...
+|-
+|c2||192||128||96||64||48||32||24||16||12||8
+|}
+
+For higher speeds, the series is continued in the same manner.
+
+Air drag in Newtons will then be c2*v*v with v in m/s, although it is probably futile to attempt to make c2 a realistic number due to the lack of TTd's consistent scaling. &nbsp;If a vehicle doesn't reach its historical top speed, you might try setting prop. 19 one or two higher than the default above, otherwise it's probably a good idea to leave it at the default.
+
+=== Refit cost (1A) ===
+
+Refit cost, using 25% of the [[en/BaseCosts|purchase price cost base]]. This property can be overridden by callback 15E.
+
+{{en/Ottdp|1.2|no|ottdrev=r23087}} If the refit cost factor is set to zero and bit 4 of the miscellaneous flags (1C) is set, auto-refitting is allowed.
+
+=== Miscellaneous flags (1C) ===
+
+This is a bit mask, with the following bits:
+
+{| |-
+!Bit!!Value!!Meaning
+|-
+|0||1||Vehicle is a tram/light rail vehicle and requires tram tracks to operate
+|-
+|1||2||Uses two company colors
+|-
+|2||4||reserved, do not use
+|-
+|3||8||reserved, do not use
+|-
+|4||10||{{en/Ottdp|1.2|no|ottdrev=r23087}} Auto-refitting is enabled for refits where callback 15E allows it or prop 1A specifies zero cost.
+|-
+|5||   20||{{en/Ottdp|1.2|no|ottdrev=r23861}} Use cargo multiplier for default cargo. See page about [[en/VehicleRefitting#misc-vehicle-flag-5-use-of-capacity-multiplier-for-default-cargo-set|vehicle refitting]].
+|-
+|6||   40||{{en/Ottdp|1.3|no|ottdrev=r24124}} Disable breakdown smoke effect.
+|-
+|7||   80||{{en/Ottdp|1.7|no|ottdrev=r27668}} [[en/Action2/Vehicles#composing-vehicles-from-multiple-sprites|Compose vehicle from multiple sprites.]]
+|}
+
+=== Long format introduction date (1F) ===
+
+Set the vehicle introduction date, in days since the year 0. This takes account of leap years; dividable by 4, but not 100 unless 400. A start date of 1920-01-01 is obtained with a value of 701265 (51 B3 0A 00). This property must be set after property 00 to take effect.
+
+{{en/Ottdp|no|}} In TTDPatch, dates after 2044 will be limited to 2044.
+
+=== Sort vehicle list (20) ===
+See sort vehicle list for [[en/Action0Trains#sort-vehicle-list-1a|trains]] for details.
+
+=== Visual effect (21) ===
+See the equivalent [[en/Action0Trains#visual-effects-and-wagon-power-22|train property]] for information about the meaning of all bits. There is no default effect for road vehicles, therefore values of 00..0F will show no visual effect. Bit 7 (disable wagon power) currently has no meaning and should be left at 0.
+
+=== Custom cargo ageing period (22) ===
+See custom cargo ageing period for [[en/Action0Trains#custom-cargo-ageing-period-2b|trains]] for details.
+
+== Przykład ==
+
+Do napisania
