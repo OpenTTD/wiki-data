@@ -1,0 +1,354 @@
+
+<!--{{-}}<br>-->{{en/Ambox| text = w trakcie edycji.}}<!-- -->
+==Wprowadzenie==
+
+W przeciwieństwie do [[en/VariationalAction2]], którego wyniki są zawsze określane na podstawie przewidywalnej decyzji, RandomAction2 może wykorzystać losowe wyniki do wybrania jednego z kilku wpisów [[en/Action2]].
+
+== Format ==
+
+The data looks as follows:
+
+ <Sprite-number> * <Length> 02 <feature> <set-id> <nowiki>[80|83]</nowiki> <random-triggers> <randbit> <nrand> <set-ids>
+
+From TTDPatch 2.6 r1850 and OpenTTD r12452, and '''for vehicles only''':
+
+ <Sprite-number> * <Length> 02 <feature> <set-id> 84 <count> <random-triggers> <randbit> <nrand> <set-ids>
+
+{| |-
+!'''Element'''!![[en/GRFActionsDetailed|'''Size''']]!!'''Description'''
+|-
+|<Sprite-number>||dec||A sequential sprite number
+|-
+|<length>||dec||The total number of bytes used in this action.
+|-
+|02||B||Defines action 02
+|-
+|<feature>||B||For what type of vehicle/station/... should this definition be used?
+|-
+|<set-id>||B||The ID of this action 2 (used like a cargo ID)
+|-
+|80, 83, 84||B||Type of random action, see below.
+|-
+|<count>||B||(when present) Location of controlling vehicle.
+|-
+|<random-triggers>||B||When to re-randomize
+|-
+|<randbit>||B||What random bit to use for this action 2
+|-
+|<nrand>||B||Number of set-ids to choose from, must be a power of 2
+|-
+|<set-ids>||W||Action 2 set-ids to choose from.
+|}
+
+== Description ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+===Feature===
+
+This sets the type of [[en/Features|feature]] that you wish to change. Set it to:
+
+{|- |
+!Value!![[en/Features|Feature]]
+|-
+|00||Trains
+|-
+|01||Road Vehicles
+|-
+|02||Ships
+|-
+|03||Aircraft
+|-
+|04||Stations
+|-
+|05||Canals/Rivers
+|-
+|07||Houses
+|-
+|09||Industry Tiles
+|-
+|0A||Industries
+|-
+|0D||Airports
+|-
+|0F||Objects
+|-
+|10||Railtypes
+|-
+|11||Airport Tiles
+|-
+|12||Roadtypes
+|-
+|13||Tramtypes
+|}
+
+=== set-ID ===
+
+This defines the number of this action 2. &nbsp;The ID can then be used as target in an action 3 or another variational/random action 2.
+
+=== 80/83/84 ===
+
+Use 80 to randomize the object (vehicle, station, building, industry, object) based on its own triggers and bits.
+
+Use 83 to randomize the object based on its "related" object (s.b.).
+
+Use 84 to randomize the vehicle based on any vehicle in the consist.
+
+{| |-
+!Feature!!Related object
+|-
+|Vehicles (00-03)||First vehicle of consist
+|-
+|Stations (04)||N/A
+|-
+|Houses (07)||N/A
+|-
+|Industry tiles (09)||Industry containing tile
+|-
+|Industries (0A)||N/A
+|-
+|Objects (0F)||N/A
+|}
+
+=== count ===
+
+For type 84, this specifies which vehicle's random bits this vehicle will be using and/or modifying.
+
+The low nibble (bits 0-3) specifies how far to count from the starting vehicle. If it is zero, the count will be read from GRF register 100h instead.
+
+The high nibble (bits 6-7, actually) specifies which vehicle is the starting vehicle, and which direction to count:
+
+{| |-
+!Value!!Meaning
+|-
+|0||count back (away from the engine), starting at this vehicle
+|-
+|4||count forward (toward the engine), starting at this vehicle.
+|-
+|8||count back, starting at the engine
+|-
+|C||count back, starting at the first vehicle in this chain of vehicles with the same ID, as for vehicle variable 41
+|}
+
+Bits 4-5 are reserved and must be zero, so other values of the high nibble are not allowed.
+
+=== random-triggers ===
+
+This is a bit mask of triggers which cause re-randomizing. Normally, any matching trigger causes the graphics to be randomized again, but if you add 80 to the bitmask, the re-randomizing only happens if '''all''' triggers have occurred.
+
+Trigger bits are feature-specific, see below.
+
+Note, that rerandomisation only occurs in the graphics chain, not for callbacks. So, if you use a random action only inside a callback and want to rerandomise the bits, you have to add a "dummy" rerandomisation RA2 into the graphics chain.
+
+Example:
+ -1 * -1   02 04 02
+           80                         // random in callback
+           00                         // no triggers
+           00                         // first random bit to use
+           \b 16                      // number of cases
+           \w 10 \w 11 \w 12 \w 13    // random cases
+           \w 14 \w 15 \w 16 \w 17
+           \w 18 \w 19 \w 20 \w 21
+           \w 22 \w 23 \w 24 \w 25
+ 
+ -1 * -1   02 04 01
+           85 0C 00 \wx FFFF
+           01
+           \w 2 \w 14 \w 14           // callback 14
+           \w 3                       // graphics chain
+ 
+ -1 * -1   02 04 00
+           80                         // dummy random outside callback
+           04                         // train arrival
+           00                         // first bit to rerandomise
+           \b 16                      // number of cases
+           \w 1 \w1 \w 1 \w1          // all cases the same, only for triggering rerandomisation
+           \w 1 \w1 \w 1 \w1
+           \w 1 \w1 \w 1 \w1
+           \w 1 \w1 \w 1 \w1
+ 
+ -1 * -1   03 04 01 00 00 \w 0        // action 3
+
+=== randbit ===
+
+{{en/Ottdp|no|&lt;2.5|ttdprev=alpha30}} For versions before TTDPatch 2.0.1 alpha 30, leave this at 00. It doesn't quite work the way intended (it was supposed to allow independent random chains, but currently everything is re-randomized at the same time, thereby defeating this mechanism).
+
+{{en/Ottdp| |2.5|ttdprev=alpha 30}} Since TTDPatch 2.0.1 alpha 30, only those bits that actually get triggered will be re-randomized. Prior versions always re-randomized all bits. This will make it possible to have independent sets of bits for independent triggers (or untriggered bits, set only at the time of purchase). Setting randbit determines the first bit to be re-randomized, as well as basing the random graphics on. The total number of bits used is the 2-logarithm of nrand below (e.g., for nrand=16, 4 bits are used).
+
+=== nrand ===
+
+Number of different sets to choose from. &nbsp;This must be a power of 2, i.e. 2, 4, 8, 16 etc.
+
+=== set-ids ===
+
+Action 2 IDs to randomly choose from
+
+== Triggers ==
+
+{| |-
+!rowspan="2"|Feature
+!colspan="2"|Random bits
+!rowspan="2"|Triggers
+|-
+!Self!!Related
+|-
+|Vehicles||8||8 read-only||yes
+|-
+|Stations||16 + 4 <ref name="stationshared">16 Bits shared for the whole station/airport (airport and station share the same bits). 4 bits per tile.</ref><ref>TTDPatch actually only implements 8 shared random bits (plus 4 per tile). Bits 8-15 are always zero.</ref>
+|no||yes
+|-
+|Canals||8||no||no
+|-
+|Houses||8||no||yes
+|-
+|Industry tiles||8||16||yes
+|-
+|Industries||16||no||no
+|-
+|Airports||16 <ref name="stationshared"/>||no||no
+|-
+|Objects||8||no||no
+|-
+|Railtypes||2||no||no
+|-
+|Roadtypes||2||no||no
+|-
+|Tramtypes||2||no||no
+|-
+|Airport tiles||16 + 4 <ref name="stationshared"/>||no||no
+|}
+<references/>
+
+=== Vehicles ===
+
+Vehicles have 8 random bits, and the following triggers:
+
+{| |-
+!Bit!!Value!!Version!!Trigger
+|-
+|0||01||{{en/Ottdp|0.6|2.0}}||Vehicle gets new load of cargo (only after it was empty)
+|-
+|1||02||{{en/Ottdp|0.6|2.0}}||Vehicle enters a depot and is serviced
+|-
+|2||04||{{en/Ottdp|0.6|2.5}}||The consist has unloaded all cargo
+|-
+|3||08||{{en/Ottdp|0.6|2.5}}||Any vehicle of the consist receives cargo
+|-
+|4||10||{{en/Ottdp|0.6|2.5}}||[[en/Callbacks#32-day-callback-32 |Callback 32]] returned 1
+|}
+
+The consist trigger bits 2 and 3 allow re-randomizing whenever the consist receives cargo after fully unloading. They should be used with action 2 type 80, not 83, and the random-triggers variable should have 80 added to it, to make the re-randomizing happen only if the consist was empty and '''then''' received new cargo.
+
+Vehicles can read the random bits of other vehicles (using random action type 83 or 84), but they can only trigger
+rerandomisation of their own bits. Do not specify any triggers for rerandomisation when accessing random bits of other vehicles (via type 83 or 84), it will not do what you think.
+
+=== Stations ===
+
+Stations have 16+4 random bits. Bits 0 to 15 are a property of the station as a whole, and bits 16 to 19 are different for each tile. &nbsp;To get tile-based randomness, therefore use randbit=10 and nrand of no more than 16 (since only 4 random bits are available per tile).
+
+{| |-
+!Bit!!Value!!Version!!Trigger
+|-
+|0||01||{{en/Ottdp|1.3|2.5}}||new cargo waiting
+|-
+|1||02||{{en/Ottdp|1.3|2.5}}||no more cargo
+|-
+|2||04||{{en/Ottdp|1.3|2.5}}||train arrives (starts unloading/loading)
+|-
+|3||08||{{en/Ottdp|1.3|2.5}}||train leaves (done unloading & loading)
+|-
+|4||10||{{en/Ottdp|1.3|2.5}}||train loads or unloads cargo
+|-
+|5||20||{{en/Ottdp|1.3|2.5}}||train reserves platform (using PBS)
+|}
+
+Also note that none of the above triggers will actually trigger unless prop. 12 has at least one bit set. &nbsp;Triggers 01 will be triggered for any of the cargo types set in prop. 12, but trigger 02 will only be triggered if all of those cargo types have no more cargo waiting. Triggers 04, 08 and 20 are triggered no matter what cargo types the train transports, as long as prop. 12 is not zero.
+
+Triggers 04, 08, 10 and 20 only affect the platform on which they occur, as well as the random bits of the station, but not other platforms.
+
+Because the 'occured triggers' are only stored once per station (not distinguishing tiles or cargo types), adding 80 to 
+random-triggers does not make a lot of sense.
+
+=== Town building triggers ===
+
+Town buildings have 8 random bits.
+
+{| |-
+!Bit!!Value!!Version!!Trigger
+|-
+|0||01||{{en/Ottdp|0.6|2.5}}||the building tile is processed in the periodic tile processing loop
+|-
+|1||02||{{en/Ottdp|0.6|2.5}}||the top tile of the building is processed in the periodic tile processing loop
+|}
+
+The periodic tile processing loop constantly processes the tiles of the map, processing any given tile in every 256 ticks (approx. 3.5 TTD days). Since no "real" event happens to town buildings, you have only this opportunity to re-randomize the look of your building.
+
+If every 3.5 days is too fast for you, you can multiply the time-out by setting property 16 for the given tile. The time-out is 256 ticks*(prop. 16+1), so 0 means every 3.5 days, 1 means every 7 days, 2 means every 10.5 days and so on.
+
+If trigger 02 is activated, all parts of the building that has this trigger set will get the same random bits, allowing you to randomize a multi-tile building as one unit. On the other hand, if the tiles of a multi-tile building have trigger 1 set, all tiles will be randomized individually. Note that all tiles of a multi-tile building get the same value when building the building.
+
+=== Industry tile triggers ===
+
+Industry tiles have 8+16 random bits. Accessed through random action 2 type 80, you get 8 tile-specific bits, and accessed through random action 2 type 83, you get 16 industry-specific bits. The triggers are the same for both. Triggers 02 and 04 are triggered for all tiles of the industry at once. Every tile can rerandomise both its own random bits and those of the industry. That is every tile can specify some bits of the industry to rerandomize, and the union of all those bits will be rerandomsied at the end.
+
+{| |-
+!Bit!!Value!!Version!!Trigger
+|-
+|0||01||{{en/Ottdp|0.6|2.5}}||the building tile is processed in the periodic tile processing loop<ref>{{en/Ottdp|no| |}} Rerandomisation of the shared bits of the industry does not happen properly in current TTDPatch.</ref>
+|-
+|1||02||{{en/Ottdp|0.6|2.5}}||triggers simultaneously for all tiles of the industry every 256 ticks. If the industry is a primary one, output cargo is generated at the same time.
+|-
+|2||04||{{en/Ottdp|0.6|2.5}}||cargo is delivered to the industry. If the industry is a processing one, output cargo is generated at the same time.
+|}
+<references />
+
+Trigger 1 works similarly to trigger 1 for houses except that you cannot multiply the timeout: it's always 256 ticks.
+
+Industry tiles can rerandomise both their own random bits as well as the random bits of the industry (via random action type 83).
+The remembered triggers for rerandomisation with 80 added to the triggers are in both cases the same per tile.
+
+Industries have random bits. However, they can only be rerandomised by their tiles.
+
+=== Canals ===
+
+Canals / Rivers have 8 random bits.
+
+There is currently no way to influence the random byte creation via triggers, internally the bits are feed from VarAction2Canals var 83 that is set when building a canal. Feature ids not supported by VarAction2Canals are undefined and should never be used.
+
+=== Objects ===
+
+Objects have 8 random bits per tile of the object.
+
+There are no triggers for objects however.
+
+Also note that the random bits are unique to each tile in the object, and are not shared across the whole object.
+
+=== Railtypes ===
+
+Rail tiles have 2 pseudo random bits, based on tile location.
+
+There are no triggers.
+
+=== Roadtypes ===
+
+Road tiles have 2 pseudo random bits, based on tile location.
+
+There are no triggers.
+
+=== Tramtypes ===
+
+Tram tiles have 2 pseudo random bits, based on tile location.
+
+There are no triggers.
+
+=== Other features ===
+
+All features not mentioned in the list above have neither random bits nor triggers, including towns (which would be accessed using random action 2 type 83 for stations and industries).
+
+==Przykład==
