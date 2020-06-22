@@ -1,0 +1,42 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+==Wprowadzenie==
+
+Od wersji TTDPatch 2.0.1 alpha 16 możliwe było użycie akcji D do odczytu parametrów innych plików GRF. Dzięki temu możesz spróbować użyć ustawień dla innego pokrewnego GRF, zanim wrócisz do domyślnego kodu.
+
+== Format ==
+
+<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 0D &lt;target&gt; 00 &lt;param&gt; FE &lt;GRFID&gt;</pre>
+
+{| class="wikitable"
+|-
+!'''Element'''
+![[en/GRFActionsDetailed|'''Size''']]
+!'''Description'''
+|-
+|0D
+|B
+|Defines action 0D
+|-
+|&lt;target&gt;
+|B
+|Target parameter
+|-
+|&lt;param&gt;
+|B
+|Parameter number of the other GRF file that you want to read
+|-
+|FE
+|B
+|Defines a special variable access
+|-
+|&lt;GRFID&gt;
+|D
+|The GRFID whose parameter you want to read
+|}
+
+Spowoduje to zapisanie parametru &lt;param&gt; pliku GRF z GRFID &lt;GRFID&gt; do &lt;target&gt;
+
+Za pomocą parametru FE można odczytać akcję 14 NewGRF innej wersji NewGRF w OpenTTD. Zwraca 0, jeśli akcja 14 nie ustawiła żadnej wersji NewGRF.
+
+Jeśli nie można znaleźć GRFID lub parametr nie jest zdefiniowany, zamiast tego używana jest wartość 0 (bez względu na to, czy bit 7 operacji jest ustawiony, czy nie).
