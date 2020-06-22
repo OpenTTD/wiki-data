@@ -1,0 +1,169 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+==Wprowadzenie==
+
+Kafelki przemysłowe działają podobnie do budynków miejskich, z tym wyjątkiem, że nie są samodzielne; zawsze są częścią branży.
+
+Defining industry tiles follows the same schema as houses do: to start using an ID, you first need to define it by setting property 8 for it. If you try to reference an ID (either via action0 or via action3) that isn't defined, your request is ignored, but not reported as an error, either. This means that if you want to conditionally define an ID, all you need to do is skipping the action0 that sets property8, and everything else gets skipped automatically.
+
+Industry tile IDs are unique within each grf file. The per-GRF ID is specified as a byte, which means no GRF can define more than 256 tile IDs. You should use your industry tile IDs sparingly. [[en/VariationalAction2/Industry Tiles#relative-position-43| Variational action 2 variable 43]] for industry tiles can help you limiting tile consumption to 2 or 3 per industry. Avoid using tile FFh, so the tileID can be turned into an extended byte (in Action 3) in the distant future without breaking your NewGRF.
+
+{{en/Ttdp|}} In total, TTDPatch can have up to a total of 256 new industry tile IDs (i.e. old tile types don't count).
+
+{{en/Ottd|}} OpenTTD can have 512 IDs for all active grf files, but that includes non-overridden original tiles.
+
+== Properties ==
+
+{| |-
+!Property !![[en/GRFActionsDetailed|Size]] !!Version !! Description
+|-
+|08||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 43}}||Substitute building type
+|-
+|09||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 43}}||Industry tile override
+|-
+|0A,0B,0C||W||{{en/Ottdp|0.6|2.5}}||Tile acceptance
+|-
+|0D||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 49}}||Land shape flags
+|-
+|0E||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 54}}||Callback flags
+|-
+|0F||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 54}}||Animation information
+|-
+|10||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 54}}||Animation speed.
+|-
+|11||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 54}}||Triggers for callback 25
+|-
+|12||B||{{en/Ottdp|0.6|2.5|ttdprev=beta 2}}||Special flags
+|-
+|13||V||{{en/Ottdp|1.9|no|ottdrev=e66cec8f}}||Tile acceptance list
+|}
+
+== Description ==
+
+=== Substitute tile type (08) ===
+
+This tile type will be used instead of your new one if your definition isn't available for any reason. Valid values are [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#Class8 00h-AEh]. Assigning this property copies the properties of the old type just like it does with houses.
+
+If this tile's action 3 appears before this property is set, the action 3 will have no effect.
+
+=== Industry tile override (09) ===
+
+Works like the house override property for houses.
+
+=== Tile acceptance (0A, 0B, 0C) ===
+
+These three words define what cargoes the tile accepts, and how much of them. The low byte defines the type of the cargo according to the current climate, while the high byte defines the degree of acceptance in 1/8 units. If you don't need all three cargo types, just zero out the high byte of the extra properties.
+
+{{en/GrfFrom|7}} From GRF version 7 and above, the meaning of the low byte changes: instead of a climate-dependent cargo slot number, you have to give a climate-independent cargo ID. If your GRF has a cargo translation table, then this ID is the index in that table; otherwise, it's the cargo bit. Acceptance of cargoes not currently present will automatically be disabled.
+
+{{en/Ottdp|1.9|no|ottdrev=e66cec8f}} These properties only support three cargos. Use property 13 instead to list more cargo types. 
+
+=== Land shape flags (0D) ===
+
+This property defines which slopes the tile can be built on.
+
+{| |-
+!Bit!!Value!!Version!!Meaning
+|-
+|0||1||{{en/Ottdp|0.6|2.5}}||NW edge cannot be lowered
+|-
+|1||2||{{en/Ottdp|0.6|2.5}}||NE edge cannot be lowered
+|-
+|2||4||{{en/Ottdp|0.6|2.5}}||SW edge cannot be lowered
+|-
+|3||8||{{en/Ottdp|0.6|2.5}}||SE edge cannot be lowered
+|-
+|4||10||{{en/Ottdp|0.6|2.5}}||Can only be built on flat land
+|-
+|5||20||{{en/Ottdp|0.6|2.5|ttdprev=alpha 58}}||The tile is allowed on both land and water
+|}
+
+Industry tiles are never built on steep slopes unless [[en/Callbacks#custom-shape-check-2f |callback 2F]] is enabled, but bits 0..4 are ignored in that case.
+
+Bit 5 can be used to allow tiles of land industries built on water or vice versa. It effectively disables the land/water check code for the tile. If you need to customize the behavior further, you can use [[en/Callbacks#custom-shape-check-2f |callback 2F]] to decide what kind of water/land is allowed.
+
+;'''PLEASE NOTE''': Be careful when setting this property. If you fail to set it correctly, your industry may end up building on a hillside, which is probably not what you want. The easiest way is to set bit 4 for middle tiles, bit 0 for the tiles along the SE edge, bit 1 for those along the SW edge and so on.
+
+=== Callback flags (0E) ===
+
+{| |-
+!Bit!!value!!version!!meaning
+|-
+|0||1||{{en/Ottdp| | }}||use [[en/Callbacks#next-animation-frame-1a-26-141-153-158 |callback 26]] to decide the next animation frame
+|-
+|1||2||{{en/Ottdp| | }}||use [[en/Callbacks#length-of-animation-frame-20-27-142-154-15a |callback 27]] to decide animation speed
+|-
+|2||4||{{en/Ottdp| |2.5|ttdprev=alpha 55 vcs 3}}||use [[en/Callbacks#decide-cargo-acceptance-2b |callback 2B]] to decide amount of acceptance
+|-
+|3||8||{{en/Ottdp| |2.5|ttdprev=alpha 55 vcs 3}}||use [[en/Callbacks#get-accepted-cargo-types-2a-2c |callback 2C]] to decide accepted types
+|-
+|4||10||{{en/Ottdp| | }}||use [[en/Callbacks#custom-shape-check-2f |callback 2F]] to check if a slope is suitable
+|-
+|5||20||{{en/Ottdp| | }}||use [[en/Callbacks#decide-drawing-default-foundations-30-14e-150 |callback 30]] to decide if default foundations need to be drawn
+|-
+|6||40||{{en/Ottdp| |2.5|ttdprev=beta 3}}||use [[en/Callbacks#disable-autosloping-3c-14f-15d |callback 3C]] to allow or deny autosloping below the tile
+|}
+
+Please note that [[en/Callbacks#animation-control-1b-25-140-152-159 |callback 25]] doesn't have a bit here. To use [[en/Callbacks#animation-control-1b-25-140-152-159 |callback 25]], simply set the wanted bits in property 11 and it will work as intended.
+
+=== Animation information (0F) ===
+
+The low byte specifies the number of animation frames minus one, so 00 means 1 frame, 01 means 2 frames etc. The maximum number of frames is 256, although you can have some problems if your animation exceeds FD (253) frames. The high byte must be 0 for non-looping animations and 01 for looping animations. Every other value is reserved for future use. In addition, if the whole word contains FFFF, animation is turned off for this tile (this is the default value).
+
+=== Animation speed (10) ===
+
+The meaning is the same as for house property 1B, but the lower limit is 0 instead of 2, so the fastest possible animation changes frames every game tick (27ms). The default value is 2.
+
+=== Triggers for [[en/Callbacks#animation-control-1b-25-140-152-159 |callback 25]] (11) ===
+
+Call [[en/Callbacks#animation-control-1b-25-140-152-159 |callback 25]] when:
+
+{| |-
+!Bit!!Value!!Version!!Meaning||Var 18
+|-
+|0||1||{{en/Ottdp|0.6|2.5}}||the construction state changes||
+|-
+|1||2||{{en/Ottdp|0.6|2.5}}||the tile is processed in the periodic processing loop||
+|-
+|2||4||{{en/Ottdp|0.6|2.5}}||the industry of the tile is processed in the periodic processing loop (synchronized animation)||
+|-
+|3||8||{{en/Ottdp|0.6|2.5}}||the industry of the tile receives input cargo from a station||
+|-
+|4||10||{{en/Ottdp|0.6|2.5|ttdprev=beta 2}}||the industry distributes its output cargo to one of the stations nearby||
+|}
+Currently no trigger provides additional information in var 18.
+
+=== Special flags (12) ===
+
+{| |-
+!Bit!!Value!!Meaning
+|-
+|0||1||[[en/Callbacks#next-animation-frame-1a-26-141-153-158 |Callback 26]] needs random bits
+|-
+|1||2||{{en/Ottdp|1.9|no|ottdrev=e66cec8f}} In addition to the cargotypes set by property 0A..0C and 13, the tile accepts all cargotypes which the industry accepts.
+* This considers industry properties 11 and 26 and callback 14B.
+* This does not consider industry callback 3D.
+* This property adds 8/8 acceptance for the matching cargotypes. You can list negative acceptances (-8/8) in property 13 to exclude specific cargos.
+* Tile callback 2C overrides all acceptances including those added by this flag.
+|}
+
+=== Tile acceptance list (13) ===
+{{en/Ottdp|1.9|no|ottdrev=e66cec8f}} 
+
+Format:
+ <numinput> (<cargotype> <acceptance>)*
+
+{| |-
+!Size!!Variable!!Meaning
+|-
+|B||numinput||Number of (<cargotype> <acceptance>) pairs to follow,
+|-
+|B||cargotype||Cargotype (from CTT) to accept.
+|-
+|B||acceptance||Acceptance in 1/8 units. May be negative to negate property 12 bit 1.
+|}
+
+This property defines up to 16 cargotypes, which are accepted by the industry tile.
+Use this property instead of property 0A..0C.
+
+==Przykład==
