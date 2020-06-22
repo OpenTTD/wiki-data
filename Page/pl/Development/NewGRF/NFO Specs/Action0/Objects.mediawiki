@@ -1,0 +1,197 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+==Wprowadzenie==
+Definiowanie właściwości nowych obiektów.
+
+W przeciwieństwie do pojazdów lub nowych stacji, większość nowych obiektów nie ma rzeczywistego odpowiednika w TTD.
+
+The IDs are therefore free to be chosen and will in fact be allocated automatically by the patch. In action 0, you only specify IDs relative to the set, i.e. the ID of the first object type is 00, the second object type is 01 and so on. In total, each game can only have 255 object IDs for all active grf files.
+
+The property you '''must''' set for each object ID is 08 (in addition to defining an action 3 for it). Also, all object IDs must get their classes in the right order, starting from ID 00 onwards.
+
+== Properties ==
+{|
+!Number!![[en/GRFActionsDetailed|Size]]!!Version!!Description
+|-
+|08||D||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Class label, see below
+|-
+|09||W||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Text ID for class
+|-
+|0A||W||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Text ID for this object
+|-
+|0B||B||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||[[en/Action0General#climate-availability|Climate availability]]
+|-
+|0C||B||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Byte representing size, see below
+|-
+|0D||B||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Object build cost factor (sets object removal cost factor as well)
+|-
+|0E||D||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Introduction date, see below
+|-
+|0F||D||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||End of life date, see below
+|-
+|10||W||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Object flags, see below
+|-
+|11||W||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Animation information
+|-
+|12||B||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Animation speed
+|-
+|13||W||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Animation triggers
+|-
+|14||B||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Object removal cost factor (set after object build cost factor)
+|-
+|15||W||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Callback flags, see below
+|-
+|16||B||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Height of the building
+|-
+|17||B||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Number of object views
+|-
+|18||B||{{en/Ottdp|1.4|no|ottdrev=r25879}}||Measure for number of objects placed upon map creation
+|}
+
+Check [http://pics.lakie.net/newObject-ActionStructure.png Lakie's Graphical Representation of the newObject Specifications]
+
+== Descriptions ==
+
+=== Object class (08) ===
+
+Class labels are unique identifiers composed of the letters A-Z and/or the numbers 0-9, &nbsp;analoguous to [[en/Action0Stations#station-class-08|station class labels]].
+
+Their main use is to combine objects into classes and make them available by the top dropdown list in the object construction window.
+
+Unlike for stations, there is no default class for objects. Set authors have to specify their [[en/ObjectLabels|own labels]], although it is strongly recommended to follow a general scheme to try to avoid confusion.
+
+Class IDs must be set before any other property.
+
+=== Object class text ID (09) ===
+
+The text ID for this class (word value). This textid should be either a TTD textid or a D4xx textid (set via D0xx in action4).
+
+When specifying an object, you don't need to set a class name again if you already did for another one with the same class.
+
+=== Object text ID (0A) ===
+
+The text ID for the object for query and selection (word value). Same requirements as for property09.
+
+=== Object size (0C) ===
+
+The object size up to 15x15 tiles.
+
+This byte value is divided into two nibbles. The first defines the size in y direction and the second defines the size in x (i.e., stored as YX).
+
+Note that any value lower than 0x11 will be rejected.
+
+=== Build Cost (0D) ===
+
+The build cost multiplier. This is multiplied by the number of tiles for evaluation of construction and removal costs of an object.
+
+=== Introduction date (0E) ===
+
+Introduction date of an object, in days since the year 0. This takes account of leap years; divisible by 4, but not 100 unless 400. A start date of 1920-01-01 is obtained with a value of 701265 (51 B3 0A 00). In TTDPatch anything before 1920 is considered to be always available, and it should allow for objects to work past 2044, the date is also the very first date you can build the object.
+
+=== End of life date (0F) ===
+
+Last year an object can be build, in days since the year 0. Same requirements as above. Also note that it must be a minimum of a year (365 days) after the introduction date or TTDPatch will ignore it.
+
+=== Object flags (10) ===
+
+The following flags control object behaviour and are cached for built objects, so changing these flags will have no effect on already constructed objects.
+
+{|
+!Bit!!Value!!Version!!Meaning
+|-
+|0||1||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Only Available in the scenario editor<ref name="incompatible">Note that bits 0 and 7 are incompatible and setting both will make an object completely unavailable.</ref>
+|-
+|1||2||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Irremovable<ref>Object cannot be removed through normal dynamite, control must be held and the removal cost will be multiplied by 25 (this is the usual behaviour for most class A objects in TTDPatch).</ref>
+|-
+|2||4||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Anything Can Remove (owned land behaviour)
+|-
+|3||8||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Allow construction of the object on water
+|-
+|4||16||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Removal cost is actually income (owned land behaviour)
+|-
+|5||32||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Do not display foundations if on a slope
+|-
+|6||64||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Object has animation<ref>Setting this flag will allow the object's animation counter to be increased, must be set if you plan to make use of animations. Like stations you must enable animation on a per tile basis by means of the "built tile" trigger and callback 159.</ref>
+|-
+|7||128||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Only available during game play<ref name="incompatible" />
+|-
+|8||256||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Allows 2cc mapping for objects instead of the default 1cc
+|-
+|9||512||{{en/Ottdp|1.1|2.6|ttdprev=r2331}}||Disallows construction on land (also has bit 3 behaviour)
+|-
+|10||1024||{{en/Ottdp|1.1|2.6|ttdprev=r2331}}||Draws the water under the object<ref>Only applies when built on top of a water tile, also replaces the ground tile of the object completely. (Does not work when object built on sloped water tiles).</ref>
+|-
+|11||2048||{{en/Ottdp|1.1|no|ottdrev=r21455}}||Allow bridge over the object taking the building height into account
+|-
+|12||4096||{{en/Ottdp|1.1|2.6|ottdrev=r21455|ttdprev=r2360}}||Random bits in the "next animation frame" callback
+|-
+|13||8192||{{en/Ottdp|1.4|no|ottdrev=r25878}}||Scale amount of objects placed on map generation not by map area, but roughly by the length of the coastline
+|}
+
+<references />
+
+=== Animation information (11) ===
+
+The low byte specifies the number of animation frames minus one, so 00 means 1 frame, 01 means 2 frames etc. The maximum number of frames is 256, although you can have some problems if your animation exceeds FD (253) frames. The high byte must be 0 for non-looping animations and 01 for looping animations. Every other value is reserved for future use. In addition, if the whole word contains FFFF, animation is turned off for this object (this is the default value).
+
+Since you can't have properties for individual object tiles, this property applies for every tile of the object. If you don't want to animate some tiles, you should check the current position during [[en/Callbacks#animation-control-1b-25-140-152-159|callback 159]] and return FD if the current tile doesn't need to be animated. If you also need animations of different length per tile, you'll have to use [[en/Callbacks#next-animation-frame-1a-26-141-153-158|callback 158]] for that.
+
+=== Animation speed (12) ===
+
+The meaning is the same as for [[en/Action0Houses#animation-speed-1b|house property 1B]], but the lower limit is 0 instead of 2, so the fastest possible animation changes frames every game tick (27ms). The default value is 0.
+
+=== Animation triggers (13) ===
+
+This is a bit mask of events that should trigger [[en/Callbacks#animation-control-1b-25-140-152-159|callback 159]], allowing to change the animation state
+
+{|
+!Bit!!Value!!Meaning!!Happens on!!Var 18
+|-
+|0||1||Object is built||all tiles||
+|-
+|1||2||Periodic tile loop||single tile||
+|-
+|2||4||Synchronised periodic tile loop||all tiles||
+|}
+Currently no trigger provides additional information in var 18. 
+
+The synchronised periodic tile loop is called directly after the (unsynchronised) periodic tile loop of the northern tile.
+
+=== Object removal cost factor (14) ===
+
+Cost factor for the removal of an object. This must be set after property 0D (object build cost factor) as that overwrites this value.
+
+=== Callback flags (15) ===
+
+For objects, the following [[en/Callbacks]] can be defined by setting the corresponding bit in property 15:
+
+{|
+!Bit!!Value!!Variable 0C value!!Callback
+|-
+|0||1||157||Custom slope check
+|-
+|1||2||158||Decide next animation frame
+|-
+|2||4||15A||Decide animation speed
+|-
+|3||8||15B||Decide colour of building
+|-
+|4||16||15C||Show additional text in the build object window
+|-
+|5||32||15D||Allow/disallow autosloping
+|}
+
+=== Building height (16) ===
+
+Set the height of the building in heightlevels (8 pixels). For example if the structure is 16 pixels high you set this property to 2.
+
+{{en/Ottdp|1.1|no|ottdrev=r21455}} In OpenTTD this property is used to determine the height of the build object window; the height for the object preview is set to 32 + "value of property 16" * 8. The property is also uses to determine how high a bridge must be if it is allowed by the bit in property 10.
+
+=== Number of views (17) ===
+
+Objects may have "views", i.e. different graphical representations, e.g. used to show rotated views of an object. Number of views may be 1, 2, or 4. Default value is 1.
+
+For non-square objects, x and y sizes are swapped for odd views. I.e., giving an object size of 1*2 (x = 1, y = 2), it will be displayed as 1*2 for num = <nowiki>[</nowiki>0,2] (x-direction) but as 2*1 for num = <nowiki>[</nowiki>1,3] (y-direction).
+
+Use object varaction2 var48 to access particular views of an object.
+==Przykłady==
