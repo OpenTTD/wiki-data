@@ -1,0 +1,121 @@
+
+<!--{{-}}<br>-->{{en/Ambox| text = w trakcie edycji.}}<!-- -->
+==Wprowadzenie ==
+
+Zwykła akcja 2 może uzyskać dostęp do jednej zmiennej i wykonywać na niej ograniczone modyfikacje (shift, i dodawać, dzielić / modulo) zamiast prostego dostępu do zmiennej. Korzystając z zaawansowanej akcji 2, można wykonać prawie nieograniczoną liczbę wielu różnych operacji na kilku zmiennych.
+
+Ponadto za pomocą wywołań procedur (ze zmienną 7E) możliwe jest ponowne użycie bloków VarAction2 w kilku miejscach kodu NFO.
+
+== Format ==
+
+An advanced VarAction2 looks as follows:
+
+ <Sprite-number> * <Length> 02 <feature> <set-id> <type> <variable> <varadjust> '''[<operator> <variable> <varadjust>]'''... <nvar> (<set-id> <low-range> <high-range>){n} <default>
+
+The new elements are the <operator> (a byte), followed by another <variable> and <varadjust> pair. &nbsp;This sequence may be repeated as often as necessary, by setting the appropriate bit in the previous <varadjust> (see below).
+
+=== varadjust ===
+
+<varadjust> itself has the same format as a regular var. action 2, however to perform a calculation, bit 5 in <shift-num> has to be set:
+
+{|
+!Bit(s)!!Value!!Meaning
+|-
+|0..4||0..1F||number of bits to right shift <variable>
+|-
+|5||20||'''an <operator> <variable> <varadjust> triple follows this <varadjust>'''
+|-
+|6||40||This is a shift-and-add-divide adjustment.
+|-
+|7||80||This is a shift-and-add-modulo adjustment.
+|}
+
+Bit 5 needs to be set for each <shift-num>, except the last one that isn't going to be followed by another calculation (i.e., <operator> <variable> <varadjust> set). Bit 5 clear terminates the calculation and uses the resulting value for checking the ranges determining the set-id to use (or, if nvar=0, as a callback result).
+
+=== operator ===
+
+This field, and the following variable/varadjust pair, exist only if the previous shift-num had bit 5 set. This field has escape sequences for each of its valid values, as shown in the table below. See [[en/GRFActionsDetailed#byte-order|the discussion of escape sequences]] for further information on escape sequences in general. Can have the following values:
+
+{|
+!Value!!Escape!!Effect!!Version!!Notes
+|-
+|00||\2+||result = val1 + val2||{{en/Ottdp|0.6|2.5}}||
+|-
+|01||\2-||result = val1 - val2||{{en/Ottdp|0.6|2.5}}||
+|-
+|02||\2<||result = min(val1, val2)||{{en/Ottdp|0.6|2.5}}
+|rowspan=2|val1 and val2 are both considered signed
+|-
+|03||\2>||result = max(val1, val2)||{{en/Ottdp|0.6|2.5}}
+|-
+|04||\2u<||result = min(val1, val2)||{{en/Ottdp|0.6|2.5}}
+|rowspan=2|val1 and val2 are both considered unsigned
+|-
+|05||\2u>||result = max(val1, val2)||{{en/Ottdp|0.6|2.5}}
+|-
+|06||\2/||result = val1 / val2||{{en/Ottdp|0.6|2.5}}
+|rowspan=2|val1 and val2 are both considered signed
+|-
+|07||\2%||result = val1 mod val2||{{en/Ottdp|0.6|2.5}}
+|-
+|08||\2u/||result = val1 / val2||{{en/Ottdp|0.6|2.5}}
+|rowspan=2|val1 and val2 are both considered unsigned
+|-
+|09||\2u%||result = val1 mod val2||{{en/Ottdp|0.6|2.5}}
+|-
+|0A||\2*||result = val1 * val2||{{en/Ottdp|0.6|2.5}}||result will be truncated to B/W/D (that makes it the same for signed/unsigned operands)
+|-
+|0B||\2&||result = val1 & val2||{{en/Ottdp|0.6|2.5}}||bitwise AND
+|-
+|0C||\2<nowiki>|</nowiki>||result = val1 <nowiki>|</nowiki> val2||{{en/Ottdp|0.6|2.5}}||bitwise OR
+|-
+|0D||\2<nowiki>^</nowiki>||result = val1 <nowiki>^</nowiki> val2||{{en/Ottdp|0.6|2.5}}||bitwise XOR
+|-
+|0E||\2s or \2sto <ref name="renum1265">Supported since grfcodec and nforenum r1265 (1.0.0 and 3.4.4, respectively.)</ref>||var7D[val2]  = val1, result = val1||{{en/Ottdp|0.6|2.6|ttdprev=r1246}}||Store result. See [[en/Storages#temporary-storage|Temporary storage]].
+|-
+|0F||\2r or \2rst <ref name="renum1265"/>||result = val2 <ref>Operator 0F is only useful when using variable 7B, or immediately after operators 0E or 10, to store the result of a calculation, and then discard that result and start fresh.</ref>||{{en/Ottdp|0.6|2.6|ttdprev=r1246}}||
+|-
+|10||\2psto <ref name="grfcodec100">Supported since grfcodec 1.0.0 and nforenum 4.0.0.</ref>||var7C[val2] = val1, result = val1||{{en/Ottdp|0.6|2.6|ttdprev=r1315}}||Store result into persistent storage. See [[en/Storages#persistent-storage|Persistent storage]].
+|-
+|11||\2ror or \2rot <ref>Supported since grfcodec and nforenum r1655 (1.0.0 and 3.4.6, respectively.)</ref>||result = val1 rotate right val2||{{en/Ottdp|0.6|2.6|ttdprev=r1651}}||Always a 32-bit rotation.
+|-
+|12||\2cmp <ref name="grfcodec100"/>||see notes||{{en/Ottdp|0.6|2.6|ttdprev=r1698}}||Result is 0 if val1<val2, 1 if val1=val2 and 2 if val1>val2. Both values are considered signed. <ref name="compare">Operations 12 and 13 should be preferred over operation 01 (subtraction) when only the relation of the two values is needed and the difference itself is irrelevant. This is because operation 01 can overflow and give the wrong sign if the difference is too big, but comparisons work correctly for all values.</ref>
+|-
+|13||\2ucmp <ref name="grfcodec100"/>||see notes||{{en/Ottdp|0.6|2.6|ttdprev=r1698}}||The same as 12, but operands are considered unsigned. <ref name="compare"/>
+|-
+|14||\2<< <ref name="grfcodec100"/>||result = val1 << val2||{{en/Ottdp|1.1|2.6|ottdrev=r20332|ttdprev=r2335}}||shift left; val2 should be in the range 0 to 31.
+|-
+|15||\2u>> <ref name="grfcodec100"/>||result = val1 >> val2||{{en/Ottdp|1.1|2.6|ottdrev=r20332|ttdprev=r2335}}||shift right (unsigned); val2 should be in the range 0 to 31.
+|-
+|16||\2>> <ref name="grfcodec100"/>||result = val1 >> val2||{{en/Ottdp|1.1|2.6|ottdrev=r20332|ttdprev=r2335}}||shift right (signed); val2 should be in the range 0 to 31.
+|}
+
+where val1 is the value resulting from the current variable/varadjust pair (or the result of the previous calculations if this isn't the first pair) and val2 is the value resulting from the following variable/varadjust pair. By setting bit 5 of shift-num repeatedly, you can combine several variables together before making your decision.
+
+<references/>
+
+Note that a bitwise NOT can be done by XORing with variable 1A. Similarly, you can specify literal values (i.e. plain numbers instead of variables), by using variable 1A and an and-mask of the value you want. For example, to specify a literal 26, use variable=1A, shift-num=00 (or the higher bits set if you need further calculations), and and-mask=26. This works with B, W or D sized literals if you use the right and-mask size for the given type of action 2. The appropriate \b, \w, or \d escape sequence can be useful for specifying literals. See [[en/GRFActionsDetailed#byte-order|the discussion of escape sequences]] for further information.
+
+=== Using types 81/82 (etc) simultaneously ===
+{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 59}}
+Since TTDPatch 2.0.1 alpha 59, it is possible to access variables using both VarAction2 type 81 and 82 (and their W/D cousins) indirectly through the new variable 1C.
+
+This variable stores the result of the current VarAction2 and makes it available to the next VarAction2 in the chain. &nbsp;Therefore, to access, for instance when drawing a house, both house variables (type 81) and town variables (type 82), you would read the house variables in one var. action 2, type 81, and then chain to the next VarAction2, type 82. &nbsp;There, you now have access to the house variable value stored in variable 1C as well as the town variables in the regular variables.
+
+Note that to chain to the next VarAction2, you ''must not'' use nvar=0, because that returns the result value as a callback result. &nbsp;Instead, you need to use nvar=1, and specify the chained VarAction2 in both the <set-id> and <default> positions.
+
+{{en/Ottdp|0.6|2.6|ttdprev=r1246}}
+Since TTDPatch 2.6 r1246, you may also store values in the 7D array, where they will persist for the life of the action 2 chain, unless overwritten.
+
+=== Using procedures ===
+{{en/Ottdp|0.6|2.5|ttdprev=2.5 beta 7}}
+When the variable in a VarAction2 is 7E, the procedure given by the 60+x parameter is invoked. This means that the byte following the variable number (7E) specifies a variational or random action 2 ID to call, similarly to how a regular VarAction2 branches to other action 2 entries. However, instead of branching, it is a subroutine call, with the value calculated by the called entry being used as variable value.
+
+The called action 2 should return a callback result. {{en/Ottdp|0.6|2.6|ttdprev=r2367}} If the chain ends in a regular action2, the returned result is 0xFFFF. For earlier versions of TTDPatch the variable 7E value was undefined in this case.
+
+Because callback results are limited to 15 bits, to access the full 32 bit result you can read variable 1C instead (e.g. by and-ing the 7E result with 0 and then adding var. 1C).
+
+The feature of this called action 2 is ignored, and all variables accessed use the same feature as the calling VarAction2. It is however valid to use any type of VarAction2, e.g. types 81 and 82 and the various byte/word/dword sizes may be mixed. It is also valid to use nvar=00 to return the computed value as callback result, instead of specifying ranges, although this way the return value is still limited to 15 bits. When using a random action 2 in the called chain, random triggers are processed in the same way as in "normal" chains.
+
+{{en/Ottdp|0.6|2.5/2.6|ttdprev=r846, will be in yet unreleased 2.5 beta 10}}
+W TTDPatch 2.5 beta 9 i wcześniejszych oraz w TTDPatch 2.6 przed r846, VarAction2s, które próbują wykonać wiele wywołań sekwencyjnych (w przeciwieństwie do zagnieżdżonych), będą miały niezdefiniowane wyniki.
