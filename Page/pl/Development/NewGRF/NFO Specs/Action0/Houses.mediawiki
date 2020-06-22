@@ -1,0 +1,320 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+== Wprowadzenie ==
+
+W przypadku budynków miejskich (lub po prostu domów) przesunięcie określa pierwszy ID domu dla tej akcji 0. ID''`y'' domów, takie jak ID''`y'' stacji, są unikalne w każdym pliku grf, i w sumie każda gra może mieć tylko 255 ID''`ów'' w TTDPatch i 512 ID''`ów'' w OpenTTD dla wszystkich aktywnych plików grf.
+
+Aby rozpocząć korzystanie z ID domu, musisz go najpierw zdefiniować, ustawiając jego właściwość 08 (patrz poniżej). Jeśli spróbujesz zmodyfikować ID domu, którego właściwość 08 nie jest ustawiona, twoje żądanie zostanie zignorowane, ale również nie zostanie zgłoszone jako błąd. ID''`y'' domów, w przeciwieństwie do ID''`ów'' stacji, nie muszą być ustawione w kolejności, więc możesz użyć akcji 7, aby pominąć akcję 0 domów, których obecnie nie potrzebujesz (na przykład domy, które i tak nie pojawiają się w obecnym klimacie). Zaleca się to zrobić w celu zdefiniowania jak najmniejszej liczby ID''`ów'' , pozostawiając miejsce dla innych GRF. Nie musisz pomijać wszystkich zer akcji dla ID  domu, aby go wyłączyć; wystarczy pominięcie akcji 0, która ustawia właściwość 08.
+
+== Properties ==
+
+{| |-
+!Number!![[en/GRFActionsDetailed|Size]]!!Version!!Description
+|-
+|08||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||Substitute building type
+|-
+|09||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||Building flags
+|-
+|0A||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||Availability years
+|-
+|0B||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||Population
+|-
+|0C||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||Mail generation multiplier
+|-
+|0D||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||Passenger acceptance
+|-
+|0E||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||Mail acceptance
+|-
+|0F||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||Goods, food or fizzy drinks acceptance
+|-
+|10||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||LA rating decrease on removal (should be set to the same value for every tile for multi-tile buildings)
+|-
+|11||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||Removal cost multiplier (should be set to the same value for every tile for multi-tile buildings)
+|-
+|12||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||Building name ID
+|-
+|13||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||Building availability mask
+|-
+|14||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||House callback flags
+|-
+|15||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||House override byte
+|-
+|16||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 34}}||Periodic refresh multiplier
+|-
+|17||4*B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 35}}||Four random colours to use
+|-
+|18||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 35}}||Relative probability of appearing
+|-
+|19||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 38}}||Extra flags
+|-
+|1A||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 39}}||Animation frames
+|-
+|1B||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 39}}||Animation speed
+|-
+|1C||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 43}}||Class of the building type
+|-
+|1D||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 55 vcs 2}}||Callback flags 2
+|-
+|1E||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 55 vcs 2}}||Accepted cargo types
+|-
+|1F||W||{{en/Ottdp|0.6|2.6|ttdprev=r1554}}||Minimum life span in years
+|-
+|20||W||{{en/Ottdp|1.2|2.6|ottdrev=r23072|ttdprev=r1677}}||Cargo acceptance watch list
+|-
+|21||W||{{en/Ottdp|0.7|no|ottdrev=r13437}}||Long year (zero based) of minimum appearance
+|-
+|22||W||{{en/Ottdp|0.7|no|ottdrev=r13437}}||Long year (zero based) of maximum appearance
+|-
+|23||V||{{en/Ottdp|1.9|no|ottdrev=48b334cf}}||Tile acceptance list 
+|}
+
+When a town decides to expand, each active house type (both old and new ones) has a uniform probability to appear, so the more new houses you define, the fewer old TTD buildings will appear.
+
+== Descriptions ==
+
+=== Substitute building type (08) ===
+
+This building type will be used instead of your new one if your definition isn't available for any reason (the grf file is not found, for example).
+
+Don't set a substitute building type that is larger than your new one (for example, don't set 14 (stadium) for an 1x1 building) because this may corrupt savegames. Setting this property automatically copies every property of the substitute building to your new building, so you don't have to change properties that are the same as the substitute.
+
+House flags 40 and 80 are exceptions; these flags are never set automatically. Only the first property 08 setting copies properties; if you later change it, properties will stay.
+
+There's a special use of this property beginning from alpha 72: if you set it to FFh, you can disable an old house type. In this case, the ID used must be the number of old house type you want to disable. Disabling only prevents building the type in towns; houses already present on the map will stay unchanged. The type can still be overridden, and overriding affects houses present on the map.
+
+If this house's action 3 appears before this property is set, the action 3 will have no effect.
+
+=== Building flags (09) ===
+
+{| |-
+!Bit!!Value!!Meaning
+|-
+|0||1||This is a 1x1 building
+|-
+|1||2||This building can be built only on flat land (if clear, foundations are automatically displayed on sloped land)
+|-
+|2||4||This is a 2x1 building<ref name="large">If your building isn't 1x1, set flags for the north tile, then define the next 1 or 3 tiles tiles (by setting their property 8). The only bit that can be set in the flags of additional tiles is bit 5 (animation). There should be no property 8 setting between the first tile and the additional tiles.</ref>
+|-
+|3||8||This is a 1x2 building<ref name="large" />
+|-
+|4||10||This is a 2x2 building<ref name="large" /><ref>For 2x2 buildings, the first additional tile is the east one, the second is the west part and the third is the south part. You probably want to set the substitute for additional tiles to a TTD additional tile whose flags are already zero. 2x2 buildings are always built on flat land no matter how bit 1 is set.</ref>
+|-
+|5||20||Animation flag, set in tiles 04 and 05 (large office block). New buildings have a different animation scheme than large office blocks, but animation is still enabled with this bit.<ref>The animation flag works on a per-tile basis, so you should enable it for additional tiles of multi-tile buildings as well if you want all tiles to be animated.</ref>
+|-
+|6||40||This building is a church<ref name="only1">Only one church and one stadium can exist in a town. The town won't build buildings with the according flag set until the old church/stadium is removed. (This can be done by either the town or a player)</ref>
+|-
+|7||80||This building is a stadium<ref name="only1" />
+|}
+
+<references />
+
+=== Availability years (0A) ===
+
+The low byte is the minimum year, the high is the maximum. The building can only be built between these two years (inclusive). 1920 is added to both bytes before using the values.
+
+{{en/Ottdp|no| }}
+Since the year counting stops in TTDPatch in 2070 even with [[en/EternalGame]] on, start years above 150 mean "never", and end years above 150 mean "forever". In OpenTTD there is no limit for the maximum year (resp. it is 5000000).
+
+'''WARNING:''' Don't set the start year below 1930 (0Ah) unless you know what you're doing!
+
+{{en/Ttdp|}} If TTDPatch finds a building that is available before 1930, it will not build old building types until that year, so you have to provide at least one custom building type that is available before 1930 for every [[en/TownZones|town zone]], or TTD may deadlock while trying to create a random game or expand a town.
+
+{{en/Ottd|}} The availability of all active houses with the lowest availability year is set to start from year 0, so that always at least one house is available irrespective of starting year. Thus, if you de-activate default houses or set an introduction date prior to the default houses introduction year 1930, you should have at least for each [[en/TownZones|town zone]] a house with the same earliest availability year or you might end up with a situation where no house can be placed in a [[en/TownZones|town zone]].
+
+=== Population (0B) and Mail generation multiplier (0C) ===
+[[File:en/House production.png|frame|right|Actual house production roughly depends on squared value of the population / mail generation multiplier.]]
+
+The population of the town will be increased by the amount set in prop. 0B if this building is built. Additional house parts should have a population of zero. The higher this value is, the more passengers this building generates.
+
+The higher the mail generation multiplier is, the more mail the building generates. For multi-tile buildings, mail generation is done in per-tile basis, so you can specify different values for every tile, although distributing the generation equally between tiles is suggested.
+
+This is how exactly passengers are generated: In each periodic processing (i.e. every 256 ticks), a random value 0<=X<=255 is generated for each house tile. If X isn't smaller than the population of the tile, no passengers are generated. Otherwise, X/8+1 passengers are generated (rounded down). If there is a recession going on, the number of generated passengers is halved, but this division gets rounded up instead of down. Mail generation happens in a similar manner, but with a new random value, and checking against the mail generation multiplier instead of the population.
+
+You can further customize how the cargo is generated with the [[en/Callbacks#custom-cargo-production-2e |callback 2E]].<br style="clear:both" />
+
+=== Passenger (0D), Mail (0E) and Good/Food/Fizzy drinks (0F) acceptance ===
+
+The acceptance is given in units of 1/8th and must not be larger than 8 eighths.
+
+For property 0F, positive values indicate that the building accepts goods, and negative values (i.e. FF = 1/8th, FE = 2/8ths etc.) indicate acceptance of food or fizzy drinks, depending on the climate.
+
+All the above three values can be set independently for tiles of multi-tile buildings, since every tile is processed individually when determining what a station accepts.
+
+The type of accepted cargo can be modified using [[en/Action0Houses#accepted-cargo-types|property 1E]].
+
+{{en/Ottdp|no| }} Note that in TTDPatch the officefood switch may modify acceptance in the sub-arctic and subtropical climates.
+
+=== Building name ID (12) ===
+
+The ID of the text that should be displayed in the land query window. The name can also be set by [[en/Action4|action 4]] (see there). Should be set to the same value for every tile for multi-tile buildings.
+
+=== Building availability mask (13) ===
+
+{| |-
+!Bit!!Value!!Meaning
+|-
+|0..4||1,2,4,8,10||which [[en/VarAction2Houses#town-zone-42|town zone(s)]] the building can be built in
+|-
+|11||800||can appear in sub-arctic climate above the snow line
+|-
+|12||1000||can appear in temperate climate
+|-
+|13||2000||can appear in sub-arctic climate below the snow line
+|-
+|14||4000||can appear in subtropical climate
+|-
+|15||8000||can appear in toyland climate
+|}
+
+This property should be set to zero for additional building tiles.
+
+=== House callback flags (14,1D) ===
+
+For houses, the following [[en/Callbacks]] can be defined by setting the corresponding bit in property 14:
+
+{| |-
+!Bit!!Value!!Variable 0C value!!Version!!Callback
+|-
+|0||1||17||{{en/Ottdp| | }}||decide whether the house can be built on a given tile
+|-
+|1||2||1A||{{en/Ottdp| | }}||decide the following frame of the animations
+|-
+|2||4||1B||{{en/Ottdp| | }}||periodically start/stop the animation
+|-
+|3||8||1C||{{en/Ottdp| | }}||change animation when construction state changes
+|-
+|4||10||1E||{{en/Ottdp| | }}||decide the color of the building
+|-
+|5||20||1F||{{en/Ottdp| | }}||decide the cargos amounts accepted
+|-
+|6||40||20||{{en/Ottdp| | }}||decide the length of the current animation frame
+|-
+|7||80||21||{{en/Ottdp| | }}||trigger destruction of building
+|}
+
+Property 1D was introduced after all bits of property 14 were filled. Its usage is the same, only the meaning of bits is different:
+
+{| |-
+!Bit!!Value!!Variable 0C value!!Version!!Callback
+|-
+|0||1||2A||{{en/Ottdp| | }}||decide the cargo types accepted
+|-
+|1||2||2E||{{en/Ottdp| | }}||custom cargo production
+|-
+|2||4||143||{{en/Ottdp| | }}||conditional protection
+|-
+|3||8||14E||{{en/Ottdp|1.0|2.6|ottdrev=r17558|ttdprev=2249}}||decide if default foundations need to be drawn
+|-
+|4||10||14F||{{en/Ottdp|1.0|2.6|ottdrev=r17558|ttdprev=2249}}||allow or deny autosloping below the tile
+|}
+
+Bit is the bit you have to set, you do this by adding all the values for all the bits. Variable 0C value is what variable 0C will be set to, for checking it in the variational Action2 for callbacks.
+
+Callback flags are ignored for additional building tiles.
+
+=== House override byte (15) ===
+
+Setting this property makes this building appear instead of the given old TTD building type. Setting the property is ignored if the given old house type is already overridden. You can set this property more than once to override more old building types.
+
+No new house of the overridden types will be built in towns.
+
+This property works in a per-tile basis, so you override tiles of old multi-tile buildings individually, although the old type will still be built if you don't override its north tile.
+
+=== Periodic refresh multiplier (16) ===
+
+This is used for random triggers, and sets how often the tile is re-randomized. When set to X, the tile will be re-randomized on every (X+1)-th periodic processing. (In other words, every (X+1)*256 game ticks.) If you want all tiles to be re-randomized, you must set this (but not necessarily to the same value) for each tile.
+
+If callback 1B is enabled in property 14, it is also called after re-randomizing random bits.
+
+{{en/Ottdp|1.1|2.5|ttdprev=2.5 beta 9}} In TTDPatch versions before TTDPatch 2.6 r1639 and TTDPatch 2.5 beta 9 (including beta 9), this variable could have any value between 0 and 255. After these versions, the upper limit has been lowered to 63. To maintain compatibility, values above 63 will be interpreted as 63.
+
+=== Random colours (17) ===
+
+This specifies four colors used for random painting (see [[en/Action2HousesIndustryTiles]]). Each byte of the dword defines a color, the values are the same as in Action2, except that numbering starts from zero instead of 775. If not set, this defaults to 04 08 0c 06 (red, blue, orange and green, the colors of the modern office building). Can be set to different values for tiles of multi-tile buildings.
+
+=== Probability (18) ===
+
+This sets the relative probability of this house being built. Old TTD house types have a probability of 16, and this is the default for new types as well.
+
+Increase (or better multiply) this value to make your building appear relatively more often, or decrease (divide) it to make it rarer. If you set this to zero, the house type never appears. The minimal useful value 1 means it's sixteen times less probable to build this type than a normal type, while the maximum setting of 255 means it's almost sixteen times more probable.
+
+The probability is relative since the absolute probability depends on the count and probability of other houses as well: the more types are available (and the higher their probabilities are), the less the chance is that your type will be chosen.
+
+=== Extra Flags (19) ===
+
+{| |-
+!Bit!!Value!!Version!!Meaning
+|-
+|0||1||{{en/Ottdp|0.6|2.5}}||This building appears during the generation of a town, but not later, i.e. will appear in random games, but new ones won't be built during the game. Useful for buildings that are intended to be historical.
+|-
+|1||2||{{en/Ottdp|0.6|2.5}}||This building is protected, i.e. towns and AI players won't remove it. Human players can still remove it, so you may need to set a high remove cost/rating to make them think twice.
+|-
+|2||4||{{en/Ottdp|0.6|2.5}}||Synchronized [[en/Callbacks#animation-control-1b-25-140-152-159| callback 1B]]. (for multi-tile buildings)<ref>If synchronized callbacks are enabled, callback 1B will be called when the periodic processing reaches the main tile of the building, and not when it reaches the current tile. This is useful if your animation must run synchronously on every tile of the building. If this bit is set, callback 1B is called according to the main tile's property 16, not the current one, to make sure every tile stays in sync.</ref>
+|-
+|3||8||{{en/Ottdp|0.6|2.5|ttdprev=beta 2}}||[[en/Callbacks#next-animation-frame-1a-26-141-153-158 |Callback 1A]] needs random bits
+|}
+
+<references />
+
+=== Animation Frames (1A) ===
+
+The bottom seven bits define how many frames the animation consists of, minus one. (I.e. 0 means 1 frame, 1 means 2 frames etc.) The highest bit has another purpose (see below), so the biggest supported value is 7F (128 frames).
+
+The highest bit is set if the animation is looping, i.e. it should start again from the first frame after showing the last frame. Non-looping animations stop after the last frame, leaving it on the screen. Both kinds of animations start automatically when the building is created. It's recommended to use callback 1B with non-looping animations, so they are played multiple times.
+
+{{en/Ottdp|0.6|2.5|ottdrev=r12347|ttdprev=r1639}} In TTDPatch versions before TTDPatch 2.6 r1639 and TTDPatch 2.5 beta 9 (including beta 9) and OpenTTD before r12347, the frame number was limited to 32. If you intend to maintain compatibility with those versions, you should not use animations longer than 32 frames.
+
+=== Animation Speed (1B) ===
+
+This is the amount of time between switching frames.
+
+The default value is 2, which means the switch occurs every 108 milliseconds. Increasing this value by one doubles the wait, i.e. 3 will cause 216 ms delay, while 4 will pause 432 ms, and so on. Values below 2 have the same effect as 2, so the default is the fastest possible setting. The maximum is 16, which means 1769 seconds (approx. half an hour) delay. Settings above this value may cause strange behaviour.
+
+=== Building Class (1C) ===
+
+Types that were given the same class byte are considered to be in the same class. If you don't explicitly set this value, the type is considered to have no class (it won't be considered to be class 0). The scope of a class is the current GRF file, so two types are never in the same class if they were defined by different GRF files. Currently, this property affects variable 44 only.
+
+This property is a per-tile one, you can set it for additional tiles as well. It's a better idea, however, to set it for the main tile only, since var. 44 counts tiles, not buildings, and you may count multi-tile multiple times otherwise.
+
+=== Accepted cargo types (1E) ===
+
+There may be cases when you want your house to accept something other than the default types (passenger, mail, goods and food). This property allows you to do that. If this property is set to FFFFFFFFh (the default), the meaning of properties 0D, 0E and 0F aren't changed, that is, they are the passenger, mail and goods/food acceptances, accordingly. If this property isn't FFFFFFFFh, the first three bytes must be climate-dependent cargo slot numbers (the fourth byte is ignored). In this case property 0D is the amount of acceptance of the first cargo type given, 0E is the same for the second type and 0F is the same for the third type.
+
+From GRF version 7 and above, the meaning of this property changes: instead of climate-dependent cargo slot numbers, you have to give climate-independent cargo IDs. If your GRF has a cargo translation table, then this ID is the index in that table; otherwise, it's the cargo slot number. Acceptance of cargoes not currently present will automatically be disabled.
+
+=== Minimum life span in years (1F) ===
+
+Towns are prevented from destroying the house if it hasn't yet reached the age given here. The default is 0, which means towns are free to remove the house any time they like. Please note that this setting doesn't prevent AI players from removing the house; only towns are affected. If you need to protect your building from AI players as well, you can set the "protected" flag (property 19 bit 1), or use [[en/Callbacks#protect-building-conditionally-143 |callback 143]] and use your custom code to decide who (and when) is allowed to remove the building.
+
+For this to operate consequently on multi-tile buildings, you must set the same minimum lifespan for all tiles of the building.
+
+=== Cargo acceptance watch list (20) ===
+
+This property is a list of cargo types, types whose acceptance should be watched. The first byte is the length of the list, the remaining bytes identify cargo types. {{en/GrfFrom|7}} If your GRF is version 7 or above, and has a cargo translation table, the bytes are indexes in the table; otherwise, they are cargo slot numbers. When a cargo from this list is accepted by the current tile, [[en/Callbacks#watched-cargo-accepted-148 |callback 148]] is called on ''all'' tiles of the building. See [[en/Callbacks#watched-cargo-accepted-148 |callback 148]] for more details about how this happens.
+
+{{en/Ttdp|}} This property has no effect if the station2 structure isn't present. The station2 structure is present if any of the following is true:
+* Generalfixes is on, and miscmods.noextendstationrange is off
+* Any of fifoloading, newcargos or irregularstations is on
+
+=== Availability years (long format) - Minimum (21) - Maximum (22) ===
+
+Those two properties allow to specify a range of dates (based on year zero(0) that are not limited to the 1930 dates. So earlier buildings can be introduced. Be sure to add substantial houses to the sets, if you do not wat to have uniform towns, since the current earliest houses will remain in their current 1920 era. Mind also the warning wrt. introduction years as described at property 0A.
+
+=== Tile acceptance list (23) ===
+{{en/Ottdp|1.9|no|ottdrev=48b334cf}} 
+
+Format:
+ <numinput> (<cargotype> <acceptance>)*
+
+{| |-
+!Size!!Variable!!Meaning
+|-
+|B||numinput||Number of (<cargotype> <acceptance>) pairs to follow,
+|-
+|B||cargotype||Cargotype (from CTT) to accept.
+|-
+|B||acceptance||Acceptance in 1/8 units.
+|}
+
+Ta właściwość określa do 16 cargotypów, które są akceptowane przez dom.
+Użyj tej właściwości zamiast właściwości 0D..0F.
