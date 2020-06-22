@@ -1,0 +1,256 @@
+
+<!--{{-}}<br>-->{{en/Ambox| text = w trakcie edycji.}}<!-- -->
+==Wprowadzenie==
+
+Oddzwonienie to specjalne działanie 2, które łata "wywołuje" <small>''(calls)''</small> w celu zmodyfikowania różnych funkcji, czego przykładem jest efekt wizualny pojazdów kolejowych. &nbsp;Zobacz [[en/Ttwiki/CallbacksTut|callback tutorial]] , jak ich używać.
+
+W ostatnim działaniu 2 łańcucha VarAction2s drugi bajt pasującego wpisu musi mieć ustawiony bit 7, aby zidentyfikować go jako wynik wywołania zwrotnego.
+
+Na przykład 04 00 nie jest wynikiem wywołania zwrotnego (ale może być identyfikatorem innego powiązanego działania 2), podczas gdy 04 80 jest wynikiem wywołania zwrotnego o wartości 4. W sumie wywołanie zwrotne ma 15-bitowe wartości wyniku, przy czym górna 7 bitów jest zapisanych w drugim bajcie. Na przykład 54 C2 jest wynikiem wywołania zwrotnego o wartości 4254 = 16980, gdzie znowu drugi bajt ma ustawiony bit 7, zmieniając 42 na C2.
+
+{{en/GrfTill|7}} For GRF version 7 and below not all 15 bit values are available as return values, only values between 00 and 7EFF.
+For compatibility with earlier patch versions, FF in the high byte is taken to mean the same thing as 80, so 04 FF also has a callback result of 4. Note that if your grf file needs to be compatible with versions before TTDPatch 2.0.1 alpha 40, you must set the high byte to FF, and so can use only 8 bit results.
+
+{{en/GrfFrom|8}} For GRF version 8 and above this compatibility layer has been removed. Callbacks can return all 15 bit values between 00 and 7FFF.
+
+To check for a specific callback, use an [[en/VariationalAction2]] or [[en/VarAction2Advanced]] to check for variable 0C.
+* Variable 0C contains the callback number.
+* Variable 0C is a word, thus the VarAction2 must use type 85.
+* Results can be specified directly using 8xxx values (see above), or with 8xxx value in subsequent (Basic/Variational/Random)Action2 which are referenced as usual with their set-id.
+* The default case of the VarAction2 must point to the regular graphics chain, so that unknown/future callbacks results in a "callback failure" result.
+
+Example:
+ <Sprite-number> * <Length> 02 <feature> <set-id> 85 0C 00 \wxFFFF
+                               <nvar> (<set-id/result> \wx <callback> \wx <callback>){n}
+                                       <set-id of graphics chain>
+
+The format for VarAction2 is explained in detail on the [[en/VariationalAction2]] page.
+
+== List of callbacks ==
+
+The following callbacks are defined by the patch. &nbsp;The number of the callback is what will be stored in variable 0C so that you can return the right results if you have several callbacks. &nbsp;All callbacks are explained in more detail below.
+
+'''PLEASE NOTE:''' Since TTDPatch 2.5 beta 5, the size of variable 0C has changed, and now there are word-sized callback numbers as well. To maintain backwards compatibility, only callbacks 10..3F can be checked using a byte-sized check. Callbacks 140 and above, on the other hand, must be checked using a word or dword sized check, to make sure they are identified uniquely.
+
+{| |-
+!Number!!Feature(s)!!Meaning
+|-
+|10||Vehicles||[[en/Callback/Visual effect and wagon power|Visual effect and wagon power]]
+|-
+|11||Vehicles||[[en/Callback/Wagon length|Wagon length]]
+|-
+|12||Vehicles||[[en/Callback/Load amount|Load amount]]
+|-
+|13||Stations||[[en/Callback/Station availability|Station availability]]
+|-
+|14||Stations||[[en/Callback/Station sprite layout|Select sprite layout]]
+|-
+|15||Vehicles||[[en/Callback/Refitted capacity callback|Refitted capacity callback]]
+|-
+|16||Trains||[[en/Callback/Articulated engine|Build articulated engines]]
+|-
+|17||Houses||[[en/Callback/House construction check|House construction check]]
+|-
+|18||Several <ref name="generic">Generic callbacks are called for the feature, not any specific vehicle ID. Read the [[en/Action3#n-id|Action 3]] entry on how to define these.</ref>||[[en/Callback/AI construction/purchase selection|AI construction/purchase selection]]
+|-
+|19||Vehicles||[[en/Callback/Cargo Subtype Display|Cargo sub-type display]]
+|-
+|1A||Houses||Next animation frame
+|-
+|1B||Houses||Animation control
+|-
+|1C||Houses||Construction stage changes
+|-
+|1D||Trains||Can wagon be attached
+|-
+|1E||Houses||Decide colour of building
+|-
+|1F||Houses||Cargo acceptance
+|-
+|20||Houses||Length of animation frame
+|-
+|21||Houses||Trigger building destruction
+|-
+|22||Industries||Availability
+|-
+|23||Vehicles||Additional text in purchase screen
+|-
+|24||Stations||Custom station layout
+|-
+|25||Industry tiles||Animation control
+|-
+|26||Industry tiles||Next animation frame
+|-
+|27||Industry tiles||Length of animation frame
+|-
+|28||Industries||Industry location permissibility
+|-
+|29||Industries||Random production change
+|-
+|2A||Houses||Get accepted cargo types
+|-
+|2B||Industry tiles||Decide cargo acceptance
+|-
+|2C||Industry tiles||Get accepted cargo types
+|-
+|2D||Vehicles||Select colour mapping for vehicle
+|-
+|2E||Houses||Custom cargo production
+|-
+|2F||Industry tiles||Custom shape check
+|-
+|30||Industry tiles||Decide drawing default foundations
+|-
+|31||Vehicles||Start/stop check
+|-
+|32||Vehicles||32-day callback
+|-
+|33||Several||Sound effect callback
+|-
+|34||Vehicles <ref name="generic"/>||Autoreplace vehicle selection
+|-
+|35||Industries||Monthly random production change
+|-
+|36||Vehicles||Change vehicle Properties
+|-
+|37||Industries||Cargo sub-type display
+|-
+|38||Industries||Show additional text in fund window
+|-
+|39||Cargoes||Custom profit calculation
+|-
+|3A||Industries||Show additional text in industry window
+|-
+|3B||Industries||Control special effects
+|-
+|3C||Industry tiles||Disable autosloping
+|-
+|3D||Industries||Opt out of accepting cargo
+|-
+|40..13F|| ||--Reserved--
+|-
+|140||Stations||Animation control
+|-
+|141||Stations||Next animation frame
+|-
+|142||Stations||Length of animation frame
+|-
+|143||Houses||Protect building conditionally
+|-
+|144||Sounds <ref name="generic"/>||{{en/Ottdp|1.2|2.6|ottdrev=r23144|ttdprev=r821}} Ambient sound effects
+|-
+|145||Cargoes||Custom station rating calculation
+|-
+|146||New Signals <ref name="generic"/>||New signals sprite drawing
+|-
+|147||Canals||Add sprite offset
+|-
+|148||Houses||Watched cargo accepted
+|-
+|149||Stations||Land slope check
+|-
+|14A||Industries||Decide industry color
+|-
+|14B||Industries||Decide input cargo types
+|-
+|14C||Industries||Decide output cargo types
+|-
+|14D||Houses||Customized building name
+|-
+|14E||Houses||Decide drawing default foundations
+|-
+|14F||Houses||Disable autosloping
+|-
+|150||Airport tiles||{{en/Ottdp|1.1|no|ottdrev=r19197}} Decide drawing default foundations
+|-
+|152||Airport tiles||{{en/Ottdp|1.1|no|ottdrev=r19197}} Animation control
+|-
+|153||Airport tiles||{{en/Ottdp|1.1|no|ottdrev=r19197}} Next Animation frame
+|-
+|154||Airport tiles||{{en/Ottdp|1.1|no|ottdrev=r19197}} Length of animation frame
+|-
+|155||Airports||{{en/Ottdp|1.1|no|ottdrev=r20373}} Extra information about airport layout in the build gui
+|-
+|156||Airports||{{en/Ottdp|1.1|no|ottdrev=r20373}} Airport layout name
+|-
+|157||Objects||Land slope check
+|-
+|158||Objects||Next animation frame
+|-
+|159||Objects||Animation control
+|-
+|15A||Objects||Length of animation frame
+|-
+|15B||Objects||Decide colour of building
+|-
+|15C||Objects||Show additional text in building window
+|-
+|15D||Objects||Disable autosloping
+|-
+|15E||Vehicles||{{en/Ottdp|1.2|no|ottdrev=r23124}} Refit cost factor
+|-
+|15F||Industries||{{en/Ottdp|1.3|no|ottdrev=r24186}} Set initial production level on construction
+|-
+|160||Vehicles||{{en/Ottdp|1.5|no|ottdrev=r26747}} Advanced effect creation
+|}
+<references/>
+
+{{en/Callback/Visual effect and wagon power}}
+{{en/Callback/Wagon length}}
+{{en/Callback/Load amount}}
+{{en/Callback/Station availability}}
+{{en/Callback/Station sprite layout}}
+{{en/Callback/Refitted capacity callback}}
+{{en/Callback/Articulated engine}}
+{{en/Callback/House construction check}}
+{{en/Callback/AI construction/purchase selection}}
+{{en/Callback/Cargo Subtype Display}}
+{{en/Callback/Next animation frame}}
+{{en/Callback/Animation control}}
+{{en/Callback/Construction stage changes}}
+{{en/Callback/Can wagon be attached}}
+{{en/Callback/Building colour}}
+{{en/Callback/Cargo acceptance}}
+{{en/Callback/Length of animation frame}}
+{{en/Callback/Trigger building destruction}}
+{{en/Callback/Industry availability}}
+{{en/Callback/Additional text in purchase screen}}
+{{en/Callback/Custom station layout}}
+{{en/Callback/Industry location permissibility}}
+{{en/Callback/Random production change}}
+{{en/Callback/Get accepted cargo types}}
+{{en/Callback/Decide cargo acceptance}}
+{{en/Callback/Select colour mapping for vehicle}}
+{{en/Callback/Custom cargo production}}
+{{en/Callback/Custom shape check}}
+{{en/Callback/Decide drawing default foundations}}
+{{en/Callback/Vehicle Start/stop check}}
+{{en/Callback/32-day callback}}
+{{en/Callback/Sound effect}}
+{{en/Callback/Autoreplace vehicle selection}}
+{{en/Callback/Monthly random production change}}
+{{en/Callback/Change vehicle properties}}
+{{en/Callback/Cargo sub-type display for industries}}
+{{en/Callback/Show additional text in fund/building window}}
+{{en/Callback/Custom profit calculation for cargoes}}
+{{en/Callback/Show additional text in industry window}}
+{{en/Callback/Control special industry effects}}
+{{en/Callback/Disable autosloping}}
+{{en/Callback/Opt out of accepting cargo}}
+{{en/Callback/Protect building conditionally}}
+{{en/Callback/Ambient sound effects}}
+{{en/Callback/Custom station rating calculation}}
+{{en/Callback/New signals sprite drawing callback}}
+{{en/Callback/Add sprite offset callback}}
+{{en/Callback/Watched cargo accepted}}
+{{en/Callback/Station slope check}}
+{{en/Callback/Decide industry colour}}
+{{en/Callback/Decide input and output cargo types}}
+{{en/Callback/Customized building name}}
+{{en/Callback/Extra information about layout in the build gui}}
+{{en/Callback/Layout name}}
+{{en/Callback/Object slope check}}
+{{en/Callback/Decide object colour}}
+{{en/Callback/Refit cost factor}}
+{{en/Callback/Set initial production level on construction}}
+{{en/Callback/Advanced effect creation}}
