@@ -1,0 +1,91 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+== Wprowadzenie ==
+
+Lotniska działają podobnie jak przemysł i budynki miejskie. Maksymalna liczba możliwych portów lotniczych wynosi 128. Wszystkie (nawet przesłonięte) typy oryginalne liczą się do tego limitu.
+
+Defining airports follows the same schema as industries do: to start using an ID, you first need to define it by setting property 8 or 9 for it. If you try to reference an ID (either via action0 or via action3) that isn't defined, your request is ignored, but not reported as an error, either. This means that if you want to conditionally define an ID, all you need to do is skipping the action0 that sets property8/property9, and everything else gets skipped automatically.
+
+==Properties==
+
+{| |-
+!Number!![[en/GRFActionsDetailed|Size]]!!Version!!Description
+|-
+|08||B||{{en/Ottdp|1.1|no|ottdrev=r19459}}||Airport type override
+|-
+|0A||V||{{en/Ottdp|1.1|no|ottdrev=r20377}}||Set airport layout(s)
+|-
+|0C||2*W||{{en/Ottdp|1.1|no|ottdrev=r19459}}||Availability years
+|-
+|0D||B||{{en/Ottdp|1.1|no|ottdrev=r19459}}||Best compatible TTD airport type
+|-
+|0E||B||{{en/Ottdp|1.1|no|ottdrev=r19459}}||Catchment area
+|-
+|0F||B||{{en/Ottdp|1.1|no|ottdrev=r19459}}||Noise level
+|-
+|10||W||{{en/Ottdp|1.1|no|ottdrev=r19459}}||TextID to be used as airport name
+|-
+|11||W||{{en/Ottdp|1.2|no|ottdrev=r23415}}||Infrastructure maintenance cost factor
+|}
+
+==Descriptions==
+
+===Airport type override (08)===
+
+Works as both substitute type and override. The assignment of this property copies all properties of the old type to this new type. List of valid types: [[en/AirportTypes]]
+
+There's a special use of this property: if you set it to FFh, you can disable an original airport. In this case, the ID used must be the number of airport you want to disable. Disable requests are ignored for airports that have already been overridden.
+
+===Set airportlayout(s) (0A)===
+
+Format of airport layout tables:
+
+{| |-
+!Size!!Variable!!Meaning
+|-
+|B||numlayouts||The total number of layouts following
+|-
+|D||size||The size in bytes of the whole definition, excluding numlayouts and size
+|-
+|V||layouts||numlayout layouts, see format below
+|}
+
+Format of an airport layout:
+
+{| |-
+!Size!!Variable!!Meaning
+|-
+|B||xoffs
+|-
+|B||yoffs||Offsets counted from the northernmost tile of the airport, specifying the position of the current tile. Both are taken as signed integers, but cannot go negative except the special case mentioned below.
+|-
+|B||oldtile||An old tile type to be put on the given tile
+|-
+|||--or--||
+|-
+|0xFE,W||newtile||The ID of an already defined airport tile, padded with 0 to create a word value. This tile type will be placed on the given tile.
+|-
+|||--or--||
+|-
+|0xFF|| ||The given tile is checked for clearance, but nothing will be placed on it. Useful to ensure some free space around your airport. This is the only case where xoffs and yoffs can be negative. If xoffs is negative, yoffs must be one lower than the wanted value.
+|}
+
+The layout consists of a single byte giving the rotation of the layout (0: north, 2: east, 4: south, 6: west) followed by a list of the above tile definitions, terminated by two bytes: 0,80h
+
+===Availability years (0C)===
+
+First year and last year the airport is available. 0 and FFFF respectively are forever.
+
+===Best compatible TTD airport type (0D)===
+
+Used for compatibility with [[en/VariationalAction2/Vehicles#aircraft-info-44| vehicle var 44]]. Valid values:
+
+0: small airport
+
+1: large airport
+
+2: heliport
+
+3: oilrig
+
+== Przykład ==
