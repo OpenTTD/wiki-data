@@ -1,0 +1,1052 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+'''Cargo labels in OpenTTD'''
+
+{{en/GrfFrom|8}} In GRF version 8 the value to be used in all vehicle and industry properties, and in [[en/Action3|action 3]], is the position of the cargo label in the [[en/Action0/Global Settings#cargo-translation-table-09|cargo translation table]] included in the GRF.
+
+{{en/GrfTill|7}} GRF version 7 and below used different cargo properties for different properties (called "Type A" or "translated" and "Type B" or "untranslated" cargo slots), for historical reasons.  This method is deprecated as it meant relying blindly on cargos always using the same slots.  You can see the table of Type A and Type B slots [http://newgrf-specs.tt-wiki.net/index.php?title=CargoTypes&oldid=2861 here] if you really want to.
+
+== Cargo Labels ==
+
+Dotychczas zdefiniowano następujące etykiety ładunków:
+
+
+{|class="wikitable"
+|-
+! Label
+! Cargo Description
+! [[en/Action0Cargos#cargoclasses-16|Cargo classes]]
+! colspan="4" | Usage
+! Notes
+|-
+| align="center" colspan="2" | '''Basic Cargos'''
+| align="center" colspan="6" | These cargos are present when no NewGRF is used, or in some common Industry NewGRFs
+|-
+| PASS
+| Passengers
+| 0001 Passengers
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| COAL
+| Coal
+| 0010 Bulk
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| MAIL
+| Mail
+| 0002 Mail
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| OIL_
+| Oil
+| 0040 Liquid
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+|
+|-
+| LVST
+| Livestock
+| 0020 Piece goods
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+|
+|-
+| GOOD
+| Goods
+| 0004 Express
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| GRAI
+| Grain
+| 0010 Bulk
+| style="background: #CC00CC; color: black" | TTD
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+| Temperate; see also WHEA, MAIZ, CERE. YETI also adds 0200 Covered.
+|-
+| WOOD
+| Wood
+| 0020 Piece goods
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+|
+|-
+| IORE
+| Iron Ore
+| 0010 Bulk
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+|
+|-
+| STEL
+| Steel
+| 0020 Piece goods
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+| Renamed "Balls of Steel" in YETI
+|-
+| VALU
+| Valuables
+| 0008 Armoured
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+|
+|
+| Temperate; see also GOLD, DIAM
+|-
+| PAPR
+| Paper
+| 0020 Piece goods
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| WHEA
+| Wheat
+| 0010 Bulk
+| style="background: #CC00CC; color: black" | TTD
+|
+|
+|
+| Arctic; see also GRAI, MAIZ, CERE
+|-
+| FOOD
+| Food
+| 0084 Express, refrigerated
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+| YETI food has Refrigerated and piece goods
+|-
+| GOLD
+| Gold
+| 0008 Armoured
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+| Arctic; see also VALU, DIAM
+|-
+| RUBR
+| Rubber
+| 0040 Liquid
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| FRUT
+| Fruit
+| 0090 Bulk, refrigerated
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+| In FIRS: 00A4 Express, piece goods, refrigerated. In YETI: Piece goods, covered.
+|-
+| MAIZ
+| Maize
+| 0010 Bulk
+| style="background: #CC00CC; color: black" | TTD
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+| Tropic; see also GRAI, WHEA, CERE
+|-
+| CORE
+| Copper Ore
+| 0010 Bulk
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| WATR
+| Water
+| 0040 Liquid
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+|
+|
+|
+|-
+| DIAM
+| Diamonds
+| 0008 Armoured
+| style="background: #CC00CC; color: black" | TTD
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+| Tropic; see also VALU, GOLD
+|-
+| SUGR
+| Sugar
+| 0010 Bulk
+| style="background: #CC00CC; color: black" | TTD
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+| Toyland.  In FIRS 0030 Bulk, piece goods
+|-
+| AORE
+| Bauxite (Aluminium ore)
+| 0010 Bulk
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| BEAN
+| Beans
+| 0010 Bulk
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| BEER
+| Alcohol
+| 0064 Express, piece goods, liquids
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| BDMT
+| Building Materials
+| 0220 Piece goods, covered/sheltered
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+| In FIRS: 0030 Bulk, piece goods. In YETI only Piece goods.
+|-
+| BOOM
+| Explosives
+| 0024 Express, piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| BRCK
+| Bricks
+| 0020 Piece goods
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+|
+|
+|
+|-
+| CBLK
+| Carbon Black
+| 0230 Piece goods, Bulk, covered/sheltered
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| CERA
+| Ceramics
+| 0020 Piece goods
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+|
+|
+|
+|-
+| CERE
+| Cereals
+| 0210 Bulk, covered/sheltered
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+|
+|
+| <ref name="ecs_cargo_change" />
+|-
+| CLAY
+| Clay
+| 0210 Bulk covered/sheltered
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+|
+|-
+| CMNT
+| Cement
+| 0210 Bulk covered/sheltered
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| COPR
+| Copper
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| CSTI
+| Cast Iron
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| CTAR
+| Coal Tar
+| 0140 Liquids, hazardous
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| DYES
+| Dyes
+| 0060 Piece goods, liquids
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+|
+|
+|
+|-
+| ENSP
+| Engineering Supplies
+| 0024 Express, piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| FECR
+| Ferrochrome
+| 0010 Bulk
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| FERT
+| Fertiliser
+| 0030 Bulk, piece goods
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+| FIRS: 0024 Express, piece goods. ECS: <ref name="ecs_cargo_change" />
+|-
+| FICR
+| Fibre crops
+| 0030 Bulk, piece goods
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| FISH
+| Fish
+| 0084 Express, refrigerated
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| FMSP
+| Farm Supplies
+| 0024 Express, piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| GLAS
+| Glass
+| 0420 Piece goods, oversized
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+|
+|
+|
+|-
+| GRVL
+| Stone
+| 0010 Bulk
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+| Was "Gravel / Ballast""
+|-
+| JAVA
+| Coffee
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: black" | [[en/Ttwiki/FIRS|FIRS]]
+|
+| FIRS: 0024 Piece goods, express. Units in FIRS are 'bags'
+|-
+| KAOL
+| Kaolin (China Clay)
+| 0250 Bulk, liquids, covered
+|
+|
+| style="background: #1AD74C; color: black" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| LIME
+| Lime stone
+| 0010 Bulk
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+|
+|
+|
+|-
+| MILK
+| Milk
+| 00C4 Express, liquid, refrigerated
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| NITR
+| Nitrate
+| 0010 Bulk
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| OLSD
+| Oil seed
+| 0210 Bulk, covered/sheltered
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+|
+|
+| <ref name="ecs_cargo_change" />
+|-
+| PEAT
+| Peat
+| 0010 Bulk
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| PETR
+| Petrol / Fuel Oil
+| 0040 Liquid
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| PHOS
+| Phosphate
+| 0010 Bulk
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| PLAS
+| Plastic
+| 0060 Piece goods, liquid
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+|
+|
+|
+|-
+| PORE
+| Pyrite Ore
+| 0010 Bulk
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| POTA
+| Potash
+| 0210 Bulk, covered/sheltered
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+| FIRS: 0010 Bulk. ECS: <ref name="ecs_cargo_change" />
+|-
+| RFPR
+| Refined products
+| 0040 Liquid
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+|
+|-
+| SAND
+| Sand
+| 0010 Bulk
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| SCMT
+| Scrap Metal
+| 1010 Bulk, non-pourable
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| SULP
+| Sulphur
+| 0210 Bulk, covered/sheltered
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+| FIRS: 0250 Bulk, Liquid, Covered/sheltered. ECS: <ref name="ecs_cargo_change">ECS cargo classes changed as of Dec 31, 2010</ref>
+|-
+| TOUR
+| Tourists
+| 0005 Passengers, express
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+|
+|
+|
+|-
+| TYRE
+| Tyres
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| URAN
+| Uranium
+| 0110 Bulk, Hazardous
+|
+|
+|
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+|
+|-
+| VEHI
+| Vehicles
+| 0420 Piece goods, oversized
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+|
+|-
+| WDPR
+| Wood Products
+| 0030 Bulk, piece goods
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| WOOL
+| Wool
+| 0220 Piece goods, covered/sheltered
+|
+| style="background: #FFCC00; color: black" | [[en/Ttwiki/ECS|ECS]]
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+| <ref name="ecs_cargo_change" />
+|-
+| ZINC
+| Zinc
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| align="center" colspan="2" | '''Extended Cargos'''
+| align="center" colspan="6" | these cargos are only present in rare/specialized situations
+|-
+| ACID
+| Acid
+| 0140 Liquids, hazardous
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| CASS
+| Cassava
+| 0010 Bulk
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| CHLO
+| Chlorine
+| 0140 Liquids, hazardous
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| COKE
+| Coke
+| 0010 Bulk
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| EOIL
+| Edible Oil
+| 0060 Piece goods, liquids
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| IRON
+| Pig Iron
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| METL
+| Metal
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| MNO2
+| Manganese
+| 0010 Bulk
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| MNSP
+| Manufacturing Supplies
+| 0024 Piece goods, express
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| NUTS
+| Nuts
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| PIPE
+| Pipe
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| POWR
+| Electrical Machines
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| QLME
+| Quicklime
+| 0210 Bulk, covered/sheltered
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| RCYC
+| Recyclables
+| 0220 Piece goods, covered
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+| FIRS: 0030 Bulk, piece goods
+|-
+| SALT
+| Salt
+| 0010 Bulk
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| SASH
+| Soda Ash
+| 0210 Bulk, covered/sheltered
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| SGBT
+| Sugar beet
+| 0010 Bulk
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+| not in tropical
+|-
+| SGCN
+| Sugarcane
+| 1010 Bulk, non-pourable
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+| only tropical
+|-
+| SLAG
+| Slag
+| 0010 Bulk
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| STAL
+| Alloy Steel
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| STCB
+| Carbon Steel
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| STST
+| Stainless Steel
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| VBOD
+| Vehicle bodies
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| VENG
+| Vehicle Engines
+| 0020 Piece goods
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| VPTS
+| Vehicle Parts
+| 0024 Piece goods, express
+|
+|
+| style="background: #1AD74C; color: white" | [[en/Ttwiki/FIRS|FIRS]]
+|
+|
+|-
+| align="center" colspan="2" | '''Fantasy Cargos'''
+| align="center" colspan="6" | these cargos are for use in fantasy or science fiction settings
+|-
+| BATT
+| Batteries
+| 0020 Piece goods
+| style="background: #CC00CC; color: black" | TTD
+|
+|
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+| Toyland
+|-
+| BUBL
+| Bubbles
+| 0020 Piece goods
+| style="background: #CC00CC; color: black" | TTD
+|
+|
+|
+| Toyland
+|-
+| COLA
+| Cola
+| 0040 Liquid
+| style="background: #CC00CC; color: black" | TTD
+|
+|
+|
+| Toyland
+|-
+| CTCD
+| Cotton Candy (Candyfloss)
+| 0010 Bulk
+| style="background: #CC00CC; color: black" | TTD
+|
+|
+|
+| Toyland
+|-
+| FZDR
+| Fizzy Drinks
+| 0020 Piece goods
+| style="background: #CC00CC; color: black" | TTD
+|
+|
+|
+| Toyland
+|-
+| PLST
+| Plastic
+| 0040 Liquid
+| style="background: #CC00CC; color: black" | TTD
+|
+|
+|
+| Toyland; see also PLAS
+|-
+| SWET
+| Sweets (Candy)
+| 0004 Express
+| style="background: #CC00CC; color: black" | TTD
+|
+|
+|
+| Toyland
+|-
+| TOFF
+| Toffee
+| 0010 Bulk
+| style="background: #CC00CC; color: black" | TTD
+|
+|
+|
+| Toyland
+|-
+| TOYS
+| Toys
+| 0020 Piece goods
+| style="background: #CC00CC; color: black" | TTD
+|
+|
+|
+| Toyland
+|-
+| YETI
+| Workers, YETI dudes
+| 0404 Express, oversized
+|
+|
+|
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+|
+|-
+| YETY
+| Tired Workers, Tired YETI dudes
+| 0404 Express, oversized
+|
+|
+|
+| style="background: #009fe3; color: black" | [[en/Ttwiki/YETI|YETI]]
+|
+|-
+| align="center" colspan="2" | '''Special Cargos'''
+| align="center" colspan="6" | these cargos are for use outside industry sets and do not represent transporting anything
+|-
+| DFLT
+| 'Default'
+| ---- None
+|
+|
+|
+|
+| Used by andythenorth to identify default cargo graphics in newgrfs that use code/graphics generation. 
+
+Not intended to be used as an actual cargo in translation tables.
+|-
+| GEAR
+| Locomotive regearing
+| 8000 Special
+|
+|
+|
+|
+| Using this cargo may make your vehicle set incompatible with some industry sets
+
+use CB36 instead to set capacity to 0
+|-
+| align="center" colspan="2" | '''Deprecated Cargos'''
+| align="center" colspan="6" | these cargos are not used by any current industry set, and are listed here for backwards compatibility
+|-
+| FRVG
+| Fruit (and optionally Vegetables)
+| 00A4 Express, piece goods, refrigerated
+|
+|
+|
+|
+| Deprecated FIRS cargo. Replaced by FRUT for FIRS > v1.3.0
+|-
+| FUEL
+| Fuel
+| 0040 Liquid
+|
+|
+|
+|
+| Use PETR for refined-oil fuel
+|-
+| RSGR
+| Raw Sugar
+| 0010 Bulk
+|
+|
+|
+|
+| Deprecated in FIRS. See SGBT and SGCN
+|-
+| SCRP
+| Scrap Metal
+| 0010 Piece goods
+|
+|
+|
+|
+| Deprecated in FIRS, use SCMT instead
+|-
+| TWOD
+| Tropic Wood
+| 0020 Piece goods
+|
+|
+|
+|
+| formerly intended as a default cargo
+|-
+| WSTE
+| Waste
+| 0010 Bulk
+|
+|
+|
+|
+| Deprecated in FIRS.
+|}
+
+<references />
+
+Jeśli napiszesz lub opublikujesz NewGRF, który wprowadza nową etykietę ładunkową, dodaj również komentarz w miejscu, w którym używana jest nowa etykieta.
