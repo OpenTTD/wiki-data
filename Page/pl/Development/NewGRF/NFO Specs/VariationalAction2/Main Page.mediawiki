@@ -1,0 +1,266 @@
+
+<!--{{-}}<br>{{ambox | text = w trakcie edycji.}} -->
+==Wprowadzenie ==
+
+Aby wesprzeć zmiany grafiki oparte na innych czynnikach niż tylko stany obciążenia, użyj VarAction2. Zapewnia to wyrafinowany sposób decydowania, jakiej grafiki użyć.
+
+VarAction2 może być używane jak każda inna akcja 2, ale zapewnia dodatkowy krok pośredni: zamiast od razu zdefiniować zestawy akcji 1, określa listę dodatkowych wpisów akcji 2, z których jedna jest używana w zależności od rodzaj wariacji, która jest zdefiniowana. Wspomniane wpisy akcji 2 mogą z kolei być wariacyjne lub losowe (w celu zapewnienia łańcuchów decyzji) lub mogą być elementem końcowym, czyli zwykłą akcją 2, która zawiera definicje zestawów akcji 1 lub wynikiem wywołania zwrotnego.
+
+== Format ==
+
+Dane wyglądają następująco:
+
+ <Sprite-number> * <Length> 02 <feature> <set-id> <type> <variable> <varadjust> <nvar> (<set-id> <low-range> <high-range>){n} <default>
+
+{| |-
+!'''Element'''!![[en/GRFActionsDetailed|'''Size''']]!!'''Description'''
+|-
+|<Sprite-number>||dec||A sequential sprite number
+|-
+|<length>||dec||The total number of bytes used in this action.
+|-
+|02||B||Defines action 02
+|-
+|<feature>||B||For what type of vehicle/station should this definition be used?
+|-
+|<set-id>||B||The ID of this action 2 (used like a cargo ID)
+|-
+|<type>||B||Type of VarAction2, see below
+|-
+|<variable>||B||Which variable we base the decision on
+|-
+|<varadjust>||V||How to manipulate the value before deciding.
+|-
+|<nvar>||B||Number of different ranges of the value (not counting the default)
+|-
+|<set-id>||W||Action 2 set-id to use for the following range.
+|-
+|<low-range>||B/W/D||Minimum (inclusive) of the range for which to use the above set-id
+|-
+|<high-range>||B/W/D||Maximum (inclusive) of the range
+|-
+|<default>||W||Action 2 set-id to use if no range matches
+|}
+
+Rozmiar <varadjust> zależy od <type>, a także dostosowań, które należy wykonać i zawsze musi zapewniać maskę AND. Dla <type> 81, „nic nie rób” <varadjust> to 00 FF.
+
+Powtarzasz sekwencję <set-id> <low-range> <high-range> tak często, jak określa to <nvar>.
+
+<low-range> i <high-range> mają rozmiar B, W lub D, w zależności od <type> . Zobacz ten wpis, aby uzyskać więcej informacji.
+
+== Description ==
+
+=== Sprite-number ===
+
+To tylko numer, na którym jesteś.
+
+=== Length ===
+
+Policz liczbę bajtów w tej akcji.
+
+=== Feature ===
+
+Ustawia to rodzaj [[en/Features|feature]] , który chcesz zmienić. Ustaw na:
+
+{|- |
+!Value!![[en/Features|Feature]]
+|-
+|00||[[en/VariationalAction2/Vehicles | Trains]]
+|-
+|01||[[en/VariationalAction2/Vehicles | Road Vehicles]]
+|-
+|02||[[en/VariationalAction2/Vehicles | Ships]]
+|-
+|03||[[en/VariationalAction2/Vehicles | Aircraft]]
+|-
+|04||[[en/VariationalAction2/Stations | Stations]]
+|-
+|05||[[en/VariationalAction2/Canals | Canals/Rivers]]
+|-
+|06||[[en/VariationalAction2/Bridges | Bridges]]
+|-
+|07||[[en/VariationalAction2/Houses | Houses]]
+|-
+|09||[[en/VariationalAction2/Industry Tiles | Industry Tiles]]
+|-
+|0A||[[en/VariationalAction2/Industries | Industries]]
+|-
+|0B||Cargos (no feature specific variables)
+|-
+|0C||Sound Effects (no feature specific variables)
+|-
+|0D||[[en/VariationalAction2/Airports | Airports]]
+|-
+|0E||[[en/VariationalAction2/Signals | Signals]]
+|-
+|0F||[[en/VariationalAction2/Objects | Objects]]
+|-
+|10||[[en/VariationalAction2/Railtypes | Railtypes]]
+|-
+|11||[[en/VariationalAction2/Airport Tiles | Airport Tiles]]
+|-
+|12||[[en/VariationalAction2/Roadtypes | Roadtypes]]
+|-
+|13||[[en/VariationalAction2/Tramtypes | Tramtypes]]
+|}
+
+=== Set-ID ===
+
+Określa liczbę tego działania 2. &nbsp;Identyfikator można następnie wykorzystać jako cel w akcji 3 lub innej akcji wariacyjnej/losowej 2.
+
+=== Type ===
+
+{| |-
+! !! B<br/>Access lowest byte !! {{Page:pl/Extrazi/ottdp|0.6|2.5}} W<br/>Access lowest word !! {{Page:pl/Extrazi/ottdp|0.6|2.5}} D<br/>Access lowest doubleword
+|-
+!align="left"| Access general variable or<br/>variable of the primary object
+|align="center"| 81 
+|align="center"| 85 
+|align="center"| 89
+|-
+!align="left"| Access variable of "related" object
+|align="center"| 82 
+|align="center"| 86 
+|align="center"| 8A
+|}
+
+Typ dostępu określa zarówno wielkość dostępu do zmiennych, jak i wybiera między zmiennymi ogólnymi a zmiennymi wrodzonymi obiektu lub zmiennymi konkretnego "pokrewnego" <small>''(related)''</small> obiektu.
+
+{|- |
+!colspan="2"|[[en/Features|Feature]]!!Related object
+|-
+|00-03||[[en/VariationalAction2/Vehicles | Vehicles]]||First [[en/VariationalAction2/Vehicles | vehicle]] of consist
+|-
+|04||[[en/VariationalAction2/Stations | Stations]]||[[en/VariationalAction2/Towns | Town]] to which station belongs
+|-
+|05||[[en/VariationalAction2/Canals | Canals/Rivers]]||N/A
+|-
+|06||[[en/VariationalAction2/Bridges | Bridges]]||[[en/VariationalAction2/Towns | Town]] of bridge
+|-
+|07||[[en/VariationalAction2/Houses | Houses]]||[[en/VariationalAction2/Towns | Town]] of house
+|-
+|09||[[en/VariationalAction2/Industry Tiles | Industry Tiles]]||[[en/VariationalAction2/Industries | Industry]] containing tile
+|-
+|0A||[[en/VariationalAction2/Industries | Industries]]||[[en/VariationalAction2/Towns | Town]] of industry
+|-
+|0B||Cargos||N/A
+|-
+|0C||Sound Effects||N/A
+|-
+|0D||[[en/VariationalAction2/Airports | Airports]]||N/A
+|-
+|0E||[[en/VariationalAction2/Signals | Signals]]||N/A
+|-
+|0F||[[en/VariationalAction2/Objects | Objects]]||[[en/VariationalAction2/Towns | Town]] of object
+|-
+|10||[[en/VariationalAction2/Railtypes | Railtypes]]||N/A
+|-
+|11||[[en/VariationalAction2/Airport Tiles | Airport Tiles]]||N/A
+|-
+|12||[[en/VariationalAction2/Roadtypes | Roadtypes]]||N/A
+|-
+|13||[[en/VariationalAction2/Tramtypes | Tramtypes]]||N/A
+|}
+
+Każda zmienna określa jej rozmiar. Nie każda zmienna jest podwójnym słowem.
+Jeśli dostępna zmienna jest mniejsza niż podany tutaj rozmiar, dodatkowe bity mogą zawierać śmieci i powinny być <and-masked>.
+
+=== Variable ===
+
+Variational Action 2 allows accessing these variables:
+
+{| |-
+!'''Number'''!![[en/GRFActionsDetailed|'''Size''']]!!Version!!'''Meaning'''
+|-
+|00-3F|| || ||See [[en/GlobalVariables| global variables page]].
+|-
+|40+x||D|| ||specially calculated feature-specific variable, see following feature-specific pages
+|-
+|5F||D||{{Page:pl/Extrazi/ottdp|0.7|2.6|ttdprev=r1928}}||Feature-specific random data: triggers in low byte, bits in other three bytes. Bits of the variable not associated with random or trigger bits are reserved.
+|-
+|60+x||D|| ||similar to 40+x variables, but the variable number must be followed by a byte, which will be given to the variable handler as parameter.
+|-
+|7B||-||{{Page:pl/Extrazi/ottdp|1.1|2.6|ottdrev=r21604|ttdprev=r2359}}||A special 60+x variable to be used in Advanced Variational Action 2. It allows to evaluate any other 60+x variable using a non-constant parameter from a register. The parameter of variable 7B specifies another 60+x variable which is evaluated. The parameter for that variable is read from the accumulator ('val1'), i.e. the result from the preceding operations of the same Advanced Variational Action 2. Hence variable 7B may not be the first variable used in the calculation. Variable 7B itself and 7E (procedure call) are not allowed to be used as parameter for variable 7B.
+
+{{Page:pl/Extrazi/ottdp|1.2|no|ottdrev=r23138}} Since OpenTTD r23138 you can use this to pass 32 bit parameters to 60+x variables. Currently this is only useful for a few variables, e.g. vehicle variable 60. For most variables the higher bits of the parameter are considered reserved. So, make sure to mask the higher bits in the preceding calculations.
+|-
+|7C||D||{{Page:pl/Extrazi/ottdp|0.6|2.6|ttdprev=r1315}}||A special 60+x variable used to access values stored in the registers of [[en/Storages#persistent-storage|persistent storage]].
+|-
+|7D||D||{{Page:pl/Extrazi/ottdp|0.6|2.6|ttdprev=r1246}}||A special 60+x variable used to access values stored in the registers of [[en/Storages#temporary-storage|temporary storage]]. Available in the purchase list.
+|-
+|7E||D||{{Page:pl/Extrazi/ottdp|0.6|2.5}}||A special 60+x variable indicating a [[en/VarAction2Advanced#using-procedures|procedure call]]. Available in the purchase list.
+|-
+|7F||D||{{Page:pl/Extrazi/ottdp|0.6|2.5}}||A special 60+x variable that reads GRF parameter whose number is given by the 60+x parameter. Available in the purchase list.
+|-
+|80+x|| || ||Feature-specific variable, see following feature-specific pages. While most of these variables actually refer to raw memory locations of original TTD structures, you cannot rely on that. Some variables were added later, some were moved or replaced. Only the variables listed in the specs are somewhat set to not be changed in the future.
+|}
+
+W przypadku wszystkich funkcji zmienne 80 + x są przesunięte w odpowiednią strukturę w danych gry TTD. &nbsp;Zmienne 40+x i 60+x są specjalnymi zmiennymi, które są obliczane w locie i nie są tak naprawdę nigdzie przechowywane w pamięci, chyba że podano inaczej. Dlatego należy ich używać tak mało, jak to konieczne, aby nie spowalniać zbytnio gry przy obliczaniu tych zmiennych (które można nazwać tysiące razy na sekundę, ilekroć porusza się pojazd).
+
+Podczas wyświetlania pojazdu (itp.) Na liście zakupów, gra prawidłowo pokaże te odmiany na podstawie zmiennych zewnętrznych (daty itp.), Ale odmiany na podstawie zmiennych pojazdu (zmienne 40 + x, 60 + x i 80 + x) zawsze pokaże pierwszy (nie domyślny) identyfikator ładunku, chyba że dla danej zmiennej podano inaczej. Jeśli wykonasz obliczenia, pierwszy identyfikator ładunku zostanie wybrany, jeśli którakolwiek z potrzebnych zmiennych jest niedostępna.
+
+Listy 80 + x zmiennych na kolejnych stronach nie są wyczerpujące; wymienione są tylko przydatne zmienne. Aby uzyskać pełną listę, sprawdź definicję odpowiednich struktur w TTD. Marcin Grzegorczyk ma dość dobrą listę definicji struktur [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html savegame internals page].
+
+=== varadjust ===
+
+Adjust variable to a more useful range. It has the following format:
+
+<pre>  <shift-num> <and-mask> <nowiki>[<add-val> <divide-val>/<modulo-val>]</nowiki></pre>
+
+{| |-
+!'''Element'''!![[en/GRFActionsDetailed|'''Size''']]!!'''Description'''
+|-
+|shift-num||B||value to right-shift the variable, and some special bits. See below.
+|-
+|and-mask||B/W/D||value with which to AND the variable after shifting. Return this value if neither bit 6 nor bit 7 of shift-num are set.
+|-
+|add-val||B/W/D||value to add to the variable after ANDing. Only present if bits 6 or 7 are set in shift-num.
+|-
+|divide-val||B/W/D||return the sum divided by this value. Only present if bit 6 is set in shift-num.
+|-
+|modulo-val||B/W/D||return the sum modulo (remainder of division by) this value. Only present if bit 7 is set in shift-num.
+|}
+
+<shift-num> is a partial bit-mask; its bits have the following meanings:
+
+{| |-
+!Bit(s)!!Value!!Version!!Meaning
+|-
+|0..4||0..1F||{{Page:pl/Extrazi/ottdp|0.6|2.0}}||number of bits to right shift <variable>
+|-
+|5||20||{{Page:pl/Extrazi/ottdp|0.6|2.5}}||This is an [[en/VarAction2Advanced|advanced VarAction2]]
+|-
+|6||40||{{Page:pl/Extrazi/ottdp|0.6|2.5}}||This is a shift-and-add-divide adjustment.
+|-
+|7||80||{{Page:pl/Extrazi/ottdp|0.6|2.5}}||This is a shift-and-add-modulo adjustment.
+|}
+
+Nie można ustawić obu bitów 6 i 7. Jeśli żaden z nich nie jest ustawiony, ten varadjust jest zmianą i zmianą.
+
+Należy zauważyć, że w przypadku operacji dodawania i dzielenia zarówno zmienna, jak i dzielnik są traktowane jako liczby ze znakiem. Oznacza to, że jeśli ustawiony jest wysoki bit, liczba jest traktowana jako ujemna, więc może być konieczne maskowanie najbardziej znaczącego bitu, aby wykonać podział bez znaku.
+
+=== nvar ===
+
+Tutaj ustawiasz liczbę różnych zakresów do sprawdzenia. Jeśli wartość zmiennej po powyższych manipulacjach nie mieści się w jednym z tych zakresów, zostanie użyta wartość domyślna. &nbsp;Wyświetlana w oknie zakupu, gra zawsze pokaże pierwszy zakres, jeśli zmienna jest typu 40 + x lub 80 + x (ponieważ zmienna jest niezdefiniowana, ponieważ pojazd jeszcze nie istnieje).
+
+{{Page:pl/Extrazi/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 57}} Since TTDPatch 2.0.1 alpha 57, nvar=0 is a special case. Instead of using ranges, nvar=0 means that the result of an [[en/VarAction2Advanced|advanced]] calculation (or, if no calculation is performed, the adjusted variable value itself) is returned as callback result, with bit 15 set. &nbsp;This is useful for those callbacks where many different return values are possible and it is easier to calculate them than list them in ranges. &nbsp;The default value must still be specified, and will be used in case the variable(s) used are not available.
+
+=== sets and ranges ===
+
+For each of the ranges to check, you give the set-id as a '''WORD''' value (i.e. with a 00 following, e.g. set-id 5 becomes 05 00, or - in case of a callback result - by setting the high bit, e.g. 05 80), followed by the low and high limits of this range. &nbsp;The first range that matches will be used.
+
+The various \b, \w, and \d escape sequences can be useful for <min-range> and <max-range>. See [[en/GRFActionsDetailed#byte-order|the discussion of escape sequences]] for further information.
+
+=== default ===
+
+Set-id do użycia, jeśli żaden z zakresów nie pasuje.
+
+=Przykład=
+<pre>
+ -1 * 15       02 05 03 81        // Action2, Feature 05 (canals), action2ID 03, 1-byte variable
+                   81 00 04       // variable 81 (terrain type), shift 00, mask 0x04 (=bit for "on or above snowline")
+                   01             // check one range
+                   02 00    04 04 // snowy tile: link to action2ID 02
+                   01 00          // default:    link to action2ID 01
+
+</pre>
