@@ -1,0 +1,212 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+== Wprowadzenie ==
+
+Ponowne kolorowanie ikonek to pseudosprite używane do ponownego kolorowania innych ikonek, najczęściej do stosowania kolorów firmowych. Ponowny kolor sprite to po prostu ponowne mapowanie oryginalnej tabeli kolorów TTD.
+
+== Syntax ==
+
+A recolor sprite has the following format:
+
+ <Sprite-number> * 257 00 <recolor-table>
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+
+|-
+|<Sprite-number>||dec||A sequential sprite number
+
+|-
+|257||dec||The total number of bytes used in this action, always 257
+
+|-
+|00||B||literal 00
+
+|-
+|<recolor-table>||256*B||See below
+|}
+
+== Description ==
+
+=== 00 ===
+
+At first glance, it is easy to confuse a recolor sprite with an action 0, most often for trains. Attempting to read the recolor sprite as an action 0 will usually reveal that there are far too many bytes. Another clue is that recolor sprites are always 257 bytes long.
+
+The correct method to distinguish recolor sprites and action 0s is to note that recolor sprites can only appear in an [[en/Action5]] or [[en/ActionA]] block, and action 0s can only appear outside such a block.
+
+=== recolor-table ===
+
+A 256-byte recolor table. A byte at the offset equal to the index of the source color specifies the color to be drawn.
+
+Note that the offsets and bytes are different depending on whether the GRF is being loaded in TTD DOS or TTD Win. If you create a grf that contains recolor sprites, you may find it necessary to maintain two separate versions, or use an Action7 that checks variable 83 to guard the introducing action 5/A and the recolor sprite(s).
+
+== Usage ==
+
+Recolor sprites are applied in one of two ways.
+
+;Non-transparently: Each pixel in the sprite is looked up in the recolor table, and then the color specified at that offset is drawn on the screen. If the resultant color is 00 ("transparent blue"), then if the [[en/RealSprites#compression|sprite's compression]] bit 3 is ''not'' set, nothing is drawn; otherwise (i.e. if the sprite is in chunked data format) the actual color 00 (which is ''black'') is drawn.
+
+;Transparently: For each sprite pixel that is not transparent, the current (on-screen) color of the pixel at the location where the sprite pixel would be drawn is looked up in the recolor table, and then redrawn in the new color. If the recolor lookup returns 00 ("transparent blue"), the resultant color is actually black. Other than is-transparent-blue/not-transparent-blue, the actual colors of the pixels in a sprite that is drawn transparently are meaningless.
+
+== Default recolour sprites ==
+
+TTD already defines a number of recolour sprites for various uses, e.g. for the semi-transparency of glass or the re-colouring of the tubular bridges, company colours or some houses.
+
+{|
+!Sprite number (dec)!!Sprite number (hex)!!Description
+
+|-
+!colspan="3"|translations for selection highlights
+
+|-
+|771||0x303|| A pulsating red tile is drawn if you try to build a wrong tunnel or raise/lower land where it is not possible
+
+|-
+|772||0x304|| Makes a square red. is used when removing rails or other stuff
+
+|-
+|773||0x305 || This draws a blueish square (catchment areas for example)
+
+|-
+!colspan="3"|translations for the company colour (blue-ish colours are replaced)
+
+|-
+|775||0x307 || company colour to dark blue
+
+|-
+|776||0x308 || company colour to pale green
+
+|-
+|777||0x309 || company colour to pink
+
+|-
+|778||0x30A || company colour to yellow
+
+|-
+|779||0x30B || company colour to red
+
+|-
+|780||0x30C || company colour to light blue
+
+|-
+|781||0x30D || company colour to green
+
+|-
+|782||0x30E || company colour to dark green
+
+|-
+|783||0x30F || company colour to blue
+
+|-
+|784||0x310 || company colour to cream
+
+|-
+|785||0x311 || company colour to mauve
+
+|-
+|786||0x312 || company colour to purple
+
+|-
+|787||0x313 || company colour to orange
+
+|-
+|788||0x314 || company colour to brown
+
+|-
+|789||0x315 || company colour to grey
+
+|-
+|790||0x316 || company colour to white (darker parts are blue-ish)
+
+|-
+!colspan="3"|translation for infrastructure ground sprites
+
+|-
+|791||0x317 || bare land, for rail and road (crossings)
+
+|-
+!colspan="3"|translations for "brownish red" colour used by some town buildings and bridges
+
+|-
+|795||0x31B || structure to blue
+
+|-
+|796||0x31C || structure to brownish (e.g. cantilever bridges)
+
+|-
+|797||0x31D || structure to white
+
+|-
+|798||0x31E || structure to red (e.g. bridges)
+
+|-
+|799||0x31F || structure to green (e.g. bridges)
+
+|-
+|800||0x320 || structure to concrete (e.g. suspension bridge)
+
+|-
+|801||0x321 || structure to yellow (e.g. suspension bridge + tubular)
+
+|-
+!colspan="3"| other
+
+|-
+|802||0x322 || glass effect
+
+|-
+|803||0x323 || maps to greyscale (newspaper)
+
+|-
+|804||0x324 || crashed vehicle (grey-ish)
+
+|-
+|1438||0x59E || church red
+
+|-
+|1439||0x59F || church cream
+|}
+
+For the company colour translation a translation to dark blue (0x307) is the identity translation which replaces every colour with itself. You can use it in cases where a remapping is needed, but you don't want to recolor anything.
+
+== Dual company colours ==
+{{en/Ottdp|0.6|2.5}}
+You can also use the dual-company-colour recolour sprites. However, they are no default TTD sprites and thus they do not have fixed sprite numbers. You can determine the spritenumber of the first 2CC recolour sprite via [[en/ReadingPatchVariables|Patch Variable 11]]. You then need [[en/Action6|Action 6]] to put the needed recolourings into actions where needed.
+
+Starting from the spritenumber from patch variable 11 there are 256 recolour sprites. Their order follows the default company recolourings above. The second company colour changes every 16 sprites, so every combination of first and second colour is available:
+
+{|
+!Offset from first sprite (dec) !!Offset from first sprite (hex) !! First colour (colours 0xC6 to 0xCD) !! Second colour (colours 0x50 to 0x57)
+
+|-
+|0 || 0x00 || dark blue || dark blue
+
+|-
+|1 || 0x01 || pale green || dark blue
+
+|-
+|<nowiki>:</nowiki> || : || : || :
+
+|-
+|15 ||  0x0F || white || dark blue
+
+|-
+|16 ||  0x10 || dark blue ||pale green
+
+|-
+|<nowiki>:</nowiki> || : || : || :
+
+|-
+|31 || 0x1F || white ||pale green
+
+|-
+|32 || 0x20 || dark blue || pink
+
+|-
+|<nowiki>:</nowiki> || : || : || :
+
+|-
+|255 || 0xFF || white || white 
+|}
+
+Zauważysz w kodzie szesnastkowym, że niby przesunięcie odsunięcia reprezentuje pierwszy kolor firmy od 0 (ciemnoniebieski) do F (biały), a wysoki nibble reprezentuje drugi kolor firmowy.
