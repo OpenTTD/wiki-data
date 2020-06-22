@@ -1,0 +1,112 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+<div style="float:right; padding-left:12px; background:none;">{{en/NFONavVehicles}}</div>
+
+== Wprowadzenie ==
+Właściwości Działania 0 wspólne dla wszystkich typów pojazdów:
+Cztery typy pojazdów (pociągi, pojazdy drogowe, statki i samoloty) mają pewne wspólne właściwości, które zostały tutaj opisane.
+
+== Properties ==
+
+{| class="wikitable"
+|-
+!Number !![[en/GRFActionsDetailed|Size]]!!Version !!Description !!Available for articulated parts
+|-
+|00 ||W||{{en/Ottdp|0.6|2.0}}||date of introduction||no
+|-
+| 02||B||{{en/Ottdp|0.6|2.0}}||reliability decay speed||no
+|-
+| 03||B||{{en/Ottdp|0.6|2.0}}||vehicle life in years||no
+|-
+| 04||B||{{en/Ottdp|0.6|2.0}}||model life in years||no
+|-
+| 06||B||{{en/Ottdp|0.6|2.0}}||climate availability||should be zero
+|-
+| 07||B||{{en/Ottdp|0.6|2.0}} {{en/GrfFrom|2}}||loading speed||yes
+|}
+
+In TTDPatch properties 00 to 06 only apply to new games, or when using [[en/Ttwiki/ResetVehicleData|Cht: ResetVehicles]].
+In OpenTTD the same holds for 00, 02, 04 and 06 (i.e. not for 03) unless using [[en/Ottdwiki/Console#other-commands|resetengines]].
+
+== Description ==
+
+=== Date of introduction ===
+
+The date is specified as number of days since 1920 where TTD counts 365,25 days in a year. It will have a random number from 0 to 511 days added to it at the start of every new game, or after using [[en/Ttwiki/ResetVehicleData|Cht: ResetVehicles]] (TTDPatch) resp. [[en/Ottdwiki/Console#other-commands|resetengines]] (OpenTTD).
+
+{{en/Ottdp|&lt;0.7|}} Note that TTD stops updating vehicle type data after the game ends in 2050, so all dates of introduction should be no later than in 2044, to ensure that all vehicle types can be introduced and reach their maximum reliability. This restriction does not apply to OpenTTD 0.7 and newer.
+
+{{en/Ottdp|&lt;0.7| |ottdrev=before r16929}} If the property value is 729 (2D9h) or less, i.e. before 1922, the random number is not added and the vehicle is introduced at exactly the given date.
+
+{{en/Ottdp|0.7|no}} Since OpenTTD r16929 the start date is not randomised in the first two years after game-start (no matter whether before or after 1922).
+
+The \w&lt;date&gt; escape sequence is especially useful here. See [[en/GRFActionsDetailed#byte-order|the discussion of escape sequences]] for further information.
+
+=== Reliability decay speed ===
+
+The reliability decay speed is set when a new vehicle is bought, and specifies how quickly the reliability decays after servicing. &nbsp;The initial TTD default for all vehicles is 20. &nbsp;If a vehicle goes without servicing for a long time, or if it gets very, very old, this number increases, meaning faster decay and more breakdowns. &nbsp;Larger numbers mean faster decay, smaller number slower decay. If set to 0, reliability never decreases in normal operation.
+
+=== Vehicle life ===
+
+The number of years before a particular vehicle is considered too old and needs replacing,
+
+=== Model life ===
+
+The number of years that this model can be bought in the game (if PersistentEngines is off). &nbsp;Usually this should be at least twice or three times as &nbsp;long as the vehicle life. &nbsp;When starting a new game, a random amount between 31 months and 17 years is added to this as well.
+
+If the early retirement property (26/1B/16/16) is not set, the model life works like this:
+
+{|
+|-
+!Phase !!Duration !!Reliability
+|-
+|1||7 to 38 months||increases from 48-73% to 75-100%
+|-
+|2||prop. 04 less 8 years||stays constant at peak, 75-100%
+|-
+|3||10 to 20.5 years||decreases from peak to 25-50%
+|}
+
+(the ranges in time and reliability are randomized at the start of each game)
+
+At the end of phase 3, the model is retired and removed from the purchase list. &nbsp;Note that when the model reliability starts dropping in phase 3, so does the reliability of every single vehicle of this make in the game.
+
+Setting this property to 0xFF means the model will never expire.
+
+If persistentengines is on, the model never gets to within two years of the end of phase 2, it is kept in phase 2 as long as at least one vehicle of this make is in the game.
+
+If the early retirement property is set, the vehicle is retired this many years before the end of phase 2 (can be negative if desired), but not if persistentengines would keep the model alive.
+
+{{en/Ottdp|0.7|2.5|ottdrev=r14680|ttdprev=2.5 beta 7}} This property also works for wagons since TTDPatch 2.5 beta 7 resp. OpenTTD r14680.
+
+=== Climate availability ===
+
+This is a bit mask of the climates in which this model is available. &nbsp;Simply add the values for the climates:
+
+{|
+|-
+!Bit!!Value!!Climate
+|-
+|0||1||Temperate
+|-
+|1||2||Arctic
+|-
+|2||4||Tropical
+|-
+|3||8||Toyland
+|}
+
+For example, 1+2+4 = 07 would make a vehicle available in all climates except Toyland.
+
+If you need a vehicle not to be available through the purchase menu, e.g. a locomotive tender being part of an articulated vehicle (locomotive and tender), you may use a value of zero for the bit mask.
+
+{{en/Ottdp|no|2.5}} Same procedure works for vehicles to be used exlusively by [[en/Callback/AI construction/purchase selection |TTDPatch's AI]], but not by a human player.
+
+=== Loading speed ===
+This is the amount of cargo transferred per unit of time if using gradualloading. The default is 5 for trains and road vehicles, 10 for ships and 20 for aircraft. This amount of cargo is loaded to or unloaded from the vehicle every 40 ticks for trains, every 20 ticks for road vehicles and aircraft and every 10 ticks for ships.
+
+If [[en/Action0/Vehicles/Trains#miscellaneous-flags-27|Miscellaneous flag 5]] is set, the load amount specified in this property is scaled using [[en/Action0/Cargos#capacity-multiplier-1d|Cargo property 1D]].
+
+{{en/Ottdp|&lt;0.7||ottdrev=before r14672}} For aircraft carrying both passengers and mail this property is broken (wrt. mail) in TTDPatch and OpenTTD before r14672. All aircraft effectively use the load amount of the train engine with ID 00.
+
+{{en/Ottdp|0.7|no|ottdrev=r14672}} Od OpenTTD r14672 ta właściwość jest używana dla pasażerów, podczas gdy poczta używa 1/4 (w zaokrągleniu w górę). Możesz użyć [[en/Callbacks#load-amount-12|callback 12]]  do niezależnego kontrolowania ilości ładunku dla pasażerów i poczty.
