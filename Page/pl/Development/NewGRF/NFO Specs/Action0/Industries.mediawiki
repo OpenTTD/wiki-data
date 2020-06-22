@@ -1,0 +1,442 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+==Wprowadzenie==
+
+Branże działają podobnie jak budynki miejskie. Limit liczby rodzajów branży wynosi:
+* {{en/Ttdp|2.5}} TTDPatch: 37
+* {{en/Ottd|&lt;1.6}} OpenTTD < 1.6: 64
+* {{en/Ottd|1.6}} OpenTTD ⩾ 1.6: 128 per NewGRF, 240 in total
+The non-overridden original types count towards the (total) limit. Industries don't have a climate mask; you should simply not define an industry if it would be for the wrong climate.
+
+Defining industries follows the same schema as houses do: to start using an ID, you first need to define it by setting property 8 for it. If you try to reference an ID (either via action0 or via action3) that isn't defined, your request is ignored, but not reported as an error, either. This means that if you want to conditionally define an ID, all you need to do is skipping the action0 that sets property8, and everything else gets skipped automatically.
+
+== Properties ==
+{| |-
+!Property !![[en/GRFActionsDetailed|Size]] !!Version !! Description
+|-
+|08||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Substitute industry type
+|-
+|09||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Industry type override
+|-
+|0A||V||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Set industry layout(s)
+|-
+|0B||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Industry production flags
+|-
+|0C||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Industry closure message
+|-
+|0D||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Production increase message
+|-
+|0E||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Production decrease message
+|-
+|0F||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Fund cost multiplier
+|-
+|10||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Production cargo types
+|-
+|11||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Acceptance cargo types
+|-
+|12,13||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Production multipliers
+|-
+|14||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Minimal amount of cargo distributed
+|-
+|15||V||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Random sound effects
+|-
+|16||3*B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Conflicting industry types
+|-
+|17||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Probability in random game
+|-
+|18||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Probability during gameplay
+|-
+|19||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Map color
+|-
+|1A||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Special industry flags to define special behavior
+|-
+|1B||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||New industry text ID
+|-
+|1C,1D,1E||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 45}}||Input cargo multipliers for the three input cargo types
+|-
+|1F||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 49}}||Industry name
+|-
+|20||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 49}}||Prospecting success chance
+|-
+|21,22||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 49}}||Callback flags
+|-
+|23||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 73}}||Destruction cost multiplier
+|-
+|24||W||{{en/Ottdp|0.6|2.6|ttdprev=r1782}}||Default text for nearby station
+|-
+|25||V||{{en/Ottdp|1.9|no|ottdrev=e66cec8f}}||Production cargo type list
+|-
+|26||V||{{en/Ottdp|1.9|no|ottdrev=e66cec8f}}||Acceptance cargo type list
+|-
+|27||V||{{en/Ottdp|1.9|no|ottdrev=e66cec8f}}||Production multiplier list
+|-
+|28||V||{{en/Ottdp|1.9|no|ottdrev=e66cec8f}}||Input cargo multiplier list
+|}
+
+== Description ==
+
+=== Substitute industry type (08) ===
+
+Substitute industry type. The first assignment of this property copies all properties of the old type to this new type. Unlike for houses, the substitute type won't replace this new type if the definition becomes unavailable. List of [[en/IndustryDefaultProps#climate-independent-properties |valid industry types]]
+
+There's a special use of this property beginning from alpha 70: if you set it to FFh, you can disable an original industry. In this case, the ID used must be the number of industry you want to disable. Disable requests are ignored for industries not present on the current climate and industries already overridden.
+
+{{en/Ottdp|1.1|ottdrev=r20108}} AIs can use the substitute type to make decisions about station graphics and vehicle choice via [[en/Callbacks#ai-construction-purchase-selection-18| callback 18]].
+
+=== Industry type override (09) ===
+
+Industry type override. The overridden industry type won't be built in new random games. If the GRF file becomes active after the game was started, industries of the overridden new type won't be replaced by the new type. List of [[en/IndustryDefaultProps#climate-independent-properties |valid industry types]]
+
+By overriding an old type, you're saying "my type is a substitute for that old type". When GRFs ask information about the old type you've overridden (via industry variable 67, for example), they will get information about your type instead. If you want to replace an old industry type with something completely different, use the "disable" function of property 08 (see above), then define the new industry type ''without'' using property 09. A rule of thumb: if your industry accepts or produces different cargoes than the original one, it should not override the original one.
+
+For example, if you want to replace the old coal mine with something that changes its coal production more dynamically, use property 09 to override industry 00. This way, other industries that want to be far from coal mines will stay far from your industry type too. If, however, you want to replace the coal mine with a potash mine, do not use property 09. This will ensure that other industries don't consider your type as a coal mine.
+
+Please note, however, that only one new industry can override an old type. If two new types want to override the same old type, the first one wins, and the second is added normally, ignoring its property 09.
+
+=== Set industry layout(s) (0A) ===
+
+Format of industry layout tables:
+
+{| |-
+!Size!!Variable!!Meaning
+|-
+|B||numlayouts||The total number of layouts following
+|-
+|D||size||The size of the whole definition, excluding numlayouts and size
+|-
+|V||layouts||numlayout layouts, see format below
+|}
+
+Format of an industry layout:
+
+As a special case, if the first byte of a new industry layout is FEh, then only two bytes follow: the industry number and the layout number. The specified layout of the specified old industry type will be added to the layout list of the current industry. The following applies only if the first byte wasn't FEh
+
+{| |-
+!Size!!Variable!!Meaning
+|-
+|B||xoffs
+|-
+|B||yoffs||Offsets counted from the northernmost tile of the industry, specifying the position of the current tile. Both are taken as signed integers, but cannot go negative except the special case mentioned below.
+|-
+|B||oldtile||An old tile type to be put on the given tile
+|-
+|||--or--||
+|-
+|0xFE,W||newtile||The ID of an already defined industry tile, padded with 0 to create a word value. This tile type will be placed on the given tile.
+|-
+|||--or--||
+|-
+|0xFF|| ||The given tile is checked for clearance, but nothing will be placed on it. Useful to ensure some free space around your industry. This is the only case where xoffs and yoffs can be negative.
+
+{{en/GrfTill|7}} For GRF versions <= 7, if xoffs is negative, yoffs must be one lower than the wanted value.
+|
+|}
+
+The layout consists of a list of the above tile definitions, terminated by two bytes: 0,80h
+
+=== Industry production type (0B) ===
+
+{| |-
+!Value!!Meaning!!{{en/Ottdp|0.6|no}} Effect on nearby stations!!Effect if [[en/Callbacks#random-production-change-29|CB 29]] is disabled
+|-
+|00||consuming industry (e.g. power plant)||none||No production changes; no closure
+|-
+|01||extractive industry (e.g. coal mine)||suffix 'Mines' if some non-liquid, non-passenger, non-mail cargo is produced||Standard primary-industry production change
+|-
+|02||organic industry (e.g. forest)||suffix 'Forest' or 'Woods' if wood is produced||Standard primary-industry production change
+|-
+|04||processing industry (e.g. steel mill)||none||Standard processing-industry closing-behaviour
+|}
+Other values are reserved; do not set any other values.
+
+=== Industry messages (0C..0E), new industry text ID (1B) ===
+
+The text associated with these textID will be shown if the industry announces closedown, if the industry increases production, if the industry decreases production or when the industry is generated during the game.
+
+For the generation message, by default, all industries have "New xxx is being constructed near yyy", except forests, that have "New Forest is being planted near yyy".
+
+=== Production cargo types (10) ===
+
+Two climate-dependent cargo numbers representing the cargo types the industry can produce. Unused slots can be filled with FFh. List of valid types: [[en/CargoTypes]]
+
+{{en/Ottdp|1.9|no|ottdrev=e66cec8f}} This property only supports two output cargos. Use property 25 instead to output more cargo types.
+
+=== Acceptance cargo types (11) ===
+
+Three climate-dependent cargo numbers representing the cargo types the industry can accept, plus a fourth filler byte which is always ignored. Unused slots can be filled with FFh. List of valid types: [[en/CargoTypes]]
+
+These cargo types will only be really accepted if the according acceptance of the industry tiles adds up to 8/8 or more.
+
+From GRF version 7 and above, the meaning of the above two properties will change: instead of climate-dependent cargo slot numbers, you have to give climate-independent cargo IDs. If your GRF has a cargo translation table, then this ID is the index in that table; otherwise, it's the cargo bit. Cargoes not currently present will be changed to FFh. Please note that TTD stops processing these lists at the first FFh value, so specifying absent cargoes isn't always safe.
+
+{{en/Ottdp|1.9|no|ottdrev=e66cec8f}} This property only supports three input cargos. Use property 26 instead to output more cargo types.
+
+=== Production multipliers (12, 13) ===
+
+If nonzero, the industry periodically (every 256 ticks, that is 8 or 9 times in a month) produces the given amount from the according cargo type. The properties specify the amount produced at default production level, they are scaled equally on [[en/Callbacks#random-production-change-29|production changes]].
+
+{{en/Ottdp|1.9|no|ottdrev=e66cec8f}} This properties only supports two output cargos. Use property 27 instead to output more cargo types.
+
+=== Minimal amount of cargo distributed (14) ===
+
+The produced cargo will be distributed to stations only after it exceeds this amount.
+
+=== Random sound effects (15) ===
+
+The data starts with a byte defining the number of available effects, then one byte per effect. TTD periodically picks one of the available effects randomly, and plays it.
+
+=== Conflicting industry types (16) ===
+
+3 bytes define 3 types that won't appear in the vicinity of this industry. If a byte has bit 7 set, the bottom 6 bits are the ID of a new type already defined in the current GRF file. If bit 7 is clear, the bottom 6 bits specify an old industry type. FFh can be used to fill unused entries. You shouldn't modify property 9 after the type has been referenced by a property 16. List of [[en/IndustryDefaultProps#climate-independent-properties |valid industry types]]
+
+=== Probability in random game (17), Probability during gameplay (18) ===
+
+Old types have probabilities between 0 and 10. If the random game probability value is nonzero, at least one instance of this type is guaranteed to appear on the map.
+
+These probabilities are "relative probabilities". That is, if you set the probability of industry A to twice the probability of industry B, industry A will appear about twice as often as B. Increasing the probabilities of all industries on the other hand changes nothing. The appearance probabilities have no influence on how many industries are placed in total.
+
+=== Map colour (19) ===
+
+The value must be a color index from the DOS pallette. The following values are used by default industries:
+
+{| |-
+!Number!!Colour!!Example
+|-
+|01||Black||Coal mine
+|-
+|0A||Gray||Steel mill
+|-
+|0F||White||Bank
+|-
+|25||Dark beige||Water supply
+|-
+|27||Light beige||Rubber plantation
+|-
+|30||Pink||Farm
+|-
+|37||Brown||Food processing plant
+|-
+|56||Green||Forest
+|-
+|98||Blue||Oil wells/oil rig
+|-
+|AE||Purple||Factory
+|-
+|B8||Red||Power station
+|-
+|BF||Yellow||Oil refinery
+|-
+|C2||Orange||Saw mill
+|-
+|D0||Light green||Water tower
+|}
+
+=== Special industry flags to define special behavior (1A) ===
+
+{| |-
+!Bit!!Value!!Version!!Meaning
+|-
+|0||1||{{en/Ottdp|0.6|2.5}}||The industry periodically plants fields around itself (temperate and arctic farms)
+|-
+|1||2||{{en/Ottdp|0.6|2.5}}||The industry cuts trees around itself and produces its first output cargo from them (lumber mill)
+|-
+|2||4||{{en/Ottdp|0.6|2.5}}||The industry is built on water (oil rig)
+|-
+|3||8||{{en/Ottdp|0.6|2.5}}||The industry can only be built in towns (i.e. it has to replace houses) with population larger than 1200 (temperate bank)
+|-
+|4||10||{{en/Ottdp|0.6|2.5}}||The industry can only be built in towns (i.e. it has to replace houses) (arctic and tropic banks, water tower)
+|-
+|5||20||{{en/Ottdp|0.6|2.5}}||The industry is always built near towns (i.e. near town sign; additionally the industry is allowed to replace houses) (toy shop)
+|-
+|6||40||{{en/Ottdp|0.6|2.5}}||Fields are planted around the industry when it's built (all farms)
+|-
+|7||80||{{en/Ottdp|0.6|2.5}}||The industry cannot increase its production on the temperate climate (oil wells)
+|-
+|8||100||{{en/Ottdp|0.6|2.5}}||The industry is built only before 1950 (oil wells)
+|-
+|9||200||{{en/Ottdp|0.6|2.5}}||The industry is built only after 1960 (oil rig)
+|-
+|10||400||{{en/Ottdp|0.6|2.5}}||AI players will attempt to establish air and ship routes going to this industry (oil rig)
+|-
+|11||800||{{en/Ottdp|0.6|2.5}}||The industry can be exploded by a military airplane (oil refinery)
+|-
+|12||1000||{{en/Ottdp|0.6|2.5}}||The industry can be exploded by a military helicopter (factory)
+|-
+|13||2000||{{en/Ottdp|0.6|2.5}}||The industry can cause a subsidence (coal mine)
+|-
+|14||4000||{{en/Ottdp|0.6|2.5}}||Automatic production multiplier handing (No industry has this bit set by default.)<ref>If bit 14 is set, variables 40..42 will be divided by industry.prodmultiplier (variable 93), and the resulting instructions will be multiplied by the same amount before applying them. If you set this bit, please use small amounts in your instructions, since industry.prodmultiplier is 16 for default production, and can get as high as 128.</ref>
+|-
+|15||8000||{{en/Ottdp|0.6|2.5}}||The production callback needs random bits in var. 10 (No industry has this bit set by default.)
+|-
+|16||10000||{{en/Ottdp|1.0|2.6|ttdprev=r1925}}||Do not force one instance of this type to appear during initial map generation (No industry has this bit set by default.)
+|-
+|17||20000||{{en/Ottdp|0.6|2.6|ttdprev=r1925}}||Allow closing down the last instance of this type (No industry has this bit set by default.)
+|-
+|18||40000||{{en/Ottdp|1.9|no|ottdrev=e66cec8f}}||New format for callback 37, 14B, 14C to support more input/output cargos. See the callbacks for details.
+|}
+
+<references />
+
+By default, TTDPatch tries to ensure that cargo chains don't get broken. To achieve this, TTDPatch always generates at least one instance from every available industry type during random map generation, and prevents the last instance from closing down even when the production change callback says it should. If your industry type isn't essential for gameplay, or you want to handle this situation yourself, you can set bits 16 and/or 17 to turn off the default TTDPatch behavior.
+
+If you supply a lot of industry types but also want to support OpenTTD's small map sizes you should set bit 16 for the less important industry types which can be ommitted (there will likely not be enough space for an industry of every type).
+
+=== Input cargo multipliers for the three input cargo types (1C..1E) ===
+
+If the first (low) word of the property is M1 and the second (high) word is M2, and X units of the corresponding cargo is delivered to the industry, the output amounts are calculated this way:
+
+<pre>output_type1 = X*M1/256
+
+output_type2 = X*M2/256</pre>
+
+The default value for old industry types is 0100h,0000h , so every unit of input cargo produces one unit of output cargo of the first type. Exceptions are temperate banks and oil rigs, that have the default value of 0000h,0000h ,so input cargo doesn't affect output.
+
+{{en/Ottdp|1.9|no|ottdrev=e66cec8f}} This property only supports three input and two output cargos. Use property 28 instead, if you have more cargo types.
+
+=== Industry name (1F) ===
+
+This is the text ID that will be attached to the town name when TTD texts refer to the industry.
+
+=== Prospecting success chance (20) ===
+
+This value is currently used only for extractive and organic industries (see property 0B for details). The higher this value is, the higher the chance that your industry can be built on a random place after prospecting. 0 means constant failure, while FFFFFFFFh means constant success.
+
+=== Callback flags (21,22) ===
+
+Property 21 can have the following bits set:
+
+{| |-
+!Bit!!Value!!Var. 0C!!Version!!Callback
+|-
+|0||1||22||{{en/Ottdp| |2.5}}||Determine whether the industry can be built
+|-
+|1||2||00||{{en/Ottdp| |2.5}}||Call the [[en/Action2Industries|production callback]] when cargo arrives at the industry <ref name="smootheconomy">{{en/Ottdp|0.6|no}} If none of the production change callbacks is activated, OpenTTD will use "smooth economy" if enabled. If any of the callbacks is enabled, "smooth economy" will be disabled for the industry.</ref>
+|-
+|2||4||00||{{en/Ottdp| |2.5}}||Call the [[en/Action2Industries|production callback]] every 256 ticks <ref name="smootheconomy"/>
+|-
+|3||8||28||{{en/Ottdp| |2.5}}||Determine whether the industry can be built on given spot
+|-
+|4||10||29||{{en/Ottdp| |2.5}}||Control random production changes
+|-
+|5||20||35||{{en/Ottdp| |2.5}}||Monthly random production change
+|-
+|6||40||37||{{en/Ottdp| |2.5}}||Cargo sub-type display
+|-
+|7||80||38||{{en/Ottdp| |2.5|ttdprev=2.0.1 alpha 72}}||Additional text in industry fund window
+|}
+<references/>
+
+Property 22 can have the following bits set:
+
+{| |-
+!Bit!!Value!!Var. 0C!!Version!!Callback
+|-
+|0||1||3A||{{en/Ottdp| |2.5|ttdprev=2.0.1 alpha 72}}||Show additional text in industry window
+|-
+|1||2||3B||{{en/Ottdp| |2.5|ttdprev=2.0.1 alpha 73}}||Control special industry effects
+|-
+|2||4||3D||{{en/Ottdp| |2.5|ttdprev=2.5 beta 4 }}||Opt out of accepting cargo
+|-
+|3||8||14A||{{en/Ottdp| |2.6|ttdprev=r1712}}||Decide industry color
+|-
+|4||10||14B||{{en/Ottdp| |2.6|ttdprev=r1718}}||Decide input cargo types
+|-
+|5||20||14C||{{en/Ottdp| |2.6|ttdprev=r1718}}||Decide output cargo types
+|-
+|6||40||15F||{{en/Ottdp|1.3|no|ottdrev=r24186}}||Set initial production level on construction.
+|}
+
+=== Destruction cost multiplier (23) ===
+
+This value specifies the cost of removing the industry when the ctrl-dynamite function of morebuildoptions.removeindustry is enabled. This value is multiplied by the house removal cost multiplier to get the final cost. The default value is 1000 in TTDPatch, and 0 (zero) in OpenTTD.
+
+=== Default name for nearby station (24) ===
+
+If non-zero, this text ID specifies an additional name option for stations built near this industry, which will be used before any of the standard TTD names. The text should contain a \80, which will be the name of the nearby town.
+
+If the newly built station cannot use the specified text (because that name has been used for another station in the same town) the default TTD naming system will be used, but without the names "\80 Oilfield" or "\80 Mines".
+
+Setting this to zero disables "\80 Oilfield" and "\80 Mines" without adding any additional station name options.
+
+=== Production cargo type list (25) ===
+{{en/Ottdp|1.9|no|ottdrev=e66cec8f}} 
+
+Format:
+ <numoutput> (<cargotype>)*
+
+{| |-
+!Size!!Variable!!Meaning
+|-
+|B||numoutput||Number of <cargotype> to follow,
+|-
+|B||cargotype||Cargotype (from CTT) to produce.
+|}
+
+This property defines up to 16 cargotypes, which are produced by the industry.
+Use this property instead of property 10.
+
+=== Acceptance cargo type list (26) ===
+{{en/Ottdp|1.9|no|ottdrev=e66cec8f}} 
+
+Format:
+ <numinput> (<cargotype>)*
+
+{| |-
+!Size!!Variable!!Meaning
+|-
+|B||numinput||Number of <cargotype> to follow,
+|-
+|B||cargotype||Cargotype (from CTT) to accept.
+|}
+
+This property defines up to 16 cargotypes, which are accepted by the industry.
+Use this property instead of property 11.
+
+=== Production multiplier list (27) ===
+{{en/Ottdp|1.9|no|ottdrev=e66cec8f}} 
+
+Format:
+ <numoutput> (<amount>)*
+
+{| |-
+!Size!!Variable!!Meaning
+|-
+|B||numinput||Number of <amount> to follow,
+|-
+|B||amount||Amount of cargo to produce.
+|}
+
+If nonzero, the industry periodically (every 256 ticks, that is 8 or 9 times in a month) produces the given amount from the according cargo type.
+The amounts correlate to the cargotypes set by property 25. If fewer/more amounts are set, the extra items are not produced/ignored.
+
+The properties specify the amount produced at default production level, they are scaled equally on [[en/Callbacks#random-production-change-29|production changes]].
+
+Use this property instead of property 12 and 13.
+
+=== Input cargo multiplier list (28) ===
+{{en/Ottdp|1.9|no|ottdrev=e66cec8f}} 
+
+Format:
+ <numinput> <numoutput> (<multiplier>)*
+
+{| |-
+!Size!!Variable!!Meaning
+|-
+|B||numinput||Number of input cargos to use.
+|-
+|B||numoutput||Number of output cargos to use.
+|-
+|W||multiplier||Cargo multipliers in 1/256 units. <numinput>*<numoutput> items.
+|}
+
+This property defines a matrix which described how input cargos from property 26 are processed into output cargos from property 25.
+
+Example:
+ 03 04    // 3 input cargos, 4 output cargos
+    \wx0100 \wx0000 \wx0000 \wx0100    // input cargo 0 is converted to output cargos 0 and 3
+    \wx0000 \wx0100 \wx0000 \wx0100    // input cargo 1 is converted to output cargos 1 and 3
+    \wx0000 \wx0000 \wx0100 \wx0100    // input cargo 2 is converted to output cargos 2 and 3
+
+The matrix correlates to the cargotypes set by property 25 and 26. If fewer/more cargotypes are used, the extra items are not produced/ignored.
+
+Użyj tej właściwości zamiast właściwości 1C..1E.
