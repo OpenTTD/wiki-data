@@ -1,0 +1,90 @@
+
+<!--{{-}}<br>-->{{en/Ambox| text = w trakcie edycji.}}<!-- -->
+<div style="float:right; padding-left:12px; background:none;">{{en/NFONavVehicles}}</div>
+
+== Wprowadzenie ==
+
+Specjalny rodzaj akcji 3 nazywa się malowaniem lub ominięcie wagonu. Gdy jest używany, zmienia wygląd wagonów kolejowych, gdy są podłączone do określonego silnika. Umożliwia to posiadanie zestawów pociągów, w których wygląd niektórych wagonów odpowiada wyglądowi silnika.
+
+Umożliwia także zmianę wyglądu wirników śmigłowca, aw przyszłości wygląd efektów wizualnych pociągu, takich jak dym z pary i oleju napędowego.
+
+== How to use it ==
+
+The format of a wagon override is the same as a regular action 3 entry, with the following special considerations:
+* It must immediately follow the action 3 entry of the engine, or another wagon override (no other kind of sprites allowed in-between) (This requirement is no longer present starting from TTDPatch 2.0.1 alpha 41.)
+* Its nvid value must have bit 7 set, i.e. it must have 80 added to it
+* It must list the vehicle IDs of the wagons to use overrides for, and the action 2 IDs of the graphics to use for the override
+* The wagon's sprite ID must have been set to FD to show new graphics for the override to work
+* You can't skip just a livery override using action 7, you always have to skip all linked action 3's, i.e. from the engine action 3 to the last livery override.
+
+You can have as many wagon override following an engine action 3 as you like, but they must not be interrupted by other sprites (except, since TTDPatch 2.0.1 alpha 41, a possible action 6).
+
+When using this feature for helicopter rotor overrides (or later, for visual effect overrides), the engine action 3 and the wagon override must have the same vehicle ID, essentially making it not a wagon override but an engine override. &nbsp;The patch catches this special case and makes it apply to the rotor graphics instead.
+
+== Przykład ==
+
+Oto przykład zastąpienia wagonu pasażerskiego, furgonetki pocztowej i wagonu opancerzonego dla silnika pociągu o numerze identyfikacyjnym 28. Grafika silnika została zdefiniowana w działaniu 2 ID 00, grafika dla wagonu pasażerskiego o numerze ID 01 oraz furgonetka pocztowa i opancerzona furgonetka używa tej samej grafiki, co ID 02.
+
+<pre>23 * 7   03 00 01 28 00 00 00
+
+24 * 7   03 00 81 1B 00 01 00
+
+25 * 7   03 00 82 1C 37 00 02 00</pre>
+
+{| class="wikitable"
+|-
+!'''Byte'''
+!'''Meaning'''
+|-
+| colspan="2" | Passenger Carriage Override
+|-
+|24
+|&lt;sprite-number&gt;
+|-
+|7
+|&lt;length&gt; of the action in bytes; start counting at 03 (&lt;action&gt;)
+|-
+|03
+|&lt;action&gt;: sets this pseudo-sprite to function as action 3
+|-
+|00
+|&lt;feature&gt;: 00 for trains
+|-
+|81
+|&lt;n-id&gt;: 1 wagon to override
+|-
+|1B
+|&lt;ids...&gt;: vehicle ID (1B - passenger carriage)
+|-
+|00
+|&lt;num-cid&gt;: this wagon doesn't have any cargo-specific graphics
+|-
+|01 00
+|&lt;def-cid&gt;: use action 2 ID 01
+|-
+| colspan="2" | Mail Van and Armoured Van Override
+|-
+|25
+|&lt;sprite-number&gt;
+|-
+|7
+|&lt;length&gt; of the action in bytes; start counting at 03 (&lt;action&gt;)
+|-
+|03
+|&lt;action&gt;: sets this pseudo-sprite to function as action 3
+|-
+|00
+|&lt;feature&gt;: 00 for trains
+|-
+|82
+|&lt;n-id&gt;: 2 wagon IDs to override
+|-
+|1C 37
+|&lt;ids...&gt;: vehicle IDs, 1C mail van and 37 armoured van
+|-
+|00
+|&lt;num-cid&gt;: these wagons don't have cargo-specific graphics
+|-
+|02 00
+|&lt;def-cid&gt;: Use action 2 ID 02
+|}
