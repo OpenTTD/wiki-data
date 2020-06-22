@@ -1,0 +1,88 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+== Wprowadzenie ==
+
+{{en/Ottdp|1.1|ottdrev=r19204}}
+Kafelki lotniskowe działają jak kafelki przemysłowe i podobnie jak budynki miejskie, z tym wyjątkiem, że nie są samodzielne. Oznacza to, że kafelek lotniska nie może być samodzielny, zawsze jest częścią lotniska.
+
+== Properties ==
+
+{| |-
+!Number!!Version!![[en/GRFActionsDetailed|Size]]!!Description
+|-
+|08||{{en/Ottdp|1.1|ottdrev=r19204}}||B||Substitute airport tile type
+|-
+|09||{{en/Ottdp|1.1|ottdrev=r19204}}||B||Airport tile override
+|-
+|0E||{{en/Ottdp|1.1|ottdrev=r19204}}||B||Callback flags
+|-
+|0F||{{en/Ottdp|1.1|ottdrev=r19204}}||W||Animation information
+|-
+|10||{{en/Ottdp|1.1|ottdrev=r19204}}||B||Animation speed.
+|-
+|11||{{en/Ottdp|1.1|ottdrev=r19204}}||B||Animation triggers
+|}
+
+== Descriptions ==
+
+=== Substitute tile type (08) ===
+
+This tile type will be used instead of your new one if your definition isn't available for any reason. Assigning this property copies the properties of the old type just like it does with houses. If this tile's action 3 appears before this property is set, the action 3 will have no effect.
+
+=== Airport tile override (09) ===
+
+Works like the house override property for houses and industry tiles.
+
+=== Callback flags (0E) ===
+
+{| |-
+!Bit!!value!!version!!meaning
+|-
+|0||1||{{en/Ottdp|1.1|ottdrev=r19204}}||use [[en/Callbacks#next-animation-frame-1a-26-141-153-158 |callback 153]] to decide the next animation frame
+|-
+|1||2||{{en/Ottdp|1.1|ottdrev=r19204}}||use [[en/Callbacks#length-of-animation-frame-20-27-142-154-15a |callback 154]] to decide animation speed
+|-
+|2||4||{{en/Ottdp}}||(reserved)
+|-
+|3||8||{{en/Ottdp}}||(reserved)
+|-
+|4||10||{{en/Ottdp|1.1|ottdrev=r19204}}||use callback xx to check if a slope is suitable (not yet implemented)
+|-
+|5||20||{{en/Ottdp|1.1|ottdrev=r19204}}||use [[en/Callbacks#decide-drawing-default-foundations-30-14e-150 |callback 150]] to decide if default foundations need to be drawn
+|-
+|6||40||{{en/Ottdp|1.1|ottdrev=r19204}}||use callback xx to allow or deny autosloping below the tile (not yet implemented)
+|}
+
+Please note that callback 152 doesn't have a bit here. To use [[en/Callbacks#animation-control-1b-25-140-152-159 |callback 152]], simply set the wanted bits in property 11 and it will work as intended.
+
+=== Animation information (0F) ===
+
+The low byte specifies the number of animation frames minus one, so 00 means 1 frame, 01 means 2 frames etc. The maximum number of frames is 256, although you can have some problems if your animation exceeds FD (253) frames. The high byte must be 0 for non-looping animations and 01 for looping animations. Every other value is reserved for future use. In addition, if the whole word contains FFFF, animation is turned off for this tile (this is the default value).
+
+=== Animation speed (10) ===
+
+The meaning is the same as for house property 1B, but the lower limit is 0 instead of 2, so the fastest possible animation changes frames every game tick (27ms). The default value is 2.
+
+=== Animation triggers via [[en/Callback/Animation control |callback 152]] (11) ===
+
+This shares some flags with industry tiles and others with stations. Call [[en/Callback/Animation control|callback 152]] when:
+
+{| |-
+!Bit!!Value!!Version!!Meaning!!Var 18
+|-
+|0||1||{{en/Ottdp|1.1|ottdrev=r19204}}||airport was just constructed||
+|-
+|1||2||{{en/Ottdp|1.1|ottdrev=r19204}}||the tile is processed in the periodic processing loop||
+|-
+|2||4||{{en/Ottdp|1.1|ottdrev=r19204}}||new cargo arrives at the station (for all airport tiles the same)||<ref name="cargotype">Bits 8..15 of var 18 contain the triggering cargo type. If your GRF has a cargo translation table, the cargo type will be an index in that table, or FFh if the cargo isn't in the table. If you don't have a cargo translation table, the cargo type will simply be the climate-dependent cargo type number.</ref>
+|-
+|3||8||{{en/Ottdp|1.1|ottdrev=r19204}}||a cargo type gets removed from the station (for all airport tiles the same)||<ref name="cargotype"/>
+|-
+|4||10||{{en/Ottdp|1.1|ottdrev=r19204}}||every 250 ticks (for all airport tiles the same)||
+|-
+|5||20||{{en/Ottdp|1.9}}||Triggered when an airplane (not a helicopter!) lands at airport (single tile only)||
+|}
+
+<references/>
+
+== Przykład ==
