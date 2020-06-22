@@ -1,0 +1,439 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+==Wprowadzenie==
+
+Definiowanie właściwości nowych stacji.
+
+
+W przeciwieństwie do pojazdów, nowe stacje nie mają odpowiednika TTD. W związku z tym można wybrać dowolne identyfikatory i w rzeczywistości zostaną one przydzielone automatycznie. W akcji 0 podajesz tylko identyfikatory w stosunku do zestawu, tj. Identyfikator pierwszego typu stacji to 00, drugi typ stacji to 01 itd..
+
+{{en/Ttdp|}} In TTDPatch each game can only have 255 station IDs for all active grf files.
+
+The only property you '''must''' set for each station ID is 08 (in addition to defining an [[en/Action3|action 3]] for it), anything else can be left at the default. It must be the first property you set for each station ID, because the station ID is actually undefined until it has been assigned a class through property 08. Also, all station IDs must get their classes in the right order, starting from ID 00 onwards.
+
+== Properties ==
+
+{| |-
+!Number!![[en/GRFActionsDetailed|Size]]!!Version!!Description
+|-
+|08||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 19}}||Class ID, see below
+|-
+|09||V||{{en/Ottdp|0.6|2.5|ttdprev=alpha 20}}||Sprite layout, see below
+|-
+|0A||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 20}}||Copy sprite layout
+|-
+|0B||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 22}}||Callback flags
+|-
+|0C||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 22}}||Bit mask of disabled numbers of platforms
+|-
+|0D||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 22}}||Bit mask of disabled platform lengths
+|-
+|0E||V||{{en/Ottdp|0.6|2.5|ttdprev=alpha 22}}||Define custom layout, see below
+|-
+|0F||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 22}}||Copy custom layout from stationid given by argument
+|-
+|10||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 25}}||Little/lots threshold
+|-
+|11||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 27}}||Pylon placement
+|-
+|12||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 30}}||Bit mask of cargo type triggers for random sprites
+|-
+|13||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 30}}||General flags
+|-
+|14||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 47}}||Overhead wire placement
+|-
+|15||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 51}}||Can train enter tile
+|-
+|16||W||{{en/Ottdp|0.7|2.5|ttdprev=beta 9}}||Animation information
+|-
+|17||B||{{en/Ottdp|0.7|2.5|ttdprev=beta 9}}||Animation speed
+|-
+|18||W||{{en/Ottdp|0.7|2.5|ttdprev=beta 9}}||Animation triggers
+|-
+|19||V||{{en/Ottdp}}||Road routing (reserved for future use)
+|-
+|1A||V||{{en/Ottdp|1.2|no|ottdrev=r22518}}||Advanced sprite layout with register modifiers
+|}
+
+
+Unofficial additions and changes. Don't rely on them to ever work this way in OpenTTD or TTDPatch:
+{| |-
+!Number!![[en/GRFActionsDetailed|Size]]!!Version!!Description
+|-
+|1B||8*B||whatever-PP||Minimum bridge height for bridges over stations
+|}
+
+== Description ==
+
+=== Station class (08) ===
+TTDPatch groups sets of new station graphics into various classes. &nbsp;The classes can be selected by the top dropdown list in the construction window, and the individual stations within the class from the bottom dropdown list. &nbsp;In addition, each station can alter its appearance using [[en/VariationalAction2|variational]] and/or [[en/RandomAction2|random]] action 2 entries.
+
+Only two classes are pre-defined:
+
+{| |-
+!Name!!Class ID!!Intended use for station
+|-
+|DFLT||44 46 4C 54||Default, no special station type
+|-
+|WAYP||57 41 59 50||Non-cargo stations, waypoints, signal boxes etc.
+|}
+
+You may simply use other classes than the above, as long as no more than (at the moment) 16 classes are used among all active .grf files at any time.
+
+When a WAYP station is built, it will not accept cargo nor will any cargo appear from nearby industries or towns. &nbsp;Trains will not stop at WAYP stations, regardless of the non-stop order and/or the nonstop switch.
+
+=== Sprite layout (09) ===
+This controls what sprites are displayed, where they are displayed, and in what order. &nbsp;The property is variable sized, and contains the data for all 8 possible station tile types. &nbsp;If this property is set, the num-ent in the corresponding [[en/Action1|action 1]] need not be equal to 12 (hex), it can in fact be any number, and any number of sprites can be displayed in any order.
+
+The data is specified as data for all eight tiles in this way:
+
+<pre>&lt;num&gt; &lt;data1&gt; &lt;data2&gt; ... &lt;datan&gt;</pre>
+
+{| |-
+!Size!!Name!!Meaning
+|-
+|B*||num||Number of different tiles supported (see below)
+|-
+|V||data1...||The variable size data for each of the &lt;num&gt; tiles, as specified below
+|}
+
+===== Number of tiles supported =====
+* Normally this is 8, but you can specify fewer as well
+* Using callback flags bit 1, specifying more makes sense too
+* This value must be the same for all stations set by this action 0, even though it must be repeated for the prop. 09 definition of each station ID as well
+
+(Note that num is an extended byte, see [[en/GRFActionsDetailed]].)
+
+The content of each of the (usually eight) data sets is either a new sprite layout:
+
+{| |-
+!Size!!Name!!Meaning
+|-
+|D||groundsprite||the sprite to draw for the rails; this is by default a TTD sprite, but with bit 31 set an [[en/Action1|action 1]] sprite (42D+X) may be specified
+|-
+|V||spritedata||the data for station sprites, see below; each has a size of 10 bytes, and there may be several
+|-
+|B||80||a literal 80 ends the list of sprites for this tile
+|}
+or, alternatively, the instruction to use TTD's layout by using four zero bytes 00 00 00 00 instead of the groundsprite bytes. You can use [http://www.bytetransfer.de/projects/ttdpatch/docs/spriteidmapping.php the online sprite ID converter] to look up the sprite IDs you can use for all the climates.
+
+One can draw two types of sprites. &nbsp;One type is one that establishes a new 3D bounding box for use by the sprite sorter. &nbsp;The other type shares the 3D bounding box of the previous sprite(s). &nbsp;It must not be larger than the sprite which established the bounding box, nor must any part of it be outside this box. &nbsp;For simplicity, it should have the exact same dimensions as the sprite it shares the bounding box with. &nbsp;The latter type is supported in the station construction window display only since TTDPatch 2.6 r1684.
+
+The spritedata of sprites with their own bounding box has this format:
+
+{| |-
+!Size!!Name!!Meaning
+|-
+|B||xofs||x-offset from northern tile corner
+|-
+|B||yofs||y-offset from northern tile corner
+|-
+|B||zofs||z-offset from northern tile corner
+|-
+|B||xextent||size of sprite in x direction
+|-
+|B||yextent||size of sprite in y direction
+|-
+|B||zextent||size of sprite in z direction
+|-
+|D||sprite||sprite number to draw
+|}
+
+The spritedata of sprites sharing the bounding box has this format:
+
+{| |-
+!Size!!Name!!Meaning
+|-
+|B||xofs||x-offset relative to previous sprite
+|-
+|B||yofs||y-offset relative to previous sprite
+|-
+|B||80||a literal 80
+|-
+|B||00||(ignored)
+|-
+|B||00||(ignored)
+|-
+|B||00||(ignored)
+|-
+|D||sprite||sprite number to draw
+|}
+
+Since OpenTTD r18959 you can draw multiple ground sprites for a tile, which is useful if you want to use the usual rail/grass/concrete groundtile, but still need to add features to it without using a new bounding box. To do so use the syntax of sprites sharing the previous bounding box, but use it before the first bounding box definition. xpixeloffset and ypixeloffset refer to the usual spot of groundtiles. The same feature is also partially supported in TTDPatch since TTDPatch 2.6 r2312: TTDPatch ignores the xofs and yofs fields and always uses (0,0) for the offset. If you are developing a GRF that needs to be compatible with both OpenTTD and TTDPatch, you should always keep xofs and yofs zero to get the same effect in both games.
+Note however that both implementations do not consider the [[en/Action0/Stations#general-flags-13|setting of prop13 bit 0]], hence these "multiple ground sprites" have to be always part of the building sprites set and cannot be part of the different sprite set for ground sprites.
+
+The sprite number can have the following values (remember to use little endian, i.e. reversed byte order):
+
+{| |-
+!Number!!Sprite
+|-
+|0000042D+X||use sprite X from the corresponding [[en/Action1|action 1]] block (i.e. 0000042D for the first, 0000042E for the second, etc.)
+|-
+|0000842D+X||same, but draw it using company colour translation
+|-
+|0322442D+X||same, but draw in transparent mode (actual colours of the sprite are disregarded entirely); supported in station construction window display since TTDPatch 2.6 r1683
+|-
+|RRRR842D+X||draw sprite with colour translation defined in sprite RRRR; available since TTDPatch 2.6 r1683
+|}
+
+With bit 31 set, this sprite will refer to a TTD sprite, not the action 1 sprite. For the first ground sprite the reverse meaning applies.
+
+Depending on the railtype the sprites may get additional offsets:
+
+{| |-
+! !! Normal/electrified rail !! Monorail !! Maglev
+|-
+|TTD sprites || 0 || 82 || 164
+|-
+|Action 1 sprite (first ground sprite) || 0 || 1 || 2
+|-
+|Action 1 sprite (other sprites in the layout) || 0 || 0 || 0
+|}
+
+So, TTD sprites and the first ground sprite are affected by the railtype, while other action 1 sprites in the layout are not. The offset "82" refers to the offset between the default TTD track sprites; if you are using non-track ground sprites which are not from an action 1, you need to supply fake spritenumbers which preemptively reverse the offsets (that is, you need different sprite layouts for every railtype your station is available for).
+
+Setting bit 30 forces this sprite to be displayed normally even in "transparent buildings" mode (supported only in TTDPatch 2.6 r1695 and later).
+
+See below for an example of linked sprites as well as transparent sprites (e.g. for a station roof).
+
+Note that the coordinates here are 3D coordinates with x running from top-right to bottom-left and y running from top-left to bottom-right, with the tile dimensions being 16x16 (and 8 for one height level). This means the x and y values should always be within 0-15 (decimal).
+
+This is different to and independent from the x/y offsets used in the actual .NFO file. &nbsp;The 3D bounding box is used by TTD's sprite sorter to figure out the order in which to draw the sprites, as well as telling it which sprites to draw, because those whose bounding box falls outside the currently updated screen rectangle will not be drawn. &nbsp;Make sure the 3D bounding box is large enough to contain the entire sprite, but not so large that the sprite sorter can't determine which sprites should be in front.
+
+This means that the order in which you specify sprites is irrelevant. &nbsp;Sprites will get drawn from back to front, in the order which the sprite sorter determines as correct, from their bounding boxes. &nbsp;There are two exceptions, however:
+* Sprites sharing the same bounding box will always be drawn in the given order.
+* The station construction window display doesn't use the sprite sorter. Tiles that may be displayed in that window need to be specified in the correct drawing order, back to front.
+
+=== Copy sprite layout (0A) ===
+
+This is not a property as such, but an action. &nbsp;It takes as argument a byte which is interpreted as station-ID to copy the custom sprite layout from.
+
+=== Callback flags (0B) ===
+For stations, the following [[en/Callbacks]] can be defined by setting the corresponding bit in property 0B:
+
+{| |-
+!Bit!!Value!!Variable 0C value!!Callback
+|-
+|0||1||13||Whether to make station available in construction window (non-zero callback return) or not (callback returns zero)
+|-
+|1||2||14||Use callback to select sprite layout
+|-
+|2||4||141||Decide next animation frame
+|-
+|3||8||142||Decide animation speed
+|-
+|4||10||149||Custom slope check
+|}
+Bit is the bit you have to set, you do this by adding all the values for all the bits. Variable 0C value is what variable 0C will be set to, for checking it in the [[en/VariationalAction2|VarAction2]] for callbacks.
+
+=== Selection of numbers of platforms and length (0C, 0D) ===
+
+By default all platform lengths and any number of platforms is available for the new stations. &nbsp;Using these properties, you can choose which ones should be unavailable by setting the corresponding bit in the property.
+
+The values are a byte, used as a bit mask. &nbsp;Bits 0 to 6 control the availability of number or length 1 to 7, and bit 7 controls the availability of the "+7" button. &nbsp;Each bit that is set disables the corresponding length or number of platforms.
+
+For compatibility with "largestations off", at least one length between 1 and 5 (bits 0 to 4) and one number of platforms between 1 and 4 (bits 0 to 3) must be available, i.e. at least one of these bits must be unset.
+
+=== Define custom layout (0E) ===
+
+This allows choosing which tile type is built at which tile of a newly built
+
+station. &nbsp;There are four different types, which TTD normally defines as
+
+{| |-
+!Tile type!!Appearance
+|-
+|00||plain platform
+|-
+|02||platform with building
+|-
+|04||platform with roof, left side
+|-
+|06||platform with roof, right side
+|}
+
+These numbers are used for stations in NE-SW direction, or these numbers plus one for stations in the NW-SE direction. &nbsp;To define a custom layout, use this format:
+
+{| |-
+!Size!!Name!!Meaning
+|-
+|B||length||length of platforms for this layout
+|-
+|B||number||number of platforms for this layout
+|-
+|V||tiles||length*number bytes of tile types, one platform after another, only 00, 02, 04 or 06 are allowed as values
+|}
+
+Repeat this as often as necessary to define the layouts for all supported combinations of length and number. &nbsp;End the definitions with a 00 00 (zero length and zero number). &nbsp;Any combinations that are not defined will be built using TTD's default layout.
+Note that it may be easier to draw different sprite sets using a [[en/VariationalAction2|VarAction2]] based on [[en/VarAction2Stations#platform-info-40-41-46-47-49|station variable 40]], rather than redefining the layout. &nbsp;In addition, [[en/Callbacks#custom-station-layout-24|callback 24]] will be used to further customize the layout as defined by this property (or by TTD if no prop 0E layout is available). This may also be easier than defining a prop 0E layout for every combination of length and number of platforms.
+
+=== Copy custom layout (0F) ===
+
+Similar to property 0A, this copies the custom layout from the station-ID given by the argument.
+
+=== Little/lots threshold (10) ===
+Amount of cargo for switching from "little" to "lots" of cargo. &nbsp;TTDPatch separates the full range of cargo amounts (0 to 4095) into two separate subranges, "little" and "lots" of cargo. &nbsp;This allows better control of cargo amount based graphics (if needed). &nbsp;Property 10 specifies at what amount of cargo the patch is to switch from one to the other subrange. &nbsp;See [[en/Action2Stations|Action 2 for stations]] for more information.
+
+=== Pylon placement (11) and wire placement (14) ===
+Prop. 11 sets which tile types should have pylons when used with electrified tracks. By default, tiles 0-3 (default stations without roof) have pylons, and tiles 4-7 (default stations with roof) don't. This is a bit mask of tile types, with a bit set meaning that a pylon should be drawn. The tile types here do not consider [[en/Callbacks#station-sprite-layout-14|callback 14]], but rather the type as it was built, i.e. from prop. 0E.
+
+Prop. 14 works in a similar way, except that it sets the tile types on which there should be ''no'' wires displayed. With the default value of "00", wires are displayed everywhere, and for each bit set, the wire is omitted on that tile type.
+
+This property should only be used when the wires cause problems with the sprite sorter, because even when the wire is obscured by a station hall or similar, it should still show up in transparent mode so that each tile can easily be verified as being electrified.
+
+=== Cargo types for random triggers (12) ===
+
+This sets which cargo types should trigger re-randomizing. The cargo types are given as a bitmask of the bits from column 3 (type B) in CargoTypes. &nbsp;If nothing is set (the default), the no random triggers will happen, to conserve CPU time.
+
+With GRF version 7 and above, the interpretation of bits changes. Instead of climate-dependent cargo slot numbers (type B), you have to set the bits of climate-independent cargo ID (type A).
+
+=== General Flags (13) ===
+
+{| |-
+!Bit!!Value!!Version!!Meaning
+|-
+|0||1||{{en/Ottdp|0.7|2.5}}||use different sprite set for ground sprites ([[en/GlobalVariables#extra-callback-info-10-and-18|var. 10]] is 1 for ground sprites, 0 otherwise)
+|-
+|1||2||{{en/Ottdp|0.6|2.5}}||when calculating the cargo amount to display, divide the amount by the station size (to simulate cargo distributed over the area of the station)
+|-
+|2||4||{{en/Ottdp|0.7|2.5}}||[[en/Callbacks#next-animation-frame-1a-26-141-153-158|callback 141]] needs random bits in var. 10
+|-
+|3||8||{{en/Ottdp|1.0|2.6}}||Use custom foundations on sloped tiles (the lowest byte of [[en/GlobalVariables#extra-callback-info-10-and-18|var. 10]] is 2 for foundation sprites)
+|-
+|4||10||{{en/Ottdp|1.0|2.6}}||When bit 3 is set, use extended foundation block instead of the simple one
+|}
+
+Bit 3 works somewhat similarly to bit 0: your sprite selection will be called again, with 2 in the lowest byte of [[en/GlobalVariables#extra-callback-info-10-and-18|variable 10]]. If the chain ends on a callback result, the program will assume the foundation selection has failed and will use the default foundaton sprites. The low word of [[en/GlobalVariables#extra-callback-info-10-and-18|variable 18]] will contain the tile type of the current tile; if you have [[en/Callbacks#station-sprite-layout-14|callback 14]] enabled, this will be the its return value - otherwise, the default TTD types (platform with building, platform with left roof etc.) are used. In either case, one is added for the NW-SE orientation, in case your station needs different foundations depending on its orientation. Bits 16 and 17 are set if the NW and and NE foundations are to merged with the corresponding neighbour tile, so you shouldn't draw the corresponding edge in the foundation sprite. Other bits of variable 10 and variable 18 are reserved for future use.
+
+Your sprite selection code should select a foundation sprite block. The contents of this block depends on whether bit 4 is set or not.
+* Bit 4 clear (simple foundations):
+[[File:en/Simple foundations.png]]
+
+The programme will combine the needed foundation from these 8 sprites depending on the current slope. You don't need to care about the merge data in bits 16..17 of [[en/GlobalVariables#extra-callback-info-10-and-18|variable 18]]; it will be taken care of that automatically by adding the 7th and 8th sprite only when necessary.
+* Bit 4 set (extended foundations):
+[[File:en/Extended foundations.png]]
+
+You need to have one sprite for every slope that's possible below a rail station. The correct one will be automatically selected depending on the current slope. It can't handle the merging itself, however, so you need four foundation blocks: one with no edges removed, one with the NW edge removed, one with the NE edge removed and one with both north edges removed. Your sprite selection code is responsible for selecting the correct of those blocks according to the merge info in [[en/GlobalVariables#extra-callback-info-10-and-18|variable 18]].
+
+In both cases, you can put an additional value into register 100h, which will serve as an offset into the selected block. If you don't modify register 100h during the chain, it will default to 0. It is important that the dimensions of these sprites remain the same - thus bit 6 in the real sprites must be set to prevent GRFCodec from trimming the empty blue areas. The offset of these foundations must be -31 to the X direction and -9 to the Y direction.
+
+=== Can train enter tile (15) ===
+
+Like props. 11 and 14, this value contains eight bits relating to the eight possible tile types. If a bit is set, trains are prevented from routing through or entering any tile of this type.
+
+=== Animation information (16) ===
+
+The low byte specifies the number of animation frames minus one, so 00 means 1 frame, 01 means 2 frames etc. The maximum number of frames is 256, although you can have some problems if your animation exceeds FD (253) frames. The high byte must be 0 for non-looping animations and 01 for looping animations. Every other value is reserved for future use. In addition, if the whole word contains FFFF, animation is turned off for this station (this is the default value).
+Since you can't have properties for individual station tiles, this property applies for every tile of the station. If you don't want to animate some tiles, you should check the current position during [[en/Callbacks#animation-control-1b-25-140-152-159|callback 140]] and return FD if the current tile doesn't need to be animated. If you also need animations of different length per tile, you'll have to use [[en/Callbacks#next-animation-frame-1a-26-141-153-158|callback 141]] for that.
+
+=== Animation speed (17) ===
+The meaning is the same as for [[en/Action0Houses#animation-speed-1b|house property 1B]], but the lower limit is 0 instead of 2, so the fastest possible animation changes frames every game tick (27ms). The default value is 2.
+
+=== Animation triggers (18) ===
+This is a bit mask of events that should trigger [[en/Callbacks#animation-control-1b-25-140-152-159|callback 140]], allowing to change the animation state
+
+{| |-
+!Bit!!Value!!Version!!Meaning!!Happens on!!Var 18
+|-
+|0||1||{{en/Ottdp|0.7|2.5}}||Station part is built||the newly built tiles||
+|-
+|1||2||{{en/Ottdp|0.7|2.5}}||New cargo arrives to station||whole station||<ref name="cargotype">Bits 8..15 of var 18 contain the triggering cargo type. If your GRF has a cargo translation table, the cargo type will be an index in that table, or FFh if the cargo isn't in the table. If you don't have a cargo translation table, the cargo type will simply be the climate-dependent cargo type number.</ref>
+|-
+|2||4||{{en/Ottdp|0.7|2.5}}||A cargo type gets removed from station||whole station||<ref name="cargotype"/>
+|-
+|3||8||{{en/Ottdp|0.7|2.5}}||Train enters station (starts loading/unloading)||platform where the train is||
+|-
+|4||10||{{en/Ottdp|0.7|2.5}}||Train leaves station (done loading/unloading)||platform where the train is||
+|-
+|5||20||{{en/Ottdp|1.2|2.5|ottdrev=r22746}}||Train loads/unloads cargo||platform where the train is||
+|-
+|6||40||{{en/Ottdp|0.7|2.5}}||Every 250 ticks||whole station||
+|}
+
+The remaining bits are reserved for future triggers, they must be zero for now.
+
+The "happens on" column tells which tiles will [[en/Callbacks#animation-control-1b-25-140-152-159 |callback 140]] be called on.
+
+<references/>
+
+=== Road routing (19 - reserved for future use) ===
+
+Will allow to have routing informations for road vehicles on rail stations,
+
+generally you need to deny rail vehicle traveling via prop 15
+
+This property is not yet implemented {{en/Ottd|no}}{{en/Ttdp|no}}.
+
+=== Advanced sprite layout with register modifiers (1A) ===
+
+{{en/Ottdp|1.2|no|ottdrev=r22518}}
+Format:
+ 1A <num-layouts> <0x40 + num-sprites>
+                  <groundsprite> <flags> [<register/value>]...
+                  [ <buildingsprite> <flags>
+                      ( <xoffset> <yoffset> <zoffset> <xextent> <yextent> <zextent> 
+                      | <xpixeloffset> <ypixeloffset> 80)
+                    [<register/value>]...
+                  ]...
+
+For further details see [http://wiki.openttd.org/Frosch/Advanced_Sprite_Layout#Stations here] for now.
+
+=== Minimum bridge height (1B) ===
+
+This property allows building bridges over stations.
+
+The bridge height property defines minimum clearances required for a bridge for each of the four [[en/Action0/Stations#define-custom-layout-0e|tile types]] of this station (or zero to not allow any bridge). Values are given in "height level" units (1 level == 8px).
+
+
+{| class="wikitable" |-
+!Height (1)!!Appearance
+|-
+| style="text-align:center;" |x1 y1 ||plain platform
+|-
+| style="text-align:center;" |x2 y2 ||platform with building
+|-
+| style="text-align:center;" |x3 y3 ||platform with roof, left side
+|-
+| style="text-align:center;" |x4 y4 ||platform with roof, right side
+|}
+(1) where the values are one byte pairs (x-direction, y-direction) expressed in hexadecimal notation.
+
+
+Syntax:
+
+1B <1st pair> <2nd pair> <3rd pair> <4th pair><br />
+1B x1 y1 x2 y2 x3 y3 x4 y4<br />
+1B 01 01 02 02 03 03 03 03 // 8px 16px 24px 24px
+
+This property is currently only available for JGR's Patch Pack (v0.26.0 and later) and the developmental "New Map Features" (NMF) fork of OpenTTD.
+
+
+== Examples ==
+
+=== Using TTD's sprite layouts for certain tiles ===
+
+To use TTD's layout, you use <code>00 00 00 00</code> for the ground sprite number and leave off everything else.
+
+So instead of for example
+
+ F4 03 00 00
+    00 00 00    10 05 02    2E 84 00 00
+    00 0B 00    10 05 02    30 84 00 00
+    80
+
+you just put
+
+ 00 00 00 00
+
+=== Using transparent sprites ===
+
+You can use transparent sprites to make for example the roof translucent like in TTD's stations. The roof of TTD's stations is made like this:
+
+ 00 00 10    10 10 0A    37 84 00 00
+ 00 00 80    00 00 00    3B 44 22 03
+
+The first sprite here is the non-transparent frame of the roof, drawn in company colours (it has bit 15 set). The second part is a special "linked" sprite without its own bounding box, it shares that of the previous sprite. That's done by setting the z offset to 80.
+
+To make that second sprite transparent, bit 14 is set in the sprite number, and the upper word is set to 322 (*), so 0322443B means to take sprite 43B and draw it in transparent mode. The colours of that sprite are ignored entirely, every pixel in colour 0 is fully transparent, and all other pixels are semi-transparent (essentially just causing what they are drawn over to become darker).
+
+(*) To jest [[en/RecolorSprites#default-recolour-sprites | recolour sprite]] dla efektu szkła.
