@@ -1,0 +1,130 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+== Wprowadzenie ==
+
+Zapobieganie konfliktom przy ograniczonych zasobach
+
+
+
+Od czasu TTDPatch 2.0.1 alpha 51 możliwe było użycie działania D w celu uczestniczenia we wspólnym zarządzaniu zasobami.
+
+Ta funkcja jest przydatna w celu uniknięcia konfliktów zasobów między plikami grf. Plik może sprawdzać dostępne zasoby, sprawdzać, czy niektóre identyfikatory są dostępne i/lub oznaczać je jako zastrzeżone. Następnie akcja 6 wprowadzi rzeczywiste wartości do odpowiednich wpisów akcji, na przykład akcja 0 lub 3 dla pojazdów, a akcja A dla duszków. Alternatywnie można użyć innej akcji D, aby ustawić zmienną 99 i odpowiednio dopasować identyfikatory odpowiednich akcji.
+
+If the requested resources are not available, the grf file will be deactivated and be shown with an orange colour in the GRF Status Window, as well as a message indicating the type of resource that was not available. Note that previously allocated resources will not be freed if this happens, therefore you must first ''check'' that ''all'' of the resources are available before reserving ''any'' of them. This means if you have more than one type of resource that is required, you need two action D entries for each type, first one action D for each type using the "check" or "find" operation, after all of which follow the action D entries for each type using the "reserve" or "mark" operation.
+
+Ten typ akcji D jest ignorowany podczas inicjalizacji (ponieważ zasoby również nie zostały jeszcze zainicjowane), a parametr docelowy zostanie wówczas ustawiony na 0.
+
+'''Please note:''' This resource management is cooperative. That means that grf files that do not use it can still access all IDs, and the patch will never know about it. Only those grf files that use this resource management will "know" of each other and can be sure not to use conflicting resources. If another grf file then uses a "reserved" ID without telling the patch via an action D, there is nothing that will prevent it from doing so.
+
+== Syntax ==
+
+ <Sprite-number> * <Length> 0D <target> 00 <GRM-op> FE FF <feature> <count>
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+
+|-
+|0D||B||Defines action 0D
+
+|-
+|<target>||B||Target parameter. See also below.
+
+|-
+|00||B||Assignment
+
+|-
+|<GRM-op>||B||Resource operation to perform. See below.
+
+|-
+|FE||B||Defines a special variable access
+
+|-
+|FF||B||Prevent conflicts with ReadingOtherGRFParameters
+
+|-
+|<feature>||B||Feature to operate on. See below.
+
+|-
+|<count>||W||Number of IDs to operate on.
+|}
+
+For the check, mark, no-fail check, and get-owner operations, <target> must contain the first ID to be operated on.
+
+== Description of GRM-ops ==
+
+The following operations are available:
+
+Each operation also has a corresponding escape sequence, as listed. See [[en/GRFActionsDetailed#byte-order|the discussion of escape sequences]] for further information on escape sequences in general.
+
+{|
+!Number!!Escape!!Operation!!Result!!Meaning
+
+|-
+|00||\DR||Reserve||First found ID||find available resource ID and mark as in use
+
+|-
+|01||\DF||Find||First found ID||find available resource ID but do not mark
+
+|-
+|02||\DC||Check||(none)||check whether given resources (ID stored in the <target> variable) are available
+
+|-
+|03||\DM||Mark||(none)||check that the given resources are available, and if so mark as in use
+
+|-
+|04||\DnF||No-fail Find||(see below)||like "Find", but does not deactive the grf if no IDs found
+
+|-
+|05||\DnC||No-fail Check||(see below)||like "Check", but does not deactive the grf if there is a conflict
+
+|-
+|06||\DO||Get Owner||GRF-ID of owner||Retrieve GRFID that has reserved the given ID (or 0 if not reserved)
+|}
+
+Action D returns its result (if any) in the given <target> parameter. If the result is marked as "(none)" in the above table, the <target> parameter is not modified.
+
+The "reserve" and "find" operations will try to find a contiguous block of <count> entries, and store the first number in the target parameter of the action D. If not enough entries can be found, the grf file is deactivated. For OpenTTD it's not useful to split large blocks into multiple smaller blocks, as it is unlikely that even a large block can't be found in the 16777216 allocatable sprites.
+
+The "check" and "mark" operations use the value stored in the ''target'' parameter of the action D, and check/mark the block of <count> entries starting from that number. If not all entries are available, the grf file is deactivated.
+
+The no-fail versions work exactly like their regular counterparts, but they set the <target> parameter to -1 (FFFFFFFF) if the resources are unavailable, which can be checked with action 7 afterwards. They do not deactivate the grf file. If successful, they do nothing. They are useful if the file wants to voluntarily skip certain modifications in case other files have changed them already.
+
+Typically, the "reserve" or "find" operations will be used for files that modify only a few vehicles. For (mostly) complete sets, the "check" and "mark" operations are more useful, because it is often not feasible to remap the IDs of an entire set, so these operations will simply make sure that all needed IDs are available.
+
+For each feature, multiple "find" operations will check for different size blocks, but will always return the same base entry number, so "find" should only be called once for each feature.
+
+== Support for features ==
+
+The following features and feature/GRM-op combinations are supported:
+
+{|
+!Feature!!Reserve!!Find!!Check!!Mark!!Get!!Notes
+
+|-
+|00 (trains)||<center>0</center>||<center>0</center>||<center>X</center>||<center>X</center>||<center>X</center>||
+
+|-
+|01 (road vehicles)||<center>0</center>||<center>0</center>||<center>X</center>||<center>X</center>||<center>X</center>||
+
+|-
+|02 (ships)||<center>0</center>||<center>0</center>||<center>X</center>||<center>X</center>||<center>X</center>||
+
+|-
+|03 (aircraft)||<center>0</center>||<center>0</center>||<center>X</center>||<center>X</center>||<center>X</center>||
+
+|-
+|08 (general sprites)||<center>X</center>||<center>X</center>||<center>*</center>||<center>*</center>||<center>-</center>||
+
+|-
+|0B (cargos)||<center>-</center>||<center>-</center>||<center>X</center>||<center>X</center>||<center>X</center>||see below
+|}
+
+0 = unsafe, the IDs may change when loading game
+
+X = safe to use
+
+<nowiki>*</nowiki> = safe but useless
+
+- = do not use
+
+W przypadku nowych ładunków, identyfikatory 00..1F odnoszą się do samych identyfikatorów ładunku (np. ID 0B jest dostępny w klimacie umiarkowanym, a 0C..1F we wszystkich klimatach), podczas gdy identyfikatory 20..3F odnoszą się do numeru bitu z podpory. 08 plus 20 (np. ID 2D, będący bitem 0D=fruit , jest dostępny we wszystkich klimatach oprócz tropikalnego). Musisz sprawdzić i oznaczyć oba typy identyfikatorów dla poprawnego działania.
