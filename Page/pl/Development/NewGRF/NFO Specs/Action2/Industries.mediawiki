@@ -1,0 +1,192 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+= Produkcja Przemysłowa Callback =
+
+Branże nie mają bezpośrednio z nimi grafiki (mają grafikę poprzez kafelki), więc nie mogą mieć tradycyjnej akcji 2. Jednak nadal mogą używać akcji 2 do specjalnego celu: wywołań produkcyjnych. Oddzwonienie produkcyjne może dokładnie określić, w jaki sposób przemysł produkuje ładunek, ale wymaga to więcej niż 15 bitów, które może zwrócić normalny oddzwonienie.
+
+When an industry has bits 1 or 2 set in property 21, its production is changed. Instead of processing the incoming cargo instantly, it remembers how many units are waiting, and uses the production callback mechanism to decide how much cargo must be produced.
+
+The production callback is handled in an action 2 chain. &nbsp;Typically there will be a sub-chain of multiple varaction 2s for logic before the final varaction 2 handling the production cb. &nbsp;The ID of the first varaction 2 in the subchain should be handled explicitly by a check for production cb using var 0C. &nbsp;Do not rely on handling production cb sub-chain as default ID for the varaction 2 checking 0C, this can have unexpected results. &nbsp;However the ID of the varaction 2 handling the production cb itself should be the default ID for the 0C check. &nbsp;Makes sense?
+
+== Format ==
+
+For the production callback, the action 2 data looks as follows:
+
+=== Format version 00 ===
+
+<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 02 0A &lt;set-id&gt; &lt;version&gt; &lt;subtract-in-1&gt; &lt;subtract-in-2&gt; &lt;subtract-in-3&gt; &lt;add-out-1&gt; &lt;add-out-2&gt; &lt;again&gt; </pre>
+
+{| class="wikitable
+|-
+!'''Element'''
+![[en/GRFActionsDetailed|'''Size''']]
+!'''Description'''
+|-
+|&lt;Sprite-number&gt;
+|dec
+|A sequential sprite number
+|-
+|&lt;length&gt;
+|dec
+|The total number of bytes used in this action
+|-
+|02
+|B
+|Defines action 02
+|-
+|0A
+|B
+|feature 0A=industries
+|-
+|&lt;set-id&gt;
+|B
+|ID for this definition
+|-
+|&lt;version&gt;
+|B
+|version of the production-callback format, 00
+|-
+|&lt;subtract-in-1..3&gt;
+|W
+|Amounts to be subtracted from the incoming cargoes waiting to be processed. (Signed)
+|-
+|&lt;add-out-1/2&gt;
+|W
+|Amounts to be added to the produced cargoes. (Unsigned)
+|-
+|&lt;again&gt;
+|B
+|Repeat callback if nonzero, do not repeat if 00. <ref>Before TTDPatch 2.0.1 alpha 73 the only valid values were 01 and 00.</ref>
+|}
+<references/>
+
+=== Format version 01 ===
+{{en/Ottdp|0.6|2.6|ttdprev=r1307}}
+
+<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 02 0A &lt;set-id&gt; &lt;version&gt; &lt;subtract-in-1&gt; &lt;subtract-in-2&gt; &lt;subtract-in-3&gt; &lt;add-out-1&gt; &lt;add-out-2&gt; &lt;again&gt; </pre>
+
+
+{| class="wikitable"
+|-
+!'''Element'''
+![[en/GRFActionsDetailed|'''Size''']]
+!'''Description'''
+|-
+|&lt;Sprite-number&gt;
+|dec
+|A sequential sprite number
+|-
+|&lt;length&gt;
+|dec
+|The total number of bytes used in this action
+|-
+|02
+|B
+|Defines action 02
+|-
+|0A
+|B
+|feature 0A=industries
+|-
+|&lt;set-id&gt;
+|B
+|ID for this definition
+|-
+|&lt;version&gt;
+|B
+|version of the production-callback format, 01
+|-
+|&lt;subtract-in-1..3&gt;
+|B
+|Numbers of registers that contain the amounts to be subtracted from the incoming cargoes waiting to be processed.
+|-
+|&lt;add-out-1/2&gt;
+|B
+|Numbers of registers that hold the amounts to be added to the produced cargoes.
+|-
+|&lt;again&gt;
+|B
+|Number of &lt;again&gt; register. Repeat callback if the value of the register &nbsp;isn't zero, do not repeat otherwise
+|}
+
+=== Format version 02 ===
+{{en/Ottdp|1.9|no|ottdrev=e66cec8f}}
+
+<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 02 0A &lt;set-id&gt; &lt;version&gt; <numinputs> (<inputcargo> <subtract-in>)* <numoutputs> (<outputcargo> <add-out>)* &lt;again&gt; </pre>
+
+
+{| class="wikitable"
+|-
+!'''Element'''
+![[en/GRFActionsDetailed|'''Size''']]
+!'''Description'''
+|-
+|&lt;Sprite-number&gt;
+|dec
+|A sequential sprite number
+|-
+|&lt;length&gt;
+|dec
+|The total number of bytes used in this action
+|-
+|02
+|B
+|Defines action 02
+|-
+|0A
+|B
+|feature 0A=industries
+|-
+|&lt;set-id&gt;
+|B
+|ID for this definition
+|-
+|&lt;version&gt;
+|B
+|version of the production-callback format, 02
+|-
+|<numinput>
+|B
+|Number of (<inputcargo> <subtract-in>) pairs to follow.
+|-
+|<inputcargo>
+|B
+|Cargotype from cargo translation table.
+|-
+|&lt;subtract-in&gt;
+|B
+|Number of register that contain the amounts to be subtracted from the incoming cargoes waiting to be processed.
+|-
+|<numoutput>
+|B
+|Number of (<outputcargo> <add-out>) pairs to follow.
+|-
+|<outputcargo>
+|B
+|Cargotype from cargo translation table.
+|-
+|&lt;add-out&gt;
+|B
+|Number of register that hold the amounts to be added to the produced cargoes.
+|-
+|&lt;again&gt;
+|B
+|Number of &lt;again&gt; register. Repeat callback if the value of the register &nbsp;isn't zero, do not repeat otherwise
+|}
+
+== Details ==
+
+The total amount of cargo waiting cannot go negative. &nbsp;If you specify more than the amount actually waiting, the incoming amount will be zeroed instead. You can use negative subtract-in values to increase the amount of cargo waiting.
+
+During this callback, the lowest byte of variable 18 contains the reason the callback is called: 0 if it was called because of incoming cargo, 1 if it was called in the periodic processing. Bits 8-23 contain how many times the callback was already called in this loop, i.e. 0 for the first call, 1 for the second etc.)
+
+{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 73}} For TTDPatch 2.0.1 alpha 73 and above, bits 24-31 of variable 18 contain the &lt;again&gt; value of the previous call (the lowest byte only in case of version 1), or 0 if this is the first call. This can be used to have state information during the loop since you can pass information to the next iteration.
+
+{{en/Ottdp|0.6|2.5|ttdprev=2.5 beta 5}} Since TTDPatch 2.5 beta 5, you can request some random bits in variable 10 by setting bit 15 of property 1A. These bits won't be re-randomized when you call the callback again by setting a non-zero "again" value; they're randomized only for the first call.
+
+{{en/Ottdp|0.6|2.6|ttdprev=r1307}} Using the version 1 format, available since TTDPatch 2.6 r1307, you can decide the instructions dynamically. Instead of constants, you give register numbers that contain the needed values; you can compute these values earlier in the action2 chain. Registers are 4 bytes long and are considered to be signed. Negative add-out values don't make sense and are ignored. The results are clamped to the allowed range (0..65535 for both incoming and outgoing cargo amounts).
+
+{{en/Ottdp|1.9|no|ottdrev=e66cec8f}} Korzystając z formatu wersji 2, można wyświetlić więcej ładunków wejściowych i wyjściowych niż w wersji 1. Rodzaje ładunków są określone zgodnie z tabelą translacji ładunków; kwoty są określone w rejestrach jak w wersji 1. Wymienione typy ładunków, które nie są akceptowane / produkowane przez przemysł (właściwości 10..11, 25..26, oddzwanianie 14B..14C) są ignorowane.
+* Nie musisz wymieniać wszystkich rodzajów ładunków produkowanych/akceptowanych przez przemysł. Kwoty dla rodzajów ładunków nienotowanych pozostają niezmienione.
+* Możesz podać więcej rodzajów ładunku niż faktycznie wyprodukowano/przyjęto (na przykład, gdy oddzwonienie 14B..14C wybrało podzbiór ładunków). Nadmiar przedmiotów jest ignorowany.
+* Nie wymieniaj dwukrotnie tego samego rodzaju ładunku.
