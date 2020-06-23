@@ -1,30 +1,35 @@
 [[Translation:en/Development/NewGRF/Development Tools]]
 
-There are a few tools which are required in order to produce NewGRFs. First you have to choose the "language" which you want to use to create the GRF. There are basically two (or three) common tool-chains for that, which you need one of:
+You have several options for creating NewGRFs. Of the two main coding methods, NML is easier and is recommended for new NewGRF creators.
 
-* [http://www.openttd.org/download-grfcodec grfcodec/nforenum] - the two most fundamental tools for creating NewGRFs. GRFCodec encodes and decodes GRFs into plain images and plain (meta-)data (NFO) and vice versa. NFORenum on the other hand is a linter and syntax checker for NFO files. Since GRFCodec 5.0 both tools are bundled in one package. You can compare this toolchain roughly with an assembler/disassembler.
+==Coding with NML==
 
-* [http://dev.openttdcoop.org/projects/nml NML] - a high level language for writing NewGRFs. This is again a text-based language, but abstracting a fair amount of the complexity of writing NewGRFs. It is the only toolchain which supports term-evaluations and expressions and is especially suited for GRFs offering user parameters. There is an easy-to-follow [https://www.tt-wiki.net/wiki/NMLTutorial tutorial] for creating NewGRFs with NML.
+* [https://github.com/OpenTTD/nml NewGRF meta language] (NML) is a high-level, text-based language. It is easier to write and read than NFO, and is recommended for new NewGRF creators. It is the only toolchain which supports term-evaluations and expressions and is especially suited for GRFs offering user parameters.
+* There is an easy-to-follow [https://www.tt-wiki.net/wiki/NMLTutorial tutorial] for creating NewGRFs with NML.
 
-* [http://users.tt-forums.net/grfmaker/ GRFMaker] - UNMAINTAINED! A tool which abstracts from the NFO and allows to generate GRF files without diving into near-hex editing. It is a graphical tool which presents GRFs in a abstracted way while hiding some details. All coding is done via graphical interface; however it only supports/offers a subset of what is possible with NewGRFs.<br/> Unfortunately this seems to result in the biggest drawback of this toolchain: No advanced GRF coder uses it, so there is about noone who can help you with it. GRFMaker related question threads on the forums often get a reply, how to do something with NFO and/or NML; but none is able to translate that into GRFMaker. :(
+==Coding with NFO==
+
+* [http://newgrf-specs.tt-wiki.net/wiki/Main_Page Low level NewGRF format specification] - You will have to study this if you plan on writing NewGRF using GRFCodec/NFORenum and/or want to use Grf2Html.
+
+* [http://www.openttd.org/download-grfcodec grfcodec] - A tool which encodes and decodes GRFs into plain images and plain (meta-)data (NFO) and vice versa. It comes bundled with NFORenum, a linter and syntax checker for NFO files. You can compare this toolchain roughly with an assembler/disassembler.
 
 * [http://www.ttdpatch.de/grfspecs/m4nfoManual/index.html m4nfo] - a high-level language frontend based on the powerful [http://www.gnu.org/software/m4 M4 macro processor]. It produces low-level nfo byte-code, to generate newGRFs by use of [http://www.openttd.org/download-grfcodec grfcodec]. Layed out as a set of small modules, it keeps implementation lightweight (M4: 143kB, m4nfo module 'trains': 50kB), yet supports the full range from plain nfo to higher abstraction levels while producing efficient user-controllable code. m4nfo is user-expandable and gives full access to the underlying M4 macro processor, allowing for all types of templating applications. By handling distributed source files and linking of pre-compiled grf part files, it significantly reduces development time and makes m4nfo especially applicable for the large projects, with additional support of dependency-tracking build utilities like [http://www.gnu.org/software/make/ make]. In existence since 2009, m4nfo is constantly maintained, available for Windows, OSX and Linux (see M4 availability).
 
-In addition to these tools you might be interested in these additional tools:
-
 * [http://dev.openttdcoop.org/projects/grf2html Grf2Html] - a tool to generate a browser-viewable HTML representation from a GRF. It can be used for in-depth analysis, semantical checking of GRFs and studying their behaviour. As such it is especially suited to learn writing NewGRFs by looking and understanding GRFs written by others. However, it is of limited use when you decide for the high level language NML, as it will probable overwhelm you with details which are abstracted by NML.
+
+* [http://users.tt-forums.net/grfmaker/ GRFMaker] - UNMAINTAINED! A tool which abstracts from the NFO and allows to generate GRF files without diving into near-hex editing. It is a graphical tool which presents GRFs in a abstracted way while hiding some details. All coding is done via graphical interface; however it only supports/offers a subset of what is possible with NewGRFs.<br/> Unfortunately this seems to result in the biggest drawback of this toolchain: No advanced GRF coder uses it, so there is about noone who can help you with it. GRFMaker related question threads on the forums often get a reply, how to do something with NFO and/or NML; but none is able to translate that into GRFMaker. :(
+
+==Creating graphics==
+* [https://www.tt-forums.net/viewtopic.php?f=26&t=69974 PixelTool] - a voxel-based sprite editor and rendering tool which simplifies drawing sprites considerably.
 
 * [http://dev.openttdcoop.org/projects/ttdviewer TTDViewer] - a simple tool which just displays your .pcx or .png graphics. However, it also does the TTD palette animation and offers you to dynamically apply recolourings like company colours to the image. As it will reload the image whenever it changes on disk, you can use it parallel to your drawing program to get a quick preview, especially when you use the special animated colours of the TTD palette or you use recolourings such as company colours.
 
 * [http://www.andreszsogon.com/grf-wizard/ GRF Wizard] - A graphical user interface for the grfcodec executable. Provides a simple and easy GUI for encoding and decoding GRF files, with some options such as palette conversion.
 
-Further resources:
-* [http://dev.openttdcoop.org #openttdcoop Development Zone] - the site hosting most development tools and lots of open-source NewGRFs. If you head for an GPL-licensed NewGRF yourself, you will also find frameworks for creating NewGRFs (for both GRFCodec/NFORenum and NML) to easily get stated with.
+==Further resources==
+* [http://dev.openttdcoop.org #openttdcoop Development Zone] - the site hosting many development tools and lots of open-source NewGRFs.
 * [http://www.tt-forums.net/viewforum.php?f=26 TT-Forums NewGRF Development] - English forum for NewGRF development, discussion, creating graphics and finding teammates for your project.
 * [http://www.tt-forums.net/viewforum.php?f=68 TT-Forums NewGRF Technical Discussion] - English forum for technical support on developing NewGRFs (''not'' on using NewGRFs!), NewGRF tools and discussion of NewGRF format specifications.
-* [http://newgrf-specs.tt-wiki.net/wiki/Main_Page Low level NewGRF format specification] - You will have to study this if you plan on writing NewGRF using GRFCodec/NFORenum and/or want to use Grf2Html.
-* [http://newgrf-specs.tt-wiki.net/wiki/NML:Main NML documentation] - Specification and handbook for NML.
-
 * [http://www.tt-forums.net/viewtopic.php?f=26&t=4381 Historic tool list] - Historic thread at tt-forums.net
 
 [[Category:en/NewGRF]]
