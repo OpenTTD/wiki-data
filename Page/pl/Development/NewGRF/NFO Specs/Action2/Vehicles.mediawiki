@@ -1,0 +1,161 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+== Wprowadzenie ==
+
+Definiowanie set-IDs dla pojazdów .
+
+For features 0, 1, 2 and 3 (vehicles), Action2 is mainly used to define sets of sprites that show one vehicle in various states of load for one particular type of cargo.
+
+Do not skip an Action2 using [[en/Action9]] (unless it skips the whole file). Action2 must not be skipped by Action9 or TTDPatch will most likely crash. Skip or modify [[en/Action3]] instead. Skipping an Action2 with an [[en/Action7]] has no effect.
+
+If there is only one load type, it is shown for all loads.
+
+If there are two load types, the first is shown below 50%, the other above 50%. If there are three load types, they are shown above/below 33% and 66%. If there are four load types, they are shown above/below 25%, 50% and 75%, etc.
+
+== Variable 10 ==
+
+[[en/GlobalVariables#extra-callback-info-10-and-18|Variable 10]] gives some additional information about the sprite being drawn.
+
+{| |-
+! Bits !! Meaning
+|-
+| 0 - 7 || {{en/Ottdp|1.2|no|ottdrev=r23080}} Specifies, where the sprite is being displayed. See below.
+|-
+| 8 - 15 || {{en/Ottdp|1.7|no|ottdrev=r27668}} Iteration number when composing vehicles from multiple sprites. See below.
+|-
+| 16 - 31 || Reserved. Mask out.
+|}
+
+=== Drawing different sprites on map in various GUIs ===
+{{en/Ottdp|1.2|no|ottdrev=r23080}} Since OpenTTD r23080 you can use variable 10 to display different sprites in the GUI and on the map. Currently these cases are available:
+{| |-
+! Bits 0 - 7 of [[en/GlobalVariables#extra-callback-info-10-and-18|variable 10]] !! Meaning
+|-
+| 00 || Vehicle is drawn in a viewport, i.e. on the map.
+|-
+| 01..0F || reserved
+|-
+| 10 || Vehicle is drawn in the depot GUI. <ref>OpenTTD also uses this value with the purchase-list chain (cargotype FF) to determine the gridsize in ship and aircraft depots.</ref>
+|-
+| 11 || Vehicle is drawn in the vehicle details GUI. (This includes the refit GUI.)
+|-
+| 12 || Vehicle is drawn in the vehicle list.
+|-
+| 13..1F || reserved for other future GUIs.
+|-
+| 20 || Vehicle is drawn in the purchase list. (This includes the autoreplace GUI.)
+|-
+| 21 || Vehicle is drawn in the exclusive preview GUI or in the advertisement news.
+|-
+| 22..2F || reserved for other future GUIs with non-purchased vehicles.
+|-
+| 30..FF || reserved
+|}
+<references/>
+
+The other bytes of variable 10 are reserved, and must be masked.
+The cases 20..2F are called using the purchase-list chain (cargotype FF), the other cases are called for actual vehicles (except for the special depot-gridsize call).
+
+=== Composing vehicles from multiple sprites ===
+{{en/Ottdp|1.7|no|ottdrev=r27668}} Since OpenTTD r27668 you can draw vehicles by drawing multiple sprites on top of each other.
+* The sprites can use different recolouring.
+* When using 32bpp sprites, the sprites can use the alpha channel to blend with the other sprites. In particular you can use this to alpha-blend company colours over other sprites.
+
+To enable this, you need to set bit 7 of the miscellaneous flags (train prop 27, rv prop 1C, ship prop 17, aircraft prop 17).
+
+When enabled, sprites are resolved multiple times while incrementing the iteration number in bits 8 to 15 of variable 10.
+Currently this is limited to at most 4 sprites per articulated part.
+
+In addition to returning a sprite, you need to set register 100 to return this information:
+
+{| |-
+! Bits !! Meaning
+|-
+| 0 - 15 || Recolour sprite to use. Set to 0 to use default vehicle recolouring (from callback 2D). Set to 775 for no recolouring.
+|-
+| 16 - 30 || Reserved, set to zero.
+|-
+| 31 || If set, there are more sprites to draw. Resolve sprites again with incremented iteration number.
+|}
+
+==Syntax==
+
+For vehicles, the data looks as follows:
+
+ <Sprite-number> * <Length> 02 <veh-type> <set-id> <num-loadtypes> <num-loadingtypes> <loadtypes...>
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+
+|-
+|<Sprite-number>||dec||A sequential sprite number
+
+|-
+|<length>||dec||The total number of bytes used in this action
+
+|-
+|02||B||Defines an action2
+
+|-
+|<veh-type>||B||For what type of vehicle should the following sprites be used?
+
+|-
+|<set-id>||B||Set-ID of this action2
+
+|-
+|<num-loadtypes>||B||Number of different states while moving
+
+|-
+|<num-loadingtypes>||B||Number of different states while loading/unloading
+
+|-
+|<loadtypes>||W||Sets from the most recent action1 to use for various states of loading.
+|}
+
+==Description==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== veh-type ===
+
+This sets the type of vehicle that you wish to change. Set it to
+
+00 for trains
+
+01 for road vehicles
+
+02 for ships
+
+03 for planes
+
+=== Set-id ===
+
+This is the number that you give this set of sprites. You can choose any value between 00 and FF, and you can reuse them within a grf file at a later point (if being equal to an existing set-ID, the existing one is overwritten and the new one is used).
+
+=== num-loadtypes ===
+
+This is the number of different graphics that the vehicle has while it's not loading or unloading, depending on the amount of cargo it carries.  For example, if it has two states, full or empty, this would be 02.  If it has three states, full, half full or empty, this would be 03.
+
+=== num-loadingtypes ===
+
+Same as num-loadtypes, except this is used while the vehicle is loading or unloading. For example if the vehicle is closed, it might only have one state when moving (i.e. num-loadtypes is 01), but show several load states when it is being loaded or unloaded and thus open.
+
+Neither num-loadtypes nor num-loadingtypes may be zero, there must be at least one state for each.
+
+=== loadtypes ===
+
+The sprite sets to use for the states of load. Each entry is a '''WORD''' value in little endian format, and refers to the most recent action1 sets. For example, action1 sets 4, 5 and 7 would be encoded as <tt>04 00</tt>, <tt>05 00</tt> and <tt>07 00</tt>, respectively. Note the additional 00 which is needed because it must be a word value here.
+
+The first entries of these are used when not loading. There have to be num-loadtypes of these.  After this follow the sets to use while loading/unloading, and there must be num-loadingtype of those.
+
+Note that you can share action1 sets between several action2 entries.  For example, you might have a wagon that can hold coal or iron ore, and it would look the same if it's empty. Then the empty sprite set could be shared by the action2 entries for iron ore and coal.
+
+= Przykład =
+
+<span style='color:#808080'>Something to go here</span>
