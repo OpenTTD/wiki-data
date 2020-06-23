@@ -1,0 +1,76 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+== Wprowadzenie ==
+
+Definiowanie set-IDs stacji .
+
+For stations, Action2 is used to define set-IDs, similar to the way it works for vehicles. See the description below for details.
+
+Do not skip an Action2 using [[en/Action9]] (unless it skips the whole file). Action2 must not be skipped by Action9 or TTDPatch will most likely crash. Skip or modify [[en/Action3]] instead. Skipping an Action2 with an [[en/Action7]] has no effect.
+
+== Syntax ==
+
+For stations, the data looks as follows:
+
+ <Sprite-number> * <Length> 02 04 <set-id> <numlittlesets> <numlotssets> <sets...>
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+
+|-
+|<[[#sprite-number|Sprite-number]]>||dec||A sequential sprite number
+
+|-
+|<[[#length|length]]>||dec||The total number of bytes used in this action
+
+|-
+|02||B||Defines action2
+
+|-
+|04||B||Stations is feature 4
+
+|-
+|<[[#set-id|set-id]]>||B||What set-ID this action2 defines
+
+|-
+|<[[#numlittlesets-numlotssets|numlittlesets]]>||B||How many different cargo amounts to show when there is little cargo
+
+|-
+|<[[#numlittlesets-numlotssets|numlotssets]]>||B||Same but when there is lots of cargo
+
+|-
+|<[[#sets|sets]]...>||W||Sprite sets for each of the cargo amounts
+|}
+
+== Description ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== Set-id ===
+
+The set-ID that you want to define for this set. You can choose any value between 00 and FF, and you can reuse them within a grf file at a later point (if being equal to an existing set ID, the existing one is overwritten and the new one is used).
+
+=== numlittlesets, numlotssets ===
+
+Like for vehicles, this decides the graphics set to use depending on the amount of cargo waiting. There are two caveats, though. Firstly, a station can have 12 different cargoes waiting, not just a single one. Secondly, the maximum amount is 4095 for all stations and all cargo types.
+
+Regarding the first issue, the amount of cargo this refers to depends on the action3 that triggered this action2:
+* if the cargo type matched exactly, it's the amount of the matching cargo (e.g. the action3 said "for coal, use this action2")
+* if the default was used, it's the amount of all cargo types added together
+* if the station is displayed for construction, the maximum amount is shown
+
+Regarding the second issue, TTDPatch introduces the distinction between "little" and "lots of" cargo. The amount where this occurs is set by property 10, which is zero by default. But if set to a non-zero value, for example 200, then the range 0 to 199 is divided by numlittlesets, and the remaining range 200 to 4095 is divided by numlotssets. If property 10 is zero, the "little" sets are never used, and so numlittlesets may be zero. numlotssets must never be zero, however.
+
+=== sets ===
+
+The sets from the most recent action1 to use for this set-ID, for each stage of numlittlesets and numlotssets, i.e. in total numlittlesets+numlotssets entries.
+
+== Przykład ==
+
+<span style='color:#808080'>Something to go here</span>
