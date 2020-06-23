@@ -1,0 +1,75 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+== Wprowadzenie ==
+{| |-
+!Feature !! Version !! Associated graphics
+|-
+|Canals || {{en/Ottdp|0.6|2.5}} || Depends on [[en/Action3#ids | Action3 ID]]; see [[en/Action0/Canals | Action0]]
+|-
+|Cargos || {{en/Ottdp|0.6|2.5}} || Single icon sprite
+|-
+|Airports || {{en/Ottdp|1.1|no}} || Single preview image
+|-
+|Railtypes || {{en/Ottdp|1.0|no|ottdrev=r19056}} || Depends on [[en/Action3/Railtypes#cargo-type| Action3 'cargo' type]]
+|-
+|Roadtypes || {{en/Ottdp|1.10}} || Depends on [[en/Action3/Roadtypes#cargo-type| Action3 'cargo' type]]
+|-
+|Tramtypes || {{en/Ottdp|1.10}} || Depends on [[en/Action3/Tramtypes#cargo-type| Action3 'cargo' type]]
+|}
+
+The Action2 for these features defines only a single spriteset, therefore the action2 you need isn't too complicated.
+
+The only graphics associated to cargoes is their icon that is shown in the station window.
+
+The graphics associated with railtypes, roadtypes, and tramtypes are somewhat more complicated, but all their logic is in variational action2s and the action3; the standard action2 is again not complicated.
+
+The only graphics associated with airports is their preview sprite. The default size for the preview sprite is 230x140. The airport build GUI will automatically scale if you have a smaller or larger image, but it will probably look best if you make sure it is no larger than the default size.
+
+Do not skip an Action2 using [[en/Action9]] (unless it skips the whole file). Action2 must not be skipped by Action9 or TTDPatch will most likely crash. Skip or modify [[en/Action3]] instead. Skipping an Action2 with an [[en/Action7]] has no effect.
+
+== Syntax ==
+
+ <Sprite-number> * <Length> 02 <feature> <set-id> 01 00 <set>
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+|-
+|<Sprite-number>||dec||A sequential sprite number
+|-
+|<length>||dec||The total number of bytes used in this action
+|-
+|02||B||Defines action2
+|-
+|<feature>||B||[[en/Features | Feature]] being defined
+|-
+|<set-id>||B||What set-ID this action2 defines
+|-
+|01||B||A literal 01 byte
+|-
+|00||B||A literal 00 byte
+|-
+|<set>||W||Number of set to use from the last action 1
+|}
+
+You may note that this is the same as the action2 entry for vehicles, but with num_loadtypes=1 and num_loadingtypes=0, and only one set number.
+
+== Description ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== set-id ===
+
+This defines the ID of the current action 2. This ID will later be referred to by [[en/Action3|action 3]], or a variational/random action 2.
+
+You can reuse action 2 IDs, and there's no restriction on the order in which they are defined.
+
+=== set ===
+
+Zestaw ikonek używany do wyświetlania. Wpis jest wartością WORD w małym formacie endian i odnosi się do najnowszego zestawu akcji1. Na przykład zestaw akcji 1 zestaw 3 będzie zakodowany jako 03 00. Zwróć uwagę na dodatkowy 00, który jest potrzebny, ponieważ tutaj musi być wartością słowa.
+(Nie zapominaj, że numeracja zestawu ikonek zaczyna się od zera)
