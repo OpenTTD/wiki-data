@@ -1,0 +1,111 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+= Action2 Sprite Layout =
+{| |-
+!Feature !! Version
+|-
+|Houses || {{en/Ottdp|0.6|2.5}}
+|-
+|Industry Tiles || {{en/Ottdp|0.6|2.5}}
+|-
+|Objects || {{en/Ottdp|1.1|2.6|ttdprev=alpha r2023}}
+|-
+|Airport Tiles || {{en/Ottdp|1.1|no}}
+|}
+
+Ta Action2 definiuje spriteayout dla kafelka. Dostępne są trzy formaty:
+* Podstawowy format dla jednego 'sprite' naziemnego i jednego 'sprite' budowlanego.
+* Rozszerzony format łączenia wielu 'sprites'.
+* Zaawansowany format z przesunięciami rejestru <small>''(register offsets)''</small>
+
+== Basic format for tiles with a single building sprite ==
+
+<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 02 07/09/0F/11 &lt;set-id&gt; 00 &lt;groundsprite&gt; &lt;buildingsprite&gt; &lt;xoffset&gt; &lt;yoffset&gt; &lt;xextent&gt; &lt;yextent&gt; &lt;zextent&gt;</pre>
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+|-
+|&lt;[[#sprite-number|Sprite-number]]&gt;||dec||A sequential sprite number
+|-
+|&lt;[[#length|length]]&gt;||dec||The total number of bytes used in this action
+|-
+|02||B||Defines action 02
+|-
+|07/09/0F/11||B||feature 7=town buildings, 9=industry tiles, 0F = objects, or 11 airport tiles
+|-
+|&lt;[[#set-id|set-id]]&gt;||B||ID for this definition
+|-
+|00||B||Literal 0 (to distinguish this definition from random/variational lists)
+|-
+|&lt;[[#sprite-definition-for-ground-and-building-sprites|groundsprite]]&gt;||D||Ground sprite for the building (see format below)
+|-
+|&lt;[[#sprite-definition-for-ground-and-building-sprites|buildingsprite]]&gt;||D||The sprite of the building (see format below), can be zero to indicate that no building sprite should be displayed (useful for early building stages)
+|-
+|&lt;xofs&gt;||B||x-offset from northern tile corner (as a signed byte)
+|-
+|&lt;yofs&gt;||B||y-offset from northern tile corner (as a signed byte)
+|-
+|&lt;xextent&gt;||B||size of sprite in x direction
+|-
+|&lt;yextent&gt;||B||size of sprite in y direction
+|-
+|&lt;zextent&gt;||B||size of sprite in z direction
+|}
+
+In the above, xofs, yofs, xextent, yextent and zextent define the 3D bounding box of the building sprite not including the ground sprite. The z-offset is always zero for buildings (TTD doesn't support floating buildings). Please note that xofs/xextent and yofs/yextent pairs that place the bounding box off the tile are not recommended.
+
+== Extended format using multiple combined sprites ==
+
+{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 55 vcs 3}} Since TTDPatch 2.0.1 alpha 55 vcs 3, houses, industry (and object) tiles support an extended syntax as well, which looks as follows:
+
+<pre><nowiki>&lt;Sprite-number&gt; * &lt;Length&gt; 02 07/09/0F/11 &lt;set-id&gt; &lt;num-sprites&gt; &lt;groundsprite&gt; [&lt;buildingsprite&gt; (&lt;xoffset&gt; &lt;yoffset&gt; &lt;zoffset&gt; &lt;xextent&gt; &lt;yextent&gt; &lt;zextent&gt;) | (&lt;xpixeloffset&gt; &lt;ypixeloffset&gt; 80)] ...</nowiki></pre>
+
+{|
+!Element!![[en/GRFActionsDetailed|Size]]!!Description
+|-
+|&lt;[[#sprite-number|Sprite-number]]&gt;||dec||A sequential sprite number
+|-
+|&lt;[[#length|length]]&gt;||dec||The total number of bytes used in this action
+|-
+|02||B||Defines action 02
+|-
+|07/09/0F/11||B||feature 7=town buildings, 9=industry tiles, 0F = objects, or 11 = airport tiles
+|-
+|&lt;[[#set-id|set-id]]&gt;||B||ID for this definition
+|-
+|&lt;num-sprites&gt;||B||Number of following building sprites (the groundsprite mustn't be counted). Allowed range: 1 to 63 (0x01 to 0x3F). {{en/Ottdp|1.2|no|ottdrev=r22518}} Adding 0x40 makes the layout an Advanced Spritelayout with register modifiers ([[en/Action2/Advanced Sprite Layout| see below]]).
+|-
+|&lt;[[#sprite-definition-for-ground-and-building-sprites|groundsprite]]&gt;||D||Ground sprite for the building (see format below)
+|-
+|&lt;[[#sprite-definition-for-ground-and-building-sprites|buildingsprite]]&gt;||D||The sprite to be drawn. Unlike the basic format, zero isn't allowed here.
+|-
+!colspan="3"| -- for sprites defining a new bounding box --
+|-
+|&lt;xofs&gt;||B||x-offset from northern tile corner (as a signed byte)
+|-
+|&lt;yofs&gt;||B||y-offset from northern tile corner (as a signed byte)
+|-
+|&lt;zofs&gt;||B||z-offset from the ground
+|-
+|&lt;xextent&gt;||B||size of sprite in x direction
+|-
+|&lt;yextent&gt;||B||size of sprite in y direction
+|-
+|&lt;zextent&gt;||B||size of sprite in z direction
+|-
+!colspan="3"| -- for sprites sharing their bounding box with the previous sprite --
+|-
+|&lt;xpixeloffset&gt;||B||x offset from the top left corner of the previous sprite
+|-
+|&lt;ypixeloffset&gt;||B||y offset from the top left corner of the previous sprite
+|-
+|80||B||a literal 80h byte to distinguish from new-bounding-box definitions
+|}
+
+Note: restrictions for sprites sharing their bounding box are the same as explained for [[en/Action0Stations#sprite-layout-09|station tiles.]]
+
+{{en/Ottd|0.7|r18959}} Since OpenTTD r18959 you can draw multiple ground sprites for a tile, which is useful if you want to use the usual grass/water/concrete groundtile, but still need to add features to it without using a new bounding box. To do so use the syntax of sprites sharing the previous bounding box, but use it before the first bounding box definition. xpixeloffset and ypixeloffset refer to the usual spot of groundtiles.
+
+{{en/Ttdp|2.6|r2313}} Ta sama funkcja jest również częściowo obsługiwana w TTDPatch, ponieważ TTDPatch 2.6 r2313: TTDPatch ignoruje pola xpixeloffset i ypixeloffset i zawsze używa (0,0) dla offsetu. Jeśli tworzysz GRF, który musi być zgodny zarówno z OpenTTD, jak i TTDPatch, zawsze powinieneś zachować zero xpixeloffset i ypixeloffset zero, aby uzyskać ten sam efekt w obu grach.
+
+{{en/Action2/Advanced Sprite Layout}}
