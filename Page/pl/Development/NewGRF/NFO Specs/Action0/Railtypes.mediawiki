@@ -6,9 +6,9 @@
 
 Definiowanie właściwości typów szyn.
 
-{{en/Ottdp|1.0|no|ottdrev=r18969}} 16 railtypes can be defined.
+{{en/Ottdp|1.0|no|ottdrev=r18969}} 16 typów szyn można zdefiniować.
 
-{{en/Ottdp|1.9|no|ottdrev=bf8d7df7}} 64 railtypes can be defined.
+{{en/Ottdp|1.9|no|ottdrev=bf8d7df7}} 64 typów szyn można zdefiniować.
 
 == Properties ==
 
@@ -132,25 +132,25 @@ Definiowanie właściwości typów szyn.
 
 <references />
 
-In NFO, rail type IDs will be GRF local, with an ID to label mapping. Therefore to modify an existing rail type, specify its label in property 08. To create a new rail type, again just specify its label in property 08. This way there is no need for complex GRM mechanisms to allocate IDs. If a label 'clashes' with another GRF, then one GRF will end up modifying the properties instead of creating a new rail type.
+W NFO identyfikatory typu szyny będą lokalne GRF, z identyfikatorem mapowania etykiety. Dlatego, aby zmodyfikować istniejący typ szyny, określ jego etykietę we właściwości 08. Aby utworzyć nowy typ szyny, ponownie po prostu określ jej etykietę we właściwości 08. W ten sposób nie ma potrzeby stosowania skomplikowanych mechanizmów GRM do przydzielania ID''`ów''. If a label 'clashes' with another GRF, then one GRF will end up modifying the properties instead of creating a new rail type.
 
-When a new rail type is created, it is populated with the information from the first rail type, except that the compatible and powered list contain only the rail type being created. However, no default values should be assumed, as the first rail type may have been modified.
+Gdy tworzony jest nowy typ szyny, jest on wypełniany informacjami z pierwszego typu szyny, z tym wyjątkiem, że lista kompatybilnych i zasilanych zawiera tylko tworzony typ szyny. Nie należy jednak zakładać żadnych wartości domyślnych, ponieważ pierwszy typ szyny mógł zostać zmodyfikowany.
 
 == Vehicle and Railtype availability ==
 
-Vehicle and railtype availability and compatibility is influenced by multiple properties.
-Generally, the vehicle defines which railtype it is, and the railtypes define the compatibility between each other.
-* A vehicle exists, if its railtype (train prop 05) is defined. Otherwise the vehicle is disabled.
-* When a vehicle is introduced, it always introduces its railtype (train prop 05).
-* A railtype is introduced, if at least one of the following conditions is met:
-** A vehicle is introduced, that references the railtype (train prop 05).
-** Another railtype is introduced, that references the railtype via the introduced railtype list (railtype prop 19).
-** The introduction date (railtype prop 17) is passed and all required railtypes (railtype prop 18) are available.
+Dostępność i kompatybilność pojazdów i typów szyn zależy od wielu właściwości.
+Zasadniczo pojazd określa, jaki to typ szyny, a typy szyn określają wzajemną kompatybilność.
+* Pojazd istnieje, jeżeli zdefiniowano jego typ szyny (podpora pociągu 05). W przeciwnym razie pojazd jest wyłączony.
+* Kiedy pojazd jest wprowadzany, zawsze wprowadza swój typ szyny (podpora pociągu 05).
+* Typ szyny zostaje wprowadzony, jeżeli spełniony jest przynajmniej jeden z następujących warunków:
+** Wprowadzono pojazd, który odnosi się do typu szyny (podpora pociągu 05).
+** Wprowadzono kolejny typ szyny, który odwołuje się do typu szyny za pomocą wprowadzonej listy rodzajów szyn (prop 19).
+** Data wprowadzenia (podpora typu szyny 17) została przekroczona i dostępne są wszystkie wymagane typy szyn (podpora typu szyny 18).
 
-Via railtype property 1D multiple railtypes can be defined, which shall be considered equivalent to a railtype.
-This affects the interpretation of train property 05. If train property 05 references an undefined railtype, then
-railtype property 1D is checked for all defined railtypes, whether the vehicle can be reassigned to some other railtype.
-Otherwise the vehicle is disabled.
+Poprzez właściwość typu szyny 1D można zdefiniować wiele rodzajów szyn, które należy uznać za równoważne z typem szyny.
+Wpływa to na interpretację właściwości pociągu 05. Jeśli właściwość pociągu 05 odnosi się do niezdefiniowanego rodzaju kolei, wówczas
+właściwość 1D typu szyny jest sprawdzana dla wszystkich zdefiniowanych typów szyn, czy pojazd może zostać ponownie przypisany do innego rodzaju szyny.
+W przeciwnym razie pojazd jest wyłączony.
 
 == Rail type label (08) ==
 
@@ -178,33 +178,33 @@ These are globally unique four-letter identifiers for specific rail types (analo
 
 {{en/Ottdp|1.9|no|ottdrev=bf8d7df7}} 64 railtypes can be defined.
 
-Rail type sets may use up to 64 railtypes and have to specify their own [[en/RailtypeLabels|labels]].
+Zestawy typów szyn mogą wykorzystywać do 64 rodzajów szyn i muszą określać własne [[pl/Development/NewGRF/NFO Specs/TracktypeLabels|etykiety]].
 
 See also [[en/Action0/Global Settings#rail-type-translation-table-12|Rail Type Translation Table]] for further info.
 
 == Build rail toolbar caption (09) ==
 
-String ID of the name of the rail type as shown in the toolbar caption.
+ID ciągu nazwy typu szyny, jak pokazano w podpisie paska narzędzi.
 
 {{en/GrfTill|7}} {{en/Ottd|1.2|ottdrev=r23129}} For backwards compatibility, setting this property sets the rail type name (property 1B) to this string as well for GRF versions 7 or below.
 
-OpenTTD before r20342 and 1.0.3 require the string to start with the white control code. Later versions of OpenTTD will automatically default to white.
+OpenTTD przed wersjami r20342 i 1.0.3 wymagają, aby ciąg zaczynał się od białego kodu sterującego. Późniejsze wersje OpenTTD automatycznie domyślnie zmieniają kolor na biały.
 
 == Rail construction dropdown text (0A) ==
 
-String ID for text in the dropdown of all rail types.
+Identyfikator ciągu tekstu w menu rozwijanym wszystkich typów szyn.
 
-This string must never start with a colour control code.
+Ciąg ten nigdy nie może zaczynać się od kodu kontroli koloru.
 
 == Build vehicle window caption (0B) ==
 
-String ID for build vehicle window caption.
+Identyfikator ciągu dla podpisu okna pojazdu.
 
-OpenTTD before r20342 and 1.0.3 require the string to start with the white control code. Later versions of OpenTTD will automatically default to white.
+OpenTTD przed wersjami r20342 i 1.0.3 wymagają, aby ciąg zaczynał się od białego kodu sterującego. Późniejsze wersje OpenTTD automatycznie domyślnie zmieniają kolor na biały.
 
 == Autoreplace text (0C) ==
 
-String ID for rail type shown in autoreplace window.
+ID ciągu dla typu szyny pokazany w oknie automatycznego zastępowania.
 
 == New engines (0D) ==
 
@@ -214,19 +214,19 @@ StringID to use for showing texts of the type "We have invented a new &lt;rail t
 
 List of rail types on which trains of this rail type can run, even though they might not be powered. E.g. wagons/engines of "eletrified rail"-type are also compatible to "normal rail" and "third rail" type, but they are not powered (there need to be an other powered engine in the consist to move the train).
 
-The format is:
+Format to:
 
 <pre>0E &lt;nvar&gt; (&lt;rail type label&gt;){n}</pre>
 
-That is you give the number of compatible rail types in a single byte followed by a list of that length of rail type labels. A rail type is automatically compatible (and powered) with itself, so you don't need to list the current rail type.
+Oznacza to, że podajesz liczbę kompatybilnych typów szyn w jednym bajcie, a następnie listę etykiet szyn o takiej długości. Typ szyny jest automatycznie kompatybilny (i zasilany) ze sobą, więc nie musisz wymieniać bieżącego typu szyny.
 
-Note that these properties apply to trains of this rail type, not the track. If you want trains of other rail types to be able to run on your rail types, you must set the compatible rail types property for each rail type. Setting these properties behaves always incremental, so you only need to the set additional bits for each other rail type, you cannot remove compatibility/poweredness once it is set (by some other grf).
+Należy pamiętać, że te właściwości dotyczą pociągów tego rodzaju szyn, a nie toru. Jeśli chcesz, aby pociągi innych typów kolei mogły jeździć na twoich typach kolei, musisz ustawić właściwość kompatybilnych typów kolei dla każdego rodzaju kolei. Ustawienie tych właściwości zachowuje się zawsze przyrostowo, więc wystarczy ustawić dodatkowe bity dla każdego typu szyny, nie można usunąć kompatybilności/mocy po jej ustawieniu (przez jakiś inny GRF).
 
 == Powered rail type list (0F) ==
 
 List of rail types on which trains of this rail type are powered. E.g. engines of "normal rail"-type are powered on "electrified rail"- and "third-rail"-type as well.
 
-Same format as for property 0E above.
+Taki sam format jak dla właściwości 0E powyżej.
 
 == Rail type flags (10) ==
 
@@ -272,7 +272,7 @@ Flags to define properties related to the rail type:
 
 == Curve Speed advantage multiplier (11) ==
 
-This property sets the multiplier to the curve speed advantage which all trains running on this track type get. The base curve speed advantage is given by the multiplication of the value of this property with the base speed advantage - which depends on the curve length in wagons:
+Ta właściwość ustawia mnożnik na przewagę prędkości łuku, którą otrzymują wszystkie pociągi kursujące na tym typie torów. Przewaga prędkości krzywej bazowej wynika z pomnożenia wartości tej właściwości przez przewagę prędkości bazowej - która zależy od długości krzywej w wagonach:
 
 {| class="wikitable"
 |-
@@ -323,11 +323,11 @@ This property sets the multiplier to the curve speed advantage which all trains 
 
 The maximum speed for a train in a curve is defined by "base speed advantage" * (2 + "property 11"). Tilting trains get an additional bonus of 20% to this value.
 
-For the default rail types this property is 0 for normal rail and electrified rail, 1 for monorail, and 2 for maglev.
+Dla domyślnych typów szyn ta właściwość wynosi 0 dla szyny normalnej i szyny zelektryfikowanej, 1 dla szyny jednoszynowej i 2 dla szyny maglev.
 
 == Station (and depot) graphics (12) ==
 
-This property defines the default graphics for the stations. If no depot sprites are defined, this also defines at the same time the depot sprites to be used. There are three kind of default stations (and depots), usually associated with rail, monorail and maglev tracks. Valid values are:
+Ta właściwość określa domyślną grafikę dla stacji. Jeśli nie zdefiniowano żadnych duszków zajezdni, definiuje to jednocześnie duszki, które mają być używane. Istnieją trzy rodzaje domyślnych stacji (i składów), zwykle związanych z torami kolejowymi, jednoszynowymi i maglevowymi. Prawidłowe wartości to:
 
 {| class="wikitable"
 |-
@@ -350,7 +350,7 @@ Speed limit in mph*1.6 (approx. km/h). Set to "0" for no limit at all.
 
 == Acceleration model (15) ==
 
-This property defines the acceleration model used. Valid values range from 0 to 2:
+Ta właściwość definiuje zastosowany model przyspieszenia. Prawidłowe wartości mieszczą się w zakresie od 0 do 2:
 
 {| class="wikitable"
 |-
@@ -367,33 +367,33 @@ This property defines the acceleration model used. Valid values range from 0 to 
 |Maglev
 |}
 
-There is currently no difference between normal rail and monorail.
+Obecnie nie ma różnicy między normalną koleją a koleją jednoszynową.
 
 == Map colour (16) ==
 
-This property defines the colour this track type is drawn in the minimap view. The byte value specifies the colour entry in the [[en/PalettesAndCoordinates|DOS palette]].
+Ta właściwość określa kolor, jaki ten typ ścieżki jest rysowany w widoku minimapy. Wartość bajtu określa wpis koloru w [[en/PalettesAndCoordinates|DOS palette]].
 
 == Introduction date (17) ==
 
-This property defines the long date formatted introduction date of this rail type. With this property set the rail type will be introduced at (or after) this date when all of the introduction required rail types are available to the company of the player, or whenever a vehicle using this rail type gets introduced whichever is first.
+Ta właściwość określa sformatowaną datę wprowadzenia daty tego typu szyny. Z tym zestawem właściwości typ szyny zostanie wprowadzony w dniu (lub po tej dacie), gdy wszystkie wymagane typy szyny będą dostępne dla firmy gracza lub za każdym razem, gdy pojazd wykorzystujący ten typ szyny zostanie wprowadzony, w zależności od tego, co nastąpi wcześniej.
 
 == Introduction required rail type list (18) ==
 
-List of rail types on that need to be available to the company of the player for this rail type to be introduced at (or after) the introduction date. This limit does not apply when the rail type is introduced by the introduction of a vehicle.
+Lista rodzajów szyn na tym szynie musi być dostępna dla firmy gracza, aby ten typ szyny mógł zostać wprowadzony w dniu wprowadzenia (lub później). Limit ten nie ma zastosowania, gdy typ szyny zostaje wprowadzony przez wprowadzenie pojazdu.
 
-Same format as for property 0E above.
+Taki sam format jak dla właściwości 0E powyżej.
 
-This can, for example, be used to introduce a third rail with catenary track type when both third rail and catenary rail types are available.
+Może to być na przykład wykorzystane do wprowadzenia trzeciej szyny z typem sieci trakcyjnej, gdy dostępne są zarówno typy trzeciej szyny, jak i sieci trakcyjnej.
 
 == Introduced rail type list (19) ==
 
-List of rail types that get introduced when this rail type is introduced. For example, to make sure that when a fast rail type is introduced the slow variant exists.
+Lista rodzajów szyn wprowadzanych po wprowadzeniu tego typu szyn. Na przykład, aby upewnić się, że po wprowadzeniu typu szybkiej szyny istnieje wariant wolny.
 
-Same format as for property 0E above.
+Taki sam format jak dla właściwości 0E powyżej.
 
 == Sort order (1A) ==
 
-Property for influencing the sort order of the drop down lists with rail types. Default values are as follows:
+Właściwość wpływająca na porządek sortowania list rozwijanych z typami szyn. Wartości domyślne są następujące:
 
 {| class="wikitable"
 |-
@@ -416,11 +416,11 @@ Property for influencing the sort order of the drop down lists with rail types. 
 |Railtype #n
 |}
 
-Thus the rail type that (internally) gets index 8 will get a default value of 87. These defaults are to keep the ordering when this property is not supported as they were.
+Zatem typ szyny, który (wewnętrznie) otrzymuje indeks 8, otrzyma wartość domyślną 87. Te wartości domyślne mają zachować porządek, gdy ta właściwość nie jest obsługiwana tak, jak były.
 
 == Rail type name (1B) ==
 
-String ID of the name of the rail type.
+ID ciągu nazwy typu szyny.
 
 {{en/GrfTill|7}} For GRF versions 7 or earlier, set property 1B ''after'' setting property 09, as property 09 sets the rail type name as well for backwards compatibility.
 
@@ -428,7 +428,7 @@ String ID of the name of the rail type.
 
 A list of alternate labels that get "redirected" to this rail type when used e.g. as track type of train or when testing if a label is defined. The redirection only happens if the alternate label isn't defined as a real rail type. Same format as for property 0E above.
 
-Alternate labels are not considered when evaluating properties 0E, 0F, 18, and 19.
+Alternatywne etykiety nie są brane pod uwagę przy ocenie właściwości 0E, 0F, 18 i 19.
 
 = Przykład =
 
