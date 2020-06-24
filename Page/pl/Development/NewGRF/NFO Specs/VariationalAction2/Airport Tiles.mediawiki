@@ -1,0 +1,115 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+==Wprowadzenie==
+
+== Variables ==
+
+
+{| |-
+!Variable!![[en/GRFActionsDetailed|'''Size''']]!!Version!!Content
+|-
+|40||B||{{en/Ottdp|0.6|2.5}}||Construction state of the tile: a value between 0 and 3 (only defined for industries)
+|-
+|41||B||{{en/Ottdp|0.6|2.5}}||Ground type, the same as variable 81 for [[en/VarAction2Canals|canals]]
+|-
+|42||B||{{en/Ottdp|0.6|2.5}}||Current [[en/TownZones|town zone]] of the tile in the nearest town
+|-
+|43||D||{{en/Ottdp|0.6|2.5}}||Relative position
+|-
+|44||B||{{en/Ottdp|0.6|2.5}}||Animation frame. Like [[en/VarAction2Houses#current-animation-frame-46|house variable 46]] but can contain anything 0..FF.
+|-
+|60||D||{{en/Ottdp|0.6|2.5}}||Land info of nearby tiles
+|-
+|61||D||{{en/Ottdp|0.6|2.5}}||Animation stage of nearby tiles
+|-
+|62||D||{{en/Ottdp|0.6|2.6|ttdprev=r1270}}||Get industry or airport tile ID at offset
+|}
+
+VarAction2 for airport tiles is only available in OpenTTD r19204 or later
+
+No 80+x variables are available (nor will they ever be). Try to access one will crash TTD.
+
+=== [[en/TownZones|Town zone]] (42) ===
+
+[[en/TownZones|Town zone]] where the building is situated (which is not necessarily the founder of the town). Zero if the tile isn't in a town. This is mostly useful for banks and other urban industries.
+
+=== Relative position (43) ===
+
+This is the position of the tile relative to the northernmost tile of the industry or airport.
+
+'''Format:''' 00yxYYXX
+
+{| |-
+!Variable!!Content
+|-
+|x||the x offset from the northernmost tile
+|-
+|XX||same, but stored in a byte instead of a nibble
+|-
+|y||the y offset from the northernmost tile
+|-
+|YY||same, but stored in a byte instead of a nibble
+|}
+
+Because of the fact that y and x are nibbles, they may contain incorrect values if your industry exceeds 16 tiles in either direction. This variable can be used to spare industry or airport tile IDs: the same tile type can choose different representation depending on where exactly it is inside the industry.
+
+=== Land info of nearby tiles (60) ===
+
+The parameter of this variable is an offset from the position of the current tile. The low nibble contains the signed X offset (that is 0h=0, 1h=+1 ... 7h=+7; 8h=-8, 9h=-7 ... Fh=-1), the high nibble contains the Y offset. Therefore the parameter 00h accesses the current tile itself.
+
+The returned doubleword is in the format '''rc zz bb ss''', where the meaning of the letters is:
+* '''r''' is reserved for future use
+* '''c''' contains the [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#Landscape landscape class] of the tile. {{en/Ottdp|0.6|2.5|ttdprev=alpha 72}} 
+* '''zz''' is the height of the lowest corner of the tile.
+: {{en/GrfTill|7}} For GRF version 7 and below: Multiple of 8.
+: {{en/GrfFrom|8}} For GRF version 8 and above: Multiple of 1.
+* '''bb''' is a bit field, the meaning of the individual bits are:
+{| |-
+!Bit||Value||Version||Meaning
+|-
+|0||1||{{en/Ottdp|0.6|2.5}}||The tile is an industry tile, and belongs to the same industry as the current one
+|-
+|1||2||{{en/Ottdp|0.6|2.5}}||The tile has water on it. This flag is set for coasts as well. If you need a full water tile, check the slope data as well. If it's zero (flat tile), the tile is fully watered.
+|-
+|2..4|| ||{{en/Ottdp|0.6|2.5|ttdprev=alpha 70}}||0 - normal tile; 1 - desert; 2 - rainforest; 4 - snowy tile
+|-
+|5..6|| ||{{en/Ottdp|1.2|no|ottdrev=r22679}}||Water class: 0 - undefined / land; 1 - sea; 2 - canal; 3 - river. This is not the same as bit 1, as e.g. an industry tile can have a water class but has bit 1 unset.
+|-
+|7|| || ||reserved for future use
+|}
+* '''ss''' contains the slope data of the tile. The meaning of the individual bits is:
+{| |-
+!Bit||Value||Meaning
+|-
+|0||1||West corner is above the lowest
+|-
+|1||2||South corner is above the lowest
+|-
+|2||4||East corner is above the lowest
+|-
+|3||8||North corner is above the lowest
+|-
+|4||16||The tile is a steep slope (i.e. the corner opposite to the lowest one is two units higher)
+|-
+|other bits|| ||always zero
+|}
+
+The resulting, possible values for this byte are illustrated in this image (from OpenTTD docs):
+
+[[File:en/Industrytile var60.png]]
+
+It is sometimes more useful to know the height of the highest corner of the tile. This can be computed with "zz/8 + ((ss+15)/16)", that is: "60 XX 33 1F 00 60 XX 40 FF 0F 10", where XX is the parameter. This returns a number 0..31 instead of 0..248, though.
+Why this works, and how to adjust for the different value range, are left as exercises for the reader.
+
+
+Be aware that due to the way that TTD generates a random map, the class number of a neighbour tile could be different from what you expect. E.g., when placing a water-based industry adjacent to a coast in a random game, these tiles aren´t adjacent to water anymore after the industry has been generated and therefore you can't reliably check for coast tiles in the industry´s placement callback.
+
+=== Animation stage for nearby tiles (61) ===
+
+The parameter of this variable is interpreted the same way as for variable 60. The return value is FFFFFFFFh if the given tile doesn't belong to the industry, and the number of the current animation frame of the given tile otherwise. (That is, the value that var 44 would return for the given tile.)
+
+=== Get industry tile ID at offset (62) ===
+
+Works similarly to industry variable 60, except that the point of reference is the current tile instead of the north tile of the industry, and the offsets are considered to be signed.
+
+==Przykład==
