@@ -1,0 +1,120 @@
+
+<!--{{-}}<br>-->{{en/Ambox| text = w trakcie edycji.}}<!-- -->
+== Wprowadzenie ==
+
+Action 3  przypisuje zestawy graficzne (do których odwołuje się (łańcuchy) [[pl/Development/NewGRF/NFO Specs/Action2/Main Page|action 2(e]] ) do ID''`ów'' funkcji . 
+
+== Format ==
+
+The format of the data is feature-dependent, canals use specific ids which define the graphics being provided.
+
+The data is:
+
+<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 03 05 01 &lt;id&gt; 00 &lt;set-ID&gt;</pre>
+
+{| class="wikitable"
+|-
+!'''Element'''
+![[en/GRFActionsDetailed|'''Size''']]
+!'''Description'''
+|-
+|&lt;Sprite-number&gt;
+|dec
+|A sequential sprite number
+|-
+|&lt;length&gt;
+|dec
+|The total number of bytes used in this action
+|-
+|03
+|B
+|Defines action 03
+|-
+|05
+|B
+|Feature 05 "Canals"
+|-
+|01
+|B
+|Canals and rivers can only provide one "ID" at a time
+|-
+|&lt;id&gt;
+|B/B*
+|IDs of the current feature this action 3 associates graphics with. There must be as many IDs as &lt;n-id&gt; specifies
+|-
+|00
+|B
+|Canals support no cargo types
+|-
+|&lt;set-ID&gt;
+|W
+|Default set-ID to use if none of the above matches
+|}
+
+== Description ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== Feature ===
+
+This sets the type of [[en/Features|feature]] that you wish to change, 05 for canals in this case
+
+=== id ===
+
+In the case of canals or rivers this differs by the type of sprites provided in the real sprite:
+
+{| |-
+!'''ID'''!!'''Description'''
+!colspan="2"|'''Sprites'''
+!colspan="2"|'''Sprites when [[en/Action0/Canals#graphic-flags-09| prop. 09 Bit 0]] is set'''
+|-
+|00||Canal water||{{en/Ottdp|0.6|2.5}}||4 slope sprites||{{en/Ottdp|1.1|2.6|ottdrev=r20352|ttdprev=r1573}}||1 flat ground sprite followed by 4 slope sprites
+|-
+|01||Locks||{{en/Ottdp|0.6|2.5}}||24||{{en/Ottdp|no|no}}||undefined
+|-
+|02||Dikes||{{en/Ottdp|0.6|2.5}}||12||{{en/Ottdp|no|no}}||undefined
+|-
+|03||Canal GUI||{{en/Ottdp|no|2.5}}||1||{{en/Ottdp|no|no}}||undefined
+|-
+|04||Flat docks||{{en/Ottdp|no|2.5}}||4||{{en/Ottdp|no|no}}||undefined
+|-
+|05||River water||{{en/Ottdp|0.6|2.6}}||4 slope sprites||{{en/Ottdp|1.1|2.6|ottdrev=r20352|ttdprev=r1573}}||1 flat ground sprite followed by 4 slope sprites
+|-
+|06||Riverbanks ||{{en/Ottdp|0.6|2.6}}||12*5 (Last 4 for slopes)||{{en/Ottdp|no|no}}||undefined
+|-
+|07||River GUI||{{en/Ottdp|no|2.6}}||2||{{en/Ottdp|no|no}}||undefined
+|-
+|08||Buoy||{{en/Ottdp|1.2|no|ottdrev=r22973}}||1||{{en/Ottdp|no|no}}||undefined
+|}
+
+==== Watercliffs (00) ====
+[[File:en/Riversprites 00.png]]
+
+==== Dikes (Canals) (02) ====
+[[File:en/Riversprites 02.png]]
+
+==== River slopes (05) ====
+When property 09, bit 0 is NOT set, the required sprites are
+[[File:en/Riversprites 05.png]]
+
+if the bit is set, the sprites are preceeded by a flat water tile which then represents the water used exclusively for rivers.
+
+==== Riverbanks (06) ====
+
+This contains 5 times sprites as shown for id2 (dikes). The first 12 sprites are for level land, the following ones are for sloped rivers where slopes follow the same order as for id5 (river slopes).
+
+==== Buoy (08) ====
+
+This contains the buoy sprite without water to be shown on the map. This will be overlaid on the appropriate water for the tile.
+
+=== set-ID ===
+
+set-ID (or Action2 ID)
+
+== Przykład ==
