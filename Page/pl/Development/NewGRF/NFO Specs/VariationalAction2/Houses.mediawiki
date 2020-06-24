@@ -1,0 +1,186 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+==Wprowadzenie==
+
+== Variables ==
+
+{| |-
+!Variable!![[en/GRFActionsDetailed|'''Size''']]!!Version*!!Description
+|-
+|40||B||{{en/Ottdp|0.6|2.5}}||Construction stage and pseudo-random values
+|-
+|41||B||{{en/Ottdp|0.6|2.5}}||Age of the building in years (or, strictly speaking, the difference between the current year and the year the building was built). Returns 255 for buildings older than 255 years.
+|-
+|42||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 43}}||Town zone where the building is situated.
+|-
+|43||B||{{en/Ottdp|0.6|2.5}}||Terrain type: 0 normal, 1 desert, 2 rainforest, 4 on or above snowline
+|-
+|44||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 43}}||Building counts
+|-
+|45||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 38}}||Town expansion bits
+|-
+|46||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 67}}||Current animation frame
+|-
+|47||D||{{en/Ottdp|0.7|2.6|ottdrev=r14294|ttdprev=r2020}}||XY Coordinate of the building
+|-
+|60||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 56}}||Other building counts
+|-
+|61||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 56}}||Other building counts
+|-
+|62||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 72}}||Land info for nearby tiles
+|-
+|63||B||{{en/Ottdp|0.7|2.6|ttdprev=r1665}}||Current animation frame of nearby house tiles
+|-
+|64||B||{{en/Ottdp|1.2|2.6|ottdrev=r23070|ttdprev=r1672}}||Cargo acceptance history of nearby stations
+|-
+|65||B||{{en/Ottdp|0.7|2.6|ottdrev=r13603|ttdprev=r2242}}||Distance of nearest house matching a given criterion
+|-
+|66||D||{{en/Ottdp|1.0|2.6|ttdprev=r2246}}||Class and ID of nearby house tile
+|-
+|67||D||{{en/Ottdp|1.0|2.6|ttdprev=r2246}}||GRFID of nearby house tile
+|-
+|80+x||||||None defined, and none ever will because town buildings don't have an internal structure. Trying to access these variables crashes TTD.
+|}
+
+<nowiki>*</nowiki> Specified version is earliest known to support the variable in its current form. Some variables may have been available earlier.
+
+== Description ==
+
+=== Construction stage and pseudo-random values (40) ===
+
+{| |-
+!Bits!!Meaning
+|-
+|0..1||Construction state: 0..2: various states of construction, 3: construction finished
+|-
+|2..3||A pseudo-random value. It isn't actually random, but is derived from the position of the building. Old buildings use this value to randomize their colors. TTDPatch has a better way to randomize things, but you can still use that value to mimic unpatched TTD behaviour. Note that adjacent tiles aren't guaranteed to have the same pseudo-random bits
+|}
+
+=== Town zone (42) ===
+
+Town zone where the building is situated. The value is between 0 and 4, where 0 is the outermost zone of the town. Smaller towns have fewer zones. Roads are plain in zone 0 and 1, paved in zone 2, have trees in zone 3 and streetlights in zone 4
+
+=== Building counts (44) ===
+
+Returns dword LLllCCcc, where cc means how many buildings of the current type can be found in the current town, while CC is the same for the whole map. ll and LL are similar to cc and CC, but contain the number of tiles that have the same class as the current one. For tiles that have no class, ll and LL are always zero. Overridden old types are considered to be the new type they were overridden with. During [[en/Callbacks#house-construction-check-17|callback 17]], the current building isn't on the map yet, and therefore isn't counted. In other cases, the building count is at least one, since the current building is counted as well.
+
+=== Town expansion bits (45) ===
+
+{| |-
+!Bit!!Value!!Meaning
+|-
+|0||1||Set if TTD is currently creating a random town, clear otherwise. PLEASE NOTE: while TTD is generating a random town, town variables 82 (town population) and B6 (number of buildings) are incorrect. The population counter contains the population of buildings generated _yet_, which means the final value may be larger than you get. The building count variable, on the other hand, is surely higher than the final value will be. If you want to check these variables during [[en/Callbacks#house-construction-check-17|callback 17]], you may need to check variable 45 as well and make adjustments if this bit is set.
+|}
+
+Other bits are currently reserved for future use.
+
+=== Current animation frame (46) ===
+
+The current animation frame being displayed. If you don't use animation callbacks, it's between zero and the value set in property 1A. Animation callbacks can set this to anything between 0 and 127.
+
+Enabling animation on a house tile by setting properties 9, 1A and probably 1B ensures that variable 46 will indeed change with time, and the building is redrawn every time variable 46 changes. This means that you can use a VarAction2 to choose the current frame according to variable 46. Please note that this kind of animation needs more CPU time and more sprites, so you should prefer palette animation if possible.
+
+=== XY Coordinate of the building (47) ===
+
+The coordinate of the tile this part of the building is located. &nbsp;If the building is not yet constructed, like during [[en/Callbacks#house-construction-check-17|callback 17]], the returned value will be the proposed location. &nbsp;The format of the var is YYYYXXXX.
+
+=== Other building counts (60, 61) ===
+
+For variable 60, the parameter is an old house type number. For variable 61, it is a new house type number defined in the current GRF file.
+
+These variables work like variable 44, but they count the given house type instead of the current one.
+
+Please note that, unlike random graphics, changes of deterministic building graphics don't automatically redraw the building (except when either the construction state or variable 46 changes), resulting in temporary graphics glitches when a visible building changes its graphics. These glitches can be fixed by scrolling the building out of view, then back again.
+
+=== Land info for nearby tiles (62) ===
+
+This variable works exactly like [[en/VarAction2IndustryTiles#land-info-of-nearby-tiles-60|var. 60 for industry tiles]], except that bit 0 of the '''bb''' part is undefined.
+
+=== Current animation frame of nearby house tiles (63) ===
+
+The parameter of this variable is an offset from the position of the current tile. The low nibble contains the signed X offset (that is 0h=0, 1h=+1 ... 7h=+7; 8h=-8, 9h=-7 ... Fh=-1), the high nibble contains the Y offset. Although you can query a 16x16 area with these parameters, it's currently useless to use offsets other than -1, 0 and +1; if you query a tile that doesn't belong to the same building as the current tile, the result is meaningless. It may even be junk if the queried tile isn't a house tile at all.
+
+=== Cargo acceptance history of nearby stations (64) ===
+
+The parameter of this variable is a cargo identifier. {{en/GrfFrom|7}} If your GRF is version 7 or later and has a cargo translation table, this is an index to that table; otherwise, it's a cargo slot number. Additionally, GRF register 100h should contain an offset relative to the current tile (use 0 for the current tile). The lowest byte contains the signed X offset and the next higher byte the signed Y offset.
+
+The returned value looks like this:
+
+{| |-
+!Bit number!!Meaning
+|-
+|0||This cargo was accepted in a nearby station some time in the past
+|-
+|1||This cargo was accepted in a nearby station last month
+|-
+|2||This cargo was accepted in a nearby station this month
+|-
+|3||This cargo was accepted in a nearby station since the last periodic processing (which happens every 250 ticks)
+|-
+|4||This cargo is one of the types that triggered [[en/Callbacks#watched-cargo-accepted-148|callback 148]] (only during callback 148)
+|-
+|other bits||undefined; reserved for future use
+|}
+
+A station is considered nearby if the selected tile is inside its acceptance area. That's why you can give an offset - other tiles of your multi-tile building may have different stations "nearby".
+
+{{en/Ttdp|}} The information required for this variable is stored in the station2 structure, and therefore works only if the station2 structure is present. The station2 structure is present if any of the following is true:
+* Generalfixes is on, and miscmods.noextendstationrange is off
+* Any of fifoloading, newcargos or irregularstations is on
+
+If the station2 structure isn't present, the returned value is always zero.
+
+=== Distance of nearest house matching a given criterion (65) ===
+
+This will perform a circular search around the current tile, trying to find another house tile that will match the same type, class or GRFID. (Note: other tiles of the originating house will not match.) &nbsp;Search result will be the [http://en.wikipedia.org/wiki/Taxicab_geometry Manhattan distance] between both tiles or 0, if no house tile matching the given criteria has been found.
+
+The parameter of this variable is composed of two parts:
+
+Bits 0..5 indicate the radius of the search going to be performed (given in Manhattan metric). Maximum search radius is 63 while the minimum is 1. A radius of 0 is considered reserved - do not use.
+
+Bits 6..7 indicate the type of search to be carried out:
+
+0 : Search by house type as defined in the grf file
+
+1 : Search by building class
+
+2 : Search by GRFID
+
+Just like other search variables, be aware that this is a CPU intensive one
+
+=== Class and ID of nearby house tile (66) ===
+
+The parameter of this variable is an offset from the position of the current tile. The low nibble contains the signed X offset (that is 0h=0, 1h=+1 ... 7h=+7; 8h=-8, 9h=-7 ... Fh=-1), the high nibble contains the Y offset. The returned value is structured like this:
+
+{| |-
+!High word!!Information about house class
+|-
+|||'''FFFFh''' if the selected tile isn't a house tile
+|-
+|||'''0000h''' if the selected house doesn't have a class specified (including old houses, which cannot have a class)
+|-
+|||'''01XXh''' if the selected house has been defined in the current GRF with class XX
+|-
+|||'''02XXh''' if the selected house has been defined in a different GRF with class XX
+|-
+!Low word!!Information about house ID
+|-
+|||'''FFFFh''' if the selected tile isn't a house tile
+|-
+|||'''00XXh''' if the selected house is old house type XX
+|-
+|||'''01XXh''' if the selected house has been defined in the current GRF with ID XX
+|-
+|||'''02XXh''' if the selected house has been defined in a different GRF with ID XX
+|}
+
+In case the selected house comes from another GRF, you need to use variable 67 (see below) to find out the corresponding GRFID and identify the exact type of the house. Please note that variable 67 is cheaper to calculate than this one, so if you are looking for a specific GRFID/houseID combination, you should try matching the GRFID first, and get variable 66 only if the GRFID matches.
+
+=== GRFID of nearby house tile (67) ===
+
+The parameter of this variable is an offset from the position of the current tile. The low nibble contains the signed X offset (that is 0h=0, 1h=+1 ... 7h=+7; 8h=-8, 9h=-7 ... Fh=-1), the high nibble contains the Y offset. The returned value is one of the following:
+* '''FFFFFFFFh''' if the selected tile isn't a house tile
+* '''00000000h''' if the selected house is an old house type
+* otherwise, the GRFID of the GRF which defined the type of the selected house
+
+==Przykład==
