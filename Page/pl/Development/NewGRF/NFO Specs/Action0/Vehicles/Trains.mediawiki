@@ -92,7 +92,7 @@ Set track type of vehicle: 0 = rail, 1 = monorail, 2 = maglev. For setting the a
 
 == Speed (09) ==
 
-Train speed is in units of mph*1.6, i.e. approximately km/h.
+Prędkość pociągu jest wyrażona w jednostkach mph*1,6, tj. W przybliżeniu km/h.
 
 For wagons, this value is only used if the "wagonspeedlimit" switch is on, and it limits the speed of the train to that of the lowest wagon speed. &nbsp;This limit is ignored for wagons with a livery override for the current train, so that train sets always get their max speed from the engine's max speed.
 
@@ -100,15 +100,15 @@ For wagons, a value of 0 means "default" (which depends on cargo type and date o
 
 == Power (0B) ==
 
-The power of the engine, in HP.
+Moc silnika w KM <small>''(HP)''</small> .
 
-A value of 0 means that the vehicle will be a wagon, otherwise it will be an engine.
+Wartość 0 oznacza, że ​​pojazd będzie wagonem, w przeciwnym razie będzie to silnik.
 
 == Running cost base (0E) and factor (0D) ==
 
-TTD calculates all costs by multiplying a 32-bit [[en/BaseCosts|base amount]] with an 8-bit factor. &nbsp;The base amount is changed according to inflation, whereas the factor remains constant.
+TTD calculates all costs by multiplying a 32-bit [[en/BaseCosts|base amount]] with an 8-bit factor. &nbsp;Kwota podstawowa jest zmieniana zgodnie z inflacją, podczas gdy współczynnik pozostaje stały.
 
-For the running costs of train vehicles, the following base amounts are available depending on the vehicle type (the value here is a pointer into TTD's memory where the actual amount is stored):
+Dla kosztów bieżących pojazdów kolejowych dostępne są następujące kwoty podstawowe w zależności od typu pojazdu (tutaj wartość jest wskaźnikiem do pamięci TTD, w której przechowywana jest faktyczna kwota):
 
 {| |-
 !Type!!Value!!in little-endian notation
@@ -122,9 +122,9 @@ For the running costs of train vehicles, the following base amounts are availabl
 |Wagons||0||00 00 00 00
 |}
 
-Theoretically, you could use pointers to other base amounts available in TTD, but these are the numbers TTD uses for train vehicles.
+Teoretycznie można użyć wskaźników do innych bazowych kwot dostępnych w TTD, ale są to liczby, których TTD używa do pojazdów kolejowych.
 
-The following are some real values for maintenance costs depending on the setting of the above two factors. &nbsp;This value is correct for medium difficulty, but increases and decreases for hard and easy difficulties respectively. &nbsp;These are the costs of a new game starting in 1921, because they obviously increase with inflation over time (unless noinflation is turned on).
+Poniżej przedstawiono niektóre rzeczywiste wartości kosztów utrzymania w zależności od ustawienia powyższych dwóch czynników. &nbsp;Ta wartość jest poprawna dla średnich trudności, ale zwiększa się i zmniejsza odpowiednio dla trudności trudnych i łatwych. &nbsp;Są to koszty nowej gry rozpoczynającej się w 1921 r., Ponieważ z czasem rosną wraz z inflacją (chyba że nie włączono żadnej inflacji).
 
 '''Running cost base 4C30 (steam)'''
 
@@ -182,7 +182,7 @@ The following are some real values for maintenance costs depending on the settin
 
 == Cost factor (17) ==
 
-The cost factor is a bit-coded value which determines how expensive an engine is. There is no distinction between steam, diesel or electric engines, they all use the same cost factor. The table below gives you some values to use for finding the right price for your engines.
+Współczynnik kosztu to kodowana bitowo wartość, która określa, jak drogi jest silnik. Nie ma różnicy między silnikami parowymi, wysokoprężnymi lub elektrycznymi, wszystkie wykorzystują ten sam współczynnik kosztów. Poniższa tabela zawiera wartości, które należy zastosować, aby znaleźć odpowiednią cenę dla swoich silników.
 
 {| |-
 !Cost factor!!Price
@@ -202,9 +202,9 @@ The cost factor is a bit-coded value which determines how expensive an engine is
 
 == Engine traction type (19) ==
 
-This sets the traction type of a train engine, i.e. whether it is powered by steam, diesel, electric, monorail or maglev technology. &nbsp;It also sets the corresponding sound effect of the engine, and if property 22 is not set, the visual effect as well.
+Określa typ trakcji silnika pociągu, tzn. Czy jest on napędzany parą, olejem napędowym, elektrycznym, jednoszynowym czy maglev. &nbsp;Ustawia również odpowiedni efekt dźwiękowy silnika, a jeśli właściwość 22 nie jest ustawiona, również efekt wizualny.
 
-The following ranges are available (and it does not matter which value you pick):
+Dostępne są następujące zakresy (i nie ma znaczenia, którą wartość wybierzesz):
 
 {| |-
 !Values!!Traction type
@@ -225,31 +225,31 @@ Default value is 00, i.e. steam. For setting the appropriate track type, see [[e
 
 == Sort vehicle list (1A) ==
 
-This is not a property as such, but an action. &nbsp;It forces TTDPatch to shuffle the vehicle this "property" is being set for in front of the vehicle with the given value of the property. &nbsp;The order of this list is only used in the train purchase window.
+To nie jest właściwość jako taka, ale działanie. &nbsp;It forces TTDPatch to shuffle the vehicle this "property" is being set for in front of the vehicle with the given value of the property. &nbsp;Kolejność tej listy jest używana tylko w oknie zakupu pociągu.
 
-For example, setting prop. 1A for vehicle 09 to a value of 07 would lead to the following internal list: ... 05 06 09 07 08 0A 0B ...
+Na przykład ustawienie prop. 1A dla pojazdu 09 do wartości 07 doprowadziłoby do następującej wewnętrznej listy: ... 05 06 09 07 08 0A 0B ...
 
-This property can not simply be overwritten, because the list is already shuffled when trying to do so.
+Tej właściwości nie można po prostu nadpisać, ponieważ lista jest już tasowana podczas próby jej wykonania.
 
-{{en/Ottdp|no|2.0}} It is possible to reset the list to its original order with a special action 0 that has num-info set to 0, and only sets property 1A for trains:
+{{en/Ottdp|no|2.0}} Możliwe jest zresetowanie listy do pierwotnej kolejności za pomocą specjalnej akcji 0, która ma num-info ustawioną na 0 i ustawia tylko właściwość 1A dla pociągów:
 <pre>00 00 01 00 00 1A</pre>
 
-Resetting the list should however only be done by sets that contain replacements for all train vehicles.
+Resetowanie listy powinno być jednak wykonywane tylko przez zestawy, które zawierają zamienniki dla wszystkich pojazdów kolejowych.
 
-{{en/Ottdp|0.7|no|ottdrev=r13831}} This property is an extended byte in OpenTTD since r13831!
+{{en/Ottdp|0.7|no|ottdrev=r13831}} Ta właściwość jest rozszerzonym bajtem w OpenTTD od r13831!
 
 == Powered train wagons (1B and 23, see also 22) ==
 
-Normally, train wagons are unpowered in TTD, and if you set property 0B to a non-zero value, they become engines instead. &nbsp;Therefore, to model real-life trains where wagons have power, a different mechanism is needed.
-To make train wagons powered, you set property 1B of the '''engine''' instead of the wagon. This determines how much power each wagon adds to the train when attached to this engine. This only applies to wagons with a [[en/Action3|graphics override]] for this engine as well. &nbsp;This means that for example passenger wagons (with an override) will add power, but coal wagons (with no override) will not.
+Zwykle wagony kolejowe nie mają mocy w TTD, a jeśli ustawisz właściwość 0B na wartość niezerową, zamiast tego stają się silnikami. &nbsp;Dlatego do modelowania prawdziwych pociągów, w których wagony mają moc, potrzebny jest inny mechanizm.
+To make train wagons powered, you set property 1B of the '''engine''' instead of the wagon. This determines how much power each wagon adds to the train when attached to this engine. This only applies to wagons with a [[en/Action3|graphics override]] for this engine as well. &nbsp;Oznacza to, że na przykład wagony pasażerskie (z obejściem) dodadzą moc, ale wagony węglowe (bez obejścia) nie będą.
 
-In addition to adding power, these wagons are also heavier by the amount set in property 23.
+Oprócz dodania mocy wagony te są również cięższe o kwotę określoną we właściwości 23.
 
 == Refit cost (1C) ==
 
 Refit cost, using 50% of the [[en/BaseCosts|purchase price cost base]]. This property can be overridden by callback 15E.
 
-{{en/Ottdp|1.2|no|ottdrev=r23087}} If the refit cost factor is set to zero and bit 4 of the miscellaneous flags (27) is set, auto-refitting is allowed.
+{{en/Ottdp|1.2|no|ottdrev=r23087}} Jeśli współczynnik kosztu remontu jest ustawiony na zero, a bit 4 flag różnych (27) jest ustawiony, dozwolone jest automatyczne dopasowanie.
 
 == Callbacks (1E) ==
 For trains, the following [[en/Callbacks]] have to be enabled by setting the corresponding bit in property 1E (certain other, not as frequently used callbacks are available without setting a bit here):
@@ -274,9 +274,9 @@ For trains, the following [[en/Callbacks]] have to be enabled by setting the cor
 |7||80||33||Sound effect callbacks
 |}
 
-Bit is the bit you have to set, you do this by adding all the values for all the bits. Variable 0C value is what variable 0C will be set to, for checking it in the VarAction2 for callbacks.
+Bit to bit, który musisz ustawić, robisz to poprzez dodanie wszystkich wartości dla wszystkich bitów. Zmienna wartość 0C to ta, dla której zostanie ustawiona zmienna 0C, do sprawdzania jej w VarAction2 pod kątem wywołań zwrotnych.
 
-These callbacks do not need a bit to activate them, they are always active and will be used if defined in the action 3/action 2 chain.
+Te wywołania zwrotne <small>''(callbacks )''</small> nie potrzebują trochę, aby je aktywować, są zawsze aktywne i zostaną użyte, jeśli zostaną zdefiniowane w łańcuchu akcji 3 / akcji 2.
 {| |-
 !Variable 0C value!!Callback
 |-
@@ -295,15 +295,15 @@ These callbacks do not need a bit to activate them, they are always active and w
 
 == Coefficient of tractive effort (1F) ==
 
-This cofficient sets what fraction of the vehicle weight is equal to the maximum tractive effort. &nbsp;This includes the effect of having some unpowered axles, as well as the coefficient of friction that is available.
+Współczynnik ten określa, jaka część masy pojazdu jest równa maksymalnemu wysiłkowi pociągowemu. &nbsp;Obejmuje to efekt posiadania niektórych niezasilanych osi, a także dostępny współczynnik tarcia.
 
 Theoretically, this value should be calculated by taking the ratio of adhesive weight W<sub>adh</sub> (i.e. the vehicle weight that rests on powered axles) times the coefficient of friction µ between the wheels and the rails to the total vehicle weight W, times 255, and convert to hex:
 
 prop. 1F = HEX ((W<sub>adh</sub> * µ / W) * 255)
 
-With prop. 1F having a value of FF, the tractive effort is equal to the vehicle weight, for 80, it is half, and so on. If not set, a default of 4C is used, for a fraction of 0.30, corresponding to Wadh=W and a coefficient of friction of 0.30, which is the value used by the patch before TTDPatch 2.0.1 alpha 19.
+Z prop. 1F o wartości FF, siła pociągowa jest równa masie pojazdu, dla 80 jest to połowa i tak dalej. If not set, a default of 4C is used, for a fraction of 0.30, corresponding to Wadh=W and a coefficient of friction of 0.30, which is the value used by the patch before TTDPatch 2.0.1 alpha 19.
 
-Sometimes you know the real-life tractive effort instead of adhesive weight and coefficient of friction. To help calculating prop. 1F in that case, here's a small example using the NS 1600 (Electric) with a mass of 84 tons and real-life tractive effort (TE<sub>real</sub>) of 259 kN. To quickly find the value for property 1F you fill in the following formula:
+Czasami znasz rzeczywistą siłę pociągową zamiast ciężaru kleju i współczynnika tarcia. Aby pomóc obliczyć rekwizyt. 1F in that case, here's a small example using the NS 1600 (Electric) with a mass of 84 tons and real-life tractive effort (TE<sub>real</sub>) of 259 kN. Aby szybko znaleźć wartość właściwości 1F, wypełnij następującą formułę:
 
 prop. 1F = HEX ((TE<sub>real</sub> / (Mass * g) * 255)
 
@@ -313,7 +313,7 @@ prop. 1F = HEX ((259 / (84 * 9.8) * 255)
 
 prop. 1F = HEX (0.3146 *255) = HEX(80.229)
 
-HEX calculations only work with figures in the natural domain: each figure has to be a positive and round figure. Therefore the value you convert to HEX isn't 80.229 but 80:
+Obliczenia HEX działają tylko z liczbami w dziedzinie naturalnej: każda cyfra musi być liczbą dodatnią i okrągłą. Dlatego wartość przeliczana na HEX nie jest 80.229, ale 80:
 
 HEX 80 = 50
 
@@ -321,9 +321,9 @@ Property 1F for the NS 1600 (Electric) would then be: 1F 50.
 
 == Coefficient of air drag (20) ==
 
-This property sets the air drag coefficient c2 used for the realistic acceleration model, from 01 (no airdrag) to FF (most air drag) in arbitrary units. 00 means to use the default value that depends on the top speed (to simulate the fact that high-speed engines are more streamlined).
+Ta właściwość ustawia współczynnik oporu powietrza c2 stosowany w realistycznym modelu przyspieszenia, od 01 (bez airdrag) do FF (większość oporu powietrza) w dowolnych jednostkach. 00 oznacza użycie wartości domyślnej, która zależy od prędkości maksymalnej (aby zasymulować fakt, że silniki dużych prędkości są bardziej usprawnione).
 
-The default values are the following:
+Wartości domyślne są następujące:
 
 {| |-
 !top speed (mph/1.6)!!	<16!!	16!!	24!!	32!!	48!!	64!!	96!!	128!!	192!!	256!!	...
@@ -332,9 +332,9 @@ The default values are the following:
 |}
 
 
-For higher speeds, the series is continued in the same manner.
+W przypadku wyższych prędkości seria jest kontynuowana w ten sam sposób.
 
-Air drag in Newtons will then be c2*v*v with v in m/s, although it is probably futile to attempt to make c2 a realistic number due to the lack of TTD's consistent scaling. If a train doesn't reach its historical top speed, you might try setting the value of prop. 20 one or two steps lower than the default above, otherwise it's probably a good idea to leave it at the default.
+Przeciąganie powietrza w Newtonach będzie wówczas c2*v*v przy v w m/s, chociaż prawdopodobnie nie ma sensu próbować uczynić c2 realistyczną liczbą ze względu na brak spójnego skalowania TTD. Jeśli pociąg nie osiąga swojej historycznej prędkości maksymalnej, możesz spróbować ustawić wartość podpory. 20 jeden lub dwa kroki poniżej domyślnej wartości powyżej, w przeciwnym razie prawdopodobnie dobrym pomysłem jest pozostawienie domyślnej wartości.
 
 == Shorter train vehicles (21) ==
 
@@ -347,9 +347,9 @@ except at the end of the train
 
 == Visual effects and wagon power (22) ==
 
-By default, the visual effect of train engines is determined by the traction type (property 19). With this option you can change the type of effect as well as the position of it relative to the vehicle. (Note: for TTDPatch and OpenTTD up to r21229 only the positioning of steam actually works. For {{en/Ottdp|1.1|no|ottdrev=r21230}} positioning diesel smoke and electric sparks works as well) The position of the effect provides a range from 0 to F that is added to the type of the effect.
+Domyślnie efekt wizualny silników pociągu jest określony przez rodzaj trakcji (właściwość 19). Dzięki tej opcji możesz zmienić rodzaj efektu, a także jego położenie względem pojazdu. (Uwaga: w przypadku TTDPatch i OpenTTD do r21229 faktycznie działa tylko pozycjonowanie pary. For {{en/Ottdp|1.1|no|ottdrev=r21230}} positioning diesel smoke and electric sparks works as well) The position of the effect provides a range from 0 to F that is added to the type of the effect.
 
-Position 0 corresponds to a point half a vehicle length ahead of the vehicle, 4 is the front of the vehicle, 8 the middle, C the end and F is a half length behind the vehicle. Intermediate values are in-between.
+Pozycja 0 odpowiada połowie długości pojazdu przed pojazdem, 4 to przód pojazdu, 8 środek, C koniec, a F to połowa długości za pojazdem. Wartości pośrednie znajdują się pomiędzy.
 
 Additionally, this property can be used to disable powered wagons of this type, although that is usually done with [[en/Callbacks#visual-effect-and-wagon-power-10| callback 10]] instead (which has the same meaning as prop. 22, but is more flexible).
 
@@ -410,49 +410,49 @@ Prior to {{en/Ottd|1.1|r21966}} all non-multiheaded/non-articulated vehicles wou
 
 == Cargo classes (28, 29) ==
 
-To make vehicle sets more compatible with future new cargo definitions, these two properties allow vehicles to define what type of cargo they should be refittable to. A wagon will be refittable to all cargo types that match any of the classes set in prop. 28 except for the ones that match any of the classes set in prop. 29. In addition, afterwards those cargo types listed in prop. 1D will be toggled. In terms of logic, it is
+Aby uczynić zestawy pojazdów bardziej kompatybilnymi z przyszłymi nowymi definicjami ładunku, te dwie właściwości pozwalają pojazdom określić, do jakiego rodzaju ładunku powinny być one przystosowane. Wagon będzie można montować na wszystkich typach ładunków, które pasują do dowolnej klasy ustawionej w śmigle. 28 z wyjątkiem tych, które pasują do którejkolwiek z klas ustawionych w prop. 29. Ponadto następnie te rodzaje ładunku wymienione w prop. 1D zostanie przełączony. Jeśli chodzi o logikę, to jest
 
 Refit list = (cargos from prop. 28 AND NOT cargos from prop. 29) XOR cargos from prop. 1D
 
-This means, if a cargo type is in the list because it matches prop. 28 but not prop 29, having the respective bit set in prop. 1D will disable it again. Conversely, if the cargo type is not in the list, the bit in prop. 1D will add it. This way, if props. 28/29 are unset, prop. 1D will retain the original meaning, but it is still able to selectively add or remove certain cargo types even if props. 28/29 are used.
+Oznacza to, że jeśli typ ładunku znajduje się na liście, ponieważ pasuje do podpory. 28, ale nie podpora 29, mając odpowiedni bit ustawiony w podporze. 1D ponownie ją wyłączy. I odwrotnie, jeśli typu ładunku nie ma na liście, bit we wniosku. 1D doda to. W ten sposób, jeśli rekwizyty. 28/29 są rozbrojone, prop. 1D zachowa oryginalne znaczenie, ale nadal jest w stanie selektywnie dodawać lub usuwać określone typy ładunku, nawet jeśli są rekwizytami. 28/29 są używane.
 
-As a consequence, you have both full control over the cargo types that you know of (using prop. 1D), and those you don't know of yet (using props. 28/29). Leave the bits for cargos that you don't know of unset in prop. 1D, and set/clear the bits for known cargos to add/remove them from the list as appropriate.
+W rezultacie masz zarówno pełną kontrolę nad rodzajami ładunków, o których wiesz (za pomocą rekwizytów 1D), jak i tymi, których jeszcze nie znasz (za pomocą rekwizytów 28/29). Zostaw bity dla ładunków, o których nie wiesz, że są rozbrojone w rekwizytach. 1D i ustaw/wyczyść bity znanych ładunków, aby odpowiednio dodać/usunąć je z listy.
 
 {{en/Ottd|1.2|r23291}} It is recommended to use properties 2C and 2D instead of property 1D, as property 1D behaves badly if the cargo classes of a cargo are ever changed.
 
-The class list is a bit mask. See the action0 cargos page for bits and classes defined so far.
+Lista klas jest trochę maską. Zobacz stronę ładunków action0 dla bitów i klas zdefiniowanych do tej pory.
 
 Take a look at [[en/Action0Cargos#cargo-classes-16|Action0 for cargos]] for the classes defined so far.
 
-Note that cargo types may belong to several classes. This is the reason for making two properties, an additive and a subtractive one, because this way a vehicle can be specified to be refittable to, for example, all express cargo that does not require refrigeration (i.e., from the default cargos, no food).
+Należy pamiętać, że typy ładunków mogą należeć do kilku klas. Z tego powodu powstają dwie właściwości: dodatkowa i odejmująca, ponieważ w ten sposób można określić, że pojazd nadaje się do ponownego montażu, na przykład, do wszystkich przesyłek ekspresowych, które nie wymagają chłodzenia (tj. Z domyślnych ładunków, bez żywności ).
 For the cargo types added in this way, the vehicle will probably have no specific graphics (in [[en/Action3|action 3]]) to show the cargo load. &nbsp;In this case, the default will be used, which should therefore be sufficiently generic-looking if possible. However, using [[en/VarAction2Vehicles#vehicle-cargo-info-47|vehicle variable 47]] you can at least select the graphics most appropriate for the cargo type's class.
 About the interaction with other properties take a look at the summary page about [[en/VehicleRefitting|vehicle refitting]].
 
-Disclaimer: there is no guarantee that classes won't vary over time or between sets. The classes of a cargo may change between different versions of a specific industry/cargo newgrf, or different classes may be set for the same cargo label by different industry/cargo newgrfs. Feel free to use classes in your set for conveniently refitting to cargos, but if you - the vehicle author - care about specific cargos being transported in specific vehicles, use label based refits (changing labels without a very good reason is considered to be bad practice).
+Oświadczenie: nie ma gwarancji, że klasy nie będą się zmieniać w czasie lub między zestawami. Klasy ładunku mogą się zmieniać między różnymi wersjami określonej branży/newgrf cargo lub różne klasy dla tej samej etykiety ładunku mogą być ustawione przez różne newgrfs przemysłu/cargo. Zapraszam do korzystania z klas w swoim zestawie do wygodnego przeładowywania ładunków, ale jeśli Ty - autor pojazdu - dbasz o transport określonych ładunków w określonych pojazdach, korzystaj z przeróbek na podstawie etykiet (zmiana etykiet bez bardzo dobrego powodu jest uważana za złą praktykę ).
 
 == Long format introduction date (2A) ==
 
-Set the vehicle introduction date, in days since the year 0. This takes account of leap years; dividable by 4, but not 100 unless 400. A start date of 1920-01-01 is obtained with a value of 701265 (51 B3 0A 00). This property must be set after property 00 to take effect.
+Ustaw datę wprowadzenia pojazdu, w dniach od roku 0. Uwzględnia to lata przestępne; dzieli się przez 4, ale nie 100, chyba że 400. Datę początkową 1920-01-01 uzyskuje się o wartości 701265 (51 B3 0A 00). Ta właściwość musi zostać ustawiona po właściwości 00, aby obowiązywała.
 
 {{en/Ottdp|no|}} In TTDPatch, dates after 2044 will be limited to 2044.
 
 == Custom cargo ageing period (2B) ==
 
-This property allows to modify the period in ticks after which cargo carried by the vehicle is aged. By default, cargo is aged every 185 ticks. A value of 0 disables ageing of cargo. This property can be modified via [[en/Callbacks#change-vehicle-properties-36|callback 36]].
+Ta właściwość pozwala modyfikować okres w kleszczach, po którym dojrzewa ładunek przewożony przez pojazd. Domyślnie ładunek starzeje się co 185 tyknięć. Wartość 0 wyłącza starzenie się ładunku. Ta właściwość może być modyfikowana via [[en/Callbacks#change-vehicle-properties-36|callback 36]].
 
 == List of always refittable cargo types (2C, 2D) ==
 
-These two properties allows to unconditionally include or exclude cargo types for refittability independent of any of the other refit properties or the cargo classes. If you specify a cargo type that is not available, the cargo type will be silently ignored.
+Te dwie właściwości umożliwiają bezwarunkowe włączenie lub wykluczenie rodzajów ładunku w celu ponownego użycia niezależnie od innych właściwości przebudowy lub klas ładunku. Jeśli określisz typ ładunku, który nie jest dostępny, rodzaj ładunku zostanie po cichu zignorowany.
 
-The format for both properties is:
+Format obu właściwości to:
 
 <pre>2C/2D &lt;nvar&gt; (&lt;Index into cargo type table&gt;){n}</pre>
 
-That is you give the number of cargos in a single byte followed by a list of that length of indexes into the cargo translation table ([[en/CargoTypes|Type A]]).
+Oznacza to, że podajesz liczbę ładunków w jednym bajcie, a następnie listę indeksów o tej długości do tabeli translacji ładunku ([[en/CargoTypes|Type A]]).
 
-= Example =
+= Przykład =
 
-Below is an example of what a real Action 0 pseudo-sprite could look like for a train engine.
+Poniżej znajduje się przykład tego, jak mógłby wyglądać prawdziwy pseudo-duszek Action 0 dla silnika pociągu.
 
 (A basic version)
 
@@ -489,7 +489,7 @@ Below is an example of what a real Action 0 pseudo-sprite could look like for a 
 |-
 |FD||&lt;value&gt;: FD for new graphics
 |}
-Since nfo version 7, so-called [[en/GRFActionsDetailed#byte-order|"escape sequences"]] have been introduced in an attempt to offer a more human-readable form.
+Od wersji 7 nfo, tzw [[en/GRFActionsDetailed#byte-order|"escape sequences"]] zostały wprowadzone w celu zaoferowania formy bardziej czytelnej dla człowieka.
 
 Poniżej znajduje się ten sam przykład, co powyżej, z zastosowanymi sekwencjami ucieczki:
 
