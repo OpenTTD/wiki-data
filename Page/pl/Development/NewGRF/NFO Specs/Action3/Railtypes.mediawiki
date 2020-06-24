@@ -1,0 +1,365 @@
+
+<!--{{-}}<br>-->{{en/Ambox| text = w trakcie edycji.}}<!-- -->
+== Wprowadzenie ==
+
+Action 3 przypisuje zestawy graficzne (do których odwołuje się (łańcuchy) [[pl/Development/NewGRF/NFO Specs/Action2/Main Page|action 2(e]] ) do ID''`ów'' funkcji.
+
+{{en/Ottdp|1.0|no|ottdrev=r19056}} Typy szyn są dostępne tylko w OpenTTD &gt; r19056
+
+== Format ==
+
+The format of the data is feature-dependent. For railtypes it looks like
+
+<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 03 10 &lt;n-id&gt; &lt;ids...&gt; &lt;num-cid&gt; &lt;cargo-type&gt; &lt;set-ID&gt;... &lt;default set-ID&gt;</pre>
+
+{| class="wikitable"
+|-
+!'''Element'''
+![[en/GRFActionsDetailed|'''Size''']]
+!'''Description'''
+|-
+|&lt;Sprite-number&gt;
+|dec
+|A sequential sprite number
+|-
+|&lt;length&gt;
+|dec
+|The total number of bytes used in this action
+|-
+|03
+|B
+|Defines action 03
+|-
+|10
+|B
+|The feature byte for railtypes
+|-
+|&lt;n-id&gt;
+|B
+|Number of IDs this action 3 associates graphics with
+|-
+|&lt;ids...&gt;
+|B/B*
+|IDs of the current feature this action 3 associates graphics with. There must be as many IDs as &lt;n-id&gt; specifies
+|-
+|&lt;num-cid&gt;
+|B
+|Number of different "cargo" types to support
+|-
+|&lt;cargo-type&gt;
+|B
+|"Cargo" type for which to use the following set-ID
+|-
+|&lt;set-ID&gt;
+|W
+|Set-ID (from action 2 or from a varaction2 chain) to use for this cargo type
+|-
+|&lt;default set-ID&gt;
+|W
+|Default set-ID to use if none of the above matches
+|}
+
+== Description ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== n-id ===
+
+How many items of the current feature this action 3 defines new graphics for. If this is more than one, all items listed will get the same graphics. If this value has bit 7 set (i.e. 80 added), it is a wagon override. See [[en/Action3LiveryOverride|Action 3 - Livery Override]] for more info on this feature.
+
+You can make a definition with n-id equal to zero (and thus no ids that follow). &nbsp;This creates a generic feature-specific definition not associated with any particular item. &nbsp;At the moment, this is used for generic callbacks, but might be extended to other functions eventually.
+
+=== ids ===
+
+Feature IDs to use this action 3 for. All IDs are counted from the first of their class, i.e. the first road vehicle has 00, as does the first plane, the first ship, and the first train vehicle.
+
+=== num-cid ===
+
+Number of "cargo" type definitions that follow.
+
+=== cargo-type ===
+
+Railtypes re-uses in its Action3 the 'cargo'-type definition in order to assign the type of graphics defined by the associated set-ID:
+
+{| class="wikitable"
+|-
+!'Cargo' Type
+!Sprite Type
+!#Sprites
+!Useage
+|-
+|00
+|Icons and cursors
+|16
+|4 rail directions, autorail, depot, tunnel and convert rail. First all icons, then all cursors.
+|-
+|01
+|Track overlays for junctions and PBS<ref name=leftout>Either all or none of these sprites should be provided.</ref>
+|10
+|6 flat and 4 slope pieces. Sprites should contain only the track, with no landscape.
+|-
+|02
+|Underlay<ref name=leftout />
+|16
+|6 flat and 4 slope, and 1 X crossing pieces ''with track'', and 5 junction pieces without track. Sprites should contain the track and the 'ballast' below it. No landscape should be drawn.
+|-
+|03
+|Tunnel<ref name=leftout />
+|4
+|1 sprite for each direction. Sprite is overlay for track in existing tunnel graphics. The original ground sprite is drawn, then the overlay, then possibly a train and the original tunnel head is drawn over the top. This keeps compatibility with different landscape types. Sprite order: SW, NW, NE, SE. {{en/Ottd|1.2|r23952}} If type 0A is defined as well, this sprite is used slightly different, see [[#tunnel-portal-overlay-0a|Tunnel portal overlay (0A)]].
+|-
+|04
+|Catenary wire
+|28
+|Follows the same layout for wires of the first 28 sprites as Action5 type 5.
+|-
+|05
+|Catenary pylons
+|8
+|Follows the same layout for pylons of the 8 sprites after the wires as Action5 type 5.
+|-
+|06
+|Bridge surfaces<ref name=leftout />
+|6
+|10 sprites if we ever include diagonal bridges.
+|-
+|07
+|Level crossing overlay<ref name=leftout />
+|10
+|1 rail overlay and 4 light sprites for X and Y.
+|-
+|08
+|Depots<ref name=depotr22854>{{en/Ottd|1.2|r22854}} In OpenTTD prior to r22854, depot sprites would not be used if the above 'all or none' sprites were not supplied.</ref>
+|6
+|2 sprites for each southish, 1 sprite for each northish. Follows the original layout for depot sprites.
+|-
+|09
+|Fences
+|8 / 16
+|X, Y, Vertical, Horizontal, SW slope, SE slope, NE slope and NW slope. Follows the same layout as original original fence sprites at sprite 1301. {{en/Ottdp|1.6|no|ottdrev=r27343}} Since OpenTTD r27343 there is also a 16 sprites version, see below.
+|-
+|0A
+|Tunnel portal overlay<ref name=tunneloverlay>Above 'all or none' sprites must be supplied, if these sprites are to be used.</ref>
+|4
+|{{en/Ottd|1.2|r23952}} 1 sprite for each direction, order is SW, NW, NE, SE.
+|-
+|0B
+|Signal sprites
+|8
+|{{en/Ottd|1.3|r24367}} 1 sprite for each direction, order is SW, NE, NW, SE, E, W, S, N (i.e. like for the corresponding [[en/Action5#04-signal-graphics|Action 5]] entry).
+|-
+|0C
+|Precombined overlay sprites
+|63
+|{{en/Ottd|1.10|g42046af933}} 63 sprites for each combination of track on a tile. The index is determined by treating each track piece as a bit in the order X Y N S W E, subtracting 1.
+|}
+
+<references />
+
+==== GUI sprites (00) ====
+
+[[File:en/Railtype gui.png]]
+
+==== Rail overlay (01) ====
+
+[[File:en/Railtype overlay.png]]
+
+==== Rail underlay (02) ====
+
+[[File:en/Railtype underlay.png]]
+
+==== Level crossing sprites (07) ====
+
+You can define a special track piece which crosses the road and for each of two directions and each of the corners of the tile a separate sprite for a light, sign, or whatever should go there.
+
+{| class="wikitable"
+|-
+!Sprite number for X
+!Sprite number for Y
+!Useage
+|-
+|0
+| &nbsp; &nbsp;1
+| &nbsp; &nbsp;Rail overlay
+|-
+|2
+| &nbsp; &nbsp;3
+| &nbsp; &nbsp;North light
+|-
+|4
+| &nbsp; &nbsp;5
+| &nbsp; &nbsp;East light
+|-
+|6
+| &nbsp; &nbsp;7
+| &nbsp; &nbsp;West light
+|-
+|8
+| &nbsp; &nbsp;9
+| &nbsp; &nbsp;South light
+|}
+
+[[File:en/Railtype levelcrossing.png]]
+
+==== Depot sprites (08) ====
+
+{| class="wikitable
+|-
+!Sprite Number
+!Usage
+|-
+|0
+| &nbsp; &nbsp;NE wall for SE-entry depot.
+|-
+|1
+| &nbsp; &nbsp;Depot building for SE-entry depot.
+|-
+|2
+| &nbsp; &nbsp;NW wall for SW-entry depot.
+|-
+|3
+| &nbsp; &nbsp;Depot building for SW-entry depot.
+|-
+|4
+| &nbsp; &nbsp;Depot building for NE-entry depot.
+|-
+|5
+| &nbsp; &nbsp;Depot building for NW-entry depot.
+|}
+==== Fences (09) ====
+
+[[File:en/Railtype fences.png]]
+
+{{en/Ottdp|1.6|no|ottdrev=r27343}} Since OpenTTD r27343 there is also a 16 sprites version, this allows to use different sprites resp. offsets for the fences on either track side.
+
+{| |-
+! Sprite number !! Tile slope !! Track bit !! Fence position !! Version
+|-
+| 0 || flat || X || NW || {{en/Ottdp|1.0|no|ottdrev=r19056}}
+|-
+| 1 || flat || Y || NE || {{en/Ottdp|1.0|no|ottdrev=r19056}}
+|-
+| 2 || flat || left || E || {{en/Ottdp|1.0|no|ottdrev=r19056}}
+|-
+| 3 || flat || upper || S || {{en/Ottdp|1.0|no|ottdrev=r19056}}
+|-
+| 4 || SW || X || NW || {{en/Ottdp|1.0|no|ottdrev=r19056}}
+|-
+| 5 || SE || Y || NE || {{en/Ottdp|1.0|no|ottdrev=r19056}}
+|-
+| 6 || NE || X || NW || {{en/Ottdp|1.0|no|ottdrev=r19056}}
+|-
+| 7 || NW || Y || NE || {{en/Ottdp|1.0|no|ottdrev=r19056}}
+|-
+| 8 || flat || X || SE || {{en/Ottdp|1.6|no|ottdrev=r27343}}
+|-
+| 9 || flat || Y || SW || {{en/Ottdp|1.6|no|ottdrev=r27343}}
+|-
+| 10 || flat || left || W || {{en/Ottdp|1.6|no|ottdrev=r27343}}
+|-
+| 11 || flat || upper || N || {{en/Ottdp|1.6|no|ottdrev=r27343}}
+|-
+| 12 || SW || X || SE || {{en/Ottdp|1.6|no|ottdrev=r27343}}
+|-
+| 13 || SE || Y || SW || {{en/Ottdp|1.6|no|ottdrev=r27343}}
+|-
+| 14 || NE || X || SE || {{en/Ottdp|1.6|no|ottdrev=r27343}}
+|-
+| 15 || NW || Y || SW || {{en/Ottdp|1.6|no|ottdrev=r27343}}
+|}
+
+==== Tunnel portal overlay (0A) ====
+
+If this 'cargo' type is defined, tunnels for this railtype will be drawn differently.
+
+First, a grass underlay base sprite is drawn, then the sprite returned from type 03. Next, train sprites if applicable and then a grass overlay and finally the sprite from this type (0A). The grass sprites are defined in the base set and do not contain any parts of the tracks or portal, so these have to be fully provided by the railtype sprites.
+
+Illustration: [[File:en/RailtypeTunnelExample.png]]
+
+Variable 10 can be used to distinguish between several requested tunnel variations:
+{| |-
+! Lowest byte of [[en/GlobalVariables#extra-callback-info-10-and-18|variable 10]] !! Meaning
+|-
+| 00 || This is a plain portal without any extra features (like tracks above).
+|-
+| all other values || reserved for future extensions (e.g. basetunnels).
+|}
+The other bytes of variable 10 are reserved, and must be masked.
+
+==== Signal sprites (0B) ====
+
+This 'cargo' type can be used to supply custom signal graphics.
+
+The resulting sprite set must consist of 8 sprites, corresponding to the following signal directions: SW-facing, NE-facing, NW-facing, SE-facing, E-facing, W-facing, S-facing, N-facing. Variable 18 contains information about the kind of signal to be drawn. If resolving fails or results in an empty sprite group, the matching base set sprite will be used instead.
+
+'''Format of [[en/GlobalVariables#extra-callback-info-10-and-18|variable 18]]:''' xxTTVVSS
+
+{| |-
+! TT: Signal type !! Meaning
+|-
+| 00 || Normal block signal
+|-
+| 01 || Entry pre-signal
+|-
+| 02 || Exit pre-signal
+|-
+| 03 || Combo pre-signal
+|-
+| 04 || Two-way path signal
+|-
+| 05 || One-way path signal
+|-
+| all other values || Reserved
+|}
+
+
+{| |-
+! VV: Signal variant !! Meaning
+|-
+| 00 || Light (electric) signal
+|-
+| 01 || Semaphore
+|-
+| all other values || Reserved
+|}
+
+
+{| |-
+! SS: Signal state !! Meaning
+|-
+| 00 || Red signal
+|-
+| 01 || Green signal
+|-
+| all other values || Reserved
+|}
+
+All other bytes of variable 18 are reserved and must be masked.
+
+'''Variable 10''' can be used to distinguish between map and GUI sprites:
+{| |-
+! Lowest byte of [[en/GlobalVariables#extra-callback-info-10-and-18|variable 10]] !! Meaning
+|-
+| 00 || Signal is drawn in a viewport, i.e. on the map.
+|-
+| 10 || Signal is drawn in the signal GUI. The returned sprite set must still have 8 sprites, but OpenTTD will only use the 7th sprite, so all other sprites can be empty.
+|-
+| all other values || Reserved
+|}
+The other bytes of variable 10 are reserved, and must be masked.
+
+==== Precombined overlay sprites (0C) ====
+
+[[File:en/Rails combined.png]]
+
+=== default set-ID ===
+
+The default set-ID would be used for railtype callbacks. However, since there are currently no callbacks for railtypes it should always result in a [[en/Action2/Only Callback Failure|callback-failure]].
+
+== Przykład ==
