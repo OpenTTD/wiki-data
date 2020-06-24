@@ -1,0 +1,356 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+<div style="float:right; padding-left:12px; background:none;">{{en/NFONavVehicles}}</div>
+
+==Wprowadzenie==
+
+== Variables ==
+
+{|
+!Variable!![[en/GRFActionsDetailed|Size]]!!Version!!Description!!Available in purchase list
+|+
+|10||D||{{en/Ottdp|1.2|no|ottdrev=r23080}}||Pick sprites for different GUI windows - See [[en/Action2/Vehicles]].||{{en/Ottdp|1.2|no|ottdrev=r23080}}
+|+
+|40||D||{{en/Ottdp|0.6|2.5}}||Position in consist and length of consist||no
+|+
+|41||D||{{en/Ottdp|0.6|2.5}}||Position in and length of chain of consecutive vehicles with same ID||no
+|+
+|42||D||{{en/Ottdp|0.6|2.5}}||Cargo types transported by consist||no
+|+
+|43||D||{{en/Ottdp|0.6|2.5}}||Player info||{{en/Ottdp|0.6|2.5|ottdrev=r4611|ttdprev=beta 2}}
+|+
+|44||D||{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 48}}||Aircraft info||no
+|+
+|45||D||{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 58}}||Curvature info||no
+|+
+|46||D||{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 59}}||Motion counter||no
+|+
+|47||D||{{en/Ottdp|0.6|2.5}}||Vehicle cargo info||{{en/Ottdp|0.7|no|ottdrev=r15542}} <ref name="var47">Variable 47 refers to the default cargo of the vehicle, when in purchase list. This differs from the cargo used in Action 3, which is 0xFF in purchase list. The "refit cycle" (F2) is currently always zero in the purchase list.</ref>
+|+
+|48||D||{{en/Ottdp|0.6|2.5}}||Vehicle type information||{{en/Ottdp|0.6|2.5|ottdrev=r5338|ttdprev=beta 2}}
+|+
+|49||D||{{en/Ottdp|0.7|2.6|ottdrev=r13376|ttdprev=r2216}}||Year of construction (long format, 0 based)||{{en/Ottdp|0.7|no|ottdrev=r13376}} <ref name="date">This is the current date</ref>
+|+
+|4A||D||{{en/Ottdp|1.1|no|ottdrev=r20165}}||Info about current railtype/roadtype/tramtype||no
+|+
+|4B||D||{{en/Ottdp|1.2|no|ottdrev=r23068}}||Long date of last servicing||{{en/Ottdp|1.2|no|ottdrev=r23068}} <ref name="date" />
+|+
+|4C||D||{{en/Ottdp|1.3|no|ottdrev=r24246}}||Current max speed including e.g track or timetable speed limits. Only valid for front vehicle. Note, units differ for each vehicle type<ref name="speed">See [[en/Action0Trains#speed-09|train property 09]], [[en/Action0RoadVehicles|road vehicle property 08]] (not 15, even when using realistic acceleration), [[en/Action0Ships|ship property 0B]] and [[en/Action0Planes|aircraft property 0C]].</ref>||no
+|+
+|4D||D||{{en/Ottdp|1.4|no|ottdrev=r26157}}||Position within articulated vehicle||no
+|+
+|60||D||{{en/Ottdp|0.6|2.5|ttdprev=2.0.1 alpha 57}}||Count Veh.ID occurence||no
+|+
+|61||-<ref>The size of the result matches the size of the queried variable.</ref>||{{en/Ottdp|1.2|no|ottdrev=r22997}}||Query variable of n-th vehicle in chain||no
+|+
+|62||D||{{en/Ottdp|1.2|no|ottdrev=r22998}}||Curvature/position difference for n-th vehicle in chain||no
+|+
+|97||B||{{en/Ottdp|0.6|2.0}}||Tick counter, increased every engine tick||no
+|+
+|B2||W||||Vehicle status: bit0 = vehicle invisible (in tunnel/depot), bit1 = stopped, bit7 = crashed||no
+|+
+|B4||W||{{en/Ottdp|0.6|2.0}}||Current speed. Note, units differ for each vehicle type<ref name="speed" />||no
+|+
+|B9||B||{{en/Ottdp|0.6|2.0}}||Cargo type (type B from the list at [[en/CargoTypes]]; climate dependent)||no
+|+
+|C0||W||{{en/Ottdp|0.6|2.0}}||Engine age in days<br/>{{en/Ottdp|1.2|2.5|ottdrev=r22816|ttdprev=alpha 61}} Valid for wagons and articulated parts as well.||no
+|+
+|C4||B||{{en/Ottdp|0.6|2.0}}||Year built (counted from 1920), note this is modified when Cht: Year is used||{{en/Ottdp|0.6|no|ottdrev=r4611}} <ref name="date" />
+|+
+|C6||W||{{en/Ottdp|0.6|2.0}}||Vehicle type ID <ref>{{en/Ottdp|0.7|no}} In OpenTTD 0.7 and newer this is the GRF-local ID of the vehicle. Earlier versions of OpenTTD and TTDPatch report the [[en/VehicleIDs|TTD ID]]. For trains this is the same; for other vehicle types they differ.</ref> (useful for [[en/Callbacks#can-wagon-be-attached-1d|Callback 1D]])||no
+|+
+|C8||B||{{en/Ottdp|0.6|2.0}}||Sprite type; FD for trains forward, FE or FF when reversed||no
+|+
+|C9||B||{{en/Ottdp|0.6|2.0}}||Day counter; increased daily||no
+|+
+|DA||W||{{en/Ottdp|0.6|2.0}}||Next wagon index, FFFF if last wagon (use shift-num=08 and check for FF)||no
+|+
+|F2||B||{{en/Ottdp|0.6|2.5}}||Refit cycle, how many times refitted to the same cargo type||{{en/Ottdp|0.7|no|ottdrev=r15542}} <ref name="var47" />
+|+
+|FE||W||{{en/Ottdp|0.6|2.5}}||Modflags||no
+|+
+|FF||B||{{en/Ottdp|0.6|2.5}}||Modflags||no
+|}
+
+<references />
+
+For other 80+x variables confer the [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#_VehicleArray TTD vehicle structure].
+
+Variables 40, 41, 42 and 43 are cached. This means that while they are in principle computationally expensive, they can be used without impacting performance. Variables 45 and 60 are also computationally expensive but cannot be cached, and should therefore be used sparingly. If possible 80+x variables are to be preferred.
+
+Cached variables are updated when the game is loaded, when the consist enters or is rearranged in a depot, and when the train reverses.
+
+In the purchase list only a few variables are available. Especially the front vehicle (related object) cannot be accessed, nor other articulated parts.
+
+== Description ==
+=== Position and length (40, 41) ===
+
+'''Format:''' 00nnbbff
+
+{| |-
+!Variable!!Value
+|-
+|ff||position of vehicle within the consist counted from the engine (front), e.g. the engine would have ff=0, the 1st wagon or mail compartment of planes would have ff=1, the 2nd wagon or the rotor of helicopters would have ff=2, the 3rd wagon would have ff=3 etc
+|-
+|bb||same as ff, but counted from the end, i.e. the last wagon has bb=0, the next-to-last wagon has bb=1 etc.
+|-
+|nn||Total number of vehicles in the consist, including shadow and rotor for aircraft.
+* In var 40 this is zero-based. That is, the value returned is one less than the actual number of vehicles. A train with engine and three wagons has nn=3.
+* In var 41 this is one-based. That is, the value returned is the actual number of vehicles.
+|}
+
+For variable 40, these numbers refer to the whole consist, but for variable 41, they only refer to the chain of consecutive vehicles with the same ID as the current wagon (including itself, but possibly excluding the engine):
+
+[[File:en/Vehicle var40 41.png]]
+
+Note however, that accessing the "related" object (i.e. the locomotive) doesn´t make much sense for vars 40/41, except for var40 when in a [[en/Callbacks#can-wagon-be-attached-1d|callback 1D]] chain.
+
+=== Consist cargo (42) ===
+
+'''Format:''' uuiicctt
+
+{| |-
+!Variable!!Value
+|-
+|tt||a bit mask of all [[en/Action0Cargos#cargo-classes-16|cargo classes]] transported by the consist
+|-
+|cc||the most common [[en/CargoTypes|cargo type]] (from the column for type A)
+|-
+|ii||the most common refit cycle (var. F2) of cargo type cc
+|-
+|uu||the result of ORing the bits of prop. 25 from all vehicles in the train
+|}
+
+If used with VarAction2 type 81 (vehicle) it returns only cargo from this vehicle on, with type 82 (engine) that of the whole consist.
+See also variable 47 for more details on the cargo carried by a vehicle.
+
+{{en/GrfTill|7}} For GRF versions 7 and before "cc" is the untranslated bit number from [[en/Action0/Cargos#bit-number-for-bitmasks-08|cargo property 8]].
+
+{{en/GrfFrom|8}} With GRF version 8 the meaning of "cc" changes. If the grf file has installed a [[en/Action0/Global Settings#cargo-translation-table-09|cargo translation table]], the value in "cc" is the index of the cargo in that table; or FF if the cargo is not present in the table.
+
+=== Player info (43) ===
+
+'''Format:''' Ccttmmnn
+
+{| |-
+!Variable!!Value
+|-
+|nn||the number of the current player from 0 to 7 (up to E (14) in OpenTTD since r14735)
+|-
+|mm||the multiplayer player number with the host player (or the single player) being 0 and the client player being 1
+|-
+|tt||the player type, see below for possible values
+|-
+|c||the primary player colour
+|-
+|C||{{en/Ottdp|0.6|2.5|ttdprev=r1405}} the secondary player colour, equal to c if none (since r1405)
+|}
+
+
+{| |-
+!tt value!!Meaning
+|-
+|0||Player is human player (permanent company)
+|-
+|1||Player is AI player (not managed)
+|-
+|2||{{en/Ottdp|no|2.5}} Player is a human managing an AI company
+|-
+|3||{{en/Ottdp|no|2.5}} Player is human player's original company, now temporarily AI controlled
+|}
+
+{{en/Ottdp|0.6|2.5|ttdprev=r1497}} Since r1497, when the vehicle sprite is being displayed in an exclusive offer window or new vehicle news message, or in other circumstances when no player is associated with the vehicle, nn will be FF.
+
+=== Aircraft info (44) ===
+
+'''Format:''' xxxxhhtt
+
+hh is the height of the aircraft above ground, or more properly above the height of its shadow. Buildings, including the heliport, don't count as "ground", i.e. to get the height above a heliport, you have to subtract the heliport height from hh.
+
+tt is the type of the current airport: 0=small, 1=large, 2=heliport, 3=oil rig. The current airport is the target airport for aircraft that have finished the ascent and are in flight.
+
+=== Curvature info (45) ===
+
+'''Format:''' xxxTxBxF
+
+This returns the amount of curvature between the adjacent wagon pairs. It is useful for train vehicles that normally tilt in curves. The curvature is the difference in direction between the surrounding vehicles:
+
+F = for the front pair (previous wagon to current wagon, 0 if vehicle is first)
+
+B = for the back pair (current wagon to next wagon, 0 if wagon is last)
+
+T = for the triplet (previous wagon to next wagon; is zero in an S-bend)
+
+Possible values:
+
+{| |-
+!Decimal!!Hex!!Meaning
+|-
+| -4||C||180° curve left (T only)
+|-
+| -3||D||135° curve left (T only)
+|-
+| -2||E||90° curve left
+|-
+| -1||F||45° curve left
+|-
+|0||0||no curve
+|-
+|1||1||45° curve right
+|-
+|2||2||90° curve right
+|-
+|3||3||135° curve right (T only)
+|-
+|4||4||180° curve right (T only)
+|}
+
+=== Motion counter (46) ===
+
+'''Format:''' 32-bit value
+
+This variable counts the amount of motion that a vehicle has done. &nbsp;It is only valid for the first vehicle in a consist (i.e. use VarAction2 type 82!). &nbsp;Its value is in units of 1/4096 of a tile. &nbsp;A vehicle actually moves visibly every time the motion counter increases by 256, and since a tile consists of 16 such subunits, 16*256=4096 motion units mean motion across one tile.
+
+The most useful way to access it is probably with &lt;shiftnum&gt;=08 and an appropriate &lt;andmask&gt;. &nbsp;For example, to achieve an animation with one frame per vehicle motion and 16 frames in total for motion across an entire tile, you would use &lt;shiftnum&gt;=08 and &lt;andmask&gt;=0F. &nbsp;For an animation with one frame every two vehicle motions and 4 frames total, use &lt;shiftnum&gt;=09 and &lt;andmask&gt;=03.
+
+If the vehicle is going very fast (&gt;160 mph for trains), it may move by several 1/16ths of a tile at once, and thus some frames may be skipped, but the animation will still remain in sync with the motion.
+
+Note that vehicle graphics are only updated every time the vehicle actually moves, so checking the lower byte is probably pointless, and only needed internally to achieve sufficient precision.
+
+=== Vehicle cargo info (47) ===
+
+'''Format:''' ccccwwtt
+
+{| |-
+!Variable!!Value
+|-
+|tt||the [[en/CargoTypes|cargo type]] transported by the vehicle (from the column for type A); translated if a translation table has been installed
+|-
+|ww||cargo unit weight in 1/16 tons, same as [[en/Action0Cargos#weight-of-one-unit-of-the-cargo-0f|cargo prop. 0F]]
+|-
+|cccc||the [[en/Action0Cargos#cargo-classes-16|cargo class]] value of the cargo transported by the vehicle
+|}
+
+Note that if the grf has installed a [[en/Action0/Global Settings#cargo-translation-table-09|cargo translation table]], the value in "tt" is the slot number in that table, irrespective of which actual slot or bit the cargo is using in the game. If a table has been installed, but the current cargo is not listed there, "tt" will be set to FF.
+
+Unlike variable 42, this variable returns the info of the current vehicle only, not the consist.
+
+=== Vehicle type information (48) ===
+
+'''Format:''' xxxxxxff
+
+The bits of ff are:
+
+{| |-
+!Bit!!Value!!Meaning
+|-
+|0||1||Vehicle type is available on the market
+|-
+|1||2||Vehicle type is in the testing phase
+|-
+|2||4||Exclusive testing offer for a human player active
+|}
+
+All other bits in ff are undefined and must be masked out.
+
+=== Information about current railtype/roadtype/tramtype (4A) ===
+
+'''Format:''' xxxxFFrr
+
+The lower byte (rr) contains the (translated) railtype/roadtype/tramtype the vehicle is currently driving on. 
+
+If the railtype/roadtype/tramtype has no entry in the railtype/roadtype/tramtype translation table of the GRF, this value will be 0xFF. 
+
+If no translation table is present, the raw value will be returned.
+
+Trains will return railtype.  {{en/Ottdp|1.10|no}}Road vehicles (except trams) will return roadtype.  Trams will return railtype.
+
+For trains only, the next byte (FF) contains the following flags:
+
+{| |-
+!Bit!!Value!!Meaning
+|-
+|0||1||The vehicle is/would be powered on the current railtype (this is independent from powered/non-powered wagon or anything)
+|}
+
+All other bits are undefined.
+
+All other bytes and the result for non-rail vehicles are undefined.
+
+=== Position within articulated vehicle (4B) ===
+
+'''Format:''' xxxxbbff
+
+{| |-
+!Variable!!Value
+|-
+|ff||Position of vehicle (articulated part) within the articulated vehicle, counted from the first part, starting with 0.
+|-
+|bb||Position of vehicle (articulated part) within the articulated vehicle, counted from the last part, starting with 0.
+|-
+|xx||Reserved, do not access.
+|}
+
+The total number of articulated parts of a vehicle equals ff + 1 + bb.
+
+For road vehicles "ff" and "bb" currently equal var 40, since there are no road vehicle wagons yet.
+
+=== Count Veh.ID occurence (60) ===
+
+'''Format:''' xxxxxxnn
+
+The 60+x parameter is the vehicle ID to look for, and the returned nn is the number of vehicles in the consist that have this ID. If used with VarAction2 type 81, only the current vehicle and onwards will be check, with VarAction2 type 82, all vehicles in the consist will be counted.
+
+=== Query variable of n-th vehicle in chain (61) ===
+
+This is a special variable to get the contents of another variable of a different vehicle in the vehicle chain. It is only supported for trains and road vehicles. It is not supported during a callback that is used to modify vehicle properties to avoid circular dependencies, which currently limits this variable to callbacks 1D, 2D, 31 and 32 plus outside callback scope.
+
+Temporary register 10F is interpreted as a signed integer and specifies the offset in the chain from the current vehicle. Positive values are interpreted as towards the end, negative values as towards the front. If the offset is outside the vehicle chain, the result value will be 0.
+
+The 60+x parameter specifies the variable to access and temporary register 10E is passed as the new 60+x parameter. Passing 61 as the variable is not allowed. Currently only vehicle specific variables listed on this page plus global variable 25 and {{en/Ottdp|1.3|no|ottdrev=r24527}} 5F are accessible through var 61.
+
+The resulting value will have the size of whatever variable is queried.
+
+=== Curvature/position difference for n-th vehicle in chain (62) ===
+
+'''Format:''' zzyyxxFD
+
+This variable is only supported for trains and road vehicles.
+
+The 60+x parameter is interpreted as a signed integer and specifies the offset in the chain from the current vehicle. Positive values are interpreted as towards the end, negative values as towards the front. If the offset is outside the vehicle chain, the result value will be 0.
+
+The lowest nibble (D) contains the direction difference between the selected vehicle and this vehicle, the possible values are identical to those of [[#curvature-info-45|variable 45]].
+
+The next nibble (F) has the following meaning:
+{| |-
+!Bit!!Value!!Meaning
+|-
+|3||8||The vehicle is currently hidden
+|}
+
+The upper three bytes contain the signed difference of the X/Y/Z position between the selected vehicle and this vehicle.
+
+=== Modflags (FE and FF) ===
+
+The bits in FE mostly relate to gradualloading. &nbsp;A few useful bits for grf authors are;
+
+{| |-
+!Bit!!Version!!Value of the bit
+|-
+|1||{{en/Ottdp|1.5|2.5|ottdrev=r26430}}||Vehicle is still unloading and has not yet started loading new cargo at the current station.
+|-
+|5||{{en/Ottdp|0.6|2.5}}||Vehicle is powered (engine or powered wagon, mainly useful for the latter)
+|-
+|6||{{en/Ottdp|0.6|2.5}}||Vehicle would be powered (engine or powered wagon) if there were suitable track. (E.g. electric train in mixed train on normal track)
+|-
+|8 <ref>This bit is only accurate for the first vehicle in the consist.</ref>||{{en/Ottdp|0.6|2.5}}||This bit is flipped every time the train reverses direction
+|-
+|10||{{en/Ottdp|0.6|2.5|ttdprev=r1334}}||Vehicle was built during the exclusive preview
+|}
+<references/>
+
+variable FF is actually the high byte of variable FE, so FE bit 8 is the same as FF bit 0.
+
+Other bits are reserved; most are actually used for TTDPatch internal states.
+
+==Przykłady==
