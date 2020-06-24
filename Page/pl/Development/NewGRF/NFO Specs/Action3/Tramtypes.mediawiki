@@ -1,0 +1,224 @@
+
+<!--{{-}}<br>-->{{en/Ambox| text = w trakcie edycji.}}<!-- -->
+== Wprowadzenie ==
+
+Action 3 przypisuje zestawy graficzne (do których odwołuje się (łańcuchy) [[pl/Development/NewGRF/NFO Specs/Action2/Main Page|action 2(e]] ) do ID''`ów'' funkcji.
+
+{{en/Ottdp|1.10}} Tramtypes are available only in OpenTTD &gt; 1.10
+
+== Format ==
+
+The format of the data is feature-dependent. For tramtypes it looks like
+
+<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 03 13 &lt;n-id&gt; &lt;ids...&gt; &lt;num-cid&gt; &lt;cargo-type&gt; &lt;set-ID&gt;... &lt;default set-ID&gt;</pre>
+
+{| class="wikitable"
+|-
+!'''Element'''
+![[en/GRFActionsDetailed|'''Size''']]
+!'''Description'''
+|-
+|&lt;Sprite-number&gt;
+|dec
+|A sequential sprite number
+|-
+|&lt;length&gt;
+|dec
+|The total number of bytes used in this action
+|-
+|03
+|B
+|Defines action 03
+|-
+|13
+|B
+|The feature byte for tramtypes
+|-
+|&lt;n-id&gt;
+|B
+|Number of IDs this action 3 associates graphics with
+|-
+|&lt;ids...&gt;
+|B/B*
+|IDs of the current feature this action 3 associates graphics with. There must be as many IDs as &lt;n-id&gt; specifies
+|-
+|&lt;num-cid&gt;
+|B
+|Number of different "cargo" types to support
+|-
+|&lt;cargo-type&gt;
+|B
+|"Cargo" type for which to use the following set-ID
+|-
+|&lt;set-ID&gt;
+|W
+|Set-ID (from action 2 or from a varaction2 chain) to use for this cargo type
+|-
+|&lt;default set-ID&gt;
+|W
+|Default set-ID to use if none of the above matches
+|}
+
+== Description ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== n-id ===
+
+How many items of the current feature this action 3 defines new graphics for. If this is more than one, all items listed will get the same graphics. If this value has bit 7 set (i.e. 80 added), it is a wagon override. See [[en/Action3LiveryOverride|Action 3 - Livery Override]] for more info on this feature.
+
+You can make a definition with n-id equal to zero (and thus no ids that follow). &nbsp;This creates a generic feature-specific definition not associated with any particular item. &nbsp;At the moment, this is used for generic callbacks, but might be extended to other functions eventually.
+
+=== ids ===
+
+Feature IDs to use this action 3 for. All IDs are counted from the first of their class, i.e. the first road vehicle has 00, as does the first plane, the first ship, and the first train vehicle.
+
+=== num-cid ===
+
+Number of "cargo" type definitions that follow.
+
+=== cargo-type ===
+
+Tramtypes re-uses in its Action3 the 'cargo'-type definition in order to assign the type of graphics defined by the associated set-ID:
+
+{| class="wikitable"
+|-
+!'Cargo' Type
+!Sprite Type
+!#Sprites
+!Useage
+|-
+|00
+|Icons and cursors
+|12
+|4 rail directions, autorail, depot, tunnel and convert rail. First all icons, then all cursors.
+|-
+|01
+|Track overlays<ref name=leftout>Either all or none of these sprites should be provided.</ref>
+|19
+|11 trackbit combinations, 4 slopes, and 4 dead ends. These sprites are '''required''' for tramtypes.
+|-
+|02
+|Underlay<ref name=leftout />
+|19
+|11 trackbit combinations, 4 slopes, and 4 dead ends. These sprites are required.
+<!--
+|-
+|03
+|Tunnel<ref name=leftout />
+|4
+|1 sprite for each direction. Sprite is overlay for track in existing tunnel graphics. The original ground sprite is drawn, then the overlay, then possibly a train and the original tunnel head is drawn over the top. This keeps compatibility with different landscape types. Sprite order: SW, NW, NE, SE. {{ottd|1.2|r23952}} If type 0A is defined as well, this sprite is used slightly different, see [[#Tunnel portal overlay (0A)|Tunnel portal overlay (0A)]].
+-->
+|-
+|04
+|Catenary front
+|29
+|11 trackbit combinations, 4 slopes, 4 dead ends, 4 tunnels, 2 bridge middle, 4 bridge ramps
+|-
+|05
+|Catenary back
+|29
+|11 trackbit combinations, 4 slopes, 4 dead ends, 4 tunnels (unused), 2 bridge middle, 4 bridge ramps
+|-
+|06
+|Bridge surfaces<ref name=leftout />
+|6
+|2 bridge middle, 4 bridge ramps
+|-
+|08
+|Depots
+|6
+|Follows the original layout for depot sprites. If not present, the default depot sprites (depending on catenary flag) plus track overlay are drawn. If present, the depot sprites are expected to include track overlay graphics.
+<!--
+|-
+|0A
+|Tunnel portal overlay<ref name=tunneloverlay>Above 'all or none' sprites must be supplied, if these sprites are to be used.</ref>
+|4
+|{{ottd|1.2|r23952}} 1 sprite for each direction, order is SW, NW, NE, SE.
+-->
+|}
+
+<references />
+
+==== GUI sprites (00) ====
+
+[[File:en/Archive/Development/Nrt gui.png]]
+
+==== Track overlay (01) ====
+
+[[File:en/Archive/Development/Nrt overlay.png]]
+
+==== Track underlay (02) ====
+
+[[File:en/Archive/Development/Nrt underlay.png]]
+
+==== Catenary front (04)====
+
+[[File:en/Archive/Development/Nrt catenary front.png]]
+
+==== Catenary back (05) ====
+
+[[File:en/Archive/Development/Nrt catenary back.png]]
+
+==== Depot sprites (08) ====
+
+[[File:en/Archive/Development/Nrt depot.png]]
+
+{| class="wikitable
+|-
+!Sprite Number
+!Usage
+|-
+|0
+| &nbsp; &nbsp;NE wall for SE-entry depot.
+|-
+|1
+| &nbsp; &nbsp;Depot building for SE-entry depot.
+|-
+|2
+| &nbsp; &nbsp;NW wall for SW-entry depot.
+|-
+|3
+| &nbsp; &nbsp;Depot building for SW-entry depot.
+|-
+|4
+| &nbsp; &nbsp;Depot building for NE-entry depot.
+|-
+|5
+| &nbsp; &nbsp;Depot building for NW-entry depot.
+|}
+
+==== Bridge surfaces (06) ====
+
+[[File:en/Archive/Development/Nrt bridge.png]]
+<!--
+==== Tunnel portal overlay (0A) ====
+
+If this 'cargo' type is defined, tunnels for this railtype will be drawn differently.
+
+First, a grass underlay base sprite is drawn, then the sprite returned from type 03. Next, train sprites if applicable and then a grass overlay and finally the sprite from this type (0A). The grass sprites are defined in the base set and do not contain any parts of the tracks or portal, so these have to be fully provided by the railtype sprites.
+
+Illustration: [[File:RailtypeTunnelExample.png]]
+
+Variable 10 can be used to distinguish between several requested tunnel variations:
+{| |-
+! Lowest byte of [[GlobalVariables#Extra_callback_info_.2810_.2F_-.29_and_.2818_.2F_-.29|variable 10]] !! Meaning
+|-
+| 00 || This is a plain portal without any extra features (like tracks above).
+|-
+| all other values || reserved for future extensions (e.g. basetunnels).
+|}
+The other bytes of variable 10 are reserved, and must be masked.
+-->
+
+=== default set-ID ===
+
+The default set-ID would be used for tramtype callbacks. However, since there are currently no callbacks for tramtypes it should always result in a [[en/Action2/Only Callback Failure|callback-failure]].
+
+== Przykład ==
