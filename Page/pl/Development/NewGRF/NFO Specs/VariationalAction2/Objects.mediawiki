@@ -1,0 +1,142 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+==Wprowadzenie==
+
+== Variables ==
+{|
+!Variable !![[en/GRFActionsDetailed|Size]] !!Version !! Description
+|-
+|40||D||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Relative position, like [[en/VarAction2IndustryTiles#relative-position-43|Industry Tile var43]]
+|-
+|41||W||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2088}}||Tile information, see below
+|-
+|42||D||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Construction date from year 0
+|-
+|43||B||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Animation counter, see below
+|-
+|44||B||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Object founder information
+|-
+|45||D||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Get [[en/TownZones|town zone]] and Manhattan distance of closest town
+|-
+|46||D||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Get square of Euclidian distance of closest town
+|-
+|47||B||{{en/Ottdp|1.1|2.6|ottdrev=r21259|ttdprev=r2351}}||Object colour
+|-
+|48||B||{{en/Ottdp|1.1|2.6|ottdrev=r21455|ttdprev=r2340}}||Object views
+|-
+|60||W||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Get object type and view at offset
+|-
+|61||B||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Get random bits at offset
+|-
+|62||D||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Land info of nearby tiles
+|-
+|63||W||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Animation counter of nearby tile
+|-
+|64||D||{{en/Ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Count of object, distance of closest instance
+|}
+
+== Description ==
+=== Tile information (41) ===
+
+The return value has the format of ss0t where t is the terrain type which the tile is on, same values as [[en/VarAction2Canals|canal var81]].
+
+As of TTDPatch r2088, ss contains the slope data of the tile, same format as for [[en/VarAction2IndustryTiles#land-info-of-nearby-tiles-60|industrytile var60]]. The meaning of the individual bits is:
+
+{|
+!Bit!!Meaning
+|-
+|0||West corner is above the lowest
+|-
+|1||South corner is above the lowest
+|-
+|2||East corner is above the lowest
+|-
+|3||North corner is above the lowest
+|-
+|4||The tile is a steep slope (*)
+|}
+
+(*) - Steep slopes have this bit plus 3 points raised, giving them values of 0x17, 0x1B, 0x1D and 0x1E.
+
+=== Animation Counter (43) ===
+
+This byte gets the actual value of the animation counter (note that action0, property 10, bit 6 must be set for this to work).
+
+=== Object founder information (44) ===
+
+This byte contains the ID of the company that funded the object, or 10h if the object was placed in the scenario editor.
+
+=== Get [[en/TownZones|town zone]] and Manhattan distance of closest town (45) ===
+
+Like [[en/VarAction2Industries#get-town-zone-and-manhattan-distance-of-closest-town-65|industry var65]] but instead of an offset the current tile is used.
+
+=== Get square of Euclidian distance of closest town (46) ===
+
+Like [[en/VarAction2Industries#get-square-of-euclidean-distance-of-closest-town-66|industry var66]] but instead of an offset the current tile is used.
+
+=== Object colour (47) ===
+
+This byte returns the colour of the object.
+
+(since TTDPatch r2351 and OpenTTD r21259)
+
+=== Get object views (48) ===
+
+Returned value stands for a particular view of an object. Number and rank of set-IDs must match the value given in the object's action0 prop17, i.e. for an object with 4 views, prop48 may return values 0 .. 4. Since OpenTTD r21455.
+
+=== Get object type at offset (60) ===
+
+The parameter of this variable is an offset from the current tile. The low nibble contains the signed X offset (that is 0h=0, 1h=+1 ... 7h=+7, 8h=-8, 9h=-7 ... Fh=-1), the high nibble contains the Y offset. Therefore the parameter 00h accesses the current tile itself.
+
+The variable value has the format
+ rrrvtttt
+
+{| |-
+! field !! bits !! Meaning
+|-
+| tttt || 0 - 15
+|
+* 00xxh if the tile is an object tile and was defined in the current GRF with ID xx.
+* FFFEh if the tile is an object tile that was defined in another GRF file or it's a default object.
+* FFFFh if the tile isn't an object tile.
+|-
+| v || 16 - 19 || {{en/Ottdp|1.4|no|ottdrev=r26315}} View of the object, if it is defined in the current GRF.
+|-
+| rrrr || 20 - 31 || reserved, always mask
+|}
+
+=== Get random bits at offset (61) ===
+
+Returns the same values as [[en/VarAction2Industries#get-random-tile-bits-at-offset-61|industry var61]]. The offset it from the current tile and is signed.
+
+To get the random bits from a tile using a offset relative to the north tile of the object, see the example below.
+
+=== Land info of nearby tiles (62) ===
+
+Returns the same values as [[en/VarAction2IndustryTiles#land-info-of-nearby-tiles-60|industry tile var60]]. The offset it from the current tile and is signed.
+
+To get the land info from a tile using a offset relative to the north tile of the object, see the example below.
+
+=== Animation counter of nearby tile (63) ===
+
+Returns the var43 of another tile given by the signed offset.
+
+To get the animation counter from a tile using a offset relative to the north tile of the object, see the example below.
+
+=== Count of object, distance of closest instance (64) ===
+
+Returns the same values as [[en/VarAction2Industries#count-of-industry-distance-of-closest-instance-67-68|industry var67]]. The distance is from the current tile.
+
+== Examples ==
+
+=== Getting the north tile random bits ===
+
+The following code uses variable 40, 61 and 7B to read the random bits of the north tile of the object.
+
+<pre>    0 * 0    02 0F xx 81
+                       40      30 FF   // Get relative position of object tile as yx
+               \2^     1A      20 77   // Negate the numbers in bits 0..3 and 4..7 ...
+               \2+     1A      20 11   // ... (here we can optionally insert another (positive) offset, to get some other tile relative to the north tile)
+               \2^     1A      20 88   // ... (we need to split the xor in two parts, so bits 0..3 do not influence bits 4..7)
+               \2rst   7B 61   00 FF   // Get the random bits at the northern tile
+                        ...</pre>
