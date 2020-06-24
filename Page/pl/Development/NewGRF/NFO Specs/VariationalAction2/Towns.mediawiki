@@ -1,0 +1,58 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+==Wprowadzenie==
+
+== Variables ==
+
+{| |-
+!Variable!![[en/GRFActionsDetailed|Size]]!!Version!!Content
+|-
+|40||B||{{en/Ottdp| |}}||Larger town effect on this town
+|-
+|41||W (B)||{{en/Ottdp| |}}||Town index<ref>In OpenTTD this variable is word-sized, in TTDPatch this variable is byte-sized.</ref>
+|-
+|82||W||{{en/Ottdp| |}}||Population
+|-
+|94, 96, 98, 9A, 9C||W||{{en/Ottdp| |}}||Square of [[en/TownZones|town zone]] radii for the [[en/TownZones|town zones]] 0 ... 4
+|-
+|B6||W||{{en/Ottdp| |}}||number of buildings
+|}
+
+<references />
+
+These are accessed by using a type 82/86/8A action 2 for stations, town buildings, or industries.
+
+For other 80+x variables confer the [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#_TownArray TTD town structure].
+
+== Description ==
+=== Larger town effect (40) ===
+
+This returns how the "largertowns" / "economy.larger_towns" setting affects this town:
+
+{| |-
+!Value!!Meaning
+|-
+|0||largertowns is enabled, but it won't allow this town to grow larger than usual
+|-
+|1||largertowns is enabled, and it allows to grow this town larger
+|-
+|2||largertowns is disabled, so no towns are allowed to grow larger
+|}
+
+=== Town index (41) ===
+
+This returns the index of the town in the town array. You can use this value to treat some towns specially. (For example, the first town on the map can be considered the capital and you can allow a Parliament to be built there, but nowhere else)
+
+TTDPatch only: This variable has a value between 0 and 69 (inclusive).
+
+=== Population (82) ===
+Returns the population of the town, but at most 65535.
+
+=== [[en/TownZones|Town zone]] radii (94, 96, 98, 9A, 9C) ===
+
+Squares of radii of 5 [[en/TownZones| town zones]] where variable 94 refers to the outermost zone 0 and variable 9C to the inner most zone 4.
+
+=== Number of buildings (B6) ===
+Returns the number of buildings the town possesses.
+
+==Przykład==
