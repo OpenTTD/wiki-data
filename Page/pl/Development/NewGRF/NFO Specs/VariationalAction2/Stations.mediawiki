@@ -1,0 +1,276 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+==Wprowadzenie==
+
+Stacje kolejowe mają wiele zmiennych z portami lotniczymi. Wspólne zmienne są udokumentowane na [[en/VariationalAction2/BaseStation|separate page]]
+
+== Variables ==
+{| |-
+!Variable!!Version!![[en/GRFActionsDetailed|'''Size''']]!!Description
+|-
+|10||{{en/Ottdp|0.7|2.5}}||D||Additional information for sprite selection - see [[en/Action0/Stations#general-flags-13|General station flags]] and [[en/AdvancedSpriteLayout]]
+|-
+|40||{{en/Ottdp|0.6|2.5}}||D||Platform info and relative position
+|-
+|41||{{en/Ottdp|0.6|2.5}}||D||Platform info and relative position for individually built sections
+|-
+|42||{{en/Ottdp|0.6|2.5}}||D||Terrain and track type
+|-
+|43 <ref>{{en/Ottdp|1.2|2.5|ottdrev=r22848|ttdprev=2.5 beta 2}} Available in the purchase list as well.</ref>||{{en/Ottdp|1.2|2.5|ottdrev=r22848}}||D||Player info, see [[en/VarAction2Vehicles#player-info-43|vehicle variable 43]]
+|-
+|44||{{en/Ottdp|0.7|2.5}}||B||Path-based signalling info
+|-
+|45||{{en/Ottdp|0.6|2.5}}||W||Rail continuation info
+|-
+|46,47||{{en/Ottdp|0.6|2.5}}||D||Platform info, counted from the middle
+|-
+|48|| || ||See [[en/VariationalAction2/BaseStation|Base Stations]].
+|-
+|49||{{en/Ottdp|0.6|2.5}}||D||Platform info and relative position of same-direction section
+|-
+|4A||{{en/Ottdp|0.7|2.5}}||B||Current animation frame
+|-
+|60-65|| || ||See [[en/VariationalAction2/BaseStation|Base Stations]].
+|-
+|66||{{en/Ottdp|0.6|2.5}}||D||Animation frame of nearby tile
+|-
+|67||{{en/Ottdp|0.6|2.6}}||D||Land info of nearby tiles
+|-
+|68||{{en/Ottdp|0.6|2.6}}||D||Station info of nearby tiles
+|-
+|69|| || ||See [[en/VariationalAction2/BaseStation|Base Stations]].
+|-
+|6A||{{en/Ottdp|1.10|no|ottdrev=5df01bf}}||D||GRFID of nearby tiles
+|-
+|80||{{en/Ottdp|no|no}} <ref>Works in TTDPatch for sufficiently small stations.</ref>||B||Number and length of train platforms
+|}
+<references/>
+
+For other 80+x variables confer the [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#_StationArray TTD station structure]. Note that you have to subtract 0x10 from the offsets there, or else the facility bit mask and construction date would not be accessible; instead you lose access to variables 00..0F which are meaningless anyway.
+
+'''WARNING''': Please do not use variables 8C..EB directly. The meaning of these variables changes if the newcargos switch is on. Use the variables 60..64 instead (see below). Those always work correctly.
+
+== Description ==
+=== Platform info (40, 41, 46, 47, 49) ===
+
+Variables 40, 41, 46, 47 and 49 all return information about the current tile, which platform it is on and how far along the platform. The difference is in the section of the station that they consider.
+
+{| |-
+!Variables!!Regular station!!Irregular station
+|-
+|40, 46||Whole station||Counting entire length and all adjacent platforms
+|-
+|41, 47||Individually built sections||
+|-
+|49||Whole station||Counting length and platforms that have the same direction
+|}
+
+The term "counting" here refers to starting at the tile in question, and counting tiles in all four directions. The two directions aligned with the station direction will be the length of the station, and the other two directions give the number of platforms. For variables 40 and 46, this counting stops at the edge of the station, i.e. the first non-station tile. For variable 49, it stops either at the edge, or at a station tile that is in the wrong direction. &nbsp;The resulting information is probably not really useful in the case of irregular stations, with the exception of edge detection. To correctly detect edges, you have the choice of either the station-&gt;non-station transition (vars. 40, 46), or additional an opposite-direction transition (var. 49).
+
+Variable 41 is largely unaffected by irregular stations, because it only refers to individually built sections. However, when these individual sections are built over existing tiles, the var. 41 information of surrounding tiles changes as well, due to an internal limitation in how it is stored.
+
+For variables 40, 41 and 49, the position is counted from the northern most edge of the station, and returned in the form xTNLcCpP, where:
+
+{| |-
+!Variable!!Meaning
+|-
+|x||undefined, use bit mask to mask it out
+|-
+|T||Tile type: the current tile type/layout
+{{en/Ottdp|no|}} In TTDPatch this information is only available during callback 14 (and via variable 10 during callback 24).
+|-
+|N||Total number of platforms
+|-
+|L||Total platform length
+|-
+|c||Platform number current being drawn, counted from the end (starting at zero)
+|-
+|C||Platform number currently being drawn (starting from zero)
+|-
+|p||Position along this platform counted from the end, zero at the end
+|-
+|P||Position along this platform, zero at the beginning
+|}
+
+Here, the "beginning" of a station is its northern-most (up on the screen) tile, and the "end" is the southern-most (down on the screen) tile. Each variable consists of 4 bits.
+
+For variables 46 and 47, the position is counted from the middle, i.e. the center tile has C=0 and P=0. For even lengths and numbers of platforms, the middle tile is at position L/2 resp. N/2, e.g. for length 6, it is tile 3, which is the fourth tile. The return format is xTNLxxCP, where T, N and L are as above, and C and P are the positions counted from the middle.
+
+Since C and P can have negative numbers, here's how this is encoded:
+
+{| |-
+!Hex!!Binary!!Decimal
+|-
+|0||0000||0
+|-
+|1||0001||1
+|-
+|7||0111||7
+|-
+|8||1000||-8
+|-
+|9||1001||-7
+|-
+|E||1110||-2
+|-
+|F||1111||-1
+|}
+
+The counting goes like this, preferring an extra negative number for an even count (because there are 8 negative numbers available but only 7 positive ones):
+
+{| |-
+!Count!!Numbers
+|-
+|1||<pre>          0</pre>
+|-
+|2||<pre>      -1  0</pre>
+|-
+|3||<pre>      -1  0  1</pre>
+|-
+|4||<pre>   -2 -1  0  1</pre>
+|-
+|5||<pre>   -2 -1  0  1  2</pre>
+|-
+|6||<pre>-3 -2 -1  0  1  2</pre>
+|}
+
+(etc.)
+
+=== Terrain and track type (42) ===
+
+Variable 42 is of the format xxxxttTT, where TT is the terrain type and tt is the (translated) railway track type.
+
+They can have the following values:
+
+{| |-
+!TT!!Meaning
+|-
+|0||normal (grass)
+|-
+|1||desert
+|-
+|2||rainforest
+|-
+|4||on or above snowline
+|}
+
+
+If no railtype translation table is present in the GRF, then the default translation table is used:
+{| |-
+!tt!!Meaning
+|-
+|00||railroad, regular
+|-
+|01||railroad, electrified
+|-
+|02||monorail
+|-
+|03||maglev
+|}
+
+If the railtype is not present in the table, then tt returns FF.
+
+=== Path-based signalling info (44) ===
+
+This returns the following value in bits 0-2: (bit 2 only available from alpha 47 and up)
+
+{| |-
+!State!!Value (binary)!!Value (decimal)
+|-
+|Reserved||111||7
+|-
+|Not reserved||100||4
+|-
+|No PBS||010||2
+|}
+
+At the moment, PBS on/off refers to the switch setting, in a future alpha version it will actually refer to whether the switch is on ''and'' the current block actually uses PBS.
+
+The bits are defined this way to allow easy fallback to non-PBS cases. If you need graphics to show the "unreserved" state in non-PBS cases, use bit 0, but if you need the "reserved" state in non-PBS cases, use bit 1. To explicitly check whether PBS is active or not, use bit 2.
+
+All other bits are reserved and must be masked out.
+
+=== Rail continuation info (45) ===
+
+This variable returns 16 bits of info whether the rail tracks continue in the eight tiles adjacent to the station tile.
+
+{| |-
+!Bit!!Value!!Set if rail continues in direction of...
+|-
+|0||01||+Length
+|-
+|1||02||-Length
+|-
+|2||04||+Platforms
+|-
+|3||08||-Platforms
+|-
+|4||10||+Length, +Platforms
+|-
+|5||20||-Length, +Platforms
+|-
+|6||40||+Length, -Platforms
+|-
+|7||80||-Length, -Platforms
+|}
+
+The following picture illustrates which bits represent which tile for the two possible station orientations:
+
+[[File:en/Station var45.png]]
+
+Bits 0 to 3 are set if there is track on the given tile, and it has a connection to the station tile. For bits 2, 3, the station of course has itself no connection to those tiles, but this doesn't matter for this variable. Bits 4 to 7 check connections to the neighbouring platform tile, i.e. bits 4 and 5 resp. 6 and 7 indicate a connection from that tile to tile 2 resp. 3. (This has changed again with 2.5 beta 4 r325.)
+
+Bits 8..15 repeat the above, but are set if there are any train tracks on the tile and disregard whether the track is connected to the station or not entirely.
+
+=== Animation frame of nearby tile (66) ===
+
+(From TTDPatch 2.5 beta 5)
+
+The parameter defines the offset relative to the current tile. Both nibbles are considered signed (that is, 8h=-8, 9h=-7, ...., Fh=-1, 0h=0, 1h=1, ..., 7h=7). The high nibble contains the amount to move sideways (between platforms), the low one is the amount to move along the platform. Negative offsets move northwards, positive ones southwards. If the selected tile is a rail station tile that belongs to the current station, its animation state is returned. Otherwise, FFFFFFFFh is returned.
+
+=== Land info of nearby tiles (67) ===
+
+This variable works like [[en/VarAction2IndustryTiles#land-info-of-nearby-tiles-60|industry tile variable 60]], except for three things:
+* The offsets in the parameter are interpreted relatively to the alignment of the station, the same way as for variable 66
+* The '''ss''' part is "mirrored" (bit 0 and 2 swapped) for the NW-SE orientation; this will allow you to handle analogous slopes of the two orientations without checking the orientation explicitly (since TTDPatch 2.6 r1693)
+* Bit 0 of the '''bb''' part is undefined
+
+=== Station info of nearby tiles (68) ===
+
+The parameter of this variable works the same way as the parameter of variable 66. The returned value is FFFFFFFFh if the selected tile isn't a railway station tile. Otherwise, the returned value can be separated to the following parts:
+
+{| |-
+!Bits!!Meaning
+|-
+|0..7||If the tile is defined in the current GRF, this is the setID used in the definition. Otherwise, the content is undefined.
+|-
+|8..9||0 - the tile uses original TTD graphics
+
+1 - the tile is defined in the current GRF
+
+2 - the tile is defined in another GRF
+|-
+|10||set if the selected tile belongs to the current station, clear otherwise
+|-
+|11||clear if the selected tile is parallel with the current one, set if perpendicular to it
+|-
+|12..13||0 - plain platform
+
+1 - platform with building
+
+2 - platform with roof, left side
+
+3 - platform with roof, right side
+|-
+|14..31||Undefined, reserved for future use
+|}
+
+=== GRFID of nearby station tile (6A) ===
+
+The parameter of this variable works the same way as the parameter of variable 66.
+The returned value is one of the following:
+* '''FFFFFFFFh''' if the selected tile isn't a station tile
+* '''00000000h''' if the selected station is a default station (no NewGRF station)
+* otherwise, the GRFID of the GRF which defined the type of the selected station
+
+==Przykład==
