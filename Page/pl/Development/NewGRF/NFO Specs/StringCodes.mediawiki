@@ -189,25 +189,25 @@ Teksty w TTD są głównie w zestawie znaków Latin-1 (ISO-8859-1) (z wyjątkiem
 |}
 <references/>
 
-The formatting instructions must not be used except in strings that expect them, and then they may not be out of order (with the possible exception of code 86 shuffling the internal stack). When used improperly, they will most likely crash TTD. Code 81 is always safe to use (provided that the referenced text ID uses no unsafe formatting instructions either), and will insert the given text ID (e.g. "\81\3D\A0" will insert text ID A03D, "\98Refit Aircraft"). Note however that if you want to include e.g. ID D000/D400, the 00 byte will be considered the end of string, and this will therefore break if additional texts are supposed to follow in the action 4. DCxx IDs must not be included; neither codes 80 nor 81 correctly access DCxx IDs.
+Instrukcje formatowania nie mogą być używane z wyjątkiem ciągów, które ich oczekują, a następnie mogą nie być w porządku (z możliwym wyjątkiem kodu 86 tasowania wewnętrznego stosu). Przy niewłaściwym użyciu najprawdopodobniej spowodują awarię TTD. Kod 81 jest zawsze bezpieczny w użyciu (pod warunkiem, że przywoływany tekstowy ID również nie używa niebezpiecznych instrukcji formatowania) i wstawi podany tekstowy ID (np. "\81\3D\A0" wstawi tekstowy ID A03D, "\98Refit Aircraft" ). Pamiętaj jednak, że jeśli chcesz dołączyć np. ID D000/D400, bajt 00 będzie uważany za koniec łańcucha, a zatem zostanie zerwany, jeśli w akcji mają pojawiać się dodatkowe teksty 4. Nie należy dołączać ID''`ów'' DCxx; ani kody 80, ani 81 nie mają prawidłowego dostępu do ID''`ów'' DCxx.
 
-Each formatting instructions removes its argument from the stack, so that the next one will receive the following bytes as arguments. Code 86 takes the top four words from the stack, let's call them W1 through W4, and reorders them as W4 W1 W2 W3. This is used for languages in which industries or stations should be named not "Flinfingbury Power Plant" but "Power Plant Flinfingbury".
+Każda instrukcja formatowania usuwa swój argument ze stosu, dzięki czemu następna otrzyma następujące bajty jako argumenty. Kod 86 pobiera cztery pierwsze słowa ze stosu, nazwijmy je W1 do W4 i zmieniam ich kolejność na W4 W1 W2 W3. Jest to używane w przypadku języków, w których gałęzie przemysłu lub stacje powinny być nazywane nie "Flinfingbury Power Plant" , ale "Power Plant Flinfingbury" .
 
 ==Using genders and cases==
-{{pl/Development/NewGRF/ottdp|1.1}} When multiple strings are combined to form a single sentence, the parts affect each other in various languages. E.g. you might have some string "The <industrytype> closes due to next month.", where <industrytype> is replaced by a name of some industry (e.g "brewery", "textile mill"). In German however the gender of the <industrytype> affects the string it is inserted into. For "brewery" ("Brauerei") the article "The" is translated with "Die", for "textile mill" ("Textilwerk") "The" is translated with "Das".
+{{pl/Development/NewGRF/ottdp|1.1}}Gdy wiele ciągów jest łączonych w jedno zdanie, części wpływają na siebie w różnych językach. Na przykład. możesz mieć ciąg "The <industrytype> closes due to next month." <small>''(zamyka się z powodu następnego miesiąca)''</small> , gdzie <industrytype> jest zastąpiony nazwą jakiegoś przemysłu (np.  "brewery" , "textile mill" ). Jednak w języku niemieckim płeć <industrytype> wpływa na ciąg, do którego jest wstawiany. W przypadku  "brewery" ("Brauerei") artykuł "The" przetłumaczono za pomocą "Die", a "textile mill" ("Textilwerk") "The" przetłumaczono za pomocą "Das".
 
-In OpenTTD these interactions of strings are called "genders" and "cases". While these names refer to the common grammatical constructions in various languages, there is a technical definition of these term wrt. OpenTTD. These might match the grammatical usages of genders and cases in some languages, or they might be used to deal with other grammatical constructions.
+W OpenTTD te interakcje ciągów nazywane są "rodzajami" <small>''(genders)''</small> i "przypadkami" <small>''(cases)''</small> . Chociaż nazwy te odnoszą się do popularnych konstrukcji gramatycznych w różnych językach, istnieje techniczna definicja tego terminu wrt. OpenTTD. Mogą one odpowiadać gramatycznym zastosowaniom płci i przypadków w niektórych językach lub mogą być używane do radzenia sobie z innymi konstrukcjami gramatycznymi.
 
-Generally, when a string I is inserted into a string O:
-* If the inner string I affects the outer O:
-** I is said to have a gender, and 
-** O chooses different texts depending on that gender.
-* If the outer string O affects the inner I:
-** O sets a case for I, and 
-** I chooses different texts depending on the required case.
+Ogólnie, gdy ciąg I jest wstawiany do ciągu O:
+* Jeśli wewnętrzny ciąg I wpływa na zewnętrzny O:
+** Mówi się, że mam płeć i
+** O wybiera różne teksty w zależności od płci.
+* Jeśli zewnętrzny ciąg O wpływa na wewnętrzny I:
+** O ustawia przypadek dla I, i
+** Wybieram różne teksty w zależności od wymaganego przypadku.
 
 ===Setting genders and cases===
-{{pl/Development/NewGRF/ottdp|1.1}} String codes 9A 0E and 9A 0F map a NewGRF internal gender or case ID to an OpenTTD gender or case. The internal ID is resolved to the appropriate OpenTTD gender or case at load time by means of the mapping. The first internal ID in the mapping that matches the ID from the string and has an existing OpenTTD gender or case is taken, i.e. the list of mappings is filtered by internal ID and existance of the OpenTTD gender/case and then the top element is used. When the gender or case ID is not known, or there is no existing OpenTTD gender or case with the mapped names the whole mapping is ignored and the default gender or case is taken.
+{{pl/Development/NewGRF/ottdp|1.1}}Kody ciągów 9A 0E i 9A 0F mapują wewnętrzny płeć lub ID NewGRF na płeć lub przypadek OpenTTD. ID wewnętrzny jest rozpoznawany do odpowiedniej płci lub przypadku OpenTTD w czasie ładowania za pomocą mapowania. Pobierany jest pierwszy wewnętrzny ID w odwzorowaniu, który pasuje do ID z łańcucha i ma istniejącą płeć lub wielkość liter OpenTTD, tj. Lista mapowań jest filtrowana według wewnętrznego ID i istnienia płci/wielkości liter OpenTTD, a następnie używany jest element górny . Jeśli ID płci lub sprawy nie jest znany lub nie istnieje płeć lub sprawa OpenTTD z nazwami odwzorowanymi, całe mapowanie jest ignorowane i przyjmowana jest domyślna płeć lub sprawa.
 
 '''Example of gender translation table'''
 
@@ -232,12 +232,12 @@ Generally, when a string I is inserted into a string O:
  1 * 40     04 0A 82 01 73 DC C3 9E 9A 0E 02 "Brauerei" 00
 </pre>
 
-In this case OpenTTD would look for NewGRF internal ID 2 in the gender table. This would yield "w" and "feminine" as OpenTTD gender names. In current OpenTTD this would match "w", in the fictitious older version of OpenTTD it will match "feminine".
+W takim przypadku OpenTTD szuka wewnętrznego ID 2 NewGRF w tabeli płci. To dałoby "w" i "kobiecy" <small>''(feminine)''</small> jako imiona płciowe OpenTTD. W obecnym OpenTTD pasowałoby to do "w" , w fikcyjnej starszej wersji OpenTTD pasowałoby do "żeńskiego" <small>''(feminine)''</small> .
 
 ===Choosing strings depending on required gender or case===
-{{pl/Development/NewGRF/ottdp|1.1}} String codes 9A 10 to 9A 14 map an OpenTTD gender or case to the NewGRF internal gender or case ID. The mapping is resolved at load time by going through all cases or genders OpenTTD's translation knows an mapping these to NewGRF internal IDs. If mapping is found the default choice list item is chosen. This happens by filtering the mapping on the gender or case name and then the NewGRF internal ID of the top element is used.
+{{pl/Development/NewGRF/ottdp|1.1}}Kody ciągów od 9A 10 do 9A 14 odwzorowują płeć lub przypadek OpenTTD na wewnętrzny ID lub płeć NewGRF. Mapowanie jest rozwiązywane w czasie ładowania poprzez przeglądanie wszystkich przypadków lub płci Tłumaczenie OpenTTD zna mapowanie na wewnętrzne ID''`y'' NewGRF. Jeśli mapowanie zostanie znalezione, wybierany jest domyślny element listy wyboru. Dzieje się tak, filtrując mapowanie według płci lub nazwy sprawy, a następnie używany jest wewnętrzny ID NewGRF górnego elementu.
 
-The choice list string codes are related and must be used in a specific manner:
+Kody ciągów list wyboru są powiązane i muszą być używane w określony sposób:
 
 Genders: 9A 13 &lt;offset&gt; (9A 10 &lt;index&gt; &lt;string&gt;)+ 9A 11 &lt;default&gt; 9A 12
 
@@ -245,7 +245,7 @@ Cases: 9A 14 (9A 10 &lt;ndex&gt; &lt;string&gt;)+ 9A 11 &lt;default&gt; 9A 12
 
 Plurals: 9A 13 &lt;offset&gt; (9A 10 &lt;index&gt; &lt;string&gt;)+ 9A 11 &lt;default&gt; 9A 12
 
-The offset is the stack location of the substring/value you want to get the gender/plural for. This is the real offset plus 80, i.e. an offset of 0 becomes 80 and an offset of 1 becomes 81 in the NFO.
+Przesunięcie <small>''(offset)''</small> to lokalizacja stosu <small>''(substring)''</small> podłańcucha/wartości, dla której chcesz uzyskać płeć/liczbę mnogą <small>''(plural)''</small> . Jest to rzeczywiste przesunięcie plus 80, tzn. Przesunięcie <small>''(offset)''</small> 0 staje się 80, a przesunięcie <small>''(offset)''</small> 1 staje się 81 w NFO.
 
 '''Example of gender-dependent string'''
 
@@ -255,16 +255,16 @@ The offset is the stack location of the substring/value you want to get the gend
  2 * 29     04 0A FF 01 1A DC "D" 9A 13 80 9A 10 1 "er" 9A 10 3 "as" 9A 11 "ie" 9A 12 " " 80 00
 </pre>
 
-Imagine the "Brauerei" from the previous example being, as substring, on the stack. Then this string would resolve to "Die Brauerei".
+Wyobraź sobie, że "Brauerei" z poprzedniego przykładu znajduje się jako stos na stosie. Następnie ten ciąg znaków przekształciłby się w "Die Brauerei" .
 
-What happens in OpenTTD is that whenever the "begin gender choice list" string code is found it will resolve the string at the given stack location. Of that resolved string the first character is compared to the "set gender" string code and if that is the case the (mapped) OpenTTD gender is retrieved. When there is "set gender" string code the first OpenTTD gender is used. After resolving the OpenTTD gender that gender is reverse mapped to a NewGRF internal ID. If that NewGRF internal ID exists in one of the "choice list values" that (sub)string is taken (up till the next choice list value/default). If there is no reverse mapping the string at the "choice list default" string code is used up till the "end choice list" string code. Further processing of the string happens after the choice list, i.e. the (sub)strings in the choice list may not contain any special string codes except colour codes.
+To, co dzieje się w OpenTTD, polega na tym, że za każdym razem, gdy zostanie znaleziony kod "Rozpocznij listę wyboru płci" , rozpozna ciąg w danym miejscu stosu. Z tego rozstrzygniętego ciągu pierwszy znak jest porównywany z kodem ciągu  "ustaw płeć" , a jeśli tak, to pobierana jest (odwzorowana) płeć OpenTTD. Gdy występuje ciąg znaków "ustaw płeć" , używana jest pierwsza płeć OpenTTD. Po rozstrzygnięciu płci OpenTTD płeć jest odwzorowywana odwrotnie na wewnętrzny ID NewGRF. Jeśli ten wewnętrzny ID NewGRF istnieje w jednej z "wartości listy wyboru" , to brany jest (pod) ciąg znaków (aż do następnej wartości listy wyboru/wartość domyślna). Jeśli nie ma odwrotnego odwzorowania łańcucha przy "domyślnej liście wyboru" , używany jest kod ciągu aż do łańcucha "końcowej listy wyboru" . Dalsze przetwarzanie ciągu następuje po liście wyboru, tzn. (Pod) <small>''~Sub''</small> ciągi na liście wyboru nie mogą zawierać żadnych specjalnych kodów ciągów oprócz kodów kolorów.
 
-Case choice lists work in a similar matter, except that instead of resolving a case from a (sub)string we "are" the substring; the string that includes this substring has set a case using the "select case" string code. As such no offset has to be given to the choice list, but the rest works in the same way as gender choice lists.
+Listy wyboru wielkości liter działają w podobnej sprawie, z tą różnicą, że zamiast rozstrzygania wielkości liter z (pod) łańcucha znaków "jesteśmy" podciągiem; ciąg zawierający ten podciąg ustawił wielkość liter przy użyciu kodu łańcucha "wybierz wielkość liter" <small>''(select case)''</small> . W związku z tym nie trzeba przesuwać listy wyboru, ale reszta działa w taki sam sposób jak listy wyboru płci.
 
 ==Using plural forms==
-{{pl/Development/NewGRF/ottdp|1.1}} The plural list works like a gender list, however you have to choose one "mapping" from value to plural index by setting the plural form using [[en/Action0/Global Settings]] property 15.
+{{pl/Development/NewGRF/ottdp|1.1}}Lista mnoga działa jak lista płci, jednak musisz wybrać jedno "mapowanie" <small>''(mapping)''</small> od wartości do indeksu liczby mnogiej, ustawiając formę liczby mnogiej za pomocą [[pl/Development/NewGRF/NFO Specs/Action0/Global Settings|Action0/Global Settings]] property 15.
 
-If, for example, plural form 0 is chosen using the [[en/Action0/Global Settings]] property 15, then there are 2 plural indices. If the value at the stack with the given offset equals 1 you get plural index 1, otherwise plural index 2. These plural indices are the indices that are used in the choice lists.
+Jeśli na przykład wybrano liczbę mnogą 0 za pomocą właściwości [[pl/Development/NewGRF/NFO Specs/Action0/Global Settings|Action0/Global Settings]] 15, wówczas istnieją 2 wskaźniki liczby mnogiej. Jeśli wartość na stosie z danym przesunięciem wynosi 1, otrzymasz indeks liczby mnogiej 1, w przeciwnym razie indeks liczby mnogiej 2. Te wskaźniki liczby mnogiej są wskaźnikami używanymi na listach wyboru.
 
 {| |-
 !Plural form!!Plural index!!Description
@@ -392,20 +392,20 @@ If, for example, plural form 0 is chosen using the [[en/Action0/Global Settings]
 
 =UTF-8 support=
 {{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 68}}
-Since TTDPatch 2.0.1 alpha 68, TTDPatch supports UTF-8 encoded input strings. Use [[en/Action12|action 12]] to define glyphs for the characters which do not exist in TTD's .grf files (possible since TTDPatch 2.0.1 alpha 73).
+Od TTDPatch 2.0.1 alpha 68, TTDPatch obsługuje łańcuchy wejściowe zakodowane w UTF-8. Użyj  [[pl/Development/NewGRF/NFO Specs/Action12|action 12]] , aby zdefiniować glify dla znaków, które nie istnieją w plikach .grf TTD (możliwe od wersji TTDPatch 2.0.1 alpha 73).
 
 To indicate that a given string is in UTF-8 encoding, start it with a capital thorn (U+00DE, "&THORN;"), encoded in UTF-8 as usual with the bytes C3 9E. Everything in that string is then assumed to be in UTF-8 encoding, with the following exception: if characters appear that are not valid UTF-8 sequences, they are assumed to be one of the above control codes. This way, it is still possible to write, e.g. "&THORN;Capacity: " 87 "litres", without encoding the 87 in UTF-8 (which would instead refer to a character installed at codepoint U+0087).
 
-In addition, this allows using the non-Unicode characters 9E, 9F, A0, AA, AC, AD, AF, B4..B9, BC and BD from the above list, which when encoded with UTF-8 would refer to their respective Unicode characters instead. To use the TTD characters, simply do not encode them using UTF-8 but enter them directly as bytes. This causes them to be an invalid UTF-8 sequence and allows TTDPatch to use the correct symbol from TTD's fonts.
+Ponadto pozwala to na stosowanie znaków innych niż Unicode 9E, 9F, A0, AA, AC, AD, AF, B4..B9, BC i BD z powyższej listy, które po zakodowaniu za pomocą UTF-8 odnosiłyby się do ich odpowiednich Zamiast tego znaki Unicode. Aby użyć znaków TTD, po prostu nie koduj ich za pomocą UTF-8, ale wprowadź je bezpośrednio jako bajty. To powoduje, że są one nieprawidłową sekwencją UTF-8 i pozwalają TTDPatch na użycie poprawnego symbolu z czcionek TTD.
 
-Alternatively, these symbols (in fact, the TTD character set from 20 to FF) are also mapped into the Unicode Private Use Area at U+E0xx, so to encode the truck symbol, you may use character U+E0B5 as well, although this will probably be an unprintable character in most text editors.
+Alternatywnie, te symbole (w rzeczywistości zestaw znaków TTD od 20 do FF) są również odwzorowane w prywatnym obszarze użytkowania Unicode w U+E0xx, więc aby zakodować symbol ciężarówki, możesz również użyć znaku U+E0B5, chociaż to będzie prawdopodobnie postacią niedrukowalną w większości edytorów tekstu.
 
-Finally, characters 7B..7F no longer function as the above formatting instructions, but will display regular glyphs instead (provided they are installed; by default TTD has none at these codepoints). Instead, to use these formatting instructions in UTF-8 mode, you need to use their Private Use Area codepoint at U+E0xx.
+Wreszcie, znaki 7B..7F nie działają już jak powyższe instrukcje formatowania, ale zamiast tego będą wyświetlać regularne glify (pod warunkiem, że są zainstalowane; domyślnie TTD nie ma w tych punktach kodowych). Zamiast tego, aby skorzystać z instrukcji formatowania w trybie UTF-8, musisz użyć ich punktu kodowego Prywatnego Obszaru Użytkowania w U+E0xx.
 
-Basically there are three possibilities:
-# Characters U+E020..U+E0FF in the E0xx Private Use Area do what their respective character xx would do in TTD, as do the control characters below U+0020
-# All other valid UTF-8 sequences display actual glyphs, if they are available
-# All invalid UTF-8 sequences do what their individual bytes would do in TTD
+Zasadniczo istnieją trzy możliwości:
+# Znaki U+E020..U+E0FF w prywatnym obszarze użytkowania E0xx robią to, co ich znak xx zrobiłby w TTD, podobnie jak znaki kontrolne poniżej U+0020
+# Wszystkie inne prawidłowe sekwencje UTF-8 wyświetlają rzeczywiste glify <small>''(glyphs)''</small>, jeśli są dostępne
+# Wszystkie niepoprawne sekwencje UTF-8 robią to, co robią ich poszczególne bajty w TTD
 
 Podsumowując, oto przydatna tabela:
 
