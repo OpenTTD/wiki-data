@@ -1,6 +1,6 @@
 
 <!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
-<div style="float:right; padding-left:12px; background:none;">{{en/NFONavVehicles}}</div>
+<div style="float:right; padding-left:12px; background:none;"><!--{{NFONavVehicles}}-->{{Page:pl/Extrazi/NFONavVehicles}}</div>
 
 == Wprowadzenie ==
 Właściwości Działania 0 wspólne dla wszystkich typów pojazdów:
@@ -12,49 +12,49 @@ Cztery typy pojazdów (pociągi, pojazdy drogowe, statki i samoloty) mają pewne
 |-
 !Number !![[en/GRFActionsDetailed|Size]]!!Version !!Description !!Available for articulated parts
 |-
-|00 ||W||{{en/Ottdp|0.6|2.0}}||date of introduction||no
+|00 ||W||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||date of introduction||no
 |-
-| 02||B||{{en/Ottdp|0.6|2.0}}||reliability decay speed||no
+| 02||B||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||reliability decay speed||no
 |-
-| 03||B||{{en/Ottdp|0.6|2.0}}||vehicle life in years||no
+| 03||B||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||vehicle life in years||no
 |-
-| 04||B||{{en/Ottdp|0.6|2.0}}||model life in years||no
+| 04||B||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||model life in years||no
 |-
-| 06||B||{{en/Ottdp|0.6|2.0}}||climate availability||should be zero
+| 06||B||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||climate availability||should be zero
 |-
-| 07||B||{{en/Ottdp|0.6|2.0}} {{en/GrfFrom|2}}||loading speed||yes
+| 07||B||{{pl/Development/NewGRF/ottdp|0.6|2.0}} ||loading speed||yes
 |}
 
-In TTDPatch properties 00 to 06 only apply to new games, or when using [[en/Ttwiki/ResetVehicleData|Cht: ResetVehicles]].
-In OpenTTD the same holds for 00, 02, 04 and 06 (i.e. not for 03) unless using [[en/Ottdwiki/Console#other-commands|resetengines]].
+We właściwościach TTDPatch od 00 do 06 dotyczą tylko nowych gier lub podczas ich używania <!--[[ttwiki:ResetVehicleData|Cht: ResetVehicles]]-->[http://www.tt-wiki.net/wiki/ResetVehicleData Cht: ResetVehicles].
+W OpenTTD to samo obowiązuje dla 00, 02, 04 i 06 (tj. Nie dla 03), chyba że używa <!--[[ottdwiki:Console#Other_commands|resetengines]]-->[http://www.tt-wiki.net/wiki/Console#Other_commands resetengines].
 
 == Description ==
 
 === Date of introduction ===
 
-The date is specified as number of days since 1920 where TTD counts 365,25 days in a year. It will have a random number from 0 to 511 days added to it at the start of every new game, or after using [[en/Ttwiki/ResetVehicleData|Cht: ResetVehicles]] (TTDPatch) resp. [[en/Ottdwiki/Console#other-commands|resetengines]] (OpenTTD).
+Data jest określona jako liczba dni od 1920 roku, kiedy TTD liczy 365,25 dni w roku. Będzie miała losową liczbę od 0 do 511 dni dodaną na początku każdej nowej gry lub po użyciu <!--[[ttwiki:ResetVehicleData|Cht: ResetVehicles]]-->[http://www.tt-wiki.net/wiki/ResetVehicleData Cht: ResetVehicles] (TTDPatch) resp. <!--[[ottdwiki:Console#Other_commands|resetengines]]-->[http://www.tt-wiki.net/wiki/Console#Other_commands resetengines] (OpenTTD).
 
-{{en/Ottdp|&lt;0.7|}} Note that TTD stops updating vehicle type data after the game ends in 2050, so all dates of introduction should be no later than in 2044, to ensure that all vehicle types can be introduced and reach their maximum reliability. This restriction does not apply to OpenTTD 0.7 and newer.
+{{pl/Development/NewGRF/ottdp|&lt;0.7|}} Należy pamiętać, że TTD przestaje aktualizować dane typu pojazdu po zakończeniu gry w 2050 r., Więc wszystkie daty wprowadzenia powinny być nie później niż w 2044 r., Aby zapewnić, że wszystkie typy pojazdów można wprowadzić i osiągnąć ich maksymalną niezawodność. To ograniczenie nie dotyczy OpenTTD 0.7 i nowszych.
 
-{{en/Ottdp|&lt;0.7| |ottdrev=before r16929}} If the property value is 729 (2D9h) or less, i.e. before 1922, the random number is not added and the vehicle is introduced at exactly the given date.
+{{pl/Development/NewGRF/ottdp|&lt;0.7| |ottdrev=before r16929}} Jeśli wartość nieruchomości wynosi 729 (2D9h) lub mniej, tj. Przed 1922 r., Liczba losowa nie jest dodawana, a pojazd jest wprowadzany dokładnie w danym dniu.
 
-{{en/Ottdp|0.7|no}} Since OpenTTD r16929 the start date is not randomised in the first two years after game-start (no matter whether before or after 1922).
+{{pl/Development/NewGRF/ottdp|0.7|no}} Od czasu OpenTTD r16929 data rozpoczęcia nie jest losowa przez pierwsze dwa lata po rozpoczęciu gry (bez względu na to, czy przed 1922 rokiem, czy później).
 
-The \w&lt;date&gt; escape sequence is especially useful here. See [[en/GRFActionsDetailed#byte-order|the discussion of escape sequences]] for further information.
+\w&lt;date&gt; Sekwencja ucieczki jest tu szczególnie przydatna. Zobacz [[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed#byte-order|the discussion of escape sequences]] w celu uzyskania dalszych informacji.
 
 === Reliability decay speed ===
 
-The reliability decay speed is set when a new vehicle is bought, and specifies how quickly the reliability decays after servicing. &nbsp;The initial TTD default for all vehicles is 20. &nbsp;If a vehicle goes without servicing for a long time, or if it gets very, very old, this number increases, meaning faster decay and more breakdowns. &nbsp;Larger numbers mean faster decay, smaller number slower decay. If set to 0, reliability never decreases in normal operation.
+Szybkość zaniku niezawodności jest ustawiana przy zakupie nowego pojazdu i określa, jak szybko spada niezawodność po serwisowaniu. &nbsp;Początkowa wartość TTD dla wszystkich pojazdów wynosi 20. &nbsp;Jeśli pojazd nie będzie serwisowany przez długi czas lub stanie się bardzo, bardzo stary, liczba ta wzrośnie, co oznacza szybszy rozkład i więcej awarii. &nbsp;Większe liczby oznaczają szybsze zanikanie, mniejsze liczby wolniejsze zanikanie. Przy ustawieniu na 0 niezawodność nigdy nie zmniejsza się podczas normalnej pracy.
 
 === Vehicle life ===
 
 The number of years before a particular vehicle is considered too old and needs replacing,
-
+Liczba lat, po upływie których dany pojazd jest uważany za zbyt stary i wymaga wymiany
 === Model life ===
 
-The number of years that this model can be bought in the game (if PersistentEngines is off). &nbsp;Usually this should be at least twice or three times as &nbsp;long as the vehicle life. &nbsp;When starting a new game, a random amount between 31 months and 17 years is added to this as well.
+Liczba lat, przez które ten model można kupić w grze (jeśli PersistentEngines jest wyłączony). &nbsp;Zwykle powinno to być co najmniej dwa lub trzy razy większe niż &nbsp;tak długo, jak żywotność pojazdu. &nbsp;Przy rozpoczynaniu nowej gry dodaje się do tego również losową kwotę od 31 miesięcy do 17 lat.
 
-If the early retirement property (26/1B/16/16) is not set, the model life works like this:
+Jeśli właściwość wcześniejszej emerytury (26/1B/16/16) nie jest ustawiona, życie modelu działa w ten sposób:
 
 {|
 |-
@@ -67,21 +67,21 @@ If the early retirement property (26/1B/16/16) is not set, the model life works 
 |3||10 to 20.5 years||decreases from peak to 25-50%
 |}
 
-(the ranges in time and reliability are randomized at the start of each game)
+(przedziały czasowe i niezawodność są losowe na początku każdej gry)
 
-At the end of phase 3, the model is retired and removed from the purchase list. &nbsp;Note that when the model reliability starts dropping in phase 3, so does the reliability of every single vehicle of this make in the game.
+Pod koniec fazy 3 model jest wycofywany i usuwany z listy zakupów. &nbsp;Zauważ, że gdy niezawodność modelu zaczyna spadać w fazie 3, to samo dotyczy niezawodności każdego pojazdu tej marki w grze.
 
-Setting this property to 0xFF means the model will never expire.
+Ustawienie tej właściwości na 0xFF oznacza, że ​​model nigdy nie wygasa.
 
-If persistentengines is on, the model never gets to within two years of the end of phase 2, it is kept in phase 2 as long as at least one vehicle of this make is in the game.
+Jeśli trwałe silniki są włączone, model nigdy nie osiągnie w ciągu dwóch lat od zakończenia fazy 2, jest utrzymywany w fazie 2, o ile przynajmniej jeden pojazd tej marki znajduje się w grze.
 
-If the early retirement property is set, the vehicle is retired this many years before the end of phase 2 (can be negative if desired), but not if persistentengines would keep the model alive.
+Jeśli zostanie ustawiona właściwość wcześniejszej emerytury, pojazd zostanie wycofany na wiele lat przed końcem fazy 2 (w razie potrzeby może być ujemny), ale nie, jeśli trwałe silniki utrzymają model przy życiu.
 
-{{en/Ottdp|0.7|2.5|ottdrev=r14680|ttdprev=2.5 beta 7}} This property also works for wagons since TTDPatch 2.5 beta 7 resp. OpenTTD r14680.
+{{pl/Development/NewGRF/ottdp|0.7|2.5|ottdrev=r14680|ttdprev=2.5 beta 7}} Ta właściwość działa również w przypadku wagonów od wersji TTDPatch 2.5 beta 7 lub. OpenTTD r14680.
 
 === Climate availability ===
 
-This is a bit mask of the climates in which this model is available. &nbsp;Simply add the values for the climates:
+To trochę maska ​​klimatów, w których ten model jest dostępny. &nbsp;Po prostu dodaj wartości dla klimatu:
 
 {|
 |-
@@ -100,13 +100,13 @@ For example, 1+2+4 = 07 would make a vehicle available in all climates except To
 
 If you need a vehicle not to be available through the purchase menu, e.g. a locomotive tender being part of an articulated vehicle (locomotive and tender), you may use a value of zero for the bit mask.
 
-{{en/Ottdp|no|2.5}} Same procedure works for vehicles to be used exlusively by [[en/Callback/AI construction/purchase selection |TTDPatch's AI]], but not by a human player.
+{{pl/Development/NewGRF/ottdp|no|2.5}} Same procedure works for vehicles to be used exlusively by [[pl/Development/NewGRF/NFO Specs/Callback/AI construction∕purchase selection |TTDPatch's AI]], but not by a human player.
 
 === Loading speed ===
 This is the amount of cargo transferred per unit of time if using gradualloading. The default is 5 for trains and road vehicles, 10 for ships and 20 for aircraft. This amount of cargo is loaded to or unloaded from the vehicle every 40 ticks for trains, every 20 ticks for road vehicles and aircraft and every 10 ticks for ships.
 
-If [[en/Action0/Vehicles/Trains#miscellaneous-flags-27|Miscellaneous flag 5]] is set, the load amount specified in this property is scaled using [[en/Action0/Cargos#capacity-multiplier-1d|Cargo property 1D]].
+If [[pl/Development/NewGRF/NFO Specs/Action0/Vehicles/Trains#miscellaneous-flags-27|Miscellaneous flag 5]] is set, the load amount specified in this property is scaled using [[pl/Development/NewGRF/NFO Specs/Action0/Cargos#capacity-multiplier-1d|Cargo property 1D]].
 
-{{en/Ottdp|&lt;0.7||ottdrev=before r14672}} For aircraft carrying both passengers and mail this property is broken (wrt. mail) in TTDPatch and OpenTTD before r14672. All aircraft effectively use the load amount of the train engine with ID 00.
+{{pl/Development/NewGRF/ottdp|&lt;0.7||ottdrev=before r14672}} For aircraft carrying both passengers and mail this property is broken (wrt. mail) in TTDPatch and OpenTTD before r14672. All aircraft effectively use the load amount of the train engine with ID 00.
 
-{{en/Ottdp|0.7|no|ottdrev=r14672}} Od OpenTTD r14672 ta właściwość jest używana dla pasażerów, podczas gdy poczta używa 1/4 (w zaokrągleniu w górę). Możesz użyć [[en/Callbacks#load-amount-12|callback 12]]  do niezależnego kontrolowania ilości ładunku dla pasażerów i poczty.
+{{pl/Development/NewGRF/ottdp|0.7|no|ottdrev=r14672}} Od OpenTTD r14672 ta właściwość jest używana dla pasażerów, podczas gdy poczta używa 1/4 (w zaokrągleniu w górę). Możesz użyć [[en/Callbacks#load-amount-12|callback 12]]  do niezależnego kontrolowania ilości ładunku dla pasażerów i poczty.
