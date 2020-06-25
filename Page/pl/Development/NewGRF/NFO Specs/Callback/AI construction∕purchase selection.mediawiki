@@ -1,0 +1,86 @@
+
+<!--{{-}}<br>{{ambox | text = w trakcie edycji.}}-->
+== AI construction/purchase selection (18) ==
+
+Ta funkcja zwrotna funkcji ogólnej jest wywoływana w celu podjęcia różnych decyzji, gdy sztuczna inteligencja buduje nową trasę. Na przykład, AI zazwyczaj ma ustaloną na stałe listę wagonów dla każdego rodzaju ładunku, ale dzięki temu wywołaniu zwrotnemu możesz uzależnić wybór od branż źródłowych i docelowych, a także odległości między usługami.
+
+Ponieważ pojazd nie został jeszcze kupiony, nie możesz używać zwykłych zmiennych pojazdu 40+x lub 80+x, zamiast tego masz następujące:
+
+{| |-
+!Variable!![[en/GRFActionsDetailed|Size]]!!Content
+|-
+|80||B||cargo type (climate specific, column 3, type B in the [[pl/Development/NewGRF/NFO Specs/CargoTypes|cargo type list]])
+|-
+|81||B||cargo type (climate independent, column 1, type A in the [[pl/Development/NewGRF/NFO Specs/CargoTypes|cargo type list]])
+|-
+|82||B||default selection
+|-
+|83||B||source [[en/IndustryDefaultProps|industry type]] (ID). For new industries the substitute type is returned starting with OpenTTD r20108.<ref name="IndustryTypeAI">There are two special return values available: 0xFE which indicates an unknown industry type and 0xFF wich indicates a town</ref>
+|-
+|84||B||destination [[en/IndustryDefaultProps|industry type]] (ID). For new industries the substitute type is returned starting with OpenTTD r20108.<ref name="IndustryTypeAI" />
+|-
+|85||B||distance between source and destination, in (dx+dy)/2
+|-
+|86||B||AI construction event
+|-
+|87||B||Construction number; for wagons: number of wagon; for stations 0=source station, 1=destination station
+|-
+|88||B||Station size in form NL; N=number of platforms, L=length
+|-
+|40||D||xxxxxxTT, TT=cargo slot from cargo translation table or same as var.81 if no table, available since r1167/2.5b9
+|}
+
+<references />
+
+Oddzwonienie zostanie wywołane dla następujących zdarzeń konstrukcyjnych, zapisanych w zmiennej 86:
+
+{| |-
+!Group!!Feature!!Var.86!!Type!!Description
+|-
+|Trains||00||00||Check||Regular rail engine
+|-
+||| ||01||Check||Electric rail engine
+|-
+||| ||02||Check||Monorail engine
+|-
+||| ||03||Check||Maglev engine
+|-
+||| ||08||Get||Regular rail wagon
+|-
+||| ||09||Get||Electric rail wagon
+|-
+||| ||0A||Get||Monorail wagon
+|-
+||| ||0B||Get||Maglev wagon
+|-
+||| ||0F||Get||Track type to build
+|-
+|Road Vehicles||01||00||Check||Road vehicle
+|-
+||| ||01||Get||First road vehicle ID to try
+|-
+||| ||02||Get||Number of road vehicles to try
+|-
+|Ships||02||00||Check||Ship
+|-
+||| ||01||Get||First ship ID to try
+|-
+||| ||02||Get||Number of ships to try
+|-
+|Aircraft||03||00||Check||Aircraft
+|-
+|Stations||04||00||Get||Station ID
+|}
+
+Notes:
+* "Check" oznacza sprawdzenie, czy powinien spróbować kupić ten pojazd (z ID w var. 82). Zwróć 0, aby zabronić zakupu, lub 1, aby na to pozwolić. Jeśli jest to dozwolone, komputer kupi najdroższy pojazd (lub stopień AI dla silników pociągów), jaki może znaleźć, i jest dostępny i ma wystarczająco wysoką niezawodność.
+* "Pobierz" <small>''(Get)''</small> oznacza dowiedzieć się, którego ID (itp.) Użyć. Wartość domyślna w var.82 będzie używana, jeśli wywołanie zwrotne nie powiedzie się.
+* W przypadku silników pociągów i samolotów AI zawsze sprawdza wszystkie dostępne silniki.
+* W przypadku pojazdów drogowych i statków, AI ma wbudowaną listę pojazdów do wypróbowania, możesz użyć zdarzenia oddzwaniania 01 i 02, aby zmienić tę listę.
+* W przypadku pociągów typy torów (0=regular, 1=electric, 2=monorail, 3=maglev) <small>''(electrifiedrailways/unifiedmaglev)''</small> są automatycznie mapowane odpowiednio w zależności od przełączników zelektryfikowanych/zunifikowanych. Aby uzyskać najlepsze wyniki, załóż, że wszystkie cztery są dostępne. Gra użyje wtedy poprawnego, jeśli nie jest dostępny.
+
+To wywołanie zwrotne jest "powiązane" <small>''(chained)''</small> , tzn. Jeśli wynik nie jest wynikiem wywołania zwrotnego (wysoki bit nie jest ustawiony), wówczas żądanie jest przekazywane do poprzedniej ogólnej procedury obsługi wywołania zwrotnego, tj. Są sprawdzane w odwrotnej kolejności. Umożliwia to pozostawienie niektórych decyzji poprzedniemu programowi obsługi i pozwala na pewną współpracę między kilkoma plikami .grf.
+
+ Zauważ, że GRF w wersji 7 i niższej rozróżniały tylko zerowe i niezerowe wartości zwracane dla "Check" .
+
+<!--[[Category:Callbacks]]-->[[Category:pl/User/Extrazi/Callbacks]]
