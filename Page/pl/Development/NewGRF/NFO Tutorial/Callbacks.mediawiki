@@ -1,4 +1,4 @@
-
+{{pl/Development/NewGRF/inne strony|en= www.tt-wiki.net/wiki/Callbacks_Tutorial|pl=pl/Development/NewGRF/NFO Tutorial/Callbacks}}
 {{en/-}}<!--<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
 <!--{{NFOTutorial}}-->{{pl/Development/NewGRF/NFO Tutorial/Navigation}}
 
@@ -8,17 +8,17 @@ Od wersji TTDPatch 2.0.1 alpha 11 możliwe jest stosowanie wywołań zwrotnych, 
 
 ==How it works==
 
-When the patch wants to use the value of certain properties, it can ask the graphics file what value to use, instead of simply looking it up in the table set by action 0. It does this if the corresponding callback bit has been set in the vehicle's action 0 properties. Then, the following happens:
-* The patch sets the current callback ID, variable 0C, according to what callback it is
-* Then, the patch starts at the vehicle's action 3 entry and finds the initial action 2 number to use
-* The patch then follows the chain of variational/random action 2 entries
-* The set-id of the final action 2 is used as result for the callback
+Gdy łatka chce użyć wartości niektórych właściwości, może zapytać plik graficzny, jakiej wartości użyć, zamiast po prostu przeglądać ją w tabeli ustawionej przez akcję 0. Robi to, jeśli odpowiedni bit wywołania zwrotnego został ustawiony w działanie pojazdu 0 właściwości. Następnie dzieje się, co następuje:
+* Łatka ustawia bieżący identyfikator oddzwaniania, zmienną 0C, zgodnie z tym, czym jest oddzwanianie
+* Następnie łatka rozpoczyna się od wpisu czynności 3 pojazdu i znajduje początkowy numer czynności 2 do użycia
+* Łatka następnie podąża za ciągiem wpisów wariacyjnych/losowych akcji 2
+* Set-id akcji końcowej 2 jest wykorzystywany jako wynik wywołania zwrotnego
 
-Because callbacks are different from regular vehicle graphics, the last action 2 in the chain must have a set-id with bit 15 set (e.g. XX 80 to return XX), which is invalid for regular graphics. Therefore, at least one action 2 in the chain must check the variable 0C, to decide whether this is a callback or the determination of graphics.
+Ponieważ wywołania zwrotne różnią się od zwykłej grafiki pojazdu, ostatnia akcja 2 w łańcuchu musi mieć ustawiony identyfikator z ustawionym bitem 15 (np. XX 80, aby zwrócić XX), co jest nieprawidłowe w przypadku zwykłej grafiki. Dlatego co najmniej jedno działanie 2 w łańcuchu musi sprawdzić zmienną 0C, aby zdecydować, czy jest to wywołanie zwrotne, czy określenie grafiki.
 
 ==How to define callbacks==
 
-There are several things you have to do to get callbacks to work.
+Jest kilka rzeczy, które musisz zrobić, aby oddzwonić do pracy.
 # If necessary, enable the callback. For vehicles, set the callback bit in the [[en/Grfspecs/Action0|action 0]] property for the vehicle which should use callbacks (props 1E, 17, 12 or 14 depending on vehicle type)
 # Set a default for the value that the callback modifies, e.g. set prop 07 when using the load amount callback
 # Define an [[en/Grfspecs/Action3|action 3]] for the vehicle if it doesn't have one already
@@ -76,7 +76,7 @@ The first example is a simple application. It will set new sounds for a locomoti
 
 ==Example2: using Callbacks 12, 15, and 19==
 
-Suppose you want to build passenger coaches with both first and second class, having different livery and capacity, loading amount, and additional text suffixes. For this to work we'll need callbacks [[en/Grfspecs/Callbacks#load-amount-callback-12|12 (load amount]]), [[en/Grfspecs/Callbacks#refitted-capacity-callback-15|15 (refitted capacity]]) and [[en/Grfspecs/Callbacks#cargo-subtype-display-19|19 (cargo subtype display]]):
+Załóżmy, że chcesz budować autokary pasażerskie pierwszej i drugiej klasy, o różnych barwach i pojemności, ilości załadunku i dodatkowych sufiksach tekstowych. Aby to zadziałało, potrzebujemy połączeń zwrotnych [[en/Grfspecs/Callbacks#load-amount-callback-12|12 (load amount]]), [[en/Grfspecs/Callbacks#refitted-capacity-callback-15|15 (refitted capacity]]) i [[en/Grfspecs/Callbacks#cargo-subtype-display-19|19 (cargo subtype display]]):
 
 In addition, we'll use the feature [[en/VarAction2Vehicles|"refit to same cargo type"]] to be able to change livery, loading amount and capacity deliberately, even if coaches carry only one type of cargo, namely "passengers".
 
@@ -229,9 +229,9 @@ This example will demonstrate how to use [[en/Grfspecs/Callbacks#articulated-eng
 
 ==Example4: using Callbacks 10, 16, 1D and 23==
 
-This example explains how to use [[en/Grfspecs/Callbacks#articulated-engine-callback-10|callbacks 10 (power]]), [[en/Grfspecs/Callbacks#articulated-engine-callback-16|16 (articulated]]),
+Ten przykład wyjaśnia, jak używać [[en/Grfspecs/Callbacks#articulated-engine-callback-10|callbacks 10 (power]]), [[en/Grfspecs/Callbacks#articulated-engine-callback-16|16 (articulated]]),
 
-[[en/Grfspecs/Callbacks#articulated-engine-callback-1d|1D (engine attach]]), and [[en/Grfspecs/Callbacks#articulated-engine-callback-23|23 (additional text in menu]]) to construct a four-part EMU.
+[[en/Grfspecs/Callbacks#articulated-engine-callback-1d|1D (engine attach]]), i [[en/Grfspecs/Callbacks#articulated-engine-callback-23|23 (additional text in menu]]) zbudować czteroczęściową EMU.
 
 The EMU is composed from the same building block, an electric rail car (veh-ID = 62). In addition, it should be allowed to link three of these four-part EMUs, i.e. a full consist may contain 12 rail cars in total.
 
@@ -239,9 +239,9 @@ For sake of realism, no "foreign" vehicles should be allowed to be attached to t
 
 Please notice that CBs 1D and 23 do not need a bit set in action0's property 1E.
 
-Furthermore, it is shown how to make an explicit menu entry for such an EMU. For this to work, we need an extra sprite depicting not the single rail car but the complete four-part EMU. Because this sprite will be used only inside the buying menu, the corresponding sprite block needs only this single sprite for the horizontal direction. All other directions are not needed and hence we don't have to include sprites for them.
+Ponadto pokazano, jak wprowadzić wyraźną pozycję menu dla takiej EMU. Aby to zadziałało, potrzebujemy dodatkowego duszka przedstawiającego nie pojedynczy wagon, ale kompletną czteroczęściową EMU. Ponieważ ten duszek będzie używany tylko w menu zakupu, odpowiedni blok duszka potrzebuje tylko tego jednego duszka dla kierunku poziomego. Wszystkie inne kierunki nie są potrzebne i dlatego nie musimy dołączać do nich duszków.
 
-Also, the variable action2 chain for the menu entry need references for callbacks 16 and 23. The latter is used to place the text of additional information into the menu entry, and CB 16 is needed to get the capacity of the four-part EMU to show up correctly in the buying menu.
+Ponadto zmienny łańcuch akcji2 dla pozycji menu wymaga odniesień dla oddzwaniania 16 i 23. Ten ostatni służy do umieszczania tekstu dodatkowych informacji w pozycji menu, a CB 16 jest potrzebny, aby uzyskać pojemność czteroczęściowej EMU do wyświetlają się poprawnie w menu zakupów.
 
 <pre>
 0 * 4	39 00 00 00
