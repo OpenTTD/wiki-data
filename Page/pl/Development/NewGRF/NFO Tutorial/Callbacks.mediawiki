@@ -1,0 +1,344 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+{{en/NFOTutorial}}
+
+=Callbacks in Graphics Files=
+
+Od wersji TTDPatch 2.0.1 alpha 11 możliwe jest stosowanie wywołań zwrotnych, w których pliki graficzne mogą wpływać na działanie funkcji TTDPatch. Jest to o wiele bardziej wyrafinowane niż zwykłe użycie akcji 0 do wybierania różnych ustawień, w tym, że oddzwanianie może wykorzystywać pełne możliwości wpisów wariacyjnych i losowych akcji 2.
+
+==How it works==
+
+When the patch wants to use the value of certain properties, it can ask the graphics file what value to use, instead of simply looking it up in the table set by action 0. It does this if the corresponding callback bit has been set in the vehicle's action 0 properties. Then, the following happens:
+* The patch sets the current callback ID, variable 0C, according to what callback it is
+* Then, the patch starts at the vehicle's action 3 entry and finds the initial action 2 number to use
+* The patch then follows the chain of variational/random action 2 entries
+* The set-id of the final action 2 is used as result for the callback
+
+Because callbacks are different from regular vehicle graphics, the last action 2 in the chain must have a set-id with bit 15 set (e.g. XX 80 to return XX), which is invalid for regular graphics. Therefore, at least one action 2 in the chain must check the variable 0C, to decide whether this is a callback or the determination of graphics.
+
+==How to define callbacks==
+
+There are several things you have to do to get callbacks to work.
+# If necessary, enable the callback. For vehicles, set the callback bit in the [[en/Grfspecs/Action0|action 0]] property for the vehicle which should use callbacks (props 1E, 17, 12 or 14 depending on vehicle type)
+# Set a default for the value that the callback modifies, e.g. set prop 07 when using the load amount callback
+# Define an [[en/Grfspecs/Action3|action 3]] for the vehicle if it doesn't have one already
+# Add a [[en/Grfspecs/VariationalAction2|variational action 2]] that checks the callback variable 0C for the value of the callback. See the description of a variational action 2 to find what values those are.
+# Variable 0C should be accessed as a word. Even when the callbacks IDs you want to test are below 0xFF.
+# This variational action 2 has to return a callback result (set-id with bit 15 set) when in a callback, or a regular set-id when not in a callback
+# Make sure that the "default" of the var. 0C check (corresponding to unknown callbacks) points to a regular action 2 instead of one that returns callback results, ideally using the same action 2 as in the non-callback case. This way, unknown callbacks will fail instead of returning valid, but wrong, results.
+
+As explained above, a callback result is something like <tt>06 80</tt> (with 06 being used as value of the callback), instead of a regular set-id that would be for example <tt>04 00</tt>.
+
+==Examples==
+
+Be aware that following examples don't result into 100% complete newgrfs, but instead concentrate on the most important code features. E.g., in the given [[en/Grfspecs/Action0Trains|action0s]] you'd have to add even more properties to get a well-working newgrf, or, in case an example describes only one vehicle in detail, references to other vehicles, e.g. a locomotive, are given in a symbolic form ("xx", "nn") rather than implementing it in detail and giving correct veh-IDs or c-IDs.
+
+==Example1: using Callback 33 (new sounds)==
+
+The first example is a simple application. It will set new sounds for a locomotive by using [[en/Grfspecs/Callbacks#sound-effect-callback-33|callback 33]]. The new sounds will be supplied by two .wav files using [[en/Grfspecs/Action11|action 11]]. Newly defined sounds will start from slot 73 (49h), numbers 0 - 48h being original TTD sounds. The type of event (under which circumstances a particular sound should be played) is read from variable 10.
+
+<pre>
+0 * 4	0F 00 00 00
+
+// add an action 08
+1 * 8	08 02 xx xx xx xx 00 00
+
+// set engine (00) to use new sprites, enable for callback 33
+2 * 9	00 00 02 01 00 
+		12 FD	// use new sprites 
+		1E 80	// enable CB 33
+
+// define sound files, first available slot being 49h
+3 * 3	11 02 00
+4 ** C:\ttdlx\newgrf\sprites\start.wav	// 49: whistle (departure)
+5 ** C:\ttdlx\newgrf\sprites\tunnel.wav	// 4A: whistle (in tunnel)
+
+// engine sprites go here
+6 * 4	01 00 01 04
+[...]	// 4 sprites for engine
+
+// c-ID 0 use above set of sprites
+11 * 9	02 00 00 01 01 00 00 00 00	// engine 
+	
+// sound events are read from var10:
+12 * 18	02 00 01 81 10 00 FF 02
+		49 80 01 01	// whistle: departure
+		4A 80 02 02	// whistle: in tunnel
+		00 00		// else CB fail
+
+// switch between callback and graphics branch
+13 * 17	02 00 02 85 0C 00 FF FF 01
+		01 00 33 00 33 00	// is CB 33, set sound
+		00 00			// graphics
+
+14 * 7	03 00 01 00 00 02 00	// engine
+</pre>
+
+==Example2: using Callbacks 12, 15, and 19==
+
+Suppose you want to build passenger coaches with both first and second class, having different livery and capacity, loading amount, and additional text suffixes. For this to work we'll need callbacks [[en/Grfspecs/Callbacks#load-amount-callback-12|12 (load amount]]), [[en/Grfspecs/Callbacks#refitted-capacity-callback-15|15 (refitted capacity]]) and [[en/Grfspecs/Callbacks#cargo-subtype-display-19|19 (cargo subtype display]]):
+
+In addition, we'll use the feature [[en/VarAction2Vehicles|"refit to same cargo type"]] to be able to change livery, loading amount and capacity deliberately, even if coaches carry only one type of cargo, namely "passengers".
+
+In the .nfo, the actual "refitting" is done by referencing variable F2, which holds how many times a vehicle was refitted to the same cargo type. In game, there will be two entries generated in the refit menu containing these text suffixes generated by an [[en/Grfspecs/Action4|action 4]]. Namely "passengers (1st class)" and "passengers (2nd class)" from which to choose the desired type of coach. Likewise, load amount and capacity are linked to variable F2 as well and will be changed accordingly.
+
+<pre>
+0 * 4	15 00 00 00
+	
+// add an action 08
+1 * 8	08 02 xx xx xx xx 00 00
+
+// define additional text suffixes
+2 * 0	04 00 1F 02 00 D0
+		" (1st class)" 00	// D000 = "1st class"
+               	" (2nd class)" 00	// D001 = "2nd class"
+
+// set coach (1B) to use new sprites, 
+// enable for callbacks 12, 15 and 19
+3 * 9	00 00 02 01 1B 
+		12 FD	// use new sprites 
+		1E 2C	// enable CB 12, 15 and 19
+
+// coach sprites go here
+4 * 4	01 00 02 04
+[...]	// 4 sprites for 1st class coach
+[...]	// 4 sprites for 2nd class coach
+
+// c-IDs 0..1 use above set of sprites
+13 * 9	02 00 00 01 01 00 00 00 00	// 1st class
+14 * 9	02 00 01 01 01 01 00 01 00	// 2nd class
+
+// next 4 pseudo sprites are checking var F2, 
+// thus constituting the two refitting possibilities:
+// [1st class, 48 passengers, load amount = 6]  and
+// [2nd class, 56 passengers, load amount = 8]
+
+// set load amount
+15 * 14	02 00 02 81 F2 00 FF 01
+		06 80 00 00	// 1st class = 6/tick
+		08 80		// 2nd class = 8/tick
+
+// set refitted capacity
+16 * 14	02 00 03 81 F2 00 FF 01
+		30 80 00 00	// 1st class = 48 pass  
+		38 80		// 2nd class = 56 pass 
+
+// set text suffixes
+17 * 18	02 00 04 81 F2 00 FF 02
+		00 80 00 00	// "1st class"
+		01 80 01 01	// "2nd class"
+		FF 80
+
+// set livery
+18 * 14	02 00 05 81 F2 00 FF 01
+		00 00 00 00	// 1st class
+		01 00		// 2nd class
+
+// switch between callbacks and graphics branch
+19 * 29	02 00 06 85 0C 00 FF FF 03
+		02 00 12 00 12 00	// is CB12, set load amount
+		03 00 15 00 15 00	// is CB15, set refit capacity
+		04 00 19 00 19 00	// is CB19, set text suffix
+		05 00			// graphics
+
+20 * 7	03 00 01 1B 00 06 00	// coach
+</pre>
+
+==Example3: using callbacks 11 (wagon length) and 16 (articulated engine)==
+
+This example will demonstrate how to use [[en/Grfspecs/Callbacks#articulated-engine-callback-16|callback 16]] for designing "articulated vehicles", e.g. locomotives with tenders. We'll set up two locomotives using two different tenders: <engine1> will use a standard short <tender1> and <engine2> will use the even shorter <tender2> by applying [[en/Grfspecs/Callbacks#wagon-length-callback-11|callback 11]].
+
+<pre>
+0 * 4	34 00 00 00
+
+// add an action 08
+1 * 8	08 02 xx xx xx xx 00 00
+
+// set the generic tender (2D) to use new sprites, 
+// enable for callback 11
+2 * 13	00 00 04 01 2D 
+		06 00	// don't show up in menu
+		12 FD	// use new sprites 
+		1E 02	// enable CB 11
+		21 02	// make shorter by 25%
+
+// tender sprites go here
+3 * 4	01 00 02 08
+[...]	// 8 sprites for tender1
+[...]	// 8 sprites for tender2
+
+// Cargo-ids 0..1 use above set of sprites
+20 * 9	02 00 F0 01 01 00 00 00 00	// tender1 (F0)
+21 * 9	02 00 00 01 01 01 00 01 00	// tender2
+
+// tender2 (F1) is shorter
+22 * 18	02 00 F1 85 0C 00 FF FF 01
+		03 80 11 00 11 00	// is CB11: make shorter by 37.5%
+		00 00			// graphics
+
+23 * 7	03 00 01 2D 00 F0 00	// standard tender
+
+// set two engines (00 and 01) to use new sprites, 
+// enable for callback 16
+24 * 11	00 00 02 02 00 
+		12 FD FD	// use new sprites 
+		1E 10 10	// enable CB 16
+
+// engine sprites go here
+25 * 4	01 00 02 08
+[...]	// 8 sprites for engine1
+[...]	// 8 sprites for engine2
+
+// Cargo-ids 0..1 use above set of sprites
+42 * 9	02 00 00 01 01 00 00 00 00	// engine1
+43 * 9	02 00 01 01 01 01 00 01 00	// engine2
+
+// <engine1> uses standard <tender1>
+// engine is articulated, so show either engine (00) or tender (F0)
+44 * 14	02 00 02 81 41 00 01 01
+		00 00 00 00	// engine1
+		F0 00		// tender1
+
+// set articulated CB
+45 * 14	02 00 03 81 10 00 FF 01
+		2D 80 01 01	// add tender (2D)
+		FF 80		// end of articulated vehicle
+
+// Switch between callback and graphics branch
+46 * 17	02 00 04 85 0C 00 FF FF 01
+		03 00 16 00 16 00	// is CB16, handle it
+		02 00			// graphics
+
+47 * 7	03 00 01 00 00 04 00	// engine1 with tender1
+
+// <engine2> uses shorter <tender2>
+// engine is articulated, so show either engine (01) or tender (F1)
+48 * 14	02 00 02 81 41 00 01 01
+		01 00 00 00	// engine2
+		F1 00		// tender2
+
+// switch between callback and graphics branch
+49 * 17	02 00 04 85 0C 00 FF FF 01
+		03 00 16 00 16 00	// is CB 16, handle it 
+						// (same as for <engine1>)
+		02 00			// graphics
+
+50 * 7	03 00 01 01 00 04 00	// engine2
+51 * 7  03 00 81 2D 00 F1 00    // override with tender2
+</pre>
+
+==Example4: using Callbacks 10, 16, 1D and 23==
+
+This example explains how to use [[en/Grfspecs/Callbacks#articulated-engine-callback-10|callbacks 10 (power]]), [[en/Grfspecs/Callbacks#articulated-engine-callback-16|16 (articulated]]),
+
+[[en/Grfspecs/Callbacks#articulated-engine-callback-1d|1D (engine attach]]), and [[en/Grfspecs/Callbacks#articulated-engine-callback-23|23 (additional text in menu]]) to construct a four-part EMU.
+
+The EMU is composed from the same building block, an electric rail car (veh-ID = 62). In addition, it should be allowed to link three of these four-part EMUs, i.e. a full consist may contain 12 rail cars in total.
+
+For sake of realism, no "foreign" vehicles should be allowed to be attached to the EMU. This is achieved by checking the veh-ID from [[en/VarAction2Vehicles|variable C6]]. Appropriate error messages will be generated if there's something wrong, either with number or with type of added vehicles.
+
+Please notice that CBs 1D and 23 do not need a bit set in action0's property 1E.
+
+Furthermore, it is shown how to make an explicit menu entry for such an EMU. For this to work, we need an extra sprite depicting not the single rail car but the complete four-part EMU. Because this sprite will be used only inside the buying menu, the corresponding sprite block needs only this single sprite for the horizontal direction. All other directions are not needed and hence we don't have to include sprites for them.
+
+Also, the variable action2 chain for the menu entry need references for callbacks 16 and 23. The latter is used to place the text of additional information into the menu entry, and CB 16 is needed to get the capacity of the four-part EMU to show up correctly in the buying menu.
+
+<pre>
+0 * 4	39 00 00 00
+
+// add an action 08
+1 * 8	08 02 xx xx xx xx 00 00
+
+// CB 1D error messages 
+2 * 0	04 00 81 02 20 D0
+		" (wrong number of cars)" 00	// D020
+		" (wrong type of car)" 00	// D021
+
+// CB 23 additional text for menu
+3 * 0	04 00 81 01 22 D0
+		0d 91 "4-part EMU for commuter service." 
+                " (Links max 12 parts)" 00
+
+// set rail car (62) to use new sprites, 
+// enable for callbacks 10 and 16
+4 * 11	00 00 03 01 62
+		12 FD	// use new sprites 
+		19 30	// electric traction
+		1E 11	// enable CBs 10 and 16
+
+//----------------------------------------------------------
+// the "train"
+//----------------------------------------------------------
+
+// all rail car sprites go here
+5 * 4	01 00 04 08
+[...]	// sprites for 1st car
+[...]	// sprites for 2nd car
+[...]	// sprites for 3rd car
+[...]	// sprites for 4th car
+
+// c-IDs 0..3 use above set of sprites
+38 * 9	02 00 00 01 01 00 00 00 00	// 1st car
+39 * 9	02 00 01 01 01 01 00 01 00	// 2nd car
+40 * 9	02 00 02 01 01 02 00 02 00	// 3rd car
+41 * 9	02 00 03 01 01 03 00 03 00	// 4th car
+
+// determine which car we are at. AND-ing the number of vehicles
+// in consist is more efficient as a "modulo-4" operation would be.
+42 * 22	02 00 04 81 40 00 03 03
+		03 00 03 03	// 4th car
+		02 00 02 02	// 3rd car
+		01 00 01 01	// 2nd car
+		00 00		// 1st car
+
+// set CB 16 (articulated vehicle)
+43 * 14	02 00 05 81 10 00 FF 01
+		62 80 01 03	// 3 additional parts of veh-ID 62
+		FF 80		// end articulated vehicle		
+
+// set CB 1D (engine attach)
+// allow only 3 * EMU (= 12 cars) in total
+44 * 14	02 00 06 82 40 10 FF 01
+		FE 80 00 09	// allow adding of max 8 cars
+		20 80		// error: "wrong number of cars" 
+
+// allow only EMU to attach itself, nothing else
+45 * 14	02 00 07 81 C6 00 FF 01
+		06 00 62 62	// allow
+		21 80		// error: "wrong type of car"
+
+// only car1 and, if exist, 5 and 9 should be sparking 
+// we're using a modulo-4 operation -> 80-FF-00-04
+46 * 16      02 00 08 81 40 80 FF 00 04 01
+		33 80 01 01	// sparks
+		40 80		// no sparks
+
+// switch between callback and graphics branch
+47 * 29	02 00 09 85 0C 00 FF FF 03
+		05 00 16 00 16 00	// is CB16, handle it
+		07 00 1D 00 1D 00	// is CB 1D, handle it
+		08 00 10 00 10 00	// is CB 10, handle it
+		04 00			// graphics
+
+//----------------------------------------------------------
+// menu entry
+//----------------------------------------------------------
+
+48 * 4	01 00 01 04
+
+49 * 1	00
+50 * 1	00
+51 C:\ttdlx\newgrf\sprites\emu.pcx 226 120 01 15 91 -27 -11
+52 * 1	00
+
+53 * 9	02 00 00 01 01 00 00 00 00
+
+// switch between callback and graphics branch
+54 * 23	02 00 01 85 0C 00 FF FF 02
+		05 00 16 00 16 00	// CB 16 (for capacity calculation)
+		22 80 23 00 23 00	// CB 23, show additional text
+		00 00			// graphics
+
+55 * 10	03 00 01 62 01 FF 01 00 09 00
+</pre>
+[[Category:en/Tutorials]][[Category:en/GRF Tutorial]]
