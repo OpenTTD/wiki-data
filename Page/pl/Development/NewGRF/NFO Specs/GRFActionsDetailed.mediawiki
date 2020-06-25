@@ -1,0 +1,99 @@
+
+<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+Technical reference of the new .grf actions
+
+==General Information==
+
+Następne kilka stron szczegółowo opisuje składnię akcji GRF TTDPatch. Na każdej stronie znajdziesz listę elementów składniowych, które tworzą linię dla tej akcji w pliku .nfo.
+
+Każdy element ma rozmiar (ile bajtów wykorzystuje w danych pseudo duszka). To są możliwe rozmiary:
+
+{|
+!Size !!Description
+|-
+|dec ||This value is given in decimal, not hexadecimal; the size is therefore irrelevant
+|-
+|B ||This parameter is a single byte
+|-
+|B* ||This parameter is an extended byte (either a byte, or a word value)
+|-
+|W ||This parameter is a two-byte word, specified in little-endian byte order
+|-
+|D ||This parameter is a four-byte dword, again in little-endian byte order
+|-
+|S ||This parameter is variable-length, zero terminated text string
+|-
+|V ||This parameter has a variable length, which depends on one of the previous parameters; it will be described there.
+|}
+
+Extended bytes work like this:
+* To specify a value of 0..FE, simply use that byte value
+* To specify a value of FF..FFFF, use a literal FF followed by the word value, e.g. for 320d (140 hex) use FF 40 01.
+
+==Comments==
+
+===Byte order===
+
+For values larger than one byte (i.e. W and D), the value must be split into individual bytes in the right order. This order is the so-called [http://en.wikipedia.org/wiki/Endianness little-endian] order, with the least significant bytes first.
+
+Here's how you convert a hexadecimal number into its little-endian bytes
+#Pad with zeroes from the left until you have twice as many digits as you need bytes (i.e. 4 digits for W, 8 digits for D)
+#Split into groups of two digits
+#Write these groups backwards
+
+====Examples====
+
+* 123 in W becomes 0123, then 01 23, so finally 23 01
+* 12345 in D becomes 00012345, then 00 01 23 45, so finally 45 23 01 00
+
+====Escape sequences====
+
+In Info version 7 and later (supported by grfcodec version 0.9.9 and later), grfcodec can do some of this work for you. Instead of doing the above, you may use any of the following escape sequences:
+
+* \b<dec>
+* \b<year>
+* \b*<dec>
+* \w<dec>
+* \wx<hex>
+* \w<date>
+* \d<dec>
+* \dx<hex>
+* \d<date> (Only supported by nforenum 3.4.6 and grfcodec 0.9.11 (r1703) and later.)
+
+
+Where:
+
+The second character (or, in the case of \b*, the second and third characters) indicates the number of required bytes: b for a byte, b* for an extended byte, w for a word, and d for a dword.
+
+* <dec> is any positive decimal integer that fits in the given width.
+* <year> is a year; the resultant byte will be <year>-1920
+* <hex> is any big-endian hexadecimal integer that fits in the given width.
+* <date> is a date in one of the four formats YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY, or DD/MM/YYYY. In all cases, leading zeros may be omitted.
+
+In the word-sized dates, the years 1932..2000 may be specified with only two digits.
+
+To avoid ambiguity, dword-sized dates before 1 Jan 32 must be specified with the YMD formats, not the DMY formats. eg 10 Feb 20 is \d20-2-10.
+
+
+There are also certain action-specific escape sequences; these are of the format <tt>\<action><operator></tt>, where the sequence is used for the action <tt><action></tt>, and <tt><operator></tt> is a C operator related to the function of the sequence's byte value, or something vaguely related to a C operator. Or something else.
+
+These are discussed in further detail on the appropriate action's page.
+
+
+Note that this behaviour is only supported in Info version 7 and later; in Info version 6 and earlier, such escape sequences are errors.
+
+===Strings===
+
+Strings are written as individual characters in hex codes, with a final 00 to indicate the end of the string. For example, "Hello" is 48 65 6D 6D 6F 00.
+
+To convert text into the syntax needed for .nfo files, you can use the [http://www.ttdpatch.net/cgi-bin/str2hex.pl str2hex] converter. As of grfcodec 0.9.6, you may also put literal strings right in the .nfo. Note that you may only use characters in the latin1 character set, which is what TTD uses. &nbsp;Other characters will either not show up in TTD or they will mess up the entire display.
+
+If you end up with any characters in the range 7B to 9F, remove them from the string. See [[pl/Development/NewGRF/NFO Specs/StringCodes|StringCodes]] for more details.
+
+In Info version 7 and later, strings behave mostly as they do in the C family of languages: \\, \n, and \" insert a single backslash, a line feed (0D), and a double quote (22), respectively. In addition, \<hex> (up to two characters) inserts the byte <hex>, and \U<hex> (up to four characters) inserts the UTF-8 encoding of the character U+<hex>
+
+Note that this behaviour is only supported in Info version 7 and later; in Info version 6 and earlier, the backslash is not an escape character. ("\\" encodes as one byte in Info version 7, but two bytes in Info version 6.)
+
+==Lista Actions==
+
+Zobacz <!--[[Main Page]]-->[[pl/ExtraZi/specs.tt|specs.tt]]
