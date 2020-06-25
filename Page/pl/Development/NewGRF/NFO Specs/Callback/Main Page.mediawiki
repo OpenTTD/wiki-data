@@ -2,35 +2,35 @@
 <!--{{-}}<br>-->{{en/Ambox| text = w trakcie edycji.}}<!-- -->
 ==Wprowadzenie==
 
-Oddzwonienie to specjalne działanie 2, które łata "wywołuje" <small>''(calls)''</small> w celu zmodyfikowania różnych funkcji, czego przykładem jest efekt wizualny pojazdów kolejowych. &nbsp;Zobacz [[en/Ttwiki/CallbacksTut|callback tutorial]] , jak ich używać.
+Oddzwonienie to specjalne działanie 2, które łata "wywołuje" <small>''(calls)''</small> w celu zmodyfikowania różnych funkcji, czego przykładem jest efekt wizualny pojazdów kolejowych. &nbsp;Zobacz <!--[[ttwiki:CallbacksTut|callback tutorial]]-->[[pl/Development/NewGRF/NFO Tutorial/Callbacks|callback tutorial]] , jak ich używać.
 
 W ostatnim działaniu 2 łańcucha VarAction2s drugi bajt pasującego wpisu musi mieć ustawiony bit 7, aby zidentyfikować go jako wynik wywołania zwrotnego.
 
 Na przykład 04 00 nie jest wynikiem wywołania zwrotnego (ale może być identyfikatorem innego powiązanego działania 2), podczas gdy 04 80 jest wynikiem wywołania zwrotnego o wartości 4. W sumie wywołanie zwrotne ma 15-bitowe wartości wyniku, przy czym górna 7 bitów jest zapisanych w drugim bajcie. Na przykład 54 C2 jest wynikiem wywołania zwrotnego o wartości 4254 = 16980, gdzie znowu drugi bajt ma ustawiony bit 7, zmieniając 42 na C2.
 
-{{en/GrfTill|7}} For GRF version 7 and below not all 15 bit values are available as return values, only values between 00 and 7EFF.
-For compatibility with earlier patch versions, FF in the high byte is taken to mean the same thing as 80, so 04 FF also has a callback result of 4. Note that if your grf file needs to be compatible with versions before TTDPatch 2.0.1 alpha 40, you must set the high byte to FF, and so can use only 8 bit results.
+ Dla GRF w wersji 7 i niższej nie wszystkie 15-bitowe wartości są dostępne jako wartości zwracane, tylko wartości od 00 do 7EFF.
+Dla kompatybilności z wcześniejszymi wersjami łatek, FF w górnym bajcie oznacza to samo co 80, więc 04 FF ma również wynik wywołania zwrotnego 4. Uwaga: jeśli twój plik grf musi być zgodny z wersjami przed TTDPatch 2.0.1 alfa 40, musisz ustawić wysoki bajt na FF, więc możesz użyć tylko 8-bitowych wyników.
 
-{{en/GrfFrom|8}} For GRF version 8 and above this compatibility layer has been removed. Callbacks can return all 15 bit values between 00 and 7FFF.
+{{pl/Development/NewGRF/grfFrom|8}} Dla GRF w wersji 8 i wyższej ta warstwa zgodności została usunięta. Oddzwanianie może zwrócić wszystkie 15-bitowe wartości między 00 a 7FFF.
 
-To check for a specific callback, use an [[en/VariationalAction2]] or [[en/VarAction2Advanced]] to check for variable 0C.
-* Variable 0C contains the callback number.
-* Variable 0C is a word, thus the VarAction2 must use type 85.
-* Results can be specified directly using 8xxx values (see above), or with 8xxx value in subsequent (Basic/Variational/Random)Action2 which are referenced as usual with their set-id.
-* The default case of the VarAction2 must point to the regular graphics chain, so that unknown/future callbacks results in a "callback failure" result.
+Aby sprawdzić określone oddzwonienie, użyj [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page|VariationalAction2]] lub [[pl/Development/NewGRF/NFO Specs/VarAction2Advanced|VarAction2Advanced]] , aby sprawdzić zmienną 0C .
+* Zmienna 0C zawiera numer zwrotny.
+* Zmienna 0C jest słowem, dlatego VarAction2 musi używać typu 85.
+* Wyniki można określić bezpośrednio przy użyciu wartości 8xxx (patrz wyżej) lub wartości 8xxx w kolejnej (Podstawowej/Wariacyjnej/Losowej) akcji 2, do której zwykle przypisano ich identyfikator zestawu.
+* Domyślny przypadek VarAction2 musi wskazywać na zwykły łańcuch graficzny, aby nieznane/przyszłe wywołania zwrotne skutkowały "niepowodzeniem wywołania zwrotnego" <smal>''(callback failure)''</small> .
 
-Example:
+Przykład:
  <Sprite-number> * <Length> 02 <feature> <set-id> 85 0C 00 \wxFFFF
                                <nvar> (<set-id/result> \wx <callback> \wx <callback>){n}
                                        <set-id of graphics chain>
 
-The format for VarAction2 is explained in detail on the [[en/VariationalAction2]] page.
+Format VarAction2 wyjaśniono szczegółowo na stronie [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page|VariationalAction2]] .
 
 == List of callbacks ==
 
-The following callbacks are defined by the patch. &nbsp;The number of the callback is what will be stored in variable 0C so that you can return the right results if you have several callbacks. &nbsp;All callbacks are explained in more detail below.
+Następujące wywołania zwrotne są zdefiniowane przez łatkę. &nbsp;Liczba oddzwaniania będzie przechowywana w zmiennej 0C, abyś mógł zwrócić prawidłowe wyniki, jeśli masz kilka oddzwonień. &nbsp;Wszystkie połączenia zwrotne wyjaśniono bardziej szczegółowo poniżej.
 
-'''PLEASE NOTE:''' Since TTDPatch 2.5 beta 5, the size of variable 0C has changed, and now there are word-sized callback numbers as well. To maintain backwards compatibility, only callbacks 10..3F can be checked using a byte-sized check. Callbacks 140 and above, on the other hand, must be checked using a word or dword sized check, to make sure they are identified uniquely.
+'''PROŚBA UWAGI:''' Od czasu TTDPatch 2.5 beta 5 zmieniła się wielkość zmiennej 0C, a teraz istnieją również numery zwrotne wielkości słowa. Aby zachować zgodność wsteczną, tylko wywołania zwrotne 10..3F można sprawdzić za pomocą kontroli wielkości bajtów. Z drugiej strony, wywołania zwrotne 140 i wyższe muszą być sprawdzane za pomocą czeku o rozmiarze słowa lub dworda, aby upewnić się, że są jednoznacznie zidentyfikowane.
 
 {| |-
 !Number!!Feature(s)!!Meaning
@@ -137,7 +137,7 @@ The following callbacks are defined by the patch. &nbsp;The number of the callba
 |-
 |143||Houses||Protect building conditionally
 |-
-|144||Sounds <ref name="generic"/>||{{en/Ottdp|1.2|2.6|ottdrev=r23144|ttdprev=r821}} Ambient sound effects
+|144||Sounds <ref name="generic"/>||{{pl/Development/NewGRF/ottdp|1.2|2.6|ottdrev=r23144|ttdprev=r821}} Ambient sound effects
 |-
 |145||Cargoes||Custom station rating calculation
 |-
@@ -161,17 +161,17 @@ The following callbacks are defined by the patch. &nbsp;The number of the callba
 |-
 |14F||Houses||Disable autosloping
 |-
-|150||Airport tiles||{{en/Ottdp|1.1|no|ottdrev=r19197}} Decide drawing default foundations
+|150||Airport tiles||{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=r19197}} Decide drawing default foundations
 |-
-|152||Airport tiles||{{en/Ottdp|1.1|no|ottdrev=r19197}} Animation control
+|152||Airport tiles||{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=r19197}} Animation control
 |-
-|153||Airport tiles||{{en/Ottdp|1.1|no|ottdrev=r19197}} Next Animation frame
+|153||Airport tiles||{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=r19197}} Next Animation frame
 |-
-|154||Airport tiles||{{en/Ottdp|1.1|no|ottdrev=r19197}} Length of animation frame
+|154||Airport tiles||{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=r19197}} Length of animation frame
 |-
-|155||Airports||{{en/Ottdp|1.1|no|ottdrev=r20373}} Extra information about airport layout in the build gui
+|155||Airports||{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=r20373}} Extra information about airport layout in the build gui
 |-
-|156||Airports||{{en/Ottdp|1.1|no|ottdrev=r20373}} Airport layout name
+|156||Airports||{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=r20373}} Airport layout name
 |-
 |157||Objects||Land slope check
 |-
@@ -187,11 +187,11 @@ The following callbacks are defined by the patch. &nbsp;The number of the callba
 |-
 |15D||Objects||Disable autosloping
 |-
-|15E||Vehicles||{{en/Ottdp|1.2|no|ottdrev=r23124}} Refit cost factor
+|15E||Vehicles||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23124}} Refit cost factor
 |-
-|15F||Industries||{{en/Ottdp|1.3|no|ottdrev=r24186}} Set initial production level on construction
+|15F||Industries||{{pl/Development/NewGRF/ottdp|1.3|no|ottdrev=r24186}} Set initial production level on construction
 |-
-|160||Vehicles||{{en/Ottdp|1.5|no|ottdrev=r26747}} Advanced effect creation
+|160||Vehicles||{{pl/Development/NewGRF/ottdp|1.5|no|ottdrev=r26747}} Advanced effect creation
 |}
 <references/>
 
