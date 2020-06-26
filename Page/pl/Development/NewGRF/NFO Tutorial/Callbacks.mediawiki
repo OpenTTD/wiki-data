@@ -19,10 +19,10 @@ Ponieważ wywołania zwrotne różnią się od zwykłej grafiki pojazdu, ostatni
 ==How to define callbacks==
 
 Jest kilka rzeczy, które musisz zrobić, aby oddzwonić do pracy.
-# If necessary, enable the callback. For vehicles, set the callback bit in the [[en/Grfspecs/Action0|action 0]] property for the vehicle which should use callbacks (props 1E, 17, 12 or 14 depending on vehicle type)
+# If necessary, enable the callback. For vehicles, set the callback bit in the [[pl/Development/NewGRF/NFO Specs/Action0/Main Page|action 0]] property for the vehicle which should use callbacks (props 1E, 17, 12 or 14 depending on vehicle type)
 # Set a default for the value that the callback modifies, e.g. set prop 07 when using the load amount callback
-# Define an [[en/Grfspecs/Action3|action 3]] for the vehicle if it doesn't have one already
-# Add a [[en/Grfspecs/VariationalAction2|variational action 2]] that checks the callback variable 0C for the value of the callback. See the description of a variational action 2 to find what values those are.
+# Define an [[pl/Development/NewGRF/NFO Specs/Action3/Main Page|action 3]] for the vehicle if it doesn't have one already
+# Add a [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page|variational action 2]] that checks the callback variable 0C for the value of the callback. See the description of a variational action 2 to find what values those are.
 # Variable 0C should be accessed as a word. Even when the callbacks IDs you want to test are below 0xFF.
 # This variational action 2 has to return a callback result (set-id with bit 15 set) when in a callback, or a regular set-id when not in a callback
 # Make sure that the "default" of the var. 0C check (corresponding to unknown callbacks) points to a regular action 2 instead of one that returns callback results, ideally using the same action 2 as in the non-callback case. This way, unknown callbacks will fail instead of returning valid, but wrong, results.
