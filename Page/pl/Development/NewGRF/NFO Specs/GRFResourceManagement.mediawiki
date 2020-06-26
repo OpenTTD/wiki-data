@@ -1,4 +1,4 @@
-
+{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/GRFResourceManagement|pl=pl/Development/NewGRF/NFO Specs/GRFResourceManagement}}
 <!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
 == Wprowadzenie ==
 
@@ -48,13 +48,13 @@ Ten typ akcji D jest ignorowany podczas inicjalizacji (ponieważ zasoby równie�
 |<count>||W||Number of IDs to operate on.
 |}
 
-For the check, mark, no-fail check, and get-owner operations, <target> must contain the first ID to be operated on.
+W przypadku operacji sprawdzania, oznaczania, sprawdzania bezawaryjnego i uzyskiwania informacji o właścicielu <target> musi zawierać pierwszy identyfikator, który będzie obsługiwany.
 
 == Description of GRM-ops ==
 
-The following operations are available:
+Dostępne są następujące operacje:
 
-Each operation also has a corresponding escape sequence, as listed. See [[en/GRFActionsDetailed#byte-order|the discussion of escape sequences]] for further information on escape sequences in general.
+Każda operacja ma również odpowiednią sekwencję zmiany znaczenia, zgodnie z listą. Zobacz [[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed#byte-order|the discussion of escape sequences]] w celu uzyskania dalszych informacji na temat sekwencji specjalnych.
 
 {|
 !Number!!Escape!!Operation!!Result!!Meaning
@@ -81,13 +81,13 @@ Each operation also has a corresponding escape sequence, as listed. See [[en/GRF
 |06||\DO||Get Owner||GRF-ID of owner||Retrieve GRFID that has reserved the given ID (or 0 if not reserved)
 |}
 
-Action D returns its result (if any) in the given <target> parameter. If the result is marked as "(none)" in the above table, the <target> parameter is not modified.
+Działanie D zwraca wynik (jeśli istnieje) w danym parametrze <target>. Jeśli wynik zostanie oznaczony jako "(none)" w powyższej tabeli, parametr <target> nie zostanie zmodyfikowany.
 
 The "reserve" and "find" operations will try to find a contiguous block of <count> entries, and store the first number in the target parameter of the action D. If not enough entries can be found, the grf file is deactivated. For OpenTTD it's not useful to split large blocks into multiple smaller blocks, as it is unlikely that even a large block can't be found in the 16777216 allocatable sprites.
 
 The "check" and "mark" operations use the value stored in the ''target'' parameter of the action D, and check/mark the block of <count> entries starting from that number. If not all entries are available, the grf file is deactivated.
 
-The no-fail versions work exactly like their regular counterparts, but they set the <target> parameter to -1 (FFFFFFFF) if the resources are unavailable, which can be checked with action 7 afterwards. They do not deactivate the grf file. If successful, they do nothing. They are useful if the file wants to voluntarily skip certain modifications in case other files have changed them already.
+Wersje bezawaryjne działają dokładnie tak, jak ich zwykłe odpowiedniki, ale ustawiają parametr <target> na -1 (FFFFFFFF), jeśli zasoby są niedostępne, co można sprawdzić za pomocą akcji 7. Nie dezaktywują pliku grf. Jeśli się powiedzie, nic nie robią. Są one przydatne, jeśli plik chce dobrowolnie pominąć niektóre modyfikacje w przypadku, gdy inne pliki już je zmieniły.
 
 Typically, the "reserve" or "find" operations will be used for files that modify only a few vehicles. For (mostly) complete sets, the "check" and "mark" operations are more useful, because it is often not feasible to remap the IDs of an entire set, so these operations will simply make sure that all needed IDs are available.
 
@@ -95,7 +95,7 @@ For each feature, multiple "find" operations will check for different size block
 
 == Support for features ==
 
-The following features and feature/GRM-op combinations are supported:
+Obsługiwane są następujące funkcje i kombinacje funkcji/GRM-op:
 
 {|
 !Feature!!Reserve!!Find!!Check!!Mark!!Get!!Notes
