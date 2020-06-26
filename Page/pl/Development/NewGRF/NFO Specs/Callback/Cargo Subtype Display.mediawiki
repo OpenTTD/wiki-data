@@ -1,0 +1,24 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Cargo_Subtype_Display|pl=pl/Development/NewGRF/NFO Specs/Callback/Cargo Subtype Display}}
+</noinclude>== Cargo Subtype Display (19) ==
+
+To wywołanie zwrotne pozwala wyświetlać tekst po nazwie ładunku podczas ponownego montażu oraz na wyświetlaczu pojemności pojazdu. Jest to przydatne do rozróżnienia kilku podtypów określonego ładunku, np. towarami mogą być samochody, ropa naftowa, blachy itp.
+
+Wartość zwracana musi być liczbą ciągu D0xx ustawionego przez akcję 4 w tym samym pliku .grf. &nbsp;Na przykład, jeśli ustawisz tekst ID D006 na jakiś tekst, zwrot 06 w tym wywołaniu zwrotnym spowoduje wyświetlenie go po nazwie ładunku.
+
+Zwykle do rozróżnienia różnych podtypów należy użyć zmiennej F2 cyklu/podtytułu pojazdu. &nbsp;Podczas ponownego montażu wywołanie zwrotne jest wywoływane z sukcesywnie zwiększanymi wartościami zmiennej F2, dopóki połączenie zwrotne nie powie, aby zatrzymać. &nbsp;Wszystkie zwrócone warianty są następnie wyświetlane jako opcje ponownego montażu, a wszystkie opcje, które mają ten sam typ ładunku i wynik wywołania zwrotnego (niezależnie od cyklu ponownego montażu) są zgrupowane razem w tej samej linii.
+
+{{pl/Development/NewGRF/grfTill|7}} Dla GRF w wersji 7 i niższej prawidłowe wartości zwracane to:
+{| |-
+|00..FE|| Użyj podtypu z tekstu D0xx (D000..D0FE)
+|-
+|FF|| Stop wywołania <small>''(calling)''</small>.
+|}
+
+{{pl/Development/NewGRF/grfFrom|8}} Dla GRF w wersji 8 i wyższej prawidłowe wartości zwracane to:
+{| |-
+|00..3FF|| Użyj podtypu z tekstu D0xx (D000..D3FF)
+|-
+|400|| Stop wywołania.
+|}
+
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
