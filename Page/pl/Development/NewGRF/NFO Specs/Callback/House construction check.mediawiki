@@ -1,0 +1,14 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_House_construction_check|pl=pl/Development/NewGRF/NFO Specs/Callback/House construction check}}
+</noinclude>== House construction check (17) ==
+
+To wywołanie zwrotne służy do ustalenia, czy dany typ budynku można zbudować na pozycji. Powinien zwrócić 1, aby umożliwić budowanie, a 0, aby go anulować.
+
+Ponieważ budynek nie został jeszcze utworzony, nie można używać zmiennych 40 i 41 (zwracają zero). Możesz jednak użyć zmiennej 42, 43, 44, 45 i wszystkich zmiennych miasta. Od wersji OpenTTD r19744 można również uzyskać dostęp do losowych bitów za pomocą RandomAction2 lub zmiennej 5F.
+
+Właściwości 0A i 13 są sprawdzane, nawet jeśli wywołanie zwrotne zwraca wartość niezerową; mogą również anulować budowę.
+
+W przypadku budynków z wieloma płytkami to wywołanie zwrotne jest zawsze wywoływane dla typu północnego kafelka, ale nie można zagwarantować, że pozycja, do której można uzyskać dostęp za pomocą zmiennych 40, 42 i 43, jest końcową pozycją północnej płytki. Gwarantujemy jednak, że jeśli budynek naprawdę zostanie zbudowany, jedna z jego płytek zajmie ten kafelek. Na przykład, jeśli zwrócisz zero dla pustynnych kafelków, nie oznacza to, że twój budynek nie będzie zajmował żadnych pustynnych kafelków, ani że jego północny kafelek będzie na kafelku innym niż pustynny; oznacza to tylko, że co najmniej jedna płytka budynku będzie na płytce niepustynnej. (np. nadal można go zbudować na samym skraju pustyni) To ograniczenie zostało usunięte w OpenTTD r13489, oddzwanianie jest teraz wywoływane dla ostatecznej pozycji północnego pola.
+
+{{pl/Development/NewGRF/grfTill|7}} Zauważ, że GRF w wersji 7 i niższej rozróżniały tylko zerowe i niezerowe wartości zwrotne.
+
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
