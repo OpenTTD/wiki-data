@@ -1,0 +1,18 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Articulated_engine|pl=pl/Development/NewGRF/NFO Specs/Callback/Articulated engine}}
+</noinclude>== Articulated engine (16) ==
+
+Pozwala to na budowę przegubowych silników lub wagonów, tj. Pojazdów wykonanych z kilku pojedynczych pojazdów.
+Jeśli to połączenie zwrotne jest w użyciu, dodatkowe pojazdy będą dodawane, o ile będzie to konieczne.
+
+{{pl/Development/NewGRF/grfTill|7}} Dla GRF w wersji 7 i niższej wartość zwracana wykorzystuje 8 bitów.
+Bity od 0 do 6 określają identyfikator pojazdu do dodania. Jeśli do identyfikatora zostanie dodane 80, pojazd zostanie cofnięty. Zwrot FF oznacza zakończenie pojazdu przegubowego i nie dołączanie kolejnych części.
+
+{{pl/Development/NewGRF/grfFrom|8}} Dla GRF w wersji 8 i wyższej wartość zwracana wykorzystuje 15 bitów.
+Bity od 0 do 13 określają identyfikator pojazdu do dodania. Jeśli do ID zostanie dodany 4000, pojazd zostanie cofnięty. Zwrot 7FFF oznacza zakończenie pojazdu przegubowego i nie dołączanie kolejnych części.
+
+Zauważ, że ponieważ pociąg nie jest jeszcze zbudowany, nie możesz używać zmiennych pociągu w akcji 2. Zamiast tego użyj pierwszego bajtu zmiennej 10 (dodatkowe informacje o oddzwanianiu 1), która jest ustawiona na 01 dla pierwszej części przegubowej, 02 dla drugiej i tak dalej.
+
+{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=beta 8}} Jeśli więcej niż pierwszy pojazd zawiera ładunek, oddzwanianie musi również działać w menu zakupu. Oznacza to, że w akcji 3 zostanie wywołany z typem ładunku FF. W przeciwnym razie ilość ładunku pokazana w menu zakupu będzie dotyczyć tylko pierwszej części pojazdu przegubowego.
+
+{{pl/Development/NewGRF/ottd| }} In OpenTTD the cargo class of the first road vehicles is used to determine whether the vehicle can stop at bus or truck stops regardless of the capacity of the first vehicle. If the cargo class bit for passengers is set it can go to bus stops when the is not set it can go to truck stops. See also the page about &nbsp;[[pl/Development/NewGRF/NFO Specs/VehicleRefitting|vehicle refitting]].
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
