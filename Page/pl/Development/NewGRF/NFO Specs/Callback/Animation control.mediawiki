@@ -1,0 +1,44 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Animation_control|pl=pl/Development/NewGRF/NFO Specs/Callback/Animation control}}
+</noinclude>== Animation control (1B/25/140/152/159) ==
+
+Wywoływane okresowo, w przedziale czasowym określonym we właściwości 16 (domy) lub gdy nastąpi aktywacja animacji (kafelki przemysłu, stacje, kafelki lotniska i obiekty). Zwraca liczbę klatek, do których animacja powinna przeskoczyć, lub jedną z następujących wartości specjalnych:
+
+{| |-
+!Value!!Meaning
+|-
+|FF||stop animation in its current frame
+|-
+|FE||start animation with its current frame
+|-
+|FD||leave the animation in its current state (do nothing)
+|}
+
+* For multi-tile town buildings, [[en/Action0/Houses#extra-flags-19|property 19/bit 2]] modifies this callback slightly, see details there.
+
+* Except for CB 1B (houses), the low byte of variable 18 contains the reason (animation trigger) for the call. The other bits may contain additional information specific for the trigger/reason.
+:{| |-
+! Feature !! Callback !! Animation triggers
+|-
+| Houses || 1B || none
+|-
+| Industry tiles || 25 || [[en/Action0/Industry Tiles#triggers-for-callback-25-11|Property 11]]
+|-
+| Stations || 140 || [[en/Action0/Stations#animation-triggers-18|Property 18]]
+|-
+| Airport tiles || 152 || [[en/Action0/Airport Tiles#animation-triggers-via-callback-153-11|Property 11]]
+|-
+| Objects || 159 || [[en/Action0/Objects#animation-triggers-13|Property 13]]
+|}
+
+* Except for CB 1B (houses), the callbacks are always used when defined, no bit in the action 0 property needs to be set to activate them.
+
+* {{en/Ottdp| |2.5|ttdprev=beta 2}} Since TTDPatch 2.5 beta 2, these callbacks get random bits in variable 10, to allow randomizing changes.
+
+* For callback 1B (houses), the exact randomness depends on bit 2 of [[en/Action0/Houses#extra-flags-19|property 19]] (synchronized callback 1B). If the callback is synchronized, the high 16 bits will be the same for all tiles and the low 16 bits will be different for each tile. Otherwise, all 32 bits will be independent for each tile.
+
+* For CB 25 (industry tiles), the randomness depends on the type of the event. For triggers that happen for the whole industry (triggers 2, 3 and 4), the high 16 bits will be the same for all tiles, while the low 16 bits will be different. For other triggers, all 32 bits are independent.
+
+* For CB 140 (stations), the high 16 bits are the same for all tiles triggered, while the low 16 bits are different for each tile.
+
+* Like all animation callbacks, if the high byte of the result is nonzero, it will be interpreted as a sound effect number, and the corresponding sound effect will be played at the tile.
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
