@@ -1,5 +1,6 @@
-
-<!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
+{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Action0
+|pl=pl/Development/NewGRF/NFO Specs/Action0/Main Page
+}} {{en/-}}<!--<br>{{ambox | text = w trakcie edycji.}}-->
 <div style="float:right; padding-left:12px; background:none;">{{en/NFONavVehicles}}</div>
 
 =Wprowadzenie=
@@ -86,9 +87,9 @@ Definiowanie właściwości pojazdów kolejowych.
 = Description =
 
 == Track type (05) ==
-Set track type of vehicle: 0 = rail, 1 = monorail, 2 = maglev. For setting the appropriate traction type, see [[en/Action0Trains#engine-traction-type-19|prop19]].
+Ustaw typ pojazdu na torze: 0 = szyna, 1 = kolej jednotorowa, 2 = maglev. Aby ustawić odpowiedni typ przyczepności, patrz [[en/Action0Trains#engine-traction-type-19|prop19]].
 
-{{en/Ottdp|1.0|no}} In OpenTTD, if a [[en/Action0Railtypes|rail type]] translation table is loaded, this property is an index into the table instead.
+{{en/Ottdp|1.0|no}} In OpenTTD, if a [[en/Action0Railtypes|rail type]] wczytana jest tabela translacji, ta właściwość jest indeksem tabeli.
 
 == Speed (09) ==
 
@@ -241,18 +242,18 @@ Resetowanie listy powinno być jednak wykonywane tylko przez zestawy, które zaw
 == Powered train wagons (1B and 23, see also 22) ==
 
 Zwykle wagony kolejowe nie mają mocy w TTD, a jeśli ustawisz właściwość 0B na wartość niezerową, zamiast tego stają się silnikami. &nbsp;Dlatego do modelowania prawdziwych pociągów, w których wagony mają moc, potrzebny jest inny mechanizm.
-To make train wagons powered, you set property 1B of the '''engine''' instead of the wagon. This determines how much power each wagon adds to the train when attached to this engine. This only applies to wagons with a [[en/Action3|graphics override]] for this engine as well. &nbsp;Oznacza to, że na przykład wagony pasażerskie (z obejściem) dodadzą moc, ale wagony węglowe (bez obejścia) nie będą.
+Aby zasilać wagony pociągowe, ustawiasz właściwość 1B '''silnika''' <small>''(engine)''</small> zamiast wozu. Określa to, ile mocy każdy wagon dodaje do pociągu, gdy jest podłączony do tego silnika. Dotyczy to tylko wagonów z [[pl/Development/NewGRF/NFO Specs/Action3/Main Page|graphics override]] również dla tego silnika. &nbsp;Oznacza to, że na przykład wagony pasażerskie (z obejściem) dodadzą moc, ale wagony węglowe (bez obejścia) nie będą.
 
 Oprócz dodania mocy wagony te są również cięższe o kwotę określoną we właściwości 23.
 
 == Refit cost (1C) ==
 
-Refit cost, using 50% of the [[en/BaseCosts|purchase price cost base]]. This property can be overridden by callback 15E.
+Refit cost, using 50% of the [[en/Extrazi/specs.tt/BaseCosts|purchase price cost base]]. This property can be overridden by callback 15E.
 
-{{en/Ottdp|1.2|no|ottdrev=r23087}} Jeśli współczynnik kosztu remontu jest ustawiony na zero, a bit 4 flag różnych (27) jest ustawiony, dozwolone jest automatyczne dopasowanie.
+{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23087}} Jeśli współczynnik kosztu remontu jest ustawiony na zero, a bit 4 flag różnych (27) jest ustawiony, dozwolone jest automatyczne dopasowanie.
 
 == Callbacks (1E) ==
-For trains, the following [[en/Callbacks]] have to be enabled by setting the corresponding bit in property 1E (certain other, not as frequently used callbacks are available without setting a bit here):
+For trains, the following [[en/Extrazi/specs.tt/callbacks|callbacks]] have to be enabled by setting the corresponding bit in property 1E (certain other, not as frequently used callbacks are available without setting a bit here):
 
 {| |-
 !Bit!!Value!!Variable 0C value!!Callback
@@ -339,19 +340,19 @@ Przeciąganie powietrza w Newtonach będzie wówczas c2*v*v przy v w m/s, chocia
 == Shorter train vehicles (21) ==
 
 This property reduces the length of train vehicles, in units of 1/8th (12.5%). The value 00 means the vehicle has the full length, 01 means shorter by 1/8th (12.5%), up to 05=shorter by 5/8ths (62.5%). Larger numbers will not work properly
-<ref>{{en/Ottdp|1.0|no|ottdrev=r15793}} This restriction has been removed in OpenTTD r15793. Every vehicle can have a length between 1/8 and 8/8 independent of its position in the chain.</ref>,
+<ref>{{pl/Development/NewGRF/ottdp|1.0|no|ottdrev=r15793}} This restriction has been removed in OpenTTD r15793. Every vehicle can have a length between 1/8 and 8/8 independent of its position in the chain.</ref>,
 except at the end of the train
-<ref>{{en/Ottdp|&lt;1.0|}} This means that it is only safe to use values larger than 05 in the length callback making sure that they are only returned for the very last vehicle in the train. Otherwise the train will occasionally fall apart, with the wagons after the shortest one stopping to move.</ref>. The vehicle length is set whenever it leaves a depot. This property does not work for the first vehicle in a train (i.e. the engine).
+<ref>{{pl/Development/NewGRF/ottdp|&lt;1.0|}} This means that it is only safe to use values larger than 05 in the length callback making sure that they are only returned for the very last vehicle in the train. Otherwise the train will occasionally fall apart, with the wagons after the shortest one stopping to move.</ref>. The vehicle length is set whenever it leaves a depot. This property does not work for the first vehicle in a train (i.e. the engine).
 
 <references/>
 
 == Visual effects and wagon power (22) ==
 
-Domyślnie efekt wizualny silników pociągu jest określony przez rodzaj trakcji (właściwość 19). Dzięki tej opcji możesz zmienić rodzaj efektu, a także jego położenie względem pojazdu. (Uwaga: w przypadku TTDPatch i OpenTTD do r21229 faktycznie działa tylko pozycjonowanie pary. For {{en/Ottdp|1.1|no|ottdrev=r21230}} positioning diesel smoke and electric sparks works as well) The position of the effect provides a range from 0 to F that is added to the type of the effect.
+Domyślnie efekt wizualny silników pociągu jest określony przez rodzaj trakcji (właściwość 19). Dzięki tej opcji możesz zmienić rodzaj efektu, a także jego położenie względem pojazdu. (Uwaga: w przypadku TTDPatch i OpenTTD do r21229 faktycznie działa tylko pozycjonowanie pary. For {{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=r21230}} positioning diesel smoke and electric sparks works as well) The position of the effect provides a range from 0 to F that is added to the type of the effect.
 
 Pozycja 0 odpowiada połowie długości pojazdu przed pojazdem, 4 to przód pojazdu, 8 środek, C koniec, a F to połowa długości za pojazdem. Wartości pośrednie znajdują się pomiędzy.
 
-Additionally, this property can be used to disable powered wagons of this type, although that is usually done with [[en/Callbacks#visual-effect-and-wagon-power-10| callback 10]] instead (which has the same meaning as prop. 22, but is more flexible).
+Additionally, this property can be used to disable powered wagons of this type, although that is usually done with [[pl/Extrazi/specs.tt//Callbacks#visual-effect-and-wagon-power-10| callback 10]] instead (which has the same meaning as prop. 22, but is more flexible).
 
 {| |-
 !Range	!!Effect type
@@ -366,7 +367,7 @@ Additionally, this property can be used to disable powered wagons of this type, 
 |-
 |40||Disable visual effect
 |-
-|41..7F||{{en/Ottdp|1.5|no|ottdrev=r26747}} Create effects with [[en/Callbacks#advanced-effect-creation-160|Callback 160]] using one of these spawning models:
+|41..7F||{{pl/Development/NewGRF/ottdp|1.5|no|ottdrev=r26747}} Create effects with [[pl/Extrazi/specs,tt/Callbacks#advanced-effect-creation-160|Callback 160]] using one of these spawning models:
 * 41 Steam: Gradually less effects when approaching max speed
 * 42 Diesel: Effect proportional to acceleration, no effect when idling at top speed
 * 43 Electric: Random effect, gradually less likely when approaching max spped
@@ -385,25 +386,25 @@ This is a bit mask, with the following bits:
 {| |-
 !Bit!!	Value!!	Version !!Meaning
 |-
-|0||	1||{{en/Ottdp|0.6|2.5}}||	Vehicle tilts in curves, and thus gets speed bonus <ref>The tilting speed bonus only applies if all vehicles in the train have this bit set. In TTDPatch it requires the "curves" switch to be on. For realistic curves, it gives the train two free curving pieces with no speed decrease, and for other settings, it increases the curves setting by one (0->1, 1->2, 2->2). In OpenTTD, the curve speed limit increases by 20% if 'realistic' acceleration is enabled, else there is no effect.
+|0||	1||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||	Vehicle tilts in curves, and thus gets speed bonus <ref>The tilting speed bonus only applies if all vehicles in the train have this bit set. In TTDPatch it requires the "curves" switch to be on. For realistic curves, it gives the train two free curving pieces with no speed decrease, and for other settings, it increases the curves setting by one (0->1, 1->2, 2->2). In OpenTTD, the curve speed limit increases by 20% if 'realistic' acceleration is enabled, else there is no effect.
 </ref>
 |-
-|1||	2||{{en/Ottdp|0.6|2.5}}||	Uses two company colors
+|1||	2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||	Uses two company colors
 |-
-|2||	4||{{en/Ottdp|0.6|2.5}}||	Vehicle is a multiple unit (DMU/EMU), for colour selection
+|2||	4||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||	Vehicle is a multiple unit (DMU/EMU), for colour selection
 |-
-|3||	8||{{en/Ottdp|1.1|no|ottdrev=r21966}}|| Vehicle can be flipped around in the depot <ref>When you enable flipping of a vehicle in a depot you must make sure that the graphics are correctly aligned when flipped as well. Especially in the case of shortened vehicles. For multiheaded or articulated vehicles the flipping bit has no effect; these vehicles are never to be flipped around in the depot.
+|3||	8||{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=r21966}}|| Vehicle can be flipped around in the depot <ref>When you enable flipping of a vehicle in a depot you must make sure that the graphics are correctly aligned when flipped as well. Especially in the case of shortened vehicles. For multiheaded or articulated vehicles the flipping bit has no effect; these vehicles are never to be flipped around in the depot.
 <br>
-Prior to {{en/Ottd|1.1|r21966}} all non-multiheaded/non-articulated vehicles would be able to flip around in the depot. As such this disables a "feature" in OpenTTD, but often it makes no sense to flip vehicles around (symetric vehicles) or the graphics are wrong (most shortened vehicles), and thus only enabling this when the NewGRF developer says it is possible is better.
+Prior to {{pl/Development/NewGRF/ottdp|1.1|r21966}} all non-multiheaded/non-articulated vehicles would be able to flip around in the depot. As such this disables a "feature" in OpenTTD, but often it makes no sense to flip vehicles around (symetric vehicles) or the graphics are wrong (most shortened vehicles), and thus only enabling this when the NewGRF developer says it is possible is better.
 </ref>
 |-
-|4||   10||{{en/Ottdp|1.2|no|ottdrev=r23087}}|| Auto-refitting is enabled for refits where callback 15E allows it or prop 1C specifies zero cost
+|4||   10||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23087}}|| Auto-refitting is enabled for refits where callback 15E allows it or prop 1C specifies zero cost
 |-
-|5||   20||{{en/Ottdp|1.2|no|ottdrev=r23861}}|| Use cargo multiplier for default cargo (and load amount). See page about [[en/VehicleRefitting#misc-vehicle-flag-5-use-of-capacity-multiplier-for-default-cargo-set|vehicle refitting]].
+|5||   20||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23861}}|| Use cargo multiplier for default cargo (and load amount). See page about [[en/VehicleRefitting#misc-vehicle-flag-5-use-of-capacity-multiplier-for-default-cargo-set|vehicle refitting]].
 |-
-|6||   40||{{en/Ottdp|1.3|no|ottdrev=r24124}}|| Disable breakdown smoke effect.
+|6||   40||{{pl/Development/NewGRF/ottdp|1.3|no|ottdrev=r24124}}|| Disable breakdown smoke effect.
 |-
-|7||   80||{{en/Ottdp|1.7|no|ottdrev=r27668}}|| [[en/Action2/Vehicles#composing-vehicles-from-multiple-sprites|Compose vehicle from multiple sprites.]]
+|7||   80||{{pl/Development/NewGRF/ottdp|1.7|no|ottdrev=r27668}}|| [[en/Extrazi/specs.tt/Action2/Vehicles#composing-vehicles-from-multiple-sprites|Compose vehicle from multiple sprites.]]
 |}
 
 <references />
@@ -418,15 +419,15 @@ Oznacza to, że jeśli typ ładunku znajduje się na liście, ponieważ pasuje d
 
 W rezultacie masz zarówno pełną kontrolę nad rodzajami ładunków, o których wiesz (za pomocą rekwizytów 1D), jak i tymi, których jeszcze nie znasz (za pomocą rekwizytów 28/29). Zostaw bity dla ładunków, o których nie wiesz, że są rozbrojone w rekwizytach. 1D i ustaw/wyczyść bity znanych ładunków, aby odpowiednio dodać/usunąć je z listy.
 
-{{en/Ottd|1.2|r23291}} It is recommended to use properties 2C and 2D instead of property 1D, as property 1D behaves badly if the cargo classes of a cargo are ever changed.
+{{pl/Development/NewGRF/ottd|1.2|r23291}} It is recommended to use properties 2C and 2D instead of property 1D, as property 1D behaves badly if the cargo classes of a cargo are ever changed.
 
 Lista klas jest trochę maską. Zobacz stronę ładunków action0 dla bitów i klas zdefiniowanych do tej pory.
 
-Take a look at [[en/Action0Cargos#cargo-classes-16|Action0 for cargos]] for the classes defined so far.
+Take a look at [[pl/Extrazi/specs.tt/Action0Cargos#cargo-classes-16|Action0 for cargos]] for the classes defined so far.
 
 Należy pamiętać, że typy ładunków mogą należeć do kilku klas. Z tego powodu powstają dwie właściwości: dodatkowa i odejmująca, ponieważ w ten sposób można określić, że pojazd nadaje się do ponownego montażu, na przykład, do wszystkich przesyłek ekspresowych, które nie wymagają chłodzenia (tj. Z domyślnych ładunków, bez żywności ).
-For the cargo types added in this way, the vehicle will probably have no specific graphics (in [[en/Action3|action 3]]) to show the cargo load. &nbsp;In this case, the default will be used, which should therefore be sufficiently generic-looking if possible. However, using [[en/VarAction2Vehicles#vehicle-cargo-info-47|vehicle variable 47]] you can at least select the graphics most appropriate for the cargo type's class.
-About the interaction with other properties take a look at the summary page about [[en/VehicleRefitting|vehicle refitting]].
+For the cargo types added in this way, the vehicle will probably have no specific graphics (in [[pl/Development/NewGRF/NFO Specs/Action3/Main Page|action 3]]) to show the cargo load. &nbsp;In this case, the default will be used, which should therefore be sufficiently generic-looking if possible. However, using [[pl/Extrazi/specs.tt/VarAction2Vehicles#vehicle-cargo-info-47|vehicle variable 47]] you can at least select the graphics most appropriate for the cargo type's class.
+About the interaction with other properties take a look at the summary page about [[pl/Development/NewGRF/NFO Specs/VehicleRefitting|vehicle refitting]].
 
 Oświadczenie: nie ma gwarancji, że klasy nie będą się zmieniać w czasie lub między zestawami. Klasy ładunku mogą się zmieniać między różnymi wersjami określonej branży/newgrf cargo lub różne klasy dla tej samej etykiety ładunku mogą być ustawione przez różne newgrfs przemysłu/cargo. Zapraszam do korzystania z klas w swoim zestawie do wygodnego przeładowywania ładunków, ale jeśli Ty - autor pojazdu - dbasz o transport określonych ładunków w określonych pojazdach, korzystaj z przeróbek na podstawie etykiet (zmiana etykiet bez bardzo dobrego powodu jest uważana za złą praktykę ).
 
@@ -434,11 +435,11 @@ Oświadczenie: nie ma gwarancji, że klasy nie będą się zmieniać w czasie lu
 
 Ustaw datę wprowadzenia pojazdu, w dniach od roku 0. Uwzględnia to lata przestępne; dzieli się przez 4, ale nie 100, chyba że 400. Datę początkową 1920-01-01 uzyskuje się o wartości 701265 (51 B3 0A 00). Ta właściwość musi zostać ustawiona po właściwości 00, aby obowiązywała.
 
-{{en/Ottdp|no|}} In TTDPatch, dates after 2044 will be limited to 2044.
+{{pl/Development/NewGRF/ottdp|no|}} In TTDPatch, dates after 2044 will be limited to 2044.
 
 == Custom cargo ageing period (2B) ==
 
-Ta właściwość pozwala modyfikować okres w kleszczach, po którym dojrzewa ładunek przewożony przez pojazd. Domyślnie ładunek starzeje się co 185 tyknięć. Wartość 0 wyłącza starzenie się ładunku. Ta właściwość może być modyfikowana via [[en/Callbacks#change-vehicle-properties-36|callback 36]].
+Ta właściwość pozwala modyfikować okres w kleszczach, po którym dojrzewa ładunek przewożony przez pojazd. Domyślnie ładunek starzeje się co 185 tyknięć. Wartość 0 wyłącza starzenie się ładunku. Ta właściwość może być modyfikowana via [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#change-vehicle-properties-36|callback 36]].
 
 == List of always refittable cargo types (2C, 2D) ==
 
@@ -448,7 +449,7 @@ Format obu właściwości to:
 
 <pre>2C/2D &lt;nvar&gt; (&lt;Index into cargo type table&gt;){n}</pre>
 
-Oznacza to, że podajesz liczbę ładunków w jednym bajcie, a następnie listę indeksów o tej długości do tabeli translacji ładunku ([[en/CargoTypes|Type A]]).
+Oznacza to, że podajesz liczbę ładunków w jednym bajcie, a następnie listę indeksów o tej długości do tabeli translacji ładunku ([[pl/Development/NewGRF/NFO Specs/CargoTypes|Type A]]).
 
 = Przykład =
 
@@ -489,7 +490,7 @@ Poniżej znajduje się przykład tego, jak mógłby wyglądać prawdziwy pseudo-
 |-
 |FD||&lt;value&gt;: FD for new graphics
 |}
-Od wersji 7 nfo, tzw [[en/GRFActionsDetailed#byte-order|"escape sequences"]] zostały wprowadzone w celu zaoferowania formy bardziej czytelnej dla człowieka.
+Od wersji 7 nfo, tzw [[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed#byte-order|"escape sequences"]] zostały wprowadzone w celu zaoferowania formy bardziej czytelnej dla człowieka.
 
 Poniżej znajduje się ten sam przykład, co powyżej, z zastosowanymi sekwencjami ucieczki:
 
