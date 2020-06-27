@@ -1,0 +1,30 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Industry_availability|pl=pl/Development/NewGRF/NFO Specs/Callback/Industry availability}}
+</noinclude>== Industry availability (22) ==
+
+Wywoływany, gdy TTDPatch musi wiedzieć, czy dany typ branży jest dostępny.
+
+To wywołanie zwrotne ma na celu ograniczenie całego typu, więc nie można uzyskać dostępu do żadnych zmiennych branżowych, tylko globalnych. Dobrym przykładem zastosowania tego wywołania zwrotnego jest elektrownia jądrowa, która nie może pojawić się przed 1970 rokiem.
+
+{{pl/Development/NewGRF/grfTill|7}} W przypadku GRF w wersji 7 i niższej wywołanie zwrotne powinno zwracać zero, aby udostępnić typ, lub dowolną wartość niezerową, aby go wyłączyć.
+
+{{pl/Development/NewGRF/grfFrom|8}} W przypadku GRF w wersji 8 i nowszej wywołanie zwrotne powinno zwrócić jedną z tych wartości:
+:{| |-
+|0000 || Disallow construction
+|-
+|0001..00FF|| Allow construction, and use the returned value as probability for appearance on the map. (Instead of using [[pl/Development/NewGRF/NFO Specs/Action0/Industries#probability-in-random-game-17-probability-during-gameplay-18|property 17 or 18]].)
+|-
+|0100|| Allow construction; use the appearance probability from [[pl/Development/NewGRF/NFO Specs/Action0/Industries#probability-in-random-game-17-probability-during-gameplay-18|property 17 resp. 18]].
+|}
+
+Podczas tego wywołania zwrotnego zmienna 18 (dodatkowe informacje o wywołaniu zwrotnym 2) może zawierać następujące wartości:
+
+{| |-
+!Variable 18!!Meaning
+|-
+|0||TTD is generating a map and needs to know if your type can appear.
+|-
+|1||TTD decided to build a new random industry during regular gameplay and needs to know if it can choose your type.
+|-
+|2||The user tries to build/prospect for your industry via the new industry window. TTD needs to know if the player is allowed to do this.
+|}
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
