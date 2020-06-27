@@ -1,0 +1,17 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Select_colour_mapping_for_vehicle|pl=pl/Development/NewGRF/NFO Specs/Callback/Select colour mapping for vehicle}}
+</noinclude>== Select colour mapping for vehicle (2D) ==
+
+Called while drawing the vehicle. Should return the number of the colour mapping to be used on the vehicle sprite, for example,
+775 for blue->dark blue mapping. If the callback fails, the company colour of the owner is used. Since mapping 775 doesn't
+change any colours, you can return it to disable the company colours and leave all magic blue in your sprite alone.
+
+If bit 14 is set, the company colour will be added to the resulting sprite number. This means the given sprite and the 15
+following sprites must be colour maps, one for each of the 16 possible player colours. If the vehicle also has misc.flags bit 1 set
+(two company colours), the sprite and the 255 following sprites must be appropriate colour maps. Alternatively, use a return
+value of 00 C0 to use the default two-colour maps.
+
+Uses 15 return bits.
+
+The return value is cached to speed up sprite processing, and only updated via [[en/Callbacks#32-day-callback-32 |callback 32]] bit 1 (or when loading/starting a
+game or rearranging the consist).
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
