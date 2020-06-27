@@ -1,0 +1,62 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Random_production_change|pl=pl/Development/NewGRF/NFO Specs/Callback/Random production change}}
+</noinclude>== Random production change (29) ==
+
+Wywoływany, gdy TTD wybiera branżę dla losowej zmiany produkcji. Zmienna 18 zawiera 32 losowe bity, aby pomóc w losowaniu decyzji. Oddzwonienie musi zwrócić jeden z następujących wyników:
+
+{| |-
+!Value!!Version!!Meaning
+|-
+|00||{{pl/Development/NewGRF/ottdp| | }}||Do nothing||
+|-
+|01||{{pl/Development/NewGRF/ottdp| | }}||Halve industry production. If production goes below the quarter of the default, the industry is closed instead, as if you returned 03.||
+|-
+|02||{{pl/Development/NewGRF/ottdp| | }}||Double industry production if it hasn't reached eight times of the original yet.||
+|-
+|03||{{pl/Development/NewGRF/ottdp| | }}||The industry announces imminent closure, and is physically removed from the map next month.||
+|-
+|04||{{pl/Development/NewGRF/ottdp| | }}||Do the standard random production change as if this industry was a primary one.||
+|-
+|05||{{pl/Development/NewGRF/ottdp| | }}||Divide production by 4||
+|-
+|06||{{pl/Development/NewGRF/ottdp| | }}||Divide production by 8||
+|-
+|07||{{pl/Development/NewGRF/ottdp| | }}||Divide production by 16||
+|-
+|08||{{pl/Development/NewGRF/ottdp| | }}||Divide production by 32||
+|-
+|09||{{pl/Development/NewGRF/ottdp| | }}||Multiply production by 4||
+|-
+|0A||{{pl/Development/NewGRF/ottdp| | }}||Multiply production by 8||
+|-
+|0B||{{pl/Development/NewGRF/ottdp| | }}||Multiply production by 16||
+|-
+|0C||{{pl/Development/NewGRF/ottdp| | }}||Multiply production by 32||
+|-
+|0D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ottdrev=r11532|ttdprev=r2046}}||Decrement production by 1
+|-
+|0E||{{pl/Development/NewGRF/ottdp|0.6|2.6|ottdrev=r11532|ttdprev=r2046}}||Increment production by 1
+|-
+|0F||{{pl/Development/NewGRF/ottdp|0.7|2.6|ottdrev=r14561|ttdprev=r2068}}||Set production as returned in bits 16..23 of register 0x100 (clamped to 4..128)
+|}
+
+Since TTDPatch 2.5 beta 1, you can set bit 7 of this value to suppress the news message announcing the production change.
+Be careful with this, especially for closedown messages; most players wouldn't like those being suppressed.
+
+For return values 05..0C, the double/halve news messages are displayed. You should probably replace the defaults with some text that
+doesn't explicitly say "double" or "halve", or use the message override feature (see below). If a divide operation brings the
+production below the quarter of the default, the industry is closed down instead. Multiply operations that would bring the production
+above 8 times of the original will only increase it to that value.
+
+Since TTDPatch r1306, you can override the default news messages that appear after production changes. To do this, you must set bit 8 of the
+returned result, and put the textID into the low word of GRF register 100h (the high word of the register is ignored).
+The textID can be of a default TTD text or a DCxx text; it '''cannot''' be a D0xx text. If the given action generates a message,
+it will be the one you specified. It may, however, not generate messages at all; for example, operation 04 may decide not to change
+the production, and then your message won't be shown. There is one exception: operation 00 would never generate a message,
+but it still will when bit 8 is set. This is useful in conjunction with [[en/Callbacks#monthly-random-production-change-35 |callback 35]], to tell the player about things that don't
+change the production multiplier, but are still important enough to require a news message.
+
+Using return values 0Dh, 0Eh and 0Fh you can adjust production level more smoothly. The production level is a value between 04h and 80h
+(initial value 10h). Returning 0Dh when the production is at 4 will close the industry. But returning 0Fh will never close the industry,
+instead the value is clamped to the allowed range.
+Note that OpenTTD before r15103 did not properly updated production rates provided by properties 12 and 13.
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
