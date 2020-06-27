@@ -1,0 +1,27 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Additional_text_in_purchase_screen|pl=pl/Development/NewGRF/NFO Specs/Callback/Additional text in purchase screen}}
+</noinclude>== Additional text in purchase screen (23) ==
+
+Oddzwonienia można użyć do dodania tekstu poniżej informacji o pojeździe na ekranie zakupu. Oddzwanianie jest zawsze używane, gdy jest zdefiniowane, nie trzeba ustawiać bitu we właściwości akcji 0, aby ją aktywować.
+
+A text string for the feature in the D0XX range must be defined before using this callback. The return value of this callback is the XX of a D0XX string ID. 
+
+As of r1908, text IDs D100..D3FF may also be returned.
+
+{{pl/Development/NewGRF/grfFrom|8}} Since GRF version 8 the value 400 can be returned to display no text. In older versions it is necessary to fail the callback.
+
+{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23045}} Since OpenTTD r23045 the contents of registers 100h..105h are copied onto the text reference stack.
+
+
+Lines are wrapped automatically, or may be broken explicitly using the newline character 0D. How many lines are available depends on the type of vehicle and its other properties, for instance the presence or absence of a "refittable to" line or powered wagons etc. 
+
+If cargo FF (buy menu sprite) is handled explicitly for a vehicle, then the varaction 2 handling [[en/Callbacks#additional-text-in-purchase-screen-23 |callback 23]] must be in the buy menu varaction 2 chain.
+
+
+Example for setting additional text for a road vehicle:
+
+ // Define string with ID D001 for featur 01. Bit 7 of the language byte must be set to 1, because the string ID is a word.
+ 4 * 32 04 01 83 01 \wxD001 "Hint: This is a " 0D "new line." 00
+ // The callback
+ 5 * 14 02 01 10 85 0C 00 \wxFFFF 01 \wx8001 \wx23 \wx23 02 00
+
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
