@@ -1,44 +1,42 @@
 <noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Industry_location_permissibility|pl=pl/Development/NewGRF/NFO Specs/Callback/Industry location permissibility}}
-</noinclude>
-
-== Industry location permissibility (28) ==
+</noinclude>== Industry location permissibility (28) ==
 
 Wywoływany, aby zdecydować, czy można zbudować przemysł w danym miejscu. Ponieważ branża nie została jeszcze zbudowana, możesz użyć tylko niewielkiego podzbioru danych: możesz uzyskać dostęp do danych najbliższego miasta za pośrednictwem akcji 2/typ 82 bez żadnych problemów, ale akcja 2/typ 81 uzyska dostęp do zmiennych innych niż normalnie miałby dostęp:
 
 {| |-
-!Variable!![[en/GRFActionsDetailed|Size]]!!Version!!Meaning
+!Variable!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Size]]!!Version!!Meaning
 |-
-|40+x|| ||{{en/Ottdp| | }}||Not accessible
+|40+x|| ||{{pl/Development/NewGRF/ottdp| | }}||Not accessible
 |-
-|5F|| ||{{en/Ottdp|1.1|no|ottdrev=19744}}||Random bits the industry starts with after construction. Accessible via RandomAction2 as well.
+|5F|| ||{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=19744}}||Random bits the industry starts with after construction. Accessible via RandomAction2 as well.
 |-
-|60+x|| ||{{en/Ottdp| | }}||Only var. 62 and vars 64..68 can be used
+|60+x|| ||{{pl/Development/NewGRF/ottdp| | }}||Only var. 62 and vars 64..68 can be used
 |-
-|80||W||{{en/Ottdp| | }}||Coordinates of the selected position
+|80||W||{{pl/Development/NewGRF/ottdp| | }}||Coordinates of the selected position
 |-
-|86||B||{{en/Ottdp| | }}||Number of the selected layout, according to property 0A
+|86||B||{{pl/Development/NewGRF/ottdp| | }}||Number of the selected layout, according to property 0A
 |-
-|87||B||{{en/Ottdp| | }}||Ground type of the selected spot (see [[en/VarAction2Canals|canal variable 81]] for details)
+|87||B||{{pl/Development/NewGRF/ottdp| | }}||Ground type of the selected spot (see [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Canals|canal variable 81]] for details)
 |-
-|88||B||{{en/Ottdp| | }}||[[en/TownZones|Town zone]] of the selected spot (see [[en/VarAction2Houses#town-zone-42|house variable 42]] for details)
+|88||B||{{pl/Development/NewGRF/ottdp| | }}||[[pl/Development/NewGRF/NFO Specs/TownZones|Town zone]] of the selected spot (see [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Houses#town-zone-42|house variable 42]] for details)
 |-
-|89||B||{{en/Ottdp| | }}||Distance between the closest town and the selected position.
+|89||B||{{pl/Development/NewGRF/ottdp| | }}||Distance between the closest town and the selected position.
 |-
-|8A||B||{{en/Ottdp| | }}||Height of the lowest corner of the tile
-* {{en/GrfTill|7}} For GRF version 7 and below: Multiple of 8.
-* {{en/GrfFrom|8}} For GRF version 8 and above: Multiple of 1.
+|8A||B||{{pl/Development/NewGRF/ottdp| | }}||Height of the lowest corner of the tile
+* {{pl/Development/NewGRF/grfTill|7}} For GRF version 7 and below: Multiple of 8.
+* {{pl/Development/NewGRF/grfFrom|8}} For GRF version 8 and above: Multiple of 1.
 |-
-|8B||W||{{en/Ottdp| | }}||Distance to the closest water tile if property 1A bit 2 is clear (built on land); distance to the closest empty dry land tile if property 1A bit 2 is clear (built on water)
+|8B||W||{{pl/Development/NewGRF/ottdp| | }}||Distance to the closest water tile if property 1A bit 2 is clear (built on land); distance to the closest empty dry land tile if property 1A bit 2 is clear (built on water)
 |-
-|8D||W||{{en/Ottdp| | }}||Square of the Euclidean distance between the closest town and the selected position
+|8D||W||{{pl/Development/NewGRF/ottdp| | }}||Square of the Euclidean distance between the closest town and the selected position
 |-
-|8F||D||{{en/Ottdp|0.6|2.6|ottdrev=r11985|ttdprev=r1816}}|| 32 random bits
+|8F||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ottdrev=r11985|ttdprev=r1816}}|| 32 random bits
 |}
 Unless explicitly noted, distances are Manhattan distance, not Euclidean distance, ie. <tt>|x-x0|+|y-y0|</tt> instead of <tt>sqrt((x-x0)^2+(y-y0)^2)</tt>
 
 Variable 8B will always be below 80h if prop 1A bit 2 is clear. If bit 2 is set, 8B will be set to its max of 200h in the pathological case of an all-water map.
 
-{{en/Ottd|1.1|r20942}} During this callback, variable 18 (extra callback info 2) contains the following values for OpenTTD r20942 and later:
+{{pl/Development/NewGRF/ottd|1.1|r20942}} During this callback, variable 18 (extra callback info 2) contains the following values for OpenTTD r20942 and later:
 
 {| |-
 !Variable 18!!Meaning
@@ -57,26 +55,26 @@ This callback must return a 15-bit value, which is interpreted as follows:
 {| |-
 !Value!!Version!!Meaning
 |-
-|0000-03ff||{{en/Ottdp| | }}||Industry can't be built, display the misc. GRF text Dxxx as error message
+|0000-03ff||{{pl/Development/NewGRF/ottdp| | }}||Industry can't be built, display the misc. GRF text Dxxx as error message
 |-
-|0400||{{en/Ottdp| | }}||Industry can be built
+|0400||{{pl/Development/NewGRF/ottdp| | }}||Industry can be built
 |-
-|0401||{{en/Ottdp| | }}||Industry can't be built, display the default "site unsuitable" error message.
+|0401||{{pl/Development/NewGRF/ottdp| | }}||Industry can't be built, display the default "site unsuitable" error message.
 |-
-|0402||{{en/Ottdp| | }}||Industry can't be built, display the "...can only be built in rainforest areas" error message.
+|0402||{{pl/Development/NewGRF/ottdp| | }}||Industry can't be built, display the "...can only be built in rainforest areas" error message.
 |-
-|0403||{{en/Ottdp| | }}||Industry can't be built, display the "...can only be built in desert areas" error message.
+|0403||{{pl/Development/NewGRF/ottdp| | }}||Industry can't be built, display the "...can only be built in desert areas" error message.
 |-
-|0404||{{en/Ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can only be built above the snow-line" error message.
+|0404||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can only be built above the snow-line" error message.
 |-
-|0405||{{en/Ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can only be built below the snow-line" error message.
+|0405||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can only be built below the snow-line" error message.
 |-
-|0406||{{en/Ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can't build on open sea" error message.
+|0406||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can't build on open sea" error message.
 |-
-|0407||{{en/Ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can't build on canal" error message.
+|0407||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can't build on canal" error message.
 |-
-|0408||{{en/Ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can't build on river" error message.
+|0408||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can't build on river" error message.
 |}
 
-{{en/Ottdp|0.6|2.6|ttdprev=r1755}} Since TTDPatch r1755, you can use the text reference stack for your error messages, similarly to callback 3A. The only difference is that only 4 registers are copied instead of 6 because error messages support 20 bytes of reference stack only, and two of those bytes may be used by TTD.
+{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1755}} Since TTDPatch r1755, you can use the text reference stack for your error messages, similarly to callback 3A. The only difference is that only 4 registers are copied instead of 6 because error messages support 20 bytes of reference stack only, and two of those bytes may be used by TTD.
 <!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
