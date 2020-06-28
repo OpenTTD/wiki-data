@@ -1,0 +1,75 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Cargo_sub-type_display_for_industries|pl=pl/Development/NewGRF/NFO Specs/Callback/Cargo sub-type display for industries}}
+</noinclude>== Cargo sub-type display for industries (37) ==
+
+To wywołanie zwrotne pozwala wyświetlać tekst po nazwie ładunku w oknie funduszu branżowego oraz w oknie branżowym. 
+
+{{en/GrfTill|7}} For GRF version 7 and below the valid return values are:
+{| |-
+|00..FE|| Display D0xx (D000..D0FE) text.
+|-
+|FF|| Display no text.
+|-
+|100..1FE|| Display D0xx (D100..D1FE) text.
+|-
+|200..2FE|| Display D0xx (D200..D2FE) text.
+|-
+|300..3FE|| Display D0xx (D300..D3FE) text.
+|}
+
+{{en/GrfFrom|8}} For GRF version 8 and above the valid return values are:
+{| |-
+|00..3FF|| Display D0xx (D000..D3FF) text. Display waiting amount if production CB is used.
+|-
+|400|| Display no text. Display waiting amount if production CB is used.
+|-
+|401|| {{en/Ottdp|1.7|no|ottdrev=r27751}} Display no waiting amount and no text.
+|-
+|800..BFF|| {{en/Ottdp|1.7|no|ottdrev=r27751}} Display D0xx (D000..D3FF) text without waiting amount.
+|}
+
+During the callback, variable 18 specifies which cargo sub-type is queried.
+The meaning of variable 18 changes with industry property 1A flag 18.
+
+'''Bits 0..7''' of var. 18 can have the following values:
+* If property 1A flag 18 is clear.
+{| |-
+!Number!!Meaning
+|-
+|00||Return subtext for first accepted cargo type
+|-
+|01||Return subtext for second accepted cargo type
+|-
+|02||Return subtext for third accepted cargo type
+|-
+|03||Return subtext for first produced cargo type
+|-
+|04||Return subtext for second produced cargo type
+|}
+* {{en/Ottdp|1.9|no|ottdrev=e66cec8f}} If property 1A flag 18 is set.
+{| |-
+!Number!!Meaning
+|-
+|00||Return subtext for an accepted cargo type. Use bits 16..23 to distinguish them.
+|-
+|01||Return subtext for a produced cargo type. Use bits 16..23 to distinguish them.
+|}
+
+'''Bits 8..15''' of var. 18 can have the following values:
+{| |-
+!Number!!Meaning
+|-
+|00||The text is to be displayed in the industry fund window. The industry isn't built yet, so you can't access the industry variables
+|-
+|01||The text is to be displayed in the window of the industry. You can use the industry variables here.
+|-
+|02||The text is to be displayed in the industry directory window. You can use the industry variables here.
+|-
+|other values||Reserved for future use
+|}
+
+'''Bit 16..23''' of var. 18 contain the cargo type from the CTT (only if property 1A flag 18 is set).
+
+Other bits of var. 18 are reserved for future use.
+
+{{en/Ottdp|1.0|no|ottdrev=r17802}} Since OpenTTD r17802, the contents of registers 100h..105h are copied onto the text reference stack.
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
