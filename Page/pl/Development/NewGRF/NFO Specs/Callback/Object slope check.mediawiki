@@ -1,0 +1,32 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Object_slope_check|pl=pl/Development/NewGRF/NFO Specs/Callback/Object slope check}}
+</noinclude>== Object slope check (157) ==
+
+To wywołanie zwrotne jest wywoływane dla każdego kafelka, w którym zostanie zbudowany nowy obiekt.
+
+{{en/GrfTill|7}} For GRF version 7 and below the return values are the same as for [[en/Callbacks#industry-location-permissibility-28|callback 28]], but with bit 10 inverted for backwards compatibility. This means that success is 0 instead of 0x400 while custom GRF texts start at 0x400 instead of 0. Return value 1 stands for "Land sloped in wrong direction" instead of "Site unsuitable".
+Note that earlier version of OpenTTD before r22658 and TTDPatch only support 0 for success and 1 for error.
+
+{{en/GrfFrom|8}} For GRF version 8 and above the return values are the same as for [[en/Callbacks#industry-location-permissibility-28|callback 28]]. Return value 401 stands for "Land sloped in wrong direction" instead of "Site unsuitable".
+
+Since the object isn't built yet, only some variables are available. In OpenTTD these are: 41, 42, 44, 45, 46, 48, 60 - 62 and 64.
+Additionally you get the following information:
+* Variable 10:
+{| |-
+!Bits !! Meaning
+|-
+| 0..3 || Relative X position of the tile within the object
+|-
+| 4..7 || Relative Y position of the tile within the object
+|-
+| 8..31 || Reserved; must be masked
+|}
+* Variable 18:
+{| |-
+!Bits !! Meaning
+|-
+| 0..4 || Slope of the tile
+|-
+| 5..31 || Reserved; must be masked
+|}
+
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
