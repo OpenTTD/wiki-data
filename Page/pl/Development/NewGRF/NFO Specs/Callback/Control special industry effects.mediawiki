@@ -1,0 +1,12 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Control_special_industry_effects|pl=pl/Development/NewGRF/NFO Specs/Callback/Control special industry effects}}
+</noinclude>== Control special industry effects (3B) ==
+
+To wywołanie zwrotne pozwala kontrolować niektóre aspekty efektów specjalnych włączonych we właściwości 1A. Najniższy bajt zmiennej 18 zawsze zawiera liczbę efektu specjalnego, który jest równy liczbie bitów ustawionej we właściwości 1A. Obecnie obsługiwany jest tylko efekt 0 (okresowo sadzi pola) i efekt 1 (okresowo wycina pobliskie drzewa).
+* Dla efektu 0 powinieneś zwrócić 0, aby uniknąć sadzenia pól i 1, aby zasadzić pole. Oddzwonienie jest wywoływane co 256 tyknięć dla danej branży. Zmienna 10 zawiera 32 losowe bity, których można użyć do losowego zachowania. Zmienna branżowa AAh (słowo) może być używana do rzadszego sadzenia, ale należy pamiętać, że niski bajt w tym momencie zawsze wynosi zero. Domyślne zachowanie daje 1/8 szansy na zasadzenie nowego pola co 256 tyknięć.
+* Dla efektu 1 powinieneś zwrócić 0, aby uniknąć wycięcia drzewa i 1, aby spróbować wyciąć drzewo. Oddzwonienie jest wywoływane co 256 tyknięć dla danej branży. W TTDPatch i OpenTTD przed wersją r22673 nie otrzymujesz przypadkowych wartości w tym przypadku, ale nadal możesz używać zmiennej AAh; niski bajt również tutaj zawsze wynosi zero. Domyślnym zachowaniem jest próba wycinania drzewa co 512 tyknięć.
+
+To wywołanie zwrotne jest dostępne z {{pl/Development/NewGRF/ttdp|2.5}} TTDPatch 2.0.1 a73 i powyżej
+
+{{pl/Development/NewGRF/grfTill|7}} Zauważ, że wersje 7 i niższe GRF rozróżniały tylko zerowe i niezerowe wartości zwracane dla efektu 0 i 1.
+
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
