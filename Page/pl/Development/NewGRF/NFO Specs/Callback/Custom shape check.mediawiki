@@ -1,0 +1,18 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Custom_shape_check|pl=pl/Development/NewGRF/NFO Specs/Callback/Custom shape check}}
+</noinclude>== Custom shape check (2F) ==
+
+To wywołanie zwrotne jest wywoływane, gdy TTD sprawdza, czy dany kafelek jest odpowiedni dla kafelka branżowego. Oddzwonienie powinno zwrócić zero, jeśli kafelek nie jest odpowiedni, lub dowolną inną wartość, jeśli jest odpowiedni.
+
+{{en/GrfFrom|7}} The meaning of the returned value is different in GRF version 7; it works the same way as [[en/Callbacks#industry-location-permissibility-28 |callback 28]]. {{en/Ottdp| |2.6|ttdprev=r1755}} Also, since TTDPatch r1755, you can use the text reference stack for your error messages, similarly to [[#show-additional-text-in-industry-window-3a |callback 3A]]. The only difference is that only 4 registers are copied instead of 6.
+
+Since the tile isn't built yet, you can use variables 41, 42, 43, and 60 only, and you can't access any industry variables, either. Variable 60 is the most useful here, since you can check the slope of the tile, or even the nearby tiles. This callback is the only way to allow your tile to be built on steep slopes. 
+
+{{en/Ottdp|1.1|no|ottdrev=r19744}} Since OpenTTD r19744, you can access the random bits of the industry (it would get after construction) via industry variable 5F resp. [[en/RandomAction2]] type 83.
+
+{{en/Ottdp| |2.6|ttdprev=r1728}} Since TTDPatch 2.6 r1728, the lowest byte of variable 18 contains the layout number selected for the industry. The other bits of variable 18 remain undefined for now.
+
+{{en/Ottdp|1.1|no|ottdrev=r20942}} Since OpenTTD r20942, the second lowest byte of variable 18 contains the trigger event of the industry construction. The values
+are the same as the lowest byte of variable 18 of callback 28.
+
+'''PLEASE NOTE:''' When this callback is called, TTD is just checking, and hasn't placed any industry tiles yet. Therefore, bit 8 (tile belongs to the same industry as current) of variable 60 will always be clear, even for the current tile.
+<1--[[Category:en/Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
