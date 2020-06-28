@@ -1,0 +1,109 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Custom_station_rating_calculation|pl=pl/Development/NewGRF/NFO Specs/Callback/Custom station rating calculation}}
+</noinclude>== Custom station rating calculation (145) ==
+
+To wywołanie zwrotne pozwala zmodyfikować część obliczania oceny ładunku na stacji dla twojego ładunku. Aby zrozumieć, jak go używać, musisz najpierw zrozumieć, jak działa domyślne obliczanie oceny:
+
+Wewnętrznie ocena stacji jest zapisana w bajcie, 0 oznacza 0%, a 255 oznacza 100%. Ocena jest obliczana jako suma następujących składników:
+
+==== Time since the cargo was last picked up ====
+
+{| |-
+!Time units (days)!!Score (%, rounded)
+|-
+|&gt;21 (&gt;52.5 days)||0 (0%)
+|-
+|13..21 (32.5 days..52.5 days)||25 (10%)
+|-
+|7..12 (17.5 days..32.5 days)||50 (20%)
+|-
+|4..6 (10 days..17.5 days)||95 (37%)
+|-
+|0..3 (0 days..10 days)||130 (51%)
+|}
+
+Zastosowana jednostka czasu wynosi 185 tyknięć silnika lub 2,5 dnia TTD. W przypadku statków jednostki czasu są dzielone przez 4 przed obliczeniem tego składnika, więc statki mają cztery razy więcej czasu, zanim oceny zaczną spadać.
+
+==== Amount of cargo waiting ====
+
+{| |-
+!Amount of cargo!!Score (%, rounded)
+|-
+|&gt;1500||-90 (-35%)
+|-
+|1001..1500||-35 (-14%)
+|-
+|601..1000||0 (0%)
+|-
+|301..600||10 (4%)
+|-
+|101..300||30 (12%)
+|-
+|0..100||40 (16%)
+|}
+
+==== Max. speed of the last vehicle picking up the cargo ====
+
+Obliczenia te są nieco skomplikowane. Maksymalna prędkość pojazdu jest wyrażona w "jednostkach prędkości" <small>''(speed units)''</small> . W przypadku pociągów i pojazdów drogowych jednostka prędkości wynosi 1 km/h; dla statków wynosi 0,5 km/h; dla samolotów jest to 8 mph. Jeśli maks. prędkość jest wyższa niż 255 jednostek prędkości, zamiast niej stosuje się 255. Jeśli pojazd jest wolniejszy niż 85 jednostek, nie przyznaje się punktów; w przeciwnym razie dostajesz (speed_units-85)/4 punkty. Dlatego maksymalna, jaką możesz uzyskać, to 42 punkty, czyli 16%.
+
+==== Age of the last carrier picking up the cargo ====
+
+Oryginalne obliczenia wyglądają tak:
+
+{| |-
+!Age of vehicle (years)!!Score (%, rounded)
+|-
+|2||10 (4%)
+|-
+|1||20 (8%)
+|-
+|0||33 (13%)
+|}
+
+Jeśli przełącznik newagerating jest włączony, obliczenia ulegają zmianie. Otrzymujesz 33 punkty za pojazdy młodsze niż 5 lat, a 0 punktów za pojazdy starsze niż 21 lat. Pomiędzy tymi dwoma wiekami wynik spada powoli, o 2 punkty rocznie.
+
+==== Bonus for AI companies ====
+
+{| |-
+!AI intelligence setting!!Score (%, rounded)
+|-
+|Low||0 (0%)
+|-
+|Medium||31 (12%)
+|-
+|High||63 (25%)
+|}
+
+Oznacza to, że gracze AI oszukują, aby uzyskać dobre oceny swoich martwych mózgów tras.
+==== Bonus for statue in nearest town ====
+
+Jeśli Twoja firma wzniosła pomnik w najbliższym mieście, otrzymasz 26 punktów (10%) premii do wszystkich ocen ładunku.
+
+==== Clamping ====
+Jeśli gracz robi wszystko doskonale, maksymalna ocena, jaką może uzyskać, to 271 punktów, a najgorsza możliwa usługa transportowa dostaje -90 punktów; dla "wysoce inteligentnych" <small>''(highly intelligent)''</small> graczy AI odpowiednie wartości wynoszą odpowiednio 334 i -27. Wynikowa wartość zostaje zaciśnięta w zakresie 0..255. TTD zapewnia, że ​​oceny zmieniają się powoli, ale stale: co 2,5 dnia rzeczywista ocena zbliża się do wartości obliczonej powyżej, o nie więcej niż 2 punkty. Na przykład potrzebujesz co najmniej 320 dni, aby przejść od 0% do 100%, nawet jeśli Twoja usługa jest doskonała. Gdy typ ładunku pojawia się po raz pierwszy na stacji, jego ocena jest ustawiona na 175 punktów (69%), więc dostosowanie go do rzeczywistych parametrów usługi zajmuje trochę czasu..
+
+==== Callback effect ====
+Oddzwanianie umożliwia wymianę pierwszych trzech elementów (dni od ostatniego odbioru, oczekiwania i maksymalnej prędkości ostatniego pojazdu) w powyższym obliczeniu. Jeśli oddzwonienie się powiedzie, pierwsze trzy komponenty zostaną pominięte, a zwrócone wartości zostaną użyte zamiast ich wyników. Bit 14 jest uważany za bit znaku, więc możesz zwrócić liczby ujemne (i nie musisz się martwić, że obliczone wyniki wywołania zwrotnego dadzą wynik ujemny, dopóki pozostaniesz w zakresie -16384..16383). Podczas wywołania zwrotnego zmienna 18 ma wartość ssaaaatt, gdzie
+* tt jest czasem od ostatniego odbioru ładunku, w jednostkach czasu opisanych powyżej (1 jednostka = 2,5 dnia niezależnie od typu pojazdu)
+* aaaa to ilość oczekującego ładunku
+* ss jest prędkością ostatniego pojazdu, który odbiera ładunek, w jednostkach prędkości opisanych powyżej (jeśli żaden pojazd nie wjechał jeszcze na stację, wartość wynosi FFh)
+
+Najniższy bajt zmiennej 10 zawiera jedną z następujących wartości:
+
+{| |-
+!value!!meaning
+|-
+|10h||the last vehicle entering the station was a train
+|-
+|11h||the last vehicle entering the station was a road vehicle
+|-
+|12h||the last vehicle entering the station was a ship
+|-
+|13h||the last vehicle entering the station was an aircraft
+|-
+|00h||no vehicle entered the station yet, or the last one entering was sold
+|}
+
+Pamiętaj, że na stację przypada tylko jedno pole "ostatni pojazd" <small>''(last vehicle)''</small> , więc pojazd, którego dotyczy, mógł nie odebrać żadnego ładunku. Pierwotne obliczenia TTD nie dbają o to i po prostu wykorzystują pole, aby uzyskać typ pojazdu zastosowany w pierwszym elemencie.
+
+Obecnie przy podejmowaniu decyzji można używać tylko zmiennych 10 i 18, ponieważ dla oddzwaniania ładunku nie są dostępne zmienne pojazdu ani stacji. Gdy tylko pozwoli na to architektura TTDPatch, oddzwonienie otrzyma dostęp do stacji i ostatniego wjechanego pojazdu.
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
