@@ -110,7 +110,7 @@ This section shows the factors that affect the station rating. All calculations 
 This is triggered when the game truncates cargo (<tt>waiting_changed = true</tt>), which occurs when any of the stations meet the following conditions:
 * Cargo has not been picked up from any of those stations in 637.5 days. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3300-L3306]
 * Station has rating less than or equal to 25% AND has more than 200 units of cargo waiting. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3379-L3386]
-* Station has rating less than 50% AND more than 0 units of cargo waiting, happening with RANDOM PROBABILITY proportional to the station rating. I.E. if station rating is 49%, there is a ~1% chance, at 25% rating there is a ~50% chance, and at 0% stating rating there is a 100% chance. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3388-L3396]
+* Station has rating less than 50% AND has more than 0 units of cargo waiting, happening with RANDOM PROBABILITY proportional to the station rating. I.E. if station rating is 49%, there is a ~1% chance, at 25% rating there is a ~50% chance, and at 0% station rating there is a 100% chance. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3388-L3396]
 * Station has more than 4096 units of cargo waiting. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3398-L3411].</small>
 || More than 1500 || -90 || -35%
 |-
@@ -142,7 +142,7 @@ This is triggered when the game truncates cargo (<tt>waiting_changed = true</tt>
 |}
 Divide the total rating points by 255 to get the percent rating. The maximum possible rating is 100%.
 
-Every 2.5 days ([https://github.com/OpenTTD/OpenTTD/blob/0d599e155f335e922ad2be738a3ab73d1dea346b/src/date_type.h#L34 185 ticks]) station ratings are computed; ratings can't change by more than 2 points (0.78%) per cycle, except due to items under "Event".
+Every 2.5 days ([https://github.com/OpenTTD/OpenTTD/blob/0d599e155f335e922ad2be738a3ab73d1dea346b/src/date_type.h#L34 185 ticks]), station ratings are computed; ratings can't change by more than 2 points (0.78%) per cycle, except due to items under "Event".
 Events give an instant, temporary boost (or penalty) to ratings of nearby stations. The rating will gradually return to normal, following the 2 point per 2.5 days rule.
 
 The amount of cargo that can be transported from an industry is fully reliant on the station rating. This means that if there is exactly one station serving an industry, on ticks when the industry produces cargo, exactly station rating % of the cargo will be moved to the station. So if the amount of cargo transported from an industry is low, it is probably because the station rating is low, too. 
