@@ -1,0 +1,13 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Show_additional_text_in_industry_window|pl=pl/Development/NewGRF/NFO Specs/Callback/Show additional text in industry window}}
+</noinclude>== Show additional text in industry window (3A) ==
+
+To wywołanie zwrotne pozwala wyświetlić dodatkowe informacje w oknie branżowym dotyczące stanu branży. Zwracana wartość powinna być liczbą tekstu D0xx, który ma zostać wyświetlony. Tekst musi zaczynać się od specjalnego znaku kolorystycznego i nie może być dłuższy niż jedna linia. Na przykład możesz użyć tego wywołania zwrotnego, aby wyświetlić bieżący limit produkcji w branży wtórnej.
+
+{{pl/Development/NewGRF/grfFrom|8}} W przypadku wersji GRF 8 i nowszych możesz zwrócić wartość 400, aby nie wyświetlać tekstu (zamiast niepowodzenia połączenia zwrotnego).
+
+{{pl/Development/NewGRF/ottd|0.6|r11987}} Nie są zwracane dane (przekroczony limit czasu wysyłania danych)..
+
+{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1370}} Od TTDPatch 2.6 r1370 zawartość rejestrów 100h..105h jest kopiowana na stos tekstowy. Umożliwia to wyświetlanie dynamicznie obliczanych wartości w tekście przy użyciu odpowiednich StringCodes. Należy jednak pamiętać, że moduł obsługi tekstu zobaczy go jako tablicę bajtów, a nie tablicę DWORD, więc będziesz musiał spakować dwa słowa do rejestru, gdy użyjesz kodów odczytujących słowa ze stosu. W przypadku \7D (który dostaje bajt), być może będziesz musiał spakować więcej do rejestru, ale prawdopodobnie łatwiej jest użyć \7C. Pamiętaj również, że możesz użyć \80 do wyświetlania identyfikatorów tekstowych obliczanych w locie, ale identyfikatory tekstowe DCxx nie będą działać poprawnie. Gdy musisz wybierać dynamicznie z własnych tekstów, musisz użyć identyfikatorów D0xx i dodać do nich 400 godzin. (To znaczy użyj D400, aby odnieść się do D000, D401 dla D001 itp.)
+
+To wywołanie zwrotne jest dostępne z {{pl/Development/NewGRF/ttdp|2.5}} TTDPatch 2.0.1 a72 i wyższy
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
