@@ -1,0 +1,41 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Station_slope_check|pl=pl/Development/NewGRF/NFO Specs/Callback/Station slope check}}
+</noinclude>== Station slope check (149) ==
+
+To wywołanie zwrotne jest wywoływane dla każdego pola, na którym zostanie zbudowana nowa część stacji.
+
+{{en/GrfTill|7}} For GRF version 7 and below the return values are the same as for [[en/Callbacks#industry-location-permissibility-28|callback 28]], but with bit 10 inverted for backwards compatibility. This means that success is 0 instead of 0x400 while custom GRF texts start at 0x400 instead of 0. Return value 1 stands for "Land sloped in wrong direction" instead of "Site unsuitable".
+Note that earlier version of OpenTTD before r22658 and TTDPatch only support 0 for success and 1 for error.
+
+{{en/GrfFrom|8}} For GRF version 8 and above the return values are the same as for [[en/Callbacks#industry-location-permissibility-28|callback 28]]. Return value 401 stands for "Land sloped in wrong direction" instead of "Site unsuitable".
+
+Since the station isn't built yet, no 8x variables can be accessed. Only variables 43 and 67 will work from the 4x and 6x variables. You get the following information, though:
+* variable 18:
+{| |-
+!bit numbers!!Meaning
+|-
+|0..7||offset of current tile on the platform, 0 is the northmost tile
+|-
+|8..15||bits 8..15: current platform number, 0 is the northmost platform
+|-
+|16..23||total length of station being built
+|-
+|24..31||total number of platforms being built
+|}
+* variable 10:
+{| |-
+!bit numbers!!Meaning
+|-
+|4..7||Slope info of the current tile:
+* bit 7 - N corner is elevated
+* bit 6 - E corner is elevated
+* bit 5 - S corner is elevated
+* bit 4 - W corner is elevated
+|-
+|0..3||the same information, but "mirrored" (bit 0 and 2 swapped) if the station is built in the NW-SE orientation. This allows you to check slopes without checking the orientation explicitly.
+|-
+|other bits||reserved for future use
+|}
+
+Oddzwonienie jest wywoływane dopiero po normalnym sprawdzeniu przez TTD nachyleń, więc nie jest możliwe zezwolenie na nachylenie, które domyślnie nie jest dozwolone; możesz jedynie zawęzić zestaw dozwolonych stoków. Jeśli oddzwonienie nie powiedzie się, kafelek zostanie zaakceptowany. Nazywa się to jednak płaskimi kafelkami, więc możesz zmusić swoją stację do nachylenia terenu. Nie możesz uzyskać dostępu do informacji o stacji, nawet jeśli platforma jest dodana do istniejącej stacji kolejowej lub jest nadmierna płytka stacji. To dlatego, że TTD zdecyduje o tym później w kodzie, po tym, jak nachylenie zostanie już zaakceptowane.
+
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
