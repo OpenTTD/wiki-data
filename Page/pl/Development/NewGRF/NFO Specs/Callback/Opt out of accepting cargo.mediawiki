@@ -1,0 +1,12 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Opt_out_of_accepting_cargo|pl=pl/Development/NewGRF/NFO Specs/Callback/Opt out of accepting cargo}}
+</noinclude>== Opt out of accepting cargo (3D) ==
+
+Dzięki temu zwrotowi przemysł może odmówić przyjęcia ładunku, nawet jeśli jest to jeden z rodzajów ładunku wejściowego. Jeśli w pobliżu jest inny przemysł, który przyjmuje ten ładunek, ten go dostanie.
+
+Najniższy bajt var. 18 zawiera ID dostarczonego ładunku. Jeśli twój GRF ma zainstalowaną tabelę translacji ładunku, otrzymasz indeks z tej tabeli; w przeciwnym razie otrzymasz bit ładunku związany z rodzajem ładunku. Musisz zwrócić zero, jeśli nie chcesz przyjąć ładunku, lub 1, aby go przyjąć. Inne zwracane wartości są zastrzeżone do wykorzystania w przyszłości.
+
+This callback should be used in conjunction with [[en/Callbacks#decide-cargo-acceptance-2b |callback 2B]], since the acceptance of the tiles and the acceptance of the industry itself should always agree. If you disable accepting a cargo via [[en/Callbacks#opt-out-of-accepting-cargo-3d |callback 3D]], but forget to remove the acceptance from the tiles, the station will keep accepting the cargo and the player will keep getting the money, but the industry won't receive the cargo. On the other hand, if you remove acceptance from the tiles, but forget using [[en/Callbacks#opt-out-of-accepting-cargo-3d |callback 3D]], your industry may still get the cargo. (For example, there may be another industry nearby whose tiles accept the cargo. This makes the station accept the cargo, and send it to the nearest industry, which happens to be yours, even though its tiles don't accept the cargo.)
+
+To wywołanie zwrotne jest dostępne z {{en/Ttdp|2.5}} TTDPatch 2.5 beta 4 i powyżej
+
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
