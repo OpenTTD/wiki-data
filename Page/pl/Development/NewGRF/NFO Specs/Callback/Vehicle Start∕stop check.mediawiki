@@ -1,0 +1,30 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Vehicle_Start/stop_check|pl=pl/Development/NewGRF/NFO Specs/Callback/Vehicle Start∕stop check}}
+</noinclude>== Vehicle Start/stop check (31) ==
+
+To wywołanie zwrotne jest wywoływane za każdym razem, gdy gracz (lub AI) próbuje uruchomić lub zatrzymać pojazd. Jest to przydatne przede wszystkim do zapobiegania pojazdom
+od opuszczenia składu, chyba że spełniony zostanie określony warunek. Aby sprawdzić, czy pojazd jest uruchamiany, czy zatrzymywany, sprawdź
+bit 1 zmiennej B2. Jeśli jest ustawiony, pojazd jest aktualnie zatrzymany, a jeśli jest pusty, pojazd porusza się (lub przynajmniej nie zatrzymuje się ręcznie).
+
+{{pl/Development/NewGRF/grfTill|7}} Dla GRF w wersji 7 i niższej prawidłowe wartości zwracane to:
+{| |-
+|00..FE|| Display error message using D0xx (D000..D0FE) text as second line.
+|-
+|FF|| Start/stop action shall succeed.
+|-
+|100..1FE|| Display error message using D0xx (D100..D1FE) text as second line.
+|-
+|200..2FE|| Display error message using D0xx (D200..D2FE) text as second line.
+|-
+|300..3FE|| Display error message using D0xx (D300..D3FE) text as second line.
+|}
+
+{{pl/Development/NewGRF/grfFrom|8}} Dla GRF w wersji 8 i wyższej prawidłowe wartości zwracane to:
+{| |-
+|00..3FF|| Display error message using D0xx (D000..D3FF) text as second line.
+|-
+|400|| Start/stop action shall succeed.
+|}
+
+Oddzwanianie jest zawsze używane, gdy jest zdefiniowane, nie trzeba ustawiać bitu we właściwości akcji 0, aby ją aktywować.
+
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
