@@ -1,0 +1,62 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Advanced_effect_creation|pl=pl/Development/NewGRF/NFO Specs/Callback/Advanced effect creation}}
+</noinclude>== Advanced effect creation (160) ==
+{{en/Ottdp|1.5|no|ottdrev=r26747}}
+
+To wywołanie zwrotne jest używane, gdy zaawansowane efekty wizualne są włączone za pomocą właściwości Efektu wizualnego lub <small>''(resp.)''</small> [[en/Callbacks#visual-effect-and-wagon-power-10|Callback 10]].
+
+The callback is called whenever the effect spawning model issues the vehicle to generate a visual effect.
+This callback then decides the position, amount and looks of the visual effect.
+
+Variable 10 specifies what type of visual effect to generate:
+{| |-
+! Bits !! Meaning
+|-
+| 0-7 || Effect
+* 00: Normal visual effect when driving.
+* 01-FF: Reserved
+|-
+| 8-31 || Reserved, must be masked.
+|}
+
+Variable 18 contains 32 random bits.
+
+If the callback fails, no visual effect is created.
+Otherwise the result consists of:
+{| |-
+! Bits !! Meaning
+|-
+| 0-1 || Amount of effects to spawn (0 to 3), details are specified via register 100+x
+|-
+| 2-12 || Reserved, must be set to zero.
+|-
+| 13 || Train and RV only: If set, position effect relative to vehicle center instead of relative to vehicle sprite. (behaves the same for vehicles with length 8/8) 
+|-
+| 14 || If set, disable auto-rotation of effect position wrt. vehicle orientation.
+|}
+
+Registers 100+x define the appearance of the x-th effect (amount specified via callback result):
+{| |-
+! Bits !! Meaning
+|-
+| 0-7 || Effect type
+* 00-EF: Reserved
+* F0: Reserved
+* F1: Default 'steam' effect.
+* F2: Default 'diesel' effect.
+* F3: Default 'electric' effect.
+* F4-F9: Reserved
+* FA: Default 'broken aircraft' effect.
+* FB-FE: Reserved
+* FF: No effect.
+|-
+| 8-15 || 
+* If result bit 14 is cleared: Longitudinal position (signed)
+* If result bit 14 is set: X position (signed)
+|-
+| 16-23 ||
+* If result bit 14 is cleared: Transversal position (signed)
+* If result bit 14 is set: Y position (signed)
+|-
+| 24-31 || Z position (signed)
+|}
+[[Category:pl/User/extrazi/Callbacks]]
