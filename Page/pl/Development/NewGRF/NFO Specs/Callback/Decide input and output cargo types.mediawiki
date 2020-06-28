@@ -1,0 +1,28 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Decide_input_and_output_cargo_types|pl=pl/Development/NewGRF/NFO Specs/Callback/Decide input and output cargo types}}
+</noinclude>== Decide input and output cargo types (14B,14C) ==
+{{pl/Development/NewGRF/ottdp|0.6|2.6|ottdrev=r11177|ttdprev=r1718}}
+
+Te wywołania zwrotne są wywoływane, gdy branża jest zbudowana, i pozwalają dynamicznie dostosowywać typy ładunku wejściowego i wyjściowego.
+Możesz jednak jedynie ograniczyć liczbę przyjętych/wyprodukowanych ładunków. Właściwości przemysłowe 25 i 26 powinny zawsze stanowić nadzbiór zwróconych cargotypów.
+
+Oba wywołania zwrotne są wywoływane wielokrotnie, przy czym najniższy bajt zmiennej 10 zaczyna się od zera i rośnie po każdym wywołaniu; powinieneś za każdym razem zwracać typ ładunku lub FFh, aby zakończyć listę. (Nieudane wywołanie zwrotne również kończy listę.) Obowiązują te same ograniczenia, co w przypadku wywołania zwrotnego 14A: kafelki branżowe nie zostały jeszcze umieszczone, a niektóre zmienne branżowe zawierają śmieci. Możesz jednak użyć losowych akcji 2. Interpretacja zwracanej wartości zależy od dwóch czynników: aktualnego numeru wersji GRF i obecności tabeli translacji ładunku:
+
+{| |-
+!GRF version!!Has cargo translation table!!Interpretation
+|-
+|6 or below|| ||Climate-dependent cargo slot number
+|-
+|7 or above||No||Cargo bit
+|-
+|7 or above||Yes||Index in the translation table
+|}
+
+Wyniki wywołania zwrotnego zastępują zawartość właściwości 25 i 26.
+Jeśli korzystasz z tych wywołań zwrotnych, zaleca się, aby nie używać właściwości przemysłowych 12..13, 1C..1E i 27..28, które zależą od kolejności cargotypów, ale zamiast tego należy użyć produkcyjnego wywołania zwrotnego w wersji 2.
+
+{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} Jeśli właściwość przemysłowa 1A flaga 18 jest wyraźna, te wywołania zwrotne są wywoływane co najwyżej dla 3 ładunków wejściowych i 2 wyjściowych.
+Jeśli ustawiona jest flaga 18, to ograniczenie zgodności jest usuwane, a połączenia zwrotne są wywoływane częściej.
+
+W obu przypadkach zwraca FFh jako ostatni element kończący listy.
+
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
