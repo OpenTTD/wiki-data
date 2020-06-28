@@ -1,0 +1,40 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Sound_effect|pl=pl/Development/NewGRF/NFO Specs/Callback/Sound effect}}
+</noinclude>== Sound effect (33) ==
+
+To wywołanie zwrotne jest wywoływane dla wszystkich pojazdów i jako ogólne wywołanie zwrotne dla mostów, dla różnych zdarzeń, które wspierają odtwarzanie efektów dźwiękowych.
+Typ zdarzenia jest przechowywany w najniższym bajcie zmiennej 10.
+
+15-bitowa wartość zwracana to liczba efektów dźwiękowych. Wartości od 0 do 72 (dec) to wbudowane efekty dźwiękowe TTD, wartości powyżej tego
+odnoszą się do dźwięków z Działania 11.
+
+Jeśli oddzwonienie zwróci kod błędu (nie wynik oddzwonienia), odtworzony zostanie domyślny efekt dźwiękowy TTD.
+Jeśli oddzwonienie zwróci numer dźwięku, który nie jest ani dźwiękiem TTD, ani dźwiękiem z akcji 11, nic nie zostanie odtworzone.
+
+{| |-
+!Lowest byte of variable 10!!Event
+|-
+|1||Start sound, called when leaving a station or depot, take-off sound for planes
+|-
+|2||Tunnel sound, called when vehicle enters tunnel
+|-
+|3||Breakdown sound, called when vehicle breaks down (not for planes)
+|-
+|4||Running sound, called once per engine tick, but no more than once per vehicle motion
+|-
+|5||Touchdown sound, for planes only (obviously)
+|-
+|6||Visual effect generation (steam plume, diesel smoke, electric spark)
+|-
+|7||Running sound, called every 16 engine ticks if in motion
+|-
+|8||Stopped sound, called every 16 engine ticks if stopped (e.g. at signal/in station)
+|-
+|9||Load/unload sound, called when consist loads or unloads cargo
+|-
+|10||Bridge sound, called as generic feature 06 callback every time a consist moves on a bridge. Variables 40+x, 60+x and 80+x refer to the vehicle, and bits 0..7 of variable 18 hold the bridge type
+|}
+
+W przypadku dźwięków jazdy wskazane jest sprawdzenie [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Vehicles#motion-counter-46|motion counter]] i zwrócenie tylko udanej liczby efektów dźwiękowych co tyle tyknięć ruchu pojazdu. W ten sposób dźwięki będą odtwarzane częściej, im szybszy jest pociąg. Alternatywnie możesz sprawdzić zmienną licznika tyknięć i odtwarzać efekt dźwiękowy co tyle tyknięć silnika, aby odtwarzać go ze stałą szybkością lub, oczywiście, przełączać oba tryby w zależności od prędkości pojazdu.
+
+Zauważ, że jeśli przełącznik prędkości samolotu jest aktywny, samoloty poruszają się określoną liczbę razy na tik silnika. Oznacza to, że ich licznik ruchu rośnie szybciej niż w przypadku innych pojazdów, a zatem w celu uzyskania niezawodnych efektów dźwiękowych należy podzielić licznik ruchu przez ustawienie prędkości planowej (możliwe do odczytania za pomocą [[pl/Development/NewGRF/NFO Specs/ReadingPatchVariables|action D]] ) przed sprawdzeniem wartości.
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
