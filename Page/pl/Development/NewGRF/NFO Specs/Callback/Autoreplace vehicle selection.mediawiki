@@ -1,0 +1,15 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Autoreplace_vehicle_selection|pl=pl/Development/NewGRF/NFO Specs/Callback/Autoreplace vehicle selection}}
+</noinclude>== Autoreplace vehicle selection (34) ==
+
+To wywołanie zwrotne jest wywoływane za każdym razem, gdy stary pojazd wymaga wymiany. Zwraca ID''`y'' pojazdu, aby zaktualizować obecny pojazd. Zmienne pojazdu są dostępne jak zwykle, aby zdecydować, które identyfikatory będą odpowiednie do aktualizacji.
+
+Oddzwanianie jest wielokrotnie wywoływane, a numer iteracji jest przechowywany w najniższym bajcie zmiennej 10. &nbsp;Plik .grf powinien zwracać wszystkie możliwe identyfikatory jeden po drugim, z najlepszymi wymienionymi na początku. &nbsp;Łatka będzie używać pierwszego pojazdu z listy, który jest dostępny dla gracza i ma wymaganą minimalną niezawodność określoną przez przełącznik automatycznego zastępowania, i przerywa sekwencję oddzwaniania w tym momencie.
+
+Sekwencja oddzwaniania jest również przerywana, gdy zwracany ID jest równy bieżącemu ID pojazdu. Ma to na celu zapobieganie obniżeniu oceny, dlatego należy zawsze zwracać ID pojazdu, dla którego wywołanie zwrotne jest wywoływane w odpowiednim miejscu w sekwencji.
+
+Jeśli oddzwonienie nie powiedzie się, tj. Jeśli żaden z oddzwaniania w ogólnym łańcuchu nie znajdzie odpowiedniego ID , pojazd nie zostanie zmodernizowany i zamiast tego zostanie po prostu odnowiony. &nbsp;Jeśli ID jest dostępny, ale graczowi brakuje gotówki na ulepszenie, łatka czeka na gotówkę, zanim będzie dostępna, zamiast wybierać gorszy silnik lub odnawiać pojazd.
+
+W pociągach każda głowica silnika zostanie zastąpiona jednym pojazdem nowego typu. &nbsp;W związku z tym wskazane jest, aby zwracać tylko "kompatybilne" <small>''(compatible)''</small> ID''`y'' dla pociągów, które wymagają określonej konstrukcji lub ustawienia głowic silnika.
+
+Oddzwanianie jest zawsze używane, gdy jest zdefiniowane, nie trzeba ustawiać bitu we właściwości akcji 0, aby ją aktywować.
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
