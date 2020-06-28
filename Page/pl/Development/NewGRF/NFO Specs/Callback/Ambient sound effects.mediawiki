@@ -1,0 +1,31 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Ambient_sound_effects|pl=pl/Development/NewGRF/NFO Specs/Callback/Ambient sound effects}}
+</noinclude>== Ambient sound effects (144) ==
+
+To wywołanie zwrotne jest ogólnym wywołaniem zwrotnym dla funkcji 0C (nowe dźwięki) używanej do odtwarzania efektów dźwiękowych otoczenia.
+
+15-bitowa wartość zwracana to liczba efektów dźwiękowych. Wartości od 0 do 72 (dec) to wbudowane efekty dźwiękowe TTD, wartości poza tym odnoszą się do dźwięków z [[pl/Development/NewGRF/NFO Specs/Action11|Action 11]].
+
+Aby zdecydować, czy odtworzyć dźwięk i jaki dźwięk zagrać, Var.Action 2 zmienna 10 zawiera następujące informacje:
+* {{pl/Development/NewGRF/grfTill|7}} For GRF version 7 and below: THRRxxxt
+* {{pl/Development/NewGRF/grfFrom|8}} For GRF version 8 and above: xTHHRRtt
+
+{| |-
+!Field!!Meaning
+|-
+|T||Tile class, 0=bare land, 4=trees, 6=water
+|-
+|HH||
+{{pl/Development/NewGRF/grfTill|7}} Height of north corner of tile (multiple of 8)<br/>
+{{pl/Development/NewGRF/grfFrom|8}} Height of lowest corner of tile (multiple of 1)
+|-
+|RR||8 random bits
+|-
+|xxx||Reserved
+|-
+|tt||
+* Bits 0..2: Terrain type: 0 normal (grass), 1 desert, 2 rainforest, 4 on or above snowline.
+* Bits 3..5: {{pl/Development/NewGRF/grfFrom|8}} Water class: 0 - undefined / land; 1 - sea; 2 - canal; 3 - river. 
+|}
+
+To wywołanie zwrotne musi być włączone przez bit 4 in [[pl/Development/NewGRF/NFO Specs/ActionD#misc-grf-features-9e|action D var 9E]].
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
