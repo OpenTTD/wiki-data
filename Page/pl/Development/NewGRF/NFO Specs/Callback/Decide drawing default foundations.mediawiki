@@ -1,0 +1,28 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Decide_drawing_default_foundations|pl=pl/Development/NewGRF/NFO Specs/Callback/Decide drawing default foundations}}
+</noinclude>== Decide drawing default foundations (30/14E/150) ==
+
+To wywołanie zwrotne jest wywoływane, gdy TTD rozpoczyna rysowanie kafelka przemysł/dom/lotnisko <small>''(industry/house/airport)''</small> na pochyłym terenie. Powinien zwrócić 0, aby wyłączyć
+domyślna grafika nachylenia i 1, aby je włączyć.
+
+Jeśli zdecydujesz się wyłączyć podstawę, możesz narysować własną, określając
+
+* brak naziemnego 'sprite', tzn. duszka o numerze 00 00 00 00,
+* następnie ikonka fundamentu z ustawionym bitem 30, aby widoczne były fundamenty nawet w trybie przezroczystym, a normalna wysokość fundamentu TTD wynosi 7 pikseli,
+* następnie normalna grafika z obwiedniami dostosowanymi w odniesieniu do 'sprite' fundacji: 
+
+ 100 * 4 01 09 02 01
+ // foundation
+ 101 C:\ttdlx\newgrf\sprites\slope.pcx 220 130 09 40 63 -30 -9
+ // building
+ 102 C:\ttdlx\newgrf\sprites\slope.pcx 80 130 09 31 64 -31 0
+ 
+ 103 * 28 02 09 00 02
+ 00 00 00 00 // no groundsprite
+ 00 00 00 C0 00 00 00 10 10 07 // foundation
+ 01 00 00 80 00 00 08 10 10 10 // building
+
+{{pl/Development/NewGRF/ttdp|}} Uwaga: TTDPatch i OpenTTD do 0.7 nie mają odpowiedniej grafiki fundamentowej dla stromych zboczy. W każdym razie zmienna 60 przydaje się przy wyborze właściwego fundamentu do narysowania.
+
+{{pl/Development/NewGRF/grfTill|7}} Zauważ, że GRF w wersji 7 i niższej rozróżniały tylko zerowe i niezerowe wartości zwrotne.
+
+<!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
