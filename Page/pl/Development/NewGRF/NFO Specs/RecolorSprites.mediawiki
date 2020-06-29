@@ -6,12 +6,12 @@ Ponowne kolorowanie ikonek to pseudosprite używane do ponownego kolorowania inn
 
 == Syntax ==
 
-A recolor sprite has the following format:
+Ponowne kolorowanie duszka ma następujący format:
 
  <Sprite-number> * 257 00 <recolor-table>
 
 {|
-!Element!![[en/GRFActionsDetailed|Size]]!!Description
+!Element!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Size]]!!Description
 
 |-
 |<Sprite-number>||dec||A sequential sprite number
@@ -30,27 +30,27 @@ A recolor sprite has the following format:
 
 === 00 ===
 
-At first glance, it is easy to confuse a recolor sprite with an action 0, most often for trains. Attempting to read the recolor sprite as an action 0 will usually reveal that there are far too many bytes. Another clue is that recolor sprites are always 257 bytes long.
+Na pierwszy rzut oka łatwo pomylić zmiennokolorowego duszka z działaniem 0, najczęściej w pociągach. Próba odczytania sprite'a odbarwiającego jako akcji 0 zwykle ujawni, że jest o wiele za dużo bajtów. Kolejną wskazówką jest to, że sprajniki o ponownym kolorze mają zawsze długość 257 bajtów.
 
-The correct method to distinguish recolor sprites and action 0s is to note that recolor sprites can only appear in an [[en/Action5]] or [[en/ActionA]] block, and action 0s can only appear outside such a block.
+Prawidłową metodą rozróżnienia sprite'ów od zera i akcji 0 jest zwrócenie uwagi, że sprite'y z ponownym kolorowaniem mogą pojawić się tylko w bloku [[pl/Development/NewGRF/NFO Specs/Action5|Action5]] lub [[pl/Development/NewGRF/NFO Specs/ActionA|ActionA]], a akcja 0s może pojawić się tylko poza takim blokiem.
 
 === recolor-table ===
 
-A 256-byte recolor table. A byte at the offset equal to the index of the source color specifies the color to be drawn.
+256-bajtowa tabela ponownego kolorowania. Bajt przy przesunięciu równym indeksowi koloru źródłowego określa kolor, który ma zostać narysowany.
 
-Note that the offsets and bytes are different depending on whether the GRF is being loaded in TTD DOS or TTD Win. If you create a grf that contains recolor sprites, you may find it necessary to maintain two separate versions, or use an Action7 that checks variable 83 to guard the introducing action 5/A and the recolor sprite(s).
+Zauważ, że przesunięcia i bajty różnią się w zależności od tego, czy GRF jest ładowany do TTD DOS czy TTD Win. Jeśli utworzysz GRF, który zawiera sprite'y, może okazać się konieczne utrzymanie dwóch osobnych wersji, lub użyj Action7, który sprawdza zmienną 83, aby zabezpieczyć wprowadzającą akcję 5/A i sprite'y recolor.
 
 == Usage ==
 
-Recolor sprites are applied in one of two ways.
+Ponowne kolorowanie duszków jest stosowane na jeden z dwóch sposobów.
 
-;Non-transparently: Each pixel in the sprite is looked up in the recolor table, and then the color specified at that offset is drawn on the screen. If the resultant color is 00 ("transparent blue"), then if the [[en/RealSprites#compression|sprite's compression]] bit 3 is ''not'' set, nothing is drawn; otherwise (i.e. if the sprite is in chunked data format) the actual color 00 (which is ''black'') is drawn.
+;Nieprzejrzysty: każdy piksel w ikonce jest sprawdzany w tabeli kolorów, a następnie kolor określony w tym przesunięciu jest rysowany na ekranie. Jeśli wynikowy kolor to 00 ("przezroczysty niebieski" <small>''~transparent blue''</small>)), to jeśli bit  [[pl/Development/NewGRF/NFO Specs/RealSprites#compression|sprite's compression]] ustawiony jest na ''nie'' , nic nie jest rysowane; w przeciwnym razie (tj. jeśli 'sprite' ma format danych fragmentów), rysowany jest rzeczywisty kolor 00 (czyli ''czarny'').
 
-;Transparently: For each sprite pixel that is not transparent, the current (on-screen) color of the pixel at the location where the sprite pixel would be drawn is looked up in the recolor table, and then redrawn in the new color. If the recolor lookup returns 00 ("transparent blue"), the resultant color is actually black. Other than is-transparent-blue/not-transparent-blue, the actual colors of the pixels in a sprite that is drawn transparently are meaningless.
+;Przezroczysty: Dla każdego piksela sprite, który nie jest przezroczysty, bieżący (ekranowy) kolor piksela w miejscu, w którym piksel sprite miałby zostać narysowany, jest sprawdzany w tabeli ponownego kolorowania, a następnie przerysowany w nowym kolorze. Jeśli wyszukiwanie ponownie koloru zwraca 00 ("przezroczysty niebieski"), wynikowy kolor jest w rzeczywistości czarny. Inne niż przezroczysty-niebieski/nieprzezroczysty-niebieski, rzeczywiste kolory pikseli w ikonce, która jest rysowana przezroczysto, są bez znaczenia.
 
 == Default recolour sprites ==
 
-TTD already defines a number of recolour sprites for various uses, e.g. for the semi-transparency of glass or the re-colouring of the tubular bridges, company colours or some houses.
+TTD definiuje już wiele przekolorowanych duszków do różnych zastosowań, np. do półprzezroczystości szkła lub ponownego barwienia rurowych mostów, kolorów firmowych lub niektórych domów.
 
 {|
 !Sprite number (dec)!!Sprite number (hex)!!Description
@@ -167,13 +167,13 @@ TTD already defines a number of recolour sprites for various uses, e.g. for the 
 |1439||0x59F || church cream
 |}
 
-For the company colour translation a translation to dark blue (0x307) is the identity translation which replaces every colour with itself. You can use it in cases where a remapping is needed, but you don't want to recolor anything.
+W firmowym tłumaczeniu kolorów tłumaczenie na ciemnoniebieski (0x307) to tłumaczenie tożsamości, które zastępuje każdy kolor samym sobą. Możesz go użyć w przypadkach, gdy konieczne jest ponowne mapowanie, ale nie chcesz niczego zmieniać koloru.
 
 == Dual company colours ==
-{{en/Ottdp|0.6|2.5}}
-You can also use the dual-company-colour recolour sprites. However, they are no default TTD sprites and thus they do not have fixed sprite numbers. You can determine the spritenumber of the first 2CC recolour sprite via [[en/ReadingPatchVariables|Patch Variable 11]]. You then need [[en/Action6|Action 6]] to put the needed recolourings into actions where needed.
+{{pl/Development/NewGRF/ottdp|0.6|2.5}}
+Możesz również użyć duszków zmieniających kolor w dwóch firmach. Nie są one jednak domyślnymi duszkami TTD, a zatem nie mają ustalonych numerów duszków. Możesz określić liczbę znaków dla pierwszego duszka zmieniającego kolor na 2CC poprzez [[pl/Development/NewGRF/NFO Specs/ReadingPatchVariables|Patch Variable 11]] . Następnie potrzebujesz [[pl/Development/NewGRF/NFO Specs/Action6|Action 6]] , aby wprowadzić potrzebne zmiany koloru do akcji w razie potrzeby.
 
-Starting from the spritenumber from patch variable 11 there are 256 recolour sprites. Their order follows the default company recolourings above. The second company colour changes every 16 sprites, so every combination of first and second colour is available:
+Począwszy od numeru sprit ze zmiennej patcha 11, jest 256 duszków o zmienionym kolorze. Ich kolejność jest zgodna z domyślnymi kolorami firmy powyżej. Kolor drugiej firmy zmienia się co 16 'sprites' , więc dostępna jest każda kombinacja pierwszego i drugiego koloru:
 
 {|
 !Offset from first sprite (dec) !!Offset from first sprite (hex) !! First colour (colours 0xC6 to 0xCD) !! Second colour (colours 0x50 to 0x57)
