@@ -4,19 +4,19 @@
 
 Prawdziwe duszki są graficzną częścią plików .grf; są tym, co faktycznie widzi użytkownik w grze.
 
-Istnieją dwa wyraźnie różne sposoby pisania prawdziwych duszków, w zależności od używanej wersji informacyjnej. TTDPatch i OpenTTD, dopóki wersja 1.2 nie zrozumie tylko [[en/Version numbers#grf-container-version|GRF container version 1]] lub <small>''(resp.)''</small> [[en/Version numbers#nfo-version|info version 7]] .
+Istnieją dwa wyraźnie różne sposoby pisania prawdziwych duszków, w zależności od używanej wersji informacyjnej. TTDPatch i OpenTTD, dopóki wersja 1.2 nie zrozumie tylko [[pl/Development/NewGRF/NFO Specs/Version numbers#grf-container-version|GRF container version 1]] lub <small>''(resp.)''</small> [[pl/Development/NewGRF/NFO Specs/Version numbers#nfo-version|info version 7]] .
 
 == Info version 7 ==
-Available in {{en/Ottdp||}}
+Dostępne w {{pl/Development/NewGRF/ottdp||}}
 
 === Syntax ===
 
-A real sprite has the following format:
+Prawdziwy duszek ma następujący format:
 
  <Sprite-number> <filename> <xpos> <ypos> <compression> <ysize> <xsize> <xrel> <yrel>
 
 {|
-!Element!![[en/GRFActionsDetailed|Size]]!!Description
+!Element!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Size]]!!Description
 |-
 |<Sprite-number>||dec||A sequential sprite number
 |-
@@ -41,23 +41,23 @@ A real sprite has the following format:
 
 ==== filename ====
 
-This specifies the name and path of the .pcx file. The path may be specified one of two ways:
-# An absolute path. (eg C:\GRF\sprites\filename.pcx)
-# A relative path; these are specified relative to the location of the .grf file. (eg sprites\filename.pcx)
+Określa nazwę i ścieżkę pliku .pcx. Ścieżkę można określić na jeden z dwóch sposobów:
+# Absolutna ścieżka. (np. C:\GRF\sprites\filename.pcx)
+# Ścieżka względna; są one określone względem położenia pliku .grf. (np. sprites\filename.pcx)
 
-For most purposes, relative paths are preferred, since .nfo files with relative paths are more portable than .nfo files with absolute paths.
+W większości przypadków preferowane są ścieżki względne, ponieważ pliki .nfo ze ścieżkami względnymi są bardziej przenośne niż pliki .nfo ze ścieżkami bezwzględnymi.
 
 ==== xpos, ypos, ysize, and xsize ====
 
-These are pretty easy to set, as long as you remember that the order is X, Y, Y, X, and not X, Y, X, Y.
+Są one dość łatwe do ustawienia, o ile pamiętasz, że kolejność to X, Y, Y, X, a nie X, Y, X, Y.
 
-Also, no sprite may contain zero pixels; ysize and xsize must both be at least 1.
+Ponadto żaden duszek nie może zawierać zerowych pikseli; ysize i xsize muszą mieć co najmniej 1.
 
-Note: there is a bug in grfcodec 0.9.7 and earlier that prevents them from properly encoding a sprite with a smaller ypos value than any earlier sprite. The best way to circumvent this bug is to upgrade to the newest version.
+Uwaga: w grfcodec 0.9.7 i wcześniejszych występuje błąd, który uniemożliwia im prawidłowe kodowanie duszka o mniejszej wartości ypos niż jakikolwiek wcześniejszy duszek. Najlepszym sposobem na obejście tego błędu jest aktualizacja do najnowszej wersji.
 
 ==== compression ====
 
-Unlike the other numbers, the compression is a hexadecimal bit-field. Currently, the following bits are supported:
+W przeciwieństwie do innych liczb, kompresja jest szesnastkowym polem bitowym. Obecnie obsługiwane są następujące bity:
 
 {|
 !bit!!value!!meaning
@@ -71,28 +71,28 @@ Unlike the other numbers, the compression is a hexadecimal bit-field. Currently,
 |6||40||Sprite should not be cropped. (obeyed by GRFCodec r1604 and later)
 |}
 
-The only valid values for compression are 00, 01, 02, 03 and 09 (except the special flag 0x40 that is only important for grfcodec).
-Values 00 - 03 are handled the same by OpenTTD. If you don't care about the difference for TTDPatch either use 01 or 09.
+Jedynymi poprawnymi wartościami dla kompresji są 00, 01, 02, 03 i 09 (z wyjątkiem specjalnej flagi 0x40, która jest ważna tylko dla grfcodec).
+Wartości 00 - 03 są obsługiwane tak samo przez OpenTTD. Jeśli nie zależy ci na różnicy dla TTDPatch, użyj 01 lub 09.
 
-The best value depends on which and how many pixels are transparent: If the non-transparent pixels are arranged to bigger blocks along the pixellines (like for ground tiles or diagonal views of vehicles) use 09 (chunked data format). If there are no transparent pixels or transparent pixels and non-transparent alternate a lot along the pixellines use 01.
+Najlepsza wartość zależy od tego, które i ile pikseli jest przezroczystych: Jeśli nieprzezroczyste piksele są rozmieszczone w większych blokach wzdłuż pikseli (jak w przypadku płytek gruntowych lub przekątnych widoków pojazdów), użyj 09 (format danych fragmentów). Jeśli nie ma przezroczystych pikseli lub przezroczystych pikseli i nieprzeźroczyste naprzemiennie dużo wzdłuż pikseli, użyj 01.
 
-If you are interested in improving drawing for TTDPatch (does not make a difference for OpenTTD): You can use 00 resp. 02 if there are NO transparent pixels at all. 00 is slightly quicker than 01. 02 is a valid value but does not make a lot of sense.
+Jeśli chcesz poprawić rysowanie w TTDPatch (nie robi to różnicy w OpenTTD): Możesz użyć 00 lub. 02, jeśli w ogóle NIE ma przezroczystych pikseli. 00 jest nieco szybsze niż 01. 02 jest prawidłową wartością, ale nie ma większego sensu.
 
-You can use 02 resp. 03 to store the sprite compressed in memory. Drawing will be slower, but the sprite needs less memory while it is not used. Useful for big sprites which are hardly used (like the newpaper "tycoon of the century" at game end)
+Możesz użyć 02 odpowiednio. 03 do przechowywania sprite skompresowanego w pamięci. Rysowanie będzie wolniejsze, ale duszek potrzebuje mniej pamięci, gdy nie jest używany. Przydatny dla dużych duszków, które są rzadko używane (jak nowy papier "potentat stulecia" <small>''(tycoon of the century)''</small> pod koniec gry)
 
-It is generally a bad idea to use any other value, as that may cause problems. FF is an especially bad idea.
+Zasadniczo używanie innych wartości jest złym pomysłem, ponieważ może to powodować problemy. FF to szczególnie zły pomysł.
 
 ==== xrel and yrel ====
 
-These two numbers will probably become the bane of your existence.
+Te dwie liczby prawdopodobnie staną się zmorą twojego istnienia.
 
-TTD stores a single point for every sprite. xrel and yrel specify how far right and down (respectively) to go from the TTD point to the upper-left hand corner of the sprite.
+TTD przechowuje jeden punkt dla każdego duszka. xrel i yrel określają, jak daleko w prawo i w dół (odpowiednio), aby przejść od punktu TTD do lewego górnego rogu duszka.
 
-Halving xsize and ysize and negating the results produces a decent starting point for these values, and further adjustments may be done manually, e.g within OpenTTD by activating the [http://wiki.openttd.org/NewGRF_Debugging NewGRF developer tools] and using the sprite aligner or in TTDPatch 2.0.1 alpha 69 and later with the [http://www.tt-wiki.net/wiki/GRFAuthorHelperWindow GRFAuthorHelperWindow].
+Zmniejszenie o połowę xsize i ysize oraz zanegowanie wyników tworzy przyzwoity punkt początkowy dla tych wartości, a dalsze korekty można wprowadzić ręcznie, np. W OpenTTD, aktywując  [http://wiki.openttd.org/NewGRF_Debugging NewGRF developer tools]  i używając Aligner sprite lub w TTDPatch 2.0.1 alpha 69 i późniejszych z [http://www.tt-wiki.net/wiki/GRFAuthorHelperWindow GRFAuthorHelperWindow] .
 
 ==== Ranges ====
 
-The ranges for the four numbers after the compression are as follows:
+Zakresy czterech liczb po kompresji są następujące:
 
 ysize: 1..255
 
@@ -106,10 +106,10 @@ ysize*xsize may not exceed 65535.
 
 ==== Other notes ====
 
-It is a common practice, in action 1 blocks, to use the pseudosprite "-1 * 1 00" to take the place of a real sprite that will never be used. The most common use is for vehicle sets that will only be used in the purchase window. This reduces the size of the .grf file when compared to replacing them with one-pixel sprites (but not when compared to splitting the action 1 and making the second one define only one sprite), but does not save real-sprite slots. If TTD ever attempts to draw one of these sprites, it will, at best, crash.
+Powszechną praktyką w blokach akcji 1 jest używanie pseudosprite  "-1 * 1 00"  w celu zastąpienia prawdziwego duszka, który nigdy nie zostanie użyty. Najczęstszym zastosowaniem są zestawy pojazdów, które będą używane tylko w oknie zakupu. Zmniejsza to rozmiar pliku .grf w porównaniu do zastąpienia ich duszkami jednopikselowymi (ale nie w porównaniu do podziału akcji 1 i uczynienia drugiego definiującym tylko jednego duszka), ale nie oszczędza gniazd prawdziwych duszków. Jeśli TTD kiedykolwiek spróbuje narysować jeden z tych duszków, w najlepszym wypadku się zawiesi.
 
 == Info version 32 ==
-Available in {{en/Ottdp|1.2|ottdrev=r23890}}
+Dostępne w {{pl/Development/NewGRF/ottdp|1.2|ottdrev=r23890}}
 
 === Syntax ===
 
@@ -121,11 +121,11 @@ Available in {{en/Ottdp|1.2|ottdrev=r23890}}
   |               <filename> mask  <xpos> <pos>
                   ...
 ==== Sprite-number ====
-This is a sequential sprite number, maximum value is 2**32
+Jest to sekwencyjna liczba 'sprites' , maksymalna wartość to 2**32
 ==== Filename ====
-The graphics filename which the real sprite is found in
+Nazwa pliku graficznego, w którym znajduje się prawdziwy 'sprite'
 ==== Type ====
-Sprite type. The type of the 1st sprite must always be 8bpp and of 'normal' zoom level (see below). Subsequent lines for alternative sprites can be of any type and zoom level. Available types are:
+Rodzaj 'sprite'. Typ 1. 'sprite'musi zawsze wynosić 8 bpp i 'normal' poziom powiększenia (patrz poniżej). Kolejne wiersze dla alternatywnych ikonek mogą być dowolnego typu i poziomu powiększenia. Dostępne typy to:
 {|
 !Name!!Description
 |-
@@ -137,13 +137,13 @@ Sprite type. The type of the 1st sprite must always be 8bpp and of 'normal' zoom
 |}
 
 ==== xpos, ypos ====
-The coordinates of the upper left corner of the sprite within the graphics file.
+Współrzędne lewego górnego rogu duszka w pliku graficznym.
 ==== xsize, ysize ====
-The width and height of the sprite within the graphics file. The valid value range is from 1 to 65535 for both.
+Szerokość i wysokość duszka w pliku graficznym. Prawidłowy zakres wartości wynosi od 1 do 65535 dla obu.
 ==== xrel, yrel ====
-The position of the upper-left corner of the sprite, relative to the "center" (usually negative). The valid value range is from -32768 to 32767.
+Położenie lewego górnego rogu duszka w stosunku do "center" (zwykle ujemnego). Prawidłowy zakres wartości wynosi od -32768 do 32767.
 ==== zoom level ====
-OpenTTD supports a number of zoom levels. For 'normal' zoom level a tile has a width of 64 pixels and a height of 31 (see coordinates). Available zoom levels are:
+OpenTTD obsługuje wiele poziomów powiększenia. Dla 'normal' poziomu powiększenia kafelek ma szerokość 64 pikseli i wysokość 31 (patrz współrzędne). Dostępne poziomy powiększenia to:
 {|
 !name  !!zoom level!!Grid size        !!Groundsprite with zig-zag border!!Groundsprite with smooth border!!xrel, yrel with smooth border!!Description
 |-
@@ -164,14 +164,14 @@ OpenTTD supports a number of zoom levels. For 'normal' zoom level a tile has a w
 |zi(X) || (X)x in  || (X*32) x (X*16) || (X*32) x floor(X*15) || (X*32) x (X*16-1) || ceil(X*-31), ceil(X*-1/2) || Generalisation
 |}
 
-Hint:
-If you have a normal-zoom sprite with (xrel, yel), the 2x zoom-in sprite will have (2*xrel, 2*yrel-1), and the 4x zoom-in sprite will have (4*xrel, 4*yrel-2).
+Wskazówka:
+Jeśli masz duszka z normalnym powiększeniem i (xrel, yel), 'sprite' 2x z powiększeniem będzie miał (2*xrel, 2*yrel-1), a 'sprite' z 4x powiększeniem będzie miał (4*xrel, 4*yrel-2).
 
-These conversions are implied by how OpenTTD draws foundations, in particular half-tile foundations. At 1x zoom the vertical slope edge is between two pixels, and the horizontal slope edge is in the middle of a pixel. That is: The middle of the tiles (green line) needs to line up, the top of the tiles (red line) then does not line up:
+Konwersje te są implikowane przez sposób, w jaki OpenTTD rysuje fundamenty, w szczególności fundamenty połówkowe. Przy powiększeniu 1x pionowa krawędź nachylenia znajduje się między dwoma pikselami, a pozioma krawędź nachylenia znajduje się w środku piksela. Oznacza to, że: Środek płytek (zielona linia) musi się zrównać, górna część płytek (czerwona linia) następnie się nie ustawia:
 [[File:en/Groundsprites 4x.png]]
 
 ==== Flags ====
-Flags allow to describe certain special treatment of the sprites:
+Flagi pozwalają opisać pewne specjalne traktowanie duszków:
 {|
 !name!!Description
 |-
@@ -184,16 +184,16 @@ Flags allow to describe certain special treatment of the sprites:
 
 == Transparency and glass effect ==
 
-Transparency and glass effects can be achieved by means of [[en/RecolorSprites]]
+Przezroczystość i efekty szkła można uzyskać za pomocą [[pl/Development/NewGRF/NFO Specs/RecolorSprites|RecolorSprites]]
 
 
 == Przykład ==
 
-Najlepszym sposobem, aby zobaczyć prawdziwe duszki, jest dekodowanie jednego ze standardowych plików .grf TTD. Z nielicznymi wyjątkami wszystkie duszki w tych plikach są prawdziwymi duchami; kilka, które nie są, to RecolorSprites.
+Najlepszym sposobem, aby zobaczyć prawdziwe 'sprites' , jest dekodowanie jednego ze standardowych plików .grf TTD. Z nielicznymi wyjątkami wszystkie 'sprites' w tych plikach są prawdziwymi 'sprites'; kilka, które nie są, to RecolorSprites.
 
-Przykłady prawdziwych duszków można również znaleźć na dole [[en/Extrazi/specs.tt/Action1|Action1]] lub [[en/Extrazi/specs.tt/ActionA|ActionA]].
+Przykłady prawdziwych 'sprites' można również znaleźć na dole [[en/Extrazi/specs.tt/Action1|Action1]] lub [[en/Extrazi/specs.tt/ActionA|ActionA]].
 
-Te duszki używają ścieżek absolutnych. Usunięcie części C:\TTD\ z każdej nazwy pliku działałoby równie dobrze, zakładając, że chcesz, aby plik .grf pojawił się w C:\TTD.
+Te 'sprites' używają ścieżek absolutnych. Usunięcie części C:\TTD\ z każdej nazwy pliku działałoby równie dobrze, zakładając, że chcesz, aby plik .grf pojawił się w C:\TTD.
 
 Info version 32:
     3 sprites/58_8.png 8bpp 0 0 128 64 -63 -23 normal nocrop
