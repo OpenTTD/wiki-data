@@ -32,17 +32,17 @@ Dane wyglądają następująco:
 
 === sprite-number ===
 
-The current sprite number.
+Aktualny numer 'sprite'.
 
 === length ===
 
-The total number of bytes in this action 11.
+Całkowita liczba bajtów w tym działaniu 11.
 
 === number ===
 
-This defines the number of binary include sprites that follow.
+Definiuje liczbę następujących po sobie plików binarnych.
 
-These can only be added using GRFCodec 0.9.7 or later, using the following format:
+Można je dodać tylko przy użyciu GRFCodec 0.9.7 lub nowszego, przy użyciu następującego formatu:
 
 <pre>17 ** sounds/e67_horn.wav
 18 ** sounds/sheep.wav</pre>
@@ -50,8 +50,8 @@ These can only be added using GRFCodec 0.9.7 or later, using the following forma
 Wszystkie pliki zawarte w ten sposób muszą używać formatu WAV, kodowania PCM:
 * mono
 * 8-bit or {{Page:pl/Extrazi/ottdp|1.0|no}} 16-bit
-* 11025 Hz, 22050 Hz, or {{Page:pl/Extrazi/ottdp|1.0|no}} 44100 Hz <ref>Technically OpenTTD 0.6 already supported resampling of any sample rate, but playback only used 11025 Hz anyway. Since OpenTTD 1.0 the default playback rate is 44100 Hz.</ref>
-When using [[en/Version numbers#grf-container-version|GRF container version 1]], the file size cannot exceed 64 kB.
+* 11025 Hz, 22050 Hz, or {{Page:pl/Extrazi/ottdp|1.0|no}} 44100 Hz <ref>Technically OpenTTD 0.6 obsługuje już próbkowanie dowolnej częstotliwości próbkowania, ale odtwarzanie i tak używało tylko 11025 Hz. Od OpenTTD 1.0 domyślna szybkość odtwarzania to 44100 Hz.</ref>
+Podczas korzystania z [[en/Version numbers#grf-container-version|GRF container version 1]] rozmiar pliku nie może przekraczać 64 kB.
 
 <references/>
 
@@ -73,13 +73,13 @@ Dla tych, którzy muszą wiedzieć lub są niezwykle ciekawi, faktyczne kodowani
 
 == Importing sound effects from other grf files ==
 {{Page:pl/Extrazi/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 61}}
-Since TTDPatch 2.0.1 alpha 61, it is possible to import sound effects from other grf files (or even the current file). &nbsp;This does not copy the sound effect data (thus reducing memory usage), but does provide a new sound effect entry with its own action 0 properties.
+Od wersji TTDPatch 2.0.1 alpha 61 możliwe jest importowanie efektów dźwiękowych z innych plików grf (lub nawet bieżącego pliku). &nbsp;Nie kopiuje to danych efektu dźwiękowego (co zmniejsza zużycie pamięci), ale zapewnia nowy wpis efektu dźwiękowego z własnymi właściwościami akcji 0.
 
 Jest to sposób na łączenie użytecznych efektów dźwiękowych w jednym pliku GRF i używanie ich w kilku lub duplikowanie dźwięków o różnych ustawieniach wzmocnienia lub priorytetu bez podwajania zużycia pamięci.
 
-The referenced grf file can be anywhere in newgrf(w).cfg and does not have to be active. &nbsp;If it is not loaded, no sound will be played but that is not an error condition. This makes it possible to separate sound effects and graphics into two files, to allow people with little memory to not load the sound effects yet get working graphics.
+Przywoływany plik grf może znajdować się w dowolnym miejscu w newgrf (w) .cfg i nie musi być aktywowanye. &nbsp;Jeśli nie zostanie załadowany, nie będzie odtwarzany żaden dźwięk, ale nie jest to błąd. Umożliwia to rozdzielenie efektów dźwiękowych i grafiki na dwa pliki, dzięki czemu osoby z małą ilością pamięci nie będą ładować efektów dźwiękowych, ale otrzymają działającą grafikę.
 
-Format takiego 'sprite' importu jest następujący (zastępując duszka binarnego "**"  w bloku duszka akcji 11):
+Format takiego 'sprite' importu jest następujący (zastępując 'sprite' binarnego "**"  w bloku 'sprite' akcji 11):
 
 <pre><sprite-number> * <length> FE 00 <GRFID> <number></pre>
 
