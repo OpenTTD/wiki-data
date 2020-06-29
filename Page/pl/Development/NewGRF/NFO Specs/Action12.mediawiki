@@ -2,7 +2,7 @@
 <!--{{-}}<br>{{ambox | text = w trakcie edycji.}}-->
 
 ==Wprowadzenie==
-{{Page:pl/Extrazi/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 73}}
+{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 73}}
 Ta akcja umożliwia ładowanie i definiowanie glifów dla dowolnego [http://www.unicode.org/ Unicode] znak w BMP (Basic Multilingual Plane), tj. do U+FFFF .
 
 ''Note'': Jeśli załadowany zostanie jakikolwiek plik .grf zawierający akcję 12 (nawet jeśli jest nieaktywny), TTDPatch przechodzi w tryb UTF-8. Zmienia to sposób przetwarzania wprowadzania znaków i sposób przechowywania niestandardowych ciągów w grze (są one konwertowane na kodowanie UTF-8). Nie można temu zapobiec, a ze względu na możliwe błędy w trybie UTF-8 zaleca się umieszczanie wszystkich glifów czcionek w osobnych plikach .grf, aby nie były ładowane w przypadku problemów.
@@ -33,13 +33,13 @@ Dane wyglądają następująco:
 
 Po akcji 12 muszą być prawdziwymi 'sprites' dla wszystkich glifów, tyle samo 'sprites' , ile wszystkich <num-char> dodanych.
 
-'Sprites' glifów mogą używać tylko kolorów 00 (przezroczysty), 01 (pierwszy plan) i 02 (cień). 'Sprite', który używa koloru cienia, NIE MOŻE używać [[en/RealSprites#compression|chunked data format]].
+'Sprites' glifów mogą używać tylko kolorów 00 (przezroczysty), 01 (pierwszy plan) i 02 (cień). 'Sprite', który używa koloru cienia, NIE MOŻE używać [[pl/Development/NewGRF/NFO Specs/RealSprites#compression|chunked data format]].
 
 == Description ==
 
 === sprite-number ===
 
-Aktualny numer duszka.
+Aktualny numer 'sprite'.
 
 === length ===
 
@@ -51,7 +51,7 @@ Określa liczbę następujących definicji, z których każda ma <nowiki><font><
 
 === font ===
 
-Czcionka do zdefiniowania glifów. Wartość może wynosić 0 dla czcionki proporcjonalnej normalnego rozmiaru, 1 dla czcionki proporcjonalnej małego rozmiaru, 2 dla czcionki proporcjonalnej dużego rozmiaru lub {{Page:pl/Extrazi/ottdp|1.2|no|ottdrev=23274}} 3 dla nieproporcjonalnego rozmiaru normalnego czcionka.
+Czcionka do zdefiniowania glifów. Wartość może wynosić 0 dla czcionki proporcjonalnej normalnego rozmiaru, 1 dla czcionki proporcjonalnej małego rozmiaru, 2 dla czcionki proporcjonalnej dużego rozmiaru lub {{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=23274}} 3 dla nieproporcjonalnego rozmiaru normalnego czcionka.
 
 === num-char ===
 
@@ -59,9 +59,9 @@ Liczba znaków w zakresie.
 
 === base-char ===
 
-The first Unicode character in a range to provide glyphs for. &nbsp;This can be any Unicode character in the BMP.
+Pierwszy znak Unicode w zakresie, który udostępnia glify. &nbsp;Może to być dowolny znak Unicode w BMP.
 
-Note that all characters of a definition (i.e., <nowiki><font></nowiki> <num-char> <base-char> triplet) must fit within a "block" of 128 characters, i.e. you cannot define characters U+00E0..U+011F with one definition; instead you must split it into U+00E0..U+00FF and U+0100..U+011F because those are two different blocks.
+Zauważ, że wszystkie znaki definicji (tj. <nowiki><font></nowiki> <num-char> <base-char> triplet) muszą mieścić się w "bloku" <small>''(block)''</small> 128 znaków, tzn. Nie można zdefiniować znaków U+00E0..U+011F z jedną definicją; zamiast tego musisz podzielić go na U+00E0..U+00FF i U+0100..U+011F, ponieważ są to dwa różne bloki.
 
 == Example ==
 
@@ -93,4 +93,4 @@ Note that all characters of a definition (i.e., <nowiki><font></nowiki> <num-cha
 
 Dlatego działanie 12 określa glify znaków Unicode U+00F8..U+010B. Są one podzielone na dwie definicje, ponieważ definicja nie może przekroczyć granicy bloku.
 
-Po tej akcji 12 śledzi 20 prawdziwych duszków zawierających glify dla powyższych postaci.
+Po tej akcji 12 śledzi 20 prawdziwych 'sprites' zawierających glify dla powyższych postaci.
