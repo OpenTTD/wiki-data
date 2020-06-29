@@ -40,19 +40,19 @@ Dane wyglądają następująco:
 
 === Sprite-number ===
 
-This is just the number you are at.
+To tylko numer, na którym jesteś.
 
 === Length ===
 
-Count the number of bytes in this action.
+Policz liczbę bajtów w tej akcji.
 
 === num ===
 
-This is the number of sets you want to deactivate.
+Jest to liczba zestawów, które chcesz dezaktywować.
 
 === GRFIDs ===
 
-Here you give the list of GRFIDs, in the same format as in [[en/Action8]], which should be deactivated.
+Tutaj podajesz listę GRFID, w tym samym formacie, co w [[pl/Development/NewGRF/NFO Specs/Action8|Action8]] , które należy dezaktywować.
 
 === Notes ===
 
@@ -62,15 +62,15 @@ Jeśli spróbujesz dezaktywować zestaw, który nie jest załadowany, nic się n
 
 Aby poradzić sobie z przypadkami wcześniejszego ładowania i aktywacji niekompatybilnych zestawów, możesz albo spróbować zastąpić wszystkie ich ustawienia i grafikę, albo po prostu dezaktywować ten zestaw kolejno.
 
-{{Page:pl/Extrazi/ottdp|no| }} Jeśli podany GRFID jest identyczny z GRFID aktualnie przetwarzanego pliku, bieżący plik jest aktywowany siłą. Jest to najbardziej przydatne do wprowadzania zmian w menu ekranu tytułowego, które w innym przypadku nie byłyby możliwe. Zdecydowanie zaleca się, aby nie używać tej funkcji w żaden inny sposób niż w połączeniu z akcją 7, która sprawdza zmienną 92 (tryb gry), aby aktywacja odbywała się tylko na ekranie tytułowym. W przeciwnym razie aktywacja (de) statusu systemu GRF zostanie całkowicie pominięta. Najlepiej ograniczyć tę wymuszoną aktywację do jak najmniejszej liczby działań, aby uzyskać maksymalną zgodność. Wymuszona aktywacja nie jest obsługiwana przez OpenTTD.
+{{pl/Development/NewGRF/ottdp|no| }} Jeśli podany GRFID jest identyczny z GRFID aktualnie przetwarzanego pliku, bieżący plik jest aktywowany siłą. Jest to najbardziej przydatne do wprowadzania zmian w menu ekranu tytułowego, które w innym przypadku nie byłyby możliwe. Zdecydowanie zaleca się, aby nie używać tej funkcji w żaden inny sposób niż w połączeniu z akcją 7, która sprawdza zmienną 92 (tryb gry), aby aktywacja odbywała się tylko na ekranie tytułowym. W przeciwnym razie aktywacja (de) statusu systemu GRF zostanie całkowicie pominięta. Najlepiej ograniczyć tę wymuszoną aktywację do jak najmniejszej liczby działań, aby uzyskać maksymalną zgodność. Wymuszona aktywacja nie jest obsługiwana przez OpenTTD.
 
-In principle, there can be four cases and your .grf file must be able to handle all of them properly:
-* The .grf file is active and can not be deactivated.
-: You cannot use action E in this case.
-* The .grf file is inactive but will be activated.
-: This is the only case in which action E is useful, the .grf file coming below the current one in newgrf(w).cfg but being set to be activated. Action E will set it to not be activated when it is processed.
-* The .grf file is inactive and will not be activated.
-: This can happen because it has been processed already (it comes earlier in newgrf(w).cfg) and was deactivated, either by default or manually.
+Zasadniczo mogą istnieć cztery przypadki, a plik .grf musi być w stanie poprawnie obsłużyć je wszystkie:
+* Plik .grf jest aktywny i nie można go dezaktywować.
+: W tym przypadku nie można użyć akcji E.
+* Plik .grf jest nieaktywny, ale zostanie aktywowany.
+: Jest to jedyny przypadek, w którym akcja E jest przydatna, plik .grf znajduje się poniżej bieżącego w newgrf (w) .cfg, ale jest ustawiony do aktywacji. Działanie E spowoduje, że nie będzie aktywowane podczas przetwarzania.
+* Plik .grf jest nieaktywny i nie zostanie aktywowany.
+: Może się tak zdarzyć, ponieważ został już przetworzony (pojawia się wcześniej w newgrf(w).cfg ) i został dezaktywowany, domyślnie lub ręcznie.
 
 == Przykład ==
 
@@ -104,7 +104,7 @@ continue_with_current_file;</pre>
 
 Powodem tej szczególnej kolejności pseudo-sprite' jest to, że akcja 7 nie zajmie gałęzi, jeśli w ogóle nie ma zapytanego GRFID. W takim przypadku oba 'sprites' 47 i 48 wypadają, co oznacza, że ​​skok w 49 jest wykonywany, a plik wznawia przetwarzanie. Bezwarunkowe gotos w 49 i 51 są w rzeczywistości uwarunkowane tym, że klimat nie jest 7F, co nigdy nie może być.
 
-Conceptually, without goto-logic, the code could be described by
+Koncepcyjnie, bez goto-logiki, kod mógłby zostać opisany przez
 
 <pre>if (GRFID 54570105 is active) {
 
