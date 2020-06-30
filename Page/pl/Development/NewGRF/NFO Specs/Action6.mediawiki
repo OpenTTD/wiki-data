@@ -57,14 +57,14 @@ Modyfikacja nie jest przeprowadzana, jeśli parametr nie został jeszcze zdefini
 Ile bajtów parametru użyć. Jeśli jest to więcej niż 4 (rozmiar parametru), używane są bajty następującego parametru. W takim przypadku należy zdefiniować wszystkie wymagane parametry, w przeciwnym razie nie zostaną wykonane żadne modyfikacje.
 
 Jeśli ta wartość ma ustawiony bit 7, parametr jest ''added'' do wartości docelowej, zamiast po prostu zapisywany. Jest to przydatne szczególnie przy alokacji duszków za pomocą GRF Resource Management, ponieważ zwykle alokuje się więcej niż jedną duszkę, ale parametr może przechowywać tylko jedną liczbę, pierwsza przydzielona duszka. &nbsp;Tak więc, aby poprawnie zastosować kilka liczb ikonek (tak, że działa na kilka aktywacji, nie tylko na pierwszą), użyj algorytmu takiego jak poniżej:
-* Suppose you have a sprite number <nowiki><s></nowiki> to which you want to add <nowiki><i></nowiki> (where <nowiki><i></nowiki> is returned by the GRF Resource Management)
-* To make this work several times (whenever the grf is activated), you cannot simply add <nowiki><i></nowiki> to <nowiki><s></nowiki> directly
-* Instead, use [[en/ActionD]] to define a new, otherwise unused parameter <j>, and store in it the value of <nowiki><i></nowiki> before it is set by Action D, i.e. <j> holds the previous value of <nowiki><i></nowiki>.
-* Next, after setting <nowiki><i></nowiki> with the GRF Resource Management, calculate <j> = <nowiki><i></nowiki> - <j> (i.e. subtract the previous value of i from the new value of i and store in j).
-* Use Action 6 to add the value of <j> to <nowiki><s></nowiki>, instead of adding the value of <nowiki><i></nowiki> directly.
-* This way, the new value <nowiki><s></nowiki> is the current value of <nowiki><s></nowiki> plus the new <nowiki><i></nowiki> minus the old <nowiki><i></nowiki>, which is the initial value of <nowiki><s></nowiki> plus the new <nowiki><i></nowiki>, just what we wanted.
-* Skip the action D's as well as both action 6 and the action it modifies during the [[en/GrfLoadingStages|"test" stage]] by skipping these actions if action 7 var 84 has bit 10 set.
-* Make sure that when using action 7/9, that either ''both'' or ''none'' of the above two operations are skipped. if only one but not the other is skipped, the values will go out of synch.
+* Załóżmy, że masz numer duszka <nowiki><s></nowiki>, do którego chcesz dodać <nowiki><i></nowiki> (gdzie <nowiki><i></nowiki> jest zwracane przez Zasób GRF Zarządzanie)
+* Aby to działało kilka razy (za każdym razem, gdy grf jest aktywowany), nie możesz po prostu bezpośrednio dodać <nowiki><i></nowiki> do <nowiki><s> </nowiki>
+* Zamiast tego użyj [[pl/Development/NewGRF/NFO Specs/ActionD|ActionD]], aby zdefiniować nowy, w przeciwnym razie nieużywany parametr <j>, i zapisz w nim wartość <nowiki><i></nowiki>, zanim zostanie on ustawiony przez działanie D, tj. <j> zawiera poprzednią wartość <nowiki><i></nowiki>.
+* Następnie, po ustawieniu <nowiki><i></nowiki> w GRF Resource Management, obliczyć <j> = <nowiki><i></nowiki> - <j> (tj. Odejmij poprzednią wartość i od nowa wartość i i zapisz w j).
+* Użyj działania 6, aby dodać wartość <j> do <nowiki><s></nowiki>, zamiast dodawać bezpośrednio wartość <nowiki><i> </nowiki>.
+* W ten sposób nowa wartość <nowiki><s></nowiki> to bieżąca wartość <nowiki><s></nowiki> plus nowa <nowiki><i></nowiki> minus stare <nowiki ><i></nowiki>, która jest początkową wartością <nowiki><s></nowiki> oraz nowego <nowiki><i></nowiki>, dokładnie tego, czego chcieliśmy.
+* Pomiń akcję D, a także zarówno akcję 6, jak i akcję, którą modyfikuje podczas  [[pl/Development/NewGRF/NFO Specs/GrfLoadingStages|"test" stage]] , pomijając te akcje, jeśli akcja 7 var 84 ma ustawiony bit 10.
+* Upewnij się, że podczas korzystania z akcji 7/9 ''both'', albo ''żadna'' <small>''(none)''</small> z powyższych dwóch operacji są pomijane. jeśli tylko jedno, ale nie drugie zostanie pominięte, wartości nie zostaną zsynchronizowane.
 
 Przykład poniżej.
 
@@ -72,7 +72,7 @@ Przykład poniżej.
 
 Liczba bajtów w poniższym ikonce do zmodyfikowania. Liczenie zaczyna się od 0 w bajcie akcji i może wzrosnąć do długości duszka. Nie ma możliwości dodania danych na końcu duszka.
 
-Since {{Page:pl/Extrazi/ottdp| |2.5|ttdprev=alpha 51}}, this is an extended byte (see [[en/GRFActionsDetailed]]).
+Since {{pl/Development/NewGRF/ottdp| |2.5|ttdprev=alpha 51}}, this is an extended byte (see [[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|GRFActionsDetailed]]).
 
 == Przykład ==
 
