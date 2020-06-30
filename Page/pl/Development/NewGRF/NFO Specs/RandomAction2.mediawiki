@@ -10,12 +10,12 @@ Dane wyglądają następująco:
 
  <Sprite-number> * <Length> 02 <feature> <set-id> <nowiki>[80|83]</nowiki> <random-triggers> <randbit> <nrand> <set-ids>
 
-From TTDPatch 2.6 r1850 and OpenTTD r12452, and '''for vehicles only''':
+Od TTDPatch 2.6 r1850 i OpenTTD r12452, i '''tylko dla pojazdów''':
 
  <Sprite-number> * <Length> 02 <feature> <set-id> 84 <count> <random-triggers> <randbit> <nrand> <set-ids>
 
 {| |-
-!'''Element'''!![[en/GRFActionsDetailed|'''Size''']]!!'''Description'''
+!'''Element'''!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|GRFActionsDetailed|'''Size''']]!!'''Description'''
 |-
 |<Sprite-number>||dec||A sequential sprite number
 |-
@@ -52,10 +52,10 @@ Policz liczbę bajtów w tej akcji.
 
 ===Feature===
 
-Ustawia to rodzaj [[en/Features|feature]] , który chcesz zmienić. Ustaw na:
+Ustawia to rodzaj [[pl/Development/NewGRF/NFO Specs/Features|feature]] , który chcesz zmienić. Ustaw na:
 
 {|- |
-!Value!![[en/Features|Feature]]
+!Value!![[pl/Development/NewGRF/NFO Specs/Features|Feature]]
 |-
 |00||Trains
 |-
@@ -96,7 +96,7 @@ Określa liczbę tego działania 2. &nbsp;Identyfikator można następnie wykorz
 
 Użyj 80, aby randomizować obiekt (pojazd, stację, budynek, przemysł, obiekt) na podstawie własnych wyzwalaczy i bitów.
 
-Use 83 to randomize the object based on its "related" object (s.b.).
+Użyj 83, aby randomizować obiekt na podstawie jego "pokrewnego" <small>''(related)''</small> obiektu (s.b.).
 
 Użyj 84, aby losowo wybrać pojazd na podstawie dowolnego pojazdu w składzie.
 
@@ -177,9 +177,9 @@ Example:
 
 === randbit ===
 
-{{Page:pl/Extrazi/ottdp|no|&lt;2.5|ttdprev=alpha30}} For versions before TTDPatch 2.0.1 alpha 30, leave this at 00. It doesn't quite work the way intended (it was supposed to allow independent random chains, but currently everything is re-randomized at the same time, thereby defeating this mechanism).
+{{pl/Development/NewGRF/ottdp|no|&lt;2.5|ttdprev=alpha30}} W przypadku wersji wcześniejszych niż TTDPatch 2.0.1 alpha 30 pozostaw tę wartość na 00. Nie działa to tak, jak zamierzono (miało to umożliwić niezależne losowe łańcuchy, ale obecnie wszystko jest ponownie losowe w tym samym czasie, tym samym pokonując ten mechanizm ).
 
-{{Page:pl/Extrazi/ottdp| |2.5|ttdprev=alpha 30}} Since TTDPatch 2.0.1 alpha 30, only those bits that actually get triggered will be re-randomized. Prior versions always re-randomized all bits. This will make it possible to have independent sets of bits for independent triggers (or untriggered bits, set only at the time of purchase). Setting randbit determines the first bit to be re-randomized, as well as basing the random graphics on. The total number of bits used is the 2-logarithm of nrand below (e.g., for nrand=16, 4 bits are used).
+{{pl/Development/NewGRF/ottdp| |2.5|ttdprev=alpha 30}} Od wersji TTDPatch 2.0.1 alpha 30 tylko te bity, które zostaną uruchomione, zostaną ponownie zrandomizowane. Poprzednie wersje zawsze randomizowały wszystkie bity. Umożliwi to posiadanie niezależnych zestawów bitów dla niezależnych wyzwalaczy (lub bitów niesprawdzonych, ustawianych tylko w momencie zakupu). Ustawienie randbit określa pierwszy bit, który ma zostać ponownie zrandomizowany, a także opiera się na losowej grafice. Łączna liczba użytych bitów to 2-logarytm liczby nr i poniżej (np. Dla nrand = 16 używane są 4 bity).
 
 === nrand ===
 
@@ -272,8 +272,8 @@ Zauważ też, że żaden z powyższych wyzwalaczy nie uruchomi się, chyba że z
 
 Wyzwalacze 04, 08, 10 i 20 wpływają tylko na platformę, na której występują, a także na losowe bity stacji, ale nie na inne platformy.
 
-Because the 'occured triggers' are only stored once per station (not distinguishing tiles or cargo types), adding 80 to 
-random-triggers does not make a lot of sense.
+Ponieważ 'występujące wyzwalacze' <small>''(occured triggers)''</small>  są przechowywane tylko raz na stację (bez rozróżniania rodzajów płytek lub rodzajów ładunku), co dodaje 80 do
+losowe wyzwalacze nie mają większego sensu.
 
 === Town building triggers ===
 
@@ -287,7 +287,7 @@ Budynki miejskie mają 8 losowych bitów.
 |1||02||{{Page:pl/Extrazi/ottdp|0.6|2.5}}||the top tile of the building is processed in the periodic tile processing loop
 |}
 
-The periodic tile processing loop constantly processes the tiles of the map, processing any given tile in every 256 ticks (approx. 3.5 TTD days). Since no "real" event happens to town buildings, you have only this opportunity to re-randomize the look of your building.
+Okresowa pętla przetwarzania kafelków nieprzerwanie przetwarza kafelki mapy, przetwarzając każdy kafelek co 256 tyknięć (ok. 3,5 dnia TTD). Ponieważ żadne "prawdziwe" <small>''(real)''</small> wydarzenie nie zdarzyło się w budynkach miejskich, masz tylko tę okazję, aby ponownie randomizować wygląd swojego budynku.
 
 Jeśli każde 3,5 dnia jest dla Ciebie za szybkie, możesz pomnożyć limit czasu, ustawiając właściwość 16 dla danego kafelka. Limit czasu wynosi 256 ticks*(prop. 16+1), więc 0 oznacza co 3,5 dni, 1 oznacza co 7 dni, 2 oznacza co 10,5 dnia i tak dalej.
 
@@ -308,12 +308,12 @@ Płytki przemysłowe mają 8 + 16 losowych bitów. Dostęp do akcji losowej 2 ty
 |}
 <references />
 
-Trigger 1 works similarly to trigger 1 for houses except that you cannot multiply the timeout: it's always 256 ticks.
+Trigger 1 działa podobnie do wyzwalacza 1 dla domów, tyle że nie można pomnożyć limitu czasu: zawsze jest to 256 tyknięć.
 
-Industry tiles can rerandomise both their own random bits as well as the random bits of the industry (via random action type 83).
-The remembered triggers for rerandomisation with 80 added to the triggers are in both cases the same per tile.
+Kafelki branżowe mogą przeklasyfikować zarówno swoje losowe bity, jak i losowe bity branży (za pomocą losowego typu akcji 83).
+Zapamiętane wyzwalacze dla ponownej randomizacji z 80 dodanymi do wyzwalaczy są w obu przypadkach takie same na płytkę.
 
-Industries have random bits. However, they can only be rerandomised by their tiles.
+Branże mają losowe bity. Można je jednak ponownie przypisać tylko za pomocą płytek.
 
 === Canals ===
 
@@ -333,7 +333,7 @@ Należy również pamiętać, że losowe bity są unikalne dla każdego kafelka 
 
 Płytki szynowe mają 2 pseudolosowe bity, w zależności od ich położenia.
 
-Brak wyzwalaczy.
+Brak wyzwalaczy <small>''(triggers)''</small> .
 
 === Roadtypes ===
 
