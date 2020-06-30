@@ -179,38 +179,38 @@ Ponadto są używane poza funkcjami zwrotnymi do tych specjalnych celów:
 |-
 | Vehicles || Used to distinguish drawing of vehicles in the GUI or on the map. See [[pl/Development/NewGRF/NFO Specs/Action2/Vehicles#introduction|Action2]].
 |-
-| Stations || Used to compose station tiles with sprites from different Action-1-2-3 chains, or to draw custom foundations. See [[en/Action0/Stations#general-flags-13|General station flags]] and [[en/AdvancedSpriteLayout]].
+| Stations || Used to compose station tiles with sprites from different Action-1-2-3 chains, or to draw custom foundations. See [[pl/Development/NewGRF/NFO Specs/Action0/Stations#general-flags-13|General station flags]] and [[pl/Extrazi/specs.tt/AdvancedSpriteLayout|AdvancedSpriteLayout]].
 |-
-| Railtypes || Used to distinguish between the type of tunnel portal or signal requested. See [[en/Action3/Railtypes#tunnel-portal-overlay-0a|Railtype tunnel portal overlay]] or [[en/Action3/Railtypes#signal-sprites-0b|Railtype signal sprites]] for details, respectively.
+| Railtypes || Used to distinguish between the type of tunnel portal or signal requested. See [[pl/Development/NewGRF/NFO Specs/Action3/Railtypes#tunnel-portal-overlay-0a|Railtype tunnel portal overlay]] or [[pl/Development/NewGRF/NFO Specs/Action3/Railtypes#signal-sprites-0b|Railtype signal sprites]] for details, respectively.
 |}
 
 === Tile refresh offsets (13,14,15,16 / 93,94,95,96) ===
 
-These four variables belong to an experimental TTDPatch feature. However, their definition is based on an incomplete understanding of the drawing algorithm in TTD, so they actually do not achieve what they were meant to do. Consider this historic content.
+Te cztery zmienne należą do eksperymentalnej funkcji TTDPatch. Jednak ich definicja opiera się na niepełnym zrozumieniu algorytmu rysowania w TTD, więc w rzeczywistości nie osiągają tego, co mieli zrobić. Rozważ tę historyczną treść.
 
 {{pl/Development/NewGRF/ottdp|no|2.5|ttdprev=2.0.1 alpha 39}}
 
-''These four offsets define the size and position of the rectangle refreshed when TTD decides to refresh a tile. The basis of the calculations is the pixel coordinate of the north corner of the tile.''
+''Te cztery przesunięcia określają rozmiar i położenie odświeżonego prostokąta, gdy TTD zdecyduje się odświeżyć płytkę. Podstawą obliczeń jest współrzędna pikselowa północnego rogu płytki.''
 
-''After calculating it, TTD subtracts offset_left from it to get the x coordinate of the left edge, adds offset_right to get the x coordinate of the right edge, subtracts offset_up to get the y coordinate of the top edge and adds offset_down to get the y coordinate of the bottom edge. This results in refreshing (offset_left+offset_right)*(offset_up+offset_down) pixels. The default values of these variables are 31, 36, 122 and 32, respectively.''
+''Po obliczeniu TTD odejmuje od niej offset_left, aby uzyskać współrzędną x lewej krawędzi, dodaje offset_right, aby uzyskać współrzędną x prawej krawędzi, odejmuje offset_up, aby uzyskać współrzędną y górnej krawędzi i dodaje offset_down, aby uzyskać współrzędną y dolnej krawędzi. Powoduje to odświeżenie pikseli (offset_left+offset_right)*(offset_up+offset_down) pikseli. Domyślne wartości tych zmiennych wynoszą odpowiednio 31, 36, 122 i 32.''
 
-''Reading these values is not too useful, but you can modify them using action D as well, so your sprites that would exceed the original limits can still be redrawn and animated properly. Please note that TTD uses these values for every tile, so specifying too high values may slow the game down. Please also note that these variables are specified as dwords for technical reasons, but only the bottom word will be used.''
+''Odczytywanie tych wartości nie jest zbyt przydatne, ale możesz je modyfikować również za pomocą akcji D, więc twoje 'sprites' , które przekroczyłyby pierwotne limity, mogą być nadal przerysowane i odpowiednio animowane. Pamiętaj, że TTD używa tych wartości dla każdego kafelka, więc podanie zbyt wysokich wartości może spowolnić grę. Należy również pamiętać, że te zmienne są określone jako dwory ze względów technicznych, ale zostanie użyte tylko dolne słowo.''
 
-''Since these values are global to the entire game, you shouldn't just overwrite them with an action D. Instead, you should first check if they're big enough for you by using action 7, and skip your action D if they are. This way, the variables will be set to the maximal value needed, not just the value needed for the last grf in the list.''
+''Ponieważ te wartości są globalne dla całej gry, nie powinieneś po prostu nadpisywać ich działaniem D. Zamiast tego powinieneś najpierw sprawdzić, czy są one wystarczająco duże, używając działania 7, a jeśli nie, pomiń działanie D. W ten sposób zmienne zostaną ustawione na maksymalną potrzebną wartość, a nie tylko wartość potrzebną dla ostatniego GRF na liście.''
 
 === Snow line height (- / 97) ===
 
-This is only active if the tempsnowline switch is on. It defaults to FF (no snow) and 38 (GRF version < 8) resp. 07 (GRF version >= 8) in the temperate and arctic climates, respectively.
+Jest to aktywne tylko wtedy, gdy przełącznik tempsnowline jest włączony. Domyślnie jest to FF (bez śniegu) i 38 (wersja GRF < 8) lub. 07 (wersja GRF >= 8) odpowiednio w klimacie umiarkowanym i arktycznym.
 
-{{pl/Development/NewGRF/grfTill|7}} For GRF version 7 and below it must be set to a multiple of 8, which is one level of height difference.
+{{pl/Development/NewGRF/grfTill|7}} W przypadku GRF w wersji 7 i niższej należy ustawić wielokrotność 8, co stanowi jeden poziom różnicy wysokości.
 
-{{pl/Development/NewGRF/grfFrom|8}} For GRF version 8 and above the heightlevel is set directly as multiple of 1.
+{{pl/Development/NewGRF/grfFrom|8}} Dla GRF w wersji 8 i wyższej poziom wysokości jest ustawiany bezpośrednio jako wielokrotność 1.
 
 === Global ID offset (- / 99) ===
 
-Setting this variable will add the given value to all the relevant IDs in subsequent action 0, action 3 (''except'' livery overrides), action 4 (''except'' generic texts) and action A entries. This is a more convenient way of applying the result of a GRF resource request. Setting this variable applies only to the current .grf file only.
+Ustawienie tej zmiennej doda podaną wartość do wszystkich odpowiednich identyfikatorów w kolejnych działaniach 0, działaniach 3 (przesłonięcie barwników ''z wyjątkiem'' <small>~'except'</small> ), działaniach 4 (z ''wyjątkiem'' teksty ogólne ) i działaniach A. Jest to wygodniejszy sposób zastosowania wyniku żądania zasobu GRF. Ustawienie tej zmiennej dotyczy tylko bieżącego pliku .grf.
 
-In detail, it affects the following elements:
+Szczegółowo wpływa na następujące elementy:
 
 {|
 !Action!!Element modified
@@ -229,11 +229,11 @@ In detail, it affects the following elements:
 |}
 
 === Display options (1B / -) ===
-The definition of variable 1B is slightly feature-dependent. For features that can be drawn transparently (stations, bridges, houses, industry tiles and objects) bit 4 is set if the current feature will be drawn normally, and clear if the current feature will be drawn transparently. For these purposes, airports are stations. For all other features, bit 4 is undefined.
+Definicja zmiennej 1B jest nieco zależna od funkcji. W przypadku obiektów, które można rysować w sposób przezroczysty (stacje, mosty, domy, kafelki przemysłowe i obiekty), bit 4 jest ustawiany, jeśli bieżący element zostanie narysowany normalnie, i jasne, czy bieżący element zostanie narysowany w sposób przezroczysty. Do tych celów lotniska to stacje. Dla wszystkich innych funkcji bit 4 jest niezdefiniowany.
 
 === Misc. GRF Features (1E / 9E) ===
 
-This variable is a global bit mask of various patch features a grf file can enable. Please only set the bits using operation 08 (bitwise OR), or, if absolutely necessary, remove certain bits with operation 07 (bitwise AND). This ensures that you don't mess up the settings of other grf files.
+Ta zmienna jest globalną maską bitową różnych funkcji łatek, które może włączyć plik grf. Proszę ustawić bity tylko za pomocą operacji 08 (bitowe OR) lub, jeśli jest to absolutnie konieczne, usunąć niektóre bity za pomocą operacji 07 (bitowe AND). To gwarantuje, że nie zepsujesz ustawień innych plików GRF.
 
 {|
 !Bit!!Value!!Version!!Feature
@@ -256,18 +256,18 @@ This variable is a global bit mask of various patch features a grf file can enab
 |31||80000000||{{pl/Development/NewGRF/ottdp|no|2.5}}||Only to be set by ttdpbase(w).grf for identification
 |}
 
-Remarks:
+Uwagi <small>''(Remarks)''</small>:
 <references />
 
-Example code for setting bit 3:
+Przykładowy kod ustawienia bitu 3:
 
    24 * 9     0D 9E 08 9E FF 08 00 00 00
 
-(Here, the first 08 indicates the bitwise OR operation, and 08 00 00 00 is the value to OR var.9E with.)
+(Tutaj pierwsze 08 wskazuje bitową operację OR, a 08 00 00 00 jest wartością OR var. 9E z.)
 
 === Locale-dependent settings (1F / 9F) ===
 
-This variable is a doubleword in the format rrccmmll, where the meaning of the bytes is:
+Ta zmienna jest podwójnym słowem w formacie rrccmmll, gdzie jest znaczenie bajtów:
 
 {|
 !Byte!!Meaning
@@ -285,16 +285,16 @@ This variable is a doubleword in the format rrccmmll, where the meaning of the b
 |ll||Language ID. By setting this byte, you can override the default language ID and allow other GRFs to supply correctly localized texts. (The other GRF can check for this value in action 4s)
 |}
 
-Reading this variable isn't reliable, so you must only write to it. Please also note that the cc and mm parts are considered only while loading the title screen for the first time, changing them later is ignored.
+Odczyt tej zmiennej nie jest wiarygodny, więc musisz tylko do niej pisać. Należy również pamiętać, że części cc i mm są uwzględniane tylko podczas ładowania ekranu tytułowego po raz pierwszy, zmiana ich później jest ignorowana.
 
-'''NOTE''': This variable is reset after the initialization stage. Only changes during the activation stage are considered. This way, GRFs disabled in newgrf.cfg won't change the language and/or default settings. If you want to modify the cc or mm part, make sure the corresponding action D isn't skipped by an earlier action 7 or 9. In particular, if your GRF isn't available for the tropic climate, make sure you set variable 9F before the climate check, since the default title screen is tropic, and your climate check will fail on it.
+'''NOTE''': Ta zmienna jest resetowana po etapie inicjalizacji. Uwzględniane są tylko zmiany na etapie aktywacji. W ten sposób GRF wyłączone w newgrf.cfg nie zmienią języka i/lub ustawień domyślnych. Jeśli chcesz zmodyfikować część cc lub mm, upewnij się, że odpowiednie działanie D nie jest pomijane przez wcześniejsze działanie 7 lub 9. W szczególności, jeśli twój GRF nie jest dostępny dla klimatu tropikalnego, upewnij się, że ustawiłeś zmienną 9F przed sprawdzeniem klimatu, ponieważ domyślnym ekranem tytułowym jest zwrotnik, a sprawdzenie klimatu nie powiedzie się.
 
 === OpenTTD Version (21 / A1) ===
-Variable A1 has the following format: Mmrbbbbb (though encoded in little endian as bb bb rb Mm). This variable has only a usefull meaning when variable 9D is 1 (OpenTTD). This variable can be used since OpenTTD r11330.
+Zmienna A1 ma następujący format: Mmrbbbbb (choć zakodowany w małym endianie jako bb bb rb Mm). Ta zmienna ma tylko przydatne znaczenie, gdy zmienna 9D ma wartość 1 (OpenTTD). Ta zmienna może być używana od OpenTTD r11330.
 {|
 !Element!!Meaning!!Value
 |-
-|M||major||First number of the [[en/Version numbers#openttd-version|OpenTTD version]]
+|M||major||First number of the [[pl/Development/NewGRF/NFO Specs/Version numbers#openttd-version|OpenTTD version]]
 |-
 |m||minor||Second number of the OpenTTD version
 |-
