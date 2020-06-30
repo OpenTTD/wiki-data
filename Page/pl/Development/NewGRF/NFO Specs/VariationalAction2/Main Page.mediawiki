@@ -157,9 +157,9 @@ Typ dostępu określa zarówno wielkość dostępu do zmiennych, jak i wybiera m
 |-
 |11||[[pl/Development/NewGRF/NFO Specs/VariationalAction2/Airport Tiles | Airport Tiles]]||N/A
 |-
-|12||[[en/VariationalAction2/Roadtypes | Roadtypes]]||N/A
+|12||[[pl/Development/NewGRF/NFO Specs/VariationalAction2/Roadtypes | Roadtypes]]||N/A
 |-
-|13||[[en/VariationalAction2/Tramtypes | Tramtypes]]||N/A
+|13||[[pl/Development/NewGRF/NFO Specs/VariationalAction2/Tramtypes | Tramtypes]]||N/A
 |}
 
 Każda zmienna określa jej rozmiar. Nie każda zmienna jest podwójnym słowem.
@@ -170,27 +170,27 @@ Jeśli dostępna zmienna jest mniejsza niż podany tutaj rozmiar, dodatkowe bity
 Variational Action 2 allows accessing these variables:
 
 {| |-
-!'''Number'''!![[en/GRFActionsDetailed|'''Size''']]!!Version!!'''Meaning'''
+!'''Number'''!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Size''']]!!Version!!'''Meaning'''
 |-
-|00-3F|| || ||See [[en/GlobalVariables| global variables page]].
+|00-3F|| || ||See [[pl/Development/NewGRF/NFO Specs/GlobalVariables| global variables page]].
 |-
 |40+x||D|| ||specially calculated feature-specific variable, see following feature-specific pages
 |-
-|5F||D||{{Page:pl/Extrazi/ottdp|0.7|2.6|ttdprev=r1928}}||Feature-specific random data: triggers in low byte, bits in other three bytes. Bits of the variable not associated with random or trigger bits are reserved.
+|5F||D||{{pl/Development/NewGRF/ottdp|0.7|2.6|ttdprev=r1928}}||Feature-specific random data: triggers in low byte, bits in other three bytes. Bits of the variable not associated with random or trigger bits are reserved.
 |-
 |60+x||D|| ||similar to 40+x variables, but the variable number must be followed by a byte, which will be given to the variable handler as parameter.
 |-
-|7B||-||{{Page:pl/Extrazi/ottdp|1.1|2.6|ottdrev=r21604|ttdprev=r2359}}||A special 60+x variable to be used in Advanced Variational Action 2. It allows to evaluate any other 60+x variable using a non-constant parameter from a register. The parameter of variable 7B specifies another 60+x variable which is evaluated. The parameter for that variable is read from the accumulator ('val1'), i.e. the result from the preceding operations of the same Advanced Variational Action 2. Hence variable 7B may not be the first variable used in the calculation. Variable 7B itself and 7E (procedure call) are not allowed to be used as parameter for variable 7B.
+|7B||-||{{pl/Development/NewGRF/ottdp|1.1|2.6|ottdrev=r21604|ttdprev=r2359}}||A special 60+x variable to be used in Advanced Variational Action 2. It allows to evaluate any other 60+x variable using a non-constant parameter from a register. The parameter of variable 7B specifies another 60+x variable which is evaluated. The parameter for that variable is read from the accumulator ('val1'), i.e. the result from the preceding operations of the same Advanced Variational Action 2. Hence variable 7B may not be the first variable used in the calculation. Variable 7B itself and 7E (procedure call) are not allowed to be used as parameter for variable 7B.
 
-{{Page:pl/Extrazi/ottdp|1.2|no|ottdrev=r23138}} Since OpenTTD r23138 you can use this to pass 32 bit parameters to 60+x variables. Currently this is only useful for a few variables, e.g. vehicle variable 60. For most variables the higher bits of the parameter are considered reserved. So, make sure to mask the higher bits in the preceding calculations.
+{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23138}} Since OpenTTD r23138 you can use this to pass 32 bit parameters to 60+x variables. Currently this is only useful for a few variables, e.g. vehicle variable 60. For most variables the higher bits of the parameter are considered reserved. So, make sure to mask the higher bits in the preceding calculations.
 |-
-|7C||D||{{Page:pl/Extrazi/ottdp|0.6|2.6|ttdprev=r1315}}||A special 60+x variable used to access values stored in the registers of [[en/Storages#persistent-storage|persistent storage]].
+|7C||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1315}}||A special 60+x variable used to access values stored in the registers of [[en/Storages#persistent-storage|persistent storage]].
 |-
-|7D||D||{{Page:pl/Extrazi/ottdp|0.6|2.6|ttdprev=r1246}}||A special 60+x variable used to access values stored in the registers of [[en/Storages#temporary-storage|temporary storage]]. Available in the purchase list.
+|7D||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1246}}||A special 60+x variable used to access values stored in the registers of [[en/Storages#temporary-storage|temporary storage]]. Available in the purchase list.
 |-
-|7E||D||{{Page:pl/Extrazi/ottdp|0.6|2.5}}||A special 60+x variable indicating a [[en/VarAction2Advanced#using-procedures|procedure call]]. Available in the purchase list.
+|7E||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||A special 60+x variable indicating a [[pl/Development/NewGRF/NFO Specs/VarAction2Advanced#using-procedures|procedure call]]. Available in the purchase list.
 |-
-|7F||D||{{Page:pl/Extrazi/ottdp|0.6|2.5}}||A special 60+x variable that reads GRF parameter whose number is given by the 60+x parameter. Available in the purchase list.
+|7F||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||A special 60+x variable that reads GRF parameter whose number is given by the 60+x parameter. Available in the purchase list.
 |-
 |80+x|| || ||Feature-specific variable, see following feature-specific pages. While most of these variables actually refer to raw memory locations of original TTD structures, you cannot rely on that. Some variables were added later, some were moved or replaced. Only the variables listed in the specs are somewhat set to not be changed in the future.
 |}
