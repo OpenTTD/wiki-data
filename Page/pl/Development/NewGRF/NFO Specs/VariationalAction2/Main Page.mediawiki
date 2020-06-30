@@ -167,7 +167,7 @@ Jeśli dostępna zmienna jest mniejsza niż podany tutaj rozmiar, dodatkowe bity
 
 === Variable ===
 
-Variational Action 2 allows accessing these variables:
+Działanie wariacyjne 2 umożliwia dostęp do tych zmiennych:
 
 {| |-
 !'''Number'''!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Size''']]!!Version!!'''Meaning'''
@@ -184,9 +184,9 @@ Variational Action 2 allows accessing these variables:
 
 {{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23138}} Since OpenTTD r23138 you can use this to pass 32 bit parameters to 60+x variables. Currently this is only useful for a few variables, e.g. vehicle variable 60. For most variables the higher bits of the parameter are considered reserved. So, make sure to mask the higher bits in the preceding calculations.
 |-
-|7C||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1315}}||A special 60+x variable used to access values stored in the registers of [[en/Storages#persistent-storage|persistent storage]].
+|7C||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1315}}||A special 60+x variable used to access values stored in the registers of [[pl/Development/NewGRF/NFO Specs/Storages#persistent-storage|persistent storage]].
 |-
-|7D||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1246}}||A special 60+x variable used to access values stored in the registers of [[en/Storages#temporary-storage|temporary storage]]. Available in the purchase list.
+|7D||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1246}}||A special 60+x variable used to access values stored in the registers of [[pl/Development/NewGRF/NFO Specs/Storages#temporary-storage|temporary storage]]. Available in the purchase list.
 |-
 |7E||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||A special 60+x variable indicating a [[pl/Development/NewGRF/NFO Specs/VarAction2Advanced#using-procedures|procedure call]]. Available in the purchase list.
 |-
@@ -195,15 +195,15 @@ Variational Action 2 allows accessing these variables:
 |80+x|| || ||Feature-specific variable, see following feature-specific pages. While most of these variables actually refer to raw memory locations of original TTD structures, you cannot rely on that. Some variables were added later, some were moved or replaced. Only the variables listed in the specs are somewhat set to not be changed in the future.
 |}
 
-W przypadku wszystkich funkcji zmienne 80 + x są przesunięte w odpowiednią strukturę w danych gry TTD. &nbsp;Zmienne 40+x i 60+x są specjalnymi zmiennymi, które są obliczane w locie i nie są tak naprawdę nigdzie przechowywane w pamięci, chyba że podano inaczej. Dlatego należy ich używać tak mało, jak to konieczne, aby nie spowalniać zbytnio gry przy obliczaniu tych zmiennych (które można nazwać tysiące razy na sekundę, ilekroć porusza się pojazd).
+W przypadku wszystkich funkcji zmienne 80+x są przesunięte w odpowiednią strukturę w danych gry TTD. &nbsp;Zmienne 40+x i 60+x są specjalnymi zmiennymi, które są obliczane w locie i nie są tak naprawdę nigdzie przechowywane w pamięci, chyba że podano inaczej. Dlatego należy ich używać tak mało, jak to konieczne, aby nie spowalniać zbytnio gry przy obliczaniu tych zmiennych (które można nazwać tysiące razy na sekundę, ilekroć porusza się pojazd).
 
-Podczas wyświetlania pojazdu (itp.) Na liście zakupów, gra prawidłowo pokaże te odmiany na podstawie zmiennych zewnętrznych (daty itp.), Ale odmiany na podstawie zmiennych pojazdu (zmienne 40 + x, 60 + x i 80 + x) zawsze pokaże pierwszy (nie domyślny) identyfikator ładunku, chyba że dla danej zmiennej podano inaczej. Jeśli wykonasz obliczenia, pierwszy identyfikator ładunku zostanie wybrany, jeśli którakolwiek z potrzebnych zmiennych jest niedostępna.
+Podczas wyświetlania pojazdu (itp.) Na liście zakupów, gra prawidłowo pokaże te odmiany na podstawie zmiennych zewnętrznych (daty itp.), Ale odmiany na podstawie zmiennych pojazdu (zmienne 40+x, 60+x i 80+x) zawsze pokaże pierwszy (nie domyślny) identyfikator ładunku, chyba że dla danej zmiennej podano inaczej. Jeśli wykonasz obliczenia, pierwszy identyfikator ładunku zostanie wybrany, jeśli którakolwiek z potrzebnych zmiennych jest niedostępna.
 
-Listy 80 + x zmiennych na kolejnych stronach nie są wyczerpujące; wymienione są tylko przydatne zmienne. Aby uzyskać pełną listę, sprawdź definicję odpowiednich struktur w TTD. Marcin Grzegorczyk ma dość dobrą listę definicji struktur [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html savegame internals page].
+Listy 80+x zmiennych na kolejnych stronach nie są wyczerpujące; wymienione są tylko przydatne zmienne. Aby uzyskać pełną listę, sprawdź definicję odpowiednich struktur w TTD. Marcin Grzegorczyk ma dość dobrą listę definicji struktur [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html savegame internals page].
 
 === varadjust ===
 
-Adjust variable to a more useful range. It has the following format:
+Dostosuj zmienną do bardziej użytecznego zakresu. Ma następujący format:
 
 <pre>  <shift-num> <and-mask> <nowiki>[<add-val> <divide-val>/<modulo-val>]</nowiki></pre>
 
@@ -228,7 +228,7 @@ Adjust variable to a more useful range. It has the following format:
 |-
 |0..4||0..1F||{{Page:pl/Extrazi/ottdp|0.6|2.0}}||number of bits to right shift <variable>
 |-
-|5||20||{{Page:pl/Extrazi/ottdp|0.6|2.5}}||This is an [[en/VarAction2Advanced|advanced VarAction2]]
+|5||20||{{Page:pl/Extrazi/ottdp|0.6|2.5}}||This is an [[pl/Development/NewGRF/NFO Specs/VarAction2Advanced|advanced VarAction2]]
 |-
 |6||40||{{Page:pl/Extrazi/ottdp|0.6|2.5}}||This is a shift-and-add-divide adjustment.
 |-
@@ -243,13 +243,13 @@ Należy zauważyć, że w przypadku operacji dodawania i dzielenia zarówno zmie
 
 Tutaj ustawiasz liczbę różnych zakresów do sprawdzenia. Jeśli wartość zmiennej po powyższych manipulacjach nie mieści się w jednym z tych zakresów, zostanie użyta wartość domyślna. &nbsp;Wyświetlana w oknie zakupu, gra zawsze pokaże pierwszy zakres, jeśli zmienna jest typu 40 + x lub 80 + x (ponieważ zmienna jest niezdefiniowana, ponieważ pojazd jeszcze nie istnieje).
 
-{{Page:pl/Extrazi/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 57}} Since TTDPatch 2.0.1 alpha 57, nvar=0 is a special case. Instead of using ranges, nvar=0 means that the result of an [[en/VarAction2Advanced|advanced]] calculation (or, if no calculation is performed, the adjusted variable value itself) is returned as callback result, with bit 15 set. &nbsp;This is useful for those callbacks where many different return values are possible and it is easier to calculate them than list them in ranges. &nbsp;The default value must still be specified, and will be used in case the variable(s) used are not available.
+{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 57}} Od TTDPatch 2.0.1 alfa 57 nvar=0 jest szczególnym przypadkiem. Zamiast używać zakresów, nvar = 0 oznacza, że ​​wynik obliczenia  [[pl/Development/NewGRF/NFO Specs/VarAction2Advanced|advanced]] (lub, jeśli nie zostanie wykonane obliczenie, sama wartość zmiennej skorygowanej) jest zwracana jako wynik wywołania zwrotnego, z ustawionym bitem 15. &nbsp;Jest to przydatne w przypadku tych wywołań zwrotnych, w których możliwych jest wiele różnych wartości zwracanych, i łatwiej jest je obliczyć niż podać je w zakresach. &nbsp;Wartość domyślna musi być nadal określona i będzie używana w przypadku, gdy użyte zmienne nie są dostępne.
 
 === sets and ranges ===
 
-For each of the ranges to check, you give the set-id as a '''WORD''' value (i.e. with a 00 following, e.g. set-id 5 becomes 05 00, or - in case of a callback result - by setting the high bit, e.g. 05 80), followed by the low and high limits of this range. &nbsp;The first range that matches will be used.
+Dla każdego zakresu, który chcesz sprawdzić, podajesz set-id jako wartość '''WORD''' (tj. Z 00 po, np. set-id 5 staje się 05 00, lub - w przypadku wyniku wywołania zwrotnego - przez ustawienie wysokiego bitu, np. 05 80), a następnie dolnego i górnego limitu tego zakresu. &nbsp;Zostanie użyty pierwszy pasujący zakres.
 
-The various \b, \w, and \d escape sequences can be useful for <min-range> and <max-range>. See [[en/GRFActionsDetailed#byte-order|the discussion of escape sequences]] for further information.
+Różne sekwencje specjalne \b, \w i \d mogą być przydatne dla <min-range> i <max-range> . Zobacz   [[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed#byte-order|the discussion of escape sequences]] w celu uzyskania dalszych informacji.
 
 === default ===
 
