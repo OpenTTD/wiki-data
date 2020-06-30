@@ -4,7 +4,7 @@
 
 Jest to dostępne od wersji TTDPatch 2.6 alpha 0 r1247 i późniejszych.
 
-Ten typ VarAction2 wymaga zastosowania zaawansowanych obliczeń: [[en/VarAction2Advanced]]
+Ten typ VarAction2 wymaga zastosowania zaawansowanych obliczeń: [[pl/Development/NewGRF/NFO Specs/VarAction2Advanced|VarAction2Advanced]]
 
 == Variables ==
 
@@ -34,7 +34,7 @@ Ten typ VarAction2 wymaga zastosowania zaawansowanych obliczeń: [[en/VarAction2
 |11||Inverted
 |}
 
-Note: that these are the same bits as would be used to order action5 block type 4.
+Uwaga: są to te same bity, które byłyby użyte do zamówienia bloku Action5 typu 4.
 
 === Variable 18 ===
 
@@ -98,13 +98,13 @@ Note: that these are the same bits as would be used to order action5 block type 
 
 === Parameterised var 60 ===
 
-Parameter is two signed nybble offsets to add to coordinates of tile.
+Parametr to dwa podpisane przesunięcia, które można dodać do współrzędnych kafelka.
 
-The low nybble is added to the X coordinate (top-right to bottom-left).
+Niski węzeł jest dodawany do współrzędnej X (od prawej <small>''(top-right)''</small> do prawej do lewej z lewej <small>''(bottom-left)''</small>).
 
-The high nybble is added to the Y coordinate (top-left to bottom-right).
+Wysoki węzeł jest dodawany do współrzędnej Y (od lewej górnej <small>''(top-left)''</small> do prawej dolnej <small>''(bottom-right)''</small>).
 
-The information is retrieved from the tile after the coordinates have been adjusted, starting from the tile which is currently being drawn.
+Informacje są pobierane z kafelka po dopasowaniu współrzędnych, zaczynając od kafelka, który jest obecnie rysowany.
 
 {| |-
 !Bit!!Meaning
@@ -130,7 +130,7 @@ The information is retrieved from the tile after the coordinates have been adjus
 |31||Tile is a track tile
 |}
 
-Return value cached in varaction2var 10
+Zwracana wartość buforowana <small>''(cached)''</small> w varaction2var 10
 
 == Output ==
 
@@ -168,17 +168,17 @@ Return value cached in varaction2var 10
 
 ---
 
-A generic action 3 feature 0E should be used to reference the action 2.
+Do odniesienia do akcji 2 należy użyć ogólnej funkcji 0E 0E.
 
-Callback 0x146 will call this action 3 when a signal is drawn.
+Oddzwonienie 0x146 wywoła tę akcję 3, gdy zostanie wyciągnięty sygnał.
 
-Should the GRF not support the type of signal indicated in variable 10, an invalid callback result should be returned. Returning 0 will prevent further new signal GRF files from being queried and will cause the default signal graphics to be used. Returning 0 should only be done to explicitly prevent lower priority new signals GRFs from possibly drawing the signal.
+Jeśli GRF nie obsługuje typu sygnału wskazanego w zmiennej 10, należy zwrócić niepoprawny wynik wywołania zwrotnego. Zwrócenie 0 zapobiegnie zapytaniu o nowe pliki GRF sygnału i spowoduje użycie domyślnej grafiki sygnału. Zwracanie 0 powinno być wykonywane tylko po to, aby jawnie zapobiec potencjalnemu pobieraniu nowych sygnałów przez GRF o niższym priorytecie.
 
-The result to the callback should be returned as a calculation result.
+Wynik wywołania zwrotnego powinien zostać zwrócony jako wynik obliczenia.
 
-Bits 1-4 of the callback result indicate how many varaction2vars starting from 0x20 will be used to specify sprites, to be drawn. Operator 0E should be used to store the appropriate values in vars 0x20-2F and 30 as appropriate.
+Bity 1-4 wyniku wywołania zwrotnego wskazują, ile wariacji varaction2vars rozpoczynających się od 0x20 zostanie użytych do określenia 'sprites' , które zostaną narysowane. Operator 0E powinien być używany do przechowywania odpowiednich wartości w zmiennych 0x20-2F i odpowiednio 30.
 
-Recolour sprites, specifed in varaction2var 0x30 and bit 5 of the callback result are applied for all of the sprites to be drawn.
+Ponowne kolorowanie 'sprites' określonych w varaction2var 0x30 i bit 5 wyniku wywołania zwrotnego są stosowane do wszystkich rysowanych 'sprites' .
 
 === Przykład ===
 
