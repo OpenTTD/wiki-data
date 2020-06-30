@@ -1,0 +1,46 @@
+{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Storages|pl=pl/Development/NewGRF/NFO Specs/Storages}}
+==Introduction==
+
+Przechowywanie to tablice rejestrów, do których można uzyskać dostęp przy użyciu  [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page|VariationalAction2]] . Rejestry (zarówno tymczasowe, jak i trwałe) zawsze mają rozmiar 4 bajtów. Jeśli piszesz je przy użyciu mniejszych rozmiarów (cokolwiek innego niż typ 89 / 8A), podana wartość zostanie przedłużona do 4 bajtów. Dlatego należy zachować ostrożność, czytając rejestr w rozmiarze większym niż został napisany. Dotyczy to również rejestrów odczytywanych przez TTDPatch; jeśli nie zaznaczono inaczej, TTDPatch odczytuje wszystkie 4 bajty rejestru.
+
+==Description==
+===Temporary storage===
+{{pl/Development/NewGRF/ottdp|0.6|2.6}}
+
+'''Rozmiar:''' 00 - FF (256) (from TTDPatch r1246 to r1301) or 00 - 10F (272) (od TTDPatch r1301 i OpenTTD r9707)
+
+'''Przechowywanie danych:''' [[pl/Development/NewGRF/NFO Specs/VarAction2Advanced#operator|Operator \2sto (0E)]] pozwala przechowywać wartości w rejestrach tego magazynu.
+
+'''Dostęp do danych:''' Pierwsze 256 rejestrów 00 do FF można odczytać za pomocą  [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page#variable|variable 7D]] . Pozostałe wartości (od 100 do 10F) są tylko do zapisu: służą do przekazywania dodatkowych danych do niektórych zmiennych 4x i 6x, a także do zwracania dodatkowych danych z wywołań zwrotnych.
+
+
+Magazyn tymczasowy zawiera wartości lokalne dla bieżącego łańcucha [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page|VariationalAction2]] . Po uruchomieniu nowego łańcucha wartości w pamięci tymczasowej są niezdefiniowane. Dlatego nie należy ich używać, chyba że zostały odpowiednio zainicjowane. Podczas wykonywania łańcucha tylko ten łańcuch może modyfikować wartości w pamięci tymczasowej.
+
+===Persistent storage===
+{{pl/Development/NewGRF/ottdp|0.6|2.6}}
+
+'''Rozmiar:''' 00 - 0F (16) or 00 - FF (256) (od {{pl/Development/NewGRF/ottd|1.9|6391d49}})
+
+'''Przechowywanie danyche:''' <small>''(Data storag)''</small> [[pl/Development/NewGRF/NFO Specs/VarAction2Advanced#operator|Operator \2psto (10)]] pozwala przechowywać wartości w rejestrach tego magazynu.
+
+'''Dostęp do danych:''' <small>''(Data access)''</small> Rejestry można odczytać przy użyciu  [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page#variable|variable 7C]] . Należy pamiętać, że można uzyskać dostęp do trwałego przechowywania powiązanych obiektów (patrz[[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page#type|VariationalAction2#Type]]).
+
+'''Funkcje, które go obsługują:''' Industries (0A)
+
+
+Trwałe przechowywanie jest powiązane z jednym elementem. Po utworzeniu elementu wszystkie wartości trwałego magazynu są ustawiane na zero. Stałe wartości pamięci nie mogą być dostępne ani modyfikowane przez tworzone elementy. Stała pamięć nie powinna być odczytywana, jeśli bieżąca funkcja jej nie obsługuje.
+
+===Persistent storage accessed by GRFID===
+{{pl/Development/NewGRF/ottdp|1.2|ottdrev=r22569}}
+
+'''Rozmiar:''' 00 - 0F (16) or 00 - FF (256) (od {{pl/Development/NewGRF/ottd|1.9|6391d49}}) dla każdego GRFID
+
+'''Przechowywanie danych:''' [[pl/Development/NewGRF/NFO Specs/VarAction2Advanced#operator|Operator \2psto (10)]] pozwala przechowywać wartości w rejestrach tego magazynu. GRFID, aby uzyskać dostęp, musi zostać zapisany w rejestrze tymczasowym 0x100 przed użyciem operatora 10. 0xFFFFFFFF może być użyty do uzyskania dostępu do GRFID elementu przy użyciu bieżącego łańcucha <small>''
+(chain)''</small> [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page|VariationalAction2]] .
+
+'''Dostęp do danych:''' Rejestry można odczytać przy użyciu  [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page#variable|variable 7C]] . Należy pamiętać, że można uzyskać dostęp do trwałego przechowywania powiązanych obiektów (patrz  [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page#type|VariationalAction2#Type]] ). GRFID, aby uzyskać dostęp, musi zostać zapisany w rejestrze tymczasowym 0x100 przed sprawdzeniem zmiennej 7C. 0xFFFFFFFF może być użyty do uzyskania dostępu do GRFID elementu za pomocą bieżącego łańcucha  [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page|VariationalAction2]] .
+
+'''Funkcje, które go obsługują:''' Miejscowości <small>''(Towns)''</small> (od OpenTTD r22569)
+
+
+Funkcje obsługujące trwałą pamięć masową dostępną przez GRFID nie są ograniczone do pojedynczej trwałej pamięci; istnieje stała pamięć związana z każdym GRFID. Element ma dostęp tylko do zapisu do trwałej pamięci związanej z jego własnym GRFID, ale może czytać rejestry dowolnego GRFID. Stałe wartości pamięci nie mogą być dostępne ani modyfikowane przez tworzone elementy. Stała pamięć nie powinna być odczytywana, jeśli bieżąca funkcja jej nie obsługuje.
