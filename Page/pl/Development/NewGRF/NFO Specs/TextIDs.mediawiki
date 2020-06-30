@@ -1,0 +1,117 @@
+{{pl/Development/NewGRF/ottdp|no|2.0}} To jest lista identyfikatorów tekstowych w TTD (dla działania 4), oryginalnie opracowana przez A. Skrobova.
+
+Możesz użyć tych identyfikatorów tekstowych
+* aby zmienić/przetłumaczyć łańcuchy <small>''(strings)''</small> TTD za pomocą funkcji action4 48. (To nie jest obsługiwane przez OpenTTD, i nigdy nie będzie.)
+* odwoływać się do nich w różnych właściwościach akcji 0, np. dla nazw domów/przemysłu/ładunku <small>''(house/industry/cargo)''</small>. (Jest to częściowo obsługiwane przez OpenTTD.)
+
+Uwaga: System ciągów OpenTTD bardzo różni się od systemu TTD i TTDPatch. Obsługuje/wymaga liczby mnogiej, płci, przypadków i różnych formatowań liczb, więc złożone ciągi, które są połączone z wielu części, nie są wymienne. Różne ciągi zmieniły także kolejność parametrów w czasie lub otrzymały dodatkowe argumenty.
+
+W związku z tym akcja 4 nie może zmieniać żadnych oryginalnych ciągów w OpenTTD; tłumaczenia nie są wykonywane przez NewGRF, ale tylko przez [http://translator.openttd.org/ WebTranslator].
+
+W akcji 0 można uzyskać dostęp tylko do podzbioru oryginalnych ciągów. Są to mniej więcej ciągi, które nie mają dodatkowych parametrów, np. zwykłe nazwy ładunku/domu/branży.
+
+
+=0000 General strings=
+[[pl/Extrazi/specs.tt/TextIDs/General strings | General strings 0000-07FF]]
+
+=0800 Basic land strings=
+[[pl/Extrazi/specs.tt/TextIDs/Basic land strings | Basic land strings 0800 - 0FFF]]
+
+=1000 Railroad strings=
+[[pl/Extrazi/specs.tt/TextIDs/Railroad strings | Railroad strings 1000 - 17FF]]
+
+=1800 Road strings=
+[[pl/Extrazi/specs.tt/TextIDs/Road strings | Road strings 1800 - 1FFF]]
+
+=2000 Town strings=
+[[pl/Extrazi/specs.tt/TextIDs/Town strings | Town strings 2000 - 27FF]]
+
+=2800 Tree strings=
+[[pl/Extrazi/specs.tt/TextIDs/Tree strings | Tree strings 2800 - 2FFF]]
+
+=3000 Station strings=
+[[pl/Extrazi/specs.tt/TextIDs/Station strings | Station strings 3000 - 37FF]]
+
+=3800 Water strings=
+[[pl/Extrazi/specs.tt/TextIDs/Water strings | Water strings 3800 - 3FFF]]
+
+=4000 Load/save strings=
+[[pl/Extrazi/specs.tt/TextIDs/Load, save strings | Load, save strings 4000 - 47FF]]
+
+=4800 Industry strings=
+[[en/TextIDs/Industry strings | Industry strings 4800 - 4FFF]]
+
+=5000 Tunnel and bridge strings=
+[[en/TextIDs/Tunnel and bridge strings | Tunnel and bridge strings 5000-57FF]]
+
+=5800 Object strings=
+[[en/TextIDs/Object strings | Object strings 5800 - 5FFF]]
+
+=6000 Debugger strings=
+[[en/TextIDs/Debugger strings | Debugger strings 6000 - 67FF]]
+
+=6800 Difficulty strings=
+[[en/TextIDs/Difficulty strings | Difficulty strings 6800 - 6FFF]]
+
+=7000 Company strings=
+[[en/TextIDs/Company strings | Company strings 7000 - 77FF]]
+
+=7800 Custom strings=
+Nie można ich ustawiać bezpośrednio; wpis jest generowany za każdym razem, gdy gracz wprowadza niestandardową nazwę, na przykład dla znaków, stacji lub pojazdów.
+
+=8000 Vehicle type names=
+[[en/TextIDs/Vehicle type names | Vehicle type names 8000 - 87FF]]
+
+Uwaga: identyfikatory 8000..80FF zostaną zmienione przy użyciu zwykłej akcji 4 w celu nazwania nowych pojazdów, ale nie przy użyciu "niestandardowych nazw pojazdów" <small>''(custom vehicle names)''</small> z pojazdu.dat, które zamiast tego używają niestandardowych ciągów.
+
+=8800 Train strings=
+[[en/TextIDs/Train strings | Train strings 8800 - 8FFF]]
+
+=9000 Road vehicle strings=
+[[en/TextIDs/Road vehicle strings | Road vehicle strings 9000 - 97FF]]
+
+=9800 Ship strings=
+[[en/TextIDs/Ship strings | Ship strings 9800 - 9FFF]]
+
+=A000 Aircraft strings=
+[[en/TextIDs/Aircraft strings | Aircraft strings A000 - A7FF]]
+
+=A800 Pseudo-vehicle strings=
+(None defined)
+
+=B000 Disaster strings=
+[[en/TextIDs/Disaster strings | Disaster strings B800 - BFFF]]
+
+=B800 unused=
+
+=C000 New station names=
+Służy do nazewnictwa stacji i klas newgrf TTDPatch. Więcej informacji znajduje się w akcji 4.
+
+=C800 New house names=
+Służy to do nazewnictwa budynków miasta TTDPatch newgrf. Więcej informacji znajduje się w akcji 4.
+
+=D000 Miscellaneous GRF texts=
+Jest to używane do różnych tekstów TTDPatch newgrf, głównie do oddzwaniania. Więcej informacji znajduje się w akcji 4.
+
+Tabela zawiera do 1024 pozycji. Aby użyć wpisu X w tekście dołączonym (kody 80/81), użyj ID D400 + X. Zauważ, że jeśli chcesz dołączyć identyfikator D000/D400, bajt 00 będzie uważany za koniec ciągu w akcji 4, a zatem zostanie przerwany, jeśli w akcji 4 mają nastąpić dodatkowe teksty.
+
+=D800 Persistent GRF texts=
+Jest to używane w przypadku trwałych tekstów TTDPatch newgrf (odwzorowania identyfikatorów są zachowywane poprzez zapisywanie i ładowanie, nawet jeśli plik GRF jest niedostępny). Więcej informacji znajduje się w akcji 4.
+
+ID''`y'' klas D800 (ID''`y'' DCxx) nie mogą być używane z wyjątkiem akcji 0 i specyfikacji, która wyraźnie mówi, że działają.
+
+=E000 Hard-coded game texts=
+[[en/TextIDs/Hard-coded game texts | Hard-coded game texts E000 - E7FF]]
+
+Ta klasa tekstu istnieje tylko w TTDPatch 2.0.1 alpha 59 i nowszych. Zawiera teksty zależne od języka, które pierwotnie nie miały identyfikatorów textID. Ta klasa pozwala całkowicie tłumaczyć TTD za pomocą akcji 4s, ponieważ teraz można uzyskać dostęp do każdego tekstu zależnego od języka.
+
+=E800 News texts=
+Jest to wykorzystywane wewnętrznie przez TTDPatch w celu dostarczenia dodatkowych wiadomości.
+
+=F000 unused=
+(Nieużywane, ale komunikaty o błędach krytycznych TTD wewnętrznie mają numer w tym regionie, nawet jeśli nie są to identyfikatory tekstowe jako takie.)
+
+=F800 Internal TTDPatch texts=
+[[en/TextIDs/Internal TTDPatch strings | Internal TTDPatch texts F800 - FFFF]]
+
+Jest to używane wewnętrznie przez TTDPatch dla dodatkowych regularnych ciągów, tj. Tych z ttdpttxt.txt. Od wersji TTDPatch 2.0.1 alfa 59 można używać następujących identyfikatorów tekstowych do zmiany odpowiednich ciągów łatek (przed wersją alfa 59 identyfikatory tekstowe zmieniały się regularnie). Aby zobaczyć wartości domyślne, zobacz ttdpttxt.txt wyprodukowany przez mkpttxt.exe.
