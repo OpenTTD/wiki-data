@@ -1,0 +1,99 @@
+{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/GrfLoadingStages|pl=pl/Development/NewGRF/NFO Specs/GrfLoadingStages}}
+== Introduction ==
+
+=The stages of loading a grf file=
+
+Przetwarzanie plików .grf odbywa się w kilku przebiegach, z których większość zdarza się wielokrotnie, raz na aktywację, czyli za każdym razem, gdy gra jest uruchamiana/ładowana lub przycisk "Zastosuj" <small>''(Apply)''</small> w oknie statusu GRF. Każde przejście przetwarza wszystkie pliki w kolejności, w jakiej pojawiają się w oknie statusu GRF.
+
+Zasadniczo inicjalizacja jest systemem dwuprzebiegowym (najpierw rozwiązuje cele skoku, a następnie inicjuje wszystko), co dzieje się tylko raz, aktywacja jest systemem dwuprzebiegowym (najpierw definiuje ładunki i rezerwowe ID''`y'' GRM, a następnie aktywuje się), który ma miejsce wiele razy, i testowanie to jednoprzebiegowy system uruchamiany jednym kliknięciem na czerwoną/zieloną flagę w oknie statusu GRF.
+
+{|
+!Pass!!Description
+
+|-
+|Post-Load||Run once after loading all files. Initializes the targets of action 7&9 (to resolve goto jumps), ignores all other actions.
+
+|-
+|Initialization||Run once after the post-load pass. Checks action 0 for validity, records action 1 sprite numbers, resolves action 2 references (to the sprite numbers within the grf file of action 1 sprites and references to variational/random action 2), executes actions 6, 9, B, D and F, initializes action 3, 4, 8 and 11, and ignores the rest of the actions (including in particular action 7).
+
+|-
+|Reserve||{{pl/Development/NewGRF/ottdp|0.6|2.5}} Called just before activation, to reserve GRM IDs. Also applies action 0 for cargos to make cargo labels valid to check in action 7/9 independent of order of .grf files. Ignores all actions except action 0 (for cargos), 6, 7, 8, 9, B, D and E.
+
+|-
+|Activate||Called during activation. Applies all actions except F and 10.
+
+|-
+|Test||{{pl/Development/NewGRF/ottdp|no|2.5}} Called when user clicks to enable/disable file in the GRF Status Window to check which other files react to the change. Ignores all actions except 6, 7, 8, 9, B, D and E.
+|}
+
+Plik .grf jest aktywowany tylko wtedy, gdy był aktywny podczas uruchamiania gry. Jeśli gra zostanie załadowana, tylko jej aktywne .grfs zostaną ponownie aktywowane. Plik .grf jest uważany za aktywny, jeśli jego działanie 8 zostało przetworzone, tj. Jego działanie 8 nie zostało pominięte przy użyciu działania 7.
+
+Poniższa tabela pokazuje dokładnie, które akcje są wyliczane w których przebiegach (X=akcja wykonana <small>''(X=action executed)''</small>, I=akcja zainicjowana <small>''(I=action initialized)''</small>, pusta=akcja zignorowana <small>''( empty=action ignored)''</small>).
+
+{|
+!Action!!Load!!Init!!Res!!Act!!Test!!Notes
+
+|-
+|0|| ||<center>X</center>||<center>X<ref>During reservation stage especially cargo- and railtypes are reserved, so their existence can be tested by all GRFs in activation stage independent of loading order.</ref></center>||<center>X</center>|| ||
+
+|-
+|1|| ||<center>I</center>|| ||<center>X</center>|| ||
+
+|-
+|2|| ||<center>I</center>|| ||<center>X</center>|| ||
+
+|-
+|3|| ||<center>I</center>|| ||<center>X</center>|| ||
+
+|-
+|4|| ||<center>I</center>|| ||<center>X</center>|| ||
+
+|-
+|5|| || || ||<center>X</center>|| ||
+
+|-
+|6|| ||<center>X</center>||<center>X</center>||<center>X<ref>{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 51}} Processed during activation in TTDPatch 2.0.1 alpha 51 and later.</ref></center>||<center>X</center>||
+
+|-
+|7||<center>I</center>|| ||<center>X</center>||<center>X</center>||<center>X</center>||
+
+|-
+|8|| ||<center>I</center>||<center>X</center>||<center>X</center>||<center>X</center>||When executed for an inactive file, skips remainder of file.
+
+|-
+|9||<center>I</center>||<center>X</center>||<center>X</center>||<center>X</center>||<center>X</center>||
+
+|-
+|A|| || || ||<center>X</center>|| ||
+
+|-
+|B|| ||<center>X<ref>Processed during initialization only if bit 7 of severity is set.</ref></center>||<center>X</center>||<center>X</center>||<center>X</center>||
+
+|-
+|C|| || || || || ||
+
+|-
+|D|| ||<center>X</center>||<center>X</center>||<center>X</center>||<center>X</center>||
+
+|-
+|E|| || ||<center>X</center>||<center>X</center>||<center>X</center>||
+
+|-
+|F|| ||<center>X</center>|| || || ||
+
+|-
+|10||<center>X</center>|| || || || ||
+
+|-
+|11|| ||<center>I</center>|| ||<center>X</center>|| ||
+
+|-
+|12|| || || ||<center>X</center>|| || If TTDPatch encounters any Action12 during any stage (including "Load"), Unicode handling is enabled.
+
+|-
+|13|| || || ||<center>X</center>|| ||
+
+|-
+|14|| || || || || || Processed by OpenTTD only when scanning for files. Not processed during the normal loading/activation. 
+|}
+<references/>
