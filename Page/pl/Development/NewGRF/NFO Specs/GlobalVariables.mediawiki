@@ -7,83 +7,83 @@
 !rowspan=2|'''Versions'''
 !rowspan=2|'''Description'''
 |-
-|[[en/VariationalAction2 | VA2]]||A[[en/Action6|6]]/[[en/Action7|7]]/[[en/Action9|9]]/[[en/ActionD|D]]<br>(read)||[[en/ActionD|ActD]]<br>(write)
+|[[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page | VA2]]||A[[pl/Development/NewGRF/NFO Specs/Action6|6]]/[[pl/Development/NewGRF/NFO Specs/Action7|7]]/[[en/Extrazi/specs.tt/Action7|9]]/[[pl/Development/NewGRF/NFO Specs/ActionD|D]]<br>(read)||[[pl/Development/NewGRF/NFO Specs/ActionD|ActD]]<br>(write)
 |-
-|00||80||  ||W||{{en/Ottdp|0.6|2.0}}||current date (counted as days from 1920)<ref name="startdate">{{en/Ottdp|0.7}} In multiplayer games OpenTTD doesn't report the current date and year to actions 6,7,9 and D, but the date and year the game was loaded. The reason lies in the fact that it was seen that use of this variable leads to desyncs in network games.</ref>
+|00||80||  ||W||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||current date (counted as days from 1920)<ref name="startdate">{{pl/Development/NewGRF/ottdp|0.7}} In multiplayer games OpenTTD doesn't report the current date and year to actions 6,7,9 and D, but the date and year the game was loaded. The reason lies in the fact that it was seen that use of this variable leads to desyncs in network games.</ref>
 |-
-|01||81||  ||B||{{en/Ottdp|0.6|2.0}}|| Current year (count from 1920, max. 2175 even with eternalgame)<ref name="startdate"/>
+|01||81||  ||B||{{pl/Development/NewGRF/ottdp|0.6|2.0}}|| Current year (count from 1920, max. 2175 even with eternalgame)<ref name="startdate"/>
 |-
-|02||82||  ||B/D||{{en/Ottdp|0.6|2.0}}|| current month (0-11) in bits 0-7; the higher bytes contain unusable junk.<ref name="startdate"/><br/>{{en/Ottdp|0.7|ottdrev=r13594}} Since OpenTTD r13594 'day of month' (0-30) is stored in bits 8-12, bit 15 is set in leapyears and 'day of year'(0-364 resp. 365) is stored in bits 16-24. All other bits are reserved and should be masked.
+|02||82||  ||B/D||{{pl/Development/NewGRF/ottdp|0.6|2.0}}|| current month (0-11) in bits 0-7; the higher bytes contain unusable junk.<ref name="startdate"/><br/>{{pl/Development/NewGRF/ottdp|0.7|ottdrev=r13594}} Since OpenTTD r13594 'day of month' (0-30) is stored in bits 8-12, bit 15 is set in leapyears and 'day of year'(0-364 resp. 365) is stored in bits 16-24. All other bits are reserved and should be masked.
 |-
-|03||83||  ||B||{{en/Ottdp|0.6|2.0}}|| Current climate: 00 = temp, 01 = arctic, 02 = trop, 03 = toyland
+|03||83||  ||B||{{pl/Development/NewGRF/ottdp|0.6|2.0}}|| Current climate: 00 = temp, 01 = arctic, 02 = trop, 03 = toyland
 |-
-|  ||84||  ||D||{{en/Ottdp|0.6|2.0}}|| [[en/GrfLoadingStages|GRF loading stage]], see [[#grf-loading-stage-84|below]]
+|  ||84||  ||D||{{pl/Development/NewGRF/ottdp|0.6|2.0}}|| [[pl/Development/NewGRF/NFO Specs/GrfLoadingStages|GRF loading stage]], see [[#grf-loading-stage-84|below]]
 |-
-|  ||85||  ||B||{{en/Ottdp|0.6|2.0}}|| [[en/TTDPatchFlags|TTDPatch flags]]: only for bit tests
+|  ||85||  ||B||{{pl/Development/NewGRF/ottdp|0.6|2.0}}|| [[pl/Development/NewGRF/NFO Specs/TTDPatchFlags|TTDPatch flags]]: only for bit tests
 |-
-|06||86||  ||B||{{en/Ottdp|0.6|2.0}}|| Road traffic side: bit 4 clear=left, set=right; other bits are reserved and must be masked.
+|06||86||  ||B||{{pl/Development/NewGRF/ottdp|0.6|2.0}}|| Road traffic side: bit 4 clear=left, set=right; other bits are reserved and must be masked.
 |-
-|  ||(87)||(87)||B||{{en/Ottdp|no|no}}|| No longer used since TTDPatch 2.0. (was width of "€" character)
+|  ||(87)||(87)||B||{{pl/Development/NewGRF/ottdp|no|no}}|| No longer used since TTDPatch 2.0. (was width of "€" character)
 |-
-|  ||88||  ||4*B||{{en/Ottdp|0.6|2.0}}|| Checks specified GRFID (see [[en/Action7#condition-type|condition-types]])<ref>The value of variable 88 can only be tested with the GRFID tests.</ref>
+|  ||88||  ||4*B||{{pl/Development/NewGRF/ottdp|0.6|2.0}}|| Checks specified GRFID (see [[pl/Development/NewGRF/NFO Specs/Action7#condition-type|condition-types]])<ref>The value of variable 88 can only be tested with the GRFID tests.</ref>
 |-
-|09||89||  ||W||{{en/Ottdp|0.6|2.0}}|| date fraction, incremented by 0x375 every engine tick
+|09||89||  ||W||{{pl/Development/NewGRF/ottdp|0.6|2.0}}|| date fraction, incremented by 0x375 every engine tick
 |-
-|0A||8A||  ||W||{{en/Ottdp|0.6|2.0}}|| animation counter, incremented every tick
+|0A||8A||  ||W||{{pl/Development/NewGRF/ottdp|0.6|2.0}}|| animation counter, incremented every tick
 |-
-|0B||8B||  ||D||{{en/Ottdp|no|2.0}}|| [[en/Version numbers#ttdpatch-version|TTDPatch version]], see [[#ttdpatch-version-0b-8b|below]] <ref>OpenTTD reports some arbitrary TTDPatch 2.6 version number to make old GRFs work, which do not know about OpenTTD. Do not rely on this for new NewGRFs.</ref><ref name="versionchecks">It is generally not useful to check version variables using Action 7. If you want to skip certain actions which are incompatible to some versions, you want to skip them during all loading stages. So, use Action 9.</ref>
+|0B||8B||  ||D||{{pl/Development/NewGRF/ottdp|no|2.0}}|| [[pl/Development/NewGRF/NFO Specs/Version numbers#ttdpatch-version|TTDPatch version]], see [[#ttdpatch-version-0b-8b|below]] <ref>OpenTTD reports some arbitrary TTDPatch 2.6 version number to make old GRFs work, which do not know about OpenTTD. Do not rely on this for new NewGRFs.</ref><ref name="versionchecks">It is generally not useful to check version variables using Action 7. If you want to skip certain actions which are incompatible to some versions, you want to skip them during all loading stages. So, use Action 9.</ref>
 |-
-|0C||  ||  ||W||{{en/Ottdp|0.6|2.5}}|| current [[en/Callbacks|callback]] ID (feature-specific), set to 00 when not in a callback
+|0C||  ||  ||W||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| current [[en/Callbacks|callback]] ID (feature-specific), set to 00 when not in a callback
 |-
-|0D||8D||  ||B||{{en/Ottdp|0.6|2.5}}|| TTD version, 0=DOS, 1=Windows
+|0D||8D||  ||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| TTD version, 0=DOS, 1=Windows
 |-
-|0E||8E||8E||B||{{en/Ottdp|0.6|2.5}}|| Y-Offset for train sprites
+|0E||8E||8E||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| Y-Offset for train sprites
 |-
-|0F||8F||8F||3*B||{{en/Ottdp|0.6|2.5}}|| Rail track type cost factors
+|0F||8F||8F||3*B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| Rail track type cost factors
 |-
-|10||  ||  ||D||{{en/Ottdp|0.6|2.5}}|| Extra callback info 1, see [[#extra-callback-info-10-and-18|below]].
+|10||  ||  ||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| Extra callback info 1, see [[#extra-callback-info-10-and-18|below]].
 |-
-|11||  ||  ||B||{{en/Ottdp|no|2.5}}|| current rail tool type (for station callbacks)
+|11||  ||  ||B||{{pl/Development/NewGRF/ottdp|no|2.5}}|| current rail tool type (for station callbacks)
 |-
-|12||92||  ||B||{{en/Ottdp|0.6|2.5}}|| Game mode, 0 in title screen, 1 in game and 2 in editor
+|12||92||  ||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| Game mode, 0 in title screen, 1 in game and 2 in editor
 |-
-|13||93||93||W||{{en/Ottdp|no|2.5|ttdprev=2.0.1 alpha 39}}|| Tile refresh offset to left <ref name="tilefresh">See [[en/ActionD#tile-refresh-offsets|Action D]] for more details on tile refresh offsets and their use.</ref>
+|13||93||93||W||{{pl/Development/NewGRF/ottdp|no|2.5|ttdprev=2.0.1 alpha 39}}|| Tile refresh offset to left <ref name="tilefresh">See [[en/ActionD#tile-refresh-offsets|Action D]] for more details on tile refresh offsets and their use.</ref>
 |-
-|14||94||94||W||{{en/Ottdp|no|2.5|ttdprev=2.0.1 alpha 39}}|| Tile refresh offset to right <ref name="tilefresh"/>
+|14||94||94||W||{{pl/Development/NewGRF/ottdp|no|2.5|ttdprev=2.0.1 alpha 39}}|| Tile refresh offset to right <ref name="tilefresh"/>
 |-
-|15||95||95||W||{{en/Ottdp|no|2.5|ttdprev=2.0.1 alpha 39}}|| Tile refresh offset upwards <ref name="tilefresh"/>
+|15||95||95||W||{{pl/Development/NewGRF/ottdp|no|2.5|ttdprev=2.0.1 alpha 39}}|| Tile refresh offset upwards <ref name="tilefresh"/>
 |-
-|16||96||96||W||{{en/Ottdp|no|2.5|ttdprev=2.0.1 alpha 39}}|| Tile refresh offset downwards <ref name="tilefresh"/>
+|16||96||96||W||{{pl/Development/NewGRF/ottdp|no|2.5|ttdprev=2.0.1 alpha 39}}|| Tile refresh offset downwards <ref name="tilefresh"/>
 |-
-|  ||97||97||B||{{en/Ottdp|no|2.5}}|| Fixed snow line height <ref>This variable is a deprecated way to set the snow line height via NewGRFs using [[en/ActionD]]. It is superseded by the [[en/Action0/Global Settings#snow-line-height-table-10 | Action 0 snow line height table]]. To read the current snow line with [[en/VariationalAction2 | VarAct2]] in a running game, use variable 20 instead.</ref><ref name="heightlevel">{{en/GrfTill|7}} For GRF version 7 and below these variable are multiples of 8; {{en/GrfFrom|8}} for GRF version 8 and above they directly state the heightlevel as multiple of 1.</ref>
+|  ||97||97||B||{{pl/Development/NewGRF/ottdp|no|2.5}}|| Fixed snow line height <ref>This variable is a deprecated way to set the snow line height via NewGRFs using [[en/ActionD]]. It is superseded by the [[en/Action0/Global Settings#snow-line-height-table-10 | Action 0 snow line height table]]. To read the current snow line with [[en/VariationalAction2 | VarAct2]] in a running game, use variable 20 instead.</ref><ref name="heightlevel">{{pl/Development/NewGRF/grfTill|7}} For GRF version 7 and below these variable are multiples of 8; {{pl/Development/NewGRF/grfFrom|8}} for GRF version 8 and above they directly state the heightlevel as multiple of 1.</ref>
 |-
-|18||  ||  ||D||{{en/Ottdp|0.6|2.5}}|| Extra callback info 2, see [[#extra-callback-info-10-and-18|below]].
+|18||  ||  ||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| Extra callback info 2, see [[#extra-callback-info-10-and-18|below]].
 |-
-|  ||99||99||D||{{en/Ottdp|no|2.5}}|| Global ID offset
+|  ||99||99||D||{{pl/Development/NewGRF/ottdp|no|2.5}}|| Global ID offset
 |-
-|1A||9A||  ||D||{{en/Ottdp|0.6|2.5}}|| Has always all bits set; you can use this to make unconditional jumps
+|1A||9A||  ||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| Has always all bits set; you can use this to make unconditional jumps
 |-
-|1B||  ||  ||B||{{en/Ottdp|no|2.5}}|| display options; bit 0=town names, 1=station names, 2=signs, 3=animation, 4=transparency, 5=full detail
+|1B||  ||  ||B||{{pl/Development/NewGRF/ottdp|no|2.5}}|| display options; bit 0=town names, 1=station names, 2=signs, 3=animation, 4=transparency, 5=full detail
 |-
-|1C||  ||  ||D||{{en/Ottdp|0.6|2.5}}|| result from most recent VarAction2
+|1C||  ||  ||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| result from most recent VarAction2
 |-
-|1D||9D||  ||D||{{en/Ottdp|0.6|2.5}}|| TTD Platform, 0=TTDPatch, 1=OpenTTD <ref name="versionchecks"/>
+|1D||9D||  ||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| TTD Platform, 0=TTDPatch, 1=OpenTTD <ref name="versionchecks"/>
 |-
-|1E||9E||9E||D||{{en/Ottdp|0.6|2.5}}|| Misc. GRF Features
+|1E||9E||9E||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| Misc. GRF Features
 |-
-|  ||  ||9F||D||{{en/Ottdp|no|2.5}}|| writable only: Locale-dependent settings
+|  ||  ||9F||D||{{pl/Development/NewGRF/ottdp|no|2.5}}|| writable only: Locale-dependent settings
 |-
-|20||  ||  ||B||{{en/Ottdp|0.6|2.5}}|| Current snow line height, FFh if snow isn't present at all <ref name="heightlevel"/>
+|20||  ||  ||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| Current snow line height, FFh if snow isn't present at all <ref name="heightlevel"/>
 |-
-|21||A1||  ||D||{{en/Ottdp|0.6|no}}|| [[en/Version numbers#openttd-version|OpenTTD version]], see [[#openttd-version-21-a1|below]]. <ref name="versionchecks"/>
+|21||A1||  ||D||{{pl/Development/NewGRF/ottdp|0.6|no}}|| [[en/Version numbers#openttd-version|OpenTTD version]], see [[#openttd-version-21-a1|below]]. <ref name="versionchecks"/>
 |-
-|22||A2||  ||D||{{en/Ottdp|0.7|2.6|ottdrev=r12499|ttdprev=r1857}}|| Difficulty level: 00= easy, 01=medium, 02=hard, 03=custom
+|22||A2||  ||D||{{pl/Development/NewGRF/ottdp|0.7|2.6|ottdrev=r12499|ttdprev=r1857}}|| Difficulty level: 00= easy, 01=medium, 02=hard, 03=custom
 |-
-|23||A3||  ||D||{{en/Ottdp|0.7|2.6|ottdrev=r13376|ttdpref=r2048}}|| Current date long format
+|23||A3||  ||D||{{pl/Development/NewGRF/ottdp|0.7|2.6|ottdrev=r13376|ttdpref=r2048}}|| Current date long format
 |-
-|24||A4||  ||D|||{{en/Ottdp|0.7|2.6|ottdrev=r13376|ttdprev=r2048}}|| Current year zero based
+|24||A4||  ||D|||{{pl/Development/NewGRF/ottdp|0.7|2.6|ottdrev=r13376|ttdprev=r2048}}|| Current year zero based
 |-
-|25||  ||  ||D||{{en/Ottdp|0.7|ottdrev=r15739}}|| GRFID of the grf that contains the corresponding Action3. Useful when accessing the "related" object. Currently only supported for vehicles.
+|25||  ||  ||D||{{pl/Development/NewGRF/ottdp|0.7|ottdrev=r15739}}|| GRFID of the grf that contains the corresponding Action3. Useful when accessing the "related" object. Currently only supported for vehicles.
 |}
 
 All other variable numbers are reserved and must not be used.
@@ -98,15 +98,15 @@ Variable 84 is a BYTE variable up to TTDPatch 2.5r1220. Its lower byte (bits 0..
 {|
 !Bit!!Version!!Meaning
 |-
-|0||{{en/Ottdp|0.6|2.0}}||Set after the "Initialization" stage completes
+|0||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||Set after the "Initialization" stage completes
 |-
-|1..7||{{en/Ottdp|0.6|2.0}}||Always clear
+|1..7||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||Always clear
 |-
-|8||{{en/Ottdp|0.6|2.5|ttdprev=r1220}}||Set during the "Reserve" stage only
+|8||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=r1220}}||Set during the "Reserve" stage only
 |-
-|9||{{en/Ottdp|0.6|2.5|ttdprev=r1220}}||Set during the "Activate" stage only
+|9||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=r1220}}||Set during the "Activate" stage only
 |-
-|10||{{en/Ottdp|0.6|2.5|ttdprev=r1220}}||Set during the "Test" stage only
+|10||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=r1220}}||Set during the "Test" stage only
 |-
 |11..15|| || Reserved. Do not test for them.
 |}
@@ -152,7 +152,7 @@ To detect versions from TTDPatch 2.5 rev419 and up correctly, check that var. 8B
 
 Since train sprites must normally have the same offsets on the map and in the depot view, they will appear either too low on the map or too high in the depot view. This variable moves all vehicles in the depot view down by this many pixels.
 
-{{en/Ottdp|1.0|no|ottdrev=r16867}} Since OpenTTD r16867 this variable works per grf file, that is: It only affects trains defined in the same grf.
+{{pl/Development/NewGRF/ottdp|1.0|no|ottdrev=r16867}} Since OpenTTD r16867 this variable works per grf file, that is: It only affects trains defined in the same grf.
 
 === Rail track type cost factors (0F / 8F) ===
 
@@ -188,7 +188,7 @@ Additionally they are used outside of callbacks for these special purposes:
 
 These four variables belong to an experimental TTDPatch feature. However, their definition is based on an incomplete understanding of the drawing algorithm in TTD, so they actually do not achieve what they were meant to do. Consider this historic content.
 
-{{en/Ottdp|no|2.5|ttdprev=2.0.1 alpha 39}}
+{{pl/Development/NewGRF/ottdp|no|2.5|ttdprev=2.0.1 alpha 39}}
 
 ''These four offsets define the size and position of the rectangle refreshed when TTD decides to refresh a tile. The basis of the calculations is the pixel coordinate of the north corner of the tile.''
 
@@ -202,9 +202,9 @@ These four variables belong to an experimental TTDPatch feature. However, their 
 
 This is only active if the tempsnowline switch is on. It defaults to FF (no snow) and 38 (GRF version < 8) resp. 07 (GRF version >= 8) in the temperate and arctic climates, respectively.
 
-{{en/GrfTill|7}} For GRF version 7 and below it must be set to a multiple of 8, which is one level of height difference.
+{{pl/Development/NewGRF/grfTill|7}} For GRF version 7 and below it must be set to a multiple of 8, which is one level of height difference.
 
-{{en/GrfFrom|8}} For GRF version 8 and above the heightlevel is set directly as multiple of 1.
+{{pl/Development/NewGRF/grfFrom|8}} For GRF version 8 and above the heightlevel is set directly as multiple of 1.
 
 === Global ID offset (- / 99) ===
 
@@ -239,21 +239,21 @@ This variable is a global bit mask of various patch features a grf file can enab
 !Bit!!Value!!Version!!Feature
 
 |-
-|0||1||{{en/Ottdp|no|2.5}}||Allow trees and fields in the desert
+|0||1||{{pl/Development/NewGRF/ottdp|no|2.5}}||Allow trees and fields in the desert
 |-
-|1||2||{{en/Ottdp|0.6|2.5}}||Show pavement and lights in desert towns
+|1||2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Show pavement and lights in desert towns
 |-
-|2||4||{{en/Ottdp|no|2.5}}||Fields have a height, using a 3D bounding box
+|2||4||{{pl/Development/NewGRF/ottdp|no|2.5}}||Fields have a height, using a 3D bounding box
 |-
-|3||8||{{en/Ottdp|0.6|2.5}}||Display train vehicles with full width of 32 pixels in depot window (instead of 29 pixels)<ref>Since {{en/Ottdp|1.0|no|ottdrev=r16867}} this flag works per grf file, that is: It only affects trains defined in the same GRF.</ref>
+|3||8||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Display train vehicles with full width of 32 pixels in depot window (instead of 29 pixels)<ref>Since {{pl/Development/NewGRF/ottdp|1.0|no|ottdrev=r16867}} this flag works per grf file, that is: It only affects trains defined in the same GRF.</ref>
 |-
-|4||10||{{en/Ottdp|1.2|2.6|ottdrev=r23114|ttdprev=r821}}||Enable ambient sound effect callback 144
+|4||10||{{pl/Development/NewGRF/ottdp|1.2|2.6|ottdrev=r23114|ttdprev=r821}}||Enable ambient sound effect callback 144
 |-
-|5||20||{{en/Ottdp|no|2.5/2.6|ttdprev=r1439, will be in yet unreleased 2.5 beta 10}}||Enable catenaries over the third track type (only with electrifiedrailway on)
+|5||20||{{pl/Development/NewGRF/ottdp|no|2.5/2.6|ttdprev=r1439, will be in yet unreleased 2.5 beta 10}}||Enable catenaries over the third track type (only with electrifiedrailway on)
 |-
-|6||40||{{en/Ottdp|1.5|no|ottdrev=r27200}}||Enable usage of the second rocky tile set. (sprites 4042 to 4061)
+|6||40||{{pl/Development/NewGRF/ottdp|1.5|no|ottdrev=r27200}}||Enable usage of the second rocky tile set. (sprites 4042 to 4061)
 |-
-|31||80000000||{{en/Ottdp|no|2.5}}||Only to be set by ttdpbase(w).grf for identification
+|31||80000000||{{pl/Development/NewGRF/ottdp|no|2.5}}||Only to be set by ttdpbase(w).grf for identification
 |}
 
 Remarks:
@@ -301,10 +301,10 @@ Variable A1 has the following format: Mmrbbbbb (though encoded in little endian 
 |r||revision||Third number of the OpenTTD version
 |-
 |bbbbb||build||Stable releases have 80000h set.
-{{en/Ottd|&le;1.8}} When OpenTTD was versioned using SVN the lower bits contained the SVN revision. Since OpenTTD 1.9 these bits are unused.
+{{pl/Development/NewGRF/ottd|&le;1.8}} When OpenTTD was versioned using SVN the lower bits contained the SVN revision. Since OpenTTD 1.9 these bits are unused.
 |}
 
-The presence of 80000h (bit 19 set) means that a release always has a higher version number than any builds leading to that release.
+Obecność 80000h (zestaw bitów 19) oznacza, że ​​wydanie ma zawsze wyższy numer wersji niż jakiekolwiek kompilacje prowadzące do tego wydania.
 
 Przykłady
 {|
