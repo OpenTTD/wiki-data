@@ -33,7 +33,7 @@
 |-
 |0B||8B||  ||D||{{pl/Development/NewGRF/ottdp|no|2.0}}|| [[pl/Development/NewGRF/NFO Specs/Version numbers#ttdpatch-version|TTDPatch version]], see [[#ttdpatch-version-0b-8b|below]] <ref>OpenTTD reports some arbitrary TTDPatch 2.6 version number to make old GRFs work, which do not know about OpenTTD. Do not rely on this for new NewGRFs.</ref><ref name="versionchecks">It is generally not useful to check version variables using Action 7. If you want to skip certain actions which are incompatible to some versions, you want to skip them during all loading stages. So, use Action 9.</ref>
 |-
-|0C||  ||  ||W||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| current [[en/Callbacks|callback]] ID (feature-specific), set to 00 when not in a callback
+|0C||  ||  ||W||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| current [[pl/Development/NewGRF/NFO Specs/Callback/Main Page|callback]] ID (feature-specific), set to 00 when not in a callback
 |-
 |0D||8D||  ||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| TTD version, 0=DOS, 1=Windows
 |-
@@ -55,7 +55,7 @@
 |-
 |16||96||96||W||{{pl/Development/NewGRF/ottdp|no|2.5|ttdprev=2.0.1 alpha 39}}|| Tile refresh offset downwards <ref name="tilefresh"/>
 |-
-|  ||97||97||B||{{pl/Development/NewGRF/ottdp|no|2.5}}|| Fixed snow line height <ref>This variable is a deprecated way to set the snow line height via NewGRFs using [[en/ActionD]]. It is superseded by the [[en/Action0/Global Settings#snow-line-height-table-10 | Action 0 snow line height table]]. To read the current snow line with [[en/VariationalAction2 | VarAct2]] in a running game, use variable 20 instead.</ref><ref name="heightlevel">{{pl/Development/NewGRF/grfTill|7}} For GRF version 7 and below these variable are multiples of 8; {{pl/Development/NewGRF/grfFrom|8}} for GRF version 8 and above they directly state the heightlevel as multiple of 1.</ref>
+|  ||97||97||B||{{pl/Development/NewGRF/ottdp|no|2.5}}|| Fixed snow line height <ref>This variable is a deprecated way to set the snow line height via NewGRFs using [[pl/Development/NewGRF/NFO Specs/ActionD|ActionD]]. It is superseded by the [[pl/Development/NewGRF/NFO Specs/Action0/Global Settings#snow-line-height-table-10 | Action 0 snow line height table]]. To read the current snow line with [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page | VarAct2]] in a running game, use variable 20 instead.</ref><ref name="heightlevel">{{pl/Development/NewGRF/grfTill|7}} For GRF version 7 and below these variable are multiples of 8; {{pl/Development/NewGRF/grfFrom|8}} for GRF version 8 and above they directly state the heightlevel as multiple of 1.</ref>
 |-
 |18||  ||  ||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| Extra callback info 2, see [[#extra-callback-info-10-and-18|below]].
 |-
@@ -75,7 +75,7 @@
 |-
 |20||  ||  ||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}|| Current snow line height, FFh if snow isn't present at all <ref name="heightlevel"/>
 |-
-|21||A1||  ||D||{{pl/Development/NewGRF/ottdp|0.6|no}}|| [[en/Version numbers#openttd-version|OpenTTD version]], see [[#openttd-version-21-a1|below]]. <ref name="versionchecks"/>
+|21||A1||  ||D||{{pl/Development/NewGRF/ottdp|0.6|no}}|| [[pl/Development/NewGRF/NFO Specs/Version numbers#openttd-version|OpenTTD version]], see [[#openttd-version-21-a1|below]]. <ref name="versionchecks"/>
 |-
 |22||A2||  ||D||{{pl/Development/NewGRF/ottdp|0.7|2.6|ottdrev=r12499|ttdprev=r1857}}|| Difficulty level: 00= easy, 01=medium, 02=hard, 03=custom
 |-
@@ -86,7 +86,7 @@
 |25||  ||  ||D||{{pl/Development/NewGRF/ottdp|0.7|ottdrev=r15739}}|| GRFID of the grf that contains the corresponding Action3. Useful when accessing the "related" object. Currently only supported for vehicles.
 |}
 
-All other variable numbers are reserved and must not be used.
+Wszystkie inne numery zmiennych są zastrzeżone i nie wolno ich używać.
 
 <references/>
 
@@ -94,7 +94,7 @@ All other variable numbers are reserved and must not be used.
 
 === GRF Loading stage (- / 84) ===
 
-Variable 84 is a BYTE variable up to TTDPatch 2.5r1220. Its lower byte (bits 0..7) are 0 for the post-load and GRF initialization stages and 01 for all other stages. The remaining bits are a bitmask, and including the lower byte have the following meaning:
+Zmienna 84 jest zmienną BYTE do TTDPatch 2.5r1220. Jego niższy bajt (bity 0..7) ma wartość 0 dla etapów ładowania początkowego i GRF oraz 01 dla wszystkich innych etapów. Pozostałe bity są maską bitową, a włączenie dolnego bajtu ma następujące znaczenie:
 {|
 !Bit!!Version!!Meaning
 |-
@@ -112,11 +112,11 @@ Variable 84 is a BYTE variable up to TTDPatch 2.5r1220. Its lower byte (bits 0..
 |}
 
 === TTDPatch Version (0B / 8B) ===
-Variable 8B has the following format: MMmrbbbb (though encoded in little endian as bb bb mr MM)
+Zmienna 8B ma następujący format: MMmrbbbb (choć zakodowany w little endian jako bb bb mr MM)
 {|
 !Element!!Meaning!!Value
 |-
-|MM||major||First number of the [[en/Version numbers#ttdpatch-version|TTDPatch version]]
+|MM||major||First number of the [[pl/Development/NewGRF/NFO Specs/Version numbers#ttdpatch-version|TTDPatch version]]
 |-
 |m||minor||Second number of the TTDPatch version
 |-
@@ -125,7 +125,7 @@ Variable 8B has the following format: MMmrbbbb (though encoded in little endian 
 |bbbb||build||Alpha/beta version number times ten (up to an including TTDPatch 2.5 beta 5), SVN revision (from TTDPatch 2.5 beta 5 r418 on)
 |}
 
-Examples
+Przykłady
 {|
 !Version!!Variable 8B!!Elements
 |-
@@ -146,19 +146,19 @@ Examples
 
 <references/>
 
-To detect versions from TTDPatch 2.5 rev419 and up correctly, check that var. 8B is 02500419 or higher, or replace 0419 with the actual required revision (using the revision number as hex digits). Because SVN revisions are shared with other patch branches, it is important to check the actual patch version as well as the SVN revision.
+Aby poprawnie wykryć wersje z TTDPatch 2.5 rev419 i nowsze, sprawdź tę zmienną. 8B ma wartość 02500419 lub wyższą lub zamień 0419 na rzeczywistą wymaganą wersję (używając numeru wersji jako cyfr szesnastkowych). Ponieważ wersje SVN są współużytkowane z innymi gałęziami łat, ważne jest sprawdzenie faktycznej wersji łaty, a także rewizji <small>''(revision)''</small> SVN.
 
 === Y-Offset for train sprites (0E / 8E) ===
 
-Since train sprites must normally have the same offsets on the map and in the depot view, they will appear either too low on the map or too high in the depot view. This variable moves all vehicles in the depot view down by this many pixels.
+Ponieważ 'sprite' pociągu muszą normalnie mieć takie same odsunięcia <small>''(offsets)''</small> na mapie iw widoku zajezdni, pojawią się albo za nisko na mapie, albo za wysoko w widoku zajezdni. Ta zmienna przesuwa wszystkie pojazdy w widoku składu o tyle pikseli.
 
-{{pl/Development/NewGRF/ottdp|1.0|no|ottdrev=r16867}} Since OpenTTD r16867 this variable works per grf file, that is: It only affects trains defined in the same grf.
+{{pl/Development/NewGRF/ottdp|1.0|no|ottdrev=r16867}} Ponieważ OpenTTD r16867 ta zmienna działa na plik grf, to znaczy: Wpływa tylko na pociągi zdefiniowane w tym samym grf.
 
 === Rail track type cost factors (0F / 8F) ===
 
-This variable is a collection of three bytes that are used as multipliers for track costs when the "trackcostdiff" switch is on. The value of 08 is the baseline value that is used by standard TTD.
+Ta zmienna jest zbiorem trzech bajtów, które są używane jako mnożniki kosztów śledzenia, gdy przełącznik "trackcostdiff" jest włączony. Wartość 08 jest wartością bazową używaną przez standardowe TTD.
 
-The defaults are the following:
+Domyślne są następujące:
 
 {|
 !Values!!Track types!!Electrified railways setting
@@ -171,13 +171,13 @@ The defaults are the following:
 |}
 
 === Extra callback info (10 / -) and (18 / -) ===
-These variables have callback specific meanings. They are described along the individual [[en/Callbacks]].
+Te zmienne mają znaczenie specyficzne dla wywołania zwrotnego. Są one opisane wzdłuż osoby [[pl/Extrazi/specs.tt/callbacks|callbacks]].
 
-Additionally they are used outside of callbacks for these special purposes:
+Ponadto są używane poza funkcjami zwrotnymi do tych specjalnych celów:
 {| |-
-! [[en/Features|Feature]] !! Usage
+! [[pl/Development/NewGRF/NFO Specs/Features|Feature]] !! Usage
 |-
-| Vehicles || Used to distinguish drawing of vehicles in the GUI or on the map. See [[en/Action2/Vehicles#introduction|Action2]].
+| Vehicles || Used to distinguish drawing of vehicles in the GUI or on the map. See [[pl/Development/NewGRF/NFO Specs/Action2/Vehicles#introduction|Action2]].
 |-
 | Stations || Used to compose station tiles with sprites from different Action-1-2-3 chains, or to draw custom foundations. See [[en/Action0/Stations#general-flags-13|General station flags]] and [[en/AdvancedSpriteLayout]].
 |-
