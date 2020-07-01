@@ -4,9 +4,9 @@
 
 ==Wprowadzenie==
 
-Vehicles have multiple properties and callbacks which define the default cargotype and capacity, the refitoptions and the capacities after refitting.
-* {{pl/Development/NewGRF/grfTill|7}} For GRF version 7 and below: Default cargo slot (trains, road vehicles, ships)
-* {{pl/Development/NewGRF/grfFrom|8}} For GRF version 8 and above: Default cargo bit (trains, road vehicles, ships)
+Pojazdy mają wiele właściwości i wywołań zwrotnych, które określają domyślny ładunek i pojemność, opcje modernizacji i pojemności po zamontowaniu.
+* {{pl/Development/NewGRF/grfTill|7}} Dla GRF w wersji 7 i niższej: Domyślny przedział ładunkowy <small>''~cargo slot''</small> (pociągi, pojazdy drogowe, statki)
+* {{pl/Development/NewGRF/grfFrom|8}} Dla GRF w wersji 8 i wyższej: Domyślny bit ładunku (pociągi, pojazdy drogowe, statki)
 * Default capacity (trains, road vehicles, ships)
 * Primary cargo capacity (aircraft)
 * Secondary cargo capacity (aircraft)
@@ -17,25 +17,25 @@ Vehicles have multiple properties and callbacks which define the default cargoty
 * {{pl/Development/NewGRF/ottdp|1.2|no}} Non-refittable cargo types (all vehicle types)
 * {{pl/Development/NewGRF/ottdp|1.2|no}} Misc. vehicle flag 5 'use of capacity multiplier for default cargo' (all vehicle types)
 * 'Refittable'-flag (ships)
-* [[en/Callbacks#change-vehicle-properties-36 |Callback 36]] 'capacity' (all vehicle types)
-* [[en/Callbacks#refitted-capacity-callback-15|Callback 15]] 'refitted capacity' (all vehicle types)
-* {{pl/Development/NewGRF/ottdp|1.2|no}} [[en/Action0/Cargos#capacity-multiplier-1d|Cargo property 1D 'capacity multiplier']]
+* [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#change-vehicle-properties-36 |Callback 36]] 'capacity' (all vehicle types)
+* [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#refitted-capacity-callback-15|Callback 15]] 'refitted capacity' (all vehicle types)
+* {{pl/Development/NewGRF/ottdp|1.2|no}} [[pl/Development/NewGRF/NFO Specs/Action0/Cargos#capacity-multiplier-1d|Cargo property 1D 'capacity multiplier']]
 
 == Flow chart ==
 ===  Misc. vehicle flag 5 'use of capacity multiplier for default cargo' cleared ===
-{{pl/Development/NewGRF/ottdp|1.0}} The following image visualises the interactions of the various properties and callbacks wrt. OpenTTD. If you know the behaviour of TTDPatch at that detail level, please elaborate.
+{{pl/Development/NewGRF/ottdp|1.0}} Poniższy obraz przedstawia interakcje między różnymi właściwościami i wywołaniami zwrotnymi wrt. OpenTTD. Jeśli znasz zachowanie TTDPatch na tym poziomie szczegółowości, wyjaśnij to.
 
-Behaviour in OpenTTD 1.0.x and 1.1.x:
+Zachowanie <small>''(Behaviour)''</small> w OpenTTD 1.0.x i 1.1.x:
 [[File:en/CargoMagic10.dot.png|thumb|center|800px]]
 
-Behaviour in OpenTTD 1.2.x with new refittable cargo types properties:
+Zachowanie w OpenTTD 1.2.x z nowymi właściwościami typów ładunków wielokrotnego użytku:
 [[File:en/CargoMagic12flag5cleared.dot.png|thumb|center|800px]]
 
 ===  Misc. vehicle flag 5 'use of capacity multiplier for default cargo' set ===
-{{pl/Development/NewGRF/ottdp|1.2}} If vehicle misc. flag 5 is set, the behaviour changes slightly.
-* The default cargotype does no longer affect the capacity of other refits. (Which would be troublesome if the default cargotype is not known.)
-* The capacity property (including the "primary capacity" of aircraft) and callback 36 return the capacity in a generic unit ("tons of coal"), independent of the actual transported cargo type.
-* Callback 15 is called always; also for the default cargo type, and also in purchase list.
-These changes allow vehicles to set specific capacities for cargotypes they know (via CB 15), and set a generic capacity (in "tons of coal") for other cargotypes. The capacity of unknown cargo types is then controlled by the cargo definition, which also controls the refittability via cargo classes. (Note that, if the cargo definition scales the capacity, it also scales the load amount per gradual loading step accordingly, so the overall loading time stays the same.)
+{{pl/Development/NewGRF/ottdp|1.2}} Jeśli inny pojazd flaga 5 jest ustawiona, zachowanie nieznacznie się zmienia.
+* Domyślny cargotyp nie wpływa już na pojemność innych przeróbek. (Co byłoby kłopotliwe, gdyby domyślny cargotyp nie był znany.)
+* Właściwość przepustowości (w tym  "pierwotna przepustowość" <small>''(primary capacity)''</small> statku powietrznego) i funkcja zwrotna 36 zwracają pojemność w jednostce ogólnej ("tony węgla"), niezależnie od faktycznie przewożonego rodzaju ładunku.
+* Oddzwanianie 15 jest wywoływane zawsze; także dla domyślnego rodzaju ładunku, a także na liście zakupów.
+Zmiany te pozwalają pojazdom ustawić określone pojemności dla znanych cargotypów (poprzez CB 15) i ustawić ogólną wydajność (w "tonach węgla") dla innych cargotypów. Pojemność nieznanych rodzajów ładunku jest następnie kontrolowana przez definicję ładunku, która kontroluje również możliwość ponownego załadunku według klas ładunku. (Należy pamiętać, że jeśli definicja ładunku skaluje pojemność, to również odpowiednio skaluje ilość ładunku na etap stopniowego ładowania, więc całkowity czas ładowania pozostaje taki sam.)
 
 [[File:en/CargoMagic12flag5set.dot.png|thumb|center|800px]]
