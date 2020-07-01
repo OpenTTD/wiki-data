@@ -1,0 +1,89 @@
+{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/VariationalAction2/Stations|pl=pl/Development/NewGRF/NFO Specs/VariationalAction2/BaseStation}}
+== Introduction to Base Stations ==
+
+Na tej stronie wymieniono zmienne wspólne dla wszystkich typów stacji, obecnie (kolejowych) i lotnisk
+
+== Variables ==
+{| |-
+!Variable!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Size''']]!!Version!!Description
+|-
+|48||D||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 55 vcs 3}}||Bitmask of accepted cargos
+|-
+|60||D||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 55 vcs 3}}||Amount of cargo waiting
+|-
+|61||D||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 55 vcs 3}}||Time since the cargo was last picked up
+|-
+|62||D||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 55 vcs 3}}||Rating of the cargo
+|-
+|63||D||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 55 vcs 3}}||Time spent en-route
+|-
+|64||W||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 55 vcs 3}}||Information about the last vehicle picking this cargo up
+|-
+|65||B||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=beta 2}}||Amount of cargo acceptance
+|-
+|69||D||{{pl/Development/NewGRF/ottdp|1.2|no}}||Information about cargo accepted in the past
+|-
+|F0||B||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||Bit mask of facilities attached to station (not appropriate for irregular stations)
+|-
+|FA||W||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Date when station was built in days since 1920
+|}
+
+For other 80+x variables confer the [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#_StationArray TTD station structure]. Note that you have to subtract 0x10 from the offsets there, or else the facility bit mask and construction date would not be accessible; instead you lose access to variables 00..0F which are meaningless anyway.
+
+'''WARNING''': Please do not use variables 8C..EB directly. The meaning of these variables changes if the newcargos switch is on. Use the variables 60..64 instead (see the specific station type's description). Those always work correctly.
+
+== Description ==
+
+=== Bitmask of accepted cargos (48) ===
+
+Returns a doubleword where the '''n'''th bit is set if and only if the station accepts the cargo whose climate-dependent ID is '''n'''. If newcargos is off, bits 12..31 are guaranteed to be zero. If you need to check acceptance for a climate-independent ID, you can use variable 65 instead.
+
+=== Amount of cargo waiting (60) ===
+
+The parameter is a cargo number (see note below). Currently, the returned value is between 0 and 32767, but this may later change to support the range -32768..32767.
+
+=== Time since the cargo was last picked up (61) ===
+
+The parameter is a cargo number (see note below). The unit is 185 ticks (approx. 2.5 TTD days). If the given type has never been seen on the station, the returned value is zero, otherwise, the return value isn't larger than 255.
+
+=== Rating of the cargo (62) ===
+
+The parameter is a cargo number (see note below). The returned value is between 0 and 255 (255 means 100% rating), or FFFFFFFFh if the cargo is unrated.
+
+=== Time spent en-route (63) ===
+
+The parameter is a cargo number (see note below). Returns the time elapsed since the cargo appeared on a station. If the cargo has never been seen on the station, the returned value is 0, otherwise it's between 0 and 255. The unit is 185 ticks (approx. 2.5 TTD days).
+
+=== Information about the last vehicle picking this cargo up (64) ===
+
+The parameter is a cargo number (see note below). Bits 0..7 contain the speed of the last vehicle, while bits 8..15 contain the age of the last vehicle in years. If no vehicle has attempted to pick up this cargo yet, the result is FF00h.
+
+=== Amount of cargo acceptance (65) ===
+
+The parameter is a cargo number (see note below). The return value contains the acceptance of the given cargo type in 1/8 units. The station accepts the cargo if its acceptance is at least 8/8 units. Without newcargos, the returned value is between 0 and 15 (inclusive). With newcargos enabled, the return value is either 8 or 0.
+
+'''NOTE''': In GRF version 6, parametrized variables 60..65 accept a climate-dependent cargo number. In GRF version 7 and later, these variables accept a climate-independent cargo ID. If your GRF has a cargo translation table, then this ID is the index in that table; otherwise, it's the cargo bit.
+
+=== Information about cargo accepted in the past (69) ===
+
+The parameter of this variable has the same format as for variables 60..65. The returned value looks like this:
+
+{| |-
+!Bits!!Meaning
+|-
+|0||Set if the given cargo was ever accepted at this station
+|-
+|1||Set if the given cargo was accepted last month
+|-
+|2||Set if the given cargo was accepted this month
+|-
+|3||Set if the given cargo was accepted since last periodic processing (which happens every 250 ticks)
+|-
+|4..31||Undefined, reserved for future use
+|}
+
+The information required for this variable is stored in the station2 structure, and therefore works only if the station2 structure is present. The station2 structure is present if any of the following is true:
+* Generalfixes is on, and miscmods.noextendstationrange is off
+* Any of fifoloading, newcargos or irregularstations is on
+
+Jeśli struktura station2 nie jest obecna, zwracana wartość jest zawsze równa zero.
