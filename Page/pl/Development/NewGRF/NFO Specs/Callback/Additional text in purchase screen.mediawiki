@@ -3,21 +3,21 @@
 
 Oddzwonienia można użyć do dodania tekstu poniżej informacji o pojeździe na ekranie zakupu. Oddzwanianie jest zawsze używane, gdy jest zdefiniowane, nie trzeba ustawiać bitu we właściwości akcji 0, aby ją aktywować.
 
-A text string for the feature in the D0XX range must be defined before using this callback. The return value of this callback is the XX of a D0XX string ID. 
+Przed użyciem tego wywołania zwrotnego należy zdefiniować ciąg tekstowy dla funkcji z zakresu D0XX. Wartość powrót tego zwrotnego jest XX ID D0XX łańcucha. 
 
-As of r1908, text IDs D100..D3FF may also be returned.
+Począwszy od r1908, można również zwrócić identyfikatory tekstowe D100..D3FF.
 
-{{pl/Development/NewGRF/grfFrom|8}} Since GRF version 8 the value 400 can be returned to display no text. In older versions it is necessary to fail the callback.
+{{pl/Development/NewGRF/grfFrom|8}} Od wersji 8 GRF wartość 400 może zostać zwrócona, aby nie wyświetlać tekstu. W starszych wersjach konieczne jest niepowodzenie wywołania zwrotnego.
 
-{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23045}} Since OpenTTD r23045 the contents of registers 100h..105h are copied onto the text reference stack.
-
-
-Lines are wrapped automatically, or may be broken explicitly using the newline character 0D. How many lines are available depends on the type of vehicle and its other properties, for instance the presence or absence of a "refittable to" line or powered wagons etc. 
-
-If cargo FF (buy menu sprite) is handled explicitly for a vehicle, then the varaction 2 handling [[en/Callbacks#additional-text-in-purchase-screen-23 |callback 23]] must be in the buy menu varaction 2 chain.
+{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23045}} Od wersji OpenTTD R23045 zawartość rejestrów 100h..105h jest kopiowana na stos tekstowy.
 
 
-Example for setting additional text for a road vehicle:
+Lines są zawijane automatycznie lub mogą zostać jawnie rozbite przy użyciu znaku nowej linii 0D. Liczba dostępnych linii zależy od rodzaju pojazdu i jego innych właściwości, na przykład obecności lub braku linii "nadającej się do" <small>''(refittable to)''</small> lub wagonów silnikowych itp.. 
+
+Jeśli ładunek FF (ikona menu kup) jest obsługiwany jawnie dla pojazdu, wówczas obsługa wariantu 2  [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#additional-text-in-purchase-screen-23 |callback 23]] musi być włączony łańcuch <small>''(chain)''</small> Kup menu wariant 2.
+
+
+Przykład ustawienia dodatkowego tekstu dla pojazdu drogowego:
 
  // Define string with ID D001 for featur 01. Bit 7 of the language byte must be set to 1, because the string ID is a word.
  4 * 32 04 01 83 01 \wxD001 "Hint: This is a " 0D "new line." 00
