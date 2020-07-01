@@ -68,19 +68,19 @@ Spritelayout definiuje stałe zestawy ikon do użycia z Akcji 1. Rejestry mogą 
 
 === Sprite-number ===
 
-This is just the number you are at.
+To tylko numer, na którym jesteś.
 
 === Length ===
 
-Count the number of bytes in this action.
+Policz liczbę bajtów w tej akcji.
 
 === Set-id ===
 
-The set-ID that you want to define for this set. You can choose any value between 00 and FF, and you can reuse them within a grf file at a later point (if being equal to an existing set ID, the existing one is overwritten and the new one is used).
+Identyfikator zestawu, który chcesz zdefiniować dla tego zestawu. Możesz wybrać dowolną wartość z przedziału od 00 do FF, i możesz użyć ich ponownie w pliku grf w późniejszym momencie (jeśli jest równy istniejącemu identyfikatorowi zestawu, istniejący jest zastępowany i używany jest nowy).
 
 === Sprite definition for ground and building sprites ===
 
-The ground and building sprite fields have the following format:
+Pola 'sprite' ziemi i budynku mają następujący format:
 
 {|
 !Bits!!Version!!Content
@@ -96,23 +96,23 @@ The ground and building sprite fields have the following format:
 |31||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Sprite type, see below
 |}
 
-{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 57}} Since TTDPatch 2.0.1 alpha 57, the groundsprite value can be zero if no ground sprite is needed (this is useful if you need to draw custom foundations, see [[en/Callbacks#decide-drawing-default-foundations-30-14e-150|example]]). Ground sprites are always drawn normally, so bit 30 is ignored for them. Bit 30 may get a different meaning for ground sprites in a later version of TTDPatch, so please leave it zero for now. This does not apply to additional groundsprites using the "&lt;xpixeloffset&gt; &lt;ypixeloffset&gt; 80"-syntax (see above); for these bit 30 has the same meaning as for building sprites.
+{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 57}} Od wersji TTDPatch 2.0.1 alpha 57 wartość dna może być zerowa, jeśli 'sprite' nie jest potrzebny (jest to przydatne, jeśli trzeba narysować niestandardowe fundamenty, patrz [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#decide-drawing-default-foundations-30-14e-150|example]]). Naziemne 'sprite' są zawsze rysowane normalnie, więc bit 30 jest dla nich ignorowany. Bit 30 może mieć inne znaczenie dla naziemnych 'sprites' w późniejszej wersji TTDPatch, więc na razie pozostaw to zero. Nie dotyczy to dodatkowych usług naziemnych korzystających z "&lt;xpixeloffset&gt; &lt;ypixeloffset&gt; 80"-składnia <small>''~syntax''</small> (patrz wyżej); dla tych bitów 30 ma to samo znaczenie, co dla budowania 'sprites' .
 
 ==== Colour translation special sprite number ====
 
-This is used only if bits 14 or 15 are nonzero. Bits 16-29 must be the number of a regular TTD sprite containing a colour translation table (see below for available translation tables). For transparent mode, a suitable translation table is needed, e.g. that of TTD´s sprite number 802 (s.b.). See [[en/RecolorSprites]] for more information on the usage of transparent and recolouring sprites.
+Jest to używane tylko wtedy, gdy bity 14 lub 15 są niezerowe. Bity 16–29 muszą być liczbą zwykłego 'sprite' TTD zawierającego tabelę translacji kolorów (dostępne tabele tłumaczeń znajdują się poniżej). W trybie przezroczystym potrzebna jest odpowiednia tabela translacji, np. z 'sprite' TTD o numerze 802 (s.b.). Zobacz [[pl/Development/NewGRF/NFO Specs/RecolorSprites|RecolorSprites]], aby uzyskać więcej informacji na temat używania przezroczystych i zmieniających kolor 'sprites' .
 
-For houses, if no recolour sprite is given but recolouring is turned on in bits 14-15, there are two possibilities:
-* If you have [[en/Callbacks#building-colour-1e |callback 1E]] enabled, it is called to determine the colour mapping.
-* If [[en/Callbacks#building-colour-1e |callback 1E]] is disabled or fails, one of the colours specified in property 17 will be chosen randomly.
+W przypadku domów, jeśli nie podano sprite'a zmieniającego kolor, ale zmiana koloru jest włączona w bitach 14-15, istnieją dwie możliwości:
+* Jeśli masz włączone [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#building-colour-1e |callback 1E]] , jest ono wywoływane w celu określenia odwzorowania kolorów.
+* Jeśli [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#building-colour-1e |callback 1E]] jest wyłączone lub nie działa, jeden z kolorów określonych we właściwości 17 zostanie wybrany losowo.
 
-See [[en/RecolorSprites]] for a list of available colour translations.
+Zobacz [[pl/Development/NewGRF/NFO Specs/RecolorSprites|RecolorSprites]], aby uzyskać listę dostępnych tłumaczeń kolorów.
 
-For industry tiles, if this field is zero, but recolouring is turned on in bits 14 or 15, the colour of the containing industry will automatically be applied.
+W przypadku kafelków branżowych, jeśli to pole jest równe zero, ale zmiana koloru jest włączona w bitach 14 lub 15, automatycznie zostanie zastosowany kolor branży zawierającej.
 
-The ground sprite should be exactly the same size and shape as TTD's flat tile. In general, it shouldn't contain anything that has a z-dimension because any non-ground sprite will cover it.
+Zmielony 'sprite' powinien mieć dokładnie ten sam rozmiar i kształt co płaska płytka TTD. Ogólnie rzecz biorąc, nie powinien zawierać niczego, co ma wymiar Z, ponieważ zakryje go dowolny niemielony 'sprite' .
 
-Useful values for ground sprites:
+Przydatne wartości dla 'sprite' naziemnych:
 
 {|
 !Sprite number (decimal)!!Contents
@@ -128,21 +128,21 @@ Useful values for ground sprites:
 |1420||concrete
 |}
 
-Please note that all the ground sprite becomes visible in "transparent buildings" mode, so you should draw parts that seem to be hidden as well.
+Pamiętaj, że wszystkie 'sprites' naziemne stają się widoczne w trybie "przezroczystych budynków" <small>''(transparent buildings)''</small> , dlatego powinieneś rysować również części, które wydają się być ukryte.
 
 ==== Sprite type ====
 
-If bit 31 is clear, the bottom 14 bits contain a regular TTD sprite number.
+Jeśli bit 31 jest wyraźny, dolne 14 bitów zawiera regularną liczbę 'sprites' TTD.
 
-If bit 31 is set, the bottom 14 bits contain a number of a sprite set in the most recent action 1, and the used sprite is decided according to the current construction state and the number of sprites in the set:
-* if there's only one sprite, it's used always
-* if there are two sprites, the first is used during construction (stages 0-2), and the second is used for the finished building (stage 3)
-* if there are three sprites, the first will be used in the beginning of the construction (stage 0), the second will be used during the rest of the construction (stages 1 and 2) and the third will be used for the complete building (stage 3)
-* if there are four or more sprites, the first four will be used for the four construction stages. Sprites after the first four are always ignored.
+Jeśli ustawiony jest bit 31, dolne 14 bitów zawiera pewną liczbę zestawów 'sprites' w najnowszej akcji 1, a o używanym 'sprite' decyduje się zgodnie z bieżącym stanem konstrukcyjnym i liczbą 'sprites' w zestawie:
+* jeśli jest tylko jeden 'sprite' , jest używany zawsze
+* jeśli są dwa 'sprites' , pierwszy jest używany podczas budowy (etapy 0-2), a drugi jest używany do ukończonego budynku (etap 3)
+* jeśli są trzy 'sprites' , pierwszy zostanie użyty na początku budowy (etap 0), drugi będzie użyty podczas reszty budowy (etapy 1 i 2), a trzeci zostanie wykorzystany do ukończenia budowy (etap 3)
+* jeśli są cztery lub więcej 'sprites' , pierwsze cztery zostaną wykorzystane do czterech etapów budowy. 'Sprites' po pierwszych czterech są zawsze ignorowane.
 
 
 === Flags in advanced sprite layouts ===
-<flags> is a bitset of word size with these meanings:
+<flags> jest zbiorem rozmiaru słowa o tych znaczeniach:
 {| border="1"
 |-
 ! Bit !! Hex !! Parentsprite !! Groundsprite/Childsprite
@@ -190,6 +190,6 @@ Są to rejestry tymczasowego przechowywania, które można dodać do poszczegól
 Kolejność rejestrów jest taka sama jak bitów w <flags>. Jeśli bit nie jest ustawiony, nie pojawiają się dla niego rejestry.
 Większość bitów wymaga jednego rejestru.
 *<xoffset> i <yoffset> można włączyć tylko razem, używając dwóch rejestrów,
-*rejestr "pomiń ramkę ograniczającą" <small>''(skip bounding box)''</small> - używa wartości 1, aby narysować duszka, a 0, aby go pominąć,
+*rejestr "pomiń ramkę ograniczającą" <small>''(skip bounding box)''</small> - używa wartości 1, aby narysować 'sprite' , a 0, aby go pominąć,
 *"recolorsprite z działania 1" <small>''(recolorsprite from Action 1)''</small> -  w ogóle nie używa rejestru,
 *Wartości zmiennej 10 nie są ustawiane za pomocą rejestru, ale za pomocą stałej bajtowej.
