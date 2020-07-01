@@ -1,0 +1,195 @@
+<noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Action2/Advanced_Sprite_Layout|pl=pl/Development/NewGRF/NFO Specs/Action2/Advanced Sprite Layout}}
+</noinclude>== Advanced sprite layout using register offsets ==
+
+ <Sprite-number> * <Length> 02 07/09/0F/11 <set-id> <0x40 + num-sprites>
+     <groundsprite> <flags> [<register/value>]...
+     [ <buildingsprite> <flags>
+         ( <xoffset> <yoffset> <zoffset> <xextent> <yextent> <zextent> 
+         | <xpixeloffset> <ypixeloffset> 80)
+       [<register/value>]...
+     ]...
+
+{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22518}}
+Spritelayout definiuje stałe zestawy ikon do użycia z Akcji 1. Rejestry mogą być używane do indywidualnego wyboru 'sprites' z zestawów ikon, zamiast zawsze korzystania z etapu budowy. Rejestry są oceniane, a ich wartości są zapisywane podczas oceny układu ikonki Action 2. Inne wywołania zwrotne wywoływane podczas rysowania (jak CB 1E) nie mają wpływu na używane wartości rejestrów. 
+
+{|
+!Element!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Size]]!!Description
+|-
+|&lt;[[#sprite-number|Sprite-number]]&gt;||dec||A sequential sprite number
+|-
+|&lt;[[#length|length]]&gt;||dec||The total number of bytes used in this action
+|-
+|02||B||Defines action 02
+|-
+|04/07/09/0F/11||B||feature 4=stations, 7=town buildings, 9=industry tiles, 0F = objects, or 11 = airport tiles
+|-
+|&lt;[[#set-id|set-id]]&gt;||B||ID for this definition
+|-
+|40 + &lt;num-sprites&gt;||B||Number of following building sprites (the primary groundsprite mustn't be counted). Allowed range: 1 to 63 (0x01 to 0x3F).
+|-
+|&lt;[[#sprite-definition-for-ground-and-building-sprites|groundsprite]]&gt;||D||Primary ground sprite for the building (see format below)
+|-
+|&lt;[[#flags-in-advanced-sprite-layouts|flags]]&gt;||W||Flags for the primary ground sprite (see format below)
+|-
+|&lt;[[#register-or-value-in-advances-sprite-layouts|register/value]]&gt;||V||Registers / values to be used. Depending on &lt;flags&gt; (see format below)
+|-
+|&lt;[[#sprite-definition-for-ground-and-building-sprites|buildingsprite]]&gt;||D||The sprite to be drawn. Unlike the basic format, zero isn't allowed here.
+|-
+|&lt;[[#flags-in-advanced-sprite-layouts|flags]]&gt;||W||Flags for the building sprite (see format below)
+|-
+!colspan="3"| -- for sprites defining a new bounding box --
+|-
+|&lt;xofs&gt;||B||x-offset from northern tile corner (as a signed byte)
+|-
+|&lt;yofs&gt;||B||y-offset from northern tile corner (as a signed byte)
+|-
+|&lt;zofs&gt;||B||z-offset from the ground
+|-
+|&lt;xextent&gt;||B||size of sprite in x direction
+|-
+|&lt;yextent&gt;||B||size of sprite in y direction
+|-
+|&lt;zextent&gt;||B||size of sprite in z direction
+|-
+!colspan="3"| -- for sprites sharing their bounding box with the previous sprite --
+|-
+|&lt;xpixeloffset&gt;||B||x offset from the top left corner of the previous sprite
+|-
+|&lt;ypixeloffset&gt;||B||y offset from the top left corner of the previous sprite
+|-
+|80||B||a literal 80h byte to distinguish from new-bounding-box definitions
+|-
+!colspan="3"| &nbsp;
+|-
+|&lt;[[#register-or-value-in-advances-sprite-layouts|register/value]]&gt;||V||Registers / values to be used. Depending on &lt;flags&gt; (see format below)
+|}
+
+== Descriptions of elements ==
+
+=== Sprite-number ===
+
+This is just the number you are at.
+
+=== Length ===
+
+Count the number of bytes in this action.
+
+=== Set-id ===
+
+The set-ID that you want to define for this set. You can choose any value between 00 and FF, and you can reuse them within a grf file at a later point (if being equal to an existing set ID, the existing one is overwritten and the new one is used).
+
+=== Sprite definition for ground and building sprites ===
+
+The ground and building sprite fields have the following format:
+
+{|
+!Bits!!Version!!Content
+|-
+|0-13||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Sprite number, exact meaning specified by bit 31
+|-
+|14-15||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||0: draw sprite normally, 1: draw sprite in transparent mode, 2: recolor sprite
+|-
+|16-29||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Color translation special sprite number, see below
+|-
+|30||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 57}}||If set, sprite is drawn normally even in transparent buildings mode (for building sprites only)
+|-
+|31||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Sprite type, see below
+|}
+
+{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 57}} Since TTDPatch 2.0.1 alpha 57, the groundsprite value can be zero if no ground sprite is needed (this is useful if you need to draw custom foundations, see [[en/Callbacks#decide-drawing-default-foundations-30-14e-150|example]]). Ground sprites are always drawn normally, so bit 30 is ignored for them. Bit 30 may get a different meaning for ground sprites in a later version of TTDPatch, so please leave it zero for now. This does not apply to additional groundsprites using the "&lt;xpixeloffset&gt; &lt;ypixeloffset&gt; 80"-syntax (see above); for these bit 30 has the same meaning as for building sprites.
+
+==== Colour translation special sprite number ====
+
+This is used only if bits 14 or 15 are nonzero. Bits 16-29 must be the number of a regular TTD sprite containing a colour translation table (see below for available translation tables). For transparent mode, a suitable translation table is needed, e.g. that of TTD´s sprite number 802 (s.b.). See [[en/RecolorSprites]] for more information on the usage of transparent and recolouring sprites.
+
+For houses, if no recolour sprite is given but recolouring is turned on in bits 14-15, there are two possibilities:
+* If you have [[en/Callbacks#building-colour-1e |callback 1E]] enabled, it is called to determine the colour mapping.
+* If [[en/Callbacks#building-colour-1e |callback 1E]] is disabled or fails, one of the colours specified in property 17 will be chosen randomly.
+
+See [[en/RecolorSprites]] for a list of available colour translations.
+
+For industry tiles, if this field is zero, but recolouring is turned on in bits 14 or 15, the colour of the containing industry will automatically be applied.
+
+The ground sprite should be exactly the same size and shape as TTD's flat tile. In general, it shouldn't contain anything that has a z-dimension because any non-ground sprite will cover it.
+
+Useful values for ground sprites:
+
+{|
+!Sprite number (decimal)!!Contents
+|-
+|3924||bare land
+|-
+|3981||grass
+|-
+|4061||water
+|-
+|4550||snow or desert (depending on climate)
+|-
+|1420||concrete
+|}
+
+Please note that all the ground sprite becomes visible in "transparent buildings" mode, so you should draw parts that seem to be hidden as well.
+
+==== Sprite type ====
+
+If bit 31 is clear, the bottom 14 bits contain a regular TTD sprite number.
+
+If bit 31 is set, the bottom 14 bits contain a number of a sprite set in the most recent action 1, and the used sprite is decided according to the current construction state and the number of sprites in the set:
+* if there's only one sprite, it's used always
+* if there are two sprites, the first is used during construction (stages 0-2), and the second is used for the finished building (stage 3)
+* if there are three sprites, the first will be used in the beginning of the construction (stage 0), the second will be used during the rest of the construction (stages 1 and 2) and the third will be used for the complete building (stage 3)
+* if there are four or more sprites, the first four will be used for the four construction stages. Sprites after the first four are always ignored.
+
+
+=== Flags in advanced sprite layouts ===
+<flags> is a bitset of word size with these meanings:
+{| border="1"
+|-
+! Bit !! Hex !! Parentsprite !! Groundsprite/Childsprite
+|-
+|| 0 || 0001 || Skip bounding box including child sprites || Skip sprite
+|-
+|| 1 || 0002 
+| colspan="2" | Add offset to sprite, disable default usage of construction stage or railtype-offset
+|-
+|| 2 || 0004 
+| colspan="2" | Add offset to recoloursprite
+|-
+|| 3 || 0008 
+| colspan="2" | Recolour sprite is from Action 1 (will be affected by the same construction stage resp. railtype-offsets as sprites, unless bit 2 is set)
+|-
+|| 4 || 0010 || Add offset for <xoffset> and <yoffset> || Add offset for <xpixeloffset>
+|-
+|| 5 || 0020 || Add offset for <zoffset> || Add offset for <ypixeloffset>
+|-
+|| 6 || 0040
+| colspan="2" | Resolve sprite with Variable 10 set to a specific value<ref name="action123">
+Only valid for stations: The Action 1/2/3 chain is resolved multiple times, sprites can be part of different Action 1: The associated value in <register/value> is the raw value (not a register!) to put into Variable 10 while resolving the sprites.
+<br><ul>
+<li>only allowed values currently 0-7</li>
+<li>the value '2' is used when resolving custom foundations, (so, do not conflict with that)</li>
+<li>even if the sprite is not from an Action 1, the value still defines which Action2 chains defines the values for the referenced registers.</li>
+<li>The register for "Add offset to recoloursprite" is defined by the Action 1/2/3 chain with Variable 10 as defined for the recolour sprite.</li>
+<li>The other registers are defined by the Action 1/2/3 chain with Variable 10 as defined for the sprite.</li>
+<li>If no variable 10 values are defined, then station property 13 bit 0 takes effect; i.e. variable 10 is set to 0 or 1 depending on the bit and whether the first groundsprite is resolved or a different sprite. This applies to both the groundsprite and the palette of the groundsprite.</li>
+</ul>
+</ref>
+|-
+|| 7 || 0080
+| colspan="2" | Resolve recoloursprite with Variable 10 set to a specific value<ref name="action123"/>
+|-
+|| 8..15 || 
+| colspan="2" | Reserved, should be zero. If the GRF sets unknown bits, it will be disabled.
+|-
+|}
+
+<references />
+
+=== Register or value in advanced sprite layouts ===
+Są to rejestry tymczasowego przechowywania, które można dodać do poszczególnych części. Wartości rejestru uważa się za podpisane.
+Kolejność rejestrów jest taka sama jak bitów w <flags>. Jeśli bit nie jest ustawiony, nie pojawiają się dla niego rejestry.
+Większość bitów wymaga jednego rejestru.
+*<xoffset> i <yoffset> można włączyć tylko razem, używając dwóch rejestrów,
+*rejestr "pomiń ramkę ograniczającą" <small>''(skip bounding box)''</small> - używa wartości 1, aby narysować duszka, a 0, aby go pominąć,
+*"recolorsprite z działania 1" <small>''(recolorsprite from Action 1)''</small> -  w ogóle nie używa rejestru,
+*Wartości zmiennej 10 nie są ustawiane za pomocą rejestru, ale za pomocą stałej bajtowej.
