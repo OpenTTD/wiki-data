@@ -11,33 +11,33 @@ Oprócz zmiennych globalnych ta akcja może również ustawić pewne ogólne zmi
 == Properties ==
 
 {| |-
-!Number!![[en/GRFActionsDetailed|Size]]!!Version!!Description
+!Number!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Size]]!!Version!!Description
 |-
-|08||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 40}}||Cost base multipliers
+|08||B||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 40}}||Cost base multipliers
 |-
-|09||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 66}}||Cargo translation table
+|09||D||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 66}}||Cargo translation table
 |-
-|0A||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 69}}||Currency display names
+|0A||W||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 69}}||Currency display names
 |-
-|0B||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 69}}||Currency multipliers
+|0B||D||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 69}}||Currency multipliers
 |-
-|0C||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 69}}||Currency options
+|0C||W||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 69}}||Currency options
 |-
-|0D,0E||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 69}}||Currency symbols
+|0D,0E||D||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 69}}||Currency symbols
 |-
-|0F||W||{{en/Ottdp|0.6|2.5|ttdprev=alpha 69}}||Euro introduction dates
+|0F||W||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 69}}||Euro introduction dates
 |-
-|10||12*32*B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 74}}||Snow line height table
+|10||12*32*B||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 74}}||Snow line height table
 |-
-|11||2*D||{{en/Ottdp|0.7|no|ottdrev=r12924}}||GRFID overrides for engines
+|11||2*D||{{pl/Development/NewGRF/ottdp|0.7|no|ottdrev=r12924}}||GRFID overrides for engines
 |-
-|12||D||{{en/Ottdp|0.7|no|ottdrev=r15417}}||Railtype translation table
+|12||D||{{pl/Development/NewGRF/ottdp|0.7|no|ottdrev=r15417}}||Railtype translation table
 |-
-|13,14||V||{{en/Ottdp|1.1|no|ottdrev=r21208}} {{en/GrfFrom|7}}||Gender/case translation table
+|13,14||V||{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=r21208}} {{pl/Development/NewGRF/grfFrom|7}}||Gender/case translation table
 |-
-|15||B||{{en/Ottdp|1.1|no|ottdrev=r21216}} {{en/GrfFrom|7}}||Plural form
+|15||B||{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=r21216}} {{pl/Development/NewGRF/grfFrom|7}}||Plural form
 |-
-|16,17||D||{{en/Ottdp|1.10|no}}||Road-/tramtype translation table
+|16,17||D||{{pl/Development/NewGRF/ottdp|1.10|no}}||Road-/tramtype translation table
 |}
 
 == Descriptions ==
@@ -52,7 +52,7 @@ Using math: NewBaseCost = OldBaseCost * 2^(n-8), where n is the value of propert
 
 Modifying the base costs incurs a small rounding error every time the game is saved, because the costs have to be set back to the default in the savegame. However, this error is unnoticable until many years of inflation have passed and should therefore be of little concern.
 
-{{en/Ottdp|1.0|no}} In OpenTTD rounding happens towards 1 or -1 depending on the old base cost; i.e. if the old base cost is positive round towards 1, if negative round towards -1. This prevents the base cost to be zero.
+{{pl/Development/NewGRF/ottdp|1.0|no}} In OpenTTD rounding happens towards 1 or -1 depending on the old base cost; i.e. if the old base cost is positive round towards 1, if negative round towards -1. This prevents the base cost to be zero.
 
 === Cargo translation table (09) ===
 
@@ -120,13 +120,13 @@ This value allows you to have Euro introduced instead the currency at a given ti
 
 This property allows you to specify the snow line height for every day of the year. The only ID you can set is 0, and the value must be 12*32=384 bytes long. To simplify things for the patch, every month has 32 entries, and the impossible combinations (like 32th January or 31th April) will never be read.
 
-{{en/GrfTill|7}} For GRF version 7 and below: The values should be multiple of 8 between 10h and 88h.
+{{pl/Development/NewGRF/grfTill|7}} For GRF version 7 and below: The values should be multiple of 8 between 10h and 88h.
 Values below 10h and above EFh may result in overflow and should not be used. Since the highest possible land is 78h high, giving 88h or above will effectively disable the snow line.
 
-{{en/GrfFrom|8}} For GRF version 8 and above: The values can be any value between 0 and FFh.
+{{pl/Development/NewGRF/grfFrom|8}} For GRF version 8 and above: The values can be any value between 0 and FFh.
 FF means 'no snow'; other values are scaled to the number of possible heightlevels of the map.
 
-{{en/Ottdp|no|2.5}} If the temperate snow line is enabled, this table applies on temperate as well.
+{{pl/Development/NewGRF/ottdp|no|2.5}} If the temperate snow line is enabled, this table applies on temperate as well.
 
 '''WARNING:''' Some code in TTD assumes that the snow line will remain constant: Some industries are built only above/below snowline and assume that the snow line won't move when they're already built. Similarly, snowy houses on arctic will still appear snowy even when the snow disappears around them. If you want to use this feature, make sure to counter these effects by overriding arctic houses and industries with snow-aware versions.
 
