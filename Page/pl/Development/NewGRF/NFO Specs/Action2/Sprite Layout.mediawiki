@@ -23,7 +23,7 @@ Ta Action2 definiuje spriteayout dla kafelka. Dostępne są trzy formaty:
 <pre> &lt;Sprite-number&gt; * &lt;Length&gt; 02 07/09/0F/11 &lt;set-id&gt; 00 &lt;groundsprite&gt; &lt;buildingsprite&gt; &lt;xoffset&gt; &lt;yoffset&gt; &lt;xextent&gt; &lt;yextent&gt; &lt;zextent&gt;</pre>
 
 {|
-!Element!![[en/GRFActionsDetailed|Size]]!!Description
+!Element!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Size]]!!Description
 |-
 |&lt;[[#sprite-number|Sprite-number]]&gt;||dec||A sequential sprite number
 |-
@@ -52,16 +52,16 @@ Ta Action2 definiuje spriteayout dla kafelka. Dostępne są trzy formaty:
 |&lt;zextent&gt;||B||size of sprite in z direction
 |}
 
-In the above, xofs, yofs, xextent, yextent and zextent define the 3D bounding box of the building sprite not including the ground sprite. The z-offset is always zero for buildings (TTD doesn't support floating buildings). Please note that xofs/xextent and yofs/yextent pairs that place the bounding box off the tile are not recommended.
+Na powyższym xofs, yofs, xextent, yextent i zextent definiują obwiednię 3D duszka budynku, nie uwzględniając duszka ziemi. Przesunięcie Z wynosi zawsze zero dla budynków (TTD nie obsługuje budynków pływających). Uwaga: pary xofs/xextent i yofs/yextent, które umieszczają obwiednię poza kafelkiem, nie są zalecane.
 
 == Extended format using multiple combined sprites ==
 
-{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 55 vcs 3}} Since TTDPatch 2.0.1 alpha 55 vcs 3, houses, industry (and object) tiles support an extended syntax as well, which looks as follows:
+{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 55 vcs 3}} Ponieważ TTDPatch 2.0.1 alpha 55 vcs 3, domy, kafle przemysłowe (i obiektowe) obsługują również rozszerzoną składnię, która wygląda następująco:
 
 <pre><nowiki>&lt;Sprite-number&gt; * &lt;Length&gt; 02 07/09/0F/11 &lt;set-id&gt; &lt;num-sprites&gt; &lt;groundsprite&gt; [&lt;buildingsprite&gt; (&lt;xoffset&gt; &lt;yoffset&gt; &lt;zoffset&gt; &lt;xextent&gt; &lt;yextent&gt; &lt;zextent&gt;) | (&lt;xpixeloffset&gt; &lt;ypixeloffset&gt; 80)] ...</nowiki></pre>
 
 {|
-!Element!![[en/GRFActionsDetailed|Size]]!!Description
+!Element!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Size]]!!Description
 |-
 |&lt;[[#sprite-number|Sprite-number]]&gt;||dec||A sequential sprite number
 |-
@@ -73,7 +73,7 @@ In the above, xofs, yofs, xextent, yextent and zextent define the 3D bounding bo
 |-
 |&lt;[[#set-id|set-id]]&gt;||B||ID for this definition
 |-
-|&lt;num-sprites&gt;||B||Number of following building sprites (the groundsprite mustn't be counted). Allowed range: 1 to 63 (0x01 to 0x3F). {{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22518}} Adding 0x40 makes the layout an Advanced Spritelayout with register modifiers ( [[pl/Extrazi/Action2/Advanced Sprite Layout| see below]] ).
+|&lt;num-sprites&gt;||B||Number of following building sprites (the groundsprite mustn't be counted). Allowed range: 1 to 63 (0x01 to 0x3F). {{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22518}} Adding 0x40 makes the layout an Advanced Spritelayout with register modifiers ( [[pl/Development/NewGRF/NFO Specs/Action2/Advanced Sprite Layout| see below]] ).
 |-
 |&lt;[[#sprite-definition-for-ground-and-building-sprites|groundsprite]]&gt;||D||Ground sprite for the building (see format below)
 |-
@@ -102,7 +102,7 @@ In the above, xofs, yofs, xextent, yextent and zextent define the 3D bounding bo
 |80||B||a literal 80h byte to distinguish from new-bounding-box definitions
 |}
 
-Note: restrictions for sprites sharing their bounding box are the same as explained for [[en/Action0Stations#sprite-layout-09|station tiles.]]
+Note: ograniczenia dla duszków dzielących ich obwiednię są takie same, jak wyjaśniono dla [[pl/Development/NewGRF/NFO Specs/Action0/Stations#sprite-layout-09|station tiles.]]
 
 {{pl/Development/NewGRF/ottd|0.7|r18959}} Since OpenTTD r18959 you can draw multiple ground sprites for a tile, which is useful if you want to use the usual grass/water/concrete groundtile, but still need to add features to it without using a new bounding box. To do so use the syntax of sprites sharing the previous bounding box, but use it before the first bounding box definition. xpixeloffset and ypixeloffset refer to the usual spot of groundtiles.
 
