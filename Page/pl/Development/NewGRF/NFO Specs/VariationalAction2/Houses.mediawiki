@@ -5,39 +5,39 @@
 == Variables ==
 
 {| |-
-!Variable!![[en/GRFActionsDetailed|'''Size''']]!!Version*!!Description
+!Variable!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Size''']]!!Version*!!Description
 |-
-|40||B||{{en/Ottdp|0.6|2.5}}||Construction stage and pseudo-random values
+|40||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Construction stage and pseudo-random values
 |-
-|41||B||{{en/Ottdp|0.6|2.5}}||Age of the building in years (or, strictly speaking, the difference between the current year and the year the building was built). Returns 255 for buildings older than 255 years.
+|41||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Age of the building in years (or, strictly speaking, the difference between the current year and the year the building was built). Returns 255 for buildings older than 255 years.
 |-
-|42||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 43}}||Town zone where the building is situated.
+|42||B||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 43}}||Town zone where the building is situated.
 |-
-|43||B||{{en/Ottdp|0.6|2.5}}||Terrain type: 0 normal, 1 desert, 2 rainforest, 4 on or above snowline
+|43||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Terrain type: 0 normal, 1 desert, 2 rainforest, 4 on or above snowline
 |-
-|44||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 43}}||Building counts
+|44||D||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 43}}||Building counts
 |-
-|45||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 38}}||Town expansion bits
+|45||B||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 38}}||Town expansion bits
 |-
-|46||B||{{en/Ottdp|0.6|2.5|ttdprev=alpha 67}}||Current animation frame
+|46||B||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 67}}||Current animation frame
 |-
-|47||D||{{en/Ottdp|0.7|2.6|ottdrev=r14294|ttdprev=r2020}}||XY Coordinate of the building
+|47||D||{{pl/Development/NewGRF/ottdp|0.7|2.6|ottdrev=r14294|ttdprev=r2020}}||XY Coordinate of the building
 |-
-|60||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 56}}||Other building counts
+|60||D||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 56}}||Other building counts
 |-
-|61||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 56}}||Other building counts
+|61||D||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 56}}||Other building counts
 |-
-|62||D||{{en/Ottdp|0.6|2.5|ttdprev=alpha 72}}||Land info for nearby tiles
+|62||D||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 72}}||Land info for nearby tiles
 |-
-|63||B||{{en/Ottdp|0.7|2.6|ttdprev=r1665}}||Current animation frame of nearby house tiles
+|63||B||{{pl/Development/NewGRF/ottdp|0.7|2.6|ttdprev=r1665}}||Current animation frame of nearby house tiles
 |-
-|64||B||{{en/Ottdp|1.2|2.6|ottdrev=r23070|ttdprev=r1672}}||Cargo acceptance history of nearby stations
+|64||B||{{pl/Development/NewGRF/ottdp|1.2|2.6|ottdrev=r23070|ttdprev=r1672}}||Cargo acceptance history of nearby stations
 |-
-|65||B||{{en/Ottdp|0.7|2.6|ottdrev=r13603|ttdprev=r2242}}||Distance of nearest house matching a given criterion
+|65||B||{{pl/Development/NewGRF/ottdp|0.7|2.6|ottdrev=r13603|ttdprev=r2242}}||Distance of nearest house matching a given criterion
 |-
-|66||D||{{en/Ottdp|1.0|2.6|ttdprev=r2246}}||Class and ID of nearby house tile
+|66||D||{{pl/Development/NewGRF/ottdp|1.0|2.6|ttdprev=r2246}}||Class and ID of nearby house tile
 |-
-|67||D||{{en/Ottdp|1.0|2.6|ttdprev=r2246}}||GRFID of nearby house tile
+|67||D||{{pl/Development/NewGRF/ottdp|1.0|2.6|ttdprev=r2246}}||GRFID of nearby house tile
 |-
 |80+x||||||None defined, and none ever will because town buildings don't have an internal structure. Trying to access these variables crashes TTD.
 |}
@@ -102,7 +102,7 @@ The parameter of this variable is an offset from the position of the current til
 
 === Cargo acceptance history of nearby stations (64) ===
 
-The parameter of this variable is a cargo identifier. {{en/GrfFrom|7}} If your GRF is version 7 or later and has a cargo translation table, this is an index to that table; otherwise, it's a cargo slot number. Additionally, GRF register 100h should contain an offset relative to the current tile (use 0 for the current tile). The lowest byte contains the signed X offset and the next higher byte the signed Y offset.
+The parameter of this variable is a cargo identifier. {{pl/Development/NewGRF/grfFrom|7}} If your GRF is version 7 or later and has a cargo translation table, this is an index to that table; otherwise, it's a cargo slot number. Additionally, GRF register 100h should contain an offset relative to the current tile (use 0 for the current tile). The lowest byte contains the signed X offset and the next higher byte the signed Y offset.
 
 The returned value looks like this:
 
@@ -124,7 +124,7 @@ The returned value looks like this:
 
 A station is considered nearby if the selected tile is inside its acceptance area. That's why you can give an offset - other tiles of your multi-tile building may have different stations "nearby".
 
-{{en/Ttdp|}} The information required for this variable is stored in the station2 structure, and therefore works only if the station2 structure is present. The station2 structure is present if any of the following is true:
+{{pl/Development/NewGRF/ttdp|}} The information required for this variable is stored in the station2 structure, and therefore works only if the station2 structure is present. The station2 structure is present if any of the following is true:
 * Generalfixes is on, and miscmods.noextendstationrange is off
 * Any of fifoloading, newcargos or irregularstations is on
 
