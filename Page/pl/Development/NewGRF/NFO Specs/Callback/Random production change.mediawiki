@@ -39,24 +39,24 @@ Wywoływany, gdy TTD wybiera branżę dla losowej zmiany produkcji. Zmienna 18 z
 |0F||{{pl/Development/NewGRF/ottdp|0.7|2.6|ottdrev=r14561|ttdprev=r2068}}||Set production as returned in bits 16..23 of register 0x100 (clamped to 4..128)
 |}
 
-Since TTDPatch 2.5 beta 1, you can set bit 7 of this value to suppress the news message announcing the production change.
-Be careful with this, especially for closedown messages; most players wouldn't like those being suppressed.
+Od wersji TTDPatch 2.5 beta 1 możesz ustawić bit 7 tej wartości, aby ukryć komunikat informujący o zmianie produkcji.
+Uważaj na to, szczególnie w przypadku zamkniętych wiadomości; większość graczy nie chciałaby, aby te były tłumione.
 
-For return values 05..0C, the double/halve news messages are displayed. You should probably replace the defaults with some text that
-doesn't explicitly say "double" or "halve", or use the message override feature (see below). If a divide operation brings the
-production below the quarter of the default, the industry is closed down instead. Multiply operations that would bring the production
-above 8 times of the original will only increase it to that value.
+W przypadku wartości zwrotnych 05..0C wyświetlane są komunikaty informacyjne z podwójną/połową. Prawdopodobnie powinieneś zastąpić wartości domyślne tekstem, który
+nie mówi wprost "podwójnie" <small>''(double)''</small>  ani "o połowę" <small>''(halve)''</small> ani nie używa funkcji zastępowania wiadomości (patrz poniżej). Jeśli operacja dzielenia przynosi
+produkcja poniżej jednej czwartej wartości domyślnej, zamiast tego branża jest zamknięta. Pomnóż operacje, które przyniosą produkcję
+ponad 8 razy oryginał zwiększy go tylko do tej wartości.
 
-Since TTDPatch r1306, you can override the default news messages that appear after production changes. To do this, you must set bit 8 of the
-returned result, and put the textID into the low word of GRF register 100h (the high word of the register is ignored).
-The textID can be of a default TTD text or a DCxx text; it '''cannot''' be a D0xx text. If the given action generates a message,
-it will be the one you specified. It may, however, not generate messages at all; for example, operation 04 may decide not to change
-the production, and then your message won't be shown. There is one exception: operation 00 would never generate a message,
-but it still will when bit 8 is set. This is useful in conjunction with [[en/Callbacks#monthly-random-production-change-35 |callback 35]], to tell the player about things that don't
-change the production multiplier, but are still important enough to require a news message.
+Od wersji TTDPatch r1306 możesz zastąpić domyślne wiadomości, które pojawiają się po zmianach produkcyjnych. Aby to zrobić, musisz ustawić bit 8 z
+zwrócił wynik i wstawił textID do niskiego słowa rejestru GRF 100h (wysokie słowo rejestru jest ignorowane).
+TextID może mieć domyślny tekst TTD lub tekst DCxx; '''nie może''' <small>''(cannot)''</small> być tekstem D0xx. Jeśli podana akcja wygeneruje komunikat,
+będzie to ten, który podałeś. Może jednak wcale nie generować komunikatów; na przykład operacja 04 może postanowić nie zmieniać
+produkcja, a następnie twoja wiadomość nie będzie wyświetlana. Jest jeden wyjątek: operacja 00 nigdy nie wygeneruje komunikatu,
+ale nadal tak będzie, gdy ustawiony jest bit 8. Jest to przydatne w połączeniu z [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#monthly-random-production-change-35 |callback 35]] , aby poinformować gracza o rzeczach, które nie
+zmienić mnożnik produkcji, ale nadal są wystarczająco ważne, aby wymagać wiadomości.
 
-Using return values 0Dh, 0Eh and 0Fh you can adjust production level more smoothly. The production level is a value between 04h and 80h
-(initial value 10h). Returning 0Dh when the production is at 4 will close the industry. But returning 0Fh will never close the industry,
-instead the value is clamped to the allowed range.
-Note that OpenTTD before r15103 did not properly updated production rates provided by properties 12 and 13.
+Za pomocą zwracanych wartości 0Dh, 0Eh i 0Fh można płynniej regulować poziom produkcji. Poziom produkcji wynosi od 04 do 80 godzin
+(wartość początkowa 10h). Zwrócenie 0Dh, gdy produkcja osiągnie 4, zamknie przemysł. Ale powrót 0Fh nigdy nie zamknie branży,
+zamiast tego wartość jest ograniczona do dozwolonego zakresu.
+Należy zauważyć, że OpenTTD przed wersją r15103 nie aktualizował poprawnie szybkości produkcji zapewnianych przez właściwości 12 i 13.
 <!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
