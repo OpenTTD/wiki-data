@@ -75,17 +75,17 @@ Definiowanie właściwości pojazdów drogowych.
 == Description ==
 
 === Roadtype or tramtype (05) ===
-{{pl/Development/NewGRF/ottdp|1.10|no}} Roadtype or tramtype for the vehicle.  This is an index into the [[en/Action0Roadtypes|roadtype]] or [[en/Action0Roadtypes|tramtype]] translation table.
+{{pl/Development/NewGRF/ottdp|1.10|no}} Typ drogi lub typ pojazdu. Jest to indeks do tabeli tłumaczeń  [[pl/Extrazi/specs.tt/Action0Roadtypes|roadtype]] lub [[pl/Extrazi/specs.tt/Action0Roadtypes|tramtype]] .
 
-This property:
-* will use property 1C bit 0 (flag 'vehicle is tram') to determine whether to use a roadtype or tramtype table
-* requires an appropriate roadtype or tramtype table to be loaded
+Ta nieruchomość:
+* użyje właściwości 1C bit 0 (flaga 'pojazd jest tramwajem' <small>''~vehicle is tram''</small>) w celu ustalenia, czy użyć tabeli typu drogi czy tabeli
+* wymaga załadowania odpowiedniego stołu typu drogi lub wózka
 
 === Running cost base (0A) and factor (09) ===
 
-TTD calculates all costs by multiplying a 48-bit base amount with an 8-bit factor. &nbsp;The base amount is changed according to inflation, whereas the factor remains constant.
+TTD oblicza wszystkie koszty, mnożąc 48-bitową kwotę podstawową przez współczynnik 8-bitowy. &nbsp;Kwota podstawowa jest zmieniana zgodnie z inflacją, podczas gdy współczynnik pozostaje stały.
 
-For the running costs of road vehicles, the following base amounts are available:
+W przypadku kosztów eksploatacji pojazdów drogowych dostępne są następujące kwoty podstawowe:
 
 {| |-
 !Type!!Value!!in little-endian notation
@@ -93,11 +93,11 @@ For the running costs of road vehicles, the following base amounts are available
 |Road vehicle running cost base||4C48||48 4C 00 00
 |}
 
-Theoretically, you could use pointers to other [[en/BaseCosts|base amounts]] available in TTD, but these are the numbers TTD uses for road vehicles.
+Teoretycznie można użyć wskaźników do innych [[pl/Development/NewGRF/NFO Specs/BaseCosts|base amounts]] dostępnych w TTD, ale są to liczby używane przez TTD dla pojazdów drogowych.
 
 === Cost factor (11) ===
 
-The cost factor is a bit-coded value which determines how expensive a vehicle is. The table below gives you some values to use for finding the right price for your vehicles.
+Współczynnik kosztów to kodowana bitowo wartość, która określa, jak drogi jest pojazd. Poniższa tabela zawiera wartości, które należy zastosować, aby znaleźć odpowiednią cenę dla swoich pojazdów.
 
 {| |-
 !Cost factor!!Price
@@ -117,15 +117,15 @@ The cost factor is a bit-coded value which determines how expensive a vehicle is
 
 === Realistic acceleration properties (13, 14, 15) ===
 
-Using property 15 to set the speed, it is possible to achieve speeds larger than 80 mph (127 km/h), to which property 08 is limited. When setting property 15, always set property 08 as well, so that the vehicle works reasonably well whether realistic acceleration is turned on or off. If property 15 is not set, the value from property 08 is used instead.
+Używając właściwości 15 do ustawienia prędkości, można osiągnąć prędkości większe niż 80 mph (127 km/h), do których właściwość 08 jest ograniczona. Ustawiając właściwość 15, zawsze należy również ustawić właściwość 08, aby pojazd działał właściwie bez względu na to, czy realistyczne przyspieszenie jest włączone, czy wyłączone. Jeśli właściwość 15 nie jest ustawiona, zamiast niej używana jest wartość z właściwości 08.
 
-{{pl/Development/NewGRF/ttdp|}} TTDPatch uses these properties only if road vehicles are set to realistic acceleration in the NewCurveAndMountainHandling switch. They are ignored otherwise.
+{{pl/Development/NewGRF/ttdp|}} TTDPatch używa tych właściwości tylko wtedy, gdy pojazdy drogowe są ustawione na realistyczne przyspieszenie w przełączniku NewCurveAndMountainHandling. W przeciwnym razie są ignorowane.
 
-{{pl/Development/NewGRF/ottd|}} OpenTTD uses these properties always, if they are defined and gives the speed defined here precedence over the one defined in property 08.
+{{pl/Development/NewGRF/ottd|}} OpenTTD zawsze korzysta z tych właściwości, jeśli są one zdefiniowane i daje pierwszeństwo zdefiniowanej tutaj prędkości przed tą zdefiniowaną we właściwości 08.
 
 === Callbacks (17) ===
 
-For road vehicles, the following [[en/Callbacks]] have to be enabled by setting the corresponding bit in property 17 (certain other, not as frequently used callbacks are available without setting a bit here):
+W przypadku pojazdów drogowych należy włączyć następujące  [[pl/Extrazi/specs.tt/callbacks|callbacks]]  poprzez ustawienie odpowiedniego bitu we właściwości 17 (niektóre inne, nie tak często używane oddzwaniania są dostępne bez ustawienia bitu tutaj):
 
 {| |-
 !Bit!!Value!!Variable 0C value!!Callback
@@ -145,19 +145,19 @@ For road vehicles, the following [[en/Callbacks]] have to be enabled by setting 
 |7||80||33||Sound effect callbacks
 |}
 
-Bit is the bit you have to set, you do this by adding all the values for all the bits. Variable 0C value is what variable 0C will be set to, for checking it in the VarAction2 for callbacks.
+Bit to bit, który musisz ustawić, robisz to poprzez dodanie wszystkich wartości dla wszystkich bitów. Zmienna wartość 0C to ta, dla której zostanie ustawiona zmienna 0C, do sprawdzania jej w VarAction2 pod kątem wywołań zwrotnych.
 
 === Coefficient of tractive effort (18) ===
 
-This cofficient sets what fraction of the vehicle weight is equal to the maximum tractive effort. &nbsp;This includes the effect of having some unpowered axles, as well as the coefficient of friction that is available.
+Współczynnik ten określa, jaka część masy pojazdu jest równa maksymalnemu wysiłkowi pociągowemu. &nbsp;Obejmuje to efekt posiadania niektórych niezasilanych osi, a także dostępny współczynnik tarcia.
 
-For a value of FF, the tractive effort is equal to the vehicle weight, for 80, it is half, and so on. &nbsp;If not set, a default of 4C is used, for a fraction of 0.30, corresponding to W<sub>adh</sub>=W and a coefficient of friction of 0.30, which is the value used by the patch before TTDPatch 2.0.1 alpha 19.
+Dla wartości FF siła pociągowa jest równa masie pojazdu, dla 80 jest to połowa i tak dalej. &nbsp;Jeśli nie jest ustawiony, używana jest wartość domyślna 4C, dla ułamka 0,30, odpowiadającego W<sub>adh</sub>=W i współczynnikowi tarcia 0,30, który jest wartością stosowaną przez łatę przed TTDPatch 2.0. 1 alfa 19.
 
 === Coefficient of air drag (19) ===
 
-This property sets the air drag coefficient c2 used for the realistic acceleration model, from 01 (no airdrag) to FF (most air drag) in arbitrary units. &nbsp;00 means to use the default value that depends on the top speed (to simulate the fact that high-speed engines are more streamlined).
+Ta właściwość ustawia współczynnik oporu powietrza c2 stosowany w realistycznym modelu przyspieszenia, od 01 (bez airdrag) do FF (większość oporu powietrza) w dowolnych jednostkach. &nbsp;00 oznacza użycie wartości domyślnej, która zależy od prędkości maksymalnej (aby zasymulować fakt, że silniki dużych prędkości są bardziej usprawnione).
 
-The default values are the following:
+Wartości domyślne są następujące:
 
 {| |-
 !top speed (mph/1.6)!!&lt;16!!16!!24!!32!!48!!64!!96!!128!!192!!256!!...
@@ -165,19 +165,19 @@ The default values are the following:
 |c2||192||128||96||64||48||32||24||16||12||8
 |}
 
-For higher speeds, the series is continued in the same manner.
+W przypadku wyższych prędkości seria jest kontynuowana w ten sam sposób.
 
-Air drag in Newtons will then be c2*v*v with v in m/s, although it is probably futile to attempt to make c2 a realistic number due to the lack of TTd's consistent scaling. &nbsp;If a vehicle doesn't reach its historical top speed, you might try setting prop. 19 one or two higher than the default above, otherwise it's probably a good idea to leave it at the default.
+Opór powietrza w niutonach będzie wtedy c2*v*v przy v w m/s , chociaż prawdopodobnie nie ma sensu próbować uczynić c2 realistyczną liczbą ze względu na brak spójnego skalowania TTd. &nbsp;Jeśli pojazd nie osiąga swojej historycznej prędkości maksymalnej, możesz spróbować ustawić rekwizyt. 19 jeden lub dwa wyższe niż domyślne powyżej, w przeciwnym razie prawdopodobnie dobrym pomysłem jest pozostawienie domyślnego.
 
 === Refit cost (1A) ===
 
-Refit cost, using 25% of the [[en/BaseCosts|purchase price cost base]]. This property can be overridden by callback 15E.
+Koszt remontu, przy użyciu 25% [[pl/Development/NewGRF/NFO Specs/BaseCosts|purchase price cost base]] . Tę właściwość można zastąpić wywołaniem zwrotnym 15E.
 
-{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23087}} If the refit cost factor is set to zero and bit 4 of the miscellaneous flags (1C) is set, auto-refitting is allowed.
+{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23087}} Jeśli współczynnik kosztu remontu jest ustawiony na zero i ustawiony jest bit 4 różnych flag (1C), dozwolone jest ponowne dopasowanie.
 
 === Miscellaneous flags (1C) ===
 
-This is a bit mask, with the following bits:
+To jest maska ​​nieco z następującymi bitami:
 
 {| |-
 !Bit!!Value!!Meaning
@@ -196,23 +196,23 @@ This is a bit mask, with the following bits:
 |-
 |6||   40||{{pl/Development/NewGRF/ottdp|1.3|no|ottdrev=r24124}} Disable breakdown smoke effect.
 |-
-|7||   80||{{pl/Development/NewGRF/ottdp|1.7|no|ottdrev=r27668}} [[en/Action2/Vehicles#composing-vehicles-from-multiple-sprites|Compose vehicle from multiple sprites.]]
+|7||   80||{{pl/Development/NewGRF/ottdp|1.7|no|ottdrev=r27668}} [[pl/Development/NewGRF/NFO Specs/Action2/Vehicles#composing-vehicles-from-multiple-sprites|Compose vehicle from multiple sprites.]]
 |}
 
 === Long format introduction date (1F) ===
 
-Set the vehicle introduction date, in days since the year 0. This takes account of leap years; dividable by 4, but not 100 unless 400. A start date of 1920-01-01 is obtained with a value of 701265 (51 B3 0A 00). This property must be set after property 00 to take effect.
+Ustaw datę wprowadzenia pojazdu, w dniach od roku 0. Uwzględnia to lata przestępne; dzieli się przez 4, ale nie 100, chyba że 400. Datę początkową 1920-01-01 uzyskuje się o wartości 701265 (51 B3 0A 00). Ta właściwość musi zostać ustawiona po właściwości 00, aby obowiązywała.
 
-{{pl/Development/NewGRF/ottdp|no|}} In TTDPatch, dates after 2044 will be limited to 2044.
+{{pl/Development/NewGRF/ottdp|no|}} W TTDPatch daty po 2044 r. Będą ograniczone do 2044 r.
 
 === Sort vehicle list (20) ===
-See sort vehicle list for [[en/Action0Trains#sort-vehicle-list-1a|trains]] for details.
+Zobacz listę sortowania pojazdów dla [[pl/Extrazi/specs.tt/Action0Trains#sort-vehicle-list-1a|trains]] , aby uzyskać szczegółowe informacje.
 
 === Visual effect (21) ===
-See the equivalent [[en/Action0Trains#visual-effects-and-wagon-power-22|train property]] for information about the meaning of all bits. There is no default effect for road vehicles, therefore values of 00..0F will show no visual effect. Bit 7 (disable wagon power) currently has no meaning and should be left at 0.
+Zobacz odpowiednik [[pl/Extrazi/specs.tt/Action0Trains#visual-effects-and-wagon-power-22|train property]] , aby uzyskać informacje na temat znaczenia wszystkich bitów. Nie ma domyślnego efektu dla pojazdów drogowych, dlatego wartości 00..0F nie pokażą żadnego efektu wizualnego. Bit 7 (wyłącz moc wagonu) obecnie nie ma znaczenia i powinien być pozostawiony na 0.
 
 === Custom cargo ageing period (22) ===
-See custom cargo ageing period for [[en/Action0Trains#custom-cargo-ageing-period-2b|trains]] for details.
+Zobacz niestandardowy okres starzenia się ładunku dla [[pl/Extrazi/specs.tt/Action0Trains#custom-cargo-ageing-period-2b|trains]] , aby uzyskać szczegółowe informacje.
 
 == Przykład ==
 
