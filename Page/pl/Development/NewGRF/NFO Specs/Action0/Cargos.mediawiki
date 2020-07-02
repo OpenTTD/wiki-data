@@ -2,7 +2,7 @@
 <!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
 == Wprowadzenie ==
 
-Przełącznik [[en/NewCargos]] TTDPatch pozwala modyfikować istniejące 12 ładunków na klimat, a także dodawać 20 nowych ładunków na klimat. Te przedziały ładunkowe są ponumerowane od 0 do 31, gdzie przedziały 0-11 są domyślnie używane ładunki TTD, a przedziały 12-31 domyślnie zawierają niezainicjowane śmieci (więc nie możesz ufać im, że mają sensowne informacje, musisz ustawić wszystkie ich właściwości ).
+Przełącznik [[en/NewCargos]]<!--strony nie ma w oryginale-->  TTDPatch pozwala modyfikować istniejące 12 ładunków na klimat, a także dodawać 20 nowych ładunków na klimat. Te przedziały ładunkowe są ponumerowane od 0 do 31, gdzie przedziały 0-11 są domyślnie używane ładunki TTD, a przedziały 12-31 domyślnie zawierają niezainicjowane śmieci (więc nie możesz ufać im, że mają sensowne informacje, musisz ustawić wszystkie ich właściwości ).
 
 {{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=11ab3c4e}} OpenTTD 1.9 zwiększa liczbę ładunków do 64.
 
@@ -35,7 +35,7 @@ Przełącznik [[en/NewCargos]] TTDPatch pozwala modyfikować istniejące 12 ład
 |-
 |14||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Color for the cargo payment list window
 |-
-|15||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Freight status (for [[en/FreightTrains]] switch); 0=not freight, 1=is freight
+|15||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Freight status (for [[en/FreightTrains]]<!--strony nie ma w oryginale--> switch); 0=not freight, 1=is freight
 |-
 |16||W||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Cargo classes
 |-
@@ -58,57 +58,57 @@ Przełącznik [[en/NewCargos]] TTDPatch pozwala modyfikować istniejące 12 ład
 
 === Bit number for bitmasks (08) ===
 
-This value must be used in [[en/Action3]] and in cargo bit mask properties such as refit masks. Values 1C-1F should be safe to use (if they aren't already taken, of course) if you intend to maintain compatibility with GRFs unaware of the newcargos switch. Further assuming that no active GRFs support the toyland climate, you can use values 11-1A as well.
+Tę wartość należy zastosować w [[pl/Development/NewGRF/NFO Specs/Action3/Main Page|Action3]] oraz we właściwościach maski bitów ładunku, takich jak maski do ponownego montażu. Wartości 1C-1F powinny być bezpieczne w użyciu (jeśli nie zostały jeszcze zajęte, oczywiście), jeśli zamierzasz zachować zgodność z GRF nieświadomymi przełącznika nowego ładunku. Ponadto, zakładając, że żadne aktywne GRF nie obsługują klimatu terenowego, możesz również użyć wartości 11-1A.
 
-Additionally, you can use the value FFh to disable the given cargo slot. This way, it won't appear in cargo type lists, but it won't be removed from things already on the map. If you disable a cargo, you'll probably want to zero out the cargo label (property 17) as well.
+Dodatkowo możesz użyć wartości FFh, aby wyłączyć daną szczelinę ładunkową. W ten sposób nie pojawi się na listach rodzajów ładunku, ale nie zostanie usunięty z rzeczy znajdujących się już na mapie. Jeśli wyłączysz ładunek, prawdopodobnie zechcesz również zerować etykietę ładunku (właściwość 17).
 
-This property only affects GRFs which do not have a [[en/Action0/Global Settings#cargo-translation-table-09 | cargo translation table]]. GRFs with such a table generally use the index of the cargo in the table instead of the value of this property to access a cargo. As such this property is more or less a default value for GRFs without cargo translation table. If you are unsure what value to assign to this property, set it to the same value as the cargo slot ID.
+Ta właściwość dotyczy tylko GRF, które nie mają [[pl/Development/NewGRF/NFO Specs/Action0/Global Settings#cargo-translation-table-09 | cargo translation table]] . GRF z taką tabelą zazwyczaj używają indeksu ładunku w tabeli zamiast wartości tej właściwości w celu uzyskania dostępu do ładunku. Jako taka, ta właściwość jest mniej więcej wartością domyślną dla GRF bez tabeli translacji ładunku. Jeśli nie masz pewności, jaką wartość przypisać tej właściwości, ustaw ją na tę samą wartość, co identyfikator szczeliny ładunkowej.
 
 === TextID for the cargo type name (09) ===
 
-This textID should refer to the name of the cargo, capitalized, to match the TTD style (e.g. "Passengers", "Coal", "Gold Ore", "Milk")
+Ten identyfikator tekstowy powinien odnosić się do nazwy ładunku, wielkiej litery, aby pasował do stylu TTD (np. "Passengers", "Coal", "Gold Ore", "Milk")
 
-You can reuse existing [[en/TextIDs]] or create custom strings using [[en/Action4]] with an offset in the DCxx range. Note that you need to set language-id bit 7 as well in the Action4 for a custom string. (Also applies to properties 0A to 0D)
+Możesz ponownie wykorzystać istniejące [[pl/Development/NewGRF/NFO Specs/TextIDs|TextIDs]] lub utworzyć niestandardowe ciągi znaków za pomocą [[pl/Development/NewGRF/NFO Specs/Action4|Action4]] z przesunięciem w zakresie DCxx. Pamiętaj, że musisz ustawić bit 7 id języka także w Action4 dla niestandardowego ciągu. (Dotyczy również właściwości od 0A do 0D)
 
 === TextID for one unit of the type (0A) ===
 
-This textID should refer to the cargo type name in the singular. Currently, this ID is used only in subsidy messages ("First Passenger service..." instead of "First Passengers service...", for example)
+Ten identyfikator tekstowy powinien odnosić się do nazwy rodzaju ładunku w liczbie pojedynczej. Obecnie ten identyfikator jest używany tylko w komunikatach o dotacjach (na przykład "Usługa pierwszego pasażera..." <small>''~First Passenger service''</small> zamiast "Usługa pierwszych pasażerów..." <small>''~First Passengers service''</small> )
 
 === TextID for 1 unit of cargo (0B) ===
 
-This textID will be used to display the amount of the cargo if there's exactly 1 unit waiting. Although there's only one unit waiting, you'll still have to use either the special character 7C (print signed word) or 87 (print amount in litres and add suffix " litres") so TTD removes the amount from its internal reference stack. For example, if you have a new cargo named "gold ore", this should be "\7C ton of gold ore", which will expand to "1 ton of gold ore". On the other hand, a liquid cargo named "milk" should be something like "\87 of milk", which will expand to either "100 litres of milk" or "1,000 litres of milk" (The multiplier for liquid cargos depends on miscmods.dontfixlitres. If it's on, the multiplier is 100, otherwise it's 1000)
+Ten identyfikator tekstowy zostanie użyty do wyświetlenia ilości ładunku, jeśli czeka dokładnie 1 jednostka. Chociaż czeka tylko jedna jednostka, nadal będziesz musiał użyć znaku specjalnego 7C (wydrukuj podpisane słowo) lub 87 (wydrukuj ilość w litrach i dodaj przyrostek "litry" <small>''~litres''</small> ), aby TTD usunęło kwotę ze swojego wewnętrznego stosu referencyjnego. Na przykład, jeśli masz nowy ładunek o nazwie "ruda złota" <small>''(gold ore)''</small> , powinna to być "\7C tona rudy złota" , która powiększy się do "1 tony rudy złota" . Z drugiej strony, ładunek płynny o nazwie "mleko" <small>''(milk)''</small> powinien być czymś w rodzaju "\87 mleka" , który rozszerzy się do "100 litrów mleka" lub "1000 litrów mleka" (mnożnik dla płynnych ładunków zależy od niewłaściwego sposobu .dontfixlitres. Jeśli jest włączony, mnożnik wynosi 100, w przeciwnym razie 1000)
 
 === TextID for multiple units of cargo (0C) ===
 
-This textID will be used to display the amount of cargo if the amount waiting isn't exactly 1. You'll need the same special characters as above, but now they will be expanded according to the actual cargo waiting. Sticking to the example above, you'll need "\7C tons of gold ore" and "\87 of milk", which can expand to "42 tons of gold ore" and "42,000 litres of milk", accordingly. You will note that liquid cargos can have the same textID for both property 0B and 0C since they always use the plural form.
+Ten identyfikator tekstowy zostanie użyty do wyświetlenia ilości ładunku, jeśli oczekiwana ilość nie jest dokładnie 1. Będziesz potrzebować tych samych znaków specjalnych, jak powyżej, ale teraz będą one rozszerzane zgodnie z rzeczywistym oczekiwaniem ładunku. Trzymając się powyższego przykładu, będziesz potrzebować "\7C ton rudy złota" i "\87 mleka" , które mogą wzrosnąć odpowiednio do "42 ton rudy złota" i "42 000 litrów mleka" . Zauważ, że ładunki płynne mogą mieć ten sam identyfikator tekstowy zarówno dla właściwości 0B, jak i 0C, ponieważ zawsze używają liczby mnogiej.
 
 === TextID for cargo type abbreviation (0D) ===
 
-This textID will be used in the station list window to represent the cargo waiting. It should be a two-letter abbreviation prefixed by the special character 0E to switch to the microscopic font. The microscopic font has every letter capitalized, so capitalization isn't important here. Continuing the above example, gold ore could have this as "GO" and milk as "MK" ("ML" is already taken by mail).
+Ten identyfikator tekstowy zostanie użyty w oknie listy stacji do przedstawienia czekającego ładunku. Powinien to być dwuliterowy skrót poprzedzony znakiem specjalnym 0E, aby przełączyć się na czcionkę mikroskopową. Mikroskopowa czcionka ma wielką literę, więc wielkie litery nie są tutaj ważne. Kontynuując powyższy przykład, ruda złota może mieć to jako "GO" , a mleko jako "MK" ( "ML" jest już odbierane pocztą).
 
 === Sprite number for icon (0E) ===
 
-This is a sprite number of an old TTD sprite to be displayed in the station window for this cargo, or FFFFh if the icon should be found by following the action 3 associated with this cargo. The icon must not be bigger than 10x10 pixels. One icon will be shown for every 10 units of the cargo waiting, up to 23 icons, which is the maximum.
+Jest to liczba ikonek starej ikonki TTD, która ma być wyświetlana w oknie stacji dla tego ładunku, lub FFFFh, jeśli ikonę należy znaleźć, wykonując akcję 3 związaną z tym ładunkiem. Ikona nie może być większa niż 10x10 pikseli. Jedna ikona będzie wyświetlana na każde 10 jednostek oczekującego ładunku, maksymalnie 23 ikony, co jest wartością maksymalną.
 
 === Weight of one unit of the cargo (0F) ===
 
-This property defines the weight of 1 unit from the cargo, which will be used to calculate the weight of the vehicles when loaded. The unit is 1/16 ton (which is 62.5 kg). With the examples above, gold ore should have this as 16 (since 1 ton of gold ore should weigh exactly 1 ton), while milk should have this slightly above 16 (milk is denser than water).
+Ta właściwość określa wagę 1 jednostki z ładunku, która zostanie wykorzystana do obliczenia masy pojazdów po załadowaniu. Jednostka wynosi 1/16 tony (czyli 62,5 kg). W powyższych przykładach ruda złota powinna mieć to 16 (ponieważ 1 tona rudy złota powinna ważyć dokładnie 1 tonę), podczas gdy mleko powinno mieć to nieco powyżej 16 (mleko jest gęstsze niż woda).
 
 === Penalty times and price factor (10,11,12) ===
 
-These three values define how much is paid for the delivery of the cargo type. The price factor is subject to inflation, but GRFs needn't care about this, the programme will adjust the price for them.
+Te trzy wartości określają, ile jest płacona za dostawę rodzaju ładunku. Współczynnik ceny podlega inflacji, ale GRF nie muszą się tym przejmować, program dostosuje dla nich cenę.
 
-The income generated from cargo delivery is calculated as:
+Przychody generowane z dostawy ładunków są obliczane jako:
 
 income=((((distance/2) * timefactor * amount_moved) >> 7) * cargopricefactor) >> 13
 
-where
+gdzie
 
-; a >> b : means a is arithmetically shifted right by b bits
-; distance : is the Manhattan distance between the two station signs
-; amount_moved : is the number of cargo units moved
-; cargopricefactor : is the value you set in property 12. Inflation will be applied automatically on it.
-; timefactor : is a multiplier in the range 0..255, calculated in the following way: (T1 is the value of property 10, T2 is the value of property 11, t is the time the delivery took, the unit is 185 game ticks (roughly 2.5 game days) )
+; a >> b : oznacza, że ​​a jest arytmetycznie przesunięte w prawo o bity
+; distance : to odległość 'Manhattanu' między dwoma znakami stacji
+; amount_moved : (ilość ) to liczba przeniesionych jednostek ładunku
+; cargopricefactor : jest wartością ustawioną we właściwości 12. Inflacja zostanie do niej zastosowana automatycznie.
+; timefactor : to mnożnik z zakresu 0..255, obliczony w następujący sposób: (T1 jest wartością właściwości 10, T2 jest wartością właściwości 11, t jest czasem dostawy, jednostka to 185 tyknięć gry (z grubsza 2,5 dnia gry) )
 
 
     if t<=T1 then timefactor=255
@@ -119,27 +119,27 @@ where
 
 === Color for the station list window (13) ===
 
-This color index will be used to draw the rectangle representing the amount waiting from the current cargo type in the station list window. The index should be given for the DOS palette. OpenTTD and TTDPatch will automatically translate the index for the Windows palette, if they use the windows base graphics.
+Ten indeks kolorów zostanie użyty do narysowania prostokąta reprezentującego ilość oczekującą od bieżącego rodzaju ładunku w oknie listy stacji. Indeks należy podać dla palety DOS. OpenTTD i TTDPatch automatycznie przetłumaczą indeks dla palety Windows, jeśli używają podstawowej grafiki systemu Windows.
 
 === Color for the cargo payment list window (14) ===
 
-The graph of the current cargo will be drawn using this color in the cargo payment rates graph. The index should be given for the DOS palette, the Windows version of TTDPatch will automatically translate the index for the Windows palette.
+Wykres bieżącego ładunku zostanie narysowany przy użyciu tego koloru na wykresie stawek opłat za ładunek. Indeks należy podać dla palety DOS, wersja TTDPatch dla Windows automatycznie przetłumaczy indeks dla palety Windows.
 
 === CargoClasses (16) ===
 
-See [[en/Action0Trains#cargo-classes-28-29|train prop. 28/29]] for a description of the utility of this property.
+Patrz [[pl/Extrazi/specs.tt/Action0Trains#cargo-classes-28-29|train prop. 28/29]] , aby uzyskać opis użyteczności tej właściwości.
 
-This is a bit mask of all cargo classes to which this cargo could belong.
-The following classes are available:
+Jest to nieco maska ​​wszystkich klas ładunków, do których ten ładunek może należeć.
+Dostępne są następujące klasy:
 
 {| class="wikitable
 |-
 !bit
 !value
 !class name
-!wagon type<ref name=vehicle>Suggestion for vehicle types which transport this cargo</ref>
-!usage<ref name=refitusage>Suggestion how to best make use of this class in the refit masks of vehicles<br>OR to be included in the 'allowed classes' (train prop. 28), AND NOT in the 'disallowed classes' (train prop. 29)</ref>
-!vehicle tips<ref name=vehicleuse>Suggestions this class should be used in the property which excludes a class of cargos from a vehicle. One specific type of cargo could appear both as liquid or as piece goods (e.g. milk), which depends on the actual representation. Thus excluding the other would disallow refit to that cargo.</ref>
+!wagon type<ref name=vehicle>Sugestia dla typów pojazdów transportujących ten ładunek</ref>
+!usage<ref name=refitusage>Sugestia, jak najlepiej wykorzystać tę klasę w maskach pojazdów<br>LUB do włączenia do 'dozwolonych klas' <small>''~allowed classes''</small> (train prop. 28), ORAZ NIE w  'klasach niedozwolonych' <small>''~disallowed''</small> (prop. Pociągu 29)</ref>
+!vehicle tips<ref name=vehicleuse>Sugestie, że ta klasa powinna być używana we właściwości, która wyklucza klasę ładunków z pojazdu. Jeden konkretny rodzaj ładunku może występować zarówno jako płynny, jak i towarowy (np. Mleko), co zależy od rzeczywistej reprezentacji. Zatem wykluczenie drugiego uniemożliwiłoby przebudowę tego ładunku.</ref>
 !industry tips
 |-
 |0
@@ -273,19 +273,19 @@ The following classes are available:
 
 <references />
 
-Only cargos which are in class 0 (passengers) will appear in bus stations. Only cargos which are ''not'' in class 0 will appear in truck stations.
+Tylko ładunki należące do klasy 0 (pasażerowie) pojawią się na dworcach autobusowych. Tylko ładunki, które ''nie'' <small>''(not)''</small> są w klasie 0 pojawią się na stacjach pojazdów ciężarowych.
 
-Disclaimer: there is no guarantee that classes won't vary over time or between sets.  The classes of a cargo may change between different versions of a specific industry/cargo newgrf, or different classes may be set for the same cargo label by different industry/cargo newgrfs.   Feel free to use classes in your set for conveniently refitting to cargos, but if you - the vehicle author - care about specific cargos being transported in specific vehicles, use label based refits (changing labels without a very good reason is considered to be bad practice).
+Oświadczenie: nie ma gwarancji, że klasy nie będą się zmieniać w czasie lub między zestawami. Klasy ładunku mogą się zmieniać między różnymi wersjami określonej branży/newgrf cargo lub różne klasy dla tej samej etykiety ładunku mogą być ustawione przez różne newgrfs przemysłu/cargo. Zapraszam do korzystania z klas w swoim zestawie do wygodnego przeładowywania ładunków, ale jeśli Ty - autor pojazdu - dbasz o transport określonych ładunków w określonych pojazdach, korzystaj z przeróbek na podstawie etykiet (zmiana etykiet bez bardzo dobrego powodu jest uważana za złą praktykę ).
 
 === Cargo label (17) ===
 
-Cargo labels are globally [[en/CargoTypes#cargo-labels|unique identifiers]] for a cargo type. They are used to allow vehicle grfs to easily support many cargo types, whether they are active or not and no matter what slot or bit they are using.
+Etykiety ładunkowe są na całym świecie [[pl/Development/NewGRF/NFO Specs/CargoTypes#cargo-labels|unique identifiers]] dla rodzaju ładunku. Służą one do tego, aby grfs pojazdów mogli łatwo obsługiwać wiele rodzajów ładunków, niezależnie od tego, czy są aktywne czy nie, i bez względu na to, jakiej szczeliny lub kawałka używają..
 
-Read about the [[en/Action0/Global Settings#cargo-translation-table-09|cargo translation table]] for further info.
+Przeczytaj o [[pl/Development/NewGRF/NFO Specs/Action0/Global Settings#cargo-translation-table-09|cargo translation table]] , aby uzyskać więcej informacji.
 
 === Substitute type and multiplier for town growth (18, 19) ===
 
-These properties allow you to modify how a cargo type affects town growth. Property 18 can contain one of the following values:
+Te właściwości pozwalają modyfikować wpływ rodzaju ładunku na rozwój miasta. Właściwość 18 może zawierać jedną z następujących wartości:
 
 {| |-
 !Value!!Meaning!!{{pl/Development/NewGRF/ottdp|0.7|no}} Details<ref>This is the interpretation of OpenTTD. For TTDPatch see [http://www.tt-wiki.net/wiki/NewTownGrowthSwitches NewTownGrowthMechanism], which is quite different/unrelated.</ref>
@@ -305,9 +305,9 @@ These properties allow you to modify how a cargo type affects town growth. Prope
 
 <references />
 
-The incoming cargo amount is multiplied by property 19, then divided by 256 before it is added to the town statistics. This allows you to have smaller or bigger impact than original cargoes do. Please note that cargoes accepted by industries affect the closest town as well; for example, if you have an industry that accepts passengers, every passenger brought to the industry affects the town just like if they were transported to the town directly. Usually, it's not a good idea to have industries that process such cargoes; they should be accepted by towns only.
+Ilość przychodzącego ładunku jest mnożona przez właściwość 19, a następnie dzielona przez 256, zanim zostanie dodana do statystyk miasta. Dzięki temu możesz mieć mniejszy lub większy wpływ niż oryginalne ładunki. Należy pamiętać, że ładunki akceptowane przez przemysł wpływają również na najbliższe miasto; na przykład, jeśli masz branżę, która przyjmuje pasażerów, każdy pasażer przywieziony do branży wpływa na miasto tak, jakby był bezpośrednio transportowany do miasta. Zazwyczaj nie jest dobrym pomysłem mieć branże przetwarzające takie ładunki; powinny być akceptowane tylko przez miasta.
 
-{{pl/Development/NewGRF/ottdp|0.6-1.1|no}} In OpenTTD up to 1.1 (not 1.2) property 18 also affects the creation of subsidies. Usually subsidies apply to cargo transportation between two industries. For cargos with substitution-type 05 or 0B the destination will be a town instead. Independent of property 18 subsidies from town to town are only created for cargo slot 0 (Passengers).
+{{pl/Development/NewGRF/ottdp|0.6-1.1|no}} W OpenTTD do 1.1 (nie 1.2) właściwość 18 wpływa również na tworzenie dotacji. Zazwyczaj subsydia dotyczą transportu towarów między dwoma branżami. W przypadku ładunków z <small>''(substitution-type)''</small> typem podstawienia 05 lub 0B miejscem docelowym będzie miasto. Niezależnie od nieruchomości 18 dotacji z miasta na miasto tworzy się tylko dla miejsca na ładunek 0 (pasażerowie).
 
 === Callback flags (1A) ===
 
@@ -321,9 +321,9 @@ The incoming cargo amount is multiplied by property 19, then divided by 256 befo
 
 === TextID for displaying the units of a cargo (1B) ===
 
-This textID is used by OpenTTD to show the "short cargo" form for cargo units, e.g. "10 litres" or "10 tonnes". This textID must be set after property 0B. The text this textID refers to should properly handle plurals, e.g. "\7B item\9A\15\80\9A\10\9A\11s\9A\12".
+Ten ID tekstowy jest wykorzystywany przez OpenTTD do wyświetlenia formularza "krótkiego ładunku " <small>''(short cargo)''</small> dla jednostek ładunkowych, np. "10 litrów" lub "10 ton" . Ten ID  tekstowy należy ustawić po właściwości 0B. Tekst, do którego odnosi się ten ID tekstowy, powinien poprawnie obsługiwać liczbę mnogą, np. "\7B pozycja<small>''( item)''</small>\9A\15\80\9A\10\9A\11s\9A\12" .
 
-The default for this textID depends on the default for property 0B; if the default 0B string has "litre", then the default for this textID will be the unit for litres. OpenTTD maps the following textIDs so you don't need to provide translations:
+Domyślna wartość tego identyfikatora tekstowego zależy od wartości domyślnej dla właściwości 0B; jeśli domyślny ciąg 0B ma "litr" , wówczas domyślnym dla tego textID będzie jednostka litrów. OpenTTD mapuje następujące ID''`y'' tekstowe, więc nie trzeba dostarczać tłumaczeń:
 
 {| |-
 !textID!!String
@@ -341,21 +341,21 @@ The default for this textID depends on the default for property 0B; if the defau
 |0054||<num> crate(s)
 |}
 
-The "tonne" and "litre" strings (textID 0050 and 0052) are automatically updated based on the user settings of unit display, e.g. they "tonne" might become "kg". The "(s)" is for display purposes; in reality that is a choice list.
+Ciągi znaków "tona" i "litr" (textID 0050 i 0052) są automatycznie aktualizowane na podstawie ustawień użytkownika wyświetlacza jednostki, np. "tona" może stać się "kg". "(s)" służą do celów wyświetlania; w rzeczywistości jest to lista wyboru.
 
 === TextID for displaying the amount of cargo (1C) ===
 
-This textID is used by OpenTTD to show the "long cargo" form for cargo units, e.g. "10 litres of water" or "10 tonnes of coal". This textID must be set after property 0c. The text this textID refers to should properly handle plurals, e.g. "\7B item\9A\15\80\9A\10\9A\11s\9A\12 of livestock".
+Ten identyfikator tekstowy jest wykorzystywany przez OpenTTD do wyświetlenia formularza „długi ładunek” dla jednostek ładunkowych, np. "10 litrów wody" lub "10 ton węgla" . Ten textID należy ustawić po właściwości 0c. Tekst, do którego odnosi się ten textID , powinien poprawnie obsługiwać liczbę mnogą, np. "\7B item\9A\15\80\9A\10\9A\11s\9A\12 żywca" <small>''(livestock)''</small> .
 
-The default for this textID depends on the default for property 0C, but with support for plurals. For "X litre(s)" or "X tonne(s)" you should respectively use string codes 87 and 9A 0D.
+Wartość domyślna dla tego textID zależy od wartości domyślnej dla właściwości 0C, ale z obsługą liczby mnogiej. W przypadku "X litre(s)" lub "X tonne(s)" należy odpowiednio użyć kodów łańcuchowych 87 i 9A 0D .
 
 === Capacity multiplier (1D) ===
 
-This defines the capacity (and indirectly loading speed) of vehicles carrying this cargo type, if the vehicle sets no specific capacity to this specific cargo type.
+Definiuje to pojemność (i pośrednio prędkość ładowania) pojazdów przewożących ten rodzaj ładunku, jeżeli pojazd nie ustawia określonej pojemności dla tego konkretnego rodzaju ładunku.
 
-Set this property to the amount of cargo a vehicle shall carry, which can carry 0x100 (256) tons of coal or 0x100 (256) thousand litres of water (whatever comparison is more suitable for your cargotype). Depending on whether your cargo type is light or heavy you should set this property either comparing the weight or the volume.
+Ustaw tę właściwość na ilość ładunku, który będzie przewożony pojazd, który może przewozić 0x100 (256) ton węgla lub 0x100 (256) tysięcy litrów wody (cokolwiek porównanie jest bardziej odpowiednie dla twojego cargotypu). W zależności od tego, czy typ ładunku jest lekki, czy ciężki, należy ustawić tę właściwość, porównując wagę lub objętość.
 
-The default value of this property is:
+Domyślna wartość tej właściwości to:
 {| |-
 ! Cargo slot !! Default cargo in this slot !! Property 1D !! Meaning
 |-
