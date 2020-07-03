@@ -154,7 +154,7 @@ W przeciwnym razie pojazd jest wyłączony.
 
 == Rail type label (08) ==
 
-These are globally unique four-letter identifiers for specific rail types (analoguous to [[en/Action0Cargos#cargo-label-17|cargo labels]]), used to make various rail types accessible from train vehicle grfs. Reserved labels for default rail types are:
+Są to unikatowe na skalę światową czteroliterowe identyfikatory dla określonych rodzajów szyn (analogiczne do [[pl/Development/NewGRF/NFO Specs/Action0/Cargos#cargo-label-17|cargo labels]] ), używane do udostępniania różnych typów szyn pociągiem grfs pojazdu. Zarezerwowane etykiety dla domyślnych typów szyn to:
 
 {| class="wikitable
 |-
@@ -174,19 +174,19 @@ These are globally unique four-letter identifiers for specific rail types (analo
 | Maglev Rail
 |}
 
-{{pl/Development/NewGRF/ottdp|1.0|no|ottdrev=r18969}} 16 railtypes can be defined.
+{{pl/Development/NewGRF/ottdp|1.0|no|ottdrev=r18969}} Można zdefiniować 16 typów szyn.
 
-{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=bf8d7df7}} 64 railtypes can be defined.
+{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=bf8d7df7}} Można zdefiniować 64 typy kolei.
 
 Zestawy typów szyn mogą wykorzystywać do 64 rodzajów szyn i muszą określać własne [[pl/Development/NewGRF/NFO Specs/TracktypeLabels|etykiety]].
 
-See also [[en/Action0/Global Settings#rail-type-translation-table-12|Rail Type Translation Table]] for further info.
+Zobacz także [[pl/Development/NewGRF/NFO Specs/Action0/Global Settings#railtype-translation-table-12|Rail Type Translation Table]] w celu uzyskania dalszych informacji.
 
 == Build rail toolbar caption (09) ==
 
 ID ciągu nazwy typu szyny, jak pokazano w podpisie paska narzędzi.
 
-{{pl/Development/NewGRF/grfTill|7}} {{pl/Development/NewGRF/ottd|1.2|ottdrev=r23129}} For backwards compatibility, setting this property sets the rail type name (property 1B) to this string as well for GRF versions 7 or below.
+{{pl/Development/NewGRF/grfTill|7}} {{pl/Development/NewGRF/ottd|1.2|ottdrev=r23129}} W celu zapewnienia zgodności wstecznej ustawienie tej właściwości ustawia nazwę typu szyny (właściwość 1B) na ten ciąg również w przypadku wersji GRF 7 lub niższej.
 
 OpenTTD przed wersjami r20342 i 1.0.3 wymagają, aby ciąg zaczynał się od białego kodu sterującego. Późniejsze wersje OpenTTD automatycznie domyślnie zmieniają kolor na biały.
 
@@ -208,11 +208,11 @@ ID ciągu dla typu szyny pokazany w oknie automatycznego zastępowania.
 
 == New engines (0D) ==
 
-StringID to use for showing texts of the type "We have invented a new &lt;rail type&gt; engine".
+StringID do wyświetlania tekstów typu "Wynaleźliśmy nowy &lt;rail type&gt; silnik" <small>''(engine)''</small>.
 
 == Compatible rail type list (0E) ==
 
-List of rail types on which trains of this rail type can run, even though they might not be powered. E.g. wagons/engines of "eletrified rail"-type are also compatible to "normal rail" and "third rail" type, but they are not powered (there need to be an other powered engine in the consist to move the train).
+Lista rodzajów szyn, na których mogą jeździć pociągi tego rodzaju, nawet jeśli mogą nie być zasilane. Na przykład. wagony/silniki typu "zelektryfikowana szyna" <small>''(eletrified rail)''</small> - są również kompatybilne z typami "normal rail" i "trzecia szyna" <small>''(third)''</small> , ale nie są napędzane (w celu przemieszczania pociągu musi istnieć inny silnik z napędem).
 
 Format to:
 
@@ -224,13 +224,13 @@ Należy pamiętać, że te właściwości dotyczą pociągów tego rodzaju szyn,
 
 == Powered rail type list (0F) ==
 
-List of rail types on which trains of this rail type are powered. E.g. engines of "normal rail"-type are powered on "electrified rail"- and "third-rail"-type as well.
+Lista rodzajów szyn, na których napędzane są pociągi tego rodzaju szyn. Na przykład. silniki typu "normalna szyna" są zasilane również na "szynie zelektryfikowanej" - i "trzeciej szynie" .
 
 Taki sam format jak dla właściwości 0E powyżej.
 
 == Rail type flags (10) ==
 
-Flags to define properties related to the rail type:
+Flagi do zdefiniowania właściwości związanych z typem szyny:
 
 {| class="wikitable"
 |-
@@ -319,15 +319,15 @@ Ta właściwość ustawia mnożnik na przewagę prędkości łuku, którą otrzy
 | 115
 |}
 
-"Curve length" is the average number of wagons of the train between turns. However, very sharp turns (values 0 and 1) are not averaged out in longer trains.
+"Curve length" <small>(Długość krzywej)</small> to średnia liczba wagonów pociągu między zwojami. Jednak bardzo ostre zakręty (wartości 0 i 1) nie są uśredniane w dłuższych pociągach.
 
-The maximum speed for a train in a curve is defined by "base speed advantage" * (2 + "property 11"). Tilting trains get an additional bonus of 20% to this value.
+Maksymalna prędkość pociągu na łuku jest określona przez "przewagę prędkości podstawowej" * (2 + "właściwość 11"). Pociągi przechylające otrzymują dodatkową premię w wysokości 20% do tej wartości.
 
 Dla domyślnych typów szyn ta właściwość wynosi 0 dla szyny normalnej i szyny zelektryfikowanej, 1 dla szyny jednoszynowej i 2 dla szyny maglev.
 
 == Station (and depot) graphics (12) ==
 
-Ta właściwość określa domyślną grafikę dla stacji. Jeśli nie zdefiniowano żadnych duszków zajezdni, definiuje to jednocześnie duszki, które mają być używane. Istnieją trzy rodzaje domyślnych stacji (i składów), zwykle związanych z torami kolejowymi, jednoszynowymi i maglevowymi. Prawidłowe wartości to:
+Ta właściwość określa domyślną grafikę dla stacji. Jeśli nie zdefiniowano żadnych 'sprites' zajezdni, definiuje to jednocześnie 'sprites' , które mają być używane. Istnieją trzy rodzaje domyślnych stacji (i składów), zwykle związanych z torami kolejowymi, jednoszynowymi i maglevowymi. Prawidłowe wartości to:
 
 {| class="wikitable"
 |-
@@ -346,7 +346,7 @@ Ta właściwość określa domyślną grafikę dla stacji. Jeśli nie zdefiniowa
 
 == Speed limit (14) ==
 
-Speed limit in mph*1.6 (approx. km/h). Set to "0" for no limit at all.
+Ograniczenie prędkości w mph*1.6  (ok. km/h). Ustaw na "0" w ogóle bez limitu.
 
 == Acceleration model (15) ==
 
@@ -371,7 +371,7 @@ Obecnie nie ma różnicy między normalną koleją a koleją jednoszynową.
 
 == Map colour (16) ==
 
-Ta właściwość określa kolor, jaki ten typ ścieżki jest rysowany w widoku minimapy. Wartość bajtu określa wpis koloru w [[en/PalettesAndCoordinates|DOS palette]].
+Ta właściwość określa kolor, jaki ten typ ścieżki jest rysowany w widoku minimapy. Wartość bajtu określa wpis koloru w <!--[[PalettesAndCoordinates|DOS palette]]-->[http://newgrf-specs.tt-wiki.net/wiki/PalettesAndCoordinates DOS palette].
 
 == Introduction date (17) ==
 
@@ -422,11 +422,11 @@ Zatem typ szyny, który (wewnętrznie) otrzymuje indeks 8, otrzyma wartość dom
 
 ID ciągu nazwy typu szyny.
 
-{{pl/Development/NewGRF/grfTill|7}} For GRF versions 7 or earlier, set property 1B ''after'' setting property 09, as property 09 sets the rail type name as well for backwards compatibility.
+{{pl/Development/NewGRF/grfTill|7}} W przypadku GRF w wersji 7 lub wcześniejszej ustaw właściwość 1B ''po'' <small>''(after)''</small> ustawieniu właściwości 09, ponieważ właściwość 09 ustawia również nazwę typu szyny dla kompatybilności wstecznej.
 
 == Alternate rail type labels (1D) ==
 
-A list of alternate labels that get "redirected" to this rail type when used e.g. as track type of train or when testing if a label is defined. The redirection only happens if the alternate label isn't defined as a real rail type. Same format as for property 0E above.
+Lista alternatywnych etykiet, które "przekierowują" <small>''(redirected)''</small> na ten typ szyny, gdy są używane np. jako typ toru pociągu lub podczas badania, czy zdefiniowano etykietę. Przekierowanie następuje tylko wtedy, gdy alternatywna etykieta nie jest zdefiniowana jako prawdziwy typ szyny. Taki sam format jak dla właściwości 0E powyżej.
 
 Alternatywne etykiety nie są brane pod uwagę przy ocenie właściwości 0E, 0F, 18 i 19.
 
