@@ -10,13 +10,13 @@
 |-
 |40||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Construction state of the tile: a value between 0 and 3 (only defined for industries)
 |-
-|41||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Ground type, the same as variable 81 for [[en/VarAction2Canals|canals]]
+|41||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Ground type, the same as variable 81 for [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Canals|canals]]
 |-
-|42||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Current [[en/TownZones|town zone]] of the tile in the nearest town
+|42||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Current [[pl/Development/NewGRF/NFO Specs/TownZones|town zone]] of the tile in the nearest town
 |-
 |43||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Relative position
 |-
-|44||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Animation frame. Like [[en/VarAction2Houses#current-animation-frame-46|house variable 46]] but can contain anything 0..FF.
+|44||B||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Animation frame. Like [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Houses#current-animation-frame-46|house variable 46]] but can contain anything 0..FF.
 |-
 |60||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Land info of nearby tiles
 |-
@@ -25,17 +25,17 @@
 |62||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1270}}||Get industry or airport tile ID at offset
 |}
 
-VarAction2 for airport tiles is only available in OpenTTD r19204 or later
+VarAction2 dla kafelków lotniska jest dostępna tylko w wersji OpenTTD r19204 lub nowszej
 
-No 80+x variables are available (nor will they ever be). Try to access one will crash TTD.
+Brak dostępnych zmiennych 80+x (nigdy nie będzie). Próba uzyskania dostępu spowoduje awarię TTD.
 
-=== [[en/TownZones|Town zone]] (42) ===
+=== [[pl/Development/NewGRF/NFO Specs/TownZones|Town zone]] (42) ===
 
-[[en/TownZones|Town zone]] where the building is situated (which is not necessarily the founder of the town). Zero if the tile isn't in a town. This is mostly useful for banks and other urban industries.
+[[pl/Development/NewGRF/NFO Specs/TownZones|Town zone]] gdzie znajduje się budynek (co niekoniecznie jest założycielem miasta). Zero, jeśli kafelka nie ma w mieście. Jest to szczególnie przydatne dla banków i innych branż miejskich.
 
 === Relative position (43) ===
 
-This is the position of the tile relative to the northernmost tile of the industry or airport.
+Jest to położenie kafelka względem najbardziej wysuniętego na północ kafelka branży lub lotniska.
 
 '''Format:''' 00yxYYXX
 
@@ -51,19 +51,19 @@ This is the position of the tile relative to the northernmost tile of the indust
 |YY||same, but stored in a byte instead of a nibble
 |}
 
-Because of the fact that y and x are nibbles, they may contain incorrect values if your industry exceeds 16 tiles in either direction. This variable can be used to spare industry or airport tile IDs: the same tile type can choose different representation depending on where exactly it is inside the industry.
+Z uwagi na fakt, że y i x są skubkami, mogą zawierać niepoprawne wartości, jeśli Twoja branża przekroczy 16 płytek w dowolnym kierunku. Ta zmienna może być używana do oszczędzania identyfikatorów kafelków branży lub lotniska: ten sam typ kafelków może wybrać inną reprezentację w zależności od tego, gdzie dokładnie znajduje się w branży.
 
 === Land info of nearby tiles (60) ===
 
-The parameter of this variable is an offset from the position of the current tile. The low nibble contains the signed X offset (that is 0h=0, 1h=+1 ... 7h=+7; 8h=-8, 9h=-7 ... Fh=-1), the high nibble contains the Y offset. Therefore the parameter 00h accesses the current tile itself.
+Parametr tej zmiennej jest przesunięciem względem położenia bieżącego kafelka. Niby-nibble zawiera podpisane przesunięcie X (to znaczy 0h=0, 1h=+1 ... 7h=+7; 8h=-8, 9h=-7 ... Fh=-1 ), high-nibble zawiera Przesunięcie Y Dlatego parametr 00h uzyskuje dostęp do samego bieżącego kafla.
 
-The returned doubleword is in the format '''rc zz bb ss''', where the meaning of the letters is:
-* '''r''' is reserved for future use
-* '''c''' contains the [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#Landscape landscape class] of the tile. {{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 72}} 
-* '''zz''' is the height of the lowest corner of the tile.
-: {{pl/Development/NewGRF/grfTill|7}} For GRF version 7 and below: Multiple of 8.
-: {{pl/Development/NewGRF/grfFrom|8}} For GRF version 8 and above: Multiple of 1.
-* '''bb''' is a bit field, the meaning of the individual bits are:
+Zwrócone podwójne słowo ma format '''rc zz bb ss''' , w którym oznaczono litery:
+* '''r''' jest zarezerwowany do wykorzystania w przyszłości
+* '''c''' zawiera [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#Landscape landscape class] kafla <small>''(tile)''</small>. {{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 72}} 
+* '''zz''' to wysokość najniższego rogu płytki.
+: {{pl/Development/NewGRF/grfTill|7}} Dla GRF w wersji 7 i niższej: wielokrotność 8.
+: {{pl/Development/NewGRF/grfFrom|8}} Dla GRF w wersji 8 i nowszej: wielokrotność 1.
+* '''bb''' to pole bitowe, znaczenie poszczególnych bitów to:
 {| |-
 !Bit||Value||Version||Meaning
 |-
@@ -77,7 +77,7 @@ The returned doubleword is in the format '''rc zz bb ss''', where the meaning of
 |-
 |7|| || ||reserved for future use
 |}
-* '''ss''' contains the slope data of the tile. The meaning of the individual bits is:
+* '''ss''' zawiera dane nachylenia kafla. Znaczenie poszczególnych bitów to:
 {| |-
 !Bit||Value||Meaning
 |-
@@ -94,22 +94,22 @@ The returned doubleword is in the format '''rc zz bb ss''', where the meaning of
 |other bits|| ||always zero
 |}
 
-The resulting, possible values for this byte are illustrated in this image (from OpenTTD docs):
+Wynikowe, możliwe wartości tego bajtu są zilustrowane na tym obrazku (z dokumentów OpenTTD):
 
-[[File:en/Industrytile var60.png]]
+<!--[[File:Industrytile_var60.png]]-->[http://newgrf-specs.tt-wiki.net/wiki/File:Industrytile_var60.png File:Industrytile_var60.png]
 
-It is sometimes more useful to know the height of the highest corner of the tile. This can be computed with "zz/8 + ((ss+15)/16)", that is: "60 XX 33 1F 00 60 XX 40 FF 0F 10", where XX is the parameter. This returns a number 0..31 instead of 0..248, though.
-Why this works, and how to adjust for the different value range, are left as exercises for the reader.
+Czasami bardziej przydatna jest znajomość wysokości najwyższego rogu płytki. Można to obliczyć za pomocą "zz/8 + ((ss+15)/16)" , to znaczy: "60 XX 33 1F 00 60 XX 40 FF 0F 10" , gdzie XX jest parametrem. Zwraca jednak liczbę 0..31 zamiast 0..248.
+Dlaczego to działa i jak dostosować się do innego zakresu wartości, pozostawia się jako ćwiczenia dla czytelnika.
 
 
-Be aware that due to the way that TTD generates a random map, the class number of a neighbour tile could be different from what you expect. E.g., when placing a water-based industry adjacent to a coast in a random game, these tiles aren´t adjacent to water anymore after the industry has been generated and therefore you can't reliably check for coast tiles in the industry´s placement callback.
+Należy pamiętać, że ze względu na sposób, w jaki TTD generuje losową mapę, numer klasy sąsiadującego kafelka może różnić się od oczekiwanego. Na przykład, podczas umieszczania branży opartej na wodzie w sąsiedztwie wybrzeża w losowej grze, płytki te nie sąsiadują już z wodą po wygenerowaniu branży, dlatego nie można rzetelnie sprawdzić, czy na wybrzeżu znajdują się płytki wybrzeża. oddzwonić.
 
 === Animation stage for nearby tiles (61) ===
 
-The parameter of this variable is interpreted the same way as for variable 60. The return value is FFFFFFFFh if the given tile doesn't belong to the industry, and the number of the current animation frame of the given tile otherwise. (That is, the value that var 44 would return for the given tile.)
+Parametr tej zmiennej jest interpretowany w taki sam sposób, jak dla zmiennej 60. Zwracana wartość to FFFFFFFFh, jeśli dany kafelek nie należy do branży, a liczba bieżącej klatki animacji danego kafelka w przeciwnym razie. (To znaczy wartość, którą var 44 zwróci dla danego kafelka.)
 
 === Get industry tile ID at offset (62) ===
 
-Works similarly to industry variable 60, except that the point of reference is the current tile instead of the north tile of the industry, and the offsets are considered to be signed.
+Działa podobnie do przemysłowej zmiennej 60, z tym wyjątkiem, że punktem odniesienia jest bieżący kafelek zamiast północnego kafelka branży, a przesunięcia uważa się za podpisane.
 
 ==Przykład==
