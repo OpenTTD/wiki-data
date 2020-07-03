@@ -5,10 +5,10 @@
 Branże działają podobnie jak budynki miejskie. Limit liczby rodzajów branży wynosi:
 * {{pl/Development/NewGRF/ttdp|2.5}} TTDPatch: 37
 * {{pl/Development/NewGRF/ottd|&lt;1.6}} OpenTTD < 1.6: 64
-* {{pl/Development/NewGRF/ottd|1.6}} OpenTTD ⩾ 1.6: 128 per NewGRF, 240 in total
-The non-overridden original types count towards the (total) limit. Industries don't have a climate mask; you should simply not define an industry if it would be for the wrong climate.
+* {{pl/Development/NewGRF/ottd|1.6}} OpenTTD ⩾ 1.6: 128 na NewGRF, w sumie 240
+Nieprzepisane typy oryginalne liczą się do (całkowitego) limitu. Branże nie mają maski klimatycznej; nie powinieneś po prostu definiować branży, jeśli byłaby nieodpowiednia.
 
-Defining industries follows the same schema as houses do: to start using an ID, you first need to define it by setting property 8 for it. If you try to reference an ID (either via action0 or via action3) that isn't defined, your request is ignored, but not reported as an error, either. This means that if you want to conditionally define an ID, all you need to do is skipping the action0 that sets property8, and everything else gets skipped automatically.
+Definiowanie branż odbywa się według tego samego schematu, co domy: aby zacząć korzystać z identyfikatora, najpierw należy go zdefiniować, ustawiając dla niego właściwość 8. Jeśli spróbujesz odwołać się do identyfikatora (poprzez akcję 0 lub przez akcję 3), który nie jest zdefiniowany, twoje żądanie zostanie zignorowane, ale również nie zostanie zgłoszone jako błąd. Oznacza to, że jeśli chcesz warunkowo zdefiniować identyfikator, wystarczy pominąć akcję0, która ustawia właściwość 8, a wszystko inne zostanie automatycznie pominięte.
 
 == Properties ==
 {| |-
@@ -77,25 +77,25 @@ Defining industries follows the same schema as houses do: to start using an ID, 
 
 === Substitute industry type (08) ===
 
-Substitute industry type. The first assignment of this property copies all properties of the old type to this new type. Unlike for houses, the substitute type won't replace this new type if the definition becomes unavailable. List of [[en/IndustryDefaultProps#climate-independent-properties |valid industry types]]
+Zastępczy typ branży. Pierwsze przypisanie tej właściwości powoduje skopiowanie wszystkich właściwości starego typu do tego nowego typu. W przeciwieństwie do domów, typ zastępczy nie zastąpi tego nowego typu, jeśli definicja stanie się niedostępna. Lista [[pl/Development/NewGRF/NFO Specs/IndustryDefaultProps#climate-independent-properties |valid industry types]]
 
-There's a special use of this property beginning from alpha 70: if you set it to FFh, you can disable an original industry. In this case, the ID used must be the number of industry you want to disable. Disable requests are ignored for industries not present on the current climate and industries already overridden.
+Istnieje specjalne zastosowanie tej właściwości, począwszy od alfa 70: jeśli ustawisz ją na FFh, możesz wyłączyć oryginalną branżę. W takim przypadku użyty ID musi być numerem branży, którą chcesz wyłączyć. Żądania wyłączenia są ignorowane dla branż nieobecnych w obecnym klimacie i branżach już zastąpionych.
 
-{{pl/Development/NewGRF/ottdp|1.1|ottdrev=r20108}} AIs can use the substitute type to make decisions about station graphics and vehicle choice via [[en/Callbacks#ai-construction-purchase-selection-18| callback 18]].
+{{pl/Development/NewGRF/ottdp|1.1|ottdrev=r20108}} AI mogą używać typu zastępczego do podejmowania decyzji dotyczących grafiki stacji i wyboru pojazdu za pośrednictwem [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#ai-construction-purchase-selection-18| callback 18]] .
 
 === Industry type override (09) ===
 
-Industry type override. The overridden industry type won't be built in new random games. If the GRF file becomes active after the game was started, industries of the overridden new type won't be replaced by the new type. List of [[en/IndustryDefaultProps#climate-independent-properties |valid industry types]]
+Zastąpienie typu branży. Zastępowany typ branży nie będzie wbudowany w nowe losowe gry. Jeśli plik GRF stanie się aktywny po uruchomieniu gry, branże zastąpionego nowego typu nie zostaną zastąpione przez nowy typ. Lista [[pl/Development/NewGRF/NFO Specs/IndustryDefaultProps#climate-independent-properties |valid industry types]]
 
-By overriding an old type, you're saying "my type is a substitute for that old type". When GRFs ask information about the old type you've overridden (via industry variable 67, for example), they will get information about your type instead. If you want to replace an old industry type with something completely different, use the "disable" function of property 08 (see above), then define the new industry type ''without'' using property 09. A rule of thumb: if your industry accepts or produces different cargoes than the original one, it should not override the original one.
+Przesłaniając stary typ, mówisz "mój typ zastępuje ten stary typ". Gdy GRF zapytają o stary typ, który zastąpiłeś (na przykład poprzez zmienną branżową 67), zamiast tego otrzymają informacje o twoim typie. Jeśli chcesz zastąpić stary typ branży czymś zupełnie innym, użyj funkcji "wyłącz" <small>''(disable)''</small> właściwości 08 (patrz wyżej), a następnie zdefiniuj nowy typ branży ''bez'' <small>''(without)''</small> za pomocą właściwości 09. Ogólna zasada: jeśli twoja przemysł przyjmuje lub produkuje ładunki inne niż oryginalne, nie powinien zastępować oryginalnego.
 
-For example, if you want to replace the old coal mine with something that changes its coal production more dynamically, use property 09 to override industry 00. This way, other industries that want to be far from coal mines will stay far from your industry type too. If, however, you want to replace the coal mine with a potash mine, do not use property 09. This will ensure that other industries don't consider your type as a coal mine.
+Na przykład, jeśli chcesz zastąpić starą kopalnię czymś, co bardziej dynamicznie zmienia produkcję węgla, użyj właściwości 09, aby zastąpić przemysł 00. W ten sposób inne branże, które chcą być z dala od kopalni węgla, pozostaną z dala od twojego rodzaju przemysłu też. Jeśli jednak chcesz zastąpić kopalnię węgla kopalnią potażu, nie używaj nieruchomości 09. Zapewni to, że inne branże nie uznają twojego typu za kopalnię węgla.
 
-Please note, however, that only one new industry can override an old type. If two new types want to override the same old type, the first one wins, and the second is added normally, ignoring its property 09.
+Należy jednak pamiętać, że tylko jedna nowa branża może zastąpić stary typ. Jeśli dwa nowe typy chcą zastąpić ten sam stary typ, pierwszy wygrywa, a drugi jest dodawany normalnie, ignorując jego właściwość 09.
 
 === Set industry layout(s) (0A) ===
 
-Format of industry layout tables:
+Format tabel układu branżowego:
 
 {| |-
 !Size!!Variable!!Meaning
@@ -109,7 +109,7 @@ Format of industry layout tables:
 
 Format of an industry layout:
 
-As a special case, if the first byte of a new industry layout is FEh, then only two bytes follow: the industry number and the layout number. The specified layout of the specified old industry type will be added to the layout list of the current industry. The following applies only if the first byte wasn't FEh
+Jako szczególny przypadek, jeśli pierwszym bajtem nowego układu branżowego jest FEh, następują tylko dwa bajty: numer branżowy i numer układu. Określony układ określonego starego typu branży zostanie dodany do listy układów bieżącej branży. Poniższe ma zastosowanie tylko wtedy, gdy pierwszy bajt nie był FEh
 
 {| |-
 !Size!!Variable!!Meaning
@@ -132,7 +132,7 @@ As a special case, if the first byte of a new industry layout is FEh, then only 
 |
 |}
 
-The layout consists of a list of the above tile definitions, terminated by two bytes: 0,80h
+Układ składa się z listy powyższych definicji kafelków, zakończonych dwoma bajtami: 0,80h
 
 === Industry production type (0B) ===
 
@@ -151,53 +151,53 @@ Other values are reserved; do not set any other values.
 
 === Industry messages (0C..0E), new industry text ID (1B) ===
 
-The text associated with these textID will be shown if the industry announces closedown, if the industry increases production, if the industry decreases production or when the industry is generated during the game.
+Tekst skojarzony z tymi identyfikatorami tekstowymi zostanie wyświetlony, jeśli branża ogłosi zamknięcie, jeśli przemysł zwiększy produkcję, jeśli przemysł zmniejszy produkcję lub gdy przemysł zostanie wygenerowany podczas gry.
 
-For the generation message, by default, all industries have "New xxx is being constructed near yyy", except forests, that have "New Forest is being planted near yyy".
+Dla komunikatu generacyjnego domyślnie wszystkie branże mają napis „Nowy xxx jest budowany w pobliżu yyy”, z wyjątkiem lasów, w których "Nowy las jest sadzony w pobliżu yyy".
 
 === Production cargo types (10) ===
 
-Two climate-dependent cargo numbers representing the cargo types the industry can produce. Unused slots can be filled with FFh. List of valid types: [[en/CargoTypes]]
+Dwie zależne od klimatu liczby ładunków reprezentujące typy ładunków, które przemysł może wytwarzać. Niewykorzystane miejsca można wypełnić FFh. Lista prawidłowych typów: [[pl//extrazi/specs.tt/CargoTypes|CargoTypes]]
 
-{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} This property only supports two output cargos. Use property 25 instead to output more cargo types.
+{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} Ta właściwość obsługuje tylko dwa ładunki wyjściowe. Zamiast tego użyj właściwości 25, aby wyprowadzić więcej rodzajów ładunku.
 
 === Acceptance cargo types (11) ===
 
-Three climate-dependent cargo numbers representing the cargo types the industry can accept, plus a fourth filler byte which is always ignored. Unused slots can be filled with FFh. List of valid types: [[en/CargoTypes]]
+Three climate-dependent cargo numbers representing the cargo types the industry can accept, plus a fourth filler byte which is always ignored. Unused slots can be filled with FFh. List of valid types: [[pl//extrazi/specs.tt/CargoTypes|CargoTypes]]
 
-These cargo types will only be really accepted if the according acceptance of the industry tiles adds up to 8/8 or more.
+Te typy ładunków zostaną naprawdę zaakceptowane tylko wtedy, gdy odpowiednia akceptacja kafelków branży wyniesie 8/8 lub więcej.
 
-From GRF version 7 and above, the meaning of the above two properties will change: instead of climate-dependent cargo slot numbers, you have to give climate-independent cargo IDs. If your GRF has a cargo translation table, then this ID is the index in that table; otherwise, it's the cargo bit. Cargoes not currently present will be changed to FFh. Please note that TTD stops processing these lists at the first FFh value, so specifying absent cargoes isn't always safe.
+Począwszy od wersji 7 GRF i wyższej, znaczenie powyższych dwóch właściwości ulegnie zmianie: zamiast numerów szczelin ładunkowych zależnych od klimatu należy podać niezależne od klimatu ID ładunków. Jeśli twój GRF ma tabelę translacji ładunku, wówczas ten ID jest indeksem w tej tabeli; w przeciwnym razie jest to kawałek ładunku. Ładunki obecnie nieobecne zostaną zmienione na FFh. Należy pamiętać, że TTD przestaje przetwarzać te listy przy pierwszej wartości FFh, więc określenie nieobecnych ładunków nie zawsze jest bezpieczne.
 
-{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} This property only supports three input cargos. Use property 26 instead to output more cargo types.
+{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} Ta właściwość obsługuje tylko trzy ładunki wejściowe. Zamiast tego użyj właściwości 26, aby wyprowadzić więcej rodzajów ładunku.
 
 === Production multipliers (12, 13) ===
 
-If nonzero, the industry periodically (every 256 ticks, that is 8 or 9 times in a month) produces the given amount from the according cargo type. The properties specify the amount produced at default production level, they are scaled equally on [[en/Callbacks#random-production-change-29|production changes]].
+W przypadku wartości niezerowych branża okresowo (co 256 tyknięć, czyli 8 lub 9 razy w miesiącu) wytwarza określoną ilość z odpowiedniego rodzaju ładunku. Właściwości określają ilość produkowaną na domyślnym poziomie produkcji, są one równomiernie skalowane [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#random-production-change-29|production changes]].
 
-{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} This properties only supports two output cargos. Use property 27 instead to output more cargo types.
+{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} Ta właściwość obsługuje tylko dwa ładunki wyjściowe. Zamiast tego użyj właściwości 27, aby wyprowadzić więcej rodzajów ładunku.
 
 === Minimal amount of cargo distributed (14) ===
 
-The produced cargo will be distributed to stations only after it exceeds this amount.
+Wyprodukowany ładunek zostanie rozdzielony na stacje dopiero po przekroczeniu tej ilości.
 
 === Random sound effects (15) ===
 
-The data starts with a byte defining the number of available effects, then one byte per effect. TTD periodically picks one of the available effects randomly, and plays it.
+Dane zaczynają się od bajtu określającego liczbę dostępnych efektów, a następnie jeden bajt na efekt. TTD okresowo wybiera losowo jeden z dostępnych efektów i odtwarza go.
 
 === Conflicting industry types (16) ===
 
-3 bytes define 3 types that won't appear in the vicinity of this industry. If a byte has bit 7 set, the bottom 6 bits are the ID of a new type already defined in the current GRF file. If bit 7 is clear, the bottom 6 bits specify an old industry type. FFh can be used to fill unused entries. You shouldn't modify property 9 after the type has been referenced by a property 16. List of [[en/IndustryDefaultProps#climate-independent-properties |valid industry types]]
+3 bajty definiują 3 typy, które nie pojawią się w pobliżu tej branży. Jeśli bajt ma ustawiony bit 7, dolne 6 bitów jest identyfikatorem nowego typu już zdefiniowanego w bieżącym pliku GRF. Jeśli bit 7 jest wyraźny, dolne 6 bitów określa stary typ branży. FFh można wykorzystać do wypełnienia nieużywanych wpisów. Nie należy modyfikować właściwości 9 po odwołaniu się do typu przez właściwość 16. Lista [[en/IndustryDefaultProps#climate-independent-properties |valid industry types]]
 
 === Probability in random game (17), Probability during gameplay (18) ===
 
-Old types have probabilities between 0 and 10. If the random game probability value is nonzero, at least one instance of this type is guaranteed to appear on the map.
+Stare typy mają prawdopodobieństwo od 0 do 10. Jeśli wartość prawdopodobieństwa losowej gry jest różna od zera, na mapie z pewnością pojawi się co najmniej jedno wystąpienie tego typu.
 
-These probabilities are "relative probabilities". That is, if you set the probability of industry A to twice the probability of industry B, industry A will appear about twice as often as B. Increasing the probabilities of all industries on the other hand changes nothing. The appearance probabilities have no influence on how many industries are placed in total.
+Te prawdopodobieństwa są "prawdopodobieństwami względnymi" <small>''(relative probabilities)''</small> . Oznacza to, że jeśli ustawisz prawdopodobieństwo dla przemysłu A na dwukrotność prawdopodobieństwa dla przemysłu B, przemysł A pojawi się około dwa razy częściej niż B. Z drugiej strony zwiększenie prawdopodobieństwa wszystkich branż nic nie zmienia. Prawdopodobieństwa pojawienia się nie mają wpływu na liczbę branż ogółem.
 
 === Map colour (19) ===
 
-The value must be a color index from the DOS pallette. The following values are used by default industries:
+Wartość musi być indeksem kolorów z palety DOS. Poniższe wartości są używane domyślnie dla branż:
 
 {| |-
 !Number!!Colour!!Example
@@ -277,33 +277,33 @@ The value must be a color index from the DOS pallette. The following values are 
 
 <references />
 
-By default, TTDPatch tries to ensure that cargo chains don't get broken. To achieve this, TTDPatch always generates at least one instance from every available industry type during random map generation, and prevents the last instance from closing down even when the production change callback says it should. If your industry type isn't essential for gameplay, or you want to handle this situation yourself, you can set bits 16 and/or 17 to turn off the default TTDPatch behavior.
+Domyślnie TTDPatch stara się nie dopuścić do zerwania łańcuchów ładunkowych. Aby to osiągnąć, TTDPatch zawsze generuje co najmniej jedną instancję z każdego dostępnego typu branży podczas losowego generowania map i zapobiega ostatniej instancji, nawet jeśli wezwanie do zmiany produkcji mówi, że powinna. Jeśli Twój typ branży nie jest niezbędny do rozgrywki lub chcesz sam poradzić sobie z tą sytuacją, możesz ustawić bity 16 i/lub 17, aby wyłączyć domyślne zachowanie TTDPatch.
 
-If you supply a lot of industry types but also want to support OpenTTD's small map sizes you should set bit 16 for the less important industry types which can be ommitted (there will likely not be enough space for an industry of every type).
+Jeśli dostarczasz wiele rodzajów branży, ale chcesz również obsługiwać małe rozmiary map OpenTTD, powinieneś ustawić bit 16 dla mniej ważnych rodzajów branży, które można pominąć (prawdopodobnie nie będzie wystarczającej ilości miejsca dla branży każdego typu).
 
 === Input cargo multipliers for the three input cargo types (1C..1E) ===
 
-If the first (low) word of the property is M1 and the second (high) word is M2, and X units of the corresponding cargo is delivered to the industry, the output amounts are calculated this way:
+Jeśli pierwszym (niskim) słowem właściwości jest M1, a drugim (wysokim) słowem jest M2, a jednostki X odpowiedniego ładunku są dostarczane do przemysłu, kwoty wyjściowe są obliczane w ten sposób:
 
 <pre>output_type1 = X*M1/256
 
 output_type2 = X*M2/256</pre>
 
-The default value for old industry types is 0100h,0000h , so every unit of input cargo produces one unit of output cargo of the first type. Exceptions are temperate banks and oil rigs, that have the default value of 0000h,0000h ,so input cargo doesn't affect output.
+Domyślna wartość dla starych rodzajów przemysłu to 0100h, 0000h, więc każda jednostka ładunku wejściowego wytwarza jedną jednostkę ładunku wyjściowego pierwszego typu. Wyjątek stanowią banki umiarkowane i platformy wiertnicze, które mają domyślną wartość 0000h, 0000h, więc ładunek wejściowy nie wpływa na wydajność.
 
-{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} This property only supports three input and two output cargos. Use property 28 instead, if you have more cargo types.
+{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} Ta właściwość obsługuje tylko trzy ładunki wejściowe i dwa wyjściowe. Zamiast tego użyj nieruchomości 28, jeśli masz więcej rodzajów ładunków.
 
 === Industry name (1F) ===
 
-This is the text ID that will be attached to the town name when TTD texts refer to the industry.
+Jest to identyfikator tekstowy, który zostanie dołączony do nazwy miasta, gdy teksty TTD odnoszą się do branży.
 
 === Prospecting success chance (20) ===
 
-This value is currently used only for extractive and organic industries (see property 0B for details). The higher this value is, the higher the chance that your industry can be built on a random place after prospecting. 0 means constant failure, while FFFFFFFFh means constant success.
+Ta wartość jest obecnie stosowana tylko w przemyśle wydobywczym i ekologicznym (szczegółowe informacje można znaleźć we właściwości 0B). Im wyższa jest ta wartość, tym większa szansa, że ​​twoja branża może zostać zbudowana w przypadkowym miejscu po poszukiwaniach. 0 oznacza ciągłą awarię, podczas gdy FFFFFFFFh oznacza ciągły sukces.
 
 === Callback flags (21,22) ===
 
-Property 21 can have the following bits set:
+Właściwość 21 może mieć ustawione następujące bity:
 
 {| |-
 !Bit!!Value!!Var. 0C!!Version!!Callback
