@@ -4,18 +4,18 @@
 
 Action 3 przypisuje zestawy graficzne (do których odwołuje się (łańcuchy) [[pl/Development/NewGRF/NFO Specs/Action2/Main Page|action 2(e]] ) do ID''`ów'' funkcji.
 
-{{pl/Development/NewGRF/ottdp|1.10}} Roadtypes are available only in OpenTTD &gt; 1.10
+{{pl/Development/NewGRF/ottdp|1.10}} Typy dróg są dostępne tylko w OpenTTD &gt; 1.10
 
 == Format ==
 
-The format of the data is feature-dependent. For roadtypes it looks like
+Format danych zależy od funkcji. Wygląda na typy dróg
 
 <pre> &lt;Sprite-number&gt; * &lt;Length&gt; 03 12 &lt;n-id&gt; &lt;ids...&gt; &lt;num-cid&gt; &lt;cargo-type&gt; &lt;set-ID&gt;... &lt;default set-ID&gt;</pre>
 
 {| class="wikitable"
 |-
 !'''Element'''
-![[en/GRFActionsDetailed|'''Size''']]
+![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Size''']]
 !'''Description'''
 |-
 |&lt;Sprite-number&gt;
@@ -63,29 +63,29 @@ The format of the data is feature-dependent. For roadtypes it looks like
 
 === Sprite-number ===
 
-This is just the number you are at.
+To tylko numer, na którym jesteś.
 
 === Length ===
 
-Count the number of bytes in this action.
+Policz liczbę bajtów w tej akcji.
 
 === n-id ===
 
-How many items of the current feature this action 3 defines new graphics for. If this is more than one, all items listed will get the same graphics. If this value has bit 7 set (i.e. 80 added), it is a wagon override. See [[pl/Development/NewGRF/NFO Specs/Action3LiveryOverride|Action 3 - Livery Override]] for more info on this feature.
+Ile elementów bieżącej funkcji to działanie 3 określa nową grafikę. Jeśli jest więcej niż jeden, wszystkie wymienione elementy otrzymają tę samą grafikę. Jeśli ta wartość ma ustawiony bit 7 (tj. Dodano 80), oznacza to pominięcie wagonu. Zobacz  [[pl/Development/NewGRF/NFO Specs/Action3LiveryOverride|Action 3 - Livery Override]] , aby uzyskać więcej informacji na temat tej funkcji.
 
-You can make a definition with n-id equal to zero (and thus no ids that follow). &nbsp;This creates a generic feature-specific definition not associated with any particular item. &nbsp;At the moment, this is used for generic callbacks, but might be extended to other functions eventually.
+Możesz utworzyć definicję z n-id równym zero (a zatem bez id idących dalej). &nbsp;Tworzy to ogólną definicję specyficzną dla funkcji niepowiązaną z żadnym konkretnym elementem. &nbsp;W tej chwili jest to używane do ogólnych wywołań zwrotnych, ale ostatecznie może zostać rozszerzone na inne funkcje.
 
 === ids ===
 
-Feature IDs to use this action 3 for. All IDs are counted from the first of their class, i.e. the first road vehicle has 00, as does the first plane, the first ship, and the first train vehicle.
+Identyfikatory funkcji, dla których należy użyć tej akcji 3. Wszystkie identyfikatory są liczone od pierwszego w swojej klasie, tj. Pierwszy pojazd drogowy ma 00, podobnie jak pierwszy samolot, pierwszy statek i pierwszy pojazd kolejowy.
 
 === num-cid ===
 
-Number of "cargo" type definitions that follow.
+Liczba poniższych definicji typów "ładunków" .
 
 === cargo-type ===
 
-Roadtypes re-uses in its Action3 the 'cargo'-type definition in order to assign the type of graphics defined by the associated set-ID:
+Typy dróg ponownie wykorzystują w swojej Action3 definicję typ-'cargo' w celu przypisania rodzaju grafiki zdefiniowanej przez powiązany identyfikator zestawu:
 
 {| class="wikitable"
 |-
@@ -205,15 +205,15 @@ Roadtypes re-uses in its Action3 the 'cargo'-type definition in order to assign 
 <!--
 ==== Tunnel portal overlay (0A) ====
 
-If this 'cargo' type is defined, tunnels for this railtype will be drawn differently.
+Jeśli zdefiniowano ten rodzaj 'ładunku' , tunele dla tego rodzaju kolei będą rysowane inaczej.
 
-First, a grass underlay base sprite is drawn, then the sprite returned from type 03. Next, train sprites if applicable and then a grass overlay and finally the sprite from this type (0A). The grass sprites are defined in the base set and do not contain any parts of the tracks or portal, so these have to be fully provided by the railtype sprites.
+Najpierw rysuje się sprite podstawy podkładu z trawy, następnie sprite powraca od typu 03. Następnie trenuje sprite, jeśli ma zastosowanie, a następnie nakładkę na trawę, a na koniec sprite z tego typu (0A). Duszki traw są zdefiniowane w zestawie podstawowym i nie zawierają żadnych części torów ani portalu, więc muszą być w pełni dostarczone przez duszki typu kolejowego.
 
-Illustration: [[File:RailtypeTunnelExample.png]]
+Ilustracja: [[File:RailtypeTunnelExample.png]]
 
-Variable 10 can be used to distinguish between several requested tunnel variations:
+Zmienna 10 może być użyta do rozróżnienia kilku żądanych wariantów tunelu:
 {| |-
-! Lowest byte of [[GlobalVariables#Extra_callback_info_.2810_.2F_-.29_and_.2818_.2F_-.29|variable 10]] !! Meaning
+! Lowest byte of [[user:extrazi/specs.tt/GlobalVariables/Pl#Extra_callback_info_.2810_.2F_-.29_and_.2818_.2F_-.29|variable 10]] !! Meaning
 |-
 | 00 || This is a plain portal without any extra features (like tracks above).
 |-
@@ -224,6 +224,6 @@ The other bytes of variable 10 are reserved, and must be masked.
 
 === default set-ID ===
 
-The default set-ID would be used for roadtype callbacks. However, since there are currently no callbacks for roadtypes it should always result in a [[pl/Development/NewGRF/NFO Specs/Action2/Only Callback Failure|callback-failure]].
+Domyślny ID zestawu byłby używany do wywołań zwrotnych typu drogowego. Ponieważ jednak nie ma obecnie wywołań zwrotnych dla typów dróg, zawsze powinno to skutkować „ [[pl/Development/NewGRF/NFO Specs/Action2/Only Callback Failure|callback-failure]].
 
 == Przykład ==
