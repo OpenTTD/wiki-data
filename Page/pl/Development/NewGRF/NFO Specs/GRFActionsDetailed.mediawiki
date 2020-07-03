@@ -1,6 +1,6 @@
-
+{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/GRFActionsDetailed|pl=pl/Development/NewGRF/NFO Specs/GRFActionsDetailed}}
 <!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
-Technical reference of the new .grf actions
+Dokumentacja techniczna nowych akcji .grf
 
 ==General Information==
 
@@ -26,29 +26,29 @@ Każdy element ma rozmiar (ile bajtów wykorzystuje w danych pseudo duszka). To 
 |V ||This parameter has a variable length, which depends on one of the previous parameters; it will be described there.
 |}
 
-Extended bytes work like this:
-* To specify a value of 0..FE, simply use that byte value
-* To specify a value of FF..FFFF, use a literal FF followed by the word value, e.g. for 320d (140 hex) use FF 40 01.
+Rozszerzone bajty działają w następujący sposób:
+* Aby określić wartość 0..FE, wystarczy użyć tej wartości bajtu
+* Aby określić wartość FF..FFFF, użyj dosłownego FF, a następnie wartości słowa, np. dla 320d (140 hex) użyj FF 40 01.
 
 ==Comments==
 
 ===Byte order===
 
-For values larger than one byte (i.e. W and D), the value must be split into individual bytes in the right order. This order is the so-called [http://en.wikipedia.org/wiki/Endianness little-endian] order, with the least significant bytes first.
+W przypadku wartości większych niż jeden bajt (tj. W i D) wartość należy podzielić na poszczególne bajty w odpowiedniej kolejności. Ta kolejność to tak zwana kolejność  [http://en.wikipedia.org/wiki/Endianness little-endian] , z najpierw najmniej znaczącymi bajtami.
 
-Here's how you convert a hexadecimal number into its little-endian bytes
-#Pad with zeroes from the left until you have twice as many digits as you need bytes (i.e. 4 digits for W, 8 digits for D)
-#Split into groups of two digits
-#Write these groups backwards
+Oto jak przekonwertować liczbę szesnastkową na bajty little-endian
+#Pad z zerami od lewej, aż będziesz mieć dwa razy więcej cyfr niż potrzebujesz bajtów (tj. 4 cyfry W, 8 cyfr D)
+#Podziel na grupy dwucyfrowe
+#Napisz te grupy do tyłu
 
 ====Examples====
 
-* 123 in W becomes 0123, then 01 23, so finally 23 01
-* 12345 in D becomes 00012345, then 00 01 23 45, so finally 45 23 01 00
+* 123 w W zmienia się w 0123, następnie 01 23, a więc w końcu 23 01
+* 12345 w D zmienia się na 00012345, a następnie 00 01 23 45, a więc w końcu 45 23 01 00
 
 ====Escape sequences====
 
-In Info version 7 and later (supported by grfcodec version 0.9.9 and later), grfcodec can do some of this work for you. Instead of doing the above, you may use any of the following escape sequences:
+W wersji Info 7 i nowszych (obsługiwanych przez grfcodec w wersji 0.9.9 i nowszych), grfcodec może wykonać dla ciebie część tej pracy. Zamiast robić powyższe, możesz użyć dowolnej z następujących sekwencji ucieczki:
 
 * \b<dec>
 * \b<year>
@@ -61,38 +61,38 @@ In Info version 7 and later (supported by grfcodec version 0.9.9 and later), grf
 * \d<date> (Only supported by nforenum 3.4.6 and grfcodec 0.9.11 (r1703) and later.)
 
 
-Where:
+Gdzie:
 
-The second character (or, in the case of \b*, the second and third characters) indicates the number of required bytes: b for a byte, b* for an extended byte, w for a word, and d for a dword.
+Drugi znak (lub, w przypadku \b*, drugi i trzeci znak) wskazuje liczbę wymaganych bajtów: b dla bajtu, b* dla bajtu rozszerzonego, w dla słowa id dla dworda.
 
-* <dec> is any positive decimal integer that fits in the given width.
-* <year> is a year; the resultant byte will be <year>-1920
-* <hex> is any big-endian hexadecimal integer that fits in the given width.
-* <date> is a date in one of the four formats YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY, or DD/MM/YYYY. In all cases, leading zeros may be omitted.
+* <dec> to dowolna dodatnia liczba całkowita dziesiętna pasująca do podanej szerokości.
+* <year> jest rok; wynikowy bajt będzie <year>-1920
+* <hex> jest dowolną liczbą całkowitą szesnastkową big-endian, która mieści się w podanej szerokości.
+* <date> jest datą w jednym z czterech formatów YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY, lub DD/MM/YYYY. We wszystkich przypadkach zera wiodące można pominąć.
 
-In the word-sized dates, the years 1932..2000 may be specified with only two digits.
+W datach wielkości słowa lata 1932..2000 można podać tylko za pomocą dwóch cyfr.
 
-To avoid ambiguity, dword-sized dates before 1 Jan 32 must be specified with the YMD formats, not the DMY formats. eg 10 Feb 20 is \d20-2-10.
-
-
-There are also certain action-specific escape sequences; these are of the format <tt>\<action><operator></tt>, where the sequence is used for the action <tt><action></tt>, and <tt><operator></tt> is a C operator related to the function of the sequence's byte value, or something vaguely related to a C operator. Or something else.
-
-These are discussed in further detail on the appropriate action's page.
+Aby uniknąć dwuznaczności, daty w formacie dwordów przed 1 stycznia 32 muszą być określone w formatach YMD, a nie w formatach DMY. np. 10 lutego 20 jest \d20-2-10.
 
 
-Note that this behaviour is only supported in Info version 7 and later; in Info version 6 and earlier, such escape sequences are errors.
+Istnieją również pewne sekwencje specjalne specyficzne dla akcji; są tego formatu <tt>\<action><operator></tt>, gdzie sekwencja jest używana dla akcji <tt><action></tt>, i <tt><operator></tt> to operator C związany z funkcją wartości bajtu sekwencji lub coś niejasno związany z operatorem C. Albo coś innego.
+
+Są one omówione bardziej szczegółowo na stronie odpowiedniego działania.
+
+
+Pamiętaj, że to zachowanie jest obsługiwane tylko w wersji Info 7 i nowszych; w wersji Info 6 i wcześniejszych takie sekwencje specjalne są błędami.
 
 ===Strings===
 
-Strings are written as individual characters in hex codes, with a final 00 to indicate the end of the string. For example, "Hello" is 48 65 6D 6D 6F 00.
+Ciągi są zapisywane jako pojedyncze znaki w kodach szesnastkowych, a końcowy 00 oznacza koniec łańcucha. Na przykład "Hello" to 48 65 6D 6D 6F 00.
 
-To convert text into the syntax needed for .nfo files, you can use the [http://www.ttdpatch.net/cgi-bin/str2hex.pl str2hex] converter. As of grfcodec 0.9.6, you may also put literal strings right in the .nfo. Note that you may only use characters in the latin1 character set, which is what TTD uses. &nbsp;Other characters will either not show up in TTD or they will mess up the entire display.
+Aby przekonwertować tekst na składnię wymaganą dla plików .nfo, możesz użyć konwertera [http://www.ttdpatch.net/cgi-bin/str2hex.pl str2hex] . Począwszy od grfcodec 0.9.6, możesz również umieszczać dosłowne ciągi znaków w .nfo . Pamiętaj, że możesz używać znaków tylko z zestawu znaków Latin1, z czego korzysta TTD. &nbsp;Inne znaki albo nie pojawią się w TTD, albo zepsują cały wyświetlacz.
 
-If you end up with any characters in the range 7B to 9F, remove them from the string. See [[pl/Development/NewGRF/NFO Specs/StringCodes|StringCodes]] for more details.
+Jeśli znajdziesz jakieś znaki z zakresu od 7B do 9F, usuń je z łańcucha. Zobacz  [[pl/Development/NewGRF/NFO Specs/StringCodes|StringCodes]] , aby uzyskać więcej informacji.
 
-In Info version 7 and later, strings behave mostly as they do in the C family of languages: \\, \n, and \" insert a single backslash, a line feed (0D), and a double quote (22), respectively. In addition, \<hex> (up to two characters) inserts the byte <hex>, and \U<hex> (up to four characters) inserts the UTF-8 encoding of the character U+<hex>
+W wersji Info 7 i nowszych ciągi zachowują się w większości tak, jak w rodzinie języków C: \\, \n i  \" wstawiają odpowiednio pojedynczy ukośnik odwrotny, przejście do wiersza (0D) i podwójny cudzysłów (22) Ponadto, \<hex> (do dwóch znaków) wstawia bajt <hex>, a \U <hex> (do czterech znaków) wstawia kodowanie UTF-8 znaku U+<hex>
 
-Note that this behaviour is only supported in Info version 7 and later; in Info version 6 and earlier, the backslash is not an escape character. ("\\" encodes as one byte in Info version 7, but two bytes in Info version 6.)
+Pamiętaj, że to zachowanie jest obsługiwane tylko w wersji Info 7 i nowszych; w wersji Info 6 i wcześniejszych ukośnik odwrotny nie jest znakiem ucieczki. ( "\\"  koduje jako jeden bajt w wersji Info 7, ale dwa bajty w wersji Info 6.)
 
 ==Lista Actions==
 
