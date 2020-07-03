@@ -4,7 +4,7 @@
 
 Lotniska działają podobnie jak przemysł i budynki miejskie. Maksymalna liczba możliwych portów lotniczych wynosi 128. Wszystkie (nawet przesłonięte) typy oryginalne liczą się do tego limitu.
 
-Defining airports follows the same schema as industries do: to start using an ID, you first need to define it by setting property 8 or 9 for it. If you try to reference an ID (either via action0 or via action3) that isn't defined, your request is ignored, but not reported as an error, either. This means that if you want to conditionally define an ID, all you need to do is skipping the action0 that sets property8/property9, and everything else gets skipped automatically.
+Definiowanie lotnisk odbywa się według tego samego schematu, co w branżach: aby rozpocząć korzystanie z identyfikatora, najpierw należy go zdefiniować, ustawiając dla niego właściwość 8 lub 9. Jeśli spróbujesz odwołać się do identyfikatora (poprzez akcję 0 lub przez akcję 3), który nie jest zdefiniowany, twoje żądanie zostanie zignorowane, ale również nie zostanie zgłoszone jako błąd. Oznacza to, że jeśli chcesz warunkowo zdefiniować identyfikator, wystarczy pominąć akcję0, która ustawia właściwość8 / właściwość9, a wszystko inne zostanie automatycznie pominięte.
 
 ==Properties==
 
@@ -32,13 +32,13 @@ Defining airports follows the same schema as industries do: to start using an ID
 
 ===Airport type override (08)===
 
-Works as both substitute type and override. The assignment of this property copies all properties of the old type to this new type. List of valid types: [[en/AirportTypes]]
+Działa zarówno jako typ zastępczy, jak i zastępujący. Przypisanie tej właściwości powoduje skopiowanie wszystkich właściwości starego typu do tego nowego typu. Lista prawidłowych typów: [[pl/Development/NewGRF/NFO Specs/AirportTypes|AirportTypes]]
 
-There's a special use of this property: if you set it to FFh, you can disable an original airport. In this case, the ID used must be the number of airport you want to disable. Disable requests are ignored for airports that have already been overridden.
+Istnieje specjalne zastosowanie tej właściwości: jeśli ustawisz FFh, możesz wyłączyć oryginalne lotnisko. W takim przypadku użyty identyfikator musi być numerem lotniska, które chcesz wyłączyć. Żądania wyłączenia są ignorowane dla lotnisk, które zostały już zastąpione.
 
 ===Set airportlayout(s) (0A)===
 
-Format of airport layout tables:
+Format tabel układu lotniska:
 
 {| |-
 !Size!!Variable!!Meaning
@@ -50,7 +50,7 @@ Format of airport layout tables:
 |V||layouts||numlayout layouts, see format below
 |}
 
-Format of an airport layout:
+Format układu lotniska:
 
 {| |-
 !Size!!Variable!!Meaning
@@ -70,15 +70,15 @@ Format of an airport layout:
 |0xFF|| ||The given tile is checked for clearance, but nothing will be placed on it. Useful to ensure some free space around your airport. This is the only case where xoffs and yoffs can be negative. If xoffs is negative, yoffs must be one lower than the wanted value.
 |}
 
-The layout consists of a single byte giving the rotation of the layout (0: north, 2: east, 4: south, 6: west) followed by a list of the above tile definitions, terminated by two bytes: 0,80h
+Układ składa się z jednego bajtu zapewniającego obrót układu (0: północ, 2: wschód, 4: południe, 6: zachód), a następnie lista powyższych definicji kafelków, zakończona dwoma bajtami: 0,80h
 
 ===Availability years (0C)===
 
-First year and last year the airport is available. 0 and FFFF respectively are forever.
+Lotnisko jest dostępne w pierwszym i ostatnim roku. Odpowiednio 0 i FFFF są wieczne.
 
 ===Best compatible TTD airport type (0D)===
 
-Used for compatibility with [[en/VariationalAction2/Vehicles#aircraft-info-44| vehicle var 44]]. Valid values:
+Służy do kompatybilności z [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Vehicles#aircraft-info-44| vehicle var 44]]. Prawidłowe wartości:
 
 0: small airport
 
