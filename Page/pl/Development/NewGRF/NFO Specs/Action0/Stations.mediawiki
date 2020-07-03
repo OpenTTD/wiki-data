@@ -279,7 +279,7 @@ Prop. 11 określa, które typy płytek powinny mieć pylony, gdy są używane z 
 
 Prop. 14 działa w podobny sposób, z tym wyjątkiem, że ustawia typy kafli, na których powinny być wyświetlane przewody ''nie'' <small>''(no)''</small> . Przy domyślnej wartości "00" druty są wyświetlane wszędzie, a dla każdego zestawu bitów drut jest pomijany na tym typie kafelka.
 
-Tej właściwości należy używać tylko wtedy, gdy druty powodują problemy z sortownikiem duszków, ponieważ nawet jeśli drut jest zasłonięty przez halę stacji lub podobną, powinien nadal pokazywać się w trybie przezroczystym, aby każda płytka mogła być łatwo zweryfikowana jako zelektryfikowana.
+Tej właściwości należy używać tylko wtedy, gdy druty powodują problemy z sortownikiem 'sprites' , ponieważ nawet jeśli drut jest zasłonięty przez halę stacji lub podobną, powinien nadal pokazywać się w trybie przezroczystym, aby każda płytka mogła być łatwo zweryfikowana jako zelektryfikowana.
 
 === Cargo types for random triggers (12) ===
 
@@ -303,19 +303,19 @@ W wersji 7 i nowszych GRF zmienia się interpretacja bitów. Zamiast numerów sz
 |4||10||{{pl/Development/NewGRF/ottdp|1.0|2.6}}||When bit 3 is set, use extended foundation block instead of the simple one
 |}
 
-Bit 3 działa nieco podobnie do bitu 0: wybór twojego duszka zostanie ponownie wywołany, z 2 w najniższym bajcie [[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|variable 10]] . Jeśli łańcuch zakończy się wynikiem wywołania zwrotnego, program przyjmie, że wybór fundamentu nie powiódł się, i użyje domyślnych duszków Foundaton. Niskie słowo  [[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|variable 18]] będzie zawierać typ kafelka bieżącego kafelka; jeśli masz włączone [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#station-sprite-layout-14|callback 14]] , będzie to jego wartość zwracana - w przeciwnym razie używane są domyślne typy TTD (platforma z budynkiem, platforma z lewym dachem itp.). W obu przypadkach jeden jest dodawany do orientacji NW-SE, na wypadek, gdyby twoja stacja potrzebowała różnych fundamentów w zależności od jej orientacji. Bity 16 i 17 są ustawiane, jeśli fundamenty NW i NE mają zostać połączone z odpowiednią sąsiadującą płytką, więc nie należy rysować odpowiedniej krawędzi w ikonce fundamentu. Inne bity zmiennej 10 i zmiennej 18 są zarezerwowane do wykorzystania w przyszłości.
+Bit 3 działa nieco podobnie do bitu 0: wybór twojego 'sprite' zostanie ponownie wywołany, z 2 w najniższym bajcie [[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|variable 10]] . Jeśli łańcuch zakończy się wynikiem wywołania zwrotnego, program przyjmie, że wybór fundamentu nie powiódł się, i użyje domyślnych 'sprites' Foundaton. Niskie słowo  [[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|variable 18]] będzie zawierać typ kafelka bieżącego kafelka; jeśli masz włączone [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#station-sprite-layout-14|callback 14]] , będzie to jego wartość zwracana - w przeciwnym razie używane są domyślne typy TTD (platforma z budynkiem, platforma z lewym dachem itp.). W obu przypadkach jeden jest dodawany do orientacji NW-SE, na wypadek, gdyby twoja stacja potrzebowała różnych fundamentów w zależności od jej orientacji. Bity 16 i 17 są ustawiane, jeśli fundamenty NW i NE mają zostać połączone z odpowiednią sąsiadującą płytką, więc nie należy rysować odpowiedniej krawędzi w ikonce fundamentu. Inne bity zmiennej 10 i zmiennej 18 są zarezerwowane do wykorzystania w przyszłości.
 
-Twój kod wyboru duszka powinien wybrać blok duszka fundacji. Zawartość tego bloku zależy od tego, czy bit 4 jest ustawiony, czy nie.
+Twój kod wyboru 'sprite' powinien wybrać blok 'sprite' fundacji. Zawartość tego bloku zależy od tego, czy bit 4 jest ustawiony, czy nie.
 * Bit 4 czysty (proste podstawy):
 <!--[[File:simple_foundations.png]]-->[http://newgrf-specs.tt-wiki.net/wiki/File:simple_foundations.png File:simple_foundations.png]
 
-Program połączy potrzebny fundament z tych 8 duszków w zależności od aktualnego nachylenia. Nie musisz przejmować się danymi scalania w bitach 16..17  [[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|variable 18]] ; zostanie to załatwione automatycznie poprzez dodanie siódmego i ósmego duszka tylko w razie potrzeby.
+Program połączy potrzebny fundament z tych 8 'sprites' w zależności od aktualnego nachylenia. Nie musisz przejmować się danymi scalania w bitach 16..17  [[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|variable 18]] ; zostanie to załatwione automatycznie poprzez dodanie siódmego i ósmego 'sprite' tylko w razie potrzeby.
 * Zestaw bitów 4 (rozszerzone podstawy):
-<!--[[File:extended_foundations.png]]-->[File:simple_foundations.png]]-->[http://newgrf-specs.tt-wiki.net/wiki/File:extended_foundations.png File:extended_foundations.png]
+<!--[[File:extended_foundations.png]]-->[http://newgrf-specs.tt-wiki.net/wiki/File:extended_foundations.png File:extended_foundations.png]
 
-Musisz mieć jednego duszka na każde nachylenie, które jest możliwe poniżej stacji kolejowej. Właściwy zostanie automatycznie wybrany w zależności od aktualnego nachylenia. Jednak nie obsługuje samego scalania, więc potrzebujesz czterech bloków fundamentowych: jeden bez usuniętych krawędzi, jeden z usuniętą krawędzią NW, jeden z usuniętą krawędzią NE i jeden z usuniętymi obydwoma krawędziami północnymi. Twój kod wyboru duszka jest odpowiedzialny za wybranie poprawności tych bloków zgodnie z informacjami o scaleniu w [[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|variable 18]].
+Musisz mieć jednego 'sprite' na każde nachylenie, które jest możliwe poniżej stacji kolejowej. Właściwy zostanie automatycznie wybrany w zależności od aktualnego nachylenia. Jednak nie obsługuje samego scalania, więc potrzebujesz czterech bloków fundamentowych: jeden bez usuniętych krawędzi, jeden z usuniętą krawędzią NW, jeden z usuniętą krawędzią NE i jeden z usuniętymi obydwoma krawędziami północnymi. Twój kod wyboru 'sprite' jest odpowiedzialny za wybranie poprawności tych bloków zgodnie z informacjami o scaleniu w [[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|variable 18]].
 
-W obu przypadkach można wprowadzić dodatkową wartość do rejestru 100h, która posłuży jako przesunięcie w wybranym bloku. Jeśli nie zmodyfikujesz rejestru 100h podczas łańcucha, domyślnie będzie to 0. Ważne jest, aby wymiary tych duszków pozostały takie same - dlatego bit 6 w prawdziwych duszkach musi być ustawiony, aby GRFCodec nie przyciął pustych niebieskich obszarów . Odsunięcie tych fundamentów musi wynosić -31 w kierunku X i -9 w kierunku Y.
+W obu przypadkach można wprowadzić dodatkową wartość do rejestru 100h, która posłuży jako przesunięcie w wybranym bloku. Jeśli nie zmodyfikujesz rejestru 100h podczas łańcucha, domyślnie będzie to 0. Ważne jest, aby wymiary tych 'sprites' pozostały takie same - dlatego bit 6 w prawdziwych 'sprites' musi być ustawiony, aby GRFCodec nie przyciął pustych niebieskich obszarów . Odsunięcie tych fundamentów musi wynosić -31 w kierunku X i -9 w kierunku Y.
 
 === Can train enter tile (15) ===
 
@@ -324,13 +324,13 @@ Jak rekwizyty. 11 i 14, ta wartość zawiera osiem bitów odnoszących się do o
 === Animation information (16) ===
 
 Niższy bajt określa liczbę klatek animacji pomniejszoną o jedną, więc 00 oznacza 1 klatkę, 01 oznacza 2 klatki itp. Maksymalna liczba klatek wynosi 256, chociaż możesz mieć pewne problemy, jeśli twoja animacja przekracza liczbę klatek FD (253). Górny bajt musi wynosić 0 dla animacji nie zapętlonych i 01 dla animacji zapętlonych. Każda inna wartość jest zarezerwowana do wykorzystania w przyszłości. Ponadto, jeśli całe słowo zawiera FFFF, animacja jest wyłączona dla tej stacji (jest to wartość domyślna).
-Ponieważ nie możesz mieć właściwości dla poszczególnych kafelków stacji, ta właściwość dotyczy każdego kafelka stacji. Jeśli nie chcesz animować niektórych kafelków, powinieneś sprawdzić bieżącą pozycję podczas [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159|callback 140]] i zwrócić FD, jeśli bieżący kafelek nie trzeba być animowanym. Jeśli potrzebujesz także animacji o różnej długości na płytkę, musisz użyć  [[en/Callbacks#next-animation-frame-1a-26-141-153-158|callback 141]] .
+Ponieważ nie możesz mieć właściwości dla poszczególnych kafelków stacji, ta właściwość dotyczy każdego kafelka stacji. Jeśli nie chcesz animować niektórych kafelków, powinieneś sprawdzić bieżącą pozycję podczas [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159|callback 140]] i zwrócić FD, jeśli bieżący kafelek nie trzeba być animowanym. Jeśli potrzebujesz także animacji o różnej długości na płytkę, musisz użyć  [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#next-animation-frame-1a-26-141-153-158|callback 141]] .
 
 === Animation speed (17) ===
-The meaning is the same as for [[en/Action0Houses#animation-speed-1b|house property 1B]], but the lower limit is 0 instead of 2, so the fastest possible animation changes frames every game tick (27ms). The default value is 2.
+Znaczenie jest takie samo jak dla [[pl/Extrazi/specs.tt/Action0Houses#animation-speed-1b|house property 1B]] , ale dolny limit to 0 zamiast 2, więc najszybsza możliwa animacja zmienia klatki przy każdym tyknięciu gry (27ms). Wartość domyślna to 2.
 
 === Animation triggers (18) ===
-This is a bit mask of events that should trigger [[en/Callbacks#animation-control-1b-25-140-152-159|callback 140]], allowing to change the animation state
+Jest to nieco maska ​​zdarzeń, które powinny uruchomić [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159|callback 140]] , umożliwiając zmianę stanu animacji
 
 {| |-
 !Bit!!Value!!Version!!Meaning!!Happens on!!Var 18
@@ -350,19 +350,19 @@ This is a bit mask of events that should trigger [[en/Callbacks#animation-contro
 |6||40||{{pl/Development/NewGRF/ottdp|0.7|2.5}}||Every 250 ticks||whole station||
 |}
 
-The remaining bits are reserved for future triggers, they must be zero for now.
+Pozostałe bity są zarezerwowane dla przyszłych wyzwalaczy, na razie muszą wynosić zero.
 
-The "happens on" column tells which tiles will [[en/Callbacks#animation-control-1b-25-140-152-159 |callback 140]] be called on.
+Kolumna "dzieje się" <small>''(happens on)''</small> informuje, które kafelki będą [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159 |callback 140]] .
 
 <references/>
 
 === Road routing (19 - reserved for future use) ===
 
-Will allow to have routing informations for road vehicles on rail stations,
+Pozwoli mieć informacje o trasach dla pojazdów drogowych na dworcach
 
-generally you need to deny rail vehicle traveling via prop 15
+ogólnie rzecz biorąc, musisz odmówić pojazdowi szynowemu podróżującemu śmigłem 15
 
-This property is not yet implemented {{pl/Development/NewGRF/ottd|no}}{{pl/Development/NewGRF/ttdp|no}}.
+Ta właściwość nie jest jeszcze zaimplementowana {{pl/Development/NewGRF/ottd|no}}{{pl/Development/NewGRF/ttdp|no}}.
 
 === Advanced sprite layout with register modifiers (1A) ===
 
@@ -376,13 +376,13 @@ Format:
                     [<register/value>]...
                   ]...
 
-For further details see [http://wiki.openttd.org/Frosch/Advanced_Sprite_Layout#Stations here] for now.
+Aby uzyskać więcej informacji, zobacz [http://wiki.openttd.org/Frosch/Advanced_Sprite_Layout#Stations tutaj] na teraz.
 
 === Minimum bridge height (1B) ===
 
-This property allows building bridges over stations.
+Ta właściwość pozwala budować mosty nad stacjami.
 
-The bridge height property defines minimum clearances required for a bridge for each of the four [[en/Action0/Stations#define-custom-layout-0e|tile types]] of this station (or zero to not allow any bridge). Values are given in "height level" units (1 level == 8px).
+Właściwość wysokość mostu określa minimalne prześwity wymagane dla mostu dla każdego z czterech  [[en/Action0/Stations#define-custom-layout-0e|tile types]] tej stacji (lub zero, aby nie pozwolić na żaden most). Wartości podano w "height level" jednostek (1 level == 8px).
 
 
 {| class="wikitable" |-
@@ -396,7 +396,7 @@ The bridge height property defines minimum clearances required for a bridge for 
 |-
 | style="text-align:center;" |x4 y4 ||platform with roof, right side
 |}
-(1) where the values are one byte pairs (x-direction, y-direction) expressed in hexadecimal notation.
+(1) gdzie wartości są jednobajtowymi parami (kierunek x, kierunek y) wyrażone w notacji szesnastkowej.
 
 
 Syntax:
@@ -405,35 +405,35 @@ Syntax:
 1B x1 y1 x2 y2 x3 y3 x4 y4<br />
 1B 01 01 02 02 03 03 03 03 // 8px 16px 24px 24px
 
-This property is currently only available for JGR's Patch Pack (v0.26.0 and later) and the developmental "New Map Features" (NMF) fork of OpenTTD.
+Ta właściwość jest obecnie dostępna tylko dla pakietu poprawek JGR (wer. 0.26.0 i nowszych) oraz rozwojowego widelca "Nowe funkcje mapy" <small>''(New Map Features)''</small> (NMF) OpenTTD.
 
 
 == Examples ==
 
 === Using TTD's sprite layouts for certain tiles ===
 
-To use TTD's layout, you use <code>00 00 00 00</code> for the ground sprite number and leave off everything else.
+Aby użyć układu TTD, używasz <code>00 00 00 00</code> dla naziemnej liczby 'sprites' i odrzuć wszystko inne.
 
-So instead of for example
+Więc zamiast na przykład
 
  F4 03 00 00
     00 00 00    10 05 02    2E 84 00 00
     00 0B 00    10 05 02    30 84 00 00
     80
 
-you just put
+właśnie umieściłeś
 
  00 00 00 00
 
 === Using transparent sprites ===
 
-You can use transparent sprites to make for example the roof translucent like in TTD's stations. The roof of TTD's stations is made like this:
+Możesz użyć przezroczystych 'sprites' , aby na przykład dach był półprzezroczysty, jak w stacjach TTD. Dach stacji TTD jest tak wykonany:
 
  00 00 10    10 10 0A    37 84 00 00
  00 00 80    00 00 00    3B 44 22 03
 
-The first sprite here is the non-transparent frame of the roof, drawn in company colours (it has bit 15 set). The second part is a special "linked" sprite without its own bounding box, it shares that of the previous sprite. That's done by setting the z offset to 80.
+Pierwszym 'sprite' jest nieprzezroczysta rama dachu, narysowana w kolorach firmowych (ma ustawiony bit 15). Druga część to specjalny "połączony" <small>''(linked)''</small> 'sprites' bez własnego obwiedni, podobnie jak poprzedni 'sprite' . Dokonuje się tego poprzez ustawienie przesunięcia z na 80.
 
-To make that second sprite transparent, bit 14 is set in the sprite number, and the upper word is set to 322 (*), so 0322443B means to take sprite 43B and draw it in transparent mode. The colours of that sprite are ignored entirely, every pixel in colour 0 is fully transparent, and all other pixels are semi-transparent (essentially just causing what they are drawn over to become darker).
+Aby ten drugi 'sprite' był przezroczysty, bit 14 jest ustawiany w numerze 'sprite' , a górne słowo jest ustawione na 322 (*), więc 0322443B oznacza pobranie 'sprite' 43B i narysowanie go w trybie przezroczystym. Kolory tego 'sprite' są całkowicie ignorowane, każdy piksel w kolorze 0 jest w pełni przezroczysty, a wszystkie pozostałe piksele są półprzezroczyste (zasadniczo powodując, że to, co jest rysowane, staje się ciemniejsze).
 
 (*) To jest [[en/RecolorSprites#default-recolour-sprites | recolour sprite]] dla efektu szkła.
