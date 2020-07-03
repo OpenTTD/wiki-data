@@ -35,7 +35,7 @@
 |+
 |4B||D||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23068}}||Long date of last servicing||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23068}} <ref name="date" />
 |+
-|4C||D||{{pl/Development/NewGRF/ottdp|1.3|no|ottdrev=r24246}}||Current max speed including e.g track or timetable speed limits. Only valid for front vehicle. Note, units differ for each vehicle type<ref name="speed">See [[en/Action0Trains#speed-09|train property 09]], [[en/Action0RoadVehicles|road vehicle property 08]] (not 15, even when using realistic acceleration), [[en/Action0Ships|ship property 0B]] and [[en/Action0Planes|aircraft property 0C]].</ref>||no
+|4C||D||{{pl/Development/NewGRF/ottdp|1.3|no|ottdrev=r24246}}||Current max speed including e.g track or timetable speed limits. Only valid for front vehicle. Note, units differ for each vehicle type<ref name="speed">See [[pl/Extrazi/specs.tt/Action0Trains#speed-09|train property 09]], [[pl/Extrazi/specs.tt/Action0RoadVehicles|road vehicle property 08]] (not 15, even when using realistic acceleration), [[pl/Extrazi/specs.tt/Action0Ships|ship property 0B]] and [[pl/Extrazi/specs.tt/Action0Planes|aircraft property 0C]].</ref>||no
 |+
 |4D||D||{{pl/Development/NewGRF/ottdp|1.4|no|ottdrev=r26157}}||Position within articulated vehicle||no
 |+
@@ -74,13 +74,13 @@
 
 <references />
 
-For other 80+x variables confer the [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#_VehicleArray TTD vehicle structure].
+W przypadku innych 80 + x zmiennych nadaj [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#_VehicleArray TTD vehicle structure] .
 
-Variables 40, 41, 42 and 43 are cached. This means that while they are in principle computationally expensive, they can be used without impacting performance. Variables 45 and 60 are also computationally expensive but cannot be cached, and should therefore be used sparingly. If possible 80+x variables are to be preferred.
+Zmienne 40, 41, 42 i 43 są buforowane. Oznacza to, że chociaż są one zasadniczo drogie obliczeniowo, mogą być używane bez wpływu na wydajność. Zmienne 45 i 60 są również drogie obliczeniowo, ale nie można ich buforować, dlatego należy ich używać oszczędnie. Jeśli to możliwe, należy preferować zmienne 80+x.
 
-Cached variables are updated when the game is loaded, when the consist enters or is rearranged in a depot, and when the train reverses.
+Zmienione w pamięci podręcznej zmienne są aktualizowane, gdy gra jest załadowana, kiedy konsola wjeżdża lub jest przestawiana w składzie i kiedy pociąg się cofa.
 
-In the purchase list only a few variables are available. Especially the front vehicle (related object) cannot be accessed, nor other articulated parts.
+Na liście zakupów dostępnych jest tylko kilka zmiennych. W szczególności nie można uzyskać dostępu do pojazdu przedniego (obiekt powiązany) ani innych części przegubowych.
 
 == Description ==
 === Position and length (40, 41) ===
@@ -99,11 +99,11 @@ In the purchase list only a few variables are available. Especially the front ve
 * In var 41 this is one-based. That is, the value returned is the actual number of vehicles.
 |}
 
-For variable 40, these numbers refer to the whole consist, but for variable 41, they only refer to the chain of consecutive vehicles with the same ID as the current wagon (including itself, but possibly excluding the engine):
+W przypadku zmiennej 40 liczby te odnoszą się do całości, ale w przypadku zmiennej 41 odnoszą się tylko do łańcucha kolejnych pojazdów o tym samym identyfikatorze co obecny wagon (w tym sam, ale być może z wyłączeniem silnika):
 
 [[File:en/Vehicle var40 41.png]]
 
-Note however, that accessing the "related" object (i.e. the locomotive) doesn´t make much sense for vars 40/41, except for var40 when in a [[en/Callbacks#can-wagon-be-attached-1d|callback 1D]] chain.
+Należy jednak pamiętać, że dostęp do "pokrewnego" <small>''(related)''</small> obiektu (tj. Lokomotywy) nie ma większego sensu w przypadku pojazdów Vars 40/41, z wyjątkiem var40 w łańcuchu  [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#can-wagon-be-attached-1d|callback 1D]] .
 
 === Consist cargo (42) ===
 
@@ -121,12 +121,12 @@ Note however, that accessing the "related" object (i.e. the locomotive) doesn´t
 |uu||the result of ORing the bits of prop. 25 from all vehicles in the train
 |}
 
-If used with VarAction2 type 81 (vehicle) it returns only cargo from this vehicle on, with type 82 (engine) that of the whole consist.
-See also variable 47 for more details on the cargo carried by a vehicle.
+W przypadku użycia z VarAction2 typ 81 (pojazd) zwraca on tylko ładunek z tego pojazdu, przy typie 82 (silnik), na który składa się całość.
+Zobacz także zmienną 47, aby uzyskać więcej informacji na temat ładunku przewożonego przez pojazd.
 
-{{pl/Development/NewGRF/grfTill|7}} For GRF versions 7 and before "cc" is the untranslated bit number from [[en/Action0/Cargos#bit-number-for-bitmasks-08|cargo property 8]].
+{{pl/Development/NewGRF/grfTill|7}} Dla wersji GRF 7 i wcześniejszych „cc” to nieprzetłumaczony numer bitu z  [[pl/Development/NewGRF/NFO Specs/Action0/Cargos#bit-number-for-bitmasks-08|cargo property 8]] .
 
-{{pl/Development/NewGRF/grfFrom|8}} With GRF version 8 the meaning of "cc" changes. If the grf file has installed a [[en/Action0/Global Settings#cargo-translation-table-09|cargo translation table]], the value in "cc" is the index of the cargo in that table; or FF if the cargo is not present in the table.
+{{pl/Development/NewGRF/grfFrom|8}} W wersji 8 GRF zmienia się znaczenie „cc”. Jeśli plik grf zainstalował  [[pl/Development/NewGRF/NFO Specs/Action0/Global Settings#cargo-translation-table-09|cargo translation table]] , wartość w "cc"  jest indeksem ładunku w tej tabeli; lub FF, jeżeli ładunku nie ma w tabeli.
 
 === Player info (43) ===
 
@@ -159,29 +159,29 @@ See also variable 47 for more details on the cargo carried by a vehicle.
 |3||{{pl/Development/NewGRF/ottdp|no|2.5}} Player is human player's original company, now temporarily AI controlled
 |}
 
-{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=r1497}} Since r1497, when the vehicle sprite is being displayed in an exclusive offer window or new vehicle news message, or in other circumstances when no player is associated with the vehicle, nn will be FF.
+{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=r1497}} Od r1497, kiedy 'sprite' pojazdu jest wyświetlana w oknie ekskluzywnej oferty lub wiadomości z nowym pojazdem, lub w innych okolicznościach, gdy z pojazdem nie jest powiązany żaden gracz, nn będzie FF.
 
 === Aircraft info (44) ===
 
 '''Format:''' xxxxhhtt
 
-hh is the height of the aircraft above ground, or more properly above the height of its shadow. Buildings, including the heliport, don't count as "ground", i.e. to get the height above a heliport, you have to subtract the heliport height from hh.
+hh jest wysokością statku powietrznego nad ziemią, a właściwie wysokością jego cienia. Budynki, w tym lądowisko dla śmigłowców, nie liczą się jako "ziemia" <small>''(ground)''</small> , tj. Aby uzyskać wysokość nad lądowiskiem dla śmigłowców, należy odjąć wysokość lądowiska dla śmigłowców od hh.
 
-tt is the type of the current airport: 0=small, 1=large, 2=heliport, 3=oil rig. The current airport is the target airport for aircraft that have finished the ascent and are in flight.
+tt jest rodzajem bieżącego lotniska: 0=mały, 1=duży, 2=lądowisko dla śmigłowców, 3=platforma wiertnicza. Obecne lotnisko to lotnisko docelowe dla samolotów, które zakończyły wynurzanie i są w locie.
 
 === Curvature info (45) ===
 
 '''Format:''' xxxTxBxF
 
-This returns the amount of curvature between the adjacent wagon pairs. It is useful for train vehicles that normally tilt in curves. The curvature is the difference in direction between the surrounding vehicles:
+Zwraca to krzywiznę między sąsiednimi parami wagonów. Jest to przydatne w przypadku pojazdów kolejowych, które zwykle przechylają się na zakrętach. Krzywizna to różnica w kierunku między otaczającymi pojazdami:
 
-F = for the front pair (previous wagon to current wagon, 0 if vehicle is first)
+F = dla przedniej pary (poprzedni wagon do obecnego wagonu, 0, jeśli pojazd jest pierwszy)
 
-B = for the back pair (current wagon to next wagon, 0 if wagon is last)
+B = dla tylnej pary (aktualny wagon na następny, 0 jeśli wagon jest ostatni)
 
-T = for the triplet (previous wagon to next wagon; is zero in an S-bend)
+T = dla tripletu (poprzedni wagon do następnego wagonu; zero na zakręcie S)
 
-Possible values:
+Możliwa wartość:
 
 {| |-
 !Decimal!!Hex!!Meaning
@@ -209,13 +209,13 @@ Possible values:
 
 '''Format:''' 32-bit value
 
-This variable counts the amount of motion that a vehicle has done. &nbsp;It is only valid for the first vehicle in a consist (i.e. use VarAction2 type 82!). &nbsp;Its value is in units of 1/4096 of a tile. &nbsp;A vehicle actually moves visibly every time the motion counter increases by 256, and since a tile consists of 16 such subunits, 16*256=4096 motion units mean motion across one tile.
+Ta zmienna zlicza ruch, który wykonał pojazd. &nbsp;Dotyczy tylko pierwszego pojazdu w składzie (tzn. Należy użyć VarAction2 typ 82!). &nbsp;Jego wartość wynosi 1/4096 płytki. &nbsp;Pojazd faktycznie porusza się w sposób widoczny za każdym razem, gdy licznik ruchu wzrasta o 256, a ponieważ płytka składa się z 16 takich podjednostek, 16 * 256 = 4096 jednostek ruchu oznacza ruch na jednej płytce.
 
-The most useful way to access it is probably with &lt;shiftnum&gt;=08 and an appropriate &lt;andmask&gt;. &nbsp;For example, to achieve an animation with one frame per vehicle motion and 16 frames in total for motion across an entire tile, you would use &lt;shiftnum&gt;=08 and &lt;andmask&gt;=0F. &nbsp;For an animation with one frame every two vehicle motions and 4 frames total, use &lt;shiftnum&gt;=09 and &lt;andmask&gt;=03.
+Najbardziej przydatnym sposobem dostępu jest prawdopodobnie &lt;shiftnum&gt;=08 i odpowiedni &lt;andmask&gt;. &nbsp;Na przykład, aby uzyskać animację z jedną klatką na ruch pojazdu i łącznie 16 klatek dla ruchu na całej płytce, należy użyć &lt;shiftnum&gt;=08 i &lt;andmask&gt;=0F. &nbsp;Aby uzyskać animację z jedną klatką co dwa ruchy pojazdu i łącznie 4 klatki, użyj &lt;shiftnum&gt;=09 i  &lt;andmask&gt;=03.
 
-If the vehicle is going very fast (&gt;160 mph for trains), it may move by several 1/16ths of a tile at once, and thus some frames may be skipped, but the animation will still remain in sync with the motion.
+Jeśli pojazd jedzie bardzo szybko (&gt;160 mph dla trains), może przesuwać się o kilka 1/16 części kafla jednocześnie, dlatego niektóre klatki mogą być pomijane, ale animacja nadal będzie zsynchronizowana z ruchem.
 
-Note that vehicle graphics are only updated every time the vehicle actually moves, so checking the lower byte is probably pointless, and only needed internally to achieve sufficient precision.
+Pamiętaj, że grafika pojazdu jest aktualizowana tylko za każdym razem, gdy pojazd faktycznie się porusza, więc sprawdzenie dolnego bajtu jest prawdopodobnie bezcelowe i potrzebne tylko wewnętrznie, aby osiągnąć wystarczającą precyzję.
 
 === Vehicle cargo info (47) ===
 
@@ -231,15 +231,15 @@ Note that vehicle graphics are only updated every time the vehicle actually move
 |cccc||the [[en/Action0Cargos#cargo-classes-16|cargo class]] value of the cargo transported by the vehicle
 |}
 
-Note that if the grf has installed a [[en/Action0/Global Settings#cargo-translation-table-09|cargo translation table]], the value in "tt" is the slot number in that table, irrespective of which actual slot or bit the cargo is using in the game. If a table has been installed, but the current cargo is not listed there, "tt" will be set to FF.
+Zauważ, że jeśli GRF zainstalował [[pl/Development/NewGRF/NFO Specs/Action0/Global Settings#cargo-translation-table-09|cargo translation table]] , wartość w „tt” jest numerem szczeliny w tej tabeli, niezależnie od tego, która faktyczna szczelina lub bit ładunek wykorzystuje w gra. Jeśli tabela została zainstalowana, ale aktualny ładunek nie jest tam wymieniony, „tt” zostanie ustawione na FF.
 
-Unlike variable 42, this variable returns the info of the current vehicle only, not the consist.
+W przeciwieństwie do zmiennej 42, zmienna ta zwraca informacje tylko o bieżącym pojeździe, a nie konsystencję.
 
 === Vehicle type information (48) ===
 
 '''Format:''' xxxxxxff
 
-The bits of ff are:
+Bity FF są:
 
 {| |-
 !Bit!!Value!!Meaning
@@ -251,21 +251,21 @@ The bits of ff are:
 |2||4||Exclusive testing offer for a human player active
 |}
 
-All other bits in ff are undefined and must be masked out.
+Wszystkie inne bity w ff są niezdefiniowane i muszą zostać zamaskowane.
 
 === Information about current railtype/roadtype/tramtype (4A) ===
 
 '''Format:''' xxxxFFrr
 
-The lower byte (rr) contains the (translated) railtype/roadtype/tramtype the vehicle is currently driving on. 
+Dolny bajt (rr) zawiera (przetłumaczony) typ szyny / typ drogi / typ tramwaju, na którym pojazd jedzie.
 
-If the railtype/roadtype/tramtype has no entry in the railtype/roadtype/tramtype translation table of the GRF, this value will be 0xFF. 
+Jeśli typ szyny/typ drogi/typ tramwaju <small>''(railtype/roadtype/tramtype)''</small> nie ma wpisu w tabeli translacji typu szyna/droga/typ tramwaju GRF, wartość ta będzie wynosić 0xFF.
 
-If no translation table is present, the raw value will be returned.
+Jeśli nie ma tabeli translacji, zwracana jest surowa wartość.
 
-Trains will return railtype.  {{pl/Development/NewGRF/ottdp|1.10|no}}Road vehicles (except trams) will return roadtype.  Trams will return railtype.
+Pociągi zwrócą typ szyny. {{pl/Development/NewGRF/ottdp|1.10|no}} Pojazdy drogowe (z wyjątkiem tramwajów) zwracają typ drogi. Tramwaje zwrócą kolej.
 
-For trains only, the next byte (FF) contains the following flags:
+Tylko dla pociągów następny bajt (FF) zawiera następujące flagi:
 
 {| |-
 !Bit!!Value!!Meaning
@@ -273,9 +273,9 @@ For trains only, the next byte (FF) contains the following flags:
 |0||1||The vehicle is/would be powered on the current railtype (this is independent from powered/non-powered wagon or anything)
 |}
 
-All other bits are undefined.
+Wszystkie pozostałe bity są niezdefiniowane.
 
-All other bytes and the result for non-rail vehicles are undefined.
+Wszystkie pozostałe bajty i wynik dla pojazdów innych niż kolejowe są niezdefiniowane.
 
 === Position within articulated vehicle (4B) ===
 
@@ -291,25 +291,25 @@ All other bytes and the result for non-rail vehicles are undefined.
 |xx||Reserved, do not access.
 |}
 
-The total number of articulated parts of a vehicle equals ff + 1 + bb.
+Całkowita liczba przegubowych części pojazdu wynosi ff + 1 + bb.
 
-For road vehicles "ff" and "bb" currently equal var 40, since there are no road vehicle wagons yet.
+Dla pojazdów drogowych  "ff" i "bb" są obecnie równe var 40, ponieważ nie ma jeszcze wagonów pojazdów drogowych.
 
 === Count Veh.ID occurence (60) ===
 
 '''Format:''' xxxxxxnn
 
-The 60+x parameter is the vehicle ID to look for, and the returned nn is the number of vehicles in the consist that have this ID. If used with VarAction2 type 81, only the current vehicle and onwards will be check, with VarAction2 type 82, all vehicles in the consist will be counted.
+Parametr 60+x to szukany identyfikator pojazdu, a zwracana nn to liczba pojazdów w konsolach, które mają ten identyfikator. W przypadku użycia z VarAction2 typu 81, sprawdzany będzie tylko bieżący pojazd i nowsze, przy VarAction2 typu 82 wszystkie pojazdy w składzie zostaną policzone.
 
 === Query variable of n-th vehicle in chain (61) ===
 
-This is a special variable to get the contents of another variable of a different vehicle in the vehicle chain. It is only supported for trains and road vehicles. It is not supported during a callback that is used to modify vehicle properties to avoid circular dependencies, which currently limits this variable to callbacks 1D, 2D, 31 and 32 plus outside callback scope.
+Jest to specjalna zmienna, aby uzyskać zawartość innej zmiennej innego pojazdu w łańcuchu pojazdu. Jest obsługiwany tylko w pociągach i pojazdach drogowych. Nie jest obsługiwany podczas wywołania zwrotnego używanego do modyfikowania właściwości pojazdu w celu uniknięcia zależności kołowych, co obecnie ogranicza tę zmienną do wywołań zwrotnych 1D, 2D, 31 i 32 oraz poza zakresem oddzwaniania.
 
-Temporary register 10F is interpreted as a signed integer and specifies the offset in the chain from the current vehicle. Positive values are interpreted as towards the end, negative values as towards the front. If the offset is outside the vehicle chain, the result value will be 0.
+Rejestr tymczasowy 10F jest interpretowany jako liczba całkowita ze znakiem i określa przesunięcie w łańcuchu od bieżącego pojazdu. Wartości dodatnie są interpretowane jako w kierunku końca, wartości ujemne w kierunku do przodu. Jeśli przesunięcie znajduje się poza łańcuchem pojazdu, wartość wyniku wyniesie 0.
 
-The 60+x parameter specifies the variable to access and temporary register 10E is passed as the new 60+x parameter. Passing 61 as the variable is not allowed. Currently only vehicle specific variables listed on this page plus global variable 25 and {{pl/Development/NewGRF/ottdp|1.3|no|ottdrev=r24527}} 5F are accessible through var 61.
+Parametr 60 + x określa zmienną dostępową, a rejestr tymczasowy 10E jest przekazywany jako nowy parametr 60 + x. Przekazanie 61 jako zmiennej jest niedozwolone. Obecnie tylko zmienne specyficzne dla pojazdu wymienione na tej stronie oraz zmienna globalna 25 i  {{pl/Development/NewGRF/ottdp|1.3|no|ottdrev=r24527}} 5F są dostępne poprzez var 61.
 
-The resulting value will have the size of whatever variable is queried.
+Wynikowa wartość będzie miała wielkość dowolnej zmiennej, której dotyczy zapytanie.
 
 === Curvature/position difference for n-th vehicle in chain (62) ===
 
@@ -317,22 +317,22 @@ The resulting value will have the size of whatever variable is queried.
 
 This variable is only supported for trains and road vehicles.
 
-The 60+x parameter is interpreted as a signed integer and specifies the offset in the chain from the current vehicle. Positive values are interpreted as towards the end, negative values as towards the front. If the offset is outside the vehicle chain, the result value will be 0.
+Parametr 60 + x jest interpretowany jako liczba całkowita ze znakiem i określa przesunięcie w łańcuchu od bieżącego pojazdu. Wartości dodatnie są interpretowane jako w kierunku końca, wartości ujemne w kierunku do przodu. Jeśli przesunięcie znajduje się poza łańcuchem pojazdu, wartość wyniku wyniesie 0.
 
-The lowest nibble (D) contains the direction difference between the selected vehicle and this vehicle, the possible values are identical to those of [[#curvature-info-45|variable 45]].
+Najniższa skórka (D) zawiera różnicę kierunku między wybranym pojazdem a tym pojazdem, możliwe wartości są identyczne z wartościami [[#curvature-info-45|variable 45]] .
 
-The next nibble (F) has the following meaning:
+Następny skubek (F) ma następujące znaczenie:
 {| |-
 !Bit!!Value!!Meaning
 |-
 |3||8||The vehicle is currently hidden
 |}
 
-The upper three bytes contain the signed difference of the X/Y/Z position between the selected vehicle and this vehicle.
+Trzy górne bajty zawierają podpisaną różnicę pozycji X/Y/Z między wybranym pojazdem a tym pojazdem.
 
 === Modflags (FE and FF) ===
 
-The bits in FE mostly relate to gradualloading. &nbsp;A few useful bits for grf authors are;
+Bity w FE dotyczą głównie ładowania stopniowego. &nbsp;Kilka przydatnych bitów dla autorów grf;
 
 {| |-
 !Bit!!Version!!Value of the bit
@@ -349,8 +349,8 @@ The bits in FE mostly relate to gradualloading. &nbsp;A few useful bits for grf 
 |}
 <references/>
 
-variable FF is actually the high byte of variable FE, so FE bit 8 is the same as FF bit 0.
+zmienna FF jest tak naprawdę wysokim bajtem zmiennej FE, więc bit FE 8 jest taki sam jak bit FF 0.
 
-Other bits are reserved; most are actually used for TTDPatch internal states.
+Inne bity są zastrzeżone; większość z nich jest faktycznie wykorzystywana w stanach wewnętrznych TTDPatch.
 
 ==Przykłady==
