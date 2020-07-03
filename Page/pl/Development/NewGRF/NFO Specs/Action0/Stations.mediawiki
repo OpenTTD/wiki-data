@@ -7,9 +7,9 @@ Definiowanie właściwości nowych stacji.
 
 W przeciwieństwie do pojazdów, nowe stacje nie mają odpowiednika TTD. W związku z tym można wybrać dowolne identyfikatory i w rzeczywistości zostaną one przydzielone automatycznie. W akcji 0 podajesz tylko identyfikatory w stosunku do zestawu, tj. Identyfikator pierwszego typu stacji to 00, drugi typ stacji to 01 itd..
 
-{{pl/Development/NewGRF/ttdp|}} In TTDPatch each game can only have 255 station IDs for all active grf files.
+{{pl/Development/NewGRF/ttdp|}} W TTDPatch każda gra może mieć tylko 255 identyfikatorów stacji dla wszystkich aktywnych plików grf.
 
-The only property you '''must''' set for each station ID is 08 (in addition to defining an [[en/Action3|action 3]] for it), anything else can be left at the default. It must be the first property you set for each station ID, because the station ID is actually undefined until it has been assigned a class through property 08. Also, all station IDs must get their classes in the right order, starting from ID 00 onwards.
+Jedyną właściwością, którą '''musisz''' ustawić dla każdego ID stacji, jest 08 (oprócz zdefiniowania dla niej [[pl/Development/NewGRF/NFO Specs/Action3/Main Page|action 3]] ), wszystko inne można pozostawić domyślnie. Musi to być pierwsza właściwość ustawiona dla każdego ID stacji, ponieważ ID stacji jest faktycznie niezdefiniowany, dopóki nie zostanie mu przypisana klasa za pośrednictwem właściwości 08. Ponadto wszystkie ID''`y'' stacji muszą uzyskać swoje klasy we właściwej kolejności, zaczynając od ID 00.
 
 == Properties ==
 
@@ -56,7 +56,7 @@ The only property you '''must''' set for each station ID is 08 (in addition to d
 |}
 
 
-Unofficial additions and changes. Don't rely on them to ever work this way in OpenTTD or TTDPatch:
+Nieoficjalne uzupełnienia i zmiany. Nie polegaj na nich, aby kiedykolwiek działały w ten sposób w OpenTTD lub TTDPatch:
 {| |-
 !Number!![[en/GRFActionsDetailed|Size]]!!Version!!Description
 |-
@@ -66,9 +66,9 @@ Unofficial additions and changes. Don't rely on them to ever work this way in Op
 == Description ==
 
 === Station class (08) ===
-TTDPatch groups sets of new station graphics into various classes. &nbsp;The classes can be selected by the top dropdown list in the construction window, and the individual stations within the class from the bottom dropdown list. &nbsp;In addition, each station can alter its appearance using [[en/VariationalAction2|variational]] and/or [[en/RandomAction2|random]] action 2 entries.
+TTDPatch grupuje zestawy nowej grafiki stacji w różne klasy. &nbsp;Klasy można wybrać z górnej listy rozwijanej w oknie konstrukcyjnym, a poszczególne stacje w klasie z dolnej listy rozwijanej. &nbsp;Ponadto każda stacja może zmienić swój wygląd za pomocą [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page|variational]] i/lub [[pl/Development/NewGRF/NFO Specs/RandomAction2|random]] działania 2 wpisów.
 
-Only two classes are pre-defined:
+Tylko dwie klasy są wstępnie zdefiniowane:
 
 {| |-
 !Name!!Class ID!!Intended use for station
@@ -78,14 +78,14 @@ Only two classes are pre-defined:
 |WAYP||57 41 59 50||Non-cargo stations, waypoints, signal boxes etc.
 |}
 
-You may simply use other classes than the above, as long as no more than (at the moment) 16 classes are used among all active .grf files at any time.
+Możesz po prostu użyć innych klas niż powyższe, o ile nie jest (więcej niż (obecnie)) 16 klas używanych we wszystkich aktywnych plikach .grf w dowolnym momencie.
 
-When a WAYP station is built, it will not accept cargo nor will any cargo appear from nearby industries or towns. &nbsp;Trains will not stop at WAYP stations, regardless of the non-stop order and/or the nonstop switch.
+Gdy zbudowana zostanie stacja WAYP, nie będzie ona przyjmować ładunku ani nie będzie ładunku z pobliskich gałęzi przemysłu lub miast. &nbsp;Pociągi nie zatrzymują się na stacjach WAYP, niezależnie od kolejności non-stop i / lub przełącznika non-stop.
 
 === Sprite layout (09) ===
-This controls what sprites are displayed, where they are displayed, and in what order. &nbsp;The property is variable sized, and contains the data for all 8 possible station tile types. &nbsp;If this property is set, the num-ent in the corresponding [[en/Action1|action 1]] need not be equal to 12 (hex), it can in fact be any number, and any number of sprites can be displayed in any order.
+Kontroluje to, które duszki są wyświetlane, gdzie są wyświetlane i w jakiej kolejności. &nbsp;Właściwość jest zmiennej wielkości i zawiera dane dla wszystkich 8 możliwych typów kafelków stacji. &nbsp;Jeśli ta właściwość jest ustawiona, liczba w odpowiedniej [[pl/Development/NewGRF/NFO Specs/Action1|action 1]] nie musi być równa 12 (hex), może to być dowolna liczba, a dowolna liczba duszków może być wyświetlana w dowolnej kolejności.
 
-The data is specified as data for all eight tiles in this way:
+W ten sposób dane są określone jako dane dla wszystkich ośmiu kafli:
 
 <pre>&lt;num&gt; &lt;data1&gt; &lt;data2&gt; ... &lt;datan&gt;</pre>
 
@@ -98,13 +98,13 @@ The data is specified as data for all eight tiles in this way:
 |}
 
 ===== Number of tiles supported =====
-* Normally this is 8, but you can specify fewer as well
-* Using callback flags bit 1, specifying more makes sense too
-* This value must be the same for all stations set by this action 0, even though it must be repeated for the prop. 09 definition of each station ID as well
+* Zwykle jest to 8, ale możesz też podać mniej
+* Korzystanie z flagi oddzwaniania bit 1, określenie więcej też ma sens
+* Ta wartość musi być taka sama dla wszystkich stacji ustawionych przez tę akcję 0, nawet jeśli musi zostać powtórzona dla śmigła. 09 definicja każdego ID stacji
 
-(Note that num is an extended byte, see [[en/GRFActionsDetailed]].)
+(Zauważ, że num jest rozszerzonym bajtem, patrz [[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|GRFActionsDetailed]].)
 
-The content of each of the (usually eight) data sets is either a new sprite layout:
+Zawartość każdego (zwykle ośmiu) zestawów danych jest albo nowym układem ikonek:
 
 {| |-
 !Size!!Name!!Meaning
@@ -115,11 +115,11 @@ The content of each of the (usually eight) data sets is either a new sprite layo
 |-
 |B||80||a literal 80 ends the list of sprites for this tile
 |}
-or, alternatively, the instruction to use TTD's layout by using four zero bytes 00 00 00 00 instead of the groundsprite bytes. You can use [http://www.bytetransfer.de/projects/ttdpatch/docs/spriteidmapping.php the online sprite ID converter] to look up the sprite IDs you can use for all the climates.
+lub, alternatywnie, instrukcja użycia układu TTD przy użyciu czterech bajtów zerowych 00 00 00 00 zamiast bajtów dna naziemnego. Możesz użyć  [http://www.bytetransfer.de/projects/ttdpatch/docs/spriteidmapping.php the online sprite ID converter] , aby wyszukać ID''`y'' 'sprite', których możesz użyć dla wszystkich klimatów.
 
-One can draw two types of sprites. &nbsp;One type is one that establishes a new 3D bounding box for use by the sprite sorter. &nbsp;The other type shares the 3D bounding box of the previous sprite(s). &nbsp;It must not be larger than the sprite which established the bounding box, nor must any part of it be outside this box. &nbsp;For simplicity, it should have the exact same dimensions as the sprite it shares the bounding box with. &nbsp;The latter type is supported in the station construction window display only since TTDPatch 2.6 r1684.
+Można narysować dwa rodzaje 'sprites' . &nbsp;Jeden typ to taki, który ustanawia nową ramkę ograniczającą 3D do użytku przez sortownik duszków. &nbsp;Drugi typ dzieli obwiednię 3D poprzednich ikonek. &nbsp;Nie może być większy niż duszek, który ustanowił obwiednię, ani żadna jej część nie może znajdować się poza tym polem. &nbsp;Dla uproszczenia powinien mieć dokładnie takie same wymiary, jak duszek, z którym dzieli obwiednię. &nbsp;Ten ostatni typ jest obsługiwany na ekranie okna budowy stacji tylko od TTDPatch 2.6 r1684.
 
-The spritedata of sprites with their own bounding box has this format:
+Spritedata ikonek z własnym obwiednią ma ten format:
 
 {| |-
 !Size!!Name!!Meaning
@@ -139,7 +139,7 @@ The spritedata of sprites with their own bounding box has this format:
 |D||sprite||sprite number to draw
 |}
 
-The spritedata of sprites sharing the bounding box has this format:
+Spritedata 'sprites' dzielących obwiednię ma ten format:
 
 {| |-
 !Size!!Name!!Meaning
@@ -159,10 +159,10 @@ The spritedata of sprites sharing the bounding box has this format:
 |D||sprite||sprite number to draw
 |}
 
-Since OpenTTD r18959 you can draw multiple ground sprites for a tile, which is useful if you want to use the usual rail/grass/concrete groundtile, but still need to add features to it without using a new bounding box. To do so use the syntax of sprites sharing the previous bounding box, but use it before the first bounding box definition. xpixeloffset and ypixeloffset refer to the usual spot of groundtiles. The same feature is also partially supported in TTDPatch since TTDPatch 2.6 r2312: TTDPatch ignores the xofs and yofs fields and always uses (0,0) for the offset. If you are developing a GRF that needs to be compatible with both OpenTTD and TTDPatch, you should always keep xofs and yofs zero to get the same effect in both games.
-Note however that both implementations do not consider the [[en/Action0/Stations#general-flags-13|setting of prop13 bit 0]], hence these "multiple ground sprites" have to be always part of the building sprites set and cannot be part of the different sprite set for ground sprites.
+Od OpenTTD r18959 możesz narysować wiele duszek ziemi na płytkę, co jest przydatne, jeśli chcesz użyć zwykłej płytki podłogowej szyny / trawy / betonu, ale nadal musisz dodać do niej funkcje bez korzystania z nowej ramki ograniczającej. Aby to zrobić, użyj składni ikonek współużytkujących poprzednią ramkę ograniczającą, ale użyj jej przed definicją pierwszej ramki ograniczającej. xpixeloffset i ypixeloffset odnoszą się do zwykłego miejsca płytek naziemnych. Ta sama funkcja jest również częściowo obsługiwana w TTDPatch, ponieważ TTDPatch 2.6 r2312: TTDPatch ignoruje pola xofs i yofs i zawsze używa (0,0) dla offsetu. Jeśli tworzysz GRF, który musi być zgodny zarówno z OpenTTD, jak i TTDPatch, zawsze powinieneś utrzymywać xofs i yofs zero, aby uzyskać ten sam efekt w obu grach.
+Zauważ jednak, że obie implementacje nie biorą pod uwagę  [[pl/Development/NewGRF/NFO Specs/Action0/Stations#general-flags-13|setting of prop13 bit 0]] , dlatego te „liczne duszki naziemne” muszą zawsze być częścią zestawu duszek budynku i nie mogą być częścią inny zestaw ikonek dla ikonek naziemnych.
 
-The sprite number can have the following values (remember to use little endian, i.e. reversed byte order):
+Liczba ikonek może mieć następujące wartości (pamiętaj, aby używać małego endiana, tj. Odwróconej kolejności bajtów):
 
 {| |-
 !Number!!Sprite
@@ -176,9 +176,9 @@ The sprite number can have the following values (remember to use little endian, 
 |RRRR842D+X||draw sprite with colour translation defined in sprite RRRR; available since TTDPatch 2.6 r1683
 |}
 
-With bit 31 set, this sprite will refer to a TTD sprite, not the action 1 sprite. For the first ground sprite the reverse meaning applies.
+Przy ustawionym bicie 31 ten duszek będzie odnosił się do duszka TTD, a nie duszka akcji 1. Dla pierwszego duszka naziemnego obowiązuje odwrotne znaczenie.
 
-Depending on the railtype the sprites may get additional offsets:
+W zależności od rodzaju szyny sprajty mogą uzyskać dodatkowe przesunięcia <small>''(offsets)''</small> :
 
 {| |-
 ! !! Normal/electrified rail !! Monorail !! Maglev
@@ -190,26 +190,26 @@ Depending on the railtype the sprites may get additional offsets:
 |Action 1 sprite (other sprites in the layout) || 0 || 0 || 0
 |}
 
-So, TTD sprites and the first ground sprite are affected by the railtype, while other action 1 sprites in the layout are not. The offset "82" refers to the offset between the default TTD track sprites; if you are using non-track ground sprites which are not from an action 1, you need to supply fake spritenumbers which preemptively reverse the offsets (that is, you need different sprite layouts for every railtype your station is available for).
+Tak więc duszki TTD i pierwszy duszek naziemny są pod wpływem typu szyny, podczas gdy inne duszki akcji 1 w układzie nie są. Przesunięcie "82" odnosi się do przesunięcia między domyślnymi duszkami torowymi TTD; jeśli używasz niedziałających naziemnych ikonek, które nie pochodzą z akcji 1, musisz dostarczyć fałszywe numery ikon, które zapobiegawczo odwrócą przesunięcia (to znaczy, potrzebujesz różnych układów ikon dla każdego typu linii, dla którego twoja stacja jest dostępna).
 
-Setting bit 30 forces this sprite to be displayed normally even in "transparent buildings" mode (supported only in TTDPatch 2.6 r1695 and later).
+Ustawienie bitu 30 wymusza normalne wyświetlanie tego duszka nawet w trybie "przezroczystych budynków" <small>''(transparent buildings)''</small> (obsługiwane tylko w TTDPatch 2.6 r1695 i późniejszych).
 
-See below for an example of linked sprites as well as transparent sprites (e.g. for a station roof).
+Poniżej znajduje się przykład połączonych duszków, a także przezroczystych duszków (np. Na dachu stacji).
 
-Note that the coordinates here are 3D coordinates with x running from top-right to bottom-left and y running from top-left to bottom-right, with the tile dimensions being 16x16 (and 8 for one height level). This means the x and y values should always be within 0-15 (decimal).
+Zauważ, że współrzędne tutaj są współrzędnymi 3D, przy czym x biegnie od prawego górnego rogu do lewego dolnego, zaś y biegnie od lewego górnego rogu do prawego dolnego rogu, przy czym wymiary kafelków wynoszą 16 x 16 (i 8 dla jednego poziomu wysokości). Oznacza to, że wartości xiy powinny zawsze zawierać się w przedziale 0–15 (dziesiętnie).
 
-This is different to and independent from the x/y offsets used in the actual .NFO file. &nbsp;The 3D bounding box is used by TTD's sprite sorter to figure out the order in which to draw the sprites, as well as telling it which sprites to draw, because those whose bounding box falls outside the currently updated screen rectangle will not be drawn. &nbsp;Make sure the 3D bounding box is large enough to contain the entire sprite, but not so large that the sprite sorter can't determine which sprites should be in front.
+Różni się to i jest niezależne od przesunięć x/y używanych w rzeczywistym pliku .NFO. &nbsp;Obwiednia 3D jest używana przez sortownik sprite'ów TTD do określenia kolejności rysowania 'sprites' , a także do wskazania, które 'sprites' mają rysować, ponieważ te, których ramka graniczna wykracza poza aktualnie aktualizowany prostokąt ekranu, nie zostaną narysowane. &nbsp;Upewnij się, że obwiednia 3D jest wystarczająco duża, aby pomieścić całego 'sprite' , ale nie tak duża, aby sortownik 'sprite' nie mógł określić, które 'sprites' powinny być z przodu.
 
-This means that the order in which you specify sprites is irrelevant. &nbsp;Sprites will get drawn from back to front, in the order which the sprite sorter determines as correct, from their bounding boxes. &nbsp;There are two exceptions, however:
-* Sprites sharing the same bounding box will always be drawn in the given order.
-* The station construction window display doesn't use the sprite sorter. Tiles that may be displayed in that window need to be specified in the correct drawing order, back to front.
+Oznacza to, że kolejność określania 'sprites' jest nieistotna. &nbsp;'Sprites' będą rysowane od tyłu do przodu, w kolejności, którą sortownik 'sprite' określa jako prawidłowy, z ich ramek ograniczających. &nbsp;Istnieją jednak dwa wyjątki:
+* 'Sprites' dzielące to samo obwiednię zawsze będą rysowane w podanej kolejności.
+* Okno wyświetlania konstrukcji stacji nie korzysta z sortownika 'sprites' . Kafelki, które mogą być wyświetlane w tym oknie, muszą być określone we właściwej kolejności rysowania, od tyłu do przodu.
 
 === Copy sprite layout (0A) ===
 
-This is not a property as such, but an action. &nbsp;It takes as argument a byte which is interpreted as station-ID to copy the custom sprite layout from.
+To nie jest właściwość jako taka, ale działanie. &nbsp;Jako argument przyjmuje bajt interpretowany jako ID stacji do skopiowania niestandardowego układu ikonki.
 
 === Callback flags (0B) ===
-For stations, the following [[en/Callbacks]] can be defined by setting the corresponding bit in property 0B:
+W przypadku stacji można zdefiniować następujące [[pl/Development/NewGRF/NFO Specs/Callback/Main Page|callbacks]] poprzez ustawienie odpowiedniego bitu we właściwości 0B:
 
 {| |-
 !Bit!!Value!!Variable 0C value!!Callback
@@ -224,21 +224,21 @@ For stations, the following [[en/Callbacks]] can be defined by setting the corre
 |-
 |4||10||149||Custom slope check
 |}
-Bit is the bit you have to set, you do this by adding all the values for all the bits. Variable 0C value is what variable 0C will be set to, for checking it in the [[en/VariationalAction2|VarAction2]] for callbacks.
+Bit to bit, który musisz ustawić, robisz to poprzez dodanie wszystkich wartości dla wszystkich bitów. Zmienna wartość 0C to ta, dla której zostanie ustawiona zmienna 0C, do sprawdzania jej w   [[en/VariationalAction2|VarAction2]] dla wywołań zwrotnych.
 
 === Selection of numbers of platforms and length (0C, 0D) ===
 
-By default all platform lengths and any number of platforms is available for the new stations. &nbsp;Using these properties, you can choose which ones should be unavailable by setting the corresponding bit in the property.
+Domyślnie dla wszystkich stacji dostępne są wszystkie długości platform i dowolna liczba platform. &nbsp;Korzystając z tych właściwości, możesz wybrać, które mają być niedostępne, ustawiając odpowiedni bit we właściwości.
 
-The values are a byte, used as a bit mask. &nbsp;Bits 0 to 6 control the availability of number or length 1 to 7, and bit 7 controls the availability of the "+7" button. &nbsp;Each bit that is set disables the corresponding length or number of platforms.
+Wartości są bajtami używanymi jako maska ​​bitowa. &nbsp;Bity od 0 do 6 kontrolują dostępność liczby lub długości od 1 do 7, a bit 7 kontroluje dostępność przycisku "+7" . &nbsp;Każdy ustawiony bit wyłącza odpowiednią długość lub liczbę platform.
 
-For compatibility with "largestations off", at least one length between 1 and 5 (bits 0 to 4) and one number of platforms between 1 and 4 (bits 0 to 3) must be available, i.e. at least one of these bits must be unset.
+W celu zapewnienia zgodności z "największymi wyłączeniami" <small>''(largestations off)''</small> musi być dostępna co najmniej jedna długość od 1 do 5 (bity od 0 do 4) i jedna liczba platform od 1 do 4 (bity od 0 do 3), tzn. Co najmniej jeden z tych bitów musi być nieoprawny.
 
 === Define custom layout (0E) ===
 
-This allows choosing which tile type is built at which tile of a newly built
+Pozwala to wybrać, który typ kafelka jest budowany, na którym kafelku nowo budowany
 
-station. &nbsp;There are four different types, which TTD normally defines as
+stacja. &nbsp;Istnieją cztery różne typy, które TTD zwykle określa jako
 
 {| |-
 !Tile type!!Appearance
@@ -252,7 +252,7 @@ station. &nbsp;There are four different types, which TTD normally defines as
 |06||platform with roof, right side
 |}
 
-These numbers are used for stations in NE-SW direction, or these numbers plus one for stations in the NW-SE direction. &nbsp;To define a custom layout, use this format:
+Te liczby są używane dla stacji w kierunku NE-SW lub te liczby plus jeden dla stacji w kierunku NW-SE. &nbsp;Aby zdefiniować niestandardowy układ, użyj tego formatu:
 
 {| |-
 !Size!!Name!!Meaning
@@ -264,12 +264,12 @@ These numbers are used for stations in NE-SW direction, or these numbers plus on
 |V||tiles||length*number bytes of tile types, one platform after another, only 00, 02, 04 or 06 are allowed as values
 |}
 
-Repeat this as often as necessary to define the layouts for all supported combinations of length and number. &nbsp;End the definitions with a 00 00 (zero length and zero number). &nbsp;Any combinations that are not defined will be built using TTD's default layout.
-Note that it may be easier to draw different sprite sets using a [[en/VariationalAction2|VarAction2]] based on [[en/VarAction2Stations#platform-info-40-41-46-47-49|station variable 40]], rather than redefining the layout. &nbsp;In addition, [[en/Callbacks#custom-station-layout-24|callback 24]] will be used to further customize the layout as defined by this property (or by TTD if no prop 0E layout is available). This may also be easier than defining a prop 0E layout for every combination of length and number of platforms.
+Powtarzaj to tak często, jak to konieczne, aby zdefiniować układy dla wszystkich obsługiwanych kombinacji długości i liczby. &nbsp;Zakończ definicje 00 00 (długość zerowa i liczba zerowa). &nbsp;Wszelkie niezdefiniowane kombinacje zostaną zbudowane przy użyciu domyślnego układu TTD.
+Zauważ, że łatwiejsze może być rysowanie różnych zestawów ikonek za pomocą  [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page|VarAction2]] w oparciu o [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Stations#platform-info-40-41-46-47-49|station variable 40]] , zamiast redefiniowania układu. &nbsp;Ponadto [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#custom-station-layout-24|callback 24]]  zostanie wykorzystany do dalszego dostosowania układu zgodnie z definicją tej właściwości (lub TTD, jeśli nie jest dostępny układ prop 0E). Może to być również łatwiejsze niż zdefiniowanie układu prop 0E dla każdej kombinacji długości i liczby platform.
 
 === Copy custom layout (0F) ===
 
-Similar to property 0A, this copies the custom layout from the station-ID given by the argument.
+Podobnie jak właściwość 0A, kopiuje niestandardowy układ z identyfikatora stacji podanego przez argument.
 
 === Little/lots threshold (10) ===
 Amount of cargo for switching from "little" to "lots" of cargo. &nbsp;TTDPatch separates the full range of cargo amounts (0 to 4095) into two separate subranges, "little" and "lots" of cargo. &nbsp;This allows better control of cargo amount based graphics (if needed). &nbsp;Property 10 specifies at what amount of cargo the patch is to switch from one to the other subrange. &nbsp;See [[en/Action2Stations|Action 2 for stations]] for more information.
