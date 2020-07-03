@@ -5,9 +5,9 @@ Definiowanie właściwości nowych obiektów.
 
 W przeciwieństwie do pojazdów lub nowych stacji, większość nowych obiektów nie ma rzeczywistego odpowiednika w TTD.
 
-The IDs are therefore free to be chosen and will in fact be allocated automatically by the patch. In action 0, you only specify IDs relative to the set, i.e. the ID of the first object type is 00, the second object type is 01 and so on. In total, each game can only have 255 object IDs for all active grf files.
+W związku z tym ID''`y'' można wybierać dowolnie i faktycznie zostaną one przydzielone automatycznie przez łatkę. W akcji 0 podajesz tylko ID''`y'' w stosunku do zestawu, tj. ID pierwszego typu obiektu to 00, drugi typ obiektu to 01 itd. W sumie każda gra może mieć tylko 255 ID''`ów'' obiektów dla wszystkich aktywnych plików grf.
 
-The property you '''must''' set for each object ID is 08 (in addition to defining an action 3 for it). Also, all object IDs must get their classes in the right order, starting from ID 00 onwards.
+Właściwością, którą '''musisz ''' <small>''(must)''</small> ustawić dla każdego ID obiektu, jest 08 (oprócz zdefiniowania dla niego akcji 3). Ponadto wszystkie ID''`y'' obiektów muszą mieć klasy we właściwej kolejności, zaczynając od ID 00.
 
 == Properties ==
 {|
@@ -48,53 +48,53 @@ The property you '''must''' set for each object ID is 08 (in addition to definin
 |18||B||{{pl/Development/NewGRF/ottdp|1.4|no|ottdrev=r25879}}||Measure for number of objects placed upon map creation
 |}
 
-Check [http://pics.lakie.net/newObject-ActionStructure.png Lakie's Graphical Representation of the newObject Specifications]
+Sprawdź [http://pics.lakie.net/newObject-ActionStructure.png Lakie's Graphical Representation of the newObject Specifications]
 
 == Descriptions ==
 
 === Object class (08) ===
 
-Class labels are unique identifiers composed of the letters A-Z and/or the numbers 0-9, &nbsp;analoguous to [[en/Action0Stations#station-class-08|station class labels]].
+Etykiety klas są niepowtarzalnymi identyfikatorami złożonymi z liter A-Z i / lub cyfr 0–9, &nbsp;analogicznie do [[pl/Development/NewGRF/NFO Specs/Action0/Stations#station-class-08|station class labels]].
 
-Their main use is to combine objects into classes and make them available by the top dropdown list in the object construction window.
+Ich głównym zastosowaniem jest łączenie obiektów w klasy i udostępnianie ich za pomocą górnej listy rozwijanej w oknie budowy obiektu.
 
-Unlike for stations, there is no default class for objects. Set authors have to specify their [[en/ObjectLabels|own labels]], although it is strongly recommended to follow a general scheme to try to avoid confusion.
+W przeciwieństwie do stacji, nie ma domyślnej klasy dla obiektów. Autorzy zestawu muszą określić swoje [[pl/Development/NewGRF/NFO Specs/ObjectLabels|own labels]] , chociaż zdecydowanie zaleca się stosowanie ogólnego schematu, aby uniknąć zamieszania.
 
-Class IDs must be set before any other property.
+ID''`y'' klas muszą być ustawione przed jakąkolwiek inną właściwością.
 
 === Object class text ID (09) ===
 
-The text ID for this class (word value). This textid should be either a TTD textid or a D4xx textid (set via D0xx in action4).
+ID tekstowy dla tej klasy (wartość słowa). Ten textid powinien być textid TTD lub textid D4xx (ustawiany przez D0xx w action4).
 
-When specifying an object, you don't need to set a class name again if you already did for another one with the same class.
+Określając obiekt, nie musisz ponownie ustawiać nazwy klasy, jeśli zrobiłeś to już dla innej z tą samą klasą.
 
 === Object text ID (0A) ===
 
-The text ID for the object for query and selection (word value). Same requirements as for property09.
+ID tekstowy obiektu do zapytania i wyboru (wartość słowa). Takie same wymagania jak w przypadku property09.
 
 === Object size (0C) ===
 
-The object size up to 15x15 tiles.
+Rozmiar obiektu do 15x15 płytek.
 
-This byte value is divided into two nibbles. The first defines the size in y direction and the second defines the size in x (i.e., stored as YX).
+Ta wartość bajtu jest podzielona na dwie wartości. Pierwszy określa rozmiar w kierunku y, a drugi określa rozmiar w x (tj. Przechowywany jako YX).
 
-Note that any value lower than 0x11 will be rejected.
+Pamiętaj, że każda wartość mniejsza niż 0x11 zostanie odrzucona.
 
 === Build Cost (0D) ===
 
-The build cost multiplier. This is multiplied by the number of tiles for evaluation of construction and removal costs of an object.
+Mnożnik kosztów kompilacji. Mnoży się to przez liczbę płytek do oceny kosztów budowy i usunięcia obiektu.
 
 === Introduction date (0E) ===
 
-Introduction date of an object, in days since the year 0. This takes account of leap years; divisible by 4, but not 100 unless 400. A start date of 1920-01-01 is obtained with a value of 701265 (51 B3 0A 00). In TTDPatch anything before 1920 is considered to be always available, and it should allow for objects to work past 2044, the date is also the very first date you can build the object.
+Data wprowadzenia obiektu, w dniach od roku 0. Uwzględnia lata przestępne; dzieli się przez 4, ale nie 100, chyba że 400. Datę początkową 1920-01-01 uzyskuje się o wartości 701265 (51 B3 0A 00). W TTDPatch wszystko przed 1920 jest uważane za zawsze dostępne i powinno pozwolić na działanie obiektów po 2044, data jest również pierwszą datą, w której możesz zbudować obiekt.
 
 === End of life date (0F) ===
 
-Last year an object can be build, in days since the year 0. Same requirements as above. Also note that it must be a minimum of a year (365 days) after the introduction date or TTDPatch will ignore it.
+W ubiegłym roku można zbudować obiekt, w dniach od roku 0. Takie same wymagania jak powyżej. Pamiętaj też, że musi upłynąć co najmniej rok (365 dni) od daty wprowadzenia, w przeciwnym razie TTDPatch zignoruje to.
 
 === Object flags (10) ===
 
-The following flags control object behaviour and are cached for built objects, so changing these flags will have no effect on already constructed objects.
+Następujące flagi kontrolują zachowanie obiektu i są buforowane dla obiektów zbudowanych, więc zmiana tych flag nie będzie miała wpływu na obiekty już zbudowane.
 
 {|
 !Bit!!Value!!Version!!Meaning
@@ -132,17 +132,17 @@ The following flags control object behaviour and are cached for built objects, s
 
 === Animation information (11) ===
 
-The low byte specifies the number of animation frames minus one, so 00 means 1 frame, 01 means 2 frames etc. The maximum number of frames is 256, although you can have some problems if your animation exceeds FD (253) frames. The high byte must be 0 for non-looping animations and 01 for looping animations. Every other value is reserved for future use. In addition, if the whole word contains FFFF, animation is turned off for this object (this is the default value).
+Niższy bajt określa liczbę klatek animacji pomniejszoną o jedną, więc 00 oznacza 1 klatkę, 01 oznacza 2 klatki itp. Maksymalna liczba klatek wynosi 256, chociaż możesz mieć pewne problemy, jeśli twoja animacja przekracza liczbę klatek FD (253). Górny bajt musi wynosić 0 dla animacji nie zapętlonych i 01 dla animacji zapętlonych. Każda inna wartość jest zarezerwowana do wykorzystania w przyszłości. Ponadto, jeśli całe słowo zawiera FFFF, animacja dla tego obiektu jest wyłączona (jest to wartość domyślna).
 
-Since you can't have properties for individual object tiles, this property applies for every tile of the object. If you don't want to animate some tiles, you should check the current position during [[en/Callbacks#animation-control-1b-25-140-152-159|callback 159]] and return FD if the current tile doesn't need to be animated. If you also need animations of different length per tile, you'll have to use [[en/Callbacks#next-animation-frame-1a-26-141-153-158|callback 158]] for that.
+Ponieważ nie możesz mieć właściwości dla poszczególnych kafelków obiektu, ta właściwość dotyczy każdej kafelka obiektu. Jeśli nie chcesz animować niektórych kafelków, powinieneś sprawdzić bieżącą pozycję podczas [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159|callback 159]] i zwrócić FD, jeśli bieżący kafelek nie trzeba być animowanym. Jeśli potrzebujesz także animacji o różnej długości na płytkę, musisz użyć [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#next-animation-frame-1a-26-141-153-158|callback 158]] .
 
 === Animation speed (12) ===
 
-The meaning is the same as for [[en/Action0Houses#animation-speed-1b|house property 1B]], but the lower limit is 0 instead of 2, so the fastest possible animation changes frames every game tick (27ms). The default value is 0.
+The meaning is the same as for [[pl/Extrazi/specs.tt/Action0Houses#animation-speed-1b|house property 1B]], but the lower limit is 0 instead of 2, so the fastest possible animation changes frames every game tick (27ms). The default value is 0.
 
 === Animation triggers (13) ===
 
-This is a bit mask of events that should trigger [[en/Callbacks#animation-control-1b-25-140-152-159|callback 159]], allowing to change the animation state
+This is a bit mask of events that should trigger [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159|callback 159]], allowing to change the animation state
 
 {|
 !Bit!!Value!!Meaning!!Happens on!!Var 18
@@ -153,17 +153,17 @@ This is a bit mask of events that should trigger [[en/Callbacks#animation-contro
 |-
 |2||4||Synchronised periodic tile loop||all tiles||
 |}
-Currently no trigger provides additional information in var 18. 
+Obecnie żaden wyzwalacz nie zapewnia dodatkowych informacji w var 18.
 
-The synchronised periodic tile loop is called directly after the (unsynchronised) periodic tile loop of the northern tile.
+Zsynchronizowana okresowa pętla kafelkowa jest wywoływana bezpośrednio po (niezsynchronizowanej) okresowej pętli kafelkowej płytki północnej.
 
 === Object removal cost factor (14) ===
 
-Cost factor for the removal of an object. This must be set after property 0D (object build cost factor) as that overwrites this value.
+Współczynnik kosztów usunięcia obiektu. Należy to ustawić po właściwości 0D (współczynnik kosztu kompilacji obiektu), ponieważ to zastępuje tę wartość.
 
 === Callback flags (15) ===
 
-For objects, the following [[en/Callbacks]] can be defined by setting the corresponding bit in property 15:
+W przypadku obiektów można zdefiniować następujące [[pl/Development/NewGRF/NFO Specs/Callback/Main Page|callbacks]] poprzez ustawienie odpowiedniego bitu we właściwości 15:
 
 {|
 !Bit!!Value!!Variable 0C value!!Callback
@@ -183,15 +183,15 @@ For objects, the following [[en/Callbacks]] can be defined by setting the corres
 
 === Building height (16) ===
 
-Set the height of the building in heightlevels (8 pixels). For example if the structure is 16 pixels high you set this property to 2.
+Ustaw wysokość budynku w poziomach wysokości (8 pikseli). Na przykład, jeśli struktura ma 16 pikseli wysokości, ustaw tę właściwość na 2.
 
-{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=r21455}} In OpenTTD this property is used to determine the height of the build object window; the height for the object preview is set to 32 + "value of property 16" * 8. The property is also uses to determine how high a bridge must be if it is allowed by the bit in property 10.
+{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=r21455}} W OpenTTD ta właściwość służy do określania wysokości okna obiektu kompilacji; wysokość podglądu obiektu jest ustawiona na 32 + "value of property 16" * 8 <small>(..wartość właściwa..)</small>. Właściwość służy również do określania wysokości mostu, jeśli jest to dozwolone przez bit we właściwości 10.
 
 === Number of views (17) ===
 
-Objects may have "views", i.e. different graphical representations, e.g. used to show rotated views of an object. Number of views may be 1, 2, or 4. Default value is 1.
+Obiekty mogą mieć "widoki" <small>''(views)''</small>, tj. Różne reprezentacje graficzne, np. służy do wyświetlania obróconych widoków obiektu. Liczba wyświetleń może wynosić 1, 2 lub 4. Wartość domyślna to 1.
 
-For non-square objects, x and y sizes are swapped for odd views. I.e., giving an object size of 1*2 (x = 1, y = 2), it will be displayed as 1*2 for num = <nowiki>[</nowiki>0,2] (x-direction) but as 2*1 for num = <nowiki>[</nowiki>1,3] (y-direction).
+W przypadku obiektów innych niż kwadratowe rozmiary xiy są zamieniane na nieparzyste widoki. To znaczy, podając rozmiar obiektu 1*2 (x = 1, y = 2) , będzie wyświetlany jako 1*2 dla num = <nowiki>[</nowiki>0,2] (kierunek x), ale jako 2*1 dla  num = <nowiki>[</nowiki>1,3] (kierunek y).
 
-Use object varaction2 var48 to access particular views of an object.
+Użyj obiektu varaction2 var48, aby uzyskać dostęp do określonych widoków obiektu.
 ==Przykłady==
