@@ -153,7 +153,7 @@ Identyfikator tekstu, który powinien być wyświetlany w oknie zapytania dotycz
 {| |-
 !Bit!!Value!!Meaning
 |-
-|0..4||1,2,4,8,10||which [[en/VarAction2Houses#town-zone-42|town zone(s)]] the building can be built in
+|0..4||1,2,4,8,10||which [[pl/Extrazi/specs.tt/VarAction2Houses#town-zone-42|town zone(s)]] the building can be built in
 |-
 |11||800||can appear in sub-arctic climate above the snow line
 |-
@@ -230,7 +230,7 @@ Jeśli funkcja zwrotna 1B jest włączona we właściwości 14, jest również w
 
 === Random colours (17) ===
 
-This specifies four colors used for random painting (see [[pl/Development/NewGRF/NFO Specs/Action2/Sprite Layout|Action2HousesIndustryTiles]]). Każdy bajt dwordu określa kolor, wartości są takie same jak w Action2, z tą różnicą, że numeracja zaczyna się od zera zamiast 775. Jeśli nie jest ustawiona, domyślnie jest to 04 08 0c 06 (czerwony, niebieski, pomarańczowy i zielony, kolory nowoczesnego budynku biurowego). Można ustawić różne wartości dla płytek budynków z wieloma płytkami.
+Określa cztery kolory używane do losowego malowania (patrz [[pl/Development/NewGRF/NFO Specs/Action2/Sprite Layout|Action2HousesIndustryTiles]] ). Każdy bajt dwordu określa kolor, wartości są takie same jak w Action2, z tą różnicą, że numeracja zaczyna się od zera zamiast 775. budynek biurowego). Można zestawiać różne wartości dla płytek instalacji z podzielonymi płytkami.
 
 === Probability (18) ===
 
@@ -245,13 +245,13 @@ Prawdopodobieństwo jest względne, ponieważ prawdopodobieństwo bezwzględne z
 {| |-
 !Bit!!Value!!Version!!Meaning
 |-
-|0||1||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||This building appears during the generation of a town, but not later, i.e. will appear in random games, but new ones won't be built during the game. Useful for buildings that are intended to be historical.
+|0||1||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Ten budynek pojawia się podczas generowania miasta, ale nie później, tj. Pojawi się w losowych grach, ale nowe nie zostaną zbudowane podczas gry. Przydatny w przypadku budynków, które mają być historyczne.
 |-
-|1||2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||This building is protected, i.e. towns and AI players won't remove it. Human players can still remove it, so you may need to set a high remove cost/rating to make them think twice.
+|1||2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Ten budynek jest chroniony, tzn. Miasta i gracze AI nie będą go usuwać. Ludzcy gracze nadal mogą go usunąć, więc może być konieczne ustawienie wysokiego kosztu/'rating', aby zmusili go do dwukrotnego zastanowienia.
 |-
-|2||4||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Synchronized [[en/Callbacks#animation-control-1b-25-140-152-159| callback 1B]]. (for multi-tile buildings)<ref>If synchronized callbacks are enabled, callback 1B will be called when the periodic processing reaches the main tile of the building, and not when it reaches the current tile. This is useful if your animation must run synchronously on every tile of the building. If this bit is set, callback 1B is called according to the main tile's property 16, not the current one, to make sure every tile stays in sync.</ref>
+|2||4||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Synchronized [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159| callback 1B]]. (do budynków z wieloma płytkami)<ref>Jeśli włączone są zsynchronizowane połączenia zwrotne, wywołanie zwrotne 1B zostanie wywołane, gdy okresowe przetwarzanie dotrze do głównego kafelka budynku, a nie po osiągnięciu bieżącego kafelka. Jest to przydatne, jeśli twoja animacja musi działać synchronicznie na każdym kafelku budynku. Jeśli ten bit jest ustawiony, wywołanie zwrotne 1B jest wywoływane zgodnie z właściwością 16 głównego kafelka, a nie z bieżącym, aby upewnić się, że każdy kafelek pozostaje zsynchronizowany.</ref>
 |-
-|3||8||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=beta 2}}||[[en/Callbacks#next-animation-frame-1a-26-141-153-158 |Callback 1A]] needs random bits
+|3||8||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=beta 2}}||[[pl/Development/NewGRF/NFO Specs/Callback/Main Page#next-animation-frame-1a-26-141-153-158 |Callback 1A]] potrzebuje losowych bitów
 |}
 
 <references />
@@ -284,13 +284,13 @@ Począwszy od wersji 7 GRF i wyższej, znaczenie tej właściwości zmienia się
 
 === Minimum life span in years (1F) ===
 
-Miasta nie mogą zniszczyć domu, jeśli nie osiągnął jeszcze podanego tutaj wieku. Domyślna wartość to 0, co oznacza, że ​​miasta mogą usunąć dom w dowolnym momencie. Pamiętaj, że to ustawienie nie uniemożliwia graczom AI usunięcia domu; dotyczy to tylko miast. Jeśli chcesz również chronić swój budynek przed graczami AI, możesz ustawić flagę „chronione” (właściwość 19 bit 1) lub użyć  [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#protect-building-conditionally-143 |callback 143]] i użyj własnego kodu zdecydować, kto (i kiedy) może usunąć budynek.
+Miasta nie mogą zniszczyć domu, jeśli nie osiągnął jeszcze podanego tutaj wieku. Domyślna wartość to 0, co oznacza, że ​​miasta mogą usunąć dom w dowolnym momencie. Pamiętaj, że to ustawienie nie uniemożliwia graczom AI usunięcia domu; dotyczy to tylko miast. Jeśli chcesz również chronić swój budynek przed graczami AI, możesz ustawić flagę "chronione" <small>''(protected)''</small> (właściwość 19 bit 1) lub użyć  [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#protect-building-conditionally-143 |callback 143]] i użyj własnego kodu zdecydować, kto (i kiedy) może usunąć budynek.
 
 Aby działało to konsekwentnie na budynkach z wieloma płytkami, musisz ustawić taką samą minimalną żywotność dla wszystkich płytek budynku.
 
 === Cargo acceptance watch list (20) ===
 
-Ta właściwość jest listą rodzajów ładunków, typów, których akceptację należy obserwować. Pierwszy bajt to długość listy, pozostałe bajty identyfikują typy ładunku. {{pl/Development/NewGRF/grfFrom|7}} Jeśli twój GRF jest w wersji 7 lub wyższej i ma tablicę translacji ładunku, bajty są indeksami w tabeli; w przeciwnym razie są to numery miejsc ładunkowych. Kiedy aktualny kafelek przyjmuje ładunek z tej listy, [[en/Callbacks#watched-cargo-accepted-148 |callback 148]] jest wywoływany na kafelkach „wszystkich” budynku. Zobacz [[en/Callbacks#watched-cargo-accepted-148 |callback 148]] , aby uzyskać więcej informacji na temat tego, jak to się dzieje.
+Ta właściwość jest listą rodzajów ładunków, typów, których akceptację należy obserwować. Pierwszy bajt to długość listy, pozostałe bajty identyfikują typy ładunku. {{pl/Development/NewGRF/grfFrom|7}} Jeśli twój GRF jest w wersji 7 lub wyższej i ma tablicę translacji ładunku, bajty są indeksami w tabeli; w przeciwnym razie są to numery miejsc ładunkowych. Kiedy aktualny kafelek przyjmuje ładunek z tej listy, [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#watched-cargo-accepted-148 |callback 148]] jest wywoływany na kafelkach „wszystkich” budynku. Zobacz [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#watched-cargo-accepted-148 |callback 148]] , aby uzyskać więcej informacji na temat tego, jak to się dzieje.
 
 {{pl/Development/NewGRF/ttdp|}} Ta właściwość nie ma wpływu, jeśli nie istnieje struktura station2. Struktura station2 jest obecna, jeśli spełniony jest jeden z poniższych warunków:
 * Generalfixes jest włączony, a miscmods.noextendstationrange jest wyłączony
