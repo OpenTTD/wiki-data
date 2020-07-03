@@ -4,13 +4,13 @@
 
 Kafelki przemysłowe działają podobnie do budynków miejskich, z tym wyjątkiem, że nie są samodzielne; zawsze są częścią branży.
 
-Defining industry tiles follows the same schema as houses do: to start using an ID, you first need to define it by setting property 8 for it. If you try to reference an ID (either via action0 or via action3) that isn't defined, your request is ignored, but not reported as an error, either. This means that if you want to conditionally define an ID, all you need to do is skipping the action0 that sets property8, and everything else gets skipped automatically.
+Definiowanie kafelków przemysłu odbywa się według tego samego schematu, co w przypadku domów: aby rozpocząć korzystanie z identyfikatora, najpierw należy go zdefiniować, ustawiając dla niego właściwość 8. Jeśli spróbujesz odwołać się do identyfikatora (poprzez akcję 0 lub przez akcję 3), który nie jest zdefiniowany, twoje żądanie zostanie zignorowane, ale również nie zostanie zgłoszone jako błąd. Oznacza to, że jeśli chcesz warunkowo zdefiniować identyfikator, wystarczy pominąć akcję0, która ustawia właściwość8, a wszystko inne zostanie automatycznie pominięte.
 
-Industry tile IDs are unique within each grf file. The per-GRF ID is specified as a byte, which means no GRF can define more than 256 tile IDs. You should use your industry tile IDs sparingly. [[en/VariationalAction2/Industry Tiles#relative-position-43| Variational action 2 variable 43]] for industry tiles can help you limiting tile consumption to 2 or 3 per industry. Avoid using tile FFh, so the tileID can be turned into an extended byte (in Action 3) in the distant future without breaking your NewGRF.
+Przemysłowe identyfikatory kafelków są unikalne w każdym pliku grf. Identyfikator na GRF jest określony jako bajt, co oznacza, że ​​żaden GRF nie może zdefiniować więcej niż 256 identyfikatorów kafelków. Powinieneś oszczędnie używać identyfikatorów kafelków branży.  [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Industry Tiles#relative-position-43| Variational action 2 variable 43]]  dla płytek przemysłowych może pomóc ograniczyć zużycie płytek do 2 lub 3 na branżę. Unikaj używania kafelka FFh, dzięki czemu kafelek ID może zostać zamieniony na dłuższy bajt (w akcji 3) w odległej przyszłości bez zepsucia twojego NewGRF.
 
-{{pl/Development/NewGRF/ttdp|}} In total, TTDPatch can have up to a total of 256 new industry tile IDs (i.e. old tile types don't count).
+{{pl/Development/NewGRF/ttdp|}} W sumie TTDPatch może mieć do 256 nowych ID kafelków branżowych (tzn. Stare typy kafelków się nie liczą).
 
-{{pl/Development/NewGRF/ottd|}} OpenTTD can have 512 IDs for all active grf files, but that includes non-overridden original tiles.
+{{pl/Development/NewGRF/ottd|}} OpenTTD może mieć 512 identyfikatorów dla wszystkich aktywnych plików grf, ale obejmuje to nie przesłonięte oryginalne kafle .
 
 == Properties ==
 
@@ -42,25 +42,25 @@ Industry tile IDs are unique within each grf file. The per-GRF ID is specified a
 
 === Substitute tile type (08) ===
 
-This tile type will be used instead of your new one if your definition isn't available for any reason. Valid values are [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#Class8 00h-AEh]. Assigning this property copies the properties of the old type just like it does with houses.
+Ten typ kafelka zostanie użyty zamiast nowego, jeśli definicja nie jest dostępna z jakiegokolwiek powodu. Prawidłowe wartości to [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#Class8 00h-AEh]. Przypisanie tej właściwości powoduje skopiowanie właściwości starego typu, podobnie jak w przypadku domów.
 
-If this tile's action 3 appears before this property is set, the action 3 will have no effect.
+Jeśli akcja 3 tego kafelka pojawi się przed ustawieniem tej właściwości, akcja 3 nie przyniesie żadnego efektu.
 
 === Industry tile override (09) ===
 
-Works like the house override property for houses.
+Działa jak dom nadpisuje właściwość domów.
 
 === Tile acceptance (0A, 0B, 0C) ===
 
-These three words define what cargoes the tile accepts, and how much of them. The low byte defines the type of the cargo according to the current climate, while the high byte defines the degree of acceptance in 1/8 units. If you don't need all three cargo types, just zero out the high byte of the extra properties.
+Te trzy słowa określają, jakie ładunki przyjmuje kafelek i ile z nich. Niski bajt określa rodzaj ładunku zgodnie z aktualnym klimatem, natomiast wysoki bajt określa stopień akceptacji w 1/8 jednostek. Jeśli nie potrzebujesz wszystkich trzech rodzajów ładunku, po prostu wyzeruj wysoki bajt dodatkowych właściwości.
 
-{{pl/Development/NewGRF/grfFrom|7}} From GRF version 7 and above, the meaning of the low byte changes: instead of a climate-dependent cargo slot number, you have to give a climate-independent cargo ID. If your GRF has a cargo translation table, then this ID is the index in that table; otherwise, it's the cargo bit. Acceptance of cargoes not currently present will automatically be disabled.
+{{pl/Development/NewGRF/grfFrom|7}} Począwszy od wersji 7 GRF i wyższej, znaczenie małych bajtów zmienia się: zamiast numeru szczeliny ładunkowej zależnej od klimatu, musisz podać ID ładunku niezależny od klimatu. Jeśli twój GRF ma tabelę translacji ładunku, wówczas ten ID jest indeksem w tej tabeli; w przeciwnym razie jest to kawałek ładunku. Odbiór aktualnie nieobecnych ładunków zostanie automatycznie wyłączony.
 
-{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} These properties only support three cargos. Use property 13 instead to list more cargo types. 
+{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} Te właściwości obsługują tylko trzy ładunki. Zamiast tego użyj właściwości 13, aby wymienić więcej rodzajów ładunków. 
 
 === Land shape flags (0D) ===
 
-This property defines which slopes the tile can be built on.
+Ta właściwość określa, na których zboczach można zbudować kafelek.
 
 {| |-
 !Bit!!Value!!Version!!Meaning
@@ -78,11 +78,11 @@ This property defines which slopes the tile can be built on.
 |5||20||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 58}}||The tile is allowed on both land and water
 |}
 
-Industry tiles are never built on steep slopes unless [[en/Callbacks#custom-shape-check-2f |callback 2F]] is enabled, but bits 0..4 are ignored in that case.
+Kafelki przemysłowe nigdy nie są budowane na stromych zboczach, chyba że  [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#custom-shape-check-2f |callback 2F]] jest włączone, ale w takim przypadku bity 0..4 są ignorowane.
 
-Bit 5 can be used to allow tiles of land industries built on water or vice versa. It effectively disables the land/water check code for the tile. If you need to customize the behavior further, you can use [[en/Callbacks#custom-shape-check-2f |callback 2F]] to decide what kind of water/land is allowed.
+Bit 5 może być użyty do wpuszczenia kafelków przemysłu lądowego zbudowanych na wodzie lub odwrotnie. Skutecznie wyłącza kod kontroli ląd / woda dla płytki. Jeśli chcesz bardziej dostosować zachowanie, możesz użyć [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#custom-shape-check-2f |callback 2F]] , aby zdecydować, jaki rodzaj wody / ziemi jest dozwolony.
 
-;'''PLEASE NOTE''': Be careful when setting this property. If you fail to set it correctly, your industry may end up building on a hillside, which is probably not what you want. The easiest way is to set bit 4 for middle tiles, bit 0 for the tiles along the SE edge, bit 1 for those along the SW edge and so on.
+;'''PROŚBA UWAGI''': Zachowaj ostrożność podczas ustawiania tej właściwości. Jeśli nie ustawisz go poprawnie, twoja branża może skończyć na zboczu wzgórza, co prawdopodobnie nie jest tym, czego chcesz. Najłatwiej jest ustawić bit 4 dla środkowych płytek, bit 0 dla płytek wzdłuż krawędzi SE, bit 1 dla tych wzdłuż krawędzi SW i tak dalej.
 
 === Callback flags (0E) ===
 
@@ -104,19 +104,19 @@ Bit 5 can be used to allow tiles of land industries built on water or vice versa
 |6||40||{{pl/Development/NewGRF/ottdp| |2.5|ttdprev=beta 3}}||use [[en/Callbacks#disable-autosloping-3c-14f-15d |callback 3C]] to allow or deny autosloping below the tile
 |}
 
-Please note that [[en/Callbacks#animation-control-1b-25-140-152-159 |callback 25]] doesn't have a bit here. To use [[en/Callbacks#animation-control-1b-25-140-152-159 |callback 25]], simply set the wanted bits in property 11 and it will work as intended.
+Należy pamiętać, że [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159 |callback 25]] nie ma tu trochę. Aby użyć [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159 |callback 25]] , po prostu ustaw żądane bity we właściwości 11 i będzie działać zgodnie z przeznaczeniem.
 
 === Animation information (0F) ===
 
-The low byte specifies the number of animation frames minus one, so 00 means 1 frame, 01 means 2 frames etc. The maximum number of frames is 256, although you can have some problems if your animation exceeds FD (253) frames. The high byte must be 0 for non-looping animations and 01 for looping animations. Every other value is reserved for future use. In addition, if the whole word contains FFFF, animation is turned off for this tile (this is the default value).
+Niższy bajt określa liczbę klatek animacji pomniejszoną o jedną, więc 00 oznacza 1 klatkę, 01 oznacza 2 klatki itp. Maksymalna liczba klatek wynosi 256, chociaż możesz mieć pewne problemy, jeśli twoja animacja przekracza liczbę klatek FD (253). Górny bajt musi wynosić 0 dla animacji nie zapętlonych i 01 dla animacji zapętlonych. Każda inna wartość jest zarezerwowana do wykorzystania w przyszłości. Ponadto, jeśli całe słowo zawiera FFFF, animacja dla tego kafelka jest wyłączona (jest to wartość domyślna).
 
 === Animation speed (10) ===
 
-The meaning is the same as for house property 1B, but the lower limit is 0 instead of 2, so the fastest possible animation changes frames every game tick (27ms). The default value is 2.
+Znaczenie jest takie samo, jak w przypadku właściwości domu 1B, ale dolny limit wynosi 0 zamiast 2, więc najszybsza możliwa animacja zmienia klatki w każdej grze (27ms). Wartość domyślna to 2.
 
-=== Triggers for [[en/Callbacks#animation-control-1b-25-140-152-159 |callback 25]] (11) ===
+=== Triggers for [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159 |callback 25]] (11) ===
 
-Call [[en/Callbacks#animation-control-1b-25-140-152-159 |callback 25]] when:
+Wywołanie [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159 |callback 25]] kiedy:
 
 {| |-
 !Bit!!Value!!Version!!Meaning||Var 18
@@ -163,7 +163,7 @@ Format:
 |B||acceptance||Acceptance in 1/8 units. May be negative to negate property 12 bit 1.
 |}
 
-This property defines up to 16 cargotypes, which are accepted by the industry tile.
-Use this property instead of property 0A..0C.
+Ta właściwość określa do 16 cargotypów, które są akceptowane przez kafelek branży.
+Użyj tej właściwości zamiast właściwości 0A..0C.
 
 ==Przykład==
