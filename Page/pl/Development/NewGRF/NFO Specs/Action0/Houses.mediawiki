@@ -68,21 +68,21 @@ Aby rozpocząć korzystanie z ID domu, musisz go najpierw zdefiniować, ustawiaj
 |23||V||{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=48b334cf}}||Tile acceptance list 
 |}
 
-When a town decides to expand, each active house type (both old and new ones) has a uniform probability to appear, so the more new houses you define, the fewer old TTD buildings will appear.
+Kiedy miasto decyduje się na rozwój, każdy aktywny typ domu (zarówno stary, jak i nowy) ma jednakowe prawdopodobieństwo pojawienia się, więc im więcej nowych domów zdefiniujesz, tym mniej starych budynków TTD pojawi się.
 
 == Descriptions ==
 
 === Substitute building type (08) ===
 
-This building type will be used instead of your new one if your definition isn't available for any reason (the grf file is not found, for example).
+Ten typ budynku zostanie użyty zamiast nowego, jeśli twoja definicja nie jest dostępna z jakiegokolwiek powodu (na przykład nie znaleziono pliku grf).
 
-Don't set a substitute building type that is larger than your new one (for example, don't set 14 (stadium) for an 1x1 building) because this may corrupt savegames. Setting this property automatically copies every property of the substitute building to your new building, so you don't have to change properties that are the same as the substitute.
+Nie ustawiaj zastępczego typu budynku, który jest większy niż twój nowy (na przykład, nie ustawiaj 14 (stadion) dla budynku 1x1), ponieważ może to uszkodzić zapisywane gry. Ustawienie tej właściwości powoduje automatyczne kopiowanie wszystkich właściwości budynku zastępczego do nowego budynku, dzięki czemu nie trzeba zmieniać właściwości, które są takie same jak zamiennik.
 
-House flags 40 and 80 are exceptions; these flags are never set automatically. Only the first property 08 setting copies properties; if you later change it, properties will stay.
+Flagi domów 40 i 80 są wyjątkami; flagi te nigdy nie są ustawiane automatycznie. Tylko pierwsza właściwość 08 ustawia właściwości kopiowania; jeśli później go zmienisz, właściwości pozostaną.
 
-There's a special use of this property beginning from alpha 72: if you set it to FFh, you can disable an old house type. In this case, the ID used must be the number of old house type you want to disable. Disabling only prevents building the type in towns; houses already present on the map will stay unchanged. The type can still be overridden, and overriding affects houses present on the map.
+Istnieje specjalne zastosowanie tej właściwości, zaczynając od alfy 72: jeśli ustawisz ją na FFh, możesz wyłączyć stary typ domu. W takim przypadku użyty identyfikator musi być numerem starego typu domu, który chcesz wyłączyć. Wyłączenie tylko zapobiega budowaniu tego typu w miastach; domy już obecne na mapie pozostaną niezmienione. Ten typ można nadal zastąpić, a zastąpienie wpływa na domy obecne na mapie.
 
-If this house's action 3 appears before this property is set, the action 3 will have no effect.
+Jeśli akcja 3 tego domu pojawi się przed ustawieniem tej właściwości, akcja 3 nie przyniesie żadnego efektu.
 
 === Building flags (09) ===
 
@@ -110,43 +110,43 @@ If this house's action 3 appears before this property is set, the action 3 will 
 
 === Availability years (0A) ===
 
-The low byte is the minimum year, the high is the maximum. The building can only be built between these two years (inclusive). 1920 is added to both bytes before using the values.
+Niski bajt to minimalny rok, wysoki to maksimum. Budynek można zbudować tylko między tymi dwoma latami (włącznie). 1920 jest dodawany do obu bajtów przed użyciem wartości.
 
 {{pl/Development/NewGRF/ottdp|no| }}
-Since the year counting stops in TTDPatch in 2070 even with [[en/EternalGame]] on, start years above 150 mean "never", and end years above 150 mean "forever". In OpenTTD there is no limit for the maximum year (resp. it is 5000000).
+Since the year counting stops in TTDPatch in 2070 even with [[en/EternalGame]]<!--strony mie ma w oryginale--> on, start years above 150 mean "never", and end years above 150 mean "forever". In OpenTTD there is no limit for the maximum year (resp. it is 5000000).
 
-'''WARNING:''' Don't set the start year below 1930 (0Ah) unless you know what you're doing!
+'''WARNING:''' Nie ustawiaj roku rozpoczęcia poniżej 1930 (0Ah), chyba że wiesz, co robisz!
 
-{{pl/Development/NewGRF/ttdp|}} If TTDPatch finds a building that is available before 1930, it will not build old building types until that year, so you have to provide at least one custom building type that is available before 1930 for every [[en/TownZones|town zone]], or TTD may deadlock while trying to create a random game or expand a town.
+{{pl/Development/NewGRF/ttdp|}} If TTDPatch finds a building that is available before 1930, it will not build old building types until that year, so you have to provide at least one custom building type that is available before 1930 for every [[pl/Development/NewGRF/NFO Specs/TownZones|town zone]], or TTD may deadlock while trying to create a random game or expand a town.
 
-{{pl/Development/NewGRF/ottd|}} The availability of all active houses with the lowest availability year is set to start from year 0, so that always at least one house is available irrespective of starting year. Thus, if you de-activate default houses or set an introduction date prior to the default houses introduction year 1930, you should have at least for each [[en/TownZones|town zone]] a house with the same earliest availability year or you might end up with a situation where no house can be placed in a [[en/TownZones|town zone]].
+{{pl/Development/NewGRF/ottd|}} The availability of all active houses with the lowest availability year is set to start from year 0, so that always at least one house is available irrespective of starting year. Thus, if you de-activate default houses or set an introduction date prior to the default houses introduction year 1930, you should have at least for each [[pl/Development/NewGRF/NFO Specs/TownZones|town zone]] a house with the same earliest availability year or you might end up with a situation where no house can be placed in a [[pl/Development/NewGRF/NFO Specs/TownZones|town zone]].
 
 === Population (0B) and Mail generation multiplier (0C) ===
-[[File:en/House production.png|frame|right|Actual house production roughly depends on squared value of the population / mail generation multiplier.]]
+<!--[[File:House_production.png|frame|right|Rzeczywista produkcja domu w przybliżeniu zależy od kwadratowej wartości mnożnika generowania populacji / poczty.]]--><div style="text-align:right;">[http://newgrf-specs.tt-wiki.net/wiki/File:House_production.png Rzeczywista produkcja domu w przybliżeniu zależy od kwadratowej wartości mnożnika generowania populacji / poczty.]</div>
 
-The population of the town will be increased by the amount set in prop. 0B if this building is built. Additional house parts should have a population of zero. The higher this value is, the more passengers this building generates.
+Populacja miasta zostanie zwiększona o kwotę określoną w rekwizytach. 0B, jeśli ten budynek jest zbudowany. Dodatkowe części domu powinny mieć populację równą zero. Im wyższa jest ta wartość, tym więcej pasażerów generuje ten budynek.
 
-The higher the mail generation multiplier is, the more mail the building generates. For multi-tile buildings, mail generation is done in per-tile basis, so you can specify different values for every tile, although distributing the generation equally between tiles is suggested.
+Im wyższy mnożnik generowania poczty, tym więcej poczty generuje budynek. W przypadku budynków z wieloma kafelkami generowanie poczty odbywa się dla poszczególnych kafelków, dzięki czemu można określić różne wartości dla każdego kafelka, chociaż sugeruje się równomierne rozłożenie generacji między kafelki.
 
-This is how exactly passengers are generated: In each periodic processing (i.e. every 256 ticks), a random value 0<=X<=255 is generated for each house tile. If X isn't smaller than the population of the tile, no passengers are generated. Otherwise, X/8+1 passengers are generated (rounded down). If there is a recession going on, the number of generated passengers is halved, but this division gets rounded up instead of down. Mail generation happens in a similar manner, but with a new random value, and checking against the mail generation multiplier instead of the population.
+Tak właśnie generowani są pasażerowie: w każdym okresowym przetwarzaniu (tj. Co 256 tyknięć) dla każdej płytki domu generowana jest losowa wartość 0<=X<=255 . Jeśli X nie jest mniejszy niż populacja kafelka, nie są generowani pasażerowie. W przeciwnym razie generowane są pasażery X/8+1 (zaokrąglone w dół). W przypadku recesji liczba generowanych pasażerów zmniejsza się o połowę, ale podział ten zaokrągla się w górę zamiast w dół. Generowanie poczty odbywa się w podobny sposób, ale z nową losową wartością i porównuje się z mnożnikiem generowania poczty zamiast z populacją.
 
-You can further customize how the cargo is generated with the [[en/Callbacks#custom-cargo-production-2e |callback 2E]].<br style="clear:both" />
+Możesz dalej dostosowywać sposób generowania ładunku za pomocą [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#custom-cargo-production-2e |callback 2E]].<br style="clear:both" />
 
 === Passenger (0D), Mail (0E) and Good/Food/Fizzy drinks (0F) acceptance ===
 
-The acceptance is given in units of 1/8th and must not be larger than 8 eighths.
+Akceptacja jest podana w jednostkach 1/8 i nie może być większa niż 8 ósmych.
 
-For property 0F, positive values indicate that the building accepts goods, and negative values (i.e. FF = 1/8th, FE = 2/8ths etc.) indicate acceptance of food or fizzy drinks, depending on the climate.
+W przypadku właściwości 0F wartości dodatnie wskazują, że budynek przyjmuje towary, a wartości ujemne (tj. FF = 1/8, FE = 2/8 itd.) Oznaczają przyjęcie żywności lub napojów gazowanych, w zależności od klimatu.
 
-All the above three values can be set independently for tiles of multi-tile buildings, since every tile is processed individually when determining what a station accepts.
+Wszystkie powyższe trzy wartości można ustawić niezależnie dla kafelków budynków wielopłytkowych, ponieważ każda płytka jest przetwarzana indywidualnie podczas określania, co akceptuje stacja.
 
-The type of accepted cargo can be modified using [[en/Action0Houses#accepted-cargo-types|property 1E]].
+Rodzaj przyjętego ładunku można zmienić za pomocą [[pl/Development/NewGRF/NFO Specs/Action0/Houses#accepted-cargo-types-1e|property 1E]].
 
-{{pl/Development/NewGRF/ottdp|no| }} Note that in TTDPatch the officefood switch may modify acceptance in the sub-arctic and subtropical climates.
+{{pl/Development/NewGRF/ottdp|no| }} Należy pamiętać, że w TTDPatch przełącznik officefood może modyfikować akceptację w klimacie subarktycznym i subtropikalnym.
 
 === Building name ID (12) ===
 
-The ID of the text that should be displayed in the land query window. The name can also be set by [[en/Action4|action 4]] (see there). Should be set to the same value for every tile for multi-tile buildings.
+Identyfikator tekstu, który powinien być wyświetlany w oknie zapytania dotyczącego gruntu. Nazwę można również ustawić za pomocą [[en/Extrazi/specs.tt/Action4|action 4]] (zobacz tam). Należy ustawić tę samą wartość dla każdego kafelka w przypadku budynków z wieloma płytkami.
 
 === Building availability mask (13) ===
 
@@ -166,11 +166,11 @@ The ID of the text that should be displayed in the land query window. The name c
 |15||8000||can appear in toyland climate
 |}
 
-This property should be set to zero for additional building tiles.
+Ta właściwość powinna być ustawiona na zero dla dodatkowych płytek budowlanych.
 
 === House callback flags (14,1D) ===
 
-For houses, the following [[en/Callbacks]] can be defined by setting the corresponding bit in property 14:
+W przypadku domów można zdefiniować następujące [[pl/Development/NewGRF/NFO Specs/Callback/Main Page|callbacks]] poprzez ustawienie odpowiedniego bitu we właściwości 14:
 
 {| |-
 !Bit!!Value!!Variable 0C value!!Version!!Callback
@@ -192,7 +192,7 @@ For houses, the following [[en/Callbacks]] can be defined by setting the corresp
 |7||80||21||{{pl/Development/NewGRF/ottdp| | }}||trigger destruction of building
 |}
 
-Property 1D was introduced after all bits of property 14 were filled. Its usage is the same, only the meaning of bits is different:
+Właściwość 1D została wprowadzona po wypełnieniu wszystkich bitów właściwości 14. Jego użycie jest takie samo, tylko znaczenie bitów jest inne:
 
 {| |-
 !Bit!!Value!!Variable 0C value!!Version!!Callback
@@ -208,37 +208,37 @@ Property 1D was introduced after all bits of property 14 were filled. Its usage 
 |4||10||14F||{{pl/Development/NewGRF/ottdp|1.0|2.6|ottdrev=r17558|ttdprev=2249}}||allow or deny autosloping below the tile
 |}
 
-Bit is the bit you have to set, you do this by adding all the values for all the bits. Variable 0C value is what variable 0C will be set to, for checking it in the variational Action2 for callbacks.
+Bit to bit, który musisz ustawić, robisz to poprzez dodanie wszystkich wartości dla wszystkich bitów. Zmienna wartość 0C to ta, dla której zostanie ustawiona zmienna 0C, do sprawdzania jej w wariacyjnym Action2 dla wywołań zwrotnych.
 
-Callback flags are ignored for additional building tiles.
+Flagi zwrotne są ignorowane w przypadku dodatkowych kafelków budynku.
 
 === House override byte (15) ===
 
-Setting this property makes this building appear instead of the given old TTD building type. Setting the property is ignored if the given old house type is already overridden. You can set this property more than once to override more old building types.
+Ustawienie tej właściwości powoduje, że ten budynek pojawia się zamiast podanego starego typu budynku TTD. Ustawienie właściwości jest ignorowane, jeśli dany stary typ domu jest już przesłonięty. Możesz ustawić tę właściwość więcej niż raz, aby zastąpić więcej starych typów budynków.
 
-No new house of the overridden types will be built in towns.
+W miastach nie powstanie żaden nowy dom przesłoniętych typów.
 
-This property works in a per-tile basis, so you override tiles of old multi-tile buildings individually, although the old type will still be built if you don't override its north tile.
+Ta właściwość działa na podstawie pojedynczych kafelków, więc indywidualnie zastępujesz kafelki starych budynków z wieloma kafelkami, chociaż stary typ będzie nadal budowany, jeśli nie zastąpisz jego północnego kafelka.
 
 === Periodic refresh multiplier (16) ===
 
-This is used for random triggers, and sets how often the tile is re-randomized. When set to X, the tile will be re-randomized on every (X+1)-th periodic processing. (In other words, every (X+1)*256 game ticks.) If you want all tiles to be re-randomized, you must set this (but not necessarily to the same value) for each tile.
+Służy do losowych wyzwalaczy i określa, jak często płytka jest ponownie losowa. Po ustawieniu na X, kafelek będzie ponownie losowy przy każdym (X+1) -tym okresowym przetwarzaniu. (Innymi słowy, każda  (X+1)*256 tyknięć gry.) Jeśli chcesz, aby wszystkie kafelki zostały ponownie zrandomizowane, musisz ustawić (ale niekoniecznie tę samą wartość) dla każdego kafelka.
 
-If callback 1B is enabled in property 14, it is also called after re-randomizing random bits.
+Jeśli funkcja zwrotna 1B jest włączona we właściwości 14, jest również wywoływana po ponownej randomizacji losowych bitów.
 
-{{pl/Development/NewGRF/ottdp|1.1|2.5|ttdprev=2.5 beta 9}} In TTDPatch versions before TTDPatch 2.6 r1639 and TTDPatch 2.5 beta 9 (including beta 9), this variable could have any value between 0 and 255. After these versions, the upper limit has been lowered to 63. To maintain compatibility, values above 63 will be interpreted as 63.
+{{pl/Development/NewGRF/ottdp|1.1|2.5|ttdprev=2.5 beta 9}} W wersjach TTDPatch przed TTDPatch 2.6 r1639 i TTDPatch 2.5 beta 9 (w tym beta 9) ta zmienna może mieć dowolną wartość z zakresu od 0 do 255. Po tych wersjach górna granica została obniżona do 63. Aby zachować zgodność, wartości powyżej 63 będą być interpretowane jako 63.
 
 === Random colours (17) ===
 
-This specifies four colors used for random painting (see [[en/Action2HousesIndustryTiles]]). Each byte of the dword defines a color, the values are the same as in Action2, except that numbering starts from zero instead of 775. If not set, this defaults to 04 08 0c 06 (red, blue, orange and green, the colors of the modern office building). Can be set to different values for tiles of multi-tile buildings.
+This specifies four colors used for random painting (see [[pl/Development/NewGRF/NFO Specs/Action2/Sprite Layout|Action2HousesIndustryTiles]]). Każdy bajt dwordu określa kolor, wartości są takie same jak w Action2, z tą różnicą, że numeracja zaczyna się od zera zamiast 775. Jeśli nie jest ustawiona, domyślnie jest to 04 08 0c 06 (czerwony, niebieski, pomarańczowy i zielony, kolory nowoczesnego budynku biurowego). Można ustawić różne wartości dla płytek budynków z wieloma płytkami.
 
 === Probability (18) ===
 
-This sets the relative probability of this house being built. Old TTD house types have a probability of 16, and this is the default for new types as well.
+Określa względne prawdopodobieństwo budowy tego domu. Stare typy domów TTD mają prawdopodobieństwo 16, i jest to również domyślne dla nowych typów.
 
-Increase (or better multiply) this value to make your building appear relatively more often, or decrease (divide) it to make it rarer. If you set this to zero, the house type never appears. The minimal useful value 1 means it's sixteen times less probable to build this type than a normal type, while the maximum setting of 255 means it's almost sixteen times more probable.
+Zwiększ (lub lepiej pomnóż) tę wartość, aby twój budynek pojawiał się stosunkowo częściej, lub zmniejsz (podziel), aby był rzadszy. Jeśli ustawisz tę wartość na zero, typ domu nigdy się nie pojawi. Minimalna użyteczna wartość 1 oznacza, że ​​jest szesnaście razy mniej prawdopodobne, aby zbudować ten typ niż typ normalny, natomiast maksymalne ustawienie 255 oznacza, że ​​jest prawie szesnaście razy bardziej prawdopodobne.
 
-The probability is relative since the absolute probability depends on the count and probability of other houses as well: the more types are available (and the higher their probabilities are), the less the chance is that your type will be chosen.
+Prawdopodobieństwo jest względne, ponieważ prawdopodobieństwo bezwzględne zależy również od liczby i prawdopodobieństwa innych domów: im więcej dostępnych rodzajów (i wyższe są ich prawdopodobieństwa), tym mniejsza szansa, że ​​twój typ zostanie wybrany.
 
 === Extra Flags (19) ===
 
@@ -258,47 +258,47 @@ The probability is relative since the absolute probability depends on the count 
 
 === Animation Frames (1A) ===
 
-The bottom seven bits define how many frames the animation consists of, minus one. (I.e. 0 means 1 frame, 1 means 2 frames etc.) The highest bit has another purpose (see below), so the biggest supported value is 7F (128 frames).
+Dolne siedem bitów określa, z ilu ramek składa się animacja, minus jeden. (Tj. 0 oznacza 1 ramkę, 1 oznacza 2 ramki itp.) Najwyższy bit ma inny cel (patrz poniżej), więc największą obsługiwaną wartością jest 7F (128 ramek).
 
-The highest bit is set if the animation is looping, i.e. it should start again from the first frame after showing the last frame. Non-looping animations stop after the last frame, leaving it on the screen. Both kinds of animations start automatically when the building is created. It's recommended to use callback 1B with non-looping animations, so they are played multiple times.
+Najwyższy bit jest ustawiany, jeśli animacja jest zapętlona, ​​tzn. Powinien zacząć się od pierwszej klatki po wyświetleniu ostatniej klatki. Animacje niepętlowe zatrzymują się po ostatniej klatce, pozostawiając ją na ekranie. Oba rodzaje animacji uruchamiają się automatycznie podczas tworzenia budynku. Zaleca się stosowanie wywołania zwrotnego 1B z animacjami niepętlącymi, aby były odtwarzane wielokrotnie.
 
-{{pl/Development/NewGRF/ottdp|0.6|2.5|ottdrev=r12347|ttdprev=r1639}} In TTDPatch versions before TTDPatch 2.6 r1639 and TTDPatch 2.5 beta 9 (including beta 9) and OpenTTD before r12347, the frame number was limited to 32. If you intend to maintain compatibility with those versions, you should not use animations longer than 32 frames.
+{{pl/Development/NewGRF/ottdp|0.6|2.5|ottdrev=r12347|ttdprev=r1639}} W wersjach TTDPatch przed TTDPatch 2.6 r1639 i TTDPatch 2.5 beta 9 (w tym beta 9) i OpenTTD przed r12347 liczba klatek była ograniczona do 32. Jeśli zamierzasz zachować zgodność z tymi wersjami, nie powinieneś używać animacji dłuższych niż 32 klatki.
 
 === Animation Speed (1B) ===
 
-This is the amount of time between switching frames.
+Jest to czas między przełączaniem ramek.
 
-The default value is 2, which means the switch occurs every 108 milliseconds. Increasing this value by one doubles the wait, i.e. 3 will cause 216 ms delay, while 4 will pause 432 ms, and so on. Values below 2 have the same effect as 2, so the default is the fastest possible setting. The maximum is 16, which means 1769 seconds (approx. half an hour) delay. Settings above this value may cause strange behaviour.
+Wartość domyślna to 2, co oznacza, że ​​przełączanie następuje co 108 milisekund. Zwiększenie tej wartości o jeden podwaja czas oczekiwania, tj. 3 spowoduje opóźnienie 216 ms, a 4 wstrzyma 432 ms i tak dalej. Wartości poniżej 2 mają taki sam efekt jak 2, więc domyślnie jest to najszybsze możliwe ustawienie. Maksymalna wartość to 16, co oznacza 1769 sekund (około pół godziny) opóźnienia. Ustawienia powyżej tej wartości mogą powodować dziwne zachowanie.
 
 === Building Class (1C) ===
 
-Types that were given the same class byte are considered to be in the same class. If you don't explicitly set this value, the type is considered to have no class (it won't be considered to be class 0). The scope of a class is the current GRF file, so two types are never in the same class if they were defined by different GRF files. Currently, this property affects variable 44 only.
+Typy, które otrzymały ten sam bajt klasy, są uważane za należące do tej samej klasy. Jeśli nie ustawisz wyraźnie tej wartości, typ zostanie uznany za nieposiadający klasy (nie będzie uważany za klasę 0). Zakres klasy jest bieżącym plikiem GRF, więc dwa typy nigdy nie należą do tej samej klasy, jeśli zostały zdefiniowane przez różne pliki GRF. Obecnie ta właściwość wpływa tylko na zmienną 44.
 
-This property is a per-tile one, you can set it for additional tiles as well. It's a better idea, however, to set it for the main tile only, since var. 44 counts tiles, not buildings, and you may count multi-tile multiple times otherwise.
+Ta właściwość jest zależna od płytki, możesz też ustawić ją na dodatkowe płytki. Lepiej jest jednak ustawić go tylko dla głównego kafelka, ponieważ var. 44 liczy kafelki, a nie budynki, w przeciwnym razie możesz policzyć wiele kafelków.
 
 === Accepted cargo types (1E) ===
 
-There may be cases when you want your house to accept something other than the default types (passenger, mail, goods and food). This property allows you to do that. If this property is set to FFFFFFFFh (the default), the meaning of properties 0D, 0E and 0F aren't changed, that is, they are the passenger, mail and goods/food acceptances, accordingly. If this property isn't FFFFFFFFh, the first three bytes must be climate-dependent cargo slot numbers (the fourth byte is ignored). In this case property 0D is the amount of acceptance of the first cargo type given, 0E is the same for the second type and 0F is the same for the third type.
+Mogą zdarzyć się sytuacje, gdy chcesz, aby Twój dom zaakceptował coś innego niż domyślne (pasażer, poczta, towary i jedzenie). Ta właściwość pozwala to zrobić. Jeśli ta właściwość jest ustawiona na FFFFFFFFh (wartość domyślna), znaczenie właściwości 0D, 0E i 0F nie ulega zmianie, to znaczy, że są to odpowiednio przyjęcia dla pasażerów, poczty i towarów/żywności. Jeśli ta właściwość nie jest FFFFFFFFh, pierwsze trzy bajty muszą być numerami miejsc ładunkowych zależnymi od klimatu (czwarty bajt jest ignorowany). W tym przypadku właściwość 0D jest kwotą przyjęcia pierwszego podanego rodzaju ładunku, 0E jest takie samo dla drugiego rodzaju, a 0F jest takie samo dla trzeciego rodzaju.
 
-From GRF version 7 and above, the meaning of this property changes: instead of climate-dependent cargo slot numbers, you have to give climate-independent cargo IDs. If your GRF has a cargo translation table, then this ID is the index in that table; otherwise, it's the cargo slot number. Acceptance of cargoes not currently present will automatically be disabled.
+Począwszy od wersji 7 GRF i wyższej, znaczenie tej właściwości zmienia się: zamiast numerów szczelin ładunkowych zależnych od klimatu, musisz podać niezależne od klimatu identyfikatory ładunków. Jeśli twój GRF ma tabelę translacji ładunku, wówczas ten identyfikator jest indeksem w tej tabeli; w przeciwnym razie jest to numer przedziału ładunkowego. Odbiór aktualnie nieobecnych ładunków zostanie automatycznie wyłączony.
 
 === Minimum life span in years (1F) ===
 
-Towns are prevented from destroying the house if it hasn't yet reached the age given here. The default is 0, which means towns are free to remove the house any time they like. Please note that this setting doesn't prevent AI players from removing the house; only towns are affected. If you need to protect your building from AI players as well, you can set the "protected" flag (property 19 bit 1), or use [[en/Callbacks#protect-building-conditionally-143 |callback 143]] and use your custom code to decide who (and when) is allowed to remove the building.
+Miasta nie mogą zniszczyć domu, jeśli nie osiągnął jeszcze podanego tutaj wieku. Domyślna wartość to 0, co oznacza, że ​​miasta mogą usunąć dom w dowolnym momencie. Pamiętaj, że to ustawienie nie uniemożliwia graczom AI usunięcia domu; dotyczy to tylko miast. Jeśli chcesz również chronić swój budynek przed graczami AI, możesz ustawić flagę „chronione” (właściwość 19 bit 1) lub użyć  [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#protect-building-conditionally-143 |callback 143]] i użyj własnego kodu zdecydować, kto (i kiedy) może usunąć budynek.
 
-For this to operate consequently on multi-tile buildings, you must set the same minimum lifespan for all tiles of the building.
+Aby działało to konsekwentnie na budynkach z wieloma płytkami, musisz ustawić taką samą minimalną żywotność dla wszystkich płytek budynku.
 
 === Cargo acceptance watch list (20) ===
 
-This property is a list of cargo types, types whose acceptance should be watched. The first byte is the length of the list, the remaining bytes identify cargo types. {{pl/Development/NewGRF/grfFrom|7}} If your GRF is version 7 or above, and has a cargo translation table, the bytes are indexes in the table; otherwise, they are cargo slot numbers. When a cargo from this list is accepted by the current tile, [[en/Callbacks#watched-cargo-accepted-148 |callback 148]] is called on ''all'' tiles of the building. See [[en/Callbacks#watched-cargo-accepted-148 |callback 148]] for more details about how this happens.
+Ta właściwość jest listą rodzajów ładunków, typów, których akceptację należy obserwować. Pierwszy bajt to długość listy, pozostałe bajty identyfikują typy ładunku. {{pl/Development/NewGRF/grfFrom|7}} Jeśli twój GRF jest w wersji 7 lub wyższej i ma tablicę translacji ładunku, bajty są indeksami w tabeli; w przeciwnym razie są to numery miejsc ładunkowych. Kiedy aktualny kafelek przyjmuje ładunek z tej listy, [[en/Callbacks#watched-cargo-accepted-148 |callback 148]] jest wywoływany na kafelkach „wszystkich” budynku. Zobacz [[en/Callbacks#watched-cargo-accepted-148 |callback 148]] , aby uzyskać więcej informacji na temat tego, jak to się dzieje.
 
-{{pl/Development/NewGRF/ttdp|}} This property has no effect if the station2 structure isn't present. The station2 structure is present if any of the following is true:
-* Generalfixes is on, and miscmods.noextendstationrange is off
-* Any of fifoloading, newcargos or irregularstations is on
+{{pl/Development/NewGRF/ttdp|}} Ta właściwość nie ma wpływu, jeśli nie istnieje struktura station2. Struktura station2 jest obecna, jeśli spełniony jest jeden z poniższych warunków:
+* Generalfixes jest włączony, a miscmods.noextendstationrange jest wyłączony
+* Włączono dowolne ładowanie, ładowanie nowych lub nieregularne stacje
 
 === Availability years (long format) - Minimum (21) - Maximum (22) ===
 
-Those two properties allow to specify a range of dates (based on year zero(0) that are not limited to the 1930 dates. So earlier buildings can be introduced. Be sure to add substantial houses to the sets, if you do not wat to have uniform towns, since the current earliest houses will remain in their current 1920 era. Mind also the warning wrt. introduction years as described at property 0A.
+Te dwie właściwości pozwalają na określenie zakresu dat (na podstawie roku zerowego (0), które nie są ograniczone do dat z 1930 r., Więc można wprowadzić wcześniejsze budynki. Pamiętaj, aby dodać do domów znaczne domy, jeśli nie chcesz mają jednolite miasta, ponieważ obecne najwcześniejsze domy pozostaną w obecnej erze 1920 r. Pamiętaj również o latach wprowadzenia ostrzeżeń opisanych w nieruchomości 0A.
 
 === Tile acceptance list (23) ===
 {{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=48b334cf}} 
