@@ -137,7 +137,7 @@ Układ składa się z listy powyższych definicji kafelków, zakończonych dwoma
 === Industry production type (0B) ===
 
 {| |-
-!Value!!Meaning!!{{pl/Development/NewGRF/ottdp|0.6|no}} Effect on nearby stations!!Effect if [[en/Callbacks#random-production-change-29|CB 29]] is disabled
+!Value!!Meaning!!{{pl/Development/NewGRF/ottdp|0.6|no}} Effect on nearby stations!!Effect if [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#random-production-change-29|CB 29]] is disabled
 |-
 |00||consuming industry (e.g. power plant)||none||No production changes; no closure
 |-
@@ -157,13 +157,13 @@ Dla komunikatu generacyjnego domyślnie wszystkie branże mają napis „Nowy xx
 
 === Production cargo types (10) ===
 
-Dwie zależne od klimatu liczby ładunków reprezentujące typy ładunków, które przemysł może wytwarzać. Niewykorzystane miejsca można wypełnić FFh. Lista prawidłowych typów: [[pl//extrazi/specs.tt/CargoTypes|CargoTypes]]
+Dwie zależne od klimatu liczby ładunków reprezentujące typy ładunków, które przemysł może wytwarzać. Niewykorzystane miejsca można wypełnić FFh. Lista prawidłowych typów: [[pl/Development/NewGRF/NFO Specs/CargoTypes|CargoTypes]]
 
 {{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} Ta właściwość obsługuje tylko dwa ładunki wyjściowe. Zamiast tego użyj właściwości 25, aby wyprowadzić więcej rodzajów ładunku.
 
 === Acceptance cargo types (11) ===
 
-Three climate-dependent cargo numbers representing the cargo types the industry can accept, plus a fourth filler byte which is always ignored. Unused slots can be filled with FFh. List of valid types: [[pl//extrazi/specs.tt/CargoTypes|CargoTypes]]
+Three climate-dependent cargo numbers representing the cargo types the industry can accept, plus a fourth filler byte which is always ignored. Unused slots can be filled with FFh. List of valid types: [[pl/Development/NewGRF/NFO Specs/CargoTypes|CargoTypes]]
 
 Te typy ładunków zostaną naprawdę zaakceptowane tylko wtedy, gdy odpowiednia akceptacja kafelków branży wyniesie 8/8 lub więcej.
 
@@ -187,7 +187,7 @@ Dane zaczynają się od bajtu określającego liczbę dostępnych efektów, a na
 
 === Conflicting industry types (16) ===
 
-3 bajty definiują 3 typy, które nie pojawią się w pobliżu tej branży. Jeśli bajt ma ustawiony bit 7, dolne 6 bitów jest identyfikatorem nowego typu już zdefiniowanego w bieżącym pliku GRF. Jeśli bit 7 jest wyraźny, dolne 6 bitów określa stary typ branży. FFh można wykorzystać do wypełnienia nieużywanych wpisów. Nie należy modyfikować właściwości 9 po odwołaniu się do typu przez właściwość 16. Lista [[en/IndustryDefaultProps#climate-independent-properties |valid industry types]]
+3 bajty definiują 3 typy, które nie pojawią się w pobliżu tej branży. Jeśli bajt ma ustawiony bit 7, dolne 6 bitów jest identyfikatorem nowego typu już zdefiniowanego w bieżącym pliku GRF. Jeśli bit 7 jest wyraźny, dolne 6 bitów określa stary typ branży. FFh można wykorzystać do wypełnienia nieużywanych wpisów. Nie należy modyfikować właściwości 9 po odwołaniu się do typu przez właściwość 16. Lista [[pl/Development/NewGRF/NFO Specs/IndustryDefaultProps#climate-independent-properties |valid industry types]]
 
 === Probability in random game (17), Probability during gameplay (18) ===
 
@@ -310,9 +310,9 @@ Właściwość 21 może mieć ustawione następujące bity:
 |-
 |0||1||22||{{pl/Development/NewGRF/ottdp| |2.5}}||Determine whether the industry can be built
 |-
-|1||2||00||{{pl/Development/NewGRF/ottdp| |2.5}}||Call the [[en/Action2Industries|production callback]] when cargo arrives at the industry <ref name="smootheconomy">{{pl/Development/NewGRF/ottdp|0.6|no}} If none of the production change callbacks is activated, OpenTTD will use "smooth economy" if enabled. If any of the callbacks is enabled, "smooth economy" will be disabled for the industry.</ref>
+|1||2||00||{{pl/Development/NewGRF/ottdp| |2.5}}||Call the [[pl/Development/NewGRF/NFO Specs/Action2/Industries|production callback]] kiedy ładunek dociera do branży<ref name="smootheconomy">{{pl/Development/NewGRF/ottdp|0.6|no}} Jeśli żadne wywołanie zwrotne zmiany produkcji nie zostanie aktywowane, OpenTTD użyje "łagodna <small>''(smooth)''</small> ekonomia" , jeśli jest włączone. Jeśli którykolwiek z oddzwaniania jest włączony, "płynna ekonomia" zostanie wyłączona dla branży.</ref>
 |-
-|2||4||00||{{pl/Development/NewGRF/ottdp| |2.5}}||Call the [[en/Action2Industries|production callback]] every 256 ticks <ref name="smootheconomy"/>
+|2||4||00||{{pl/Development/NewGRF/ottdp| |2.5}}||Call the [[pl/Development/NewGRF/NFO Specs/Action2/Industries|production callback]] every 256 ticks <ref name="smootheconomy"/>
 |-
 |3||8||28||{{pl/Development/NewGRF/ottdp| |2.5}}||Determine whether the industry can be built on given spot
 |-
@@ -348,15 +348,15 @@ Property 22 can have the following bits set:
 
 === Destruction cost multiplier (23) ===
 
-This value specifies the cost of removing the industry when the ctrl-dynamite function of morebuildoptions.removeindustry is enabled. This value is multiplied by the house removal cost multiplier to get the final cost. The default value is 1000 in TTDPatch, and 0 (zero) in OpenTTD.
+Ta wartość określa koszt usunięcia przemysłu, gdy włączona jest funkcja ctrl-dynamit w morebuildoptions.removeindustry. Wartość ta jest mnożona przez mnożnik kosztu przeprowadzki, aby uzyskać końcowy koszt. Wartość domyślna to 1000 w TTDPatch i 0 (zero) w OpenTTD.
 
 === Default name for nearby station (24) ===
 
-If non-zero, this text ID specifies an additional name option for stations built near this industry, which will be used before any of the standard TTD names. The text should contain a \80, which will be the name of the nearby town.
+Jeśli niezerowy, ten identyfikator tekstowy określa dodatkową opcję nazwy dla stacji zbudowanych w pobliżu tej branży, która będzie używana przed dowolną ze standardowych nazw TTD. Tekst powinien zawierać \80, który będzie nazwą pobliskiego miasta.
 
-If the newly built station cannot use the specified text (because that name has been used for another station in the same town) the default TTD naming system will be used, but without the names "\80 Oilfield" or "\80 Mines".
+Jeśli nowo zbudowana stacja nie może użyć określonego tekstu (ponieważ ta nazwa została użyta dla innej stacji w tym samym mieście), zostanie użyty domyślny system nazewnictwa TTD, ale bez nazw "\80 Oilfield" lub "\80 Mines" <small>(kopalnie)</small>.
 
-Setting this to zero disables "\80 Oilfield" and "\80 Mines" without adding any additional station name options.
+Ustawienie tej wartości na zero wyłącza "\80 Oilfield" i "\80 Mines" bez dodawania żadnych dodatkowych opcji nazw stacji.
 
 === Production cargo type list (25) ===
 {{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} 
@@ -372,8 +372,8 @@ Format:
 |B||cargotype||Cargotype (from CTT) to produce.
 |}
 
-This property defines up to 16 cargotypes, which are produced by the industry.
-Use this property instead of property 10.
+Ta właściwość definiuje do 16 cargotypów wytwarzanych przez przemysł.
+Użyj tej właściwości zamiast właściwości 10.
 
 === Acceptance cargo type list (26) ===
 {{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} 
@@ -389,8 +389,8 @@ Format:
 |B||cargotype||Cargotype (from CTT) to accept.
 |}
 
-This property defines up to 16 cargotypes, which are accepted by the industry.
-Use this property instead of property 11.
+Ta właściwość definiuje do 16 cargotypów, które są akceptowane przez przemysł.
+Użyj tej właściwości zamiast właściwości 11.
 
 === Production multiplier list (27) ===
 {{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} 
@@ -406,12 +406,12 @@ Format:
 |B||amount||Amount of cargo to produce.
 |}
 
-If nonzero, the industry periodically (every 256 ticks, that is 8 or 9 times in a month) produces the given amount from the according cargo type.
-The amounts correlate to the cargotypes set by property 25. If fewer/more amounts are set, the extra items are not produced/ignored.
+W przypadku wartości niezerowych branża okresowo (co 256 tyknięć, czyli 8 lub 9 razy w miesiącu) wytwarza określoną ilość z odpowiedniego rodzaju ładunku.
+Ilości są skorelowane z cargotypami ustawionymi przez właściwość 25. Jeśli ustawionych jest mniej/więcej kwot, dodatkowe pozycje nie są produkowane/ignorowane.
 
-The properties specify the amount produced at default production level, they are scaled equally on [[en/Callbacks#random-production-change-29|production changes]].
+Właściwości określają ilość produkowaną na domyślnym poziomie produkcji, są one równomiernie skalowane [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#random-production-change-29|production changes]].
 
-Use this property instead of property 12 and 13.
+Użyj tej właściwości zamiast właściwości 12 i 13.
 
 === Input cargo multiplier list (28) ===
 {{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} 
@@ -429,14 +429,14 @@ Format:
 |W||multiplier||Cargo multipliers in 1/256 units. <numinput>*<numoutput> items.
 |}
 
-This property defines a matrix which described how input cargos from property 26 are processed into output cargos from property 25.
+Ta właściwość definiuje macierz, która opisuje, w jaki sposób ładunki wejściowe z właściwości 26 są przetwarzane na ładunki wyjściowe z właściwości 25.
 
-Example:
+Przykład:
  03 04    // 3 input cargos, 4 output cargos
     \wx0100 \wx0000 \wx0000 \wx0100    // input cargo 0 is converted to output cargos 0 and 3
     \wx0000 \wx0100 \wx0000 \wx0100    // input cargo 1 is converted to output cargos 1 and 3
     \wx0000 \wx0000 \wx0100 \wx0100    // input cargo 2 is converted to output cargos 2 and 3
 
-The matrix correlates to the cargotypes set by property 25 and 26. If fewer/more cargotypes are used, the extra items are not produced/ignored.
+Macierz <small>''(matrix)''</small> koreluje z cargotypami ustawionymi za pomocą właściwości 25 i 26. Jeśli używanych jest mniej/więcej cargotypów, dodatkowe elementy nie są produkowane/ignorowane.
 
 Użyj tej właściwości zamiast właściwości 1C..1E.
