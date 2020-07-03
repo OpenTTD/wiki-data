@@ -83,7 +83,7 @@ Możesz po prostu użyć innych klas niż powyższe, o ile nie jest (więcej ni�
 Gdy zbudowana zostanie stacja WAYP, nie będzie ona przyjmować ładunku ani nie będzie ładunku z pobliskich gałęzi przemysłu lub miast. &nbsp;Pociągi nie zatrzymują się na stacjach WAYP, niezależnie od kolejności non-stop i / lub przełącznika non-stop.
 
 === Sprite layout (09) ===
-Kontroluje to, które duszki są wyświetlane, gdzie są wyświetlane i w jakiej kolejności. &nbsp;Właściwość jest zmiennej wielkości i zawiera dane dla wszystkich 8 możliwych typów kafelków stacji. &nbsp;Jeśli ta właściwość jest ustawiona, liczba w odpowiedniej [[pl/Development/NewGRF/NFO Specs/Action1|action 1]] nie musi być równa 12 (hex), może to być dowolna liczba, a dowolna liczba duszków może być wyświetlana w dowolnej kolejności.
+Kontroluje to, które 'sprites' są wyświetlane, gdzie są wyświetlane i w jakiej kolejności. &nbsp;Właściwość jest zmiennej wielkości i zawiera dane dla wszystkich 8 możliwych typów kafelków stacji. &nbsp;Jeśli ta właściwość jest ustawiona, liczba w odpowiedniej [[pl/Development/NewGRF/NFO Specs/Action1|action 1]] nie musi być równa 12 (hex), może to być dowolna liczba, a dowolna liczba 'sprites' może być wyświetlana w dowolnej kolejności.
 
 W ten sposób dane są określone jako dane dla wszystkich ośmiu kafli:
 
@@ -117,7 +117,7 @@ Zawartość każdego (zwykle ośmiu) zestawów danych jest albo nowym układem i
 |}
 lub, alternatywnie, instrukcja użycia układu TTD przy użyciu czterech bajtów zerowych 00 00 00 00 zamiast bajtów dna naziemnego. Możesz użyć  [http://www.bytetransfer.de/projects/ttdpatch/docs/spriteidmapping.php the online sprite ID converter] , aby wyszukać ID''`y'' 'sprite', których możesz użyć dla wszystkich klimatów.
 
-Można narysować dwa rodzaje 'sprites' . &nbsp;Jeden typ to taki, który ustanawia nową ramkę ograniczającą 3D do użytku przez sortownik duszków. &nbsp;Drugi typ dzieli obwiednię 3D poprzednich ikonek. &nbsp;Nie może być większy niż duszek, który ustanowił obwiednię, ani żadna jej część nie może znajdować się poza tym polem. &nbsp;Dla uproszczenia powinien mieć dokładnie takie same wymiary, jak duszek, z którym dzieli obwiednię. &nbsp;Ten ostatni typ jest obsługiwany na ekranie okna budowy stacji tylko od TTDPatch 2.6 r1684.
+Można narysować dwa rodzaje 'sprites' . &nbsp;Jeden typ to taki, który ustanawia nową ramkę ograniczającą 3D do użytku przez sortownik 'sprites' . &nbsp;Drugi typ dzieli obwiednię 3D poprzednich ikonek. &nbsp;Nie może być większy niż 'sprite' , który ustanowił obwiednię, ani żadna jej część nie może znajdować się poza tym polem. &nbsp;Dla uproszczenia powinien mieć dokładnie takie same wymiary, jak 'sprite' , z którym dzieli obwiednię. &nbsp;Ten ostatni typ jest obsługiwany na ekranie okna budowy stacji tylko od TTDPatch 2.6 r1684.
 
 Spritedata ikonek z własnym obwiednią ma ten format:
 
@@ -159,8 +159,8 @@ Spritedata 'sprites' dzielących obwiednię ma ten format:
 |D||sprite||sprite number to draw
 |}
 
-Od OpenTTD r18959 możesz narysować wiele duszek ziemi na płytkę, co jest przydatne, jeśli chcesz użyć zwykłej płytki podłogowej szyny / trawy / betonu, ale nadal musisz dodać do niej funkcje bez korzystania z nowej ramki ograniczającej. Aby to zrobić, użyj składni ikonek współużytkujących poprzednią ramkę ograniczającą, ale użyj jej przed definicją pierwszej ramki ograniczającej. xpixeloffset i ypixeloffset odnoszą się do zwykłego miejsca płytek naziemnych. Ta sama funkcja jest również częściowo obsługiwana w TTDPatch, ponieważ TTDPatch 2.6 r2312: TTDPatch ignoruje pola xofs i yofs i zawsze używa (0,0) dla offsetu. Jeśli tworzysz GRF, który musi być zgodny zarówno z OpenTTD, jak i TTDPatch, zawsze powinieneś utrzymywać xofs i yofs zero, aby uzyskać ten sam efekt w obu grach.
-Zauważ jednak, że obie implementacje nie biorą pod uwagę  [[pl/Development/NewGRF/NFO Specs/Action0/Stations#general-flags-13|setting of prop13 bit 0]] , dlatego te „liczne duszki naziemne” muszą zawsze być częścią zestawu duszek budynku i nie mogą być częścią inny zestaw ikonek dla ikonek naziemnych.
+Od OpenTTD r18959 możesz narysować wiele 'sprite' ziemi na płytkę, co jest przydatne, jeśli chcesz użyć zwykłej płytki podłogowej szyny / trawy / betonu, ale nadal musisz dodać do niej funkcje bez korzystania z nowej ramki ograniczającej. Aby to zrobić, użyj składni ikonek współużytkujących poprzednią ramkę ograniczającą, ale użyj jej przed definicją pierwszej ramki ograniczającej. xpixeloffset i ypixeloffset odnoszą się do zwykłego miejsca płytek naziemnych. Ta sama funkcja jest również częściowo obsługiwana w TTDPatch, ponieważ TTDPatch 2.6 r2312: TTDPatch ignoruje pola xofs i yofs i zawsze używa (0,0) dla offsetu. Jeśli tworzysz GRF, który musi być zgodny zarówno z OpenTTD, jak i TTDPatch, zawsze powinieneś utrzymywać xofs i yofs zero, aby uzyskać ten sam efekt w obu grach.
+Zauważ jednak, że obie implementacje nie biorą pod uwagę  [[pl/Development/NewGRF/NFO Specs/Action0/Stations#general-flags-13|setting of prop13 bit 0]] , dlatego te "liczne 'sprites' naziemne" <small>''(multiple ground sprites)''</small> muszą zawsze być częścią zestawu 'sprite' budynku i nie mogą być częścią inny zestaw ikonek dla ikonek naziemnych.
 
 Liczba ikonek może mieć następujące wartości (pamiętaj, aby używać małego endiana, tj. Odwróconej kolejności bajtów):
 
@@ -176,7 +176,7 @@ Liczba ikonek może mieć następujące wartości (pamiętaj, aby używać małe
 |RRRR842D+X||draw sprite with colour translation defined in sprite RRRR; available since TTDPatch 2.6 r1683
 |}
 
-Przy ustawionym bicie 31 ten duszek będzie odnosił się do duszka TTD, a nie duszka akcji 1. Dla pierwszego duszka naziemnego obowiązuje odwrotne znaczenie.
+Przy ustawionym bicie 31 ten 'sprites' będzie odnosił się do 'sprite' TTD, a nie 'sprite' akcji 1. Dla pierwszego 'sprite' naziemnego obowiązuje odwrotne znaczenie.
 
 W zależności od rodzaju szyny sprajty mogą uzyskać dodatkowe przesunięcia <small>''(offsets)''</small> :
 
@@ -190,11 +190,11 @@ W zależności od rodzaju szyny sprajty mogą uzyskać dodatkowe przesunięcia <
 |Action 1 sprite (other sprites in the layout) || 0 || 0 || 0
 |}
 
-Tak więc duszki TTD i pierwszy duszek naziemny są pod wpływem typu szyny, podczas gdy inne duszki akcji 1 w układzie nie są. Przesunięcie "82" odnosi się do przesunięcia między domyślnymi duszkami torowymi TTD; jeśli używasz niedziałających naziemnych ikonek, które nie pochodzą z akcji 1, musisz dostarczyć fałszywe numery ikon, które zapobiegawczo odwrócą przesunięcia (to znaczy, potrzebujesz różnych układów ikon dla każdego typu linii, dla którego twoja stacja jest dostępna).
+Tak więc 'sprites' TTD i pierwszy 'sprite' naziemny są pod wpływem typu szyny, podczas gdy inne 'sprites' akcji 1 w układzie nie są. Przesunięcie "82" odnosi się do przesunięcia między domyślnymi 'sprites' torowymi TTD; jeśli używasz niedziałających naziemnych ikonek, które nie pochodzą z akcji 1, musisz dostarczyć fałszywe numery ikon, które zapobiegawczo odwrócą przesunięcia (to znaczy, potrzebujesz różnych układów ikon dla każdego typu linii, dla którego twoja stacja jest dostępna).
 
-Ustawienie bitu 30 wymusza normalne wyświetlanie tego duszka nawet w trybie "przezroczystych budynków" <small>''(transparent buildings)''</small> (obsługiwane tylko w TTDPatch 2.6 r1695 i późniejszych).
+Ustawienie bitu 30 wymusza normalne wyświetlanie tego 'sprite' nawet w trybie "przezroczystych budynków" <small>''(transparent buildings)''</small> (obsługiwane tylko w TTDPatch 2.6 r1695 i późniejszych).
 
-Poniżej znajduje się przykład połączonych duszków, a także przezroczystych duszków (np. Na dachu stacji).
+Poniżej znajduje się przykład połączonych 'sprites' , a także przezroczystych 'sprites' (np. Na dachu stacji).
 
 Zauważ, że współrzędne tutaj są współrzędnymi 3D, przy czym x biegnie od prawego górnego rogu do lewego dolnego, zaś y biegnie od lewego górnego rogu do prawego dolnego rogu, przy czym wymiary kafelków wynoszą 16 x 16 (i 8 dla jednego poziomu wysokości). Oznacza to, że wartości xiy powinny zawsze zawierać się w przedziale 0–15 (dziesiętnie).
 
@@ -272,20 +272,20 @@ Zauważ, że łatwiejsze może być rysowanie różnych zestawów ikonek za pomo
 Podobnie jak właściwość 0A, kopiuje niestandardowy układ z identyfikatora stacji podanego przez argument.
 
 === Little/lots threshold (10) ===
-Amount of cargo for switching from "little" to "lots" of cargo. &nbsp;TTDPatch separates the full range of cargo amounts (0 to 4095) into two separate subranges, "little" and "lots" of cargo. &nbsp;This allows better control of cargo amount based graphics (if needed). &nbsp;Property 10 specifies at what amount of cargo the patch is to switch from one to the other subrange. &nbsp;See [[en/Action2Stations|Action 2 for stations]] for more information.
+Ilość ładunku do zamiany z "małego" na "dużo" ładunku. &nbsp;TTDPatch dzieli pełny zakres ilości ładunku (od 0 do 4095) na dwa oddzielne podzakresy, "mało" i "dużo" ładunku. &nbsp;Umożliwia to lepszą kontrolę grafiki opartej na ilości ładunku (w razie potrzeby). &nbsp;Właściwość 10 określa, przy jakiej ilości ładunku łata ma się przełączać z jednego do drugiego podzakresu. &nbsp;Więcej informacji można znaleźć w [[pl/Extrazi/specs.tt/Action2Stations|Action 2 for stations]] .
 
 === Pylon placement (11) and wire placement (14) ===
-Prop. 11 sets which tile types should have pylons when used with electrified tracks. By default, tiles 0-3 (default stations without roof) have pylons, and tiles 4-7 (default stations with roof) don't. This is a bit mask of tile types, with a bit set meaning that a pylon should be drawn. The tile types here do not consider [[en/Callbacks#station-sprite-layout-14|callback 14]], but rather the type as it was built, i.e. from prop. 0E.
+Prop. 11 określa, które typy płytek powinny mieć pylony, gdy są używane z naelektryzowanymi ścieżkami. Domyślnie płytki 0-3 (domyślne stacje bez dachu) mają pylony, a płytki 4-7 (domyślne stacje z dachem) nie. Jest to nieco maska ​​typów kafelków, a nieco ustawiony oznacza, że ​​należy narysować pylon. Typy kafelków tutaj nie biorą pod uwagę [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#station-sprite-layout-14|callback 14]] , ale raczej typ, w jakim został zbudowany, tj. Z prop. 0E.
 
-Prop. 14 works in a similar way, except that it sets the tile types on which there should be ''no'' wires displayed. With the default value of "00", wires are displayed everywhere, and for each bit set, the wire is omitted on that tile type.
+Prop. 14 działa w podobny sposób, z tym wyjątkiem, że ustawia typy kafli, na których powinny być wyświetlane przewody ''nie'' <small>''(no)''</small> . Przy domyślnej wartości "00" druty są wyświetlane wszędzie, a dla każdego zestawu bitów drut jest pomijany na tym typie kafelka.
 
-This property should only be used when the wires cause problems with the sprite sorter, because even when the wire is obscured by a station hall or similar, it should still show up in transparent mode so that each tile can easily be verified as being electrified.
+Tej właściwości należy używać tylko wtedy, gdy druty powodują problemy z sortownikiem duszków, ponieważ nawet jeśli drut jest zasłonięty przez halę stacji lub podobną, powinien nadal pokazywać się w trybie przezroczystym, aby każda płytka mogła być łatwo zweryfikowana jako zelektryfikowana.
 
 === Cargo types for random triggers (12) ===
 
-This sets which cargo types should trigger re-randomizing. The cargo types are given as a bitmask of the bits from column 3 (type B) in CargoTypes. &nbsp;If nothing is set (the default), the no random triggers will happen, to conserve CPU time.
+Określa, które typy ładunku powinny uruchamiać ponowną randomizację. Rodzaje ładunków podane są jako maska ​​bitowa bitów z kolumny 3 (typ B) w CargoTypes. &nbsp;Jeśli nic nie jest ustawione (ustawienie domyślne), nie wystąpią żadne losowe wyzwalacze, aby zaoszczędzić czas procesora.
 
-With GRF version 7 and above, the interpretation of bits changes. Instead of climate-dependent cargo slot numbers (type B), you have to set the bits of climate-independent cargo ID (type A).
+W wersji 7 i nowszych GRF zmienia się interpretacja bitów. Zamiast numerów szczelin ładunkowych zależnych od klimatu (typ B) musisz ustawić bity niezależnego od klimatu identyfikatora ładunku (typ A).
 
 === General Flags (13) ===
 
@@ -303,28 +303,28 @@ With GRF version 7 and above, the interpretation of bits changes. Instead of cli
 |4||10||{{pl/Development/NewGRF/ottdp|1.0|2.6}}||When bit 3 is set, use extended foundation block instead of the simple one
 |}
 
-Bit 3 works somewhat similarly to bit 0: your sprite selection will be called again, with 2 in the lowest byte of [[en/GlobalVariables#extra-callback-info-10-and-18|variable 10]]. If the chain ends on a callback result, the program will assume the foundation selection has failed and will use the default foundaton sprites. The low word of [[en/GlobalVariables#extra-callback-info-10-and-18|variable 18]] will contain the tile type of the current tile; if you have [[en/Callbacks#station-sprite-layout-14|callback 14]] enabled, this will be the its return value - otherwise, the default TTD types (platform with building, platform with left roof etc.) are used. In either case, one is added for the NW-SE orientation, in case your station needs different foundations depending on its orientation. Bits 16 and 17 are set if the NW and and NE foundations are to merged with the corresponding neighbour tile, so you shouldn't draw the corresponding edge in the foundation sprite. Other bits of variable 10 and variable 18 are reserved for future use.
+Bit 3 działa nieco podobnie do bitu 0: wybór twojego duszka zostanie ponownie wywołany, z 2 w najniższym bajcie [[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|variable 10]] . Jeśli łańcuch zakończy się wynikiem wywołania zwrotnego, program przyjmie, że wybór fundamentu nie powiódł się, i użyje domyślnych duszków Foundaton. Niskie słowo  [[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|variable 18]] będzie zawierać typ kafelka bieżącego kafelka; jeśli masz włączone [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#station-sprite-layout-14|callback 14]] , będzie to jego wartość zwracana - w przeciwnym razie używane są domyślne typy TTD (platforma z budynkiem, platforma z lewym dachem itp.). W obu przypadkach jeden jest dodawany do orientacji NW-SE, na wypadek, gdyby twoja stacja potrzebowała różnych fundamentów w zależności od jej orientacji. Bity 16 i 17 są ustawiane, jeśli fundamenty NW i NE mają zostać połączone z odpowiednią sąsiadującą płytką, więc nie należy rysować odpowiedniej krawędzi w ikonce fundamentu. Inne bity zmiennej 10 i zmiennej 18 są zarezerwowane do wykorzystania w przyszłości.
 
-Your sprite selection code should select a foundation sprite block. The contents of this block depends on whether bit 4 is set or not.
-* Bit 4 clear (simple foundations):
-[[File:en/Simple foundations.png]]
+Twój kod wyboru duszka powinien wybrać blok duszka fundacji. Zawartość tego bloku zależy od tego, czy bit 4 jest ustawiony, czy nie.
+* Bit 4 czysty (proste podstawy):
+<!--[[File:simple_foundations.png]]-->[http://newgrf-specs.tt-wiki.net/wiki/File:simple_foundations.png File:simple_foundations.png]
 
-The programme will combine the needed foundation from these 8 sprites depending on the current slope. You don't need to care about the merge data in bits 16..17 of [[en/GlobalVariables#extra-callback-info-10-and-18|variable 18]]; it will be taken care of that automatically by adding the 7th and 8th sprite only when necessary.
-* Bit 4 set (extended foundations):
-[[File:en/Extended foundations.png]]
+Program połączy potrzebny fundament z tych 8 duszków w zależności od aktualnego nachylenia. Nie musisz przejmować się danymi scalania w bitach 16..17  [[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|variable 18]] ; zostanie to załatwione automatycznie poprzez dodanie siódmego i ósmego duszka tylko w razie potrzeby.
+* Zestaw bitów 4 (rozszerzone podstawy):
+<!--[[File:extended_foundations.png]]-->[File:simple_foundations.png]]-->[http://newgrf-specs.tt-wiki.net/wiki/File:extended_foundations.png File:extended_foundations.png]
 
-You need to have one sprite for every slope that's possible below a rail station. The correct one will be automatically selected depending on the current slope. It can't handle the merging itself, however, so you need four foundation blocks: one with no edges removed, one with the NW edge removed, one with the NE edge removed and one with both north edges removed. Your sprite selection code is responsible for selecting the correct of those blocks according to the merge info in [[en/GlobalVariables#extra-callback-info-10-and-18|variable 18]].
+Musisz mieć jednego duszka na każde nachylenie, które jest możliwe poniżej stacji kolejowej. Właściwy zostanie automatycznie wybrany w zależności od aktualnego nachylenia. Jednak nie obsługuje samego scalania, więc potrzebujesz czterech bloków fundamentowych: jeden bez usuniętych krawędzi, jeden z usuniętą krawędzią NW, jeden z usuniętą krawędzią NE i jeden z usuniętymi obydwoma krawędziami północnymi. Twój kod wyboru duszka jest odpowiedzialny za wybranie poprawności tych bloków zgodnie z informacjami o scaleniu w [[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|variable 18]].
 
-In both cases, you can put an additional value into register 100h, which will serve as an offset into the selected block. If you don't modify register 100h during the chain, it will default to 0. It is important that the dimensions of these sprites remain the same - thus bit 6 in the real sprites must be set to prevent GRFCodec from trimming the empty blue areas. The offset of these foundations must be -31 to the X direction and -9 to the Y direction.
+W obu przypadkach można wprowadzić dodatkową wartość do rejestru 100h, która posłuży jako przesunięcie w wybranym bloku. Jeśli nie zmodyfikujesz rejestru 100h podczas łańcucha, domyślnie będzie to 0. Ważne jest, aby wymiary tych duszków pozostały takie same - dlatego bit 6 w prawdziwych duszkach musi być ustawiony, aby GRFCodec nie przyciął pustych niebieskich obszarów . Odsunięcie tych fundamentów musi wynosić -31 w kierunku X i -9 w kierunku Y.
 
 === Can train enter tile (15) ===
 
-Like props. 11 and 14, this value contains eight bits relating to the eight possible tile types. If a bit is set, trains are prevented from routing through or entering any tile of this type.
+Jak rekwizyty. 11 i 14, ta wartość zawiera osiem bitów odnoszących się do ośmiu możliwych rodzajów płytek. Jeśli bit jest ustawiony, pociągi nie mogą przejeżdżać ani wchodzić na żadne płytki tego typu.
 
 === Animation information (16) ===
 
-The low byte specifies the number of animation frames minus one, so 00 means 1 frame, 01 means 2 frames etc. The maximum number of frames is 256, although you can have some problems if your animation exceeds FD (253) frames. The high byte must be 0 for non-looping animations and 01 for looping animations. Every other value is reserved for future use. In addition, if the whole word contains FFFF, animation is turned off for this station (this is the default value).
-Since you can't have properties for individual station tiles, this property applies for every tile of the station. If you don't want to animate some tiles, you should check the current position during [[en/Callbacks#animation-control-1b-25-140-152-159|callback 140]] and return FD if the current tile doesn't need to be animated. If you also need animations of different length per tile, you'll have to use [[en/Callbacks#next-animation-frame-1a-26-141-153-158|callback 141]] for that.
+Niższy bajt określa liczbę klatek animacji pomniejszoną o jedną, więc 00 oznacza 1 klatkę, 01 oznacza 2 klatki itp. Maksymalna liczba klatek wynosi 256, chociaż możesz mieć pewne problemy, jeśli twoja animacja przekracza liczbę klatek FD (253). Górny bajt musi wynosić 0 dla animacji nie zapętlonych i 01 dla animacji zapętlonych. Każda inna wartość jest zarezerwowana do wykorzystania w przyszłości. Ponadto, jeśli całe słowo zawiera FFFF, animacja jest wyłączona dla tej stacji (jest to wartość domyślna).
+Ponieważ nie możesz mieć właściwości dla poszczególnych kafelków stacji, ta właściwość dotyczy każdego kafelka stacji. Jeśli nie chcesz animować niektórych kafelków, powinieneś sprawdzić bieżącą pozycję podczas [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159|callback 140]] i zwrócić FD, jeśli bieżący kafelek nie trzeba być animowanym. Jeśli potrzebujesz także animacji o różnej długości na płytkę, musisz użyć  [[en/Callbacks#next-animation-frame-1a-26-141-153-158|callback 141]] .
 
 === Animation speed (17) ===
 The meaning is the same as for [[en/Action0Houses#animation-speed-1b|house property 1B]], but the lower limit is 0 instead of 2, so the fastest possible animation changes frames every game tick (27ms). The default value is 2.
