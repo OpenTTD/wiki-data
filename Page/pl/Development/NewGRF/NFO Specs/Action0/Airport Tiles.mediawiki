@@ -27,20 +27,20 @@ Kafelki lotniskowe działają jak kafelki przemysłowe i podobnie jak budynki mi
 
 === Substitute tile type (08) ===
 
-This tile type will be used instead of your new one if your definition isn't available for any reason. Assigning this property copies the properties of the old type just like it does with houses. If this tile's action 3 appears before this property is set, the action 3 will have no effect.
+Ten typ kafelka zostanie użyty zamiast nowego, jeśli definicja nie jest dostępna z jakiegokolwiek powodu. Przypisanie tej właściwości powoduje skopiowanie właściwości starego typu, podobnie jak w przypadku domów. Jeśli akcja 3 tego kafelka pojawi się przed ustawieniem tej właściwości, akcja 3 nie przyniesie żadnego efektu.
 
 === Airport tile override (09) ===
 
-Works like the house override property for houses and industry tiles.
+Działa jak dom nadpisuje właściwość domów i kafli przemysłu.
 
 === Callback flags (0E) ===
 
 {| |-
 !Bit!!value!!version!!meaning
 |-
-|0||1||{{pl/Development/NewGRF/ottdp|1.1|ottdrev=r19204}}||use [[en/Callbacks#next-animation-frame-1a-26-141-153-158 |callback 153]] to decide the next animation frame
+|0||1||{{pl/Development/NewGRF/ottdp|1.1|ottdrev=r19204}}||use [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#next-animation-frame-1a-26-141-153-158 |callback 153]] to decide the next animation frame
 |-
-|1||2||{{pl/Development/NewGRF/ottdp|1.1|ottdrev=r19204}}||use [[en/Callbacks#length-of-animation-frame-20-27-142-154-15a |callback 154]] to decide animation speed
+|1||2||{{pl/Development/NewGRF/ottdp|1.1|ottdrev=r19204}}||use [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#length-of-animation-frame-20-27-142-154-15a |callback 154]] to decide animation speed
 |-
 |2||4||{{pl/Development/NewGRF/ottdp}}||(reserved)
 |-
@@ -48,24 +48,24 @@ Works like the house override property for houses and industry tiles.
 |-
 |4||10||{{pl/Development/NewGRF/ottdp|1.1|ottdrev=r19204}}||use callback xx to check if a slope is suitable (not yet implemented)
 |-
-|5||20||{{pl/Development/NewGRF/ottdp|1.1|ottdrev=r19204}}||use [[en/Callbacks#decide-drawing-default-foundations-30-14e-150 |callback 150]] to decide if default foundations need to be drawn
+|5||20||{{pl/Development/NewGRF/ottdp|1.1|ottdrev=r19204}}||use [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#decide-drawing-default-foundations-30-14e-150 |callback 150]] to decide if default foundations need to be drawn
 |-
 |6||40||{{pl/Development/NewGRF/ottdp|1.1|ottdrev=r19204}}||use callback xx to allow or deny autosloping below the tile (not yet implemented)
 |}
 
-Please note that callback 152 doesn't have a bit here. To use [[en/Callbacks#animation-control-1b-25-140-152-159 |callback 152]], simply set the wanted bits in property 11 and it will work as intended.
+Należy pamiętać, że callback 152 nie ma tutaj trochę. Aby użyć [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159 |callback 152]] , po prostu ustaw żądane bity we właściwości 11 i będzie działać zgodnie z przeznaczeniem.
 
 === Animation information (0F) ===
 
-The low byte specifies the number of animation frames minus one, so 00 means 1 frame, 01 means 2 frames etc. The maximum number of frames is 256, although you can have some problems if your animation exceeds FD (253) frames. The high byte must be 0 for non-looping animations and 01 for looping animations. Every other value is reserved for future use. In addition, if the whole word contains FFFF, animation is turned off for this tile (this is the default value).
+Niższy bajt określa liczbę klatek animacji pomniejszoną o jedną, więc 00 oznacza 1 klatkę, 01 oznacza 2 klatki itp. Maksymalna liczba klatek wynosi 256, chociaż możesz mieć pewne problemy, jeśli twoja animacja przekracza liczbę klatek FD (253). Górny bajt musi wynosić 0 dla animacji nie zapętlonych i 01 dla animacji zapętlonych. Każda inna wartość jest zarezerwowana do wykorzystania w przyszłości. Ponadto, jeśli całe słowo zawiera FFFF, animacja dla tego kafelka jest wyłączona (jest to wartość domyślna).
 
 === Animation speed (10) ===
 
-The meaning is the same as for house property 1B, but the lower limit is 0 instead of 2, so the fastest possible animation changes frames every game tick (27ms). The default value is 2.
+Znaczenie jest takie samo, jak w przypadku właściwości domu 1B, ale dolny limit wynosi 0 zamiast 2, więc najszybsza możliwa animacja zmienia klatki w każdej grze (27ms). Wartość domyślna to 2.
 
 === Animation triggers via [[en/Callback/Animation control |callback 152]] (11) ===
 
-This shares some flags with industry tiles and others with stations. Call [[en/Callback/Animation control|callback 152]] when:
+To dzieli niektóre flagi z kafelkami przemysłu, a inne ze stacjami. Wywołanie  [[pl/Development/NewGRF/NFO Specs/Callback/Animation control|callback 152]] kiedy:
 
 {| |-
 !Bit!!Value!!Version!!Meaning!!Var 18
