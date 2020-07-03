@@ -95,7 +95,7 @@ Można zdefiniować do 63 rodzajów tramwajów.
 |1B
 |{{pl/Development/NewGRF/ottdp|1.10}}
 |W
-|StringID: Tram type name<!--<ref>{{grfTill|7}} For GRF version 7 or earlier, set property 1B ''after'' setting property 09, as property 09 sets the rail type name as well for backwards compatibility.</ref>-->
+|StringID: Tram type name<!--<ref>{{grfTill|7}} W przypadku GRF w wersji 7 lub wcześniejszej ustaw właściwość 1B ''po'' ustawieniu właściwości 09, ponieważ właściwość 09 ustawia również nazwę typu szyny dla kompatybilności wstecznej.</ref>-->
 |-
 |1C
 |{{pl/Development/NewGRF/ottdp|1.10}}
@@ -110,29 +110,29 @@ Można zdefiniować do 63 rodzajów tramwajów.
 
 <references />
 
-In NFO, tram type IDs will be GRF local, with an ID to label mapping. Therefore to modify an existing tram type, specify its label in property 08. To create a new tram type, again just specify its label in property 08. This way there is no need for complex GRM mechanisms to allocate IDs. If a label 'clashes' with another GRF, then one GRF will end up modifying the properties instead of creating a new tram type.
+W NFO ID''`y'' typów tramwajów będą lokalne GRF, z ID do mapowania etykiet. Dlatego, aby zmodyfikować istniejący typ tramwaju, podaj jego etykietę we właściwości 08. Aby utworzyć nowy typ tramwaju, ponownie po prostu określ jego etykietę we właściwości 08. W ten sposób nie ma potrzeby stosowania skomplikowanych mechanizmów GRM do przydzielania ID''`ów'' . Jeśli etykieta 'koliduje' z innym GRF, to jeden GRF skończy modyfikowanie właściwości zamiast tworzenia nowego typu tramwaju.
 
-When a new tram type is created, it is populated with the information from the first tram type, except that the powered list contains only the tram type being created. However, no default values should be assumed, as the first tram type may have been modified.
+Gdy tworzony jest nowy typ tramwaju, zapełniane są informacjami z pierwszego typu tramwaju, z tym wyjątkiem, że lista zasilana zawiera tylko tworzony typ tramwaju. Nie należy jednak zakładać żadnych wartości domyślnych, ponieważ pierwszy typ tramwaju mógł zostać zmodyfikowany.
 
 == Vehicle and Tramtype availability ==
 
-Vehicle and tramtype availability and compatibility is influenced by multiple properties.
-Generally, the vehicle defines which tramtype it is, and the tramtypes define the compatibility between each other.
-* A vehicle exists, if its tramtype (road vehicle prop 05) is defined. Otherwise the vehicle is disabled.
-* When a vehicle is introduced, it always introduces its tramtype (road vehicle prop 05).
-* A tramtype is introduced, if at least one of the following conditions is met:
-** A vehicle is introduced, that references the tramtype (road vehicle prop 05).
-** Another tramtype is introduced, that references the tramtype via the introduced tramtype list (tramtype prop 19).
-** The introduction date (tramtype prop 17) is passed and all required tramtypes (tramtype prop 18) are available.
+Na różnorodność właściwości ma wpływ dostępność i kompatybilność pojazdu i tramwaju.
+Zasadniczo pojazd określa, który to typ tramwaju, a typy tramwajów określają wzajemną kompatybilność.
+* Pojazd istnieje, jeżeli zdefiniowano jego typ pojazdu (podpora 05 pojazdu drogowego). W przeciwnym razie pojazd jest wyłączony.
+* Po wprowadzeniu pojazdu zawsze wprowadza on swój typ pojazdu (podpora pojazdu drogowego 05).
+* Tramwaj jest wprowadzany, jeżeli spełniony jest co najmniej jeden z następujących warunków:
+** Wprowadzono pojazd, który odnosi się do typu tramwaju (podpora pojazdu drogowego 05).
+** Wprowadzono kolejny typ tramwaju, który odwołuje się do typu tramwaju za pomocą wprowadzonej listy typów tramwajów (propozycja tramtype 19).
+** Data wprowadzenia (podparcie tramtype 17) została przekroczona i wszystkie wymagane typy tramwajów (podparcie tramtype 18) są dostępne.
 
-Via tramtype property 1D multiple tramtypes can be defined, which shall be considered equivalent to a tramtype.
-This affects the interpretation of road vehicle property 05. If road vehicle property 05 references an undefined tramtype, then
-tramtype property 1D is checked for all defined tramtypes, whether the vehicle can be reassigned to some other tramtype.
-Otherwise the vehicle is disabled.
+Za pomocą właściwości tramtype 1D można zdefiniować wiele rodzajów tramwajów, które należy uznać za równoważne z typem tramwaju.
+Wpływa to na interpretację właściwości pojazdu drogowego 05. Jeśli właściwość pojazdu drogowego 05 odnosi się do niezdefiniowanego typu tramwaju, wówczas
+właściwość tramtype 1D jest sprawdzana dla wszystkich zdefiniowanych typów tramwajów, niezależnie od tego, czy pojazd może zostać ponownie przypisany do innego rodzaju tramwaju.
+W przeciwnym razie pojazd jest wyłączony.
 
 == Tram type label (08) ==
 
-These are globally unique four-letter identifiers for specific tram types (analoguous to [[en/Action0Cargos#cargo-label-17|cargo labels]]), used to make various tram types accessible from road vehicle grfs. Reserved labels for default tram types are:
+Są to unikatowe na skalę światową czteroliterowe identyfikatory dla określonych typów tramwajów (analogiczne do [[pl/Development/NewGRF/NFO Specs/Action0/Cargos#cargo-label-17|cargo labels]] ), używane do udostępniania różnych typów tramwajów z grfs pojazdów drogowych. Zarezerwowane etykiety dla domyślnych typów tramwajów to:
 
 {| class="wikitable
 |-
@@ -146,47 +146,47 @@ These are globally unique four-letter identifiers for specific tram types (analo
 | Electrified Tram
 |}
 
-Tram type sets may use up to 63 tramtypes and have to specify their own [[en/TramtypeLabels|labels]].
+Zestawy typów tramwajów mogą wykorzystywać do 63 rodzajów tramwajów i muszą określać własne  [[pl/Development/NewGRF/NFO Specs/TracktypeLabels|labels]] .
 
-See also [[en/Action0/Global Settings#tram-type-translation-table-12|Tram Type Translation Table]] for further info.
+Zobacz także [[pl/Development/NewGRF/NFO Specs/Action0/Global Settings#tram-type-translation-table-12|Tram Type Translation Table]]  w celu uzyskania dalszych informacji.
 
 == Build tram toolbar caption (09) ==
 
-String ID of the name of the tram type as shown in the toolbar caption.
+ID ciągu nazwy typu tramwaju, jak pokazano w podpisie paska narzędzi.
 
 == Tram construction dropdown text (0A) ==
 
-String ID for text in the dropdown of all tram types.
+ID ciągu <small>''(String)''</small> tekstu w menu rozwijanym wszystkich typów tramwajów.
 
 This string must never start with a colour control code.
 
 == Build vehicle window caption (0B) ==
 
-String ID for build vehicle window caption.
+ID ciągu dla podpisu okna pojazdu.
 
 == Autoreplace text (0C) ==
 
-String ID for tram type shown in autoreplace window.
+ID ciągu dla typu tramwaju pokazany w oknie autoreplace.
 
 == New engines (0D) ==
 
-StringID to use for showing texts of the type "We have invented a new &lt;tram type&gt; engine".
+StringID do wyświetlania tekstów typu "Wynaleźliśmy nowy &lt;tram type&gt; 'silnik'".
 
 == Powered tram type list (0F) ==
 
-List of tram types on which road vehicles of this tram type are powered. E.g. vehicles of "normal tram"-type are powered on "electrified tram"- and "haul-tram"-type as well. Note that there is no "compatible tram type list" since there is no difference between "powered" and "compatible" for tramtypes
+Lista rodzajów tramwajów, na których napędzane są pojazdy drogowe tego rodzaju. Na przykład. pojazdy typu "normalny tramwaj" są zasilane również na "zelektryfikowanym tramwaju" - i "ciągniku tramwajowym" <small>''(haul-tram)''</small> . Należy pamiętać, że nie ma "listy kompatybilnych typów  tramwajów", ponieważ nie ma różnicy między "napędzanymi" <small>''(powered)''</small> a "kompatybilnymi" dla typów tramwajów
 
-The format is:
+Format to:
 
 <pre>0E &lt;nvar&gt; (&lt;tram type label&gt;){n}</pre>
 
-That is you give the number of compatible tram types in a single byte followed by a list of that length of tram type labels. A tram type is automatically powered with itself, so you don't need to list the current tram type.
+Oznacza to, że podajesz liczbę kompatybilnych typów tramwajów w jednym bajcie, a następnie podajesz listę długości etykiet typów tramwajów. Typ tramwaju jest automatycznie zasilany sam, więc nie trzeba podawać aktualnego typu tramwaju.
 
-Note that these properties apply to road vehicles of this tram type, not the tram itself. If you want road vehicles of other tram types to be able to run on your tram types, you must set the powered tram types property for each tram type. Setting these properties behaves always incremental, so you only need to the set additional bits for each other tram type, you cannot remove poweredness once it is set (by some other grf).
+Należy pamiętać, że właściwości te dotyczą pojazdów drogowych tego rodzaju tramwajów, a nie samego tramwaju. Jeśli chcesz, aby pojazdy drogowe innych typów tramwajów mogły jeździć na tych typach tramwajów, musisz ustawić właściwość Typy napędzanych tramwajów dla każdego rodzaju tramwajów. Ustawienie tych właściwości zachowuje się zawsze przyrostowo, więc wystarczy ustawić dodatkowe bity dla każdego typu tramwaju, nie można usunąć zasilania po jego ustawieniu (przez jakiś inny GRF).
 
 == Tram type flags (10) ==
 
-Flags to define properties related to the tram type:
+Flagi do zdefiniowania właściwości związanych z typem tramwaju:
 
 {| class="wikitable"
 |-
@@ -217,33 +217,33 @@ Flags to define properties related to the tram type:
 
 == Speed limit (14) ==
 
-Speed limit in mph*0.8 (approx. 0.5km/h). Set to "0" for no limit at all.
+Ograniczenie prędkości w mph*0.8 (około 0.5km/h)). Ustaw na "0" w ogóle bez limitu.
 
 == Map colour (16) ==
 
-This property defines the colour this tram type is drawn in the minimap view. The byte value specifies the colour entry in the [[en/PalettesAndCoordinates|DOS palette]].
+Ta właściwość określa kolor, jaki ten typ tramwaju jest rysowany w widoku minimapy. Wartość bajtu określa wpis koloru w <!--[[PalettesAndCoordinates|DOS palette]]-->[http://newgrf-specs.tt-wiki.net/wiki/PalettesAndCoordinates DOS palette] .
 
 == Introduction date (17) ==
 
-This property defines the long date formatted introduction date of this tram type. With this property set the tram type will be introduced at (or after) this date when all of the introduction required tram types are available to the company of the player, or whenever a vehicle using this tram type gets introduced whichever is first.
+Ta właściwość określa datę wprowadzenia sformatowanej daty długiej tego typu tramwaju. Przy tym ustawieniu tej właściwości typ tramwaju zostanie wprowadzony w dniu (lub po tej dacie), gdy wszystkie wymagane typy wprowadzenia tramwaju będą dostępne dla firmy gracza lub za każdym razem, gdy pojazd korzystający z tego typu tramwaju zostanie wprowadzony w zależności od tego, co nastąpi wcześniej.
 
 == Introduction required tram type list (18) ==
 
-List of tram types on that need to be available to the company of the player for this tram type to be introduced at (or after) the introduction date. This limit does not apply when the tram type is introduced by the introduction of a vehicle.
+Lista rodzajów tramwajów na ten temat musi być dostępna dla firmy gracza, aby ten typ tramwaju mógł zostać wprowadzony w dniu wprowadzenia lub później. Limit ten nie ma zastosowania, gdy typ tramwaju zostaje wprowadzony przez wprowadzenie pojazdu.
 
-Same format as for property 0F above.
+Taki sam format jak dla właściwości 0F powyżej.
 
-This can, for example, be used to introduce a tram type with catenary when both normal tram and electrified tram types are available.
+Można to na przykład wykorzystać do wprowadzenia typu tramwaju z siecią trakcyjną, gdy dostępne są zarówno tramwaje normalne, jak i zelektryfikowane.
 
 == Introduced tram type list (19) ==
 
-List of tram types that get introduced when this tram type is introduced. For example, to make sure that when a fast tram type is introduced the slow variant exists.
+Lista rodzajów tramwajów wprowadzanych po wprowadzeniu tego typu tramwajów. Na przykład, aby upewnić się, że po wprowadzeniu typu szybkiego tramwaju istnieje wariant wolny.
 
-Same format as for property 0F above.
+Taki sam format jak dla właściwości 0F powyżej.
 
 == Sort order (1A) ==
 
-Property for influencing the sort order of the drop down lists with tram types. Default values are as follows:
+Właściwość wpływająca na porządek sortowania list rozwijanych z typami tramwajów. Wartości domyślne są następujące:
 
 {| class="wikitable"
 |-
@@ -260,17 +260,17 @@ Property for influencing the sort order of the drop down lists with tram types. 
 |Tramtype #n
 |}
 
-Thus the tram type that (internally) gets index 8 will get a default value of 87. These defaults are to keep the ordering when this property is not supported as they were.
+Zatem typ tramwaju, który (wewnętrznie) otrzymuje indeks 8, otrzyma wartość domyślną 87. Te wartości domyślne mają zachować porządek, gdy ta właściwość nie jest obsługiwana tak, jak były.
 
 == Tram type name (1B) ==
 
-String ID of the name of the tram type.
+ID ciągu nazwy typu tramwaju.
 
 == Alternate tram type labels (1D) ==
 
-A list of alternate labels that get "redirected" to this tram type when used e.g. as tram type of road vehicle or when testing if a label is defined. The redirection only happens if the alternate label isn't defined as a real tram type. Same format as for property 0F above.
+Lista alternatywnych etykiet, które "przekierowują" do tego typu tramwaju, gdy są używane np. jako typ pojazdu drogowego tramwajowego lub podczas badania, czy zdefiniowano etykietę. Przekierowanie następuje tylko wtedy, gdy alternatywna etykieta nie jest zdefiniowana jako prawdziwy typ tramwaju. Taki sam format jak dla właściwości 0F powyżej.
 
-Alternate labels are not considered when evaluating properties 0F, 18, and 19.
+Alternatywne etykiety nie są brane pod uwagę przy ocenie właściwości 0F, 18 i 19.
 
 = Przykład =
 
