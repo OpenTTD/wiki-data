@@ -110,29 +110,29 @@ Można zdefiniować do 63 rodzajów dróg.
 
 <references />
 
-In NFO, road type IDs will be GRF local, with an ID to label mapping. Therefore to modify an existing road type, specify its label in property 08. To create a new road type, again just specify its label in property 08. This way there is no need for complex GRM mechanisms to allocate IDs. If a label 'clashes' with another GRF, then one GRF will end up modifying the properties instead of creating a new road type.
+W NFO identyfikatory typów dróg będą lokalne GRF, z identyfikatorem mapowania etykiety. Dlatego, aby zmodyfikować istniejący typ drogi, określ jego etykietę we właściwości 08. Aby utworzyć nowy typ drogi, ponownie określ swoją etykietę we właściwości 08. W ten sposób złożone mechanizmy GRM nie będą musiały przypisywać identyfikatorów. Jeśli etykieta 'koliduje' <small>''(clashes)''</small> z innym GRF, to jeden GRF skończy modyfikować właściwości zamiast tworzyć nowy typ drogi.
 
-When a new road type is created, it is populated with the information from the first road type, except that the powered list contains only the road type being created. However, no default values should be assumed, as the first road type may have been modified.
+Gdy tworzony jest nowy typ drogi, zapełniane są informacjami z pierwszego typu drogi, z tym wyjątkiem, że lista obsługiwanych pojazdów zawiera tylko tworzony typ drogi. Nie należy jednak zakładać żadnych wartości domyślnych, ponieważ pierwszy typ drogi mógł zostać zmodyfikowany.
 
 == Vehicle and Roadtype availability ==
 
-Vehicle and roadtype availability and compatibility is influenced by multiple properties.
-Generally, the vehicle defines which roadtype it is, and the roadtypes define the compatibility between each other.
-* A vehicle exists, if its roadtype (road vehicle prop 05) is defined. Otherwise the vehicle is disabled.
-* When a vehicle is introduced, it always introduces its roadtype (road vehicle prop 05).
-* A roadtype is introduced, if at least one of the following conditions is met:
-** A vehicle is introduced, that references the roadtype (road vehicle prop 05).
-** Another roadtype is introduced, that references the roadtype via the introduced roadtype list (roadtype prop 19).
-** The introduction date (roadtype prop 17) is passed and all required roadtypes (roadtype prop 18) are available.
+Dostępność i kompatybilność pojazdu i rodzaju drogi zależy od wielu właściwości.
+Zasadniczo pojazd określa, jaki jest typ drogi, a typy dróg określają wzajemną kompatybilność.
+* Pojazd istnieje, jeśli zdefiniowano jego typ drogi (podpora 05 pojazdu drogowego). W przeciwnym razie pojazd jest wyłączony.
+* Kiedy pojazd jest wprowadzany, zawsze wprowadza swój typ drogi (prop pojazdu drogowego 05).
+* Typ drogi jest wprowadzany, jeśli spełniony jest co najmniej jeden z następujących warunków:
+** Wprowadzono pojazd, który odnosi się do typu drogi (podpora pojazdu drogowego 05).
+** Wprowadzono kolejny typ drogi, który odwołuje się do typu drogi za pomocą wprowadzonej listy rodzajów dróg (prop typu drogi 19).
+** Data wprowadzenia (rekwizyt typu 17) minęła i wszystkie wymagane typy dróg (rekwizyt typu 18) są dostępne.
 
-Via roadtype property 1D multiple roadtypes can be defined, which shall be considered equivalent to a roadtype.
-This affects the interpretation of road vehicle property 05. If road vehicle property 05 references an undefined roadtype, then
-roadtype property 1D is checked for all defined roadtypes, whether the vehicle can be reassigned to some other roadtype.
-Otherwise the vehicle is disabled.
+Poprzez właściwość typu drogi 1D można zdefiniować wiele rodzajów dróg, które należy uznać za równoważne z typem drogi.
+Wpływa to na interpretację właściwości pojazdu drogowego 05. Jeśli właściwość pojazdu drogowego 05 odnosi się do niezdefiniowanego typu drogi, wówczas
+właściwość 1D typu drogi jest sprawdzana dla wszystkich zdefiniowanych typów dróg, czy pojazd może zostać ponownie przypisany do innego typu drogi.
+W przeciwnym razie pojazd jest wyłączony.
 
 == Road type label (08) ==
 
-These are globally unique four-letter identifiers for specific road types (analoguous to [[en/Action0Cargos#cargo-label-17|cargo labels]]), used to make various road types accessible from road vehicle grfs. Reserved labels for default road types are:
+Są to unikatowe na skalę światową czteroliterowe identyfikatory dla określonych typów dróg (analogicznie do [[pl/Development/NewGRF/NFO Specs/Action0/Cargos#cargo-label-17|cargo labels]] ), używane do udostępniania różnych typów dróg z grfs pojazdów drogowych. Zarezerwowane etykiety dla domyślnych typów dróg to:
 
 {| class="wikitable
 |-
@@ -146,47 +146,47 @@ These are globally unique four-letter identifiers for specific road types (analo
 | Electrified Road
 |}
 
-Road type sets may use up to 63 roadtypes and have to specify their own [[en/RoadtypeLabels|labels]].
+Zestawy typów dróg mogą wykorzystywać do 63 rodzajów dróg i muszą określać własne  [[pl/Development/NewGRF/NFO Specs/TracktypeLabels|labels]] .
 
-See also [[en/Action0/Global Settings#road-type-translation-table-12|Road Type Translation Table]] for further info.
+Zobacz także  [[pl/Development/NewGRF/NFO Specs/Action0/Global Settings#road-type-translation-table-12|Road Type Translation Table]] w celu uzyskania dalszych informacji.
 
 == Build road toolbar caption (09) ==
 
-String ID of the name of the road type as shown in the toolbar caption.
+Identyfikator ciągu nazwy rodzaju drogi, jak pokazano w podpisie paska narzędzi.
 
 == Road construction dropdown text (0A) ==
 
-String ID for text in the dropdown of all road types.
+ID ciągu tekstu w menu rozwijanym wszystkich typów dróg.
 
-This string must never start with a colour control code.
+Ciąg ten nigdy nie może zaczynać się od kodu kontroli koloru.
 
 == Build vehicle window caption (0B) ==
 
-String ID for build vehicle window caption.
+ID ciągu dla podpisu okna pojazdu.
 
 == Autoreplace text (0C) ==
 
-String ID for road type shown in autoreplace window.
+ID ciągu dla typu drogi pokazanego w oknie autoreplace.
 
 == New engines (0D) ==
 
-StringID to use for showing texts of the type "We have invented a new &lt;road type&gt; engine".
+StringID do wyświetlania tekstów typu "Wynaleźliśmy nowy &lt;road type&gt; silnik".
 
 == Powered road type list (0F) ==
 
-List of road types on which road vehicles of this road type are powered. E.g. vehicles of "normal road"-type are powered on "electrified road"- and "haul-road"-type as well. Note that there is no "compatible road type list" since there is no difference between "powered" and "compatible" for roadtypes
+Lista rodzajów dróg, na których napędzane są pojazdy drogowe tego rodzaju dróg. Na przykład. pojazdy typu "normalna droga" są napędzane również na "zelektryfikowanej drodze" - i typie "drogi ciągnionej" <small>''(haul-road)''</small> . Pamiętaj, że nie ma  "listy rodzajów dróg zgodnych" , ponieważ nie ma różnicy między "zasilanymi" <small>''(powered)''</small> a "kompatybilnymi" dla typów dróg
 
-The format is:
+Format to:
 
 <pre>0E &lt;nvar&gt; (&lt;road type label&gt;){n}</pre>
 
-That is you give the number of compatible road types in a single byte followed by a list of that length of road type labels. A road type is automatically powered with itself, so you don't need to list the current road type.
+Oznacza to, że podajesz liczbę zgodnych typów dróg w jednym bajcie, a następnie listę etykiet o takiej długości. Typ drogi jest automatycznie zasilany sam z siebie, więc nie musisz wymieniać bieżącego typu drogi.
 
-Note that these properties apply to road vehicles of this road type, not the road itself. If you want road vehicles of other road types to be able to run on your road types, you must set the powered road types property for each road type. Setting these properties behaves always incremental, so you only need to the set additional bits for each other road type, you cannot remove poweredness once it is set (by some other grf).
+Należy pamiętać, że te właściwości dotyczą pojazdów drogowych tego rodzaju dróg, a nie samej drogi. Jeśli chcesz, aby pojazdy drogowe innych typów dróg mogły jeździć na twoich drogach, musisz ustawić właściwość typów dróg napędzanych dla każdego rodzaju drogi. Ustawienie tych właściwości zachowuje się zawsze przyrostowo, więc musisz tylko ustawić dodatkowe bity dla każdego rodzaju drogi, nie możesz usunąć zasilania, gdy jest ustawione (przez jakiś inny GRF).
 
 == Road type flags (10) ==
 
-Flags to define properties related to the road type:
+Flagi do zdefiniowania właściwości związanych z typem drogi:
 
 {| class="wikitable"
 |-
@@ -217,33 +217,33 @@ Flags to define properties related to the road type:
 
 == Speed limit (14) ==
 
-Speed limit in mph*0.8 (approx. 0.5km/h). Set to "0" for no limit at all.
+Ograniczenie prędkości w mph*0.8 (około 0.5km/h). Ustaw na "0" w ogóle bez limitu.
 
 == Map colour (16) ==
 
-This property defines the colour this road type is drawn in the minimap view. The byte value specifies the colour entry in the [[en/PalettesAndCoordinates|DOS palette]].
+Ta właściwość określa kolor, jaki ten typ drogi jest rysowany w widoku minimapy. Wartość bajtu określa wpis koloru w <!--[[PalettesAndCoordinates|DOS palette]]--> [http://newgrf-specs.tt-wiki.net/wiki/PalettesAndCoordinates DOS palette] .
 
 == Introduction date (17) ==
 
-This property defines the long date formatted introduction date of this road type. With this property set the road type will be introduced at (or after) this date when all of the introduction required road types are available to the company of the player, or whenever a vehicle using this road type gets introduced whichever is first.
+Ta właściwość określa sformatowaną datę wprowadzenia daty tego typu drogi. Przy tym ustawieniu tej właściwości typ drogi zostanie wprowadzony w dniu (lub po tej dacie), gdy wszystkie wymagane typy dróg będą dostępne dla firmy gracza lub za każdym razem, gdy pojazd korzystający z tego rodzaju drogi zostanie wprowadzony w zależności od tego, co nastąpi wcześniej.
 
 == Introduction required road type list (18) ==
 
-List of road types on that need to be available to the company of the player for this road type to be introduced at (or after) the introduction date. This limit does not apply when the road type is introduced by the introduction of a vehicle.
+Lista rodzajów dróg na tej drodze musi być dostępna dla firmy gracza, aby ten typ drogi mógł zostać wprowadzony w dniu wprowadzenia lub później. Limit ten nie ma zastosowania, gdy typ drogi wprowadzany jest przez wprowadzenie pojazdu.
 
-Same format as for property 0F above.
+Taki sam format jak dla właściwości 0F powyżej.
 
-This can, for example, be used to introduce a road type with streetlights when both paved road and electrified road types are available.
+Można to na przykład wykorzystać do wprowadzenia typu drogi z latarniami ulicznymi, gdy dostępne są zarówno droga utwardzona, jak i zelektryfikowana.
 
 == Introduced road type list (19) ==
 
-List of road types that get introduced when this road type is introduced. For example, to make sure that when a fast road type is introduced the slow variant exists.
+Lista typów dróg, które są wprowadzane po wprowadzeniu tego typu drogi. Na przykład, aby upewnić się, że po wprowadzeniu typu szybkiej drogi istnieje wariant wolny.
 
-Same format as for property 0F above.
+Taki sam format jak dla właściwości 0F powyżej.
 
 == Sort order (1A) ==
 
-Property for influencing the sort order of the drop down lists with road types. Default values are as follows:
+Właściwość wpływająca na porządek sortowania list rozwijanych z typami dróg. Wartości domyślne są następujące:
 
 {| class="wikitable"
 |-
@@ -260,17 +260,17 @@ Property for influencing the sort order of the drop down lists with road types. 
 |Roadtype #n
 |}
 
-Thus the road type that (internally) gets index 8 will get a default value of 87. These defaults are to keep the ordering when this property is not supported as they were.
+Zatem typ drogi, który (wewnętrznie) otrzymuje indeks 8, otrzyma wartość domyślną 87. Te wartości domyślne mają zachować porządek, gdy ta właściwość nie jest obsługiwana tak, jak były.
 
 == Road type name (1B) ==
 
-String ID of the name of the road type.
+ID ciągu nazwy nazwy rodzaju drogi.
 
 == Alternate road type labels (1D) ==
 
-A list of alternate labels that get "redirected" to this road type when used e.g. as road type of road vehicle or when testing if a label is defined. The redirection only happens if the alternate label isn't defined as a real road type. Same format as for property 0F above.
+Lista alternatywnych etykiet, które "przekierowują" na ten typ drogi, gdy są używane, np. jako typ drogi pojazdu drogowego lub podczas badania, czy zdefiniowano etykietę. Przekierowanie następuje tylko wtedy, gdy alternatywna etykieta nie jest zdefiniowana jako prawdziwy typ drogi. Taki sam format jak dla właściwości 0F powyżej.
 
-Alternate labels are not considered when evaluating properties 0F, 18, and 19.
+Alternatywne etykiety nie są brane pod uwagę przy ocenie właściwości 0F, 18 i 19.
 
 = Przykład =
 
