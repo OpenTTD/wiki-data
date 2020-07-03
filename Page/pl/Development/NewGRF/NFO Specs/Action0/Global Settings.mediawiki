@@ -44,31 +44,31 @@ Oprócz zmiennych globalnych ta akcja może również ustawić pewne ogólne zmi
 
 === Cost base multipliers (08) ===
 
-TTD has 49 [[en/BaseCosts|base costs]] (66 in OpenTTD currently) which govern how much everything costs. Each cost is calculated from a (fixed) factor times the base cost, which is adjusted by inflation every month.
+TTD ma 49 [[pl/Development/NewGRF/NFO Specs/BaseCosts|base costs]] (obecnie 66 w OpenTTD), które określają ile wszystko kosztuje. Każdy koszt jest obliczany na podstawie (stałego) czynnika pomnożonego przez koszt podstawowy, który jest dostosowywany o inflację co miesiąc.
 
-Setting this property allows changing these base costs by factors of two. The default value of the property is 08 which leaves the base cost unchanged. Adding one to the property doubles the base cost, subtracting one halves it.
+Ustawienie tej właściwości umożliwia zmianę tych kosztów podstawowych o dwa razy. Domyślna wartość właściwości to 08, co pozostawia koszt podstawowy bez zmian. Dodanie jednego do właściwości podwaja koszt podstawowy, odejmując jeden o połowę.
 
-Using math: NewBaseCost = OldBaseCost * 2^(n-8), where n is the value of property 08.
+Korzystanie z math: NewBaseCost = OldBaseCost * 2^(n-8), gdzie n jest wartością właściwości 08.
 
-Modifying the base costs incurs a small rounding error every time the game is saved, because the costs have to be set back to the default in the savegame. However, this error is unnoticable until many years of inflation have passed and should therefore be of little concern.
+Modyfikacja kosztów podstawowych powoduje mały błąd zaokrąglania za każdym razem, gdy gra jest zapisywana, ponieważ koszty muszą zostać ustawione na wartość domyślną w grze. Ten błąd jest jednak niezauważalny, dopóki nie minie wiele lat inflacji i dlatego nie powinien budzić obaw.
 
-{{pl/Development/NewGRF/ottdp|1.0|no}} In OpenTTD rounding happens towards 1 or -1 depending on the old base cost; i.e. if the old base cost is positive round towards 1, if negative round towards -1. This prevents the base cost to be zero.
+{{pl/Development/NewGRF/ottdp|1.0|no}} W OpenTTD zaokrąglanie odbywa się w kierunku 1 lub -1 w zależności od starego kosztu podstawowego; tj. jeśli stary koszt podstawowy to runda dodatnia w kierunku 1, a jeśli runda ujemna w kierunku -1. Zapobiega to zerowemu kosztowi podstawowemu.
 
 === Cargo translation table (09) ===
 
-To aid with coding vehicle grf files that wish to support more than the standard cargo types, the easiest way is to install a cargo translation table using this property.
+Aby pomóc w kodowaniu plików grf pojazdu, które chcą obsługiwać więcej niż standardowe typy ładunków, najłatwiej jest zainstalować tabelę translacji ładunku za pomocą tej właściwości.
 
-The cargo translation table is a list of [[en/Action0Cargos#cargo-label-17|cargo labels]]. Each entry means that the corresponding cargo is meant when using this ID in an [[en/Action3|action 3]] or for a bit in the vehicle's refit mask.
+Tabela translacji ładunku jest listą [[pl/Development/NewGRF/NFO Specs/Action0/Cargos#cargo-label-17|cargo labels]] . Każdy wpis oznacza, że ​​odpowiedni ładunek ma zastosowanie, gdy używa się tego identyfikatora w [[pl/Development/NewGRF/NFO Specs/Action3/Main Page|action 3]] lub przez chwilę w masce pojazdu.
 
-In other words, if for example the fourth entry (number 03) in the list is "MAIL", then defining graphics for cargo 03 will define graphics for mail, and bit 3 in the refit mask will be for mail as well.
+Innymi słowy, jeśli na przykład czwarty wpis (numer 03) na liście to "POCZTA" <small>''(MAIL)''</small>, wówczas zdefiniowanie grafiki dla ładunku 03 spowoduje zdefiniowanie grafiki dla poczty, a bit 3 w masce wymiany będzie również dla poczty.
 
-This way, the vehicle grf file doesn't need to know or care which cargo slot and cargo bit a certain cargo type uses, it can define its own ID for each cargo that it wishes to support, and thus be independent of both what cargo types are really available in the game and what slots/bits they use.
+W ten sposób plik grf pojazdu nie musi wiedzieć ani przejmować się, której szczeliny ładunkowej i ładunku używa dany rodzaj ładunku, może zdefiniować swój własny ID dla każdego ładunku, który chce obsługiwać, a zatem być niezależny od tego, jaki ładunek typy są naprawdę dostępne w grze i jakich slotów/bitów używają.
 
-Because the refit mask contains only 32 bits, only the first 32 entries in the translation table can make use of the refit mask. Other cargo types have to be added via the cargo classes, so put the cargos that need exceptions to the cargo class based refitting first so that they can go in the refit mask.
+Ponieważ maska ​​remontowa zawiera tylko 32 bity, tylko pierwsze 32 wpisy w tabeli translacji mogą korzystać z maski remontowej. Inne typy ładunków muszą być dodawane za pośrednictwem klas ładunków, dlatego najpierw umieść ładunki wymagające wyjątków od montażu opartego na klasie ładunku, aby mogły przejść do maski remontowej.
 
-Note that this property cannot be set incrementally, you must set all types in a single action 0 starting from ID 0.
+Zauważ, że tej właściwości nie można ustawić przyrostowo, musisz ustawić wszystkie typy w jednym działaniu 0, zaczynając od ID 0.
 
-See below for an example.
+Przykład poniżej.
 
 ==== Example ====
 
@@ -96,59 +96,59 @@ See below for an example.
 
 
 === Currency display names (0A) ===
-This and the following properties can be used to modify currencies. Each of them can have IDs 0-18 (decimal), the IDs being ordered the same as in the Currency drop-down list.
+Tej i następujących właściwości można używać do modyfikowania walut. Każdy z nich może mieć identyfikatory 0–18 (dziesiętnie), przy czym identyfikatory są uporządkowane tak samo, jak na liście rozwijanej Waluta.
 
-This property allows changing currency names that are displayed in the Currency drop-down in the Game Options window. This property is a textID, and if you need to supply your own text, it must be a DCxx one.
+Ta właściwość umożliwia zmianę nazw walut wyświetlanych w menu rozwijanym Waluta w oknie Opcje gry. Ta właściwość to textID, a jeśli musisz podać własny tekst, musi to być DCxx.
 
 === Currency multipliers (0B) ===
 
-The equivalent of 1 British pound in this currency, multiplied by 1000. For example, 1 GBP=2 USD, so this should be 2000 for US dollars. The multiplication by 1000 allows you to have decimals in the multiplier without requiring floating-point calculations. This value is used for display purposes only, TTD always uses British pounds for internal calculations.
+Odpowiednik 1 funta brytyjskiego w tej walucie pomnożony przez 1000. Na przykład 1 GBP=2 USD, więc powinno to wynosić 2000 USD. Mnożenie przez 1000 pozwala na umieszczenie ułamków dziesiętnych w mnożniku bez konieczności wykonywania obliczeń zmiennoprzecinkowych. Ta wartość jest używana wyłącznie do celów wyświetlania, TTD zawsze wykorzystuje funty brytyjskie do wewnętrznych obliczeń.
 
 === Currency options (0C) ===
 
-The low byte of this word specifies the thousands separator to be used for this currency ( usually dot "." or comma ","). The high byte should be zero if the currency symbol should be in front of the number ($123,456) and should be 1 if the currency symbol should be shown after the number (123,456$). The symbol placement can be overridden by the TTDPatch settings.
+Niższy bajt tego słowa określa separator tysięcy używany dla tej waluty (zwykle kropka "." Lub przecinek ","). Wysoki bajt powinien wynosić zero, jeśli symbol waluty powinien znajdować się przed liczbą (123 456 USD), i powinien wynosić 1, jeśli symbol waluty powinien być wyświetlany po liczbie (123 456 $). Położenie symbolu można zastąpić ustawieniami TTDPatch.
 
 === Currency symbols (0D,0E) ===
 
-These doublewords are interpreted as a string of up to 4 characters. If you need fewer characters, the remaining bytes should be zero. Property 0D is printed before the number, property 0E is printed after the number. These two usually differ only if the symbol is separated by a space from the number (for example, "$ " vs. " $"). You should specify both properties since the player can override your preferred symbol placement.
+Te podwójne słowa są interpretowane jako ciąg maksymalnie 4 znaków. Jeśli potrzebujesz mniej znaków, pozostałe bajty powinny wynosić zero. Właściwość 0D jest drukowana przed liczbą, właściwość 0E jest drukowana po numerze. Te dwa zwykle różnią się tylko wtedy, gdy symbol jest oddzielony spacją od liczby (na przykład "$ " vs. " $"). Należy określić obie właściwości, ponieważ odtwarzacz może zastąpić preferowane umieszczenie symbolu.
 
 === Euro introduction dates (0F) ===
 
-This value allows you to have Euro introduced instead the currency at a given time. If this value is zero, the currency is never substituted with the Euro (USD, for example). If it's nonzero, it gives the year when the currency is replaced by Euro (for example, 2002 for DM).
+Ta wartość umożliwia wprowadzenie euro zamiast waluty w danym momencie. Jeśli ta wartość wynosi zero, waluta nigdy nie jest zastępowana euro (na przykład USD). Jeśli jest niezerowy, podaje rok, w którym walutę zastępuje euro (na przykład 2002 dla DM).
 
 === Snow line height table (10) ===
 
-This property allows you to specify the snow line height for every day of the year. The only ID you can set is 0, and the value must be 12*32=384 bytes long. To simplify things for the patch, every month has 32 entries, and the impossible combinations (like 32th January or 31th April) will never be read.
+Ta właściwość pozwala określić wysokość linii śniegu dla każdego dnia roku. Jedynym ustawionym identyfikatorem jest 0, a wartość musi wynosić 12*32=384 bajty. Aby uprościć rzeczy związane z łatką, co miesiąc ma 32 wpisy, a niemożliwe kombinacje (jak 32 stycznia lub 31 kwietnia) nigdy nie zostaną odczytane.
 
-{{pl/Development/NewGRF/grfTill|7}} For GRF version 7 and below: The values should be multiple of 8 between 10h and 88h.
-Values below 10h and above EFh may result in overflow and should not be used. Since the highest possible land is 78h high, giving 88h or above will effectively disable the snow line.
+{{pl/Development/NewGRF/grfTill|7}} Dla GRF w wersji 7 i niższej: Wartości powinny być wielokrotnością liczby 8 między 10 godzin a 88 godzin.
+Wartości poniżej 10h i powyżej EFh mogą spowodować przepełnienie i nie należy ich używać. Ponieważ najwyższy możliwy ląd ma wysokość 78 godzin, podanie 88 godzin lub dłużej skutecznie wyłączy linię śniegu.
 
-{{pl/Development/NewGRF/grfFrom|8}} For GRF version 8 and above: The values can be any value between 0 and FFh.
-FF means 'no snow'; other values are scaled to the number of possible heightlevels of the map.
+{{pl/Development/NewGRF/grfFrom|8}} Dla GRF w wersji 8 i wyższej: wartościami mogą być dowolne wartości z zakresu od 0 do FFh.
+FF oznacza „bez śniegu”; inne wartości są skalowane do liczby możliwych poziomów wysokości mapy.
 
-{{pl/Development/NewGRF/ottdp|no|2.5}} If the temperate snow line is enabled, this table applies on temperate as well.
+{{pl/Development/NewGRF/ottdp|no|2.5}} Jeśli włączona jest linia śniegu umiarkowanego, ta tabela dotyczy również klimatu umiarkowanego.
 
-'''WARNING:''' Some code in TTD assumes that the snow line will remain constant: Some industries are built only above/below snowline and assume that the snow line won't move when they're already built. Similarly, snowy houses on arctic will still appear snowy even when the snow disappears around them. If you want to use this feature, make sure to counter these effects by overriding arctic houses and industries with snow-aware versions.
+'''UWAGA:''' Niektóre kody w TTD zakładają, że linia śniegu pozostanie stała: niektóre branże są budowane tylko powyżej/poniżej linii śniegu i zakładają, że linia śniegu nie ruszy się, gdy jest już zbudowana. Podobnie zaśnieżone domy na arktyce nadal będą wyglądały na śnieżne, nawet gdy wokół nich zniknie śnieg. Jeśli chcesz skorzystać z tej funkcji, upewnij się, że przeciwdziałasz tym efektom, zastępując arktyczne domy i gałęzie przemysłu wersjami odpornymi na śnieg.
 
 === GRFID overrides for engines (11) ===
 
-Allows you to provide a list of 'source' and 'target' GRFIDs to let vehicles in the source GRF override those in the target GRF, when dynamic engines is enabled. Each entry is 8 bytes, containing two GRFIDs. Multiple entries can be used, and different GRFs can be set to override the same 'target' GRF, but only the last instance of a 'source' GRF is active. GRFIDs that are not present will have no effect.
+Umożliwia dostarczenie listy 'źródłowych' i 'docelowych' GRFID, aby pozwolić pojazdom w źródłowym GRF zastąpić pojazdy w docelowym GRF, gdy włączone są silniki dynamiczne. Każdy wpis ma 8 bajtów i zawiera dwa GRFID. Można użyć wielu wpisów i ustawić różne GRF, aby zastąpić ten sam „docelowy” GRF, ale aktywna jest tylko ostatnia instancja „źródłowego” GRF. GRFID, które nie są obecne, nie będą miały wpływu.
 
-The scope of this feature is quite limited and it should be used only for sets that modify data of another set, for example the DBSetXL ECS addon for DBSetXL, or the censored version of LV4.
+Zakres tej funkcji jest dość ograniczony i należy jej używać tylko w przypadku zestawów modyfikujących dane innego zestawu, na przykład dodatku DBSetXL ECS dla DBSetXL lub wersji ocenzurowanej LV4.
 
 === Railtype translation table (12) ===
 
-Provides ability to specify railtypes via a translation table, similar to using a cargo translation table. Each railtype label is a DWord. The default labels are RAIL, ELRL, MONO and MGLV. If a table is installed, then changing engine traction type will not affect the railtype.
+Umożliwia określenie typów szyn za pomocą tabeli translacji, podobnie jak w przypadku tabeli translacji ładunku. Każda etykieta typu szyny jest 'DWordem'. Domyślne etykiety to RAIL, ELRL, MONO i MGLV. Jeśli zainstalowany jest stół, zmiana typu trakcji silnika nie wpłynie na typ szyny.
 
-Note that labels are not shared between features, so the same label can be used for multiple items. For example, the label "RAIL" can be used for a railtype, roadtype, tramtype, and cargotype simultaneously without conflict.
+Pamiętaj, że etykiety nie są dzielone między funkcjami, więc ta sama etykieta może być używana dla wielu elementów. Na przykład, etykieta "RAIL" może być używana jednocześnie dla typu szyny, typu drogi, typu tramwajowego i ładunku, bez konfliktu.
 
 === Gender/case translation table (13,14) ===
 
-Provides ability to specify genders or cases via a translation table. These map NewGRF internal IDs for the genders or cases to the genders or cases as defined in OpenTTD's language files so NewGRF strings and OpenTTD strings can interact on eachother's gender or cases. Property 13 is for mapping genders whereas property 14 is for mapping cases.
+Umożliwia określenie płci lub przypadków za pomocą tabeli tłumaczeń. Odwzorowują one wewnętrzne identyfikatory NewGRF dla płci lub spraw na rodzaje lub sprawy zdefiniowane w plikach językowych OpenTTD, dzięki czemu ciągi NewGRF i ciągi OpenTTD mogą oddziaływać na płeć lub przypadki nawzajem. Właściwość 13 służy do mapowania płci, natomiast właściwość 14 służy do mapowania przypadków.
 
-The ID used for these translation tables is the Action 4 (GRF version 7 or higher) language-id, i.e. this mapping only works with GRF version 7 or higher. Language-id 7F (any) is not allowed. You can can define an ID multiple times in which case the new mappings are simply appended to the already known mappings.
+Identyfikator używany w tych tabelach tłumaczeń to identyfikator języka Action 4 (GRF wersja 7 lub wyższa), tj. To odwzorowanie działa tylko z GRF wersja 7 lub nowsza. Identyfikator języka 7F (dowolny) jest niedozwolony. Możesz zdefiniować identyfikator wiele razy, w którym to przypadku nowe mapowania są po prostu dołączane do już znanych mapowań.
 
-The format is simply a 00 terminated list of mappings:
+Ten format to po prostu lista mapowań zakończona 00:
 
  (<id> <name>)+ 00
 
@@ -160,22 +160,22 @@ The format is simply a 00 terminated list of mappings:
 |V||name||A 00 terminated string with the gender or case name as in OpenTTD's translation
 |}
 
-An NewGRF internal ID may be mapped multiple times for the same language as may an OpenTTD gender or case name be (reverse) mapped multiple times. This can be used for coping with OpenTTD translators adding or removing genders or cases over time. The NewGRF internal ID may not be 00 as this ID will be used in the Action 4 strings which may not contain 00 except for terminating the string.
+Wewnętrzny identyfikator NewGRF może być mapowany wiele razy dla tego samego języka, podobnie jak płeć lub nazwa sprawy OpenTTD mogą być (odwrócone) mapowane wiele razy. Można to wykorzystać do radzenia sobie z tłumaczami OpenTTD dodającymi lub usuwającymi płcie lub sprawy w miarę upływu czasu. Wewnętrzny identyfikator NewGRF nie może mieć wartości 00, ponieważ będzie on używany w ciągach akcji 4, które mogą nie zawierać 00, z wyjątkiem zakończenia łańcucha.
 
-These mappings are used for [[en/StringCodes]] 9A 0E, 9A 0F, 9A 13 and 9A 14. How the mapping is used precisely can be found there.
+Te mapowania są używane w [[pl/Development/NewGRF/NFO Specs/StringCodes|StringCodes]] 9A 0E, 9A 0F, 9A 13 i 9A 14. Dokładne użycie mapowania można znaleźć tutaj.
 
 === Plural form (15) ===
 
-Defines the plural form for a language. The ID used is the Action 4 (GRF version 7 or higher) language-id, i.e. this only works with GRF version 7 or higher. Language-id 7F (any) is not allowed. More information about the different valid plural forms can be found on the [[en/StringCodes]] page. This property is used for [[en/StringCodes|StringCode]] 9A 15.
+Definiuje liczbę mnogą dla języka. Używany identyfikator to identyfikator języka Action 4 (GRF wersja 7 lub wyższa), tzn. Działa to tylko z GRF wersja 7 lub wyższa. Identyfikator języka 7F (dowolny) jest niedozwolony. Więcej informacji o różnych prawidłowych formach liczby mnogiej można znaleźć na stronie [[pl/Development/NewGRF/NFO Specs/StringCodes|StringCodes]] . Ta właściwość jest używana w przypadku [[pl/Development/NewGRF/NFO Specs/StringCodes|StringCode]]  9A 15.
 
 === Roadtype translation table (16) ===
 
-Provides ability to specify roadtypes via a translation table, similar to using a cargo translation table. Each roadtype label is a DWord. The default labels are ROAD and ELRD.
+Umożliwia określenie typów dróg za pomocą tabeli translacji, podobnie jak w przypadku tabeli translacji ładunku. Każda etykieta typu drogi to DWord. Domyślne etykiety to ROAD i ELRD.
 
-Note that labels are not shared between features, so the same label can be used for multiple items. For example, the label "RAIL" can be used for a railtype, roadtype, tramtype, and cargotype simultaneously without conflict.
+Pamiętaj, że etykiety nie są dzielone między funkcjami, więc ta sama etykieta może być używana dla wielu elementów. Na przykład, etykieta  "RAIL"  może być używana jednocześnie dla typu szyny, typu drogi, typu tramwajowego i ładunku, bez konfliktu.
 
 === Tramtype translation table (17) ===
 
-Umożliwia określenie typów tramwajów za pomocą tabeli translacji, podobnie jak w przypadku tabeli translacji ładunku. Każda etykieta typu tramwaj jest DWordem. Domyślne etykiety to RAIL i ELRL.
+Umożliwia określenie typów tramwajów za pomocą tabeli translacji, podobnie jak w przypadku tabeli translacji ładunku. Każda etykieta typu tramwaj jest 'DWordem'. Domyślne etykiety to RAIL i ELRL.
 
 Pamiętaj, że etykiety nie są dzielone między funkcjami, więc ta sama etykieta może być używana dla wielu elementów. Na przykład, etykieta "RAIL" może być używana jednocześnie dla typu szyny, typu drogi, typu tramwajowego i ładunku..
