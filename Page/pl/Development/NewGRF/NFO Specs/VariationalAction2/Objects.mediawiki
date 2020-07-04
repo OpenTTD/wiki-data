@@ -16,7 +16,7 @@
 |-
 |44||B||{{pl/Development/NewGRF/ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Object founder information
 |-
-|45||D||{{pl/Development/NewGRF/ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Get [[en/TownZones|town zone]] and Manhattan distance of closest town
+|45||D||{{pl/Development/NewGRF/ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Get [[pl/Development/NewGRF/NFO Specs/TownZones|town zone]] and Manhattan distance of closest town
 |-
 |46||D||{{pl/Development/NewGRF/ottdp|1.1|2.6|ottdrev=r20670|ttdprev=r2340}}||Get square of Euclidian distance of closest town
 |-
@@ -38,9 +38,9 @@
 == Description ==
 === Tile information (41) ===
 
-The return value has the format of ss0t where t is the terrain type which the tile is on, same values as [[en/VarAction2Canals|canal var81]].
+Zwracana wartość ma format ss0t, gdzie t jest typem terenu, na którym znajduje się kafelek, takie same wartości jak [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Canals|canal var81]].
 
-As of TTDPatch r2088, ss contains the slope data of the tile, same format as for [[en/VarAction2IndustryTiles#land-info-of-nearby-tiles-60|industrytile var60]]. The meaning of the individual bits is:
+Począwszy od TTDPatch r2088, ss zawiera dane nachylenia kafelka, taki sam format jak dla [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Industry Tiles#land-info-of-nearby-tiles-60|industrytile var60]] . Znaczenie poszczególnych bitów to:
 
 {|
 !Bit!!Meaning
@@ -56,39 +56,39 @@ As of TTDPatch r2088, ss contains the slope data of the tile, same format as for
 |4||The tile is a steep slope (*)
 |}
 
-(*) - Steep slopes have this bit plus 3 points raised, giving them values of 0x17, 0x1B, 0x1D and 0x1E.
+(*) - Strome zbocza mają ten bit plus 3 punkty podniesione, co daje im wartości 0x17, 0x1B, 0x1D i 0x1E.
 
 === Animation Counter (43) ===
 
-This byte gets the actual value of the animation counter (note that action0, property 10, bit 6 must be set for this to work).
+Ten bajt pobiera rzeczywistą wartość licznika animacji (zwróć uwagę, że aby to zadziałało, należy ustawić akcję 0, właściwość 10, bit 6).
 
 === Object founder information (44) ===
 
-This byte contains the ID of the company that funded the object, or 10h if the object was placed in the scenario editor.
+Ten bajt zawiera identyfikator firmy, która sfinansowała obiekt, lub 10 godzin, jeśli obiekt został umieszczony w edytorze scenariuszy.
 
-=== Get [[en/TownZones|town zone]] and Manhattan distance of closest town (45) ===
+=== Get [[pl/Development/NewGRF/NFO Specs/TownZones|town zone]] and Manhattan distance of closest town (45) ===
 
-Like [[en/VarAction2Industries#get-town-zone-and-manhattan-distance-of-closest-town-65|industry var65]] but instead of an offset the current tile is used.
+Jak [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Industries#get-town-zone-and-manhattan-distance-of-closest-town-65|industry var65]] , ale zamiast przesunięcia używana jest bieżąca płytka.
 
 === Get square of Euclidian distance of closest town (46) ===
 
-Like [[en/VarAction2Industries#get-square-of-euclidean-distance-of-closest-town-66|industry var66]] but instead of an offset the current tile is used.
+Jak [[en/VarAction2Industries#get-square-of-euclidean-distance-of-closest-town-66|industry var66]] , ale zamiast przesunięcia zastosowano bieżący kafelek.
 
 === Object colour (47) ===
 
-This byte returns the colour of the object.
+Ten bajt zwraca kolor obiektu.
 
-(since TTDPatch r2351 and OpenTTD r21259)
+(od TTDPatch r2351 i OpenTTD r21259)
 
 === Get object views (48) ===
 
-Returned value stands for a particular view of an object. Number and rank of set-IDs must match the value given in the object's action0 prop17, i.e. for an object with 4 views, prop48 may return values 0 .. 4. Since OpenTTD r21455.
+Zwrócona wartość oznacza określony widok obiektu. Liczba i ranga set-ID muszą być zgodne z wartością podaną w obiekcie action0 prop17, tj. Dla obiektu z 4 widokami prop48 może zwracać wartości 0 .. 4. Od OpenTTD r21455.
 
 === Get object type at offset (60) ===
 
-The parameter of this variable is an offset from the current tile. The low nibble contains the signed X offset (that is 0h=0, 1h=+1 ... 7h=+7, 8h=-8, 9h=-7 ... Fh=-1), the high nibble contains the Y offset. Therefore the parameter 00h accesses the current tile itself.
+Parametr tej zmiennej jest przesunięciem od bieżącego kafelka. Niby-nibble zawiera podpisane przesunięcie X (to znaczy 0h=0, 1h=+1 ... 7h=+7, 8h=-8, 9h=-7 ... Fh=-1 ), high-nibble zawiera Przesunięcie Y Dlatego parametr 00h uzyskuje dostęp do samego bieżącego kafelka.
 
-The variable value has the format
+Wartość zmiennej ma format
  rrrvtttt
 
 {| |-
