@@ -1,32 +1,32 @@
 {{pl/Development/NewGRF/inne strony|en=www.tt-wiki.net/wiki/General_strategy_for_implementing_new_graphics|pl=pl/Development/NewGRF/NFO Tutorial/General strategy for implementing new graphics}}{{en/-}}
 <!--{{NFOTutorial}}-->{{pl/Development/NewGRF/NFO Tutorial/Navigation}}
 
-==General strategy==
-# Pierwszy duszek jest wyjątkowy, definiując całkowitą liczbę pozycji w pliku .grf.
+==Ogólna strategia==
+# Pierwszy 'sprite' jest wyjątkowy, definiując całkowitą liczbę pozycji w pliku .grf.
 # Zacznij od co najmniej jednego [[pl/Development/NewGRF/NFO Specs/Action7|action 7]] wpisów, które decydują o tym, czy załadować te grafiki, na przykład w oparciu o obecny klimat.
 # Po wpisach akcji 7 zdefiniuj swój ID GRF za pomocą [[pl/Development/NewGRF/NFO Specs/Action7|action 8]] .
-# Następnie zdefiniuj jeden lub kilka wpisów [[pl/Development/NewGRF/NFO Specs/Action0/Main Page|action 0]] , które (prawdopodobnie między innymi) ustawiają ID sprite'a na FD (pociągi) lub FF (wszystkie inne typy pojazdów). Tylko pojazdy z tymi identyfikatorami duszków będą korzystać z nowych duszków.
-# Rozpocznij blok nowej grafiki, wpisując [[pl/Development/NewGRF/NFO Specs/Action1|action 1]] (blok sprite'a), a następnie rzeczywiste dane sprite. Idealnie byłoby umieścić grafikę wszystkich pojazdów razem w tym jednym bloku duszków, zwracając uwagę na to, które zestawy 'sprites' mają taką liczbę (zgodnie z ich pozycją w bloku).
+# Następnie zdefiniuj jeden lub kilka wpisów [[pl/Development/NewGRF/NFO Specs/Action0/Main Page|action 0]] , które (prawdopodobnie między innymi) ustawiają ID sprite'a na FD (pociągi) lub FF (wszystkie inne typy pojazdów). Tylko pojazdy z tymi identyfikatorami 'sprites' będą korzystać z nowych 'sprites' .
+# Rozpocznij blok nowej grafiki, wpisując [[pl/Development/NewGRF/NFO Specs/Action1|action 1]] (blok sprite'a), a następnie rzeczywiste dane sprite. Idealnie byłoby umieścić grafikę wszystkich pojazdów razem w tym jednym bloku 'sprites' , zwracając uwagę na to, które zestawy 'sprites' mają taką liczbę (zgodnie z ich pozycją w bloku).
 # Po akcji 1 podaj [[pl/Development/NewGRF/NFO Specs/Action2/Main Page|action 2]] (ID ładunku) dla każdej innej kombinacji pojazdu i rodzaju ładunku. Identyfikatory ładunku powinny zaczynać się od zera i powinny być ponumerowane kolejno.
 # Po wszystkich wpisach akcji 2 użyj [[pl/Development/NewGRF/NFO Specs/Action3/Main Page|action 3]] (ID pojazdu do map ID ładunku), aby określić, jakie ID ładunku mają być wyświetlane dla którego pojazdu i jakiego rodzaju ładunku.
 
 Mała uwaga George'a: w Moich LV używam nieco innych porządków 'sprite' . Najpierw definiuję grupy bloków ikonek. Następnie łączę je z akcją 3. A następnie określam akcję 0 i 4 dla obiektu korzystającego z tej grafiki.
 
-==Dealing with the sprite numbers and pseudo-sprite blocks==
+==Postępowanie z liczbami i blokami pseudo-'sprites'==
 
-Zapewnienie, że liczba duszków wzrośnie o jeden, i że masz prawidłową długość dla bloków pseudo-duszków, może być dość uciążliwe. Obecnie GRFCodec ma tylko ograniczone możliwości analizowania, więc musisz się upewnić, że są one rzeczywiście poprawne. Począwszy od wersji 0.9.4 GRFCodec, możesz określić liczbę duszków "-1" , co wyłącza sprawdzanie liczby duszków. Następujące duszki nadal potrzebują poprawnych liczb (chyba że mają również "-1" jako liczbę), a długość duszka nadal wymaga podania.
+Zapewnienie, że liczba 'sprites' wzrośnie o jeden, i że masz prawidłową długość dla bloków pseudo-'sprites' , może być dość uciążliwe. Obecnie GRFCodec ma tylko ograniczone możliwości analizowania, więc musisz się upewnić, że są one rzeczywiście poprawne. Począwszy od wersji 0.9.4 GRFCodec, możesz określić liczbę 'sprites' "-1" , co wyłącza sprawdzanie liczby 'sprites' . Następujące 'sprites' nadal potrzebują poprawnych liczb (chyba że mają również "-1" jako liczbę), a długość 'sprite' nadal wymaga podania.
 
 ===renum.pl===
 
 Jedną pomocą w tym zadaniu jest skrypt Perla o nazwie renum.pl, który jest zawarty w źródłowym archiwum TTDPatch. Jeśli nie słyszałeś wcześniej o Perlu, jest to potężny język programowania, który możesz dostać za darmo. Na przykład możesz zainstalować go z pakietami Cygwin ( [http://www.cygwin.com/ www.cygwin.com] ) lub z  [http://www.activestate.com/ activestate.com] lub [http://www.perl.com/ perl.com] .
 
-Jeśli napisałeś plik .nfo, ale nie ma on odpowiednich liczb dla duszków lub długości, uruchom skrypt renum.pl w następujący sposób:
+Jeśli napisałeś plik .nfo, ale nie ma on odpowiednich liczb dla 'sprites'  lub długości, uruchom skrypt renum.pl w następujący sposób:
 
 <tt>perl renum.pl < your.nfo > yournew.nfo</tt>
 
-To zajmie twoją.nfo (zastąpić twoją rzeczywistą nazwę pliku) i napisze twoją nową.nfo z poprawnymi liczbami i długościami pseudo-duszków.
+To zajmie twoją.nfo (zastąpić twoją rzeczywistą nazwę pliku) i napisze twoją nową.nfo z poprawnymi liczbami i długościami pseudo-'sprites'.
 
-Zauważ, że format nfo musi być poprawny, aby działał poprawnie; w szczególności liczby duszków i długości pseudo-duszków muszą już być *tam* <small>''~there''</small> (jako liczby zastępcze), ale nie muszą być poprawne. Również renum.pl nie rozumie ciągów. Dekoduj za pomocą -t i nie używaj ciągów, jeśli planujesz używać renum.pl.
+Zauważ, że format nfo musi być poprawny, aby działał poprawnie; w szczególności liczby 'sprites' i długości pseudo-'sprites' muszą już być *tam* <small>''~there''</small> (jako liczby zastępcze), ale nie muszą być poprawne. Również renum.pl nie rozumie ciągów. Dekoduj za pomocą -t i nie używaj ciągów, jeśli planujesz używać renum.pl.
 
 ===NFORenum===
 
