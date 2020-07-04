@@ -42,7 +42,7 @@
 |80+x||||||None defined, and none ever will because town buildings don't have an internal structure. Trying to access these variables crashes TTD.
 |}
 
-<nowiki>*</nowiki> Specified version is earliest known to support the variable in its current form. Some variables may have been available earlier.
+<nowiki>*</nowiki> Określona wersja jest najwcześniej znana z obsługi zmiennej w jej bieżącej formie. Niektóre zmienne mogły być dostępne wcześniej.
 
 == Description ==
 
@@ -58,53 +58,53 @@
 
 === Town zone (42) ===
 
-Town zone where the building is situated. The value is between 0 and 4, where 0 is the outermost zone of the town. Smaller towns have fewer zones. Roads are plain in zone 0 and 1, paved in zone 2, have trees in zone 3 and streetlights in zone 4
+Strefa miasta, w której znajduje się budynek. Wartość wynosi od 0 do 4, gdzie 0 jest najbardziej oddaloną strefą miasta. Mniejsze miasta mają mniej stref. Drogi są gładkie w strefie 0 i 1, utwardzone w strefie 2, drzewa w strefie 3 i latarnie w strefie 4
 
 === Building counts (44) ===
 
-Returns dword LLllCCcc, where cc means how many buildings of the current type can be found in the current town, while CC is the same for the whole map. ll and LL are similar to cc and CC, but contain the number of tiles that have the same class as the current one. For tiles that have no class, ll and LL are always zero. Overridden old types are considered to be the new type they were overridden with. During [[en/Callbacks#house-construction-check-17|callback 17]], the current building isn't on the map yet, and therefore isn't counted. In other cases, the building count is at least one, since the current building is counted as well.
+Zwraca dword LLllCCcc, gdzie cc oznacza, ile budynków bieżącego typu można znaleźć w bieżącym mieście, podczas gdy CC jest takie samo dla całej mapy. II i LL są podobne do CC i CC, ale zawierają liczbę płytek o tej samej klasie co bieżąca. Dla płytek, które nie mają żadnej klasy, ll i LL są zawsze równe zero. Zastąpione stare typy są uważane za nowy typ, którym zostały zastąpione. Podczas [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#house-construction-check-17|callback 17]] bieżący budynek nie jest jeszcze na mapie i dlatego nie jest liczony. W innych przypadkach liczba budynków wynosi co najmniej jeden, ponieważ liczony jest również obecny budynek.
 
 === Town expansion bits (45) ===
 
 {| |-
 !Bit!!Value!!Meaning
 |-
-|0||1||Set if TTD is currently creating a random town, clear otherwise. PLEASE NOTE: while TTD is generating a random town, town variables 82 (town population) and B6 (number of buildings) are incorrect. The population counter contains the population of buildings generated _yet_, which means the final value may be larger than you get. The building count variable, on the other hand, is surely higher than the final value will be. If you want to check these variables during [[en/Callbacks#house-construction-check-17|callback 17]], you may need to check variable 45 as well and make adjustments if this bit is set.
+|0||1||Set if TTD is currently creating a random town, clear otherwise. PLEASE NOTE: while TTD is generating a random town, town variables 82 (town population) and B6 (number of buildings) are incorrect. The population counter contains the population of buildings generated _yet_, which means the final value may be larger than you get. The building count variable, on the other hand, is surely higher than the final value will be. If you want to check these variables during [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#house-construction-check-17|callback 17]], you may need to check variable 45 as well and make adjustments if this bit is set.
 |}
 
-Other bits are currently reserved for future use.
+Inne bity są obecnie zarezerwowane do wykorzystania w przyszłości.
 
 === Current animation frame (46) ===
 
-The current animation frame being displayed. If you don't use animation callbacks, it's between zero and the value set in property 1A. Animation callbacks can set this to anything between 0 and 127.
+Wyświetlana jest bieżąca klatka animacji. Jeśli nie używasz wywołań animacji, mieści się ona między zerem a wartością ustawioną we właściwości 1A. Oddzwanianie animacji może ustawić dowolną wartość z zakresu od 0 do 127.
 
-Enabling animation on a house tile by setting properties 9, 1A and probably 1B ensures that variable 46 will indeed change with time, and the building is redrawn every time variable 46 changes. This means that you can use a VarAction2 to choose the current frame according to variable 46. Please note that this kind of animation needs more CPU time and more sprites, so you should prefer palette animation if possible.
+Włączenie animacji na kafelku domu poprzez ustawienie właściwości 9, 1A i prawdopodobnie 1B zapewnia, że ​​zmienna 46 rzeczywiście zmienia się z czasem, a budynek jest przerysowywany za każdym razem, gdy zmienia się zmienna 46. Oznacza to, że możesz użyć VarAction2, aby wybrać bieżącą klatkę zgodnie ze zmienną 46. Pamiętaj, że ten rodzaj animacji wymaga więcej czasu procesora i więcej duszków, więc jeśli to możliwe, powinieneś preferować animację paletową.
 
 === XY Coordinate of the building (47) ===
 
-The coordinate of the tile this part of the building is located. &nbsp;If the building is not yet constructed, like during [[en/Callbacks#house-construction-check-17|callback 17]], the returned value will be the proposed location. &nbsp;The format of the var is YYYYXXXX.
+Współrzędna płytki, w której znajduje się ta część budynku. &nbsp;Jeśli budynek nie został jeszcze zbudowany, np. Podczas [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#house-construction-check-17|callback 17]] , zwróconą wartością będzie proponowana lokalizacja. &nbsp;Format var to RRRRXXXX.
 
 === Other building counts (60, 61) ===
 
-For variable 60, the parameter is an old house type number. For variable 61, it is a new house type number defined in the current GRF file.
+Dla zmiennej 60 parametrem jest stary numer typu domu. Dla zmiennej 61 jest to nowy numer typu domu zdefiniowany w bieżącym pliku GRF.
 
-These variables work like variable 44, but they count the given house type instead of the current one.
+Zmienne te działają jak zmienna 44, ale liczą dany typ domu zamiast bieżącego.
 
-Please note that, unlike random graphics, changes of deterministic building graphics don't automatically redraw the building (except when either the construction state or variable 46 changes), resulting in temporary graphics glitches when a visible building changes its graphics. These glitches can be fixed by scrolling the building out of view, then back again.
+Należy pamiętać, że w przeciwieństwie do losowej grafiki, zmiany deterministycznej grafiki budynku nie przerysowują automatycznie budynku (z wyjątkiem sytuacji, gdy zmienia się stan konstrukcji lub zmienna 46), co powoduje tymczasowe usterki grafiki, gdy widoczny budynek zmienia swoją grafikę. Te usterki można naprawić, przewijając budynek poza zasięgiem wzroku, a następnie ponownie.
 
 === Land info for nearby tiles (62) ===
 
-This variable works exactly like [[en/VarAction2IndustryTiles#land-info-of-nearby-tiles-60|var. 60 for industry tiles]], except that bit 0 of the '''bb''' part is undefined.
+Ta zmienna działa dokładnie tak, jak [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Industry Tiles#land-info-of-nearby-tiles-60|var. 60 for industry tiles]] , z wyjątkiem tego, że bit 0 części '''bb''' jest niezdefiniowany.
 
 === Current animation frame of nearby house tiles (63) ===
 
-The parameter of this variable is an offset from the position of the current tile. The low nibble contains the signed X offset (that is 0h=0, 1h=+1 ... 7h=+7; 8h=-8, 9h=-7 ... Fh=-1), the high nibble contains the Y offset. Although you can query a 16x16 area with these parameters, it's currently useless to use offsets other than -1, 0 and +1; if you query a tile that doesn't belong to the same building as the current tile, the result is meaningless. It may even be junk if the queried tile isn't a house tile at all.
+Parametr tej zmiennej jest przesunięciem względem położenia bieżącego kafelka. Niby-nibble zawiera podpisane przesunięcie X (to znaczy 0h=0, 1h=+1 ... 7h=+7; 8h=-8, 9h=-7 ... Fh=-1 ), high-nibble zawiera Przesunięcie Y Chociaż możesz zapytać o obszar 16x16 za pomocą tych parametrów, obecnie nie ma potrzeby używania przesunięć innych niż -1, 0 i +1; jeśli zapytasz o kafelek, który nie należy do tego samego budynku, co bieżący, wynik jest bez znaczenia. Może to być nawet śmieci, jeśli pytana płytka wcale nie jest płytką domową.
 
 === Cargo acceptance history of nearby stations (64) ===
 
-The parameter of this variable is a cargo identifier. {{pl/Development/NewGRF/grfFrom|7}} If your GRF is version 7 or later and has a cargo translation table, this is an index to that table; otherwise, it's a cargo slot number. Additionally, GRF register 100h should contain an offset relative to the current tile (use 0 for the current tile). The lowest byte contains the signed X offset and the next higher byte the signed Y offset.
+Parametrem tej zmiennej jest identyfikator ładunku. {{pl/Development/NewGRF/grfFrom|7}} Jeśli twój GRF ma wersję 7 lub nowszą i ma tabelę translacji ładunku, jest to indeks do tej tabeli; w przeciwnym razie jest to numer przedziału ładunkowego. Ponadto rejestr GRF 100h powinien zawierać przesunięcie względem bieżącego kafelka (użyj 0 dla bieżącego kafelka). Najniższy bajt zawiera przesunięcie X ze znakiem, a następny wyższy bajt zawiera przesunięcie Y ze znakiem.
 
-The returned value looks like this:
+Zwrócona wartość wygląda następująco:
 
 {| |-
 !Bit number!!Meaning
@@ -117,40 +117,40 @@ The returned value looks like this:
 |-
 |3||This cargo was accepted in a nearby station since the last periodic processing (which happens every 250 ticks)
 |-
-|4||This cargo is one of the types that triggered [[en/Callbacks#watched-cargo-accepted-148|callback 148]] (only during callback 148)
+|4||This cargo is one of the types that triggered [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#watched-cargo-accepted-148|callback 148]] (only during callback 148)
 |-
 |other bits||undefined; reserved for future use
 |}
 
-A station is considered nearby if the selected tile is inside its acceptance area. That's why you can give an offset - other tiles of your multi-tile building may have different stations "nearby".
+W pobliżu znajduje się stacja, jeśli wybrana płytka znajduje się w obszarze akceptacji. Dlatego możesz podać przesunięcie <small>''(offset)''</small>- inne płytki w budynku z wieloma płytkami mogą mieć różne stacje "w pobliżu" <small>''(nearby)''</small> .
 
-{{pl/Development/NewGRF/ttdp|}} The information required for this variable is stored in the station2 structure, and therefore works only if the station2 structure is present. The station2 structure is present if any of the following is true:
-* Generalfixes is on, and miscmods.noextendstationrange is off
-* Any of fifoloading, newcargos or irregularstations is on
+{{pl/Development/NewGRF/ttdp|}} Informacje wymagane dla tej zmiennej są przechowywane w strukturze station2 i dlatego działają tylko wtedy, gdy obecna jest struktura station2. Struktura station2 jest obecna, jeśli spełniony jest jeden z poniższych warunków:
+* Generalfixes jest włączony, a miscmods.noextendstationrange jest wyłączony
+* Włączono dowolne ładowanie, ładowanie nowych lub nieregularne stacje
 
-If the station2 structure isn't present, the returned value is always zero.
+Jeśli struktura station2 nie jest obecna, zwracana wartość jest zawsze równa zero.
 
 === Distance of nearest house matching a given criterion (65) ===
 
-This will perform a circular search around the current tile, trying to find another house tile that will match the same type, class or GRFID. (Note: other tiles of the originating house will not match.) &nbsp;Search result will be the [http://en.wikipedia.org/wiki/Taxicab_geometry Manhattan distance] between both tiles or 0, if no house tile matching the given criteria has been found.
+Spowoduje to wykonanie cyklicznego wyszukiwania wokół bieżącego kafelka, próbując znaleźć inny kafelek domu, który będzie pasował do tego samego typu, klasy lub GRFID. (Uwaga: inne kafelki domu pochodzącego nie będą pasować.) &nbsp;Wynikiem wyszukiwania będzie [http://en.wikipedia.org/wiki/Taxicab_geometry Manhattan distance] między obiema płytkami lub 0, jeśli nie znaleziono płytki domu spełniającej podane kryteria.
 
-The parameter of this variable is composed of two parts:
+Parametr tej zmiennej składa się z dwóch części:
 
-Bits 0..5 indicate the radius of the search going to be performed (given in Manhattan metric). Maximum search radius is 63 while the minimum is 1. A radius of 0 is considered reserved - do not use.
+Bity 0..5 wskazują promień wyszukiwania, które ma zostać wykonane (podane w metrach Manhattanu). Maksymalny promień wyszukiwania to 63, a minimalny to 1. Promień 0 jest uważany za zarezerwowany - nie używaj.
 
-Bits 6..7 indicate the type of search to be carried out:
+Bity 6..7 wskazują rodzaj wyszukiwania, które należy przeprowadzić:
 
-0 : Search by house type as defined in the grf file
+0: Wyszukaj według typu domu zdefiniowanego w pliku grf
 
-1 : Search by building class
+1: Wyszukaj według klasy budynku
 
-2 : Search by GRFID
+2: Wyszukaj według GRFID
 
-Just like other search variables, be aware that this is a CPU intensive one
+Podobnie jak inne zmienne wyszukiwania, pamiętaj, że jest to procesor intensywny
 
 === Class and ID of nearby house tile (66) ===
 
-The parameter of this variable is an offset from the position of the current tile. The low nibble contains the signed X offset (that is 0h=0, 1h=+1 ... 7h=+7; 8h=-8, 9h=-7 ... Fh=-1), the high nibble contains the Y offset. The returned value is structured like this:
+Parametr tej zmiennej jest przesunięciem względem położenia bieżącego kafelka. Niby-nibble zawiera podpisane przesunięcie X (to znaczy 0h=0, 1h=+1 ... 7h=+7; 8h=-8, 9h=-7 ... Fh=-1 ), high-nibble zawiera Przesunięcie Y Zwrócona wartość ma następującą strukturę:
 
 {| |-
 !High word!!Information about house class
@@ -174,13 +174,13 @@ The parameter of this variable is an offset from the position of the current til
 |||'''02XXh''' if the selected house has been defined in a different GRF with ID XX
 |}
 
-In case the selected house comes from another GRF, you need to use variable 67 (see below) to find out the corresponding GRFID and identify the exact type of the house. Please note that variable 67 is cheaper to calculate than this one, so if you are looking for a specific GRFID/houseID combination, you should try matching the GRFID first, and get variable 66 only if the GRFID matches.
+W przypadku, gdy wybrany dom pochodzi z innego GRF, musisz użyć zmiennej 67 (patrz poniżej), aby znaleźć odpowiedni GRFID i zidentyfikować dokładny typ domu. Należy pamiętać, że zmienna 67 jest tańsza do obliczenia niż ta, więc jeśli szukasz konkretnej kombinacji GRFID/houseID, powinieneś najpierw spróbować dopasować GRFID, a uzyskać zmienną 66 tylko wtedy, gdy GRFID pasuje.
 
 === GRFID of nearby house tile (67) ===
 
-The parameter of this variable is an offset from the position of the current tile. The low nibble contains the signed X offset (that is 0h=0, 1h=+1 ... 7h=+7; 8h=-8, 9h=-7 ... Fh=-1), the high nibble contains the Y offset. The returned value is one of the following:
-* '''FFFFFFFFh''' if the selected tile isn't a house tile
-* '''00000000h''' if the selected house is an old house type
-* otherwise, the GRFID of the GRF which defined the type of the selected house
+Parametr tej zmiennej jest przesunięciem względem położenia bieżącego kafelka. Niby-nibble zawiera podpisane przesunięcie X (to znaczy 0h=0, 1h=+1 ... 7h=+7; 8h=-8, 9h=-7 ... Fh=-1 ), high-nibble zawiera Przesunięcie Y Zwrócona wartość jest jedną z następujących czynności:
+* '''FFFFFFFFh''' jeśli wybrany kafel nie jest kaflem domu
+* '''00000000h''' jeśli wybrany dom jest starym typem domu
+* w przeciwnym razie GRFID GRF, który zdefiniował typ wybranego domu
 
 ==Przykład==
