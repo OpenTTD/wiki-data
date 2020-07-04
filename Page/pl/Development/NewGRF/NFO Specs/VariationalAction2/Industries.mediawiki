@@ -90,109 +90,109 @@
 |B4||W||{{pl/Development/NewGRF/ottdp| |2.6|ttdprev=r1321}}||Date when cargo was last accepted in days since 1920, or 0 if no cargo was ever accepted. See also variable 6E.
 |}
 
-For other 80+x variables confer the [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#_IndustryArray TTD industry structure].
+Dla pozostałych 80 + x zmiennych nadaj [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#_IndustryArray TTD industry structure].
 
 === Waiting cargo (40..42) ===
 
-If bit 1 or 2 is set in property 21, these variables contain the amount of incoming cargo waiting to be processed. (40 gives the amount of the first type waiting, 41 gives the same for the second type etc.) These variables are capped at FFFFh (65535).
+Jeśli bit 1 lub 2 jest ustawiony we właściwości 21, zmienne te zawierają ilość ładunku przychodzącego oczekującego na przetworzenie. (40 oznacza liczbę oczekujących pierwszego typu, 41 daje to samo dla drugiego typu itd.) Zmienne te są ograniczone do FFFFh (65535).
 
-See also variable 6F.
+Patrz także zmienna 6F.
 
 === Manhattan distance of closest dry/land tile (43) ===
 
-This variable works the same way as var. 8B does during callback 28: if your industry is built on water, it gives the distance of the closest dry land tile, otherwise it gives the distance of the closest water tile. However, you can't use this variable during callback 28; you must always use 8B.
+Ta zmienna działa tak samo jak var. 8B robi to podczas oddzwaniania 28: jeśli twoja branża jest zbudowana na wodzie, podaje odległość najbliższego kafelka suchego lądu, w przeciwnym razie podaje odległość najbliższego kafelka wody. Nie można jednak użyć tej zmiennej podczas oddzwaniania 28; musisz zawsze używać 8B.
 
-'''PLEASE NOTE''': This variable is rather expensive to compute because, in the worst case, it has to check all tiles on the map before it gives up looking for a good tile. Try to avoid it in frequent callbacks such as the production callback, animation callbacks (unless the animation is slow, around 1 frame per game day or slower). It is, however, OK to use it during the production change callbacks.
+'''PROSZĘ ZANOTOWAĆ''': Obliczanie tej zmiennej jest raczej kosztowne, ponieważ w najgorszym przypadku musi ona sprawdzić wszystkie kafelki na mapie, zanim zrezygnuje z poszukiwania dobrego kafelka. Staraj się tego unikać w częstych wywołaniach zwrotnych, takich jak wywołania produkcyjne, wywołania animacji (chyba że animacja jest wolna, około 1 klatki na dzień gry lub wolniej). Można jednak używać go podczas wywołań zwrotnych zmian produkcyjnych.
 
 === Layout number (44) ===
 T
-his variable returns the number of the current layout. The first layout will return 01, the second 02, etc. In other words, this is one larger than what you get in variable 86 during callback 28.
+jego zmienna zwraca numer bieżącego układu. Pierwszy układ zwróci 01, drugi 02 itd. Innymi słowy, jest to jeden większy niż to, co otrzymujesz w zmiennej 86 podczas wywołania zwrotnego 28.
 
-If the industry was created using an earlier version of TTDPatch, or while newindustries was off, the result will be zero.
+Jeśli branża została utworzona przy użyciu wcześniejszej wersji TTDPatch lub gdy nowe branże były wyłączone, wynik wyniesie zero.
 
 === Player info (45) ===
 
-As [[en/VarAction2Vehicles#player-info-43|vehicle variable 43]], except that the no-player state is indicated by var A7 being 10h.
+Jak [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Vehicles#player-info-43|vehicle variable 43]] , z tym wyjątkiem, że stan braku gracza jest wskazywany przez var A7 jako 10h.
 
 === Date when industry was built in days since year 0 (46) ===
 
-Exact same behaviour as var B0, but based on year 0, instead of year 1920
+Dokładnie takie samo zachowanie jak var B0, ale oparte na roku 0, zamiast roku 1920
 
-In TTDPatch, industry age is limited to 65535 days (approximately 180 years) -- build date is never more than 65535 days ago.
+W TTDPatch wiek branży jest ograniczony do 65535 dni (około 180 lat) - data budowy nigdy nie jest dłuższa niż 65535 dni temu.
 
 === Get industry tile ID at offset (60) ===
 
-The parameter of this variable is an offset from the northernmost tile of the industry: the high nibble contains the Y offset, the low one the X offset; both are unsigned. The high word of the return value is currently reserved, and the low word can be:
-* 00xxh if the tile is an industry tile and was defined in the current GRF with ID xx.
-* FFxxh if the tile is an industry tile of an old type, and has the ID xx.
-* FFFEh if the tile is an industry tile that was defined in another GRF file
-* FFFFh if the tile isn't an industry tile, or doesn't belong to the current industry
+Parametrem tej zmiennej jest przesunięcie w stosunku do najbardziej wysuniętego na północ kafla w branży: wysokie wartości zawierają przesunięcie <small>''(offset)''</small> Y, niskie przesunięcie X; oba są niepodpisane. Górne słowo wartości zwracanej jest obecnie zarezerwowane, a dolne słowo może być:
+* 00xxh, jeśli kafel jest kaflem branżowym i został zdefiniowany w bieżącym GRF o ID xx.
+* FFxxh, jeśli kafel jest kaflem przemysłowym starego typu i ma ID xx.
+* FFFEh, jeśli kafel jest kaflem branżowym, który został zdefiniowany w innym pliku GRF
+* FFFFh, jeśli kafel nie jest kaflem branży lub nie należy do bieżącej branży
 
 === Get random tile bits at offset (61) ===
 
-The parameter of this variable is an offset from the northernmost tile of the industry: the high nibble contains the Y offset, the low one the X offset; both are unsigned. If there's an industry tile on that offset and it belongs to the current industry, the lowest byte of the return value will contain the random bits of that tile. Otherwise, the lowest byte will be zero.
+Parametrem tej zmiennej jest przesunięcie w stosunku do najbardziej wysuniętego na północ kafelka w branży: wysokie wartości zawierają przesunięcie Y, niskie przesunięcie X; oba są niepodpisane. Jeśli na tym przesunięciu znajduje się kafelek branży i należy on do bieżącej branży, najniższy bajt wartości zwracanej będzie zawierał losowe bity tego kafelka. W przeciwnym razie najniższy bajt będzie wynosił zero.
 
-The other bytes are reserved for future use.
+Pozostałe bajty są zarezerwowane do wykorzystania w przyszłości.
 
 === Land info of nearby tiles (62) ===
 
-The parameter of this variable is an offset from the northernmost tile of the industry: the high nibble contains the Y offset, the low one the X offset; both are unsigned. This variable returns the same values as [[en/VarAction2IndustryTiles#land-info-of-nearby-tiles-60|industry tile variable 60]], in the same format, except that bit 0 in the '''bb''' part is undefined. The offset should be given relatively to the north corner of the industry.
+Parametrem tej zmiennej jest przesunięcie w stosunku do najbardziej wysuniętego na północ kafelka w branży: wysokie wartości zawierają przesunięcie Y, niskie przesunięcie X; oba są niepodpisane. Ta zmienna zwraca te same wartości, co [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Industry Tiles#land-info-of-nearby-tiles-60|industry tile variable 60]] , w tym samym formacie, z wyjątkiem tego, że bit 0 w części '''bb''' jest niezdefiniowany. Przesunięcie należy podać w odniesieniu do północnego rogu branży.
 
 === Animation stage of nearby tiles (63) ===
 
-The parameter of this variable is an offset from the northernmost tile of the industry: the high nibble contains the Y offset, the low one the X offset; both are unsigned. This variable returns the same values as [[en/VarAction2IndustryTiles#animation-stage-for-nearby-tiles-61|industry tile variable 61]], in the same format. The offset should be given relatively to the north corner of the industry.
+Parametrem tej zmiennej jest przesunięcie w stosunku do najbardziej wysuniętego na północ kafelka w branży: wysokie wartości zawierają przesunięcie Y, niskie przesunięcie X; oba są niepodpisane. Ta zmienna zwraca te same wartości co [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Industry Tiles#animation-stage-for-nearby-tiles-61|industry tile variable 61]] , w tym samym formacie. Przesunięcie należy podać w odniesieniu do północnego rogu branży.
 
 === Distance of nearest industry with given type (64) ===
 
-The format of the parameter is the same as for industry property 16: either the ID of a new type with bit 7 set, or the ID of an old type. The returned value is FFFFFFFFh if there are no industries with the given type (not counting the current one, if it has the given type); otherwise, the returned value is the Manhattan distance of the closest industry with the given type.
+Format parametru jest taki sam jak dla właściwości przemysłowej 16: albo identyfikator nowego typu z ustawionym bitem 7, albo identyfikator starego typu. Zwrócona wartość to FFFFFFFFh, jeśli nie ma branż o danym typie (nie licząc bieżącej, jeśli ma dany typ); w przeciwnym razie zwracana wartość to odległość Manhattanu najbliższej branży o danym typie.
 
-=== Get [[en/TownZones|town zone]] and Manhattan distance of closest town (65) ===
+=== Get [[pl/Extrazi/specs.tt/TownZones|town zone]] and Manhattan distance of closest town (65) ===
 
-The parameter gives an offset from the northernmost tile of the industry: the high nibble means the Y offset, the low nibble means the X offset, both signed. The returned value is rrzzdddd, where rr is reserved for future use, zz is the [[en/TownZones|town zone]] of the selected tile, while dddd is the Manhattan distance of the closest town.
+Ten parametr daje przesunięcie względem najbardziej wysuniętego na północ kafelka w branży: wysokie wartości oznaczają przesunięcie Y, niskie wartości oznaczają przesunięcie X, obie sygnowane. Zwrócona wartość to rrzzdddd, gdzie rr jest zarezerwowane do wykorzystania w przyszłości, zz to [[pl/Development/NewGRF/NFO Specs/TownZones|town zone]] wybranego pola, a dddd to odległość Manhattan najbliższego miasta.
 
 === Get square of Euclidean distance of closest town (66) ===
 
-The parameter works like for var. 65, but the result is the Euclidean distance of the closest town, squared.
+Ten parametr działa jak dla var. 65, ale wynikiem jest kwadratowa odległość euklidesowa najbliższego miasta.
 
 === Count of industry, distance of closest instance (67, 68) ===
 
-Variable 67 gets two parameters: the GRFID of the GRF where the industry is defined in register 100h (can be written using operator 0E of [[en/VarAction2Advanced|VarAction2]]) and the setID of the industry as the regular parameter. There are two special cases for the GRFID: 00000000h means you're checking for a default TTD industry type, while FFFFFFFFh can be used instead of the GRFID of the current GRF.
+Zmienna 67 otrzymuje dwa parametry: GRFID GRF, gdzie branża jest zdefiniowana w rejestrze 100h (może być zapisany za pomocą operatora 0E z [[en/VarAction2Advanced|VarAction2]] ) i setID branży jako parametr regularny. Istnieją dwa specjalne przypadki dla GRFID: 00000000h oznacza, że ​​sprawdzasz domyślny typ branży TTD, podczas gdy FFFFFFFFh można użyć zamiast GRFID obecnego GRF.
 
 The return value has the format rrccdddd, where rr is reserved for future use, cc is the number of instances of the industry type and dddd is the Manhattan distance of the closest instance, of FFFFh if not appliable.
 
-You may note that this variable can be used instead of variable 64. This variable is the preferred way to get this information since it allows you to check industries defined in other GRFs as well. Variable 64 will stay for backward compatibility only.
+Możesz zauważyć, że ta zmienna może być używana zamiast zmiennej 64. Ta zmienna jest preferowanym sposobem uzyskania tych informacji, ponieważ umożliwia sprawdzenie branż zdefiniowanych również w innych GRF. Zmienna 64 pozostanie tylko dla kompatybilności wstecznej.
 
-Variable 68 works like variable 67, except that you can put a layout number in the lowest byte of register 101. (The other bits are reserved for future use, leave them zero for now.) This layout number should be 1-based (the first layout is 01, not 00). Only industries with the given layout are considered for counting and calculating distance. As a special case, if the layout number is 00, all layouts are counted, and so the result is the same as with variable 67.
+Zmienna 68 działa jak zmienna 67, z tym wyjątkiem, że można wstawić numer układu do najniższego bajtu rejestru 101. (Pozostałe bity są zarezerwowane do wykorzystania w przyszłości, na razie pozostaw je zerowe). Ten numer układu powinien być oparty na 1 ( pierwszy układ to 01, a nie 00). Tylko branże o danym układzie są brane pod uwagę do liczenia i obliczania odległości. W szczególnym przypadku, jeśli numerem układu jest 00, wszystkie układy są liczone, a więc wynik jest taki sam jak dla zmiennej 67.
 
-Since OpenTTD r22434, it is possible to filter by the town of the current industry. If the bit number 8 is set, only industries in the same town than the current one will be considered.
+Od wersji OpenTTD R22434 możliwe jest filtrowanie według miasta obecnego przemysłu. Jeśli bit nr 8 jest ustawiony, brane będą pod uwagę tylko branże w tym samym mieście niż bieżące.
 
 === Cargo info variables (69..71) ===
 
-These variables allow to query information about accepted and produced cargos.
-The variables are independent of the number of cargo types and their order. The 60+x parameter specifies the cargo type as index into the cargo translation table.
+Zmienne te pozwalają zapytać o informacje o przyjętych i wyprodukowanych ładunkach.
+Zmienne są niezależne od liczby rodzajów ładunku i ich kolejności. Parametr 60 + x określa typ ładunku jako indeks w tabeli translacji ładunku.
 
 (69..6F) {{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}}
 
-* Variable 69: amount of produced cargo waiting to be transported.
-* Variable 6A: amount of cargo produced this month.
-* Variable 6B: amount of cargo transported this month.
-* Variable 6C: amount of cargo produced last month.
-* Variable 6D: amount of cargo transported last month.
-* Variable 6E: date cargo was last delivered to the industry.
-* Variable 6F: amount of delivered cargo waiting to be processed.
+* Zmienna 69: ilość wyprodukowanego ładunku oczekującego na transport.
+* Zmienna 6A: ilość ładunku wyprodukowana w tym miesiącu.
+* Zmienna 6B: ilość ładunku przewiezionego w tym miesiącu.
+* Zmienna 6C: ilość ładunku wyprodukowanego w ostatnim miesiącu.
+* Zmienna 6D: ilość ładunku przewiezionego w ostatnim miesiącu.
+* Zmienna 6E: data ostatniego dostarczenia ładunku do branży.
+* Zmienna 6F: ilość dostarczonego ładunku oczekującego na przetworzenie.
 
 (70..71) {{pl/Development/NewGRF/ottdp|1.10|no|ottdrev=fdaf67d924}}
 
-* Variable 70: primary industry production rate.
-* Variable 71: last month transported (FF = 100%).
+* Zmienna 70: wskaźnik produkcji w przemyśle pierwotnym.
+* Zmienna 71: transportowany w ostatnim miesiącu (FF = 100%).
 
 === Industry founder information (A7) ===
 
-This byte contains the ID of the company that funded the industry, or 10h if the industry was generated randomly. If the industry was built using an earlier TTDPatch than 2.0.1 &alpha;74 or with newindustries turned off, this field is 10h.
+Ten bajt zawiera identyfikator firmy, która sfinansowała przemysł, lub 10 godzin, jeśli przemysł został wygenerowany losowo. Jeśli branża została zbudowana przy użyciu wcześniejszej wersji TTDPatch niż 2.0.1 &alpha;74 lub przy wyłączonym newindustries, to pole trwa 10 godzin.
 
 === Construction type (B3) ===
 
-This byte tells you how the industry got onto the map. The following values are possible:
+Ten bajt informuje, w jaki sposób przemysł dostał się na mapę. Możliwe są następujące wartości:
 
 {| |-
 !Value!!Meaning
