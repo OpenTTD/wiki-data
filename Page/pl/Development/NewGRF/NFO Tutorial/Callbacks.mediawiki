@@ -19,23 +19,23 @@ Ponieważ wywołania zwrotne różnią się od zwykłej grafiki pojazdu, ostatni
 ==How to define callbacks==
 
 Jest kilka rzeczy, które musisz zrobić, aby oddzwonić do pracy.
-# If necessary, enable the callback. For vehicles, set the callback bit in the [[pl/Development/NewGRF/NFO Specs/Action0/Main Page|action 0]] property for the vehicle which should use callbacks (props 1E, 17, 12 or 14 depending on vehicle type)
-# Set a default for the value that the callback modifies, e.g. set prop 07 when using the load amount callback
-# Define an [[pl/Development/NewGRF/NFO Specs/Action3/Main Page|action 3]] for the vehicle if it doesn't have one already
-# Add a [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page|variational action 2]] that checks the callback variable 0C for the value of the callback. See the description of a variational action 2 to find what values those are.
-# Variable 0C should be accessed as a word. Even when the callbacks IDs you want to test are below 0xFF.
-# This variational action 2 has to return a callback result (set-id with bit 15 set) when in a callback, or a regular set-id when not in a callback
-# Make sure that the "default" of the var. 0C check (corresponding to unknown callbacks) points to a regular action 2 instead of one that returns callback results, ideally using the same action 2 as in the non-callback case. This way, unknown callbacks will fail instead of returning valid, but wrong, results.
+# W razie potrzeby włącz oddzwanianie. W przypadku pojazdów ustaw bit wywołania zwrotnego we właściwości [[pl/Development/NewGRF/NFO Specs/Action0/Main Page|action 0]]  dla pojazdu, który powinien używać wywołań zwrotnych (rekwizyty 1E, 17, 12 lub 14 w zależności od typu pojazdu)
+# Ustaw wartość domyślną dla wartości modyfikowanej przez wywołanie zwrotne, np. ustaw rekwizyt 07 podczas korzystania z wywołania zwrotnego ilości obciążenia
+# Zdefiniuj [[pl/Development/NewGRF/NFO Specs/Action3/Main Page|action 3]] dla pojazdu, jeśli jeszcze go nie ma
+# Dodaj [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page|variational action 2]] , która sprawdza wartość zmiennej wywołania zwrotnego 0C pod kątem wartości wywołania zwrotnego. Zobacz opis działania wariacyjnego 2, aby dowiedzieć się, jakie to są wartości.
+# Zmienna 0C powinna być dostępna jako słowo. Nawet jeśli ID wywołań zwrotnych, które chcesz przetestować, są poniżej 0xFF.
+# Ta akcja wariacyjna 2 musi zwrócić wynik wywołania zwrotnego (set-id z bitem 15 ustawionym), gdy jest w wywołaniu zwrotnym, lub zwykły id zestawu, gdy nie jest w wywołaniu zwrotnym
+# Upewnij się, że "domyślny" <small>''(default);;</small> var. Kontrola 0C (odpowiadająca nieznanym wywołaniom zwrotnym) wskazuje na zwykłe działanie 2 zamiast tego, które zwraca wyniki wywołania zwrotnego, najlepiej przy użyciu tego samego działania 2, co w przypadku braku wywołania zwrotnego. W ten sposób nieznane wywołania zwrotne zakończą się niepowodzeniem zamiast zwracać prawidłowe, ale niepoprawne wyniki.
 
-As explained above, a callback result is something like <tt>06 80</tt> (with 06 being used as value of the callback), instead of a regular set-id that would be for example <tt>04 00</tt>.
+Jak wyjaśniono powyżej, wynikiem wywołania zwrotnego jest coś w rodzaju <tt>06 80</tt> (przy czym 06 jest używane jako wartość wywołania zwrotnego), zamiast zwykłego set-id, który byłby na przykład <tt>04 00</tt>.
 
 ==Examples==
 
-Be aware that following examples don't result into 100% complete newgrfs, but instead concentrate on the most important code features. E.g., in the given [[pl/Development/NewGRF/NFO Specs/Action0/Vehicles/Trains|action0s]] you'd have to add even more properties to get a well-working newgrf, or, in case an example describes only one vehicle in detail, references to other vehicles, e.g. a locomotive, are given in a symbolic form ("xx", "nn") rather than implementing it in detail and giving correct veh-IDs or c-IDs.
+Należy pamiętać, że poniższe przykłady nie dają 100% kompletnych newgrfs, ale koncentrują się na najważniejszych funkcjach kodu. Np. W danym [[pl/Development/NewGRF/NFO Specs/Action0/Vehicles/Trains|action0s]] musisz dodać jeszcze więcej właściwości, aby uzyskać dobrze działający newgrf lub, w przypadku gdy przykład opisuje szczegółowo tylko jeden pojazd, odniesienia do innych pojazdów, np lokomotywa, są podawane w formie symbolicznej ("xx", "nn") zamiast szczegółowo ją wdrażać i podawać prawidłowe ID pojazdów lub ID - c.
 
 ==Example1: using Callback 33 (new sounds)==
 
-The first example is a simple application. It will set new sounds for a locomotive by using [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#sound-effect-callback-33|callback 33]]. The new sounds will be supplied by two .wav files using [[pl/Development/NewGRF/NFO Specs/Action11|action 11]]. Newly defined sounds will start from slot 73 (49h), numbers 0 - 48h being original TTD sounds. The type of event (under which circumstances a particular sound should be played) is read from variable 10.
+Pierwszy przykład to prosta aplikacja. Ustawi nowe dźwięki dla lokomotywy za pomocą [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#sound-effect-callback-33|callback 33]]. Nowe dźwięki będą dostarczane przez dwa pliki .wav przy użyciu [[pl/Development/NewGRF/NFO Specs/Action11|action 11]]. Nowo zdefiniowane dźwięki zaczną się od slotu 73 (49h), cyfry 0–48h są oryginalnymi dźwiękami TTD. Rodzaj zdarzenia (w jakich okolicznościach należy odtworzyć określony dźwięk) jest odczytywany ze zmiennej 10.
 
 <pre>
 0 * 4	0F 00 00 00
@@ -76,11 +76,11 @@ The first example is a simple application. It will set new sounds for a locomoti
 
 ==Example2: using Callbacks 12, 15, and 19==
 
-Załóżmy, że chcesz budować autokary pasażerskie pierwszej i drugiej klasy, o różnych barwach i pojemności, ilości załadunku i dodatkowych sufiksach tekstowych. Aby to zadziałało, potrzebujemy połączeń zwrotnych [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#load-amount-callback-12|12 (load amount]]), [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#refitted-capacity-callback-15|15 (refitted capacity]]) i [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#cargo-subtype-display-19|19 (cargo subtype display]]):
+Załóżmy, że chcesz budować autokary pasażerskie pierwszej i drugiej klasy, o różnych barwach i pojemności, ilości załadunku i dodatkowych sufiksach tekstowych. Aby to zadziałało, potrzebujemy połączeń zwrotnych [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#load-amount-callback-12|12 (load amount]] ), [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#refitted-capacity-callback-15|15 (refitted capacity]] ) i [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#cargo-subtype-display-19|19 (cargo subtype display]] ):
 
-In addition, we'll use the feature [[en/VarAction2Vehicles|"refit to same cargo type"]] to be able to change livery, loading amount and capacity deliberately, even if coaches carry only one type of cargo, namely "passengers".
+Ponadto użyjemy funkcji [[en/VarAction2Vehicles|"refit to same cargo type"]] , aby móc celowo zmieniać barwę, ilość załadunku i pojemność, nawet jeśli autokary przewożą tylko jeden rodzaj ładunku, a mianowicie "pasażerowie".
 
-In the .nfo, the actual "refitting" is done by referencing variable F2, which holds how many times a vehicle was refitted to the same cargo type. In game, there will be two entries generated in the refit menu containing these text suffixes generated by an [[pl/Development/NewGRF/NFO Specs/Action4|action 4]]. Namely "passengers (1st class)" and "passengers (2nd class)" from which to choose the desired type of coach. Likewise, load amount and capacity are linked to variable F2 as well and will be changed accordingly.
+W .nfo faktyczne "ponowne zamontowanie" <small>''(refitting)''</small> odbywa się poprzez odniesienie do zmiennej F2, która przechowuje ile razy pojazd został zamontowany w tym samym typie ładunku. W grze pojawią się dwa wpisy w menu remontowym zawierające te sufiksy tekstowe wygenerowane przez  [[pl/Development/NewGRF/NFO Specs/Action4|action 4]] . Mianowicie "pasażerowie (1. klasa)" i  "pasażerowie (2. klasa)", spośród których można wybrać żądany rodzaj autokaru. Podobnie ilość obciążenia i pojemność są również powiązane ze zmienną F2 i zostaną odpowiednio zmienione.
 
 <pre>
 0 * 4	15 00 00 00
@@ -146,7 +146,7 @@ In the .nfo, the actual "refitting" is done by referencing variable F2, which ho
 
 ==Example3: using callbacks 11 (wagon length) and 16 (articulated engine)==
 
-This example will demonstrate how to use [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#articulated-engine-callback-16|callback 16]] for designing "articulated vehicles", e.g. locomotives with tenders. We'll set up two locomotives using two different tenders: <engine1> will use a standard short <tender1> and <engine2> will use the even shorter <tender2> by applying [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#wagon-length-callback-11|callback 11]].
+W tym przykładzie zademonstrowano sposób użycia [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#articulated-engine-callback-16|callback 16]] do projektowania "pojazdów przegubowych" <small>''(articulated vehicles)''</small> , np. lokomotywy z przetargami. Ustawimy dwie lokomotywy przy użyciu dwóch różnych ofert: <engine1> użyje standardowego krótkiego <tender1> i <engine2> użyje jeszcze krótszego <tender2> poprzez zastosowanie [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#wagon-length-callback-11|callback 11]].
 
 <pre>
 0 * 4	34 00 00 00
@@ -235,7 +235,7 @@ Ten przykład wyjaśnia, jak używać [[pl/Development/NewGRF/NFO Specs/Callback
 
 EMU składa się z tego samego elementu składowego, elektrycznego wagonu kolejowego (ID pojazdu = 62). Ponadto należy zezwolić na połączenie trzech z tych czteroczęściowych EMU, tj. Pełna skład może zawierać łącznie 12 wagonów.
 
-Ze względu na realizm nie należy dopuszczać do przyłączania do EMU pojazdów "odrębnych" <small>''(foreign)''</small>. Osiąga się to poprzez sprawdzenie ID pojazdu z [[en/VarAction2Vehicles | zmienna C6]]. Odpowiednie komunikaty o błędach zostaną wygenerowane, jeśli coś będzie nie tak, z liczbą lub rodzajem dodanych pojazdów.
+Ze względu na realizm nie należy dopuszczać do przyłączania do EMU pojazdów "odrębnych" <small>''(foreign)''</small>. Osiąga się to poprzez sprawdzenie ID pojazdu z [[pl/Extrazi/specs.tt/VarAction2Vehicles | zmienna C6]]. Odpowiednie komunikaty o błędach zostaną wygenerowane, jeśli coś będzie nie tak, z liczbą lub rodzajem dodanych pojazdów.
 
 Proszę zauważyć, że CB 1D i 23 nie wymagają ustawiania bitów we właściwości 1E akcji0.
 
