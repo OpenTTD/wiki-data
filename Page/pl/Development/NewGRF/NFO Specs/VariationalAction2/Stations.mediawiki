@@ -8,7 +8,7 @@ Stacje kolejowe mają wiele zmiennych z portami lotniczymi. Wspólne zmienne są
 {| |-
 !Variable!!Version!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Size''']]!!Description
 |-
-|10||{{pl/Development/NewGRF/ottdp|0.7|2.5}}||D||Additional information for sprite selection - see [[pl/Development/NewGRF/NFO Specs/Action0/Stations#general-flags-13|General station flags]] and [[en/AdvancedSpriteLayout|AdvancedSpriteLayout]]
+|10||{{pl/Development/NewGRF/ottdp|0.7|2.5}}||D||Dodatkowe informacje dotyczące wyboru 'sprite' - zobacz [[pl/Development/NewGRF/NFO Specs/Action0/Stations#general-flags-13|General station flags]] i [[en/AdvancedSpriteLayout|AdvancedSpriteLayout]]
 |-
 |40||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||D||Platform info and relative position
 |-
@@ -16,7 +16,7 @@ Stacje kolejowe mają wiele zmiennych z portami lotniczymi. Wspólne zmienne są
 |-
 |42||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||D||Terrain and track type
 |-
-|43 <ref>{{pl/Development/NewGRF/ottdp|1.2|2.5|ottdrev=r22848|ttdprev=2.5 beta 2}} Available in the purchase list as well.</ref>||{{pl/Development/NewGRF/ottdp|1.2|2.5|ottdrev=r22848}}||D||Player info, see [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Vehicles#player-info-43|vehicle variable 43]]
+|43 <ref>{{pl/Development/NewGRF/ottdp|1.2|2.5|ottdrev=r22848|ttdprev=2.5 beta 2}} Dostępne również na liście zakupów.</ref>||{{pl/Development/NewGRF/ottdp|1.2|2.5|ottdrev=r22848}}||D||Informacje o graczu, patrz [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Vehicles#player-info-43|vehicle variable 43]]
 |-
 |44||{{pl/Development/NewGRF/ottdp|0.7|2.5}}||B||Path-based signalling info
 |-
@@ -46,14 +46,14 @@ Stacje kolejowe mają wiele zmiennych z portami lotniczymi. Wspólne zmienne są
 |}
 <references/>
 
-For other 80+x variables confer the [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#_StationArray TTD station structure]. Note that you have to subtract 0x10 from the offsets there, or else the facility bit mask and construction date would not be accessible; instead you lose access to variables 00..0F which are meaningless anyway.
+W przypadku innych zmiennych 80+x nadaj [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#_StationArray TTD station structure] . Zauważ, że musisz odjąć 0x10 od przesunięć tam, w przeciwnym razie maska ​​bitowa obiektu i data budowy nie byłyby dostępne; zamiast tego tracisz dostęp do zmiennych 00..0F, które i tak są bez znaczenia.
 
-'''WARNING''': Please do not use variables 8C..EB directly. The meaning of these variables changes if the newcargos switch is on. Use the variables 60..64 instead (see below). Those always work correctly.
+'''UWAGA''': Proszę nie używać bezpośrednio zmiennych 8C..EB. Znaczenie tych zmiennych zmienia się, jeśli przełącznik newcargos jest włączony. Zamiast tego użyj zmiennych 60..64 (patrz poniżej). Te zawsze działają poprawnie.
 
 == Description ==
 === Platform info (40, 41, 46, 47, 49) ===
 
-Variables 40, 41, 46, 47 and 49 all return information about the current tile, which platform it is on and how far along the platform. The difference is in the section of the station that they consider.
+Zmienne 40, 41, 46, 47 i 49 zwracają informacje o bieżącym kafelku, na której platformie on jest i jak daleko wzdłuż platformy. Różnica polega na rozważanym odcinku stacji.
 
 {| |-
 !Variables!!Regular station!!Irregular station
@@ -65,11 +65,11 @@ Variables 40, 41, 46, 47 and 49 all return information about the current tile, w
 |49||Whole station||Counting length and platforms that have the same direction
 |}
 
-The term "counting" here refers to starting at the tile in question, and counting tiles in all four directions. The two directions aligned with the station direction will be the length of the station, and the other two directions give the number of platforms. For variables 40 and 46, this counting stops at the edge of the station, i.e. the first non-station tile. For variable 49, it stops either at the edge, or at a station tile that is in the wrong direction. &nbsp;The resulting information is probably not really useful in the case of irregular stations, with the exception of edge detection. To correctly detect edges, you have the choice of either the station-&gt;non-station transition (vars. 40, 46), or additional an opposite-direction transition (var. 49).
+Termin "liczenie" <small>''(counting)''</small> odnosi się tutaj do rozpoczynania od danego kafelka i liczenia płytek we wszystkich czterech kierunkach. Dwa kierunki wyrównane z kierunkiem stacji będą długością stacji, a pozostałe dwa kierunki podadzą liczbę platform. W przypadku zmiennych 40 i 46 liczenie to zatrzymuje się na krawędzi stacji, tj. Pierwszej płytki niestacjonarnej. Dla zmiennej 49 zatrzymuje się na krawędzi lub na kafelku stacji, który jest w złym kierunku. &nbsp;Uzyskane informacje prawdopodobnie nie są naprawdę przydatne w przypadku nieregularnych stacji, z wyjątkiem wykrywania krawędzi. Aby poprawnie wykryć krawędzie, możesz wybrać jedną ze stacji-&gt;przejście niestacjonarne (var. 40, 46) lub dodatkowe przejście w przeciwnym kierunku (var. 49).
 
-Variable 41 is largely unaffected by irregular stations, because it only refers to individually built sections. However, when these individual sections are built over existing tiles, the var. 41 information of surrounding tiles changes as well, due to an internal limitation in how it is stored.
+Zmienne 41 są w dużej mierze niezależne od nieregularnych stacji, ponieważ odnoszą się tylko do indywidualnie budowanych odcinków. Jednak gdy te poszczególne sekcje są budowane na istniejących płytkach, var. 41 informacji o otaczających kafelkach również się zmienia, ze względu na wewnętrzne ograniczenie sposobu ich przechowywania.
 
-For variables 40, 41 and 49, the position is counted from the northern most edge of the station, and returned in the form xTNLcCpP, where:
+Dla zmiennych 40, 41 i 49 pozycja jest liczona od najbardziej wysuniętej na północ krawędzi stacji i zwracana w postaci xTNLcCpP, gdzie:
 
 {| |-
 !Variable!!Meaning
@@ -92,11 +92,11 @@ For variables 40, 41 and 49, the position is counted from the northern most edge
 |P||Position along this platform, zero at the beginning
 |}
 
-Here, the "beginning" of a station is its northern-most (up on the screen) tile, and the "end" is the southern-most (down on the screen) tile. Each variable consists of 4 bits.
+Tutaj "początek" <small>''(beginning)''</small> stacji jest jej najbardziej wysuniętą na północ płytką (w górę na ekranie), a "koniec" <small>''(end)''</small> to płytka najbardziej wysunięta na południe (w dół na ekranie). Każda zmienna składa się z 4 bitów.
 
-For variables 46 and 47, the position is counted from the middle, i.e. the center tile has C=0 and P=0. For even lengths and numbers of platforms, the middle tile is at position L/2 resp. N/2, e.g. for length 6, it is tile 3, which is the fourth tile. The return format is xTNLxxCP, where T, N and L are as above, and C and P are the positions counted from the middle.
+Dla zmiennych 46 i 47 pozycja jest liczona od środka, tj. Środkowa płytka ma C=0 and P=0 . W przypadku parzystych długości i liczby platform środkowa płytka znajduje się w pozycji L/2 lub. N/2, np. dla długości 6 jest to płytka 3, która jest czwartą płytką. Format zwracany to xTNLxxCP, gdzie T, N i L są takie jak powyżej, a C i P są pozycjami liczonymi od środka.
 
-Since C and P can have negative numbers, here's how this is encoded:
+Ponieważ C i P mogą mieć liczby ujemne, oto jak jest to zakodowane:
 
 {| |-
 !Hex!!Binary!!Decimal
@@ -116,7 +116,7 @@ Since C and P can have negative numbers, here's how this is encoded:
 |F||1111||-1
 |}
 
-The counting goes like this, preferring an extra negative number for an even count (because there are 8 negative numbers available but only 7 positive ones):
+Liczenie przebiega w ten sposób, preferując dodatkową liczbę ujemną dla liczby parzystej (ponieważ dostępnych jest 8 liczb ujemnych, ale tylko 7 dodatnich):
 
 {| |-
 !Count!!Numbers
@@ -138,9 +138,9 @@ The counting goes like this, preferring an extra negative number for an even cou
 
 === Terrain and track type (42) ===
 
-Variable 42 is of the format xxxxttTT, where TT is the terrain type and tt is the (translated) railway track type.
+Zmienna 42 ma format xxxxttTT, gdzie TT jest typem terenu, a tt jest (przetłumaczonym) typem toru kolejowego.
 
-They can have the following values:
+Mogą mieć następujące wartości:
 
 {| |-
 !TT!!Meaning
@@ -155,7 +155,7 @@ They can have the following values:
 |}
 
 
-If no railtype translation table is present in the GRF, then the default translation table is used:
+Jeśli w GRF nie ma tabeli translacji typów szyn, używana jest domyślna tabela translacji:
 {| |-
 !tt!!Meaning
 |-
@@ -168,11 +168,11 @@ If no railtype translation table is present in the GRF, then the default transla
 |03||maglev
 |}
 
-If the railtype is not present in the table, then tt returns FF.
+Jeśli typ szyny nie jest obecny w tabeli, tt zwraca FF.
 
 === Path-based signalling info (44) ===
 
-This returns the following value in bits 0-2: (bit 2 only available from alpha 47 and up)
+Zwraca to następującą wartość w bitach 0-2: (bit 2 dostępny tylko od wersji alfa 47)
 
 {| |-
 !State!!Value (binary)!!Value (decimal)
@@ -184,15 +184,15 @@ This returns the following value in bits 0-2: (bit 2 only available from alpha 4
 |No PBS||010||2
 |}
 
-At the moment, PBS on/off refers to the switch setting, in a future alpha version it will actually refer to whether the switch is on ''and'' the current block actually uses PBS.
+W tej chwili włączanie/wyłączanie PBS odnosi się do ustawienia przełącznika, w przyszłej wersji alfa będzie faktycznie dotyczyło tego, czy przełącznik jest włączony ''i'' czy bieżący blok faktycznie używa PBS.
 
-The bits are defined this way to allow easy fallback to non-PBS cases. If you need graphics to show the "unreserved" state in non-PBS cases, use bit 0, but if you need the "reserved" state in non-PBS cases, use bit 1. To explicitly check whether PBS is active or not, use bit 2.
+Bity są zdefiniowane w ten sposób, aby umożliwić łatwy powrót do przypadków innych niż PBS. Jeśli potrzebujesz grafiki, aby pokazać stan "niezarezerwowany" <small>''(unreserved)''</small> w przypadkach innych niż PBS, użyj bitu 0, ale jeśli potrzebujesz stanu "zarezerwowanego" w przypadkach innych niż PBS, użyj bitu 1. Aby wyraźnie sprawdzić, czy PBS jest aktywny, czy nie, użyj bitu 2.
 
-All other bits are reserved and must be masked out.
+Wszystkie pozostałe bity są zastrzeżone i muszą być zamaskowane.
 
 === Rail continuation info (45) ===
 
-This variable returns 16 bits of info whether the rail tracks continue in the eight tiles adjacent to the station tile.
+Ta zmienna zwraca 16 bitów informacji, czy tory kolejowe kontynuują na ośmiu płytkach sąsiadujących z płytką stacji.
 
 {| |-
 !Bit!!Value!!Set if rail continues in direction of...
@@ -214,30 +214,30 @@ This variable returns 16 bits of info whether the rail tracks continue in the ei
 |7||80||-Length, -Platforms
 |}
 
-The following picture illustrates which bits represent which tile for the two possible station orientations:
+Poniższy rysunek ilustruje, które bity reprezentują, który kafelek dla dwóch możliwych orientacji stacji:
 
-[[File:en/Station var45.png]]
+<!--[[File:station_var45.png]]-->[http://newgrf-specs.tt-wiki.net/wiki/File:station_var45.png File:station_var45.png]
 
-Bits 0 to 3 are set if there is track on the given tile, and it has a connection to the station tile. For bits 2, 3, the station of course has itself no connection to those tiles, but this doesn't matter for this variable. Bits 4 to 7 check connections to the neighbouring platform tile, i.e. bits 4 and 5 resp. 6 and 7 indicate a connection from that tile to tile 2 resp. 3. (This has changed again with 2.5 beta 4 r325.)
+Bity od 0 do 3 są ustawiane, jeśli na danym kafelku znajduje się ślad i ma on połączenie z kafelkiem stacji. W przypadku bitów 2, 3 stacja oczywiście nie ma połączenia z tymi kafelkami, ale nie ma to znaczenia dla tej zmiennej. Bity 4 do 7 sprawdzają połączenia z sąsiadującą płytką platformy, tj. Bity 4 i 5 odpowiednio. 6 i 7 wskazują połączenie z tego kafelka do kafelka 2 lub odpowiednio. 3. (Zmieniło się to ponownie w wersji 2.5 beta 4 r325.)
 
-Bits 8..15 repeat the above, but are set if there are any train tracks on the tile and disregard whether the track is connected to the station or not entirely.
+Bity 8..15 powtarzają powyższe, ale są ustawiane, jeśli na kafelku są jakieś tory kolejowe i ignorowane, czy tor jest podłączony do stacji, czy nie w całości.
 
 === Animation frame of nearby tile (66) ===
 
-(From TTDPatch 2.5 beta 5)
+(Od TTDPatch 2.5 beta 5)
 
-The parameter defines the offset relative to the current tile. Both nibbles are considered signed (that is, 8h=-8, 9h=-7, ...., Fh=-1, 0h=0, 1h=1, ..., 7h=7). The high nibble contains the amount to move sideways (between platforms), the low one is the amount to move along the platform. Negative offsets move northwards, positive ones southwards. If the selected tile is a rail station tile that belongs to the current station, its animation state is returned. Otherwise, FFFFFFFFh is returned.
+Ten parametr określa przesunięcie względem bieżącego kafelka. Obie wartości są uważane za podpisane (to znaczy 8h=-8, 9h=-7, ...., Fh=-1, 0h=0, 1h=1, ..., 7h=7 ). Wysoki kęs zawiera ilość ruchu na boki (między platformami), niski to ilość poruszania się po platformie. Przesunięcia ujemne przesuwają się na północ, a dodatnie na południe. Jeśli wybrany kafelek jest kafelkiem stacji kolejowej należącym do bieżącej stacji, zwracany jest jego stan animacji. W przeciwnym razie zwracany jest FFFFFFFFh.
 
 === Land info of nearby tiles (67) ===
 
-This variable works like [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Industry Tiles#land-info-of-nearby-tiles-60|industry tile variable 60]], except for three things:
-* The offsets in the parameter are interpreted relatively to the alignment of the station, the same way as for variable 66
-* The '''ss''' part is "mirrored" (bit 0 and 2 swapped) for the NW-SE orientation; this will allow you to handle analogous slopes of the two orientations without checking the orientation explicitly (since TTDPatch 2.6 r1693)
-* Bit 0 of the '''bb''' part is undefined
+Ta zmienna działa jak [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Industry Tiles#land-info-of-nearby-tiles-60|industry tile variable 60]] , z wyjątkiem trzech rzeczy:
+* Przesunięcia <small>''(offsets)''</small> parametru są interpretowane w odniesieniu do wyrównania stacji, w taki sam sposób jak dla zmiennej 66
+* Część '''ss''' jest "dublowana" <small>''~mirrored''</small> (bit 0 i 2 zamienione) dla orientacji NW-SE; pozwoli to na obsługę analogicznych nachyleń dwóch orientacji bez wyraźnego sprawdzania orientacji (od TTDPatch 2.6 r1693)
+* Bit 0 częśc  '''bb''' jest niezdefiniowany
 
 === Station info of nearby tiles (68) ===
 
-The parameter of this variable works the same way as the parameter of variable 66. The returned value is FFFFFFFFh if the selected tile isn't a railway station tile. Otherwise, the returned value can be separated to the following parts:
+Parametr tej zmiennej działa tak samo jak parametr zmiennej 66. Zwrócona wartość to FFFFFFFFh, jeśli wybrana płytka nie jest płytką stacji kolejowej. W przeciwnym razie zwróconą wartość można podzielić na następujące części:
 
 {| |-
 !Bits!!Meaning
@@ -267,10 +267,10 @@ The parameter of this variable works the same way as the parameter of variable 6
 
 === GRFID of nearby station tile (6A) ===
 
-The parameter of this variable works the same way as the parameter of variable 66.
-The returned value is one of the following:
-* '''FFFFFFFFh''' if the selected tile isn't a station tile
-* '''00000000h''' if the selected station is a default station (no NewGRF station)
-* otherwise, the GRFID of the GRF which defined the type of the selected station
+Parametr tej zmiennej działa w taki sam sposób, jak parametr zmiennej 66.
+Zwrócona wartość jest jedną z następujących czynności:
+* '''FFFFFFFFh''' jeśli wybrany kafelek nie jest kafelkiem stacji
+* '''00000000h''' jeśli wybrana stacja jest stacją domyślną (brak stacji NewGRF)
+* w przeciwnym razie GRFID GRF, który zdefiniował typ wybranej stacji
 
 ==Przykład==
