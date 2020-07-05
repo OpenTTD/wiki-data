@@ -90,7 +90,7 @@ Ustawia to rodzaj [[pl/Development/NewGRF/NFO Specs/Features|feature]] , który 
 
 === set-ID ===
 
-Określa liczbę tego działania 2. &nbsp;Identyfikator można następnie wykorzystać jako cel w akcji 3 lub innej akcji wariacyjnej/losowej 2.
+Określa liczbę tego działania 2. &nbsp;ID można następnie wykorzystać jako cel w akcji 3 lub innej akcji wariacyjnej/losowej 2.
 
 === 80/83/84 ===
 
@@ -140,13 +140,13 @@ Bity 4-5 są zarezerwowane i muszą wynosić zero, więc inne wartości wysokieg
 
 === random-triggers ===
 
-Jest to nieco maska ​​wyzwalaczy, które powodują ponowną randomizację. Normally, any matching trigger causes the graphics to be randomized again, but if you add 80 to the bitmask, the re-randomizing only happens if '''all''' triggers have occurred.
+Jest to nieco maska ​​wyzwalaczy, które powodują ponowną randomizację. Zwykle dowolny dopasowany wyzwalacz powoduje, że grafika jest ponownie losowa, ale jeśli dodasz 80 do maski bitowej, ponowna randomizacja nastąpi tylko wtedy, gdy wystąpią wyzwalacze '''wszystkie''' <small>''(all)''</small>.
 
 Bity wyzwalające są specyficzne dla funkcji, patrz poniżej.
 
 Należy pamiętać, że ponowne losowanie występuje tylko w łańcuchu graficznym, a nie w przypadku wywołań zwrotnych. Tak więc, jeśli używasz losowej akcji tylko w ramach wywołania zwrotnego i chcesz ponownie losowo zaszyfrować bity, musisz dodać "sztuczny" <small>''(dummy)''</small> remandomizacja RA2 do łańcucha graficznego.
 
-Example:
+Przykład:
  -1 * -1   02 04 02
            80                         // random in callback
            00                         // no triggers
@@ -200,7 +200,7 @@ ID''`y'' Akcji 2 do losowego wyboru
 |-
 |Vehicles||8||8 read-only||yes
 |-
-|Stations||16 + 4 <ref name="stationshared">16 Bits shared for the whole station/airport (airport and station share the same bits). 4 bits per tile.</ref><ref>TTDPatch actually only implements 8 shared random bits (plus 4 per tile). Bits 8-15 are always zero.</ref>
+|Stations||16 + 4 <ref name="stationshared">16 bitów współdzielonych dla całej stacji/lotniska (lotnisko i stacja dzielą te same bity). 4 bity na płytkę.</ref><ref>TTDPatch faktycznie implementuje tylko 8 współdzielonych losowych bitów (plus 4 na kafelek). Bity 8-15 są zawsze zerowe.</ref>
 |no||yes
 |-
 |Canals||8||no||no
@@ -240,7 +240,7 @@ Pojazdy mają 8 losowych bitów i następujące wyzwalacze:
 |-
 |3||08||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Any vehicle of the consist receives cargo
 |-
-|4||10||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||[[en/Callbacks#32-day-callback-32 |Callback 32]] returned 1
+|4||10||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||[[pl/Development/NewGRF/NFO Specs/Callback/Main Page#32-day-callback-32 |Callback 32]] returned 1
 |}
 
 Bity wyzwalające konsolę 2 i 3 umożliwiają ponowną randomizację za każdym razem, gdy konsola otrzymuje ładunek po pełnym rozładowaniu. Powinny być używane z działaniem 2 typu 80, a nie 83, a zmienna losowych wyzwalaczy powinna mieć 80 dodanych do niej, aby ponowna randomizacja miała miejsce tylko wtedy, gdy konsola była pusta, a '''następnie''' <small>''(then)'</small> otrzymał nowy ładunek.
@@ -319,7 +319,7 @@ Branże mają losowe bity. Można je jednak ponownie przypisać tylko za pomocą
 
 Kanały / Rzeki mają 8 losowych bitów.
 
-Obecnie nie ma sposobu wpływania na losowe tworzenie bajtów za pomocą wyzwalaczy, wewnętrznie bity są przesyłane z VarAction2Canals var 83, który jest ustawiany podczas budowania kanału. Identyfikatory funkcji nie obsługiwane przez VarAction2Canals są niezdefiniowane i nigdy nie powinny być używane.
+Obecnie nie ma sposobu wpływania na losowe tworzenie bajtów za pomocą wyzwalaczy, wewnętrznie bity są przesyłane z VarAction2Canals var 83, który jest ustawiany podczas budowania kanału. Id funkcji nie obsługiwane przez VarAction2Canals są niezdefiniowane i nigdy nie powinny być używane.
 
 === Objects ===
 
