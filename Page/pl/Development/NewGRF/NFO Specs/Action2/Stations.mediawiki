@@ -4,9 +4,9 @@
 
 Definiowanie set-IDs stacji .
 
-For stations, Action2 is used to define set-IDs, similar to the way it works for vehicles. See the description below for details.
+W przypadku stacji Action2 służy do definiowania identyfikatorów zestawów, podobnie jak w przypadku pojazdów. Szczegóły znajdują się w poniższym opisie.
 
-Do not skip an Action2 using [[en/Action9]] (unless it skips the whole file). Action2 must not be skipped by Action9 or TTDPatch will most likely crash. Skip or modify [[en/Action3]] instead. Skipping an Action2 with an [[en/Action7]] has no effect.
+Nie pomijaj Action2 za pomocą [[pl/Development/NewGRF/NFO Specs/Action7|Action9]] (chyba że pomija cały plik). Action2 nie może zostać pominięte przez Action9, ponieważ TTDPatch najprawdopodobniej ulegnie awarii. Zamiast tego pomiń lub zmodyfikuj [[pl/Development/NewGRF/NFO Specs/Action3/Main Page|Action3]]. Pominięcie czynności 2 za pomocą [[pl/Development/NewGRF/NFO Specs/Action7|Action7]] nie ma żadnego efektu.
 
 == Syntax ==
 
@@ -15,7 +15,7 @@ For stations, the data looks as follows:
  <Sprite-number> * <Length> 02 04 <set-id> <numlittlesets> <numlotssets> <sets...>
 
 {|
-!Element!![[en/GRFActionsDetailed|Size]]!!Description
+!Element!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Size]]!!Description
 
 |-
 |<[[#sprite-number|Sprite-number]]>||dec||A sequential sprite number
@@ -46,30 +46,30 @@ For stations, the data looks as follows:
 
 === Sprite-number ===
 
-This is just the number you are at.
+To tylko numer, na którym jesteś.
 
 === Length ===
 
-Count the number of bytes in this action.
+Policz liczbę bajtów w tej akcji.
 
 === Set-id ===
 
-The set-ID that you want to define for this set. You can choose any value between 00 and FF, and you can reuse them within a grf file at a later point (if being equal to an existing set ID, the existing one is overwritten and the new one is used).
+Identyfikator zestawu, który chcesz zdefiniować dla tego zestawu. Możesz wybrać dowolną wartość z przedziału od 00 do FF, i możesz użyć ich ponownie w pliku grf w późniejszym momencie (jeśli jest równy istniejącemu identyfikatorowi zestawu, istniejący jest zastępowany i używany jest nowy).
 
 === numlittlesets, numlotssets ===
 
-Like for vehicles, this decides the graphics set to use depending on the amount of cargo waiting. There are two caveats, though. Firstly, a station can have 12 different cargoes waiting, not just a single one. Secondly, the maximum amount is 4095 for all stations and all cargo types.
+Podobnie jak w przypadku pojazdów, decyduje to, którego zestawu graficznego użyć, w zależności od ilości oczekującego ładunku. Istnieją jednak dwa zastrzeżenia. Po pierwsze, na stacji może czekać 12 różnych ładunków, a nie tylko jeden. Po drugie, maksymalna kwota wynosi 4095 dla wszystkich stacji i wszystkich rodzajów ładunku.
 
-Regarding the first issue, the amount of cargo this refers to depends on the action3 that triggered this action2:
-* if the cargo type matched exactly, it's the amount of the matching cargo (e.g. the action3 said "for coal, use this action2")
-* if the default was used, it's the amount of all cargo types added together
-* if the station is displayed for construction, the maximum amount is shown
+Jeśli chodzi o pierwszy problem, ilość ładunku, o której mowa, zależy od akcji3, która uruchomiła tę akcję2:
+* jeśli typ ładunku dokładnie pasuje, jest to ilość pasującego ładunku (np. akcja3 powiedziała „w przypadku węgla, użyj tej akcji2”)
+* jeśli użyto wartości domyślnej, jest to suma wszystkich rodzajów ładunku razem
+* jeśli stacja jest wyświetlana do budowy, wyświetlana jest maksymalna ilość
 
-Regarding the second issue, TTDPatch introduces the distinction between "little" and "lots of" cargo. The amount where this occurs is set by property 10, which is zero by default. But if set to a non-zero value, for example 200, then the range 0 to 199 is divided by numlittlesets, and the remaining range 200 to 4095 is divided by numlotssets. If property 10 is zero, the "little" sets are never used, and so numlittlesets may be zero. numlotssets must never be zero, however.
+W odniesieniu do drugiego problemu TTDPatch wprowadza rozróżnienie między "małym" <small>''(little)''</small> a "dużym" <small>''(lots of)''</small> ładunkiem. Ilość, w której to nastąpi, jest ustawiana przez właściwość 10, która domyślnie wynosi zero. Ale jeśli zostanie ustawiona na wartość niezerową, na przykład 200, wówczas zakres od 0 do 199 jest podzielony przez zestawy liczb numl, a pozostały zakres od 200 do 4095 jest podzielony przez zestawy liczb. Jeśli właściwość 10 jest równa zero, "małe" zestawy nigdy nie są używane, a zatem liczba małych zestawów może wynosić zero. numlotssets nie może jednak nigdy wynosić zero.
 
 === sets ===
 
-The sets from the most recent action1 to use for this set-ID, for each stage of numlittlesets and numlotssets, i.e. in total numlittlesets+numlotssets entries.
+Zestawy z ostatniej akcji1 do użycia dla tego set-ID, dla każdego etapu zestawów liczb <small>''(numlittlesets)''</small> i zestawów liczb <small>''(numlotssets)''</small>, tj. Łącznie wpisów <small>''(numlittlesets+numlotssets)''</small>.
 
 == Przykład ==
 
