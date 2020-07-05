@@ -4,17 +4,17 @@
 
 Definiowanie set-IDs dla pojazdów .
 
-For features 0, 1, 2 and 3 (vehicles), Action2 is mainly used to define sets of sprites that show one vehicle in various states of load for one particular type of cargo.
+W przypadku cech 0, 1, 2 i 3 (pojazdy) Action2 jest używane głównie do definiowania zestawów 'sprites' , które pokazują jeden pojazd w różnych stanach obciążenia dla jednego określonego rodzaju ładunku.
 
-Do not skip an Action2 using [[en/Action9]] (unless it skips the whole file). Action2 must not be skipped by Action9 or TTDPatch will most likely crash. Skip or modify [[en/Action3]] instead. Skipping an Action2 with an [[en/Action7]] has no effect.
+Nie pomijaj Action2 za pomocą [[pl/Development/NewGRF/NFO Specs/Action7|Action9]] (chyba że pomija cały plik). Action2 nie może zostać pominięte przez Action9, ponieważ TTDPatch najprawdopodobniej ulegnie awarii. Zamiast tego pomiń lub zmodyfikuj [[pl/Development/NewGRF/NFO Specs/Action3/Main Page|Action3]]. Pominięcie czynności 2 za pomocą [[pl/Development/NewGRF/NFO Specs/Action7|Action7]] nie ma żadnego efektu.
 
-If there is only one load type, it is shown for all loads.
+Jeśli istnieje tylko jeden typ obciążenia, jest pokazywany dla wszystkich obciążeń.
 
-If there are two load types, the first is shown below 50%, the other above 50%. If there are three load types, they are shown above/below 33% and 66%. If there are four load types, they are shown above/below 25%, 50% and 75%, etc.
+Jeśli istnieją dwa typy obciążeń, pierwszy pokazany jest poniżej 50%, a drugi powyżej 50%. Jeśli istnieją trzy typy obciążeń, są one pokazane powyżej/poniżej 33% i 66%. Jeśli istnieją cztery typy obciążeń, są one pokazane powyżej/poniżej 25%, 50% i 75% itd.
 
 == Variable 10 ==
 
-[[en/GlobalVariables#extra-callback-info-10-and-18|Variable 10]] gives some additional information about the sprite being drawn.
+[[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|Variable 10]] zawiera dodatkowe informacje na temat rysowanego 'sprite' .
 
 {| |-
 ! Bits !! Meaning
@@ -27,9 +27,9 @@ If there are two load types, the first is shown below 50%, the other above 50%. 
 |}
 
 === Drawing different sprites on map in various GUIs ===
-{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23080}} Since OpenTTD r23080 you can use variable 10 to display different sprites in the GUI and on the map. Currently these cases are available:
+{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23080}} Od wersji OpenTTD R23080 możesz używać zmiennej 10 do wyświetlania różnych 'sprites' w GUI i na mapie. Obecnie skrzynki te są dostępne:
 {| |-
-! Bits 0 - 7 of [[en/GlobalVariables#extra-callback-info-10-and-18|variable 10]] !! Meaning
+! Bits 0 - 7 of [[pl/Development/NewGRF/NFO Specs/GlobalVariables#extra-callback-info-10-and-18|variable 10]] !! Meaning
 |-
 | 00 || Vehicle is drawn in a viewport, i.e. on the map.
 |-
@@ -53,20 +53,20 @@ If there are two load types, the first is shown below 50%, the other above 50%. 
 |}
 <references/>
 
-The other bytes of variable 10 are reserved, and must be masked.
-The cases 20..2F are called using the purchase-list chain (cargotype FF), the other cases are called for actual vehicles (except for the special depot-gridsize call).
+Pozostałe bajty zmiennej 10 są zarezerwowane i muszą być zamaskowane.
+Przypadki 20..2F są wywoływane przy użyciu łańcucha listy zakupów (ładunek FF), pozostałe przypadki są wywoływane dla rzeczywistych pojazdów (z wyjątkiem specjalnego wywołania depot-gridsize).
 
 === Composing vehicles from multiple sprites ===
-{{pl/Development/NewGRF/ottdp|1.7|no|ottdrev=r27668}} Since OpenTTD r27668 you can draw vehicles by drawing multiple sprites on top of each other.
-* The sprites can use different recolouring.
-* When using 32bpp sprites, the sprites can use the alpha channel to blend with the other sprites. In particular you can use this to alpha-blend company colours over other sprites.
+{{pl/Development/NewGRF/ottdp|1.7|no|ottdrev=r27668}} Od OpenTTD r27668 możesz rysować pojazdy, rysując wiele 'sprites' jeden na drugim.
+* 'Sprites' mogą korzystać z różnych kolorów.
+* Podczas korzystania ze sprite'ów 32bpp, sprites mogą używać kanału alfa do łączenia się z innymi sprites. W szczególności możesz użyć tego do mieszania kolorów firmowych alfa w stosunku do innych 'sprites' .
 
-To enable this, you need to set bit 7 of the miscellaneous flags (train prop 27, rv prop 1C, ship prop 17, aircraft prop 17).
+Aby to umożliwić, musisz ustawić bit 7 różnych flag (śmigło pociągu 27, śmigło rv 1C, śmigło statku 17, śmigło samolotu 17).
 
-When enabled, sprites are resolved multiple times while incrementing the iteration number in bits 8 to 15 of variable 10.
-Currently this is limited to at most 4 sprites per articulated part.
+Po włączeniu 'sprites' są rozwiązywane wiele razy, zwiększając liczbę iteracji w bitach od 8 do 15 zmiennej 10.
+Obecnie jest to ograniczone do maksymalnie 4 'sprites' na część przegubową.
 
-In addition to returning a sprite, you need to set register 100 to return this information:
+Oprócz zwracania 'sprite' , musisz ustawić rejestr 100, aby zwrócić tę informację:
 
 {| |-
 ! Bits !! Meaning
@@ -80,12 +80,12 @@ In addition to returning a sprite, you need to set register 100 to return this i
 
 ==Syntax==
 
-For vehicles, the data looks as follows:
+W przypadku pojazdów dane wyglądają następująco:
 
  <Sprite-number> * <Length> 02 <veh-type> <set-id> <num-loadtypes> <num-loadingtypes> <loadtypes...>
 
 {|
-!Element!![[en/GRFActionsDetailed|Size]]!!Description
+!Element!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Size]]!!Description
 
 |-
 |<Sprite-number>||dec||A sequential sprite number
@@ -116,45 +116,45 @@ For vehicles, the data looks as follows:
 
 === Sprite-number ===
 
-This is just the number you are at.
+To tylko numer, na którym jesteś.
 
 === Length ===
 
-Count the number of bytes in this action.
+Policz liczbę bajtów w tej akcji.
 
 === veh-type ===
 
-This sets the type of vehicle that you wish to change. Set it to
+Ustawia typ pojazdu, który chcesz zmienić. Ustaw na
 
-00 for trains
+00 dla pociągów
 
-01 for road vehicles
+01 dla pojazdów drogowych
 
-02 for ships
+02 dla statków
 
-03 for planes
+03 dla samolotów
 
 === Set-id ===
 
-This is the number that you give this set of sprites. You can choose any value between 00 and FF, and you can reuse them within a grf file at a later point (if being equal to an existing set-ID, the existing one is overwritten and the new one is used).
+Jest to liczba, którą podajesz temu zestawowi 'sprites' . Możesz wybrać dowolną wartość z przedziału od 00 do FF, i możesz użyć ich ponownie w pliku grf w późniejszym momencie (jeśli jest równy istniejącemu identyfikatorowi zestawu, istniejący jest zastępowany i używany jest nowy).
 
 === num-loadtypes ===
 
-This is the number of different graphics that the vehicle has while it's not loading or unloading, depending on the amount of cargo it carries.  For example, if it has two states, full or empty, this would be 02.  If it has three states, full, half full or empty, this would be 03.
+Jest to liczba różnych grafik, które pojazd ma, gdy nie jest ładowany ani rozładowywany, w zależności od ilości przewożonego ładunku. Na przykład, jeśli ma dwa stany, pełny lub pusty, będzie to 02. Jeśli ma trzy stany, pełny, w połowie pełny lub pusty, będzie to 03.
 
 === num-loadingtypes ===
 
-Same as num-loadtypes, except this is used while the vehicle is loading or unloading. For example if the vehicle is closed, it might only have one state when moving (i.e. num-loadtypes is 01), but show several load states when it is being loaded or unloaded and thus open.
+Taki sam jak typ num-load, z tym wyjątkiem, że pojazd jest załadowywany lub rozładowywany. Na przykład, jeśli pojazd jest zamknięty, może on mieć tylko jeden stan podczas ruchu (tj. Typem num-load jest 01), ale może pokazywać kilka stanów obciążenia, gdy jest ładowany lub rozładowywany, a tym samym otwarty.
 
-Neither num-loadtypes nor num-loadingtypes may be zero, there must be at least one state for each.
+Ani typy obciążeń num, ani typy obciążeń num nie mogą być zerowe, dla każdego musi istnieć co najmniej jeden stan.
 
 === loadtypes ===
 
-The sprite sets to use for the states of load. Each entry is a '''WORD''' value in little endian format, and refers to the most recent action1 sets. For example, action1 sets 4, 5 and 7 would be encoded as <tt>04 00</tt>, <tt>05 00</tt> and <tt>07 00</tt>, respectively. Note the additional 00 which is needed because it must be a word value here.
+'Sprite' ustawia się dla stanów obciążenia. Każdy wpis jest wartością '''WORD''' w małym formacie endian i odnosi się do najnowszych zestawów akcji1. Na przykład zestawy akcji 1, 4, 5 i 7 będą kodowane odpowiednio jako <tt>04 00</tt>, <tt>05 00</tt> i <tt>07 00</tt> . Zwróć uwagę na dodatkowy 00, który jest potrzebny, ponieważ tutaj musi być wartością słowa.
 
-The first entries of these are used when not loading. There have to be num-loadtypes of these.  After this follow the sets to use while loading/unloading, and there must be num-loadingtype of those.
+Pierwsze wpisy są używane, gdy nie są ładowane. Musi być ich wiele rodzajów. Następnie postępuj zgodnie z zestawami, które mają być używane podczas ładowania/rozładowywania, i musi być ich typ num-load.
 
-Note that you can share action1 sets between several action2 entries.  For example, you might have a wagon that can hold coal or iron ore, and it would look the same if it's empty. Then the empty sprite set could be shared by the action2 entries for iron ore and coal.
+Pamiętaj, że możesz udostępniać zestawy akcji 1 między kilkoma wpisami akcji 2. Na przykład możesz mieć wagon, który może pomieścić węgiel lub rudę żelaza, i wyglądałby tak samo, gdyby był pusty. Wtedy pusty zestaw 'sprite' może być współdzielony przez wpisy action2 dla rudy żelaza i węgla.
 
 = Przykład =
 
