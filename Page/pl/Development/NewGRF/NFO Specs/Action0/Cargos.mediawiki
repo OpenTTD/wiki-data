@@ -62,29 +62,29 @@ Tę wartość należy zastosować w [[pl/Development/NewGRF/NFO Specs/Action3/Ma
 
 Dodatkowo możesz użyć wartości FFh, aby wyłączyć daną szczelinę ładunkową. W ten sposób nie pojawi się na listach rodzajów ładunku, ale nie zostanie usunięty z rzeczy znajdujących się już na mapie. Jeśli wyłączysz ładunek, prawdopodobnie zechcesz również zerować etykietę ładunku (właściwość 17).
 
-Ta właściwość dotyczy tylko GRF, które nie mają [[pl/Development/NewGRF/NFO Specs/Action0/Global Settings#cargo-translation-table-09 | cargo translation table]] . GRF z taką tabelą zazwyczaj używają indeksu ładunku w tabeli zamiast wartości tej właściwości w celu uzyskania dostępu do ładunku. Jako taka, ta właściwość jest mniej więcej wartością domyślną dla GRF bez tabeli translacji ładunku. Jeśli nie masz pewności, jaką wartość przypisać tej właściwości, ustaw ją na tę samą wartość, co identyfikator szczeliny ładunkowej.
+Ta właściwość dotyczy tylko GRF, które nie mają [[pl/Development/NewGRF/NFO Specs/Action0/Global Settings#cargo-translation-table-09 | cargo translation table]] . GRF z taką tabelą zazwyczaj używają indeksu ładunku w tabeli zamiast wartości tej właściwości w celu uzyskania dostępu do ładunku. Jako taka, ta właściwość jest mniej więcej wartością domyślną dla GRF bez tabeli translacji ładunku. Jeśli nie masz pewności, jaką wartość przypisać tej właściwości, ustaw ją na tę samą wartość, co ID slotu ładunkowego .
 
 === TextID for the cargo type name (09) ===
 
-Ten identyfikator tekstowy powinien odnosić się do nazwy ładunku, wielkiej litery, aby pasował do stylu TTD (np. "Passengers", "Coal", "Gold Ore", "Milk")
+Ten textID powinien odnosić się do nazwy ładunku, wielkiej litery, aby pasował do stylu TTD (np. "Passengers", "Coal", "Gold Ore", "Milk")
 
 Możesz ponownie wykorzystać istniejące [[pl/Development/NewGRF/NFO Specs/TextIDs|TextIDs]] lub utworzyć niestandardowe ciągi znaków za pomocą [[pl/Development/NewGRF/NFO Specs/Action4|Action4]] z przesunięciem w zakresie DCxx. Pamiętaj, że musisz ustawić bit 7 id języka także w Action4 dla niestandardowego ciągu. (Dotyczy również właściwości od 0A do 0D)
 
 === TextID for one unit of the type (0A) ===
 
-Ten identyfikator tekstowy powinien odnosić się do nazwy rodzaju ładunku w liczbie pojedynczej. Obecnie ten identyfikator jest używany tylko w komunikatach o dotacjach (na przykład "Usługa pierwszego pasażera..." <small>''~First Passenger service''</small> zamiast "Usługa pierwszych pasażerów..." <small>''~First Passengers service''</small> )
+Ten textID powinien odnosić się do nazwy rodzaju ładunku w liczbie pojedynczej. Obecnie ten ID jest używany tylko w komunikatach o dotacjach (na przykład "Usługa pierwszego pasażera..." <small>''~First Passenger service''</small> zamiast "Usługa pierwszych pasażerów..." <small>''~First Passengers service''</small> )
 
 === TextID for 1 unit of cargo (0B) ===
 
-Ten identyfikator tekstowy zostanie użyty do wyświetlenia ilości ładunku, jeśli czeka dokładnie 1 jednostka. Chociaż czeka tylko jedna jednostka, nadal będziesz musiał użyć znaku specjalnego 7C (wydrukuj podpisane słowo) lub 87 (wydrukuj ilość w litrach i dodaj przyrostek "litry" <small>''~litres''</small> ), aby TTD usunęło kwotę ze swojego wewnętrznego stosu referencyjnego. Na przykład, jeśli masz nowy ładunek o nazwie "ruda złota" <small>''(gold ore)''</small> , powinna to być "\7C tona rudy złota" , która powiększy się do "1 tony rudy złota" . Z drugiej strony, ładunek płynny o nazwie "mleko" <small>''(milk)''</small> powinien być czymś w rodzaju "\87 mleka" , który rozszerzy się do "100 litrów mleka" lub "1000 litrów mleka" (mnożnik dla płynnych ładunków zależy od niewłaściwego sposobu .dontfixlitres. Jeśli jest włączony, mnożnik wynosi 100, w przeciwnym razie 1000)
+Ten textID zostanie użyty do wyświetlenia ilości ładunku, jeśli czeka dokładnie 1 jednostka. Chociaż czeka tylko jedna jednostka, nadal będziesz musiał użyć znaku specjalnego 7C (wydrukuj podpisane słowo) lub 87 (wydrukuj ilość w litrach i dodaj przyrostek "litry" <small>''~litres''</small> ), aby TTD usunęło kwotę ze swojego wewnętrznego stosu referencyjnego. Na przykład, jeśli masz nowy ładunek o nazwie "ruda złota" <small>''(gold ore)''</small> , powinna to być "\7C tona rudy złota" , która powiększy się do "1 tony rudy złota" . Z drugiej strony, ładunek płynny o nazwie "mleko" <small>''(milk)''</small> powinien być czymś w rodzaju "\87 mleka" , który rozszerzy się do "100 litrów mleka" lub "1000 litrów mleka" (mnożnik dla płynnych ładunków zależy od niewłaściwego sposobu .dontfixlitres. Jeśli jest włączony, mnożnik wynosi 100, w przeciwnym razie 1000)
 
 === TextID for multiple units of cargo (0C) ===
 
-Ten identyfikator tekstowy zostanie użyty do wyświetlenia ilości ładunku, jeśli oczekiwana ilość nie jest dokładnie 1. Będziesz potrzebować tych samych znaków specjalnych, jak powyżej, ale teraz będą one rozszerzane zgodnie z rzeczywistym oczekiwaniem ładunku. Trzymając się powyższego przykładu, będziesz potrzebować "\7C ton rudy złota" i "\87 mleka" , które mogą wzrosnąć odpowiednio do "42 ton rudy złota" i "42 000 litrów mleka" . Zauważ, że ładunki płynne mogą mieć ten sam identyfikator tekstowy zarówno dla właściwości 0B, jak i 0C, ponieważ zawsze używają liczby mnogiej.
+Ten textID zostanie użyty do wyświetlenia ilości ładunku, jeśli oczekiwana ilość nie jest dokładnie 1. Będziesz potrzebować tych samych znaków specjalnych, jak powyżej, ale teraz będą one rozszerzane zgodnie z rzeczywistym oczekiwaniem ładunku. Trzymając się powyższego przykładu, będziesz potrzebować "\7C ton rudy złota" i "\87 mleka" , które mogą wzrosnąć odpowiednio do "42 ton rudy złota" i "42 000 litrów mleka" . Zauważ, że ładunki płynne mogą mieć ten sam textID zarówno dla właściwości 0B, jak i 0C, ponieważ zawsze używają liczby mnogiej.
 
 === TextID for cargo type abbreviation (0D) ===
 
-Ten identyfikator tekstowy zostanie użyty w oknie listy stacji do przedstawienia czekającego ładunku. Powinien to być dwuliterowy skrót poprzedzony znakiem specjalnym 0E, aby przełączyć się na czcionkę mikroskopową. Mikroskopowa czcionka ma wielką literę, więc wielkie litery nie są tutaj ważne. Kontynuując powyższy przykład, ruda złota może mieć to jako "GO" , a mleko jako "MK" ( "ML" jest już odbierane pocztą).
+Ten textID zostanie użyty w oknie listy stacji do przedstawienia czekającego ładunku. Powinien to być dwuliterowy skrót poprzedzony znakiem specjalnym 0E, aby przełączyć się na czcionkę mikroskopową. Mikroskopowa czcionka ma wielką literę, więc wielkie litery nie są tutaj ważne. Kontynuując powyższy przykład, ruda złota może mieć to jako "GO" , a mleko jako "MK" ( "ML" jest już odbierane pocztą).
 
 === Sprite number for icon (0E) ===
 
@@ -127,7 +127,7 @@ Wykres bieżącego ładunku zostanie narysowany przy użyciu tego koloru na wykr
 
 === CargoClasses (16) ===
 
-Patrz [[pl/Extrazi/specs.tt/Action0Trains#cargo-classes-28-29|train prop. 28/29]] , aby uzyskać opis użyteczności tej właściwości.
+Patrz [[pl/Development/NewGRF/NFO Specs/Action0/Vehicles/Trains#cargo-classes-28-29|train prop. 28/29]] , aby uzyskać opis użyteczności tej właściwości.
 
 Jest to nieco maska ​​wszystkich klas ładunków, do których ten ładunek może należeć.
 Dostępne są następujące klasy:
@@ -323,7 +323,7 @@ Ilość przychodzącego ładunku jest mnożona przez właściwość 19, a nastę
 
 Ten ID tekstowy jest wykorzystywany przez OpenTTD do wyświetlenia formularza "krótkiego ładunku " <small>''(short cargo)''</small> dla jednostek ładunkowych, np. "10 litrów" lub "10 ton" . Ten ID  tekstowy należy ustawić po właściwości 0B. Tekst, do którego odnosi się ten ID tekstowy, powinien poprawnie obsługiwać liczbę mnogą, np. "\7B pozycja<small>''( item)''</small>\9A\15\80\9A\10\9A\11s\9A\12" .
 
-Domyślna wartość tego identyfikatora tekstowego zależy od wartości domyślnej dla właściwości 0B; jeśli domyślny ciąg 0B ma "litr" , wówczas domyślnym dla tego textID będzie jednostka litrów. OpenTTD mapuje następujące ID''`y'' tekstowe, więc nie trzeba dostarczać tłumaczeń:
+Domyślna wartość tego textID zależy od wartości domyślnej dla właściwości 0B; jeśli domyślny ciąg 0B ma "litr" , wówczas domyślnym dla tego textID będzie jednostka litrów. OpenTTD mapuje następujące ID''`y'' tekstowe, więc nie trzeba dostarczać tłumaczeń:
 
 {| |-
 !textID!!String
@@ -345,7 +345,7 @@ Ciągi znaków "tona" i "litr" (textID 0050 i 0052) są automatycznie aktualizow
 
 === TextID for displaying the amount of cargo (1C) ===
 
-Ten identyfikator tekstowy jest wykorzystywany przez OpenTTD do wyświetlenia formularza „długi ładunek” dla jednostek ładunkowych, np. "10 litrów wody" lub "10 ton węgla" . Ten textID należy ustawić po właściwości 0c. Tekst, do którego odnosi się ten textID , powinien poprawnie obsługiwać liczbę mnogą, np. "\7B item\9A\15\80\9A\10\9A\11s\9A\12 żywca" <small>''(livestock)''</small> .
+Ten textID jest wykorzystywany przez OpenTTD do wyświetlenia formularza „długi ładunek” dla jednostek ładunkowych, np. "10 litrów wody" lub "10 ton węgla" . Ten textID należy ustawić po właściwości 0c. Tekst, do którego odnosi się ten textID , powinien poprawnie obsługiwać liczbę mnogą, np. "\7B item\9A\15\80\9A\10\9A\11s\9A\12 żywca" <small>''(livestock)''</small> .
 
 Wartość domyślna dla tego textID zależy od wartości domyślnej dla właściwości 0C, ale z obsługą liczby mnogiej. W przypadku "X litre(s)" lub "X tonne(s)" należy odpowiednio użyć kodów łańcuchowych 87 i 9A 0D .
 
