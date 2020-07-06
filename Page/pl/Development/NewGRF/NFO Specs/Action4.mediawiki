@@ -105,9 +105,9 @@ Znaczenie tego bajtu zależy od wersji GRF pliku .grf ustawionej w [[pl/Developm
 |7||80||Flag dla 16 bit string IDs
 |}
 
-Dodaj bity wszystkich języków, których dotyczą następujące ciągi. Bit 7 kontroluje, czy następujący identyfikator ciągu składa się z 16 czy 8 bitów. Nieznane języki będą używać ciągów amerykańskich jako rezerwowych. W przeciwnym razie ciąg znaków pozostałby niezdefiniowany dla tych języków. Aby faktycznie zdefiniować ciągi znaków dla dowolnego nowego języka, musisz użyć grf w wersji 7.
+Dodaj bity wszystkich języków, których dotyczą następujące ciągi. Bit 7 kontroluje, czy następujący ID ciągu składa się z 16 czy 8 bitów. Nieznane języki będą używać ciągów amerykańskich jako rezerwowych. W przeciwnym razie ciąg znaków pozostałby niezdefiniowany dla tych języków. Aby faktycznie zdefiniować ciągi znaków dla dowolnego nowego języka, musisz użyć grf w wersji 7.
 
-<!--{{grfFrom|7}}-->{{pl/Development/NewGRF/grfFrom|7}} W wersji 7 i wyższej jest to prosty identyfikator języka z poniższej listy. (Zmieniło się to wraz z TTDPatch 2.5 beta 4). Bit 7 ma takie samo znaczenie, jak we wcześniejszych wersjach powyżej.
+<!--{{grfFrom|7}}-->{{pl/Development/NewGRF/grfFrom|7}} W wersji 7 i wyższej jest to prosty ID języka z poniższej listy. (Zmieniło się to wraz z TTDPatch 2.5 beta 4). Bit 7 ma takie samo znaczenie, jak we wcześniejszych wersjach powyżej.
 
 W obu schematach można użyć odpowiednio wartości 7F lub FF, aby zdefiniować ciągi znaków dla języków, dla których tłumaczenie nie jest zapewniane. Najpierw ustaw wszystkie ciągi znaków na wartość domyślną, a następnie zastąp te specyficzne dla języka, jeśli istnieją. 
 
@@ -127,7 +127,7 @@ Ile kolejnych wpisów należy zmienić.
 
 ID pierwszego ciągu do zmiany.
 
-Gdy bit 7 identyfikatora języka jest czysty, jest to wartość bajtowa; Dla OpenTTD od r13482, gdzie jest to wartość rozszerzonego bajtu dla pojazdów.
+Gdy bit 7 ID języka jest czysty, jest to wartość bajtowa; Dla OpenTTD od r13482, gdzie jest to wartość rozszerzonego bajtu dla pojazdów.
 
 Gdy ustawiony jest bit 7 id-języka, jest to wartość słowa w małej notacji endian, np. 8134 staje się 34 81.
 
@@ -141,25 +141,25 @@ Chociaż zakresy te są wspólne dla wszystkich funkcji, nadal należy ustawić 
 {| |-
 !ID!!Content
 |-
-|C4xx||Set name of station class associated with station ID xx; this is the text above the preview (where otherwise TTD shows "Orientation")
+|C4xx||Ustaw nazwę klasy stacji związanej z ID stacji xx; to jest tekst nad podglądem (gdzie inaczej TTD pokazuje "Orientation")
 |-
-|C5xx||New station names, this changes the text "number of platforms" into the given text when the station with this ID from the current set is selected (i.e. xx=station-id from action 3 and 0)
+|C5xx||Nowe nazwy stacji, zmienia tekst "liczba platform" na podany tekst, gdy wybrana jest stacja o tym ID z bieżącego zestawu <small>''(set)''</small> (tj.  xx=station-id z działania 3 i 0)
 |-
-|C9xx||Name of the house type of this ID. If both property 12 and this is set, the latest definition is used always. You should prefer setting [[pl/Development/NewGRF/NFO Specs/Action0/Houses#building-name-id-12|property 12]] instead of this, so executables translated with TTD Translator will show the name in the current language. However, if you can't find any suitable old TTD texts, this can be used to specify your custom name. Don't forget to set the same text for all parts of a multi-tile building.
+|C9xx||Nazwa typu domu tego ID. Jeśli ustawiona jest zarówno właściwość 12, jak i ta, zawsze używana jest najnowsza definicja. Powinieneś raczej wybrać ustawienie  [[pl/Development/NewGRF/NFO Specs/Action0/Houses#building-name-id-12|property 12]] zamiast tego, aby pliki wykonywalne przetłumaczone przy pomocy TTD Translator wyświetlały nazwę w bieżącym języku. Jeśli jednak nie możesz znaleźć odpowiednich starych tekstów TTD, możesz tego użyć do określenia swojej niestandardowej nazwy. Nie zapomnij ustawić tego samego tekstu dla wszystkich części budynku z wieloma płytkami <small>''(multi-tile)''</small>.
 |-
-|D0xx||Miscellaneous graphics texts, unique to each .grf file. Used for several callbacks. Some callbacks support IDs up to D3FF.
+|D0xx||Różne teksty graficzne, unikatowe dla każdego pliku .grf. Używany do kilku 'cb'. Niektóre 'cb' obsługują ID do D3FF.
 |-
-|D4xx||'''Never use in Action4''', only for displaying textids in range D000-D3FF (grf specific), see [[pl/Development/NewGRF/NFO Specs/TextIDs|TextIDs]]
+|D4xx||'''Never use in Action4''', tylko do wyświetlania tekstów w zakresie D000-D3FF (specyficzny dla grf), patrz [[pl/Development/NewGRF/NFO Specs/TextIDs|TextIDs]]
 |-
 |D8xx
-|{{pl/Development/NewGRF/ottd|1.7|rev=r27769}}Useable like DCxx in Action 0 and for inclusion via string codes 0x80 and 0x81.
-{{pl/Development/NewGRF/ttdp|}}'''Never use in Action4''', only usable in Action0 features, see [[pl/Development/NewGRF/NFO Specs/TextIDs|TextIDs]]
+|{{pl/Development/NewGRF/ottd|1.7|rev=r27769}} Przydatny jak DCxx w Akcji 0 i do włączenia poprzez kody łańcuchowe <small>''(string)''</small> 0x80 i 0x81.
+{{pl/Development/NewGRF/ttdp|}} '''Nigdy nie używaj w Action4''', dostępne tylko w funkcjach Action0, patrz [[pl/Development/NewGRF/NFO Specs/TextIDs|TextIDs]]
 |-
-|DCxx||Set miscellaneous persistent GRF texts. Useable in Action 0 and for inclusion via string codes 0x80 and 0x81.
-{{pl/Development/NewGRF/ttdp|}}Unlike the D0xx GRF texts, these IDs can be used to set properties. The text ID must be set before any [[pl/Development/NewGRF/NFO Specs/Action0/Houses|action 0]] references it.
+|DCxx||Ustaw różne trwałe teksty GRF. Przydatne w akcji 0 i do włączenia poprzez kody łańcuchowe 0x80 i 0x81.
+{{pl/Development/NewGRF/ttdp|}} W przeciwieństwie do tekstów GRF D0xx, tych ID można używać do ustawiania właściwości. ID tekstowy należy ustawić wcześniej [[pl/Development/NewGRF/NFO Specs/Action0/Houses|action 0]] odwołuje się do tego.
 |}
 
-{{pl/Development/NewGRF/ttdp|}}ID''`y'' DCxx są przydzielane wewnętrznie, gdy są zdefiniowane, i są trwałe w danych zapisu. Każdy plik .grf otrzymuje osobną mapę tych wewnętrznych ID''`ów'' i dlatego może ustawić wszystkie 256 z nich. &nbsp;Jednak w sumie dostępnych jest tylko 1024 ID''`ów'' , które mogą być współużytkowane przez wszystkie pliki .grf kiedykolwiek aktywowane w grze. Oznacza to, że ID''`y'' te powinny być używane tak oszczędnie, jak to możliwe. Ale używaj ich, gdy są przydatne!
+{{pl/Development/NewGRF/ttdp|}} ID''`y'' DCxx są przydzielane wewnętrznie, gdy są zdefiniowane, i są trwałe w danych zapisu. Każdy plik .grf otrzymuje osobną mapę tych wewnętrznych ID''`ów'' i dlatego może ustawić wszystkie 256 z nich. &nbsp;Jednak w sumie dostępnych jest tylko 1024 ID''`ów'' , które mogą być współużytkowane przez wszystkie pliki .grf kiedykolwiek aktywowane w grze. Oznacza to, że ID''`y'' te powinny być używane tak oszczędnie, jak to możliwe. Ale używaj ich, gdy są przydatne!
 
 === text ===
 
