@@ -54,47 +54,47 @@ To pole i następna para zmienna 'variable/varadjust' są dostępne tylko wtedy,
 |05||\2u>||result = max(val1, val2)||{{pl/Development/NewGRF/ottdp|0.6|2.5}}
 |-
 |06||\2/||result = val1 / val2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}
-|rowspan=2|val1 and val2 are both considered signed
+|rowspan=2|zarówno val1, jak i val2 są uważane za podpisane <small>''(signed)''</small>
 |-
 |07||\2%||result = val1 mod val2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}
 |-
 |08||\2u/||result = val1 / val2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}
-|rowspan=2|val1 and val2 are both considered unsigned
+|rowspan=2|zarówno val1, jak i val2 są uważane za niepodpisane
 |-
 |09||\2u%||result = val1 mod val2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}
 |-
-|0A||\2*||result = val1 * val2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||result will be truncated to B/W/D (that makes it the same for signed/unsigned operands)
+|0A||\2*||result = val1 * val2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||wynik zostanie obcięty do B/W/D (co czyni to samo dla operandów podpisanych/niepodpisanych)
 |-
 |0B||\2&||result = val1 & val2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||bitwise AND
 |-
 |0C||\2<nowiki>|</nowiki>||result = val1 <nowiki>|</nowiki> val2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||bitwise OR
 |-
-|0D||\2<nowiki>^</nowiki>||result = val1 <nowiki>^</nowiki> val2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||bitwise XOR
+|0D||\2<nowiki>^</nowiki>||result = val1 <nowiki>^</nowiki> val2||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||bitowy XOR
 |-
-|0E||\2s or \2sto <ref name="renum1265">Supported since grfcodec and nforenum r1265 (1.0.0 and 3.4.4, respectively.)</ref>||var7D[val2]  = val1, result = val1||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1246}}||Store result. See [[pl/Development/NewGRF/NFO Specs/Storages#temporary-storage|Temporary storage]].
+|0E||\2s or \2sto <ref name="renum1265">Obsługiwane od grfcodec i nforenum r1265 (odpowiednio 1.0.0 i 3.4.4.)</ref>||var7D[val2]  = val1, result = val1||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1246}}||Magazynuj rezultat. Zerknij[[pl/Development/NewGRF/NFO Specs/Storages#temporary-storage|Temporary storage]].
 |-
-|0F||\2r or \2rst <ref name="renum1265"/>||result = val2 <ref>Operator 0F is only useful when using variable 7B, or immediately after operators 0E or 10, to store the result of a calculation, and then discard that result and start fresh.</ref>||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1246}}||
+|0F||\2r or \2rst <ref name="renum1265"/>||result = val2 <ref>Operator 0F jest użyteczny tylko przy użyciu zmiennej 7B lub bezpośrednio po operatorach 0E lub 10, do przechowywania wyniku obliczeń, a następnie odrzuć ten wynik i zacznij od nowa.</ref>||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1246}}||
 |-
-|10||\2psto <ref name="grfcodec100">Supported since grfcodec 1.0.0 and nforenum 4.0.0.</ref>||var7C[val2] = val1, result = val1||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1315}}||Store result into persistent storage. See [[en/Storages#persistent-storage|Persistent storage]].
+|10||\2psto <ref name="grfcodec100">Supported since grfcodec 1.0.0 and nforenum 4.0.0.</ref>||var7C[val2] = val1, result = val1||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1315}}||Przechowuj wynik w trwałym magazynie. Do zobaczenia <!--nie ma w oryginale--> [[en/Storages#persistent-storage|Persistent storage]].
 |-
-|11||\2ror or \2rot <ref>Supported since grfcodec and nforenum r1655 (1.0.0 and 3.4.6, respectively.)</ref>||result = val1 rotate right val2||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1651}}||Always a 32-bit rotation.
+|11||\2ror or \2rot <ref>Obsługiwane od grfcodec i nforenum r1655 (1.0.0 i 3.4.6, kolejno.)</ref>||result = val1 rotate right val2||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1651}}||Zawsze obrót 32-bitowy.
 |-
-|12||\2cmp <ref name="grfcodec100"/>||see notes||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1698}}||Result is 0 if val1<val2, 1 if val1=val2 and 2 if val1>val2. Both values are considered signed. <ref name="compare">Operations 12 and 13 should be preferred over operation 01 (subtraction) when only the relation of the two values is needed and the difference itself is irrelevant. This is because operation 01 can overflow and give the wrong sign if the difference is too big, but comparisons work correctly for all values.</ref>
+|12||\2cmp <ref name="grfcodec100"/>||Zobacz notatki||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1698}}||Result is 0 if val1<val2, 1 if val1=val2 and 2 if val1>val2. Both values are considered signed. <ref name="compare">Operacje 12 i 13 powinny być preferowane w stosunku do operacji 01 (odejmowanie), gdy potrzebna jest tylko relacja dwóch wartości, a sama różnica jest nieistotna. Jest tak, ponieważ operacja 01 może się przepełnić i dać zły znak, jeśli różnica jest zbyt duża, ale porównania działają poprawnie dla wszystkich wartości.</ref>
 |-
-|13||\2ucmp <ref name="grfcodec100"/>||see notes||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1698}}||The same as 12, but operands are considered unsigned. <ref name="compare"/>
+|13||\2ucmp <ref name="grfcodec100"/>||see notes||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1698}}||To samo co 12, ale operandy są uważane za niepodpisane. <ref name="compare"/>
 |-
 |14||\2<< <ref name="grfcodec100"/>||result = val1 << val2||{{pl/Development/NewGRF/ottdp|1.1|2.6|ottdrev=r20332|ttdprev=r2335}}||shift left; val2 should be in the range 0 to 31.
 |-
-|15||\2u>> <ref name="grfcodec100"/>||result = val1 >> val2||{{pl/Development/NewGRF/ottdp|1.1|2.6|ottdrev=r20332|ttdprev=r2335}}||shift right (unsigned); val2 should be in the range 0 to 31.
+|15||\2u>> <ref name="grfcodec100"/>||result = val1 >> val2||{{pl/Development/NewGRF/ottdp|1.1|2.6|ottdrev=r20332|ttdprev=r2335}}||Shift w prawo (bez znaku); val2 powinno mieścić się w zakresie od 0 do 31.
 |-
-|16||\2>> <ref name="grfcodec100"/>||result = val1 >> val2||{{pl/Development/NewGRF/ottdp|1.1|2.6|ottdrev=r20332|ttdprev=r2335}}||shift right (signed); val2 should be in the range 0 to 31.
+|16||\2>> <ref name="grfcodec100"/>||result = val1 >> val2||{{pl/Development/NewGRF/ottdp|1.1|2.6|ottdrev=r20332|ttdprev=r2335}}||przesuń w prawo (podpis); val2 powinno mieścić się w zakresie od 0 do 31.
 |}
 
 gdzie val1 jest wartością wynikającą z bieżącej pary zmienna/varadjust (lub wynikiem poprzednich obliczeń, jeśli nie jest to pierwsza para), a val2 jest wartością wynikającą z następującej pary zmienna/varadjust. Ustawiając wielokrotnie bit 5 shift-num, możesz połączyć kilka zmiennych razem przed podjęciem decyzji.
 
 <references/>
 
-Zauważ, że bitowego NIE można wykonać przez XORing ze zmienną 1A. Podobnie możesz określić wartości literalne (tj. Liczby zwykłe zamiast zmiennych), używając zmiennej 1A i maski i wartości, którą chcesz. Na przykład, aby podać literał 26, użyj zmiennej=1A, shift-num=00 (lub ustaw więcej bitów, jeśli potrzebujesz dalszych obliczeń) i and-mask=26 . Działa to z literałami o rozmiarach B, W lub D, jeśli użyjesz odpowiedniego rozmiaru i maski dla danego typu akcji 2. Odpowiednia sekwencja ucieczki \b, \w lub \d może być użyteczna do określania literałów. Zobacz [[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed#byte-order|the discussion of escape sequences]] w celu uzyskania dalszych informacji.
+Zauważ, że bitowego NIE można wykonać przez XORing ze zmienną 1A. Podobnie możesz określić wartości literalne (tj. Liczby zwykłe zamiast zmiennych), używając zmiennej 1A i maski i wartości, którą chcesz. Na przykład, aby podać literał 26, użyj zmiennej=1A, shift-num=00 (lub ustaw więcej bitów, jeśli potrzebujesz dalszych obliczeń) i and-mask=26 . Działa to z literałami o rozmiarach B, W lub D, jeśli użyjesz odpowiedniego rozmiaru i maski dla danego typu akcji 2. Odpowiednia sekwencja ucieczki \b, \w lub \d może być użyteczna do określania literałów. Zobacz [[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed#byte-order|omówienie sekwencji escape]] w celu uzyskania dalszych informacji.
 
 === Using types 81/82 (etc) simultaneously ===
 {{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 59}}
