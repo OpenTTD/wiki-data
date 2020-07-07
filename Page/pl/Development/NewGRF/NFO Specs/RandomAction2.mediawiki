@@ -15,29 +15,29 @@ Od TTDPatch 2.6 r1850 i OpenTTD r12452, i '''tylko dla pojazdów''':
  <Sprite-number> * <Length> 02 <feature> <set-id> 84 <count> <random-triggers> <randbit> <nrand> <set-ids>
 
 {| |-
-!'''Element'''!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Size''']]!!'''Description'''
+!'''Element'''!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Rozmiar''']]!!'''Opis'''
 |-
-|<Sprite-number>||dec||A sequential sprite number
+|<Sprite-number>||dec||Sekwencyjny numer 'sprite'
 |-
-|<length>||dec||The total number of bytes used in this action.
+|<length>||dec||Łączna liczba bajtów użytych w tej akcji.
 |-
-|02||B||Defines action 02
+|02||B||Definiuje action 02
 |-
-|<feature>||B||For what type of vehicle/station/... should this definition be used?
+|<feature>||B||Do jakiego rodzaju pojazdu/stacji/... należy zastosować tę definicję?
 |-
-|<set-id>||B||The ID of this action 2 (used like a cargo ID)
+|<set-id>||B||ID tej akcji 2 (używany jak ID ładunku)
 |-
-|80, 83, 84||B||Type of random action, see below.
+|80, 83, 84||B||Rodzaj losowej akcji, patrz poniżej.
 |-
-|<count>||B||(when present) Location of controlling vehicle.
+|<count>||B||(gdy jest obecny) Lokalizacja pojazdu kontrolującego.
 |-
-|<random-triggers>||B||When to re-randomize
+|<random-triggers>||B||Kiedy ponownie randomizować
 |-
-|<randbit>||B||What random bit to use for this action 2
+|<randbit>||B||Jakiego losowego bitu użyć do tego działania 2
 |-
-|<nrand>||B||Number of set-ids to choose from, must be a power of 2
+|<nrand>||B||Liczba zestawów identyfikatorów do wyboru, musi być potęgą 2
 |-
-|<set-ids>||W||Action 2 set-ids to choose from.
+|<set-ids>||W||Action 2 set-ids do wyboru z.
 |}
 
 == Description ==
@@ -125,15 +125,15 @@ Niski kąsek (bity 0-3) określa, jak daleko należy liczyć od pojazdu wyjścio
 Wysokie skubanie (w rzeczywistości bity 6-7) określa, który pojazd jest pojazdem wyjściowym i jaki kierunek należy liczyć:
 
 {| |-
-!Value!!Meaning
+!Wartość!!Znaczenie
 |-
-|0||count back (away from the engine), starting at this vehicle
+|0||odliczać (z dala od silnika), zaczynając od tego pojazdu
 |-
-|4||count forward (toward the engine), starting at this vehicle.
+|4||liczyć do przodu (w kierunku silnika), zaczynając od tego pojazdu.
 |-
-|8||count back, starting at the engine
+|8||odliczać, zaczynając od silnika
 |-
-|C||count back, starting at the first vehicle in this chain of vehicles with the same ID, as for vehicle variable 41
+|C||odliczaj, zaczynając od pierwszego pojazdu w tym łańcuchu pojazdów o tym samym ID, jak dla zmiennej pojazdu 41
 |}
 
 Bity 4-5 są zarezerwowane i muszą wynosić zero, więc inne wartości wysokiego skryptu nie są dozwolone.
@@ -230,15 +230,15 @@ ID''`y'' Akcji 2 do losowego wyboru
 Pojazdy mają 8 losowych bitów i następujące wyzwalacze:
 
 {| |-
-!Bit!!Value!!Version!!Trigger
+!Bit!!Wartość!!Wersja!!Wyzwalacz <small>''(Trigger)''</small>
 |-
-|0||01||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||Vehicle gets new load of cargo (only after it was empty)
+|0||01||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||Pojazd otrzymuje nowy ładunek ładunku (dopiero po opróżnieniu)
 |-
-|1||02||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||Vehicle enters a depot and is serviced
+|1||02||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||Pojazd wjeżdża do depotu i jest serwisowany
 |-
-|2||04||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||The consist has unloaded all cargo
+|2||04||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Skład <small>''(consist)''</small> rozładował cały ładunek
 |-
-|3||08||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Any vehicle of the consist receives cargo
+|3||08||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Każdy pojazd składający się z odbiorcy przyjmuje ładunek
 |-
 |4||10||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||[[pl/Development/NewGRF/NFO Specs/Callback/Main Page#32-day-callback-32 |Callback 32]] returned 1
 |}
@@ -255,17 +255,17 @@ Stacje mają 16 + 4 losowych bitów. Bity od 0 do 15 są własnością stacji ja
 {| |-
 !Bit!!Value!!Version!!Trigger
 |-
-|0||01||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||new cargo waiting
+|0||01||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||nowy ładunek czeka
 |-
-|1||02||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||no more cargo
+|1||02||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||nigdy więcej ładunku
 |-
-|2||04||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||train arrives (starts unloading/loading)
+|2||04||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||train przyjeżdża (rozpoczyna rozładunek / załadunek)
 |-
-|3||08||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||train leaves (done unloading & loading)
+|3||08||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||train odjeżdża (rozładunek i załadunek)
 |-
-|4||10||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||train loads or unloads cargo
+|4||10||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||train ładuje lub rozładowuje ładunek
 |-
-|5||20||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||train reserves platform (using PBS)
+|5||20||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||platforma rezerwuje train (przy użyciu PBS)
 |}
 
 Zauważ też, że żaden z powyższych wyzwalaczy nie uruchomi się, chyba że zostanie podparty. 12 ma co najmniej jeden ustawiony bit. &nbsp;Wyzwalacze 01 zostaną uruchomione dla dowolnego rodzaju ładunku ustawionego w rekwizytach. 12, ale wyzwalacz 02 zostanie aktywowany tylko wtedy, gdy wszystkie typy ładunków nie będą już czekały na ładunek. Wyzwalacze 04, 08 i 20 są uruchamiane bez względu na rodzaj ładunku przewożonego przez pociąg, o ile podpora. 12 nie jest zerem.
@@ -282,9 +282,9 @@ Budynki miejskie mają 8 losowych bitów.
 {| |-
 !Bit!!Value!!Version!!Trigger
 |-
-|0||01||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||the building tile is processed in the periodic tile processing loop
+|0||01||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||kafel budowlany jest przetwarzany w cyklicznej pętli przetwarzania kafli
 |-
-|1||02||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||the top tile of the building is processed in the periodic tile processing loop
+|1||02||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||górna płytka budynku jest przetwarzana w cyklicznej pętli przetwarzania kafli
 |}
 
 Okresowa pętla przetwarzania kafelków nieprzerwanie przetwarza kafelki mapy, przetwarzając każdy kafelek co 256 tyknięć (ok. 3,5 dnia TTD). Ponieważ żadne "prawdziwe" <small>''(real)''</small> wydarzenie nie zdarzyło się w budynkach miejskich, masz tylko tę okazję, aby ponownie randomizować wygląd swojego budynku.
@@ -300,11 +300,11 @@ Płytki przemysłowe mają 8+16 losowych bitów. Dostęp do akcji losowej 2 typu
 {| |-
 !Bit!!Value!!Version!!Trigger
 |-
-|0||01||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||the building tile is processed in the periodic tile processing loop<ref>{{pl/Development/NewGRF/ottdp|no| |}} Randandomizacja współdzielonych bitów branży nie przebiega prawidłowo w obecnym TTDPatch.</ref>
+|0||01||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||płytka budowlana jest przetwarzana w cyklicznej pętli przetwarzania płytek<ref>{{pl/Development/NewGRF/ottdp|no| |}} Randandomizacja współdzielonych bitów przemysłu nie przebiega prawidłowo w obecnym TTDPatch.</ref>
 |-
-|1||02||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||triggers simultaneously for all tiles of the industry every 256 ticks. If the industry is a primary one, output cargo is generated at the same time.
+|1||02||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||uruchamia się jednocześnie dla wszystkich kafelków branży co 256 tyknięć. Jeśli branża jest podstawowa, ładunek wyjściowy jest generowany w tym samym czasie.
 |-
-|2||04||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||cargo is delivered to the industry. If the industry is a processing one, output cargo is generated at the same time.
+|2||04||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||ładunek jest dostarczany do przemysłu. Jeśli przemysł jest przetwórczy, ładunek wyjściowy jest generowany w tym samym czasie.
 |}
 <references />
 
