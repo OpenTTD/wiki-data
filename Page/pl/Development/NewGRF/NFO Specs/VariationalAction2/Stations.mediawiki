@@ -56,13 +56,13 @@ W przypadku innych zmiennych 80+x nadaj [http://marcin.ttdpatch.net/sv1codec/TTD
 Zmienne 40, 41, 46, 47 i 49 zwracają informacje o bieżącym kafelku, na której platformie on jest i jak daleko wzdłuż platformy. Różnica polega na rozważanym odcinku stacji.
 
 {| |-
-!Variables!!Regular station!!Irregular station
+!Zmienne!!Zwykła stacja!!Nieregularna stacja
 |-
-|40, 46||Whole station||Counting entire length and all adjacent platforms
+|40, 46||Cała stacja||Licząc całą długość i wszystkie sąsiednie platformy
 |-
-|41, 47||Individually built sections||
+|41, 47||Indywidualnie budowane sekcje||
 |-
-|49||Whole station||Counting length and platforms that have the same direction
+|49||Cała stacja||Liczenie długości i platform, które mają ten sam kierunek
 |}
 
 Termin "liczenie" <small>''(counting)''</small> odnosi się tutaj do rozpoczynania od danego kafelka i liczenia płytek we wszystkich czterech kierunkach. Dwa kierunki wyrównane z kierunkiem stacji będą długością stacji, a pozostałe dwa kierunki podadzą liczbę platform. W przypadku zmiennych 40 i 46 liczenie to zatrzymuje się na krawędzi stacji, tj. Pierwszej płytki niestacjonarnej. Dla zmiennej 49 zatrzymuje się na krawędzi lub na kafelku stacji, który jest w złym kierunku. &nbsp;Uzyskane informacje prawdopodobnie nie są naprawdę przydatne w przypadku nieregularnych stacji, z wyjątkiem wykrywania krawędzi. Aby poprawnie wykryć krawędzie, możesz wybrać jedną ze stacji-&gt;przejście niestacjonarne (var. 40, 46) lub dodatkowe przejście w przeciwnym kierunku (var. 49).
@@ -72,24 +72,24 @@ Zmienne 41 są w dużej mierze niezależne od nieregularnych stacji, ponieważ o
 Dla zmiennych 40, 41 i 49 pozycja jest liczona od najbardziej wysuniętej na północ krawędzi stacji i zwracana w postaci xTNLcCpP, gdzie:
 
 {| |-
-!Variable!!Meaning
+!Zmienna!!Znaczenie
 |-
-|x||undefined, use bit mask to mask it out
+|x||niezdefiniowana, użyj maski bitowej, aby ją maskować
 |-
-|T||Tile type: the current tile type/layout
-{{pl/Development/NewGRF/ottdp|no|}} In TTDPatch this information is only available during callback 14 (and via variable 10 during callback 24).
+|T||Typ kafla: bieżący typ/układ kafelka
+{{pl/Development/NewGRF/ottdp|no|}}  W TTDPatch ta informacja jest dostępna tylko podczas 'cb' 14 (i poprzez zmienną 10 podczas 'cb' 24).
 |-
-|N||Total number of platforms
+|N||Całkowita liczba platform
 |-
-|L||Total platform length
+|L||Całkowita długość platformy
 |-
-|c||Platform number current being drawn, counted from the end (starting at zero)
+|c||Pobrany jest numer platformy, liczony od końca (od zera)
 |-
-|C||Platform number currently being drawn (starting from zero)
+|C||Aktualnie wybierany numer platformy (od zera)
 |-
-|p||Position along this platform counted from the end, zero at the end
+|p||Pozycja wzdłuż tej platformy liczona od końca, zero na końcu
 |-
-|P||Position along this platform, zero at the beginning
+|P||Ustaw się wzdłuż tej platformy, zero na początku
 |}
 
 Tutaj "początek" <small>''(beginning)''</small> stacji jest jej najbardziej wysuniętą na północ płytką (w górę na ekranie), a "koniec" <small>''(end)''</small> to płytka najbardziej wysunięta na południe (w dół na ekranie). Każda zmienna składa się z 4 bitów.
