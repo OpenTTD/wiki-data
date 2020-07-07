@@ -2,16 +2,16 @@
 <!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
 == Wprowadzenie ==
 
-Prawdziwe duszki są graficzną częścią plików .grf; są tym, co faktycznie widzi użytkownik w grze.
+Prawdziwe 'sprites' są graficzną częścią plików .grf; są tym, co faktycznie widzi użytkownik w grze.
 
-Istnieją dwa wyraźnie różne sposoby pisania prawdziwych duszków, w zależności od używanej wersji informacyjnej. TTDPatch i OpenTTD, dopóki wersja 1.2 nie zrozumie tylko [[pl/Development/NewGRF/NFO Specs/Version numbers#grf-container-version|GRF container version 1]] lub <small>''(resp.)''</small> [[pl/Development/NewGRF/NFO Specs/Version numbers#nfo-version|info version 7]] .
+Istnieją dwa wyraźnie różne sposoby pisania prawdziwych 'sprites', w zależności od używanej wersji informacyjnej. TTDPatch i OpenTTD, dopóki wersja 1.2 nie zrozumie tylko [[pl/Development/NewGRF/NFO Specs/Version numbers#grf-container-version|GRF container version 1]] lub <small>''(resp.)''</small> [[pl/Development/NewGRF/NFO Specs/Version numbers#nfo-version|info version 7]] .
 
 == Info version 7 ==
 Dostępne w {{pl/Development/NewGRF/ottdp||}}
 
 === Syntax ===
 
-Prawdziwy duszek ma następujący format:
+Prawdziwy 'sprite' ma następujący format:
 
  <Sprite-number> <filename> <xpos> <ypos> <compression> <ysize> <xsize> <xrel> <yrel>
 
@@ -51,9 +51,9 @@ W większości przypadków preferowane są ścieżki względne, ponieważ pliki 
 
 Są one dość łatwe do ustawienia, o ile pamiętasz, że kolejność to X, Y, Y, X, a nie X, Y, X, Y.
 
-Ponadto żaden duszek nie może zawierać zerowych pikseli; ysize i xsize muszą mieć co najmniej 1.
+Ponadto żaden 'sprite' nie może zawierać zerowych pikseli; ysize i xsize muszą mieć co najmniej 1.
 
-Uwaga: w grfcodec 0.9.7 i wcześniejszych występuje błąd, który uniemożliwia im prawidłowe kodowanie duszka o mniejszej wartości ypos niż jakikolwiek wcześniejszy duszek. Najlepszym sposobem na obejście tego błędu jest aktualizacja do najnowszej wersji.
+Uwaga: w grfcodec 0.9.7 i wcześniejszych występuje błąd, który uniemożliwia im prawidłowe kodowanie 'sprite' o mniejszej wartości ypos niż jakikolwiek wcześniejszy 'sprite'. Najlepszym sposobem na obejście tego błędu jest aktualizacja do najnowszej wersji.
 
 ==== compression ====
 
@@ -78,7 +78,7 @@ Najlepsza wartość zależy od tego, które i ile pikseli jest przezroczystych: 
 
 Jeśli chcesz poprawić rysowanie w TTDPatch (nie robi to różnicy w OpenTTD): Możesz użyć 00 lub. 02, jeśli w ogóle NIE ma przezroczystych pikseli. 00 jest nieco szybsze niż 01. 02 jest prawidłową wartością, ale nie ma większego sensu.
 
-Możesz użyć 02 odpowiednio. 03 do przechowywania sprite skompresowanego w pamięci. Rysowanie będzie wolniejsze, ale duszek potrzebuje mniej pamięci, gdy nie jest używany. Przydatny dla dużych duszków, które są rzadko używane (jak nowy papier "potentat stulecia" <small>''(tycoon of the century)''</small> pod koniec gry)
+Możesz użyć 02 odpowiednio. 03 do przechowywania sprite skompresowanego w pamięci. Rysowanie będzie wolniejsze, ale 'sprite' potrzebuje mniej pamięci, gdy nie jest używany. Przydatny dla dużych 'sprites', które są rzadko używane (jak nowy papier "potentat stulecia" <small>''(tycoon of the century)''</small> pod koniec gry)
 
 Zasadniczo używanie innych wartości jest złym pomysłem, ponieważ może to powodować problemy. FF to szczególnie zły pomysł.
 
@@ -86,7 +86,7 @@ Zasadniczo używanie innych wartości jest złym pomysłem, ponieważ może to p
 
 Te dwie liczby prawdopodobnie staną się zmorą twojego istnienia.
 
-TTD przechowuje jeden punkt dla każdego duszka. xrel i yrel określają, jak daleko w prawo i w dół (odpowiednio), aby przejść od punktu TTD do lewego górnego rogu duszka.
+TTD przechowuje jeden punkt dla każdego 'sprite'. xrel i yrel określają, jak daleko w prawo i w dół (odpowiednio), aby przejść od punktu TTD do lewego górnego rogu 'sprite'.
 
 Zmniejszenie o połowę xsize i ysize oraz zanegowanie wyników tworzy przyzwoity punkt początkowy dla tych wartości, a dalsze korekty można wprowadzić ręcznie, np. W OpenTTD, aktywując <!--[http://wiki.openttd.org/NewGRF_Debugging NewGRF developer tools]-->[[pl/Development/NewGRF/Debugowanie NewGRF|narzędzia deweloperskie]] i używając Aligner sprite lub w TTDPatch 2.0.1 alpha 69 i późniejszych z [http://www.tt-wiki.net/wiki/GRFAuthorHelperWindow GRFAuthorHelperWindow] .
 
@@ -106,7 +106,7 @@ ysize*xsize may not exceed 65535.
 
 ==== Other notes ====
 
-Powszechną praktyką w blokach akcji 1 jest używanie pseudosprite  "-1 * 1 00"  w celu zastąpienia prawdziwego duszka, który nigdy nie zostanie użyty. Najczęstszym zastosowaniem są zestawy pojazdów, które będą używane tylko w oknie zakupu. Zmniejsza to rozmiar pliku .grf w porównaniu do zastąpienia ich duszkami jednopikselowymi (ale nie w porównaniu do podziału akcji 1 i uczynienia drugiego definiującym tylko jednego duszka), ale nie oszczędza gniazd prawdziwych duszków. Jeśli TTD kiedykolwiek spróbuje narysować jeden z tych duszków, w najlepszym wypadku się zawiesi.
+Powszechną praktyką w blokach akcji 1 jest używanie pseudosprite  "-1 * 1 00"  w celu zastąpienia prawdziwego 'sprite', który nigdy nie zostanie użyty. Najczęstszym zastosowaniem są zestawy pojazdów, które będą używane tylko w oknie zakupu. Zmniejsza to rozmiar pliku .grf w porównaniu do zastąpienia ich 'sprites' jednopikselowymi (ale nie w porównaniu do podziału akcji 1 i uczynienia drugiego definiującym tylko jednego 'sprite'), ale nie oszczędza gniazd prawdziwych 'sprites'. Jeśli TTD kiedykolwiek spróbuje narysować jeden z tych 'sprites', w najlepszym wypadku się zawiesi.
 
 == Info version 32 ==
 Dostępne w {{pl/Development/NewGRF/ottdp|1.2|ottdrev=r23890}}
@@ -127,21 +127,21 @@ Nazwa pliku graficznego, w którym znajduje się prawdziwy 'sprite'
 ==== Type ====
 Rodzaj 'sprite'. Typ 1. 'sprite'musi zawsze wynosić 8 bpp i 'normal' poziom powiększenia (patrz poniżej). Kolejne wiersze dla alternatywnych ikonek mogą być dowolnego typu i poziomu powiększenia. Dostępne typy to:
 {|
-!Name!!Description
+!Nazwa!!Opis
 |-
-|8bpp || Sprite with 8 bit colour depth in one of the accepted palettes
+|8bpp || Sprite z 8-bitową głębią kolorów w jednej z zaakceptowanych palet
 |-
-|32bpp|| True colour sprite with 32 bit colour depth
+|32bpp|| Prawdziwy 'sprite' z 32-bitową głębią kolorów
 |-
-|mask || If used, this type must follow a '32bpp' entry immediately. Itself it is a 8bpp paletted sprite of the exact same size of the preceeding 32bpp sprite. It defines the colour translation for this preceeding 32bpp sprite: Palette entry 0 means to draw the 32bpp as usual, the other colours define a replacement colour where then the preceeding 32bpp sprite is interpreted as giving intensity and alpha channel information.
+|mask || Jeśli zostanie użyty, ten typ musi natychmiast następować po wpisie '32bpp' . Sam w sobie jest to sprite z paletą 8bpp , dokładnie takiej samej wielkości, jak poprzednia duszka 32 pz. Definiuje translację kolorów dla tego poprzedzającego 'sprite' 32bpp: Wpis 0 w palecie oznacza narysowanie 32bpp jak zwykle, pozostałe kolory definiują kolor zastępczy, a następnie poprzedzający 'sprite' 32bpp jest interpretowany jako dający intensywność i informacje o kanale alfa.
 |}
 
 ==== xpos, ypos ====
-Współrzędne lewego górnego rogu duszka w pliku graficznym.
+Współrzędne lewego górnego rogu 'sprite' w pliku graficznym.
 ==== xsize, ysize ====
-Szerokość i wysokość duszka w pliku graficznym. Prawidłowy zakres wartości wynosi od 1 do 65535 dla obu.
+Szerokość i wysokość 'sprite' w pliku graficznym. Prawidłowy zakres wartości wynosi od 1 do 65535 dla obu.
 ==== xrel, yrel ====
-Położenie lewego górnego rogu duszka w stosunku do "center" (zwykle ujemnego). Prawidłowy zakres wartości wynosi od -32768 do 32767.
+Położenie lewego górnego rogu 'sprite' w stosunku do "center" (zwykle ujemnego). Prawidłowy zakres wartości wynosi od -32768 do 32767.
 ==== zoom level ====
 OpenTTD obsługuje wiele poziomów powiększenia. Dla 'normal' poziomu powiększenia kafelek ma szerokość 64 pikseli i wysokość 31 (patrz współrzędne). Dostępne poziomy powiększenia to:
 {|
@@ -165,7 +165,7 @@ OpenTTD obsługuje wiele poziomów powiększenia. Dla 'normal' poziomu powiększ
 |}
 
 Wskazówka:
-Jeśli masz duszka z normalnym powiększeniem i (xrel, yel), 'sprite' 2x z powiększeniem będzie miał (2*xrel, 2*yrel-1), a 'sprite' z 4x powiększeniem będzie miał (4*xrel, 4*yrel-2).
+Jeśli masz 'sprite' z normalnym powiększeniem i (xrel, yel), 'sprite' 2x z powiększeniem będzie miał (2*xrel, 2*yrel-1), a 'sprite' z 4x powiększeniem będzie miał (4*xrel, 4*yrel-2).
 
 Konwersje te są implikowane przez sposób, w jaki OpenTTD rysuje fundamenty, w szczególności fundamenty połówkowe. Przy powiększeniu 1x pionowa krawędź nachylenia znajduje się między dwoma pikselami, a pozioma krawędź nachylenia znajduje się w środku piksela. Oznacza to, że: Środek płytek (zielona linia) musi się zrównać, górna część płytek (czerwona linia) następnie się nie ustawia:
 <!--[[File:Groundsprites_4x.png]]-->[http://newgrf-specs.tt-wiki.net/wiki/File:Groundsprites_4x.pngFile:Groundsprites_4x.png File:Groundsprites_4x.png]
