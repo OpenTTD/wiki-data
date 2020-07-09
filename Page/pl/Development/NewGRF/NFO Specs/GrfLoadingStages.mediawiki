@@ -8,22 +8,22 @@ Przetwarzanie plików .grf odbywa się w kilku przebiegach, z których większo�
 Zasadniczo inicjalizacja jest systemem dwuprzebiegowym (najpierw rozwiązuje cele skoku, a następnie inicjuje wszystko), co dzieje się tylko raz, aktywacja jest systemem dwuprzebiegowym (najpierw definiuje ładunki i rezerwowe ID''`y'' GRM, a następnie aktywuje się), który ma miejsce wiele razy, i testowanie to jednoprzebiegowy system uruchamiany jednym kliknięciem na czerwoną/zieloną flagę w oknie statusu GRF.
 
 {|
-!Pass!!Description
+!Pass!!Opis
 
 |-
-|Post-Load||Run once after loading all files. Initializes the targets of action 7&9 (to resolve goto jumps), ignores all other actions.
+|Post-Load||Uruchom raz po załadowaniu wszystkich plików. Inicjuje cele akcji 7&amp;9 (aby rozwiązać skoki goto), ignoruje wszystkie inne akcje.
 
 |-
-|Initialization||Run once after the post-load pass. Checks action 0 for validity, records action 1 sprite numbers, resolves action 2 references (to the sprite numbers within the grf file of action 1 sprites and references to variational/random action 2), executes actions 6, 9, B, D and F, initializes action 3, 4, 8 and 11, and ignores the rest of the actions (including in particular action 7).
+|Initialization||Uruchom raz po przełęczy po załadowaniu. Sprawdza działanie 0 pod kątem ważności, rejestruje akcje 1 liczby sprite,rozpoznaje odwołania do akcji 2 (do liczb sprite w pliku grf działania 1 sprites i odniesienia do akcji zmiennej/losowej 2), wykonuje akcje 6, 9, B, D i F, inicjuje działanie 3, 4, 8 i 11 i ignoruje pozostałe akcje (w tym w szczególności działanie 7).
 
 |-
-|Reserve||{{pl/Development/NewGRF/ottdp|0.6|2.5}} Called just before activation, to reserve GRM IDs. Also applies action 0 for cargos to make cargo labels valid to check in action 7/9 independent of order of .grf files. Ignores all actions except action 0 (for cargos), 6, 7, 8, 9, B, D and E.
+|Reserve||{{pl/Development/NewGRF/ottdp|0.6|2.5}} Wywołany just przed aktywacją, wobec rezerwować GRM IDs. Stosuje się również działanie 0 dla ładunków, aby etykiety ładunku ważne do odprawy w akcji 7/9 niezależne od kolejności .grf plików. Ignoruje wszystkie działania z wyjątkiem akcji 0 (dla ładunków), 6, 7, 8, 9, B, D i E.
 
 |-
-|Activate||Called during activation. Applies all actions except F and 10.
+|Activate||Wywoływana podczas aktywacji. Stosuje wszystkie akcje z wyjątkiem F i 10.
 
 |-
-|Test||{{pl/Development/NewGRF/ottdp|no|2.5}} Called when user clicks to enable/disable file in the GRF Status Window to check which other files react to the change. Ignores all actions except 6, 7, 8, 9, B, D and E.
+|Test||{{pl/Development/NewGRF/ottdp|no|2.5}} Wywoływane, gdy użytkownik klika, aby włączyć/wyłączyć plik w oknie stanu GRF, aby sprawdzić, które inne pliki reagują na zmianę. Ignoruje wszystkie działania z wyjątkiem 6, 7, 8, 9, B, D i E.
 |}
 
 Plik .grf jest aktywowany tylko wtedy, gdy był aktywny podczas uruchamiania gry. Jeśli gra zostanie załadowana, tylko jej aktywne .grfs zostaną ponownie aktywowane. Plik .grf jest uważany za aktywny, jeśli jego działanie 8 zostało przetworzone, tj. Jego działanie 8 nie zostało pominięte przy użyciu działania 7.
@@ -34,7 +34,7 @@ Poniższa tabela pokazuje dokładnie, które akcje są wyliczane w których prze
 !Action!!Load!!Init!!Res!!Act!!Test!!Notes
 
 |-
-|0|| ||<center>X</center>||<center>X<ref>During reservation stage especially cargo- and railtypes are reserved, so their existence can be tested by all GRFs in activation stage independent of loading order.</ref></center>||<center>X</center>|| ||
+|0|| ||<center>X</center>||<center>X<ref>Na etapie rezerwacji zarezerwowane są szczególnie typy ładunków i kolei, więc ich istnienie może być testowane przez wszystkie GRF na etapie aktywacji niezależnie od zamówienia załadunku.</ref></center>||<center>X</center>|| ||
 
 |-
 |1|| ||<center>I</center>|| ||<center>X</center>|| ||
@@ -52,13 +52,13 @@ Poniższa tabela pokazuje dokładnie, które akcje są wyliczane w których prze
 |5|| || || ||<center>X</center>|| ||
 
 |-
-|6|| ||<center>X</center>||<center>X</center>||<center>X<ref>{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 51}} Processed during activation in TTDPatch 2.0.1 alpha 51 and later.</ref></center>||<center>X</center>||
+|6|| ||<center>X</center>||<center>X</center>||<center>X<ref>{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 51}} Przetwarzane podczas aktywacji w TTDPatch 2.0.1 alpha 51 i nowsze.</ref></center>||<center>X</center>||
 
 |-
 |7||<center>I</center>|| ||<center>X</center>||<center>X</center>||<center>X</center>||
 
 |-
-|8|| ||<center>I</center>||<center>X</center>||<center>X</center>||<center>X</center>||When executed for an inactive file, skips remainder of file.
+|8|| ||<center>I</center>||<center>X</center>||<center>X</center>||<center>X</center>||Po wykonaniu dla nieaktywnego pliku pomija pozostałą część pliku.
 
 |-
 |9||<center>I</center>||<center>X</center>||<center>X</center>||<center>X</center>||<center>X</center>||
@@ -67,7 +67,7 @@ Poniższa tabela pokazuje dokładnie, które akcje są wyliczane w których prze
 |A|| || || ||<center>X</center>|| ||
 
 |-
-|B|| ||<center>X<ref>Processed during initialization only if bit 7 of severity is set.</ref></center>||<center>X</center>||<center>X</center>||<center>X</center>||
+|B|| ||<center>X<ref>Przetwarzane podczas inicjowania tylko wtedy, gdy bit 7 ważności jest ustawiony.</ref></center>||<center>X</center>||<center>X</center>||<center>X</center>||
 
 |-
 |C|| || || || || ||
@@ -88,12 +88,12 @@ Poniższa tabela pokazuje dokładnie, które akcje są wyliczane w których prze
 |11|| ||<center>I</center>|| ||<center>X</center>|| ||
 
 |-
-|12|| || || ||<center>X</center>|| || If TTDPatch encounters any Action12 during any stage (including "Load"), Unicode handling is enabled.
+|12|| || || ||<center>X</center>|| || Jeśli TTDPatch napotka jakąkolwiek akcję Action12 na dowolnym etapie (w tym "Load"), obsługa Unicode jest włączona.
 
 |-
 |13|| || || ||<center>X</center>|| ||
 
 |-
-|14|| || || || || || Processed by OpenTTD only when scanning for files. Not processed during the normal loading/activation. 
+|14|| || || || || || Przetwarzane przez OpenTTD tylko podczas skanowania plików. Nie przetwarzane podczas normalnego ładowania/aktywacji. 
 |}
 <references/>
