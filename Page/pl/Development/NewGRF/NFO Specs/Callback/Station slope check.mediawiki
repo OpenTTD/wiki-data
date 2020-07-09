@@ -11,29 +11,29 @@ Należy pamiętać, że wcześniejsza wersja OpenTTD przed wersją r22658 i TTDP
 Ponieważ stacja nie została jeszcze zbudowana, nie można uzyskać dostępu do zmiennych 8x. Tylko zmienne 43 i 67 będą działać na podstawie zmiennych 4x i 6x. Otrzymasz jednak następujące informacje:
 * zmienna 18:
 {| |-
-!bit numbers!!Meaning
+!numery bitu!!Znaczenie
 |-
-|0..7||offset of current tile on the platform, 0 is the northmost tile
+|0..7||przesunięcie bieżącej płytki na platformie, 0 jest najbardziej wysuniętą na północ płytką
 |-
-|8..15||bits 8..15: current platform number, 0 is the northmost platform
+|8..15||bity 8..15: bieżący numer platformy, 0 jest najbardziej wysuniętą na północ platformą
 |-
-|16..23||total length of station being built
+|16..23||całkowita długość budowanej stacji
 |-
-|24..31||total number of platforms being built
+|24..31||całkowita liczba budowanych platform
 |}
 * zmienna <small>''(variable)''</small> 10:
 {| |-
-!bit numbers!!Meaning
+!numery bitu!!Znaczenie
 |-
-|4..7||Slope info of the current tile:
-* bit 7 - N corner is elevated
+|4..7||Informacje o nachyleniu bieżącego kafelka:
+* bit 7 - N narożnik jest podniesiony
 * bit 6 - E corner is elevated
 * bit 5 - S corner is elevated
 * bit 4 - W corner is elevated
 |-
-|0..3||the same information, but "mirrored" (bit 0 and 2 swapped) if the station is built in the NW-SE orientation. This allows you to check slopes without checking the orientation explicitly.
+|0..3||te same informacje, ale "dublowane" (bit 0 i 2 zamienione), jeśli stacja jest wbudowana w orientację NW-SE. Pozwala to na sprawdzanie nachylenia bez wyraźnego sprawdzania orientacji.
 |-
-|other bits||reserved for future use
+|inne bity||zarezerwowane do wykorzystania w przyszłości
 |}
 
 Oddzwonienie jest wywoływane dopiero po normalnym sprawdzeniu przez TTD nachyleń, więc nie jest możliwe zezwolenie na nachylenie, które domyślnie nie jest dozwolone; możesz jedynie zawęzić zestaw dozwolonych stoków. Jeśli oddzwonienie nie powiedzie się, kafelek zostanie zaakceptowany. Nazywa się to jednak płaskimi kafelkami, więc możesz zmusić swoją stację do nachylenia terenu. Nie możesz uzyskać dostępu do informacji o stacji, nawet jeśli platforma jest dodana do istniejącej stacji kolejowej lub jest nadmierna płytka stacji. To dlatego, że TTD zdecyduje o tym później w kodzie, po tym, jak nachylenie zostanie już zaakceptowane.
