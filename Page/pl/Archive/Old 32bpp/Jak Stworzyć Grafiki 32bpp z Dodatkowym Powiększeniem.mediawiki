@@ -1,0 +1,277 @@
+[[Translation:en/Archive/Old 32bpp/How to Create 32bpp Graphics with Extra Zoom]]
+
+
+== Przedmowa ==
+Tworzenie nowej grafiki 32bpp dla OTTD jest łatwiejsze niż myślisz.
+Zasadniczo potrzebne są tylko 2 kroki:
+* Utwórz plik png (z odpowiednią nazwą i umieść go we właściwym katalogu)
+* Pngcodec plik png (brzmi skomplikowanie, ale po prostu dodaje trochę danych do pliku png, więc OTTD może poprawnie pokazać to w grze)
+
+
+Na potrzeby tego samouczka zaleca się zainstalowanie w systemie następującego oprogramowania:
+* [http://www.blender.org Blender] (kreator modeli 3D i renderer)
+* [http://www.gimp.org The GIMP] (program do obróbki obrazów 2D), chociaż Photoshop lub porównywalne programy mogą działać równie dobrze
+* [http://www.openttd.org/en/download-pngcodec pngcodec] (dodaje metadane do plików png)
+Wszystkie te programy są dostępne dla większości ważniejszych <small>''(major)''</small> OS', więc nie ma znaczenia, czy używasz Linuksa, Windowsa, MacOS lub podobnych systemów operacyjnych, chociaż ten samouczek skupi się na tym, jak się to robi w systemie Windows.
+
+W przypadku zaawansowanych samouczków będziesz również potrzebować:
+* [Http://www.tt-forums.net/download/file.php?id=96258 plik szablonu .blend]. Jest on oparty na [http://www.tt-forums.net/download.php?id=53231 oficjalnym pliku konfiguracyjnym oświetlenia .blend] firmy Aracirion i zawiera nieco poprawioną wersję [http://www.tt-forums.net/download/file.php?id=64916 blender_render.py skrypt Pythona], który automatyzuje renderowanie w Blenderze.
+* Narzędzie brupje [http://www.tt-forums.net/download/file.php?id=90773 blender_convert], które automatyzuje kodowanie png
+* [http://www.openttd.org/en/download-grfcodec grfcodec] (konwertuje pliki .grf na pliki .pcx <small>''(lub .png)''</small> i odwrotnie)
+
+== Krok 1: Zapoznanie się z plikami .grf ==
+Chociaż OpenTTD nie obsługuje obecnie dodatkowych sprite'ów powiększających, w grze jest prawie 7000 sprite'ów, które należy wymienić, aby uzyskać pełne 32bpp, z czego prawie 4800 znajduje się w pliku trg1r.grf (TTD) lub ogfx1_base (OpenGFX), więc trzeba będzie stworzyć wiele grafik, zanim zostaną dołączone zupełnie nowe sprite'y. Każdy z tych 'sprites' ma unikalny identyfikator, który można uzyskać dekodując odpowiedni plik .grf za pomocą grfcodec.
+[[File:en/Archive/Old 32bpp/32bpp cursor.png | thumb | right | Przykładowy kursor]]
+W przypadku wielu z nich wolisz ładny, podobny do 3D wygląd, który uzyskasz z obrazów renderowanych w blenderze, ale w przypadku niektórych wystarczy GIMP. Zróbmy nowy wskaźnik myszy. Ma ID # 0 w trg1r.grf, będąc pierwszym 'sprite' (drugi ma ID # 1 itd.). Zrób ładny wskaźnik (lub po prostu skopiuj przykładowy kursor) w GIMP i zapisz go jako plik .png w następującym folderze:
+
+<code>
+your drive:\your ottdfolder\data\sprites\name of grf file\ID of sprite.png
+</code>
+For example:
+<code>
+d:\ottd\data\sprites\ogfx1_base\0.png
+</code>
+
+Twój 'sprite' jest teraz tam, gdzie należy. Ale OTTD potrzebuje informacji, jak poprawnie go wyświetlić. Odbywa się to poprzez dodanie przesunięć do pliku png. Przesunięcia określają, jak daleko rzeczywista grafika zostanie przesunięta od początku 'sprite' w kierunku x (w poziomie) i y (w pionie). W przypadku wskaźnika myszy punktem początkowym jest lewy górny róg. Niestety dla wielu innych 'sprites' nie jest to takie proste. Aby dowiedzieć się więcej o przesunięciach, zobacz [http://newgrf-specs.tt-wiki.net/wiki/PalettesAndCoordinates#Palettes the NewGRF wiki] (przewiń w dół) - lub czytaj dalej. Przesunięcia mogą być zawarte w pliku png jako metadane. Potrzebujesz do tego pngcodec.exe. Po prostu umieść go w tym samym folderze, w którym znajduje się twój sprite. Teraz uruchom wiersz poleceń systemu Windows (start-> run-> cmd.exe). Przejdź do folderu ogfx1_base i zapisz przesunięcia:
+
+<code>
+d:\ottd\data\sprites\ogfx1_base>pngcodec a 0.png x_offs=-0 y_offs=-0
+</code>
+
+Przesunięcia są zerowe, ponieważ pochodzenie sprite'a określa końcówkę wskaźnika. W tym przykładzie lewy górny róg pliku png zawiera również końcówkę wskaźnika, więc grafika nie musi być przesuwana. Uruchom OpenTTD, aby zobaczyć swoje dzieło w grze.
+
+[[File:en/Archive/Old 32bpp/32bpp cursor in game.png|thumb|right|Duży, 'crappy' <small>''(kiepski)''</small> & kolorowy]]
+Załóżmy, że obrócimy kursor o 180 stopni. Teraz końcówka jest skierowana w prawy dolny róg. To dezorientuje OpenTTD, ponieważ nadal chce przypisać lewy górny róg do końcówki. Nasz sprite ma 60x60 pikseli (dlatego wygląda tak duży; oryginalny sprite ma tylko 24x24), więc jeśli przesuniemy go w lewo o 60 pikseli (x_offs=-60) i w górę o 60 pikseli (y_offs=-60), wszystko powinno wyrównaj ponownie prawidłowo. Jeśli twój ma inne wymiary, odpowiednio zmodyfikuj odsunięcia. Pamiętaj, że ujemne wartości przesunięcia przesuwają 'sprite' w lewo/w górę, a dodatnie - w prawo / w dół. Przesunięcia są zwykle ujemne.
+
+<code>
+d:\ottd\data\sprites\ogfx1_base>pngcodec a 0.png x_offs=-60 y_offs=-60
+</code>
+
+Kursor z 'zagięciem' <small>''(twist)''</small>!
+[[File:en/Archive/Old 32bpp/32bpp cursor in game rotated.png|thumb|none|Duże, 'crappy' <small>''(kiepskie)''</small>,  kolorowe & skręcone <small>''(twisted)''</small>]]
+
+== Krok 2: Prosty dom w Blenderze ==
+Chociaż możesz zastąpić wszystkie sprite tylko GIMP i pngcodec, użycie Blendera do tworzenia modeli 3D da ci grafikę, która może mieć o wiele bardziej atrakcyjny wygląd. Ponadto zapewnia, że ​​oświetlenie i rzucanie cieni będzie spójne w grze, nawet jeśli wielu użytkowników wniosło grafikę. Aby skorzystać z tego samouczka, powinieneś umieć nawigować, umieszczać i edytować proste obiekty w Blenderze. Blender ma dość stromą krzywą uczenia się i to właśnie zniechęca wielu ludzi. Nie powinno cię to jednak zniechęcać. Rezultaty, gdy już to opanujesz, będą bardzo satysfakcjonujące. Daj sobie kilka godzin na oswojenie się z oprogramowaniem i zacznij eksperymentować. Doskonałe samouczki można znaleźć [http://en.wikibooks.org/wiki/Blender_3D:_Noob_to_Pro w Wikibooks] i [http://wiki.blender.org/index.php/Manual na oficjalnej stronie Blendera].
+
+Ciągle tutaj? Wróciłeś po kilku godzinach? Gotowy do zadania? Zaczynajmy. Najpierw pobierz odpowiedni plik .blend. Ten został stworzony przez Aracirion i zawiera aktualną [[en/Archive/Old 32bpp/32bit Graphics Development | oficjalną konfigurację oświetlenia]]. To, na co patrzysz po otwarciu, to pojedynczy kafelek otoczony czarną obwódką. Naciśnij F12, aby zobaczyć, jak jest renderowany. W grze dachówka ma wymiary 12,5 mx 12,5 m. Należy pamiętać, że każdy kafelek jest podzielony siatką Blendera na jednostki 12,5x12,5 w widoku 3D. Mówiąc inaczej, odległość między dwiema liniami siatki wynosi 1 m. Stwórz prosty dom, pamiętając o skali.
+[[File:en/Archive/Old 32bpp/32bpp house notex.png | thumb | right | Przykładowy dom w blenderze]]
+Aby wyglądał mniej nijak, pokoloruj ściany i dach, przypisując im różne materiały. Możesz nawet dodać tekstury. Możesz znaleźć fajne na (http://www.cgtextures.com/).
+[[File:en/Archive/Old 32bpp/32bpp house tex.png | thumb | right | Teksturowany dom]]
+Kiedy jesteś zadowolony z rezultatów, naciśnij F12 po raz ostatni, aby wyrenderować swoje dzieło. OTTD nie ma jeszcze obracanej mapy, więc wystarczy jeden kąt kamery. Zastąpmy stary domek [[File:en/Archive/Old 32bpp/Smaleroldcottage.png | frame | left]] domem szkoleniowym. Stara chata ma ID#1496, więc zapisz png w folderze trg1r jako 1496_z0.png.
+Sufiks _z0 informuje OTTD, że jest to grafika przedstawiająca najbliższy poziom powiększenia. Drugi poziom otrzymuje sufiks _z1, trzeci (normalny) poziom powiększenia sufiks _z2. Jednak _z0 jest automatycznie skalowane podczas pomniejszania, więc w tej chwili potrzebujemy tylko pliku _z0. Powinieneś otrzymać obraz .png o wymiarach 512x512 pikseli. Zawiera jednak dużo pustego miejsca, więc zmniejszmy go do rozmiaru w GIMP (Obraz->Autocrop image). Powinieneś otrzymać obraz o szerokości 256 pikseli. Wysokość płaskiej płytki wyniosłaby 128 pikseli, ale po umieszczeniu na niej domu będzie wyższa. Zapisz obraz w przyciętej wersji. Teraz należy przypisać przesunięcia. W przypadku budynków początek sprite'a to górny róg ramki ograniczającej. Tak, OTTD ma granice (jak w tych grach akcji 3D ... no, prawie), które wskazują wymiary budynków. Aby zobaczyć je w grze, naciśnij Crtl+B podczas gry. Nie rób tego jednak podczas powiększania, bo gra się zawiesi. W przypadku większości budynków obwiednia obejmuje całą płytkę, 256 x 128 pikseli (lub 64 x 32 piksele w standardowym powiększeniu). Górny róg obwiedni znajduje się pośrodku poziomej osi twojego 'sprite' , więc x_offs powinno być połową szerokości twojego pliku .png. To byłoby teoretycznie -128.
+Jednak zliczanie przesunięcia zaczyna się od 0, a nie od 1 (i kończy się na 63, a nie 64) w standardowym powiększeniu, więc pomnożenie różnicy przez 4 (dla powiększenia z0) prowadzi do wartości x_off równej -124.
+Jeśli jest to dla Ciebie zbyt zagmatwane, pamiętaj, aby podzielić szerokość pliku png przez 2 i odjąć 4. To twoje x_offs (nie zapomnij, że jest to wartość ujemna).
+Przejdźmy do wartości y_offs: gdyby twoja płytka była całkowicie płaska, wynosiłaby -0. Przynajmniej w teorii. Jednak liczenie zaczyna się od 0 w standardowym powiększeniu, więc twoje przesunięcie powinno wynosić -4 w powiększeniu z0.
+Niestety Twoja płytka nie jest płaska. Jest na nim dom, który wystaje z samolotu i podnosi plik png. Aby obliczyć przesunięcie, możesz znaleźć górny róg trawnika, określić, jak daleko twój 'sprite' jest wysunięty przez dom i dodać tę wartość do swoich y_offs. Problem w tym, że nie widać górnego rogu - dom stoi na drodze. Więc jest to trochę bardziej zagmatwane: zmierz całkowitą wysokość 'sprite' i odejmij od niej 127, aby uzyskać y_offs (działa!). Przykładowy dom ma 161 pikseli wysokości (twój będzie inny), więc y_offs to:
+161-127=34 (przesunięcia <small>''offsets''</small> są zwykle ujemne, więc jest to -34)
+
+Teraz możesz zapisać przesunięcia:
+
+<code>
+d:\ottd\data\sprites\trg1r>pngcodec a 1496_z0.png x_offs=-124 y_offs=-34
+</code>
+
+Teraz uruchom OTTD, aby zobaczyć swoje dzieło w grze!
+[[File:en/Archive/Old 32bpp/32bpp house ingame.png|thumb|none|W grze]]
+
+===Ale czekaj, to nie wszystko!===
+Umieszczenie budynku i płytki gruntu (trawnika) w jednym 'sprite' powoduje kilka błędów. Na przykład selektor (ten biały prostokąt, który pojawia się podczas korzystania z narzędzia kwerendy) nie będzie wyświetlany na tym kafelku. Jest to spowodowane kolejnością wyświetlania 'sprites' . Z tego powodu budynki z pojedynczych kafelków są zwykle podzielone na dwa 'sprites' : ziemię i budynek. Jeśli chcesz uniknąć tych zakłóceń, musisz oddzielić ziemię od budynku. W przypadku starej chaty identyfikator naziemnego 'sprite' to 1495. Użyj GIMP-a (lub podobnej aplikacji), aby podzielić swojego 'sprite' na dwa pliki, 1495_z0.png i 1496_z0.png. Pozostaw wysokość i szerokość taką samą jak w oryginalnym pliku, z prawidłowo ułożonym budynkiem i podłożem. Ułatwia to ustawianie przesunięć.
+[[File:en/Archive/Old 32bpp/32bpp house split.png|thumb|left|Podział na dwa pliki]]
+[[File:en/Archive/Old 32bpp/32bpp house selector.png|thumb|right|Zwróć uwagę <small>''(note)''</small> na selektor]]
+Teraz musisz ponownie ustawić przesunięcia dla obu plików (Ważna lekcja tutaj: metadane zostaną nadpisane podczas edycji pliku!) Po prostu użyj przesunięć, które ustaliłeś wcześniej.
+To wszystko, naprawiono usterki!
+
+
+Tekstura trawnika użyta w tym przykładzie nie wygląda zbyt spójnie z istniejącą grafiką gry (Twoja może być lepsza). Dlatego podjęto próbę zebrania ładnych i dopasowanych tekstur [[en/Archive/Old 32bpp/32bit Graphics Development | tutaj na wiki]]. Jest też plik .blend ze znormalizowanymi obiektami (official_materials.blend) znalezionymi tam, które zawierają wodę, metal, chodnik i trawę, więc dobrze jest zacząć tam zajrzeć, zanim zaczniesz bardziej ambitny projekt. Możesz swobodnie dodawać zaprojektowane przez siebie materiały i tekstury.
+
+== Krok 3: Prosty pojazd drogowy w Blenderze ==
+Teraz, gdy masz już budynki, przejdźmy do transportu. Stworzymy prosty pojazd drogowy. Wczytaj plik .blend z domyślnym oświetleniem i narysuj pudełko z kołami. Pamiętaj, że wszystkie pojazdy drogowe w OTTD mają długość pół kafelka (czyli 6,25 metra lub 6,25 jednostek blendera), więc zróbmy to tej samej długości (jeśli jest znacznie dłuższy, spowoduje to usterki).
+[[File:en/Archive/Old 32bpp/32bpp Bus notex.png | thumb | left | Przykładowa magistrala]]
+Teraz to wygląda bardziej jak wagon towarowy, jeśli już. Dodaj trochę tekstury, aby wyglądał bardziej jak autobus. W przypadku samouczka włóż w to tyle wysiłku, ile chcesz. Ważne jest jednak, abyś był w stanie odróżnić przód i tył oraz lewą i prawą stronę autobusu od siebie, w przeciwnym razie będziesz zdezorientowany podczas stosowania przesunięć.
+[[File:en/Archive/Old 32bpp/32bpp Bus tex.png | thumb | right | O wiele ładniejszy z teksturami]]
+Uzgodniono, że wartości shaderów materiałów dla współczynnika odbicia i koloru otoczenia powinny być modyfikowane razem. Ustawienie obu wartości na 0,8 to dobry początek. Jeśli ustawisz te wartości zbyt nisko, model będzie wyglądał na dość ciemny w renderowaniu. Naciśnij F12, aby sprawdzić swoje wyniki.
+
+[[File:en/Archive/Old 32bpp/32bpp bus ground+ambient.png|thumb|right|Ustawianie opcji]]
+Wreszcie, nie chcesz, aby biały kafelek ziemi był renderowany, ponieważ twój autobus będzie nosił biały prostokąt, gdy będzie się poruszał w grze. Ale nadal musisz zachować cień rzucany przez autobus na tę płytkę, w przeciwnym razie końcowy wynik będzie wyglądał płasko i kreskówkowo. Ustaw więc Shader dla zmielonego materiału (i tylko dla zmielonego materiału!) Na "OnlyShad" . Jeśli jeszcze tego nie zrobiłeś, przesuń pojazd na środek płytki (początek osi) i upewnij się, że koła są na ziemi. Żadnych 'poduszkowców' <small>''(unoszące się)''</small> tutaj! Teraz model jest gotowy do renderowania. Potrzebujesz łącznie 8 renderów na poziom powiększenia, co odpowiada 8 kątom. Każdy kąt różni się od poprzedniego i następnego o 45 stopni. Dzięki tym renderom możesz zastąpić 8 sprite'ów na autobus w trg1r.grf. Wymieńmy Foster MkII Superbus. Ma 'sprite' ID #3476 do #3483.
+[[File:en/Archive/Old 32bpp/Foster Superbus trg1r sprites.png|thumb|none|The Foster MkII section of the trg1r.grf]]
+
+
+=== Renderowanie manualne ===
+Może to być trochę uciążliwe, ale jest podobne do tego, co zrobiłeś dla domu. Wypróbuj, jeśli masz problemy z automatycznym podejściem opisanym poniżej lub jeśli lubisz majsterkować ...
+Musisz wyrenderować 8 kątów. Po każdym renderowaniu zapisz renderowany obraz (F3) jako ID#_z0.png (do yourottdfolder\data\sprites\trg1r\ ), obróć model zgodnie z ruchem wskazówek zegara o dokładnie 45 stopni (zachowując środek szyny na początku osie i koła na ziemi) i ponownie renderuj. Powinieneś otrzymać 8 plików o nazwach od 3476_z0.png do 3483_z0.png. Zwróć uwagę, że twój pierwszy render najprawdopodobniej nie będzie odpowiadał 'sprite' #3476. Jeśli widok jest taki sam jak na przykładowym obrazku (autobus skierowany w stronę sw), zaczniesz od 3481_z0.png, następnie 3482_z0.png i 3483(...), potem 3476, 3477 i tak dalej, aż do 3480. Zawsze pamiętaj aby sprawdzić kąt twojego 'sprite' do tego w trg1r.grf.
+Teraz musisz otworzyć każdy plik w GIMP i automatycznie go przyciąć. To da ci dużo mniejsze pliki, z autobusem mniej więcej pośrodku (twój przebieg może się różnić w przypadku Photoshopa lub podobnych programów. Jeśli wszystko inne zawiedzie, użyj GIMP, to nic nie kosztuje). To dobrze, ponieważ początek ramek ograniczających pojazdy (patrz wyżej) to środek sprite'a. Więc x_offs i y_offs stanowią mniej więcej połowę szerokości i wysokości 'sprite' . Zrób tabelę z wymiarami każdego 'sprite' i połową każdej wartości. Jeśli skończysz z miejscami dziesiętnymi, zaokrąglij do następnej liczby całkowitej (nie ma półpikseli ...!). Pamiętaj, że przesunięcia są zwykle ujemne.
+
+{|
+|-
+| Sprite ID
+| Viewing angle
+| Width
+| Height
+| x_offs
+| y_offs
+|-
+| 3476
+| N
+| 131
+| 92
+| -66
+| -46
+|-
+| 3477
+| NE
+| 134
+| 85
+| -67
+| -43
+|-
+| 3478
+| E
+| 145
+| 70
+| -73
+| -35
+|-
+| 3479
+| SE
+| 134
+| 85
+| -67
+| -43
+|-
+| 3480
+| S
+| 128
+| 90
+| -64
+| -45
+|-
+| 3481
+| SW
+| 135
+| 84
+| -68
+| -42
+|-
+| 3482
+| W
+| 146
+| 70
+| -73
+| -35
+|-
+| 3483
+| NW
+| 136
+| 85
+| -68
+| -43
+|}
+
+Teraz użyj pngcodec, jak opisano powyżej, aby dodać wartości x_offs i y_offs do każdego 'sprite' 
+
+<code>
+d:\ottd\data\sprites\trg1r>pngcodec a 3476_z0.png x_offs=-66 y_offs=-46<br>
+d:\ottd\data\sprites\trg1r>pngcodec a 3477_z0.png x_offs=-67 y_offs=-43<br>
+</code>
+
+etc.
+
+Uruchom OTTD, aby zobaczyć swoje dzieło w grze (nie zapomnij ustawić roku na 2020 lub podobną wartość, w przeciwnym razie Twój autobus może nie być jeszcze dostępny).
+[[File:en/Archive/Old 32bpp/32bpp bus ingame.png|thumb|none|Przykładowy autobus w grze]]
+
+Doskonały. Szybki i niezawodny transport publiczny dla świata jutra!
+
+=== Automatyczne renderowanie ===
+Ręczne renderowanie kątów widzenia może być możliwe w przypadku 8 'sprites' , ale będzie coraz bardziej uciążliwe, jeśli zdecydujesz się renderować również poziomy powiększenia _z1 i _z2. Oraz pliki masek dla różnych kolorów firmowych (do tego dojdziemy później). W przypadku standardowego pojazdu zwykle otrzymasz 48 plików. Tutaj możesz chcieć skorzystać z automatycznego renderowania i kodowania. Potrzebujesz do tego skryptu blender_render.py w Pythonie i programu blender_convert. Oba zostały opracowane przez firmę brupje. Skrypt w języku Python jest już zawarty w pliku szablonu .blend, natomiast link do pliku blender_convert.exe można znaleźć we wstępie. Aby ten skrypt działał poprawnie, musisz przestrzegać następujących zasad:
+* Model, który chcesz renderować, musi znajdować się w jednej z warstw od 6 do 9, najlepiej w warstwie 6.
+* Będzie renderowany pod 4 różnymi kątami, wszystkie obrócone o 90 stopni.
+* Warstwa 10 jest zarezerwowana dla źródeł światła i otoczenia płytek. Jest zawsze aktywny.
+* Warstwa 2 jest również zawsze aktywna, w mało prawdopodobnym przypadku, gdy chcesz, aby obiekt wyglądał tak samo na każdej warstwie.
+* Wszystkie obiekty w warstwie 1, 3, 4 i 5 są ignorowane.
+[[File:en/Archive/Old 32bpp/32bpp blender render.png | thumb | right | Gotowy do renderowania]]
+Umieść swój model na warstwie 6. Ponieważ chcesz mieć 8 różnych kątów, musisz go zduplikować i przenieść kopię na warstwę 7. Obróć go zgodnie z ruchem wskazówek zegara o 45 stopni. Zmodyfikuj ustawienia w pliku skryptu, aby renderowane obrazy były zapisywane w wybranym katalogu. Wybierz tryb normalny, dostęp do warstw 6 i 7 oraz renderowanie tylko sprite'ów _z0. Umieść kursor wprowadzania tekstu (czerwony pasek) w pierwszym wierszu skryptu, a następnie naciśnij [Alt+P], gdy kursor myszy znajduje się w oknie tekstowym, aby aktywować skrypt. Odchyl się, napij się kawy lub podlej rośliny doniczkowe. Jeśli wszystko działa dobrze, wyrenderuje 8 obrazów. Zostaną one umieszczone w podfolderze z nazwą pliku .blend w określonej przez Ciebie lokalizacji.
+
+Nie będziemy się jeszcze przejmować tworzeniem odpowiednich masek kolorów firmowych, ale blender_convert.exe, narzędzie pngcodec'u, wymaga do działania przynajmniej kilku "fikcyjnych" plików masek. Więc wyrenderujmy je również, aktywując tryb maski w skrypcie Pythona i uruchamiając go ponownie (pamiętaj, aby zresetować kursor!). Powinien szybko wyrenderować 8 pustych plików masek (jeśli pliki masek nie są puste, albo masz obiekty bez materiału na swojej warstwie, albo masz materiały z fałszywymi użytkownikami. Nie przejmuj się na razie, nie użyjemy tych plików masek tak czy siak).
+Jeśli jeszcze tego nie zrobiłeś, pobierz blender_convert i rozpakuj zawartość pliku zip do wybranego miejsca docelowego. Wybrałem d:\ottd\bc\
+Krótkie zastrzeżenie: program znajduje się w użytecznej, ale wczesnej fazie rozwoju. Więc nie oczekuj GUI. Spodziewaj się jednak, że ulegnie awarii, jeśli napotka problem. Ale jeśli podasz mu odpowiednie dane, działa to jak urok.
+Utwórz pusty plik .txt o nazwie rename.txt w folderze zawierającym 16 wyrenderowanych plików. Nie pisz jeszcze nic w tym. Program potrzebuje pliku lub ulegnie awarii. Później umieścimy w nim przydatne dane.
+Uruchom blender_convert raz z wiersza poleceń.
+
+<tt>
+yourbcfolder>blender_convert locationofsprites\<br>
+np.<br>
+d:\ottd\bc>blender_convert d:\ottd\data\sprites\trg1r\example_bus\<br>
+</tt>
+
+W swoim folderze znajdziesz nowy podfolder o nazwie "output" . blender_convert automatycznie przyciął wszystkie obrazy. Teraz ponownie zanotuj wymiary obrazu, jak opisano powyżej dla procesu ręcznego. Możesz teraz usunąć folder wyjściowy. Zaczniemy ponownie bc z "właściwym" <small>''(proper)''</small> rename.txt. Podzielić wszystkie wymiary przez 2 i przyjąć wartości ujemne. Dowiedz się, który plik odpowiada danemu ID 'sprite' . Lepiej ponownie narysuj tabelę dla własnego użytku.
+Teraz otwórz plik rename.txt. Informacje do kodowania wprowadza się w następujący sposób:
+
+<tt>
+filename_of_source   <-nr .png suffix!<br>
+sprite_id<br>
+x_offs<br>
+y_offs<br>
+
+e.g.<br>
+example_bus_2_7<br>
+3476<br>
+-66<br>
+-46<br>
+example_bus_2_6<br>
+3477<br>
+-67<br>
+-43<br>
+example_bus_1_7<br>
+3478<br>
+-73<br>
+-35<br>
+.... <- i tak dalej dla każdego kąta <small>''(angle)''</small> 'sprite' .
+</tt>
+
+Zakończ każdą linię, naciskając Enter. Nie używaj pustych linii, tabulatorów ani niepotrzebnych spacji. Bc w ogóle ich nie lubi! Powinieneś otrzymać plik rename.txt, który ma (8x4 =) 32 linie. Teraz uruchom ponownie bc, jak opisano powyżej. Tym razem automatycznie przycina, pngcodec i zmienia nazwy wszystkich plików. Dobre czasy! (Jeśli się zawiesza lub podaje nieprawidłowe nazwy plików lub przesunięcia, prawdopodobnie masz literówkę w swoim rename.txt)
+Pobierz wszystkie 8 sprite'ów magistrali z folderu wyjściowego (w tym przypadku możesz usunąć pliki masek. Są po prostu puste, jeszcze nie utworzyłeś odpowiednich) i skopiuj je do folderu trg1r. Teraz uruchom OTTD, aby zobaczyć swoje dzieło w grze. W porządku!
+
+Nawiasem mówiąc, jeśli zastanawiałeś się, dlaczego podejście zautomatyzowane jest bardziej czasochłonne niż podejście ręczne: stanie się znacznie łatwiejsze, gdy przyzwyczaisz się do sposobu działania narzędzi, w którym to czasie naprawdę zaoszczędzisz dużo czas. Dużo łatwiej jest też zastosować w ten sposób kolory firmowe. Czy wspomniałem już o plikach masek ...?
+
+== Krok 4: Stosowanie kolorów firmowych ==
+Jeśli wykonałeś poprzedni krok, być może zauważyłeś, że Twój autobus wygląda tak samo, bez względu na wybrany kolor firmy. To dobrze, jeśli chcesz, aby na przykład miał prototypową kolorystykę, ale z punktu widzenia rozgrywki preferowane jest, aby przynajmniej część modelu miała kolor firmy - w przeciwnym razie będzie piekło znaleźć autobusy w dużym mieście, w którym działa kilka firm!
+Kolory firmowe są stosowane poprzez utworzenie dodatkowego pliku dla każdego 'sprite', który ma takie same wymiary jak oryginalny. W tym pliku wszystkie obszary, które mają pokazywać kolory firmowe są zaznaczone na niebiesko, a reszta jest przezroczysta. Nazywa się to plikiem maski. Pliki masek mają taką samą nazwę jak plik nadrzędny, ale przed przyrostkiem .png dodawane jest „m”. Zatem plik maski dla 3476_z0.png będzie miał postać 3476_z0m.png. Ważna uwaga: pliki masek nie muszą być pngkodowane. Otrzymują informacje o przesunięciach od nadrzędnego 'sprite' .
+[[File:en/Archive/Old 32bpp/32bpp mask file overview.png | thumb | right | Pojęcie plików masek]]
+Pliki masek dodają kolor firmowy do 'sprite' w zależności od [http://en.wikipedia.org/wiki/HSL_and_HSV wartości HSV] zwykłego koloru 'sprite' w dotkniętych obszarach. To jest Barwa (kolor), Nasycenie ( "kolorystyka" ) i Wartość (jasność/ciemność). Istnieją dwa podstawowe kolory firmowe (chociaż nie należy ich mylić z drugim kolorem firmowym) w każdej kolorystyce, które są naprzemienne co 60 stopni odcienia. Zmieszany? Oznacza to po prostu, że kolory podstawowe czerwony, zielony i niebieski (model RGB, pamiętasz?) Uzyskują pierwszy kolor, podczas gdy "mieszane" kolory żółty, cyjan i magenta uzyskują drugi kolor. Kolor pomiędzy nimi powoduje mieszanie się pierwszego i drugiego.
+Należy pamiętać, że chociaż GIMP używa bardziej logicznego schematu 360 stopni dla wartości odcieni, Blender ma wartości z zakresu od 0 do 1. Na szczęście wartości te można łatwo przekonwertować bezpośrednio.
+[[File:en/Archive/Old 32bpp/32bpp Company colours.png | thumb | right | Tabela porównawcza kolorów firmowych]]
+Dla S i V jest to łatwiejsze: nasycenie i wartość oryginalnych kolorów bezpośrednio wpływają na nasycenie i wartość kolorów firmowych. Bardzo niskie nasycenie spowoduje prawie całkowity brak firmowego koloru, więc odcienie szarości, czerni i bieli pozostaną bezbarwne.
+Odbywa się to w ten sposób, aby drobne szczegóły, takie jak cienie, kontury i tekstury, nie zostały utracone.
+Pliki masek muszą być 8-bitowe. To ograniczenie wynikające ze sposobu, w jaki OTTD radzi sobie z kolorami firmowymi. Wynik w grze będzie jednak 32-bitowy, więc nie martw się, że może to być krok wstecz!
+Zróbmy plik maski dla naszej przykładowej magistrali. Jeśli Twój autobus ma bardzo desaturowany kolor, taki jak biały, szary lub czarny, możesz wcześniej zmienić ten kolor lub wynik może być niezadowalający.
+
+===Manualne generowanie plików masek ===
+Użyj GIMP (lub innego programu do obróbki obrazu), aby otworzyć nadrzędny plik .png (na przykład 3481_z0.png). Dodaj drugą warstwę. Na tej warstwie pokoloruj wszystkie obszary, do których chcesz zastosować kolor firmowy. Wyłącz (ukryj) warstwę macierzystą, aby widoczna była tylko maska. Zapisz wynik jako odpowiedni plik maski (3481_z0m.png). Teraz przeładuj plik maski. W ten sposób pozbędziesz się warstwy macierzystej (możesz ją też po prostu usunąć bez ponownego ładowania). Konwertuj obraz na 8-bitowy, wybierając Obraz-> tryb-> indeksowany. Gimp wyświetli monit o wybranie palety. Wybierz opcję „Użyj niestandardowej palety” i upewnij się, że opcja „usuń nieużywane kolory z ostatecznej palety” NIE jest zaznaczona. Musisz zachować co najmniej 196 kolorów w palecie. Zwykle wybieram paletę „Sieć”. Jeśli inne palety nie działają dla Ciebie, wypróbuj tę. Otwórz mapę kolorów (Dialogi-> Colormap). Wybierz kolor z numerem indeksu między 196 a 203, aby pokolorować plik maski. Podobno rzeczywisty kolor nie ma znaczenia, o ile mieści się w tym zakresie. Maski są zwykle rysowane na niebiesko, więc jeśli w tym zakresie jest ładny niebieski, wybierz go (nie ręcę za to, aby czerwone lub żółte maski działały równie dobrze ...) i pomaluj kolorowe obszary maski na ładny niebieski . Zapisz plik ponownie. Teraz wszystko, co musisz zrobić, to powtórzyć to dla wszystkich pozostałych 'sprites', uruchomić OTTD i sprawdzić wyniki. Dobra robota!
+
+=== Automatyczne generowanie plików masek ===
+[[File:en/Archive/Old 32bpp/32bpp readytorender mask.png|thumb|right|Gotowy do renderowania plików masek. Zobacz zdjęcie do opisu]]
+Nadszedł czas, aby blender_render zabłysnął. Jeśli wykonałeś krok 3, zauważyłeś, że dość szybko pominęliśmy problem plików maskujących. Teraz zrobimy "właściwe" pliki masek. Ważne dla skryptu renderującego jest to, że masz ustawioną flagę "fałszywy użytkownik" dla każdego materiału, który chcesz później pokazać jako pokolorowany przez firmę. To jest mały przycisk "F" w sekcji Shaders->materials->links and pipeline. Kliknij go i obserwuj, jak liczba użytkowników danych rośnie o jeden. Jeśli zamiast tego spadnie o jeden, ten materiał miał już ustawioną flagę "fakeuser" . Możesz również określić, czy materiał ma fałszywego użytkownika w oknie dialogowym wyboru materiałów. Jeśli przed nazwą materiału znajduje się F , oznacza to, że ma jeden.
+W tym samouczku pokoloruj tylko dach. Przypisz fałszywego użytkownika do materiału dachu. Jeśli dzieli się swoim materiałem z innymi częściami autobusu, musisz przypisać mu osobny materiał. Ustaw materiał na bezcieniowy, aby uniknąć problemów z zniekształceniem kolorów i przyspieszyć proces renderowania. Możesz także chcieć wyłączyć wszystkie tekstury przypisane do materiału. I tak ich nie potrzebuje. Upewnij się, że edytujesz materiały autobusu na obu warstwach (6 i 7).
+Wybierz tryb maski w blender_render.py, komentując tryb normalny i „komentując” tryb maski. Umieść kursor tekstowy w pierwszym wierszu skryptu, naciśnij [Alt + P], aby go aktywować i pozwól skryptowi wykonać pracę za Ciebie. Teraz po prostu uruchom blender_convert, jak opisano powyżej, używając starego pliku rename.txt. Upewnij się, że nieprzetworzone renderowanie 3D z kroku 3 i pliki masek z tego kroku znajdują się w tym samym folderze. Powinien napisać nowe sprite'y wyjściowe, wszystkie z odpowiednimi plikami masek, starannie przekonwertowane do 8bpp (indeksowane kolory). Skopiuj je do folderu trg1r, uruchom OTTD i gotowe!
+
+=== Ale czekaj, to nie wszystko! ===
+Jeśli napotkasz usterki, takie jak oryginalny kolor wyświetlanego 'sprite' , szczególnie na krawędziach i zarysie 'sprite' , musisz dostosować pliki masek. Często przesuwanie masek w górę o jeden piksel w GIMP-ie załatwia sprawę (po prostu zapisz stary plik - pliki masek nie muszą być pngcodec'owane - ale pozostaw obraz w trybie indeksowanym (8bpp)). Jeśli to nadal nie działa, spróbuj rozszerzyć maski o jeden piksel w każdym kierunku. Jeśli wynik nadal jest niezadowalający, musisz edytować maski piksel po pikselu, odnotowując, gdzie pojawia się oryginalny kolor, a następnie rozszerzać maskę w tym kierunku - ale rzadko jest to konieczne.
+Jeśli Twój 'sprite' wygląda dobrze w powiększeniu z0, ale widzisz część oryginalnego koloru 'sprite' na bardziej oddalonych poziomach, możesz również spróbować przesunąć i / lub rozszerzyć maskę. Jeśli to nie zadziała, musisz wyrenderować sprite'y z1 i z2 oraz odpowiadające im pliki masek, więc źle wyrównana, pomniejszona wersja zostanie nadpisana przez wstępnie wyrenderowaną wersję sprite'a.
+
+== Krok 5: Zawijanie rzeczy ==
+Jeśli wykonałeś poprzednie dwa kroki, powinieneś skończyć z 16 plikami (8 kątów + 8 plików masek) dla magistrali w folderze trg1r (48, jeśli wyrenderowałeś również z1 i z2 zoom). To jest dobre w przypadku odtwarzania testowego, poprawiania wartości przesunięcia i tym podobnych, ale jeśli chcesz udostępnić swoje dzieło ogółowi społeczeństwa, przekonasz się, że większość użytkowników nie będzie przejmować się pobieraniem 16 oddzielnych plików. Musisz więc spakować je do jednego archiwum. Dogodnie, OTTD ma już wbudowaną możliwość odczytu archiwów, więc użytkownicy nie muszą rozpakowywać plików w swoim systemie. Co jest niewygodne, przynajmniej dla użytkowników systemu Windows, może czytać tylko pliki .tar, system archiwizacji bardziej powszechny w systemach Unix/Linux. Musisz zdobyć archiwizator plików, który obsługuje pisanie .tar. WinZip i WinRAR nie są odpowiednie. Rekomenduje [http://www.peazip.org/ PeaZip]. Jeśli chcesz mieć więcej do wyboru, [http://en.wikipedia.org/wiki/Comparison_of_file_archivers#Writing sprawdź tę tabelę porównawczą].
+Pliki .tar normalnie są umieszczane w folderze danych ottd, podczas gdy pliki sprite znajdują się w data\sprites\trg1r\ . Musisz naśladować tę strukturę folderów w pliku .tar. Więc wewnętrzna struktura twojego pliku archiwum byłaby
+
+<tt>
+sprites\trg1r\  <-i wszystkie twoje 'sprites' trafiają do tego folderu
+</tt>
+
+Jeśli chcesz, możesz dodać plik .txt w głównym folderze archiwum. OTTD zignoruje go, ale możesz go użyć do opisania zawartości archiwum, podania instrukcji instalacji, informacji historycznych o konstrukcji, pojeździe, drzewie (??), które stworzyłeś, narzekać na politykę (proszę nie!) Lub powiedzieć cześć wszystkim znajomym. Jednak utrzymuj to na umiarkowanej długości (pomyśl o przepustowości!). Co ważniejsze, możesz dołączyć licencję do tego pliku .txt. Zwykle użytkownicy OTTD bardzo poważnie podchodzą do kwestii związanych z prawami autorskimi, a ludzie, którzy zgrywają pliki w celu znalezienia treści, będą rozmawiać na forach. Ale jeśli chcesz (lub po prostu nie masz nic przeciwko), aby ludzie korzystali z twoich prac, aby tworzyć więcej grafiki, dołącz licencję, taką jak Creative Commons lub GFDL, stwierdzającą, że można to zrobić. Możesz także udostępnić plik .blend, aby inni mogli nad nim pracować - ale oddziel go od pliku .tar, proszę. Opublikuj swoją pracę na forach i gotowe. Dziękujemy za wkład w świat 32bpp OpenTTD!
+
+== Dodatkowe Zasoby ==
+
+[http://en.wikibooks.org/wiki/Blender_3D:_Noob_to_Pro "Blender 3D: Noob do Pro"] 
+
+{{en/Navbox}}
+
+[[Category:en/Archive/Community/New Graphics]][[Category:en/Archive/Old 32bpp/32bpp Graphics Developer resources]][[Category:en/Archive/Graphics Development Documentation]][[Category:pl/Archive/Community/Nowe Grafiki]][[Category:pl/Archive/Old 32bpp/Zasoby Twórców Grafik 32bpp]][[Category:pl/Archive/Dokumentacja Rozwoju Grafik]]
