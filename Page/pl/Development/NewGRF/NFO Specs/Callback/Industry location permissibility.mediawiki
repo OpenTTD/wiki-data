@@ -6,33 +6,33 @@ Wywoływany, aby zdecydować, czy można zbudować przemysł w danym miejscu. Po
 {| |-
 !Zmienna!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Rozmiar]]!!Wersja!!Znaczenie
 |-
-|40+x|| ||{{pl/Development/NewGRF/ottdp| | }}||Not accessible
+|40+x|| ||{{pl/Development/NewGRF/ottdp| | }}||Niedostępne
 |-
-|5F|| ||{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=19744}}||Random bits the industry starts with after construction. Accessible via RandomAction2 as well.
+|5F|| ||{{pl/Development/NewGRF/ottdp|1.1|no|ottdrev=19744}}||Losowe bity, od których przemysł zaczyna się po zakończeniu budowy. Dostępne również przez RandomAction2.
 |-
-|60+x|| ||{{pl/Development/NewGRF/ottdp| | }}||Only var. 62 and vars 64..68 can be used
+|60+x|| ||{{pl/Development/NewGRF/ottdp| | }}||Tylko var. 62 i vars 64..68 <small>''może być użyty''</small>
 |-
-|80||W||{{pl/Development/NewGRF/ottdp| | }}||Coordinates of the selected position
+|80||W||{{pl/Development/NewGRF/ottdp| | }}||Współrzędne wybranej pozycji
 |-
-|86||B||{{pl/Development/NewGRF/ottdp| | }}||Number of the selected layout, according to property 0A
+|86||B||{{pl/Development/NewGRF/ottdp| | }}||Numer wybranego układu, zgodnie z właściwością 0A
 |-
-|87||B||{{pl/Development/NewGRF/ottdp| | }}||Ground type of the selected spot (see [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Canals|canal variable 81]] for details)
+|87||B||{{pl/Development/NewGRF/ottdp| | }}||Typ terenu w wybranym miejscu (szczegółowe informacje można znaleźć w [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Canals|canal variable 81]] )
 |-
-|88||B||{{pl/Development/NewGRF/ottdp| | }}||[[pl/Development/NewGRF/NFO Specs/TownZones|Town zone]] of the selected spot (see [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Houses#town-zone-42|house variable 42]] for details)
+|88||B||{{pl/Development/NewGRF/ottdp| | }}||[[pl/Development/NewGRF/NFO Specs/TownZones|Strefa miejscowości]] wybranego miejsca (detale patrz zmienna domu 42) [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Houses#town-zone-42|house variable 42]] )
 |-
-|89||B||{{pl/Development/NewGRF/ottdp| | }}||Distance between the closest town and the selected position.
+|89||B||{{pl/Development/NewGRF/ottdp| | }}||Odległość między najbliższym miastem a wybraną pozycją.
 |-
-|8A||B||{{pl/Development/NewGRF/ottdp| | }}||Height of the lowest corner of the tile
-* {{pl/Development/NewGRF/grfTill|7}} For GRF version 7 and below: Multiple of 8.
-* {{pl/Development/NewGRF/grfFrom|8}} For GRF version 8 and above: Multiple of 1.
+|8A||B||{{pl/Development/NewGRF/ottdp| | }}||Wysokość najniższego narożnika kafla
+* {{pl/Development/NewGRF/grfTill|7}} Dla wersji GRF 7 i starszych: wielokrotność 8.
+* {{pl/Development/NewGRF/grfFrom|8}} Dla wersji GRF 8 i nowszych: wielokrotność 1.
 |-
-|8B||W||{{pl/Development/NewGRF/ottdp| | }}||Distance to the closest water tile if property 1A bit 2 is clear (built on land); distance to the closest empty dry land tile if property 1A bit 2 is clear (built on water)
+|8B||W||{{pl/Development/NewGRF/ottdp| | }}||Odległość do najbliższego kafla wodnego, jeśli nieruchomość 1A bit 2 jest wolna (zabudowana na lądzie); odległość do najbliższego pustego kafla terenu, jeśli właściwość <small>''(property)''</small> 1A bit 2 jest wolna (zbudowana na wodzie)
 |-
-|8D||W||{{pl/Development/NewGRF/ottdp| | }}||Square of the Euclidean distance between the closest town and the selected position
+|8D||W||{{pl/Development/NewGRF/ottdp| | }}||Kwadrat odległości euklidesowej między najbliższym miastem a wybraną pozycją
 |-
-|8F||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ottdrev=r11985|ttdprev=r1816}}|| 32 random bits
+|8F||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ottdrev=r11985|ttdprev=r1816}}|| 32 losowe bity
 |}
-O ile wyraźnie nie zaznaczono, odległości są odległością Manhattanu, a nie odległości euklidesowej, tj. <tt>|x-x0|+|y-y0|</tt> zamiast <tt>sqrt((x-x0)^2+(y-y0)^2)</tt>
+O ile wyraźnie nie zaznaczono, odległości są odległością 'Manhattanu', a nie odległości euklidesowej, tj. <tt>|x-x0|+|y-y0|</tt> zamiast <tt>sqrt((x-x0)^2+(y-y0)^2)</tt>
 
 Zmienna 8B będzie zawsze poniżej 80 godzin, jeśli bit 2 prop 1A jest czysty. Jeśli bit 2 jest ustawiony, 8B zostanie ustawione na maksimum 200 godzin w przypadku pathological mapy wody.
 
@@ -53,27 +53,27 @@ Zmienna 8B będzie zawsze poniżej 80 godzin, jeśli bit 2 prop 1A jest czysty. 
 To wywołanie zwrotne musi zwrócić 15-bitową wartość, która jest interpretowana w następujący sposób:
 
 {| |-
-!Value!!Version!!Meaning
+!Wartość!!Wersja!!Znaczenie
 |-
-|0000-03ff||{{pl/Development/NewGRF/ottdp| | }}||Industry can't be built, display the misc. GRF text Dxxx as error message
+|0000-03ff||{{pl/Development/NewGRF/ottdp| | }}||Przedsiębiorstwa nie da się zbudować, pokaż różne rzeczy. Tekst GRF Dxxx jako komunikat o błędzie
 |-
-|0400||{{pl/Development/NewGRF/ottdp| | }}||Industry can be built
+|0400||{{pl/Development/NewGRF/ottdp| | }}||Przedsiębiorstwa można budować
 |-
-|0401||{{pl/Development/NewGRF/ottdp| | }}||Industry can't be built, display the default "site unsuitable" error message.
+|0401||{{pl/Development/NewGRF/ottdp| | }}||Nie można zbudować przedsiębiorstwa, wyświetl domyślny komunikat o błędzie "witryna nieodpowiednia".
 |-
-|0402||{{pl/Development/NewGRF/ottdp| | }}||Industry can't be built, display the "...can only be built in rainforest areas" error message.
+|0402||{{pl/Development/NewGRF/ottdp| | }}||Nie można budować przedsiębiorstwa, wyświetla komunikat o błędzie "... można budować tylko na obszarach lasów deszczowych".
 |-
-|0403||{{pl/Development/NewGRF/ottdp| | }}||Industry can't be built, display the "...can only be built in desert areas" error message.
+|0403||{{pl/Development/NewGRF/ottdp| | }}||Nie można budować przedsiębiorstwa, wyświetla komunikat o błędzie "... można budować tylko na obszarach pustynnych".
 |-
-|0404||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can only be built above the snow-line" error message.
+|0404||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Nie można zbudować przedsiębiorstwa, wyświetl komunikat o błędzie "... można zbudować tylko powyżej linii śniegu".
 |-
-|0405||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can only be built below the snow-line" error message.
+|0405||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Nie można zbudować przedsiębiorstwa, wyświetl komunikat o błędzie "... można zbudować tylko poniżej linii śniegu".
 |-
-|0406||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can't build on open sea" error message.
+|0406||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Nie można zbudować przedsiębiorstwa, wyświetl komunikat o błędzie "… nie można budować na otwartym morzu".
 |-
-|0407||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can't build on canal" error message.
+|0407||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Nie można zbudować przedsiębiorstwa, wyświetl komunikat o błędzie "... nie można budować na kanale".
 |-
-|0408||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Industry can't be built, display the "...can't build on river" error message.
+|0408||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22657}}||Nie można zbudować przedsiębiorstwa, wyświetl komunikat o błędzie "… nie można zbudować na rzece".
 |}
 
 {{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1755}} Od czasu TTDPatch r1755 można używać stosu tekstowego do komunikatów o błędach, podobnie jak wywołanie zwrotne 3A. Jedyna różnica polega na tym, że zamiast 6 kopiowane są tylko 4 rejestry, ponieważ komunikaty o błędach obsługują tylko 20 bajtów stosu referencyjnego, a dwa z tych bajtów mogą być używane przez TTD.
