@@ -191,39 +191,46 @@ ID''`y'' Akcji 2 do losowego wyboru
 
 == Triggers ==
 
-{| |-
+{| border=1 |-
 !rowspan="2"|Feature
-!colspan="2"|Random bits
-!rowspan="2"|Triggers
+!colspan="2"|Losowe bity
+!rowspan="2"|<span title=Triggers>'Wyzwalacze'</span>
 |-
-!Self!!Related
+!<span title='Samego siebie'>'Self'!!<span title=Related>'Powiązane'</span>
 |-
-|Vehicles||8||8 read-only||yes
+|Pojazdy||8||8 tylko-odczyt||tak
 |-
-|Stations||16 + 4 <ref name="stationshared">16 bitów współdzielonych dla całej stacji/lotniska (lotnisko i stacja dzielą te same bity). 4 bity na płytkę.</ref><ref>TTDPatch faktycznie implementuje tylko 8 współdzielonych losowych bitów (plus 4 na kafelek). Bity 8-15 są zawsze zerowe.</ref>
-|no||yes
+|valign=middle|Stacje||valign=middle|16 + 4 <!--<ref name="stationshared">-->{{pl/Development/NewGRF/NFO Specs/refs|name=stationshared|text=16 bitów współdzielonych dla całej stacji/lotniska (lotnisko i stacja dzielą te same bity). 4 bity na kafel.|1}}<!--</ref>--><!--<ref>-->{{pl/Development/NewGRF/NFO Specs/refs|text=TTDPatch faktycznie implementuje tylko 8 współdzielonych losowych bitów (plus 4 na kafelek). Bity 8-15 są zawsze zerowe.|2}}<!--</ref>-->
+|nie||tak
 |-
-|Canals||8||no||no
+|Kanały||8||nie||nie
 |-
-|Houses||8||no||yes
+|Domy||8||nie||tak
 |-
-|Industry tiles||8||16||yes
+|Kafle Przedsiębiorstw||8||16||tak
 |-
-|Industries||16||no||no
+|Przedsiębiorstwa||16||nie||nie
 |-
-|Airports||16 <ref name="stationshared"/>||no||no
+|valign=middle|Lotniska||valign=middle|16 <!--<ref name="stationshared"/>-->{{pl/Development/NewGRF/NFO Specs/refs|name=stationshared|<!--3-->1-1}}||nie||nie
 |-
-|Objects||8||no||no
+|Obiekty||8||nie||nie
 |-
-|Railtypes||2||no||no
+|Railtypy||2||nie||nie
 |-
-|Roadtypes||2||no||no
+|Roadtypes||2||nie||nie
 |-
-|Tramtypes||2||no||no
+|Tramtypes||2||nie||nie
 |-
-|Airport tiles||16 + 4 <ref name="stationshared"/>||no||no
+|valign=middle|Kafle lotniskowe||valign=middle|16 + 4 <!--<ref name="stationshared"/>-->{{pl/Development/NewGRF/NFO Specs/refs|name=stationshared|<!--4-->1-2}}||nie||nie
 |}
-<references/>
+<!--<references/>-->{{pl/Development/NewGRF/NFO Specs/przypisy|name=stationshared|2001}}<!-- 1.0
+ -->{{pl/Development/NewGRF/NFO Specs/przypisy|name=stationshared|2001-1}}<!-- 1.1
+ -->{{pl/Development/NewGRF/NFO Specs/przypisy|name=stationshared|4101-2}}<!-- 1.2
+  -->{{pl/Development/NewGRF/NFO Specs/refs|name=stationshared|text=16 bitów współdzielonych dla całej stacji/lotniska (lotnisko i stacja dzielą te same bity). 4 bity na kafel.|<!--1-->przypis}}<!-- 1-0
+  -->{{pl/Development/NewGRF/NFO Specs/refs|name=stationshared|<!--3--><!--1-1-->przypis}}<!-- 1-1
+  -->{{pl/Development/NewGRF/NFO Specs/refs|name=stationshared|<!--4--><!--1-2-->przypis}}<!-- 1-2
+ -->{{pl/Development/NewGRF/NFO Specs/przypisy|222012}}<!-- 2
+  -->{{pl/Development/NewGRF/NFO Specs/refs|text=TTDPatch faktycznie implementuje tylko 8 współdzielonych losowych bitów (plus 4 na kafelek). Bity 8-15 są zawsze zerowe.|<!--2-->przypis}}<!-- 2 -->
 
 === Vehicles ===
 
@@ -298,15 +305,16 @@ Jeśli aktywowany jest wyzwalacz 02, wszystkie części budynku, które mają te
 Płytki przemysłowe mają 8+16 losowych bitów. Dostęp do akcji losowej 2 typu 80 daje 8 bitów specyficznych dla kafelków, a dostęp do akcji losowej 2 typu 83 , - 16 bitów branżowych. Wyzwalacze są takie same dla obu. Wyzwalacze 02 i 04 są uruchamiane jednocześnie dla wszystkich kafelków branży. Każdy kafelek może zmienić losowo zarówno swoje losowe bity, jak i te z branży. Oznacza to, że każdy kafelek może określać niektóre bity branży do ponownego losowania, a unia wszystkich tych bitów zostanie ponownie przypisana na końcu.
 
 {| |-
-!Bit!!Value!!Version!!Trigger
+!Bit!!Wartość!!Wersja!!<span title=Trigger>'Wyzwalacz'</span>
 |-
-|0||01||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||płytka budowlana jest przetwarzana w cyklicznej pętli przetwarzania płytek<ref>{{pl/Development/NewGRF/ottdp|no| |}} Randandomizacja współdzielonych bitów przemysłu nie przebiega prawidłowo w obecnym TTDPatch.</ref>
+|0||01||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||valign=middle|płytka budowlana jest przetwarzana w cyklicznej pętli przetwarzania płytek<!--<ref>-->{{pl/Development/NewGRF/NFO Specs/refs|text={{pl/Development/NewGRF/ottdp|no| |}} Randandomizacja współdzielonych bitów przemysłu nie przebiega prawidłowo w obecnym TTDPatch.|<!--1-->31}}<!--</ref>-->
 |-
 |1||02||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||uruchamia się jednocześnie dla wszystkich kafelków branży co 256 tyknięć. Jeśli branża jest podstawowa, ładunek wyjściowy jest generowany w tym samym czasie.
 |-
 |2||04||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||ładunek jest dostarczany do przemysłu. Jeśli przemysł jest przetwórczy, ładunek wyjściowy jest generowany w tym samym czasie.
 |}
-<references />
+<!--<references />-->{{pl/Development/NewGRF/NFO Specs/przypisy|222021}}<!-- 1
+  -->{{pl/Development/NewGRF/NFO Specs/refs|text={{pl/Development/NewGRF/ottdp|no| |}} Randandomizacja współdzielonych bitów przemysłu nie przebiega prawidłowo w obecnym TTDPatch.|<!--1--><!--31-->przypis}}<!-- 1 -->
 
 Trigger 1 działa podobnie do wyzwalacza 1 dla domów, tyle że nie można pomnożyć limitu czasu: zawsze jest to 256 tyknięć.
 
