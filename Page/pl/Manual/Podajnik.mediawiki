@@ -1,0 +1,77 @@
+[[Translation:en/Manual/Feeder service]]
+
+
+{{pl/Informacja|W tym artykule opisano, jak ręcznie skonfigurować podajnik jednokierunkowy. Nie jest to konieczne, jeśli masz włączony [[pl/Manual/Dystrybucja ładunku|Cargodist]] w OpenTTD v1.4 lub nowszej. }}
+
+{{pl/Informacja|Jeśli chcesz stworzyć usługę [[pl/Manual/Podajnik dwukierunkowy|podajnika dwukierunkowego]], szczegóły opisano na jego stronie. Metoda opisana w tym atykule działa tylko w jedną stronę.}}
+
+'''Podajnik''' (również: ''Dokarmiacz'' od angielskiej nazwy ''[[en/Manual/Feeder service]]'') jest, mówiąc prościej, usługą, w której pojazdy wykonują "przekazanie" ładunku. Na przykład, autobus może przewieźć pasażerów na lotnisko poza miastem, aby mogli oni podróżować przez całą mapę, żeby gracz mógł uzyskać większe dochody.
+
+W niektórych przypadkach może się wydawać, że pojazdy mają [[pl/Manual/Ujemny przychód przez stosowanie podajników|ujemny dochód]], mimo że stanowią ważną część rentownego łańcucha.
+
+[[File:en/Manual/Feeder service.png|right|thumb|400px|Autobusy zaopatrujące lotnisko w pasażerów z pobliskiego miasta]]
+
+:''Dla lepszego zrozumienia poniższego artykułu, polecamy zapoznać się najpierw z treścią artykułu o [[pl/Manual/Polecenia|poleceniach]]''
+
+Na przykład, pasażerowie przybywają na przystanek, skąd odbiera ich autobus, dojeżdżający do lokalnego lotniska, które jest poza miastem i zazwyczaj nie akceptuje pasażerów. Autobus jest ustawiony na "Przeładunek, pozostaw pusty" na lotnisku, co powoduje, że pasażerowie wychodzą z autobusu i czekają na samolot, który ich odbierze.
+
+Nie zawsze rozsądne jest ustawienie usługi "od punktu do punktu" dla każdej możliwej trasy. Często system oparty na węźle przesiadkowym ma większy sens, ponieważ odciąża sieć i umożliwia pasażerom oraz ładunkowi bardziej efektywne korzystanie z różnych rodzajów transportu w celu przeniesienia się z punktu A do punktu B. Do tego właśnie służy przycisk transferu. 
+
+==Jak wyznaczyć trasę transferu==
+
+Wyobraź sobie więc, że masz [[pl/Lotnisko|lotnisko]] w mieście i chcesz skorzystać z [[pl/Manual/Pojazdy drogowe|autobusu]], aby przywieźć na nie pasażerów z centrum miasta. Można to łatwo osiągnąć:
+
+Przede wszystkim, dworzec autobusowy musi być połączony z lotniskiem. Wystarczy że zbudujesz przystanek tuż obok lotniska, przylegający do niego z którejś strony, jeśli jednak nie masz takiej możliwości, lub, z jakiegoś powodu, nie chcesz tego robić, możesz również połączyć stacje tak jak przedstawiono w artykule o [[pl/Manual/Stacje|Stacjach łączonych]]. Pasażerowie nie przesiądą się, jeśli lotnisko będzie niezależną od przystanku stacją.
+
+[[File:pl/Manual/Feeder service wrong.png|600px|thumb|left|Dwie osobne stacje, pasażerowie nie przesiądą się]]
+{{en/-}}
+Wyznacz trasę w standardowy sposób i wybierz przycisk ''Transfer'', aby poinformować pasażerów, że mają czekać na lotnisku na samolot. Aby zapobiec "kradzieży" pasażerów samolotu przez inny autobus, wybierz też opcję ''Rozładuj''. W OpenTTD w wersji min. 0.7.0 wybierz opcję ''Transfer'' z menu rozwijanego. Polecenie brzmi teraz: ''Przeładunek, pozostaw pusty''. 
+
+[[File:pl/Manual/Feeder service correct.png|600px|thumb|left|Prawidłowo połączone stacje, obok nazwy stacji widoczne są symbole autobusu i samolotu]]
+{{en/-}}
+W ten sposób autobus zawsze przemieszcza pasażerów na lotnisko w celu dalszego transportu.
+
+==Jak stworzyć bardziej zaawansowany system podajnikowy==
+[[File:en/Manual/Complex feeder system.png|left|thumb|700px|Kompleksowy system podajników. Autobusy dowożą pasażerów do pobliskiego dworca kolejowego. Pociąg wahadłowy odbiera ich i transportuje na lotnisko.]]
+
+Być może zauważyłeś, że (i zastanawiałeś się dlaczego) możesz łączyć transfer z pełnym załadunkiem i rozładunkiem (lub odpowiednio z opcją bez ładowania). Można to wykorzystać do ustawienia bardziej złożonych usług podajników. Wyobraź sobie, że masz takie samo lotnisko jak w powyższym przykładzie. Lotnisko to ma kilka miast wokół siebie i chciałbyś mieć pociąg wahadłowy, który przejeżdża przez wszystkie miejscowości, aby odebrać pasażerów.
+
+Kolejnym atrakcyjnym aspektem jest wykorzystanie lokalnej sieci autobusowej w celu przewiezienia pasażerów z całego miasta na centralny dworzec kolejowy. Transfer i przewóz ładunku jest również przydatny, jeśli pojazd ma odebrać ładunek z kilku stacji regionalnych, a następnie dostarczyć go do odległego miejsca docelowego, tak jak to robią pociągi w życiu codziennym.
+
+=== Powolna zaawansowana usługa podajnika (<0.7.0) ===
+
+* Pierwsza miejscowość otrzymuje normalne polecenie, a tym samym wielu pasażerów wchodzi do pociągu.
+* W drugiej miejscowości ludzie mają wsiadać, ale nie wysiadać. Należy więc ustawić polecenie ''Przeładuj i zabierz ładunek'', które powoduje rozładunek pasażerów, ale następnie ponownie ich zabiera tzn.: Tylko załadunek.
+* Wszystkie następne przystanki otrzymują takie samo polecenie.
+* Lotnisko otrzymuje polecenie ''Przeładunek, pozostaw pusty''.
+
+W ten sposób wszyscy ludzie ze wszystkich przystanków zostają podrzuceni na lotnisko i wsiadają do swoich samolotów.
+
+=== Przyspieszona zaawansowana usługa podajnika (>0.7.0) ===
+[[File:en/Manual/No unload take cargo.png|right]]
+Od wersji '''0.7.0''', możesz wydać swoim pojazdom polecenie ''Nie rozładowuj i zabierz ładunek'' we wszystkich miejscowościach. To zadziała tak samo ja ''przeładunek, załaduj ładunek'' (przykład powyżej), poza tym, że pasażerowie nie będą wysiadać i wsiadać z powrotem (transfer). To przyspiesza działanie systemu podajnika, a także czyni je bardziej realistycznym, ponieważ pasażerowie z poprzednich stacji nie wysiadają na każdej po drodze, a jedynie ci nowi dosiadają się do pociągu.
+{{en/Feature|0.7}}
+
+== System dystrybucji ==
+
+
+[[File:en/Manual/Distributor-food.png|right|thumb|400px|Dystrybucja [[pl/Manual/Base Set/Cargos/Żywność|żywności]]]]
+
+[[File:en/Manual/Distributor-service.png|right|thumb|400px|Dystrybucja zaopatrzenia technicznego (ekonomia FIRS)]]
+
+Usługa dystrybutora jest przeciwieństwem usługi podajnika. Ładunek jest przekazywany do stacji dystrybucyjnej i rozprowadzany przez przynajmniej jeden pojazd na kilka różnych miejsc docelowych. Zazwyczaj podróż ze źródła do stacji transferowej obejmuje największą odległość i zarabia najwięcej pieniędzy. Jednakże, podobnie jak w przypadku zwykłych usług transferowych, przychód może być liczony na rzecz pojazdów, które realizują dostawę końcową.
+
+Usługi dystrybucyjne nie mają większego sensu dla pasażerów, ale w niektórych sytuacjach są bardzo przydatne w przypadku dostaw towarów:
+
+* W klimacie [[pl/Manual/Klimat]]m i [[pl/Manual/Klimat]]m, część z miast wymaga comiesięcznych dostaw określonych zasobów, żeby takie miasto mogło rosnąć (zobacz: [[pl/Manual/Miasta|Wzrost miast]]). Jeśli ładunek, taki jak żywność czy woda, dociera na miejsce rzadziej, sensowne jest, aby przenieść go na stację w pobliżu miasta i mieć pod ręką trasę, dzięki której ładunek dotrze do celu. Ponieważ ciężarówka ma zazwyczaj dużo mniejszą ładowność niż pojazd, który przewoził całą partię ładunku z miejsca jego pochodzenia, dostawa będzie rozłożona w czasie bardziej równomiernie.
+
+* W ekonomii [[pl/Community/NewGRF/FIRS|FIRS]] niektóre gałęzie przemysłu wymagają niewielkich ilości ładunku (np. zaopatrzenie techniczne), aby móc znacząco zwiększyć swoją produkcję. Ładunek dostarczany powyżej limitu jest nadal akceptowany, ale w rzeczywistości idzie na marne, ponieważ mógłby zostać wykorzystany do pobudzenia innych gałęzi przemysłu. Usługa dystrybucji może podzielić dużą partię towaru pomiędzy kilka pobliskich przedsiębiorstw. Zobacz też [[pl/Community/NewGRF/FIRS#usluga-podajnika|Usługa podajnika w FIRS]]. 
+
+Na niektórych mapach może być tylko kilku dostawców (takich jak [[pl/Manual/Base Set/Industries/Kopalnia złota|kopalnie złota]]), ale wielu, wielu konsumentów (takich jak [[pl/Manual/Base Set/Industries/Bank|banki]]) zgrupowanych jest daleko od dostawców. Jeżeli chcesz obsługiwać wszystkich konsumentów efektywnie, najlepiej jest skorzystać z usługi dystrybutora, aby równomiernie podzielić ładunek między odbiorców, a nie mieć wiele usług indywidualnie dostarczających ładunek bezpośrednio od producenta do konsumenta. 
+
+== SI używające usługi podajnika ==
+* [http://www.tt-forums.net/viewtopic.php?f=65&t=41518 PAXLink] używa lokalnych połączeń autobusowych do dostaw na lotniska.
+
+[[Category:pl/Manual/Rozgrywka]]
+[[Category:pl/Manual/Pojazdy]]
+[[Category:pl/Manual/Ustawienia]]
