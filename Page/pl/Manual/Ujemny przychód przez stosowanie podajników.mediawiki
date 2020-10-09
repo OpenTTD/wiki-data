@@ -1,0 +1,50 @@
+[[Translation:en/Manual/Negative income with feeder service]]
+
+
+Istnieją dwa różne przypadki, w których w usługach podajników pojazdy mogą wykazywać ujemny dochód (czasami ogromną kwotę), chociaż wykonują ważną pracę dla usługi. Ta strona wyjaśnia, dlaczego tak się dzieje i jak tego uniknąć. 
+
+==Wprowadzenie==
+[[File:en/Manual/Feeder negative income.png|right|thumb|400px|Przykładowy system podajników]]
+Rozważmy sytuację przedstawioną na ilustracji jako przykładową sieć. Usługa transportuje węgiel ze stacji A na dole po lewej stronie, przez stację pośrednią B, do stacji C na górze po prawej stronie (do elektrowni). Pierwsza część podróży odbywa się pociągiem, druga część pojazdami drogowymi. Wprawdzie przykład ten jest dość głupim sposobem dostarczania węgla na tej trasie, znacznie łatwiej i szybciej byłoby dostarczać węgiel w linii prostej, przedłużając linię ze stacji A - B bezpośrednio do stacji C, jednak jest to tylko przykład ilustrujący ten artykuł.
+
+Dwa przypadki, o których była mowa wcześniej, różnią się sposobem wymiany ładunku na stacji pośredniej B.
+
+
+
+==Polecenie rozładunku==
+Kiedy pociąg ma polecenie rozładunku na stacji B, to nie zostanie on opłacony. Pojazdy drogowe z B do C otrzymają cały zysk po dostarczeniu towaru do C. Zatem przychód pociągu będzie ujemny, chyba że po drodze będzie miał jakiś inny dochód.
+
+Upewnij się, że pociąg nie ma również polecenia załadunku (dla wersji 0.7 i nowszych), w przeciwnym razie załaduje z powrotem do wagonów właśnie rozładowany węgiel i przywiezie go z powrotem do kopalni (i nie dostaniesz zapłaty za swój wysiłek). 
+
+==Polecenie przeładunku==
+
+Teraz pociąg ma na stacji B polecenie transferu (przeładunku). Tym razem pociąg będzie miał dodatni przychód, jednak pojazdy drogowe wykazują ujemny przychód. Zobaczmy, jak to się stało.
+
+Płatność za cały dostarczony ładunek, bez względu na to, jak dotrze on do miejsca przeznaczenia, odbywa się według stałej zasady (wszystkie szczegóły znajdziesz na stronach [[pl/Manual/Game Mechanics/Main Page#przychod-za-ladunek|Mechanika Gry]] i [[pl/Manual/Game Mechanics/Przychód za ładunek|Przychód za ładunek]]).
+
+Zasadniczo:
+*otrzymujesz zapłatę za prostą odległość od źródła (kopalni węgla) do miejsca przeznaczenia (elektrowni), oraz
+*za wolniejszą dostawę ze źródła do miejsca przeznaczenia, płacisz karę. 
+
+W grze nie wiadomo, dokąd jedzie węgiel załadowany do pociągu. Kiedy pociąg przyjedzie na stację B i przeniesie węgiel, gra szacuje, ile powinieneś otrzymać za niego pieniędzy. Stwierdza ona, że 732 funty to uczciwa kwota i przypisuje ją do pociągu jako wirtualne pieniądze. Następnie trzy pojazdy drogowe zabierają węgiel i dostarczają go do elektrowni na stacji C. Tutaj gra wykrywa, że węgiel jest dostarczany do ostatecznego miejsca przeznaczenia. Oblicza ona dokładną zapłatę (około 711 funtów) za dostarczenie ładunku z kopalni bezpośrednio do elektrowni, odejmuje już podane 732 funty, co daje 21 funtów strat. W rezultacie, każdy z pojazdów drogowych musi zapłacić 7 funtów. Innymi słowy, pojazdy otrzymują rachunek za (najwyraźniej) przeszacowaną płatność za transport pociągiem. 
+
+==Przewidywanie ujemnego przychodu==
+
+Skomplikowana dostawa z wieloma przesiadkami jest zazwyczaj dobrym objawem ujemnych dochodów. Jeśli twoje pojazdy zrobią objazd, to będzie to kosztować.
+
+Innym częstym przypadkiem jest szybkość dostawy. Płatność za pociąg odbywa się na tych samych zasadach, co płatność końcowa. Ponieważ pociąg jest znacznie szybszy niż pojazd drogowy, za powolną dostawę otrzymuje mniejszą karę, czyli więcej pieniędzy niż powinien, biorąc pod uwagę średnią prędkość węgla podczas całej podróży. Pojazdy drogowe również płacą za wolniejszą niż kolej prędkość.
+
+==Zmniejszenie lub zapobieganie ujemnemu przychodowi pojazdów w systemach podajników==
+===Ogólnie===
+* Spróbuj utrzymać proste linie od źródła do celu. Nie tylko jest to szybsze, ale także zmniejsza ryzyko, że pojazdy za część podróży otrzymają więcej pieniędzy niż powinny.
+* Staraj się utrzymać jak największą prędkość wszystkich odcinków podróży. Wolniejsze pojazdy płacą cenę za zawyżone płatności pozostałych części.
+
+===W przypadku polecenia transferu===
+Przede wszystkim, jak wyjaśniono powyżej, ujemny dochód zostaje obliczony w celu zrekompensowania płatności dokonanych wcześniej za ładunek w pośrednich punktach systemu podającego. Tak więc, choć wygląda to trochę dziwnie, otrzymujesz zapłatę za cały dostarczony ładunek. Nie ma potrzeby się tym martwić.
+
+[[File:pl/Manual/Feeder systems percentage.png|right|thumb|W ustawieniach]]
+Jeśli jesteś zadowolony tylko z żółtych i zielonych płatności swoich pojazdów, możesz zmniejszyć lub wyeliminować negatywne dochody poprzez zmianę ustawień w grze. W oknie "Ustawienia", sekcja "Finanse", znajduje się ustawienie "[[pl/Archive/Unmapped/Ustawienia/Finanse#podzial-przychodow-w-przypadku-przeladunkow|Podział przychodów w przypadku przeładunków]]". Dzięki niemu możesz zmniejszyć ilość pieniędzy, które pojazdy otrzymują na stacjach pośrednich. W rezultacie, na koniec podróży do pojazdu dostarczającego ładunek do miejsca docelowego pozostaje więcej pieniędzy do zapłacenia.
+
+Należy pamiętać, że jest to ustawienie globalne, dotyczy ono wszystkich pojazdów korzystających z poleceń przeładunku. 
+
+[[Category:pl/Manual/Rozgrywka]]
