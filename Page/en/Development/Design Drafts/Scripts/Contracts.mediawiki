@@ -26,13 +26,15 @@ For compabitility reasons, the existing subsidies should still be possible.
 
 == CmdCreateSubsidy ==
 The first order of business is to find out how what you can set in a command. The current allocation of information (r26621) for <tt>CmdCreateSubsidy</tt> is
-<tt> * @param p1 various bitstuffed elements
+<tt>
+ * @param p1 various bitstuffed elements
  * - p1 = (bit  0 -  7) - SourceType of source.
  * - p1 = (bit  8 - 23) - SourceID of source.
  * - p1 = (bit 24 - 31) - CargoID of subsidy.
  * @param p2 various bitstuffed elements
  * - p2 = (bit  0 -  7) - SourceType of destination.
- * - p2 = (bit  8 - 23) - SourceID of destination.</tt>
+ * - p2 = (bit  8 - 23) - SourceID of destination.
+</tt>
 
 There is plenty of room, <tt>SourceType</tt> is just 3 values, so 2 bits suffice, and <tt>CargoID</tt> is just 5 bit long.
 That results in the following use of bits:
@@ -87,15 +89,17 @@ With just 8 bit, a linear increment does not scale very well, therefore I propos
 
 The Python program that computes it exactly for each value of '''n''':
 
-<tt>def get_length(n)
-    base = 0
-    if n <= 60: return (base + n*3)/12 # 60 = 15 year
-    n, base = n-60, base + 60*3
-    if n <= 30: return (base + n*6)/12 # 90 = 30 year
-    n, base = n-30, base + 30*6
-    if n <= 70: return (base + n*12)/12 # 160 = 100 year
-    n, base = n-70, base + 70*12
-    return (base + n*24)/12 # 255 == 290 year</tt>
+<tt>
+ def get_length(n)
+     base = 0
+     if n <= 60: return (base + n*3)/12 # 60 = 15 year
+     n, base = n-60, base + 60*3
+     if n <= 30: return (base + n*6)/12 # 90 = 30 year
+     n, base = n-30, base + 30*6
+     if n <= 70: return (base + n*12)/12 # 160 = 100 year
+     n, base = n-70, base + 70*12
+     return (base + n*24)/12 # 255 == 290 year
+</tt>
 
 === Variable cargo ===
 Cargo is even worse with respect to scale than time. For this reason there are much more steps with bigger increments.
@@ -161,33 +165,35 @@ Cargo is even worse with respect to scale than time. For this reason there are m
 
 And the Python program with that performs the compution for any '''n''':
 
-<tt>def get_amount(n)
-    base = 0
-    if n <= 40: return base + n*250 # 40 == 10K
-    n, base = n-40, base + 40*250
-    if n <= 30: return base + n*500 # 70 == 25K
-    n, base = n-30, base + 30*500
-    if n <= 25: return base + n*1000 # 95 == 50K
-    n, base = n-25, base + 25*1000
-    if n <= 20: return base + n*2500 # 115 == 100K
-    n, base = n-20, base + 20*2500
-    if n <= 20: return base + n*5000 # 135 == 200K
-    n, base = n-20, base + 20*5000
-    if n <= 30: return base + n*10000 # 165 == 500K
-    n, base = n-30, base + 30*10000
-    if n <= 20: return base + n*25000 # 185 == 1M
-    n, base = n-20, base + 20*25000
-    if n <= 10: return base + n*100000 # 195 == 2M
-    n, base = n-10, base + 10*100000
-    if n <= 12: return base + n*250000 # 207 == 5M
-    n, base = n-12, base + 12*250000
-    if n <= 10: return base + n*500000 # 217 == 10M
-    n, base = n-10, base + 10*500000
-    if n <= 15: return base + n*1000000 # 232 == 25M
-    n, base = n-15, base + 15*1000000
-    if n <= 15: return base + n*5000000 # 247 == 100M
-    n, base = n-15, base + 15*5000000
-    return base + n*50000000 # 255 == 500M</tt>
+<tt>
+ def get_amount(n)
+     base = 0
+     if n <= 40: return base + n*250 # 40 == 10K
+     n, base = n-40, base + 40*250
+     if n <= 30: return base + n*500 # 70 == 25K
+     n, base = n-30, base + 30*500
+     if n <= 25: return base + n*1000 # 95 == 50K
+     n, base = n-25, base + 25*1000
+     if n <= 20: return base + n*2500 # 115 == 100K
+     n, base = n-20, base + 20*2500
+     if n <= 20: return base + n*5000 # 135 == 200K
+     n, base = n-20, base + 20*5000
+     if n <= 30: return base + n*10000 # 165 == 500K
+     n, base = n-30, base + 30*10000
+     if n <= 20: return base + n*25000 # 185 == 1M
+     n, base = n-20, base + 20*25000
+     if n <= 10: return base + n*100000 # 195 == 2M
+     n, base = n-10, base + 10*100000
+     if n <= 12: return base + n*250000 # 207 == 5M
+     n, base = n-12, base + 12*250000
+     if n <= 10: return base + n*500000 # 217 == 10M
+     n, base = n-10, base + 10*500000
+     if n <= 15: return base + n*1000000 # 232 == 25M
+     n, base = n-15, base + 15*1000000
+     if n <= 15: return base + n*5000000 # 247 == 100M
+     n, base = n-15, base + 15*5000000
+     return base + n*50000000 # 255 == 500M
+</tt>
 
 
 === Variable ratio ===
