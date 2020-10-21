@@ -10,12 +10,12 @@ New results:
 * 0: draw default foundation (leveled)
 * 1: do not draw any foundation
 * xx02: draw a foundation which results in a specific slope, controlled via "xx".
-*: The values/meaning of "xx" need to be decided:
-*:* It could specify the resulting slope, so OpenTTD draws a foundation which transforms the present slope into the desired slope. (not all combinations are reasonable, e.g. to transform STEEP_W into STEEP_E)
-*:* It could specify the foundation type to apply, which then results in a slope depending on the original slope. (not all combinations of original slope and foundation type are possible)
-*:* It could specify a height difference for one or multiple corners (would allow raising terrain multiple levels; currently not present anywhere in the game, likely not worth pursuing)
-*:* It could specify whether "high" foundations are allowd. (foundations across 2 height levels, i.e. steep slope into flat slope)
-*:* Creating halftile foundations won't be possible, since they need two groundsprites (for lower and upper part) and there is no way to supply them.
+** The values/meaning of "xx" need to be decided:
+*** It could specify the resulting slope, so OpenTTD draws a foundation which transforms the present slope into the desired slope. (not all combinations are reasonable, e.g. to transform STEEP_W into STEEP_E)
+*** It could specify the foundation type to apply, which then results in a slope depending on the original slope. (not all combinations of original slope and foundation type are possible)
+*** It could specify a height difference for one or multiple corners (would allow raising terrain multiple levels; currently not present anywhere in the game, likely not worth pursuing)
+*** It could specify whether "high" foundations are allowd. (foundations across 2 height levels, i.e. steep slope into flat slope)
+*** Creating halftile foundations won't be possible, since they need two groundsprites (for lower and upper part) and there is no way to supply them.
 
 TODO figure out the best result values
 
@@ -26,7 +26,7 @@ New results:
 * xx02: allow autosloping, if it is possible to create slope xx using a (default) foundation.
 ** If CB 30/14E/150 return a "resulting slope", then this callback could use the same return values.
 ** However, in addition to the "resulting slope" autoslope might also need an allowed height difference. In the easiest case autoslope would only be allowed if the resulting slope on a foundation would have the same height as the same slope with a foundation before landscaping.
-**: Example:
+*** Example:
 **** SLOPE_W at heightlevel 1 can be transformed into SLOPE_FLAT at heightlevel 2.
 **** Raising the N, E or S corners or even lowering the E corner would result in SLOPE_NW, SLOPE_EW, SLOPE_SW or SLOPE_STEEP_W, which can all still be transformed into SLOPE_FLAT at heightlevel 2.
 **** Loweing the W corner would result in SLOPE_FLAT at heightlevel 1.
