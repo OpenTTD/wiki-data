@@ -5,15 +5,15 @@ The meeting started at around 18:15 GMT and finished around 21:00 GMT. Present d
 ==Issues discussed==
 ===Conversion of map arrays into a Tile structure===
 Current system:
-<pre><nowiki>extern byte   *_map_type_and_height;
+<pre>extern byte   *_map_type_and_height;
 extern byte   *_map_owner;
 extern uint16 *_map2;
 extern byte   *_map3_lo;
 extern byte   *_map3_hi;
 extern byte   *_map5;
-extern byte   *_map_extra_bits;</nowiki></pre>
+extern byte   *_map_extra_bits;</pre>
 Proposed system:
-<pre><nowiki>typedef struct Tile {
+<pre>typedef struct Tile {
        byte type_height;
        byte owner;
        uint16 m2;
@@ -21,7 +21,7 @@ Proposed system:
        byte hi3;
        byte m5;
        byte extra;
-} Tile;</nowiki></pre>
+} Tile;</pre>
 So instead of "t = _map2[tile_cur];" you can do "t = _m[tile_cur].m2;". Later the structure may be converted into two uint32s, and bits will be shuffled around to use the available space better. This will be implemented when a way to save/load it has been figured out. Also don't forget endiness people, a big endian and little endian bitfield is required.
 
 ===Save/Load Stuff===
