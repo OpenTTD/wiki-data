@@ -1,6 +1,6 @@
 {{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Action0/Industry_Tiles|pl=pl/Development/NewGRF/NFO Specs/Action0/Industry Tiles |sub=nfo}}
 <!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
-==Wprowadzenie==
+==<span id="Introduction" title=Introduction>Wprowadzenie</span>==
 
 <span title=tiles>'Kafle'</span> przemysłowe działają podobnie do budynków miejskich, z tym wyjątkiem, że nie są samodzielne; zawsze są częścią branży.
 
@@ -12,7 +12,7 @@ Przemysłowe <span title=identyfikatory>ID</span> kafli są unikalne w każdym p
 
 {{pl/Development/NewGRF/ottd|}} OpenTTD może mieć 512 <span title="identyfikatorów">ID</span> dla wszystkich aktywnych plików grf, ale obejmuje to nie przesłonięte oryginalne kafle .
 
-== Properties ==
+==<span id="Properties" title=Properties>Właściwości</span>==
 
 {| |-
 !<span title="właściwość">'Property'</span> !![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Rozmiar]] !!Wersja !! Opis
@@ -23,7 +23,7 @@ Przemysłowe <span title=identyfikatory>ID</span> kafli są unikalne w każdym p
 |-
 |0A,0B,0C||W||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Odbiór <small>''(acceptance)''</small> kafli
 |-
-|0D||B||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 49}}||Flagi kształtu gruntu
+|0D||B||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 49}}||Flagi kształtu terenu
 |-
 |0E||B||{{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=alpha 54}}||Flagi Callback
 |-
@@ -38,19 +38,19 @@ Przemysłowe <span title=identyfikatory>ID</span> kafli są unikalne w każdym p
 |13||V||{{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}}||Lista <span title=acceptance>'odbioru'</span> kafli
 |}
 
-== Description ==
+==<span id="Description">Opis</span>==
 
-=== Substitute tile type (08) ===
+===<span id="Substitute_tile_type_(08)"></span><span id="Substitute_tile_type_.2808.29" title="Substitute tile type (08)">Zastępczy typ kafla (08) </span>===
 
 Ten typ kafla zostanie użyty zamiast nowego, jeśli definicja nie jest dostępna z jakiegokolwiek powodu. Prawidłowe wartości to [http://marcin.ttdpatch.net/sv1codec/TTD-locations.html#Class8 00h-AEh]. Przypisanie tej właściwości powoduje skopiowanie właściwości starego typu, podobnie jak w przypadku domów.
 
 Jeśli akcja 3 tego kafla pojawi się przed ustawieniem tej właściwości, akcja 3 nie przyniesie żadnego efektu.
 
-=== Industry tile override (09) ===
+===<span id="Industry_tile_override_(09)"></span><span id="Industry_tile_override_.2809.29" title="Industry tile override (09)">Nadpisanie kafla przemysłu (09) </span>===
 
 Działa jak dom nadpisuje właściwość domów.
 
-=== Tile acceptance (0A, 0B, 0C) ===
+===<span id="Tile_acceptance_(0A,_0B,_0C)"></span><span id="Tile_acceptance_.280A.2C_0B.2C_0C.29"  title="Tile acceptance (0A, 0B, 0C)">Akceptacja kafli (0A, 0B, 0C) </span>===
 
 Te trzy słowa określają, jakie ładunki przyjmuje kafel i ile z nich. Niski bajt określa rodzaj ładunku zgodnie z aktualnym klimatem, natomiast wysoki bajt określa stopień akceptacji w 1/8 jednostek. Jeśli nie potrzebujesz wszystkich trzech rodzajów ładunku, po prostu wyzeruj wysoki bajt dodatkowych właściwości.
 
@@ -58,7 +58,7 @@ Te trzy słowa określają, jakie ładunki przyjmuje kafel i ile z nich. Niski b
 
 {{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} Te właściwości obsługują tylko trzy ładunki. Zamiast tego użyj właściwości 13, aby wymienić więcej rodzajów ładunków. 
 
-=== Land shape flags (0D) ===
+===<span id="Land_shape_flags_(0D)"></span><span id="Land_shape_flags_.280D.29" title="Land shape flags (0D)">Flagi kształtu terenu (0D)</span> ===
 
 Ta właściwość określa, na których zboczach można zbudować kafel.
 
@@ -82,9 +82,9 @@ Kafle przemysłowe nigdy nie są budowane na stromych zboczach, chyba że  [[pl/
 
 Bit 5 może być użyty do wpuszczenia kaflów przemysłu lądowego zbudowanych na wodzie lub odwrotnie. Skutecznie wyłącza kod kontroli ląd/woda dla kafla. Jeśli chcesz bardziej dostosować zachowanie, możesz użyć [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#custom-shape-check-2f |callback 2F]] , aby zdecydować, jaki rodzaj wody/ziemi jest dozwolony.
 
-;'''PROŚBA UWAGI''': Zachowaj ostrożność podczas ustawiania tej właściwości. Jeśli nie ustawisz go poprawnie, twoja branża może skończyć na zboczu wzgórza, co prawdopodobnie nie jest tym, czego chcesz. Najłatwiej jest ustawić bit 4 dla środkowych kafli, bit 0 dla kafli wzdłuż krawędzi SE, bit 1 dla tych wzdłuż krawędzi SW i tak dalej.
+;'''PROŚBA ODNOTOWANIA''': Zachowaj ostrożność podczas ustawiania tej właściwości. Jeśli nie ustawisz go poprawnie, twoja branża może skończyć na zboczu wzgórza, co prawdopodobnie nie jest tym, czego chcesz. Najłatwiej jest ustawić bit 4 dla środkowych kafli, bit 0 dla kafli wzdłuż krawędzi SE, bit 1 dla tych wzdłuż krawędzi SW i tak dalej.
 
-=== Callback flags (0E) ===
+===<span id="Callback_flags_(0E)"></span><span id="Callback_flags_.280E.29" title='Callback flags (0E)'>Flagi callback (0E)</span> ===
 
 {| |-
 !Bit!!wartość!!wersja!!znaczenie
@@ -106,15 +106,15 @@ Bit 5 może być użyty do wpuszczenia kaflów przemysłu lądowego zbudowanych 
 
 Należy pamiętać, że [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159 |callback 25]] nie ma tu trochę. Aby użyć [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159 |callback 25]] , po prostu ustaw żądane bity we właściwości 11 i będzie działać zgodnie z przeznaczeniem.
 
-=== Animation information (0F) ===
+===<span id="Animation_information_(0F)"></span><span id="Animation_information_.280F.29" title='Animation information (0F)'>Informacje o animacji (0F)</span> ===
 
 Niższy bajt określa liczbę klatek animacji pomniejszoną o jedną, więc 00 oznacza 1 klatkę, 01 oznacza 2 klatki itp. Maksymalna liczba klatek wynosi 256, chociaż możesz mieć pewne problemy, jeśli twoja animacja przekracza liczbę klatek FD (253). Górny bajt musi wynosić 0 dla animacji nie zapętlonych i 01 dla animacji zapętlonych. Każda inna wartość jest zarezerwowana do wykorzystania w przyszłości. Ponadto, jeśli całe słowo zawiera FFFF, animacja dla tego kafla jest wyłączona (jest to wartość domyślna).
 
-=== Animation speed (10) ===
+===<span id="Animation_speed_(10)"></span><span id="Animation_speed_.2810.29" title='Animation speed (10)'>Prędkość animacji (10)</span> ===
 
 Znaczenie jest takie samo, jak w przypadku właściwości domu 1B, ale dolny limit wynosi 0 zamiast 2, więc najszybsza możliwa animacja zmienia klatki w każdej grze (27ms). Wartość domyślna to 2.
 
-=== Triggers for [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159 |callback 25]] (11) ===
+===<span id="Triggers_for_callback_25_(11)"></span><span id="Triggers_for_callback_25_.2811.29" title='Triggers for callback 25 (11)'>Wyzwalacze dla [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159 |callback 25]] (11)</span> ===
 
 Wywołanie [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-control-1b-25-140-152-159 |callback 25]] kiedy:
 
@@ -133,7 +133,7 @@ Wywołanie [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#animation-contro
 |}
 Obecnie żaden wyzwalacz <small>''(trigger)''</small> nie zawiera dodatkowych informacji w var 18.
 
-=== Special flags (12) ===
+===<span id="Special_flags_(12)"></span><span id="Special_flags_.2812.29" title='Special flags (12)'>Specjalne flagi (12)</span> ===
 
 {| |-
 !Bit!!Wartość!!Znaczenie
@@ -147,7 +147,7 @@ Obecnie żaden wyzwalacz <small>''(trigger)''</small> nie zawiera dodatkowych in
 * 'Cb' kaflowe 2C zastępuje wszystkie akceptacje, w tym te dodane przez tę flagę.
 |}
 
-=== Tile acceptance list (13) ===
+===<span id="Tile_acceptance_list_(13)"></span><span id="Tile_acceptance_list_.2813.29" title='Tile acceptance list (13)'>Lista akceptacji kafli (13)</span> ===
 {{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}} 
 
 Format:
@@ -166,4 +166,4 @@ Format:
 Ta właściwość określa do 16 'cargotypów', które są akceptowane przez kafel branży.
 Użyj tej właściwości zamiast właściwości 0A..0C.
 
-==Przykład==
+==<span id="Example" title=Example>Przykład</span>==
