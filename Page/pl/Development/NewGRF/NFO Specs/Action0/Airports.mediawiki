@@ -28,55 +28,55 @@ Definiowanie lotnisk odbywa się według tego samego schematu, co w branżach: a
 |11||W||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23415}}||Współczynnik kosztów utrzymania infrastruktury
 |}
 
-==Descriptions==
+==<span id="Descriptions" title="Descriptions">Opis</span>==
 
-===Airport type override (08)===
+===<span id="Airport_type_override_(08)"></span><span title="Airport type override (08)" id="Airport_type_override_.2808.29">Zastąpienie typu lotniska (08)</span>===
 
 Działa zarówno jako typ zastępczy, jak i zastępujący. Przypisanie tej właściwości powoduje skopiowanie wszystkich właściwości starego typu do tego nowego typu. Lista prawidłowych typów: [[pl/Development/NewGRF/NFO Specs/AirportTypes|AirportTypes]]
 
 Istnieje specjalne zastosowanie tej właściwości: jeśli ustawisz FFh, możesz wyłączyć oryginalne lotnisko. W takim przypadku użyty identyfikator musi być numerem lotniska, które chcesz wyłączyć. Żądania wyłączenia są ignorowane dla lotnisk, które zostały już zastąpione.
 
-===Set airportlayout(s) (0A)===
+===<span id="Set_airportlayout(s)_(0A)"></span><span title="Set airportlayout(s) (0A)" id="Set_airportlayout.28s.29_.280A.29">Ustawienie układu(ów) lotniska (0A)</span>===
 
 Format tabel układu lotniska:
 
 {| |-
 !Size!!Variable!!Meaning
 |-
-|B||numlayouts||The total number of layouts following
+|B||numlayouts||Całkowita liczba kolejnych układów
 |-
-|D||size||The size in bytes of the whole definition, excluding numlayouts and size
+|D||size||Rozmiar w bajtach całej definicji, z wyłączeniem numlayouts i size
 |-
-|V||layouts||numlayout layouts, see format below
+|V||layouts||numlayout układy, zobacz format poniżej
 |}
 
 Format układu lotniska:
 
 {| |-
-!Size!!Variable!!Meaning
+!Rozmiar!!Zmienna!!Znaczenie
 |-
 |B||xoffs
 |-
-|B||yoffs||Offsets counted from the northernmost tile of the airport, specifying the position of the current tile. Both are taken as signed integers, but cannot go negative except the special case mentioned below.
+|B||yoffs||Przesunięcia liczone od najbardziej wysuniętego na północ pola lotniska, określające położenie bieżącego pola. Obie są traktowane jako liczby całkowite ze znakiem, ale nie mogą być ujemne, z wyjątkiem specjalnego przypadku opisanego poniżej.
 |-
-|B||oldtile||An old tile type to be put on the given tile
+|B||oldtile||Stary typ kafla do umieszczenia na danym kaflu
 |-
-|||--or--||
+|||--<span title=or>lub</span>--||
 |-
-|0xFE,W||newtile||The ID of an already defined airport tile, padded with 0 to create a word value. This tile type will be placed on the given tile.
+|0xFE,W||newtile||ID już zdefiniowanego kafla lotniska, uzupełniony o 0, aby utworzyć wartość słowa. Ten typ kafla zostanie umieszczony na danym kaflu.
 |-
-|||--or--||
+|||--<span title=or>lub</span>--||
 |-
-|0xFF|| ||The given tile is checked for clearance, but nothing will be placed on it. Useful to ensure some free space around your airport. This is the only case where xoffs and yoffs can be negative. If xoffs is negative, yoffs must be one lower than the wanted value.
+|0xFF|| ||Dany kafel jest sprawdzany pod kątem luzu, ale nic na niej nie zostanie umieszczone. Przydatne, aby zapewnić trochę wolnego miejsca wokół lotniska. Jest to jedyny przypadek, w którym xoffs i yoffs mogą być ujemne. Jeśli xoffs jest ujemne, yoffs musi być o jeden mniejszy od żądanej wartości.
 |}
 
 Układ składa się z jednego bajtu zapewniającego obrót układu (0: północ, 2: wschód, 4: południe, 6: zachód), a następnie lista powyższych definicji kafelków, zakończona dwoma bajtami: 0,80h
 
-===Availability years (0C)===
+===<span id="Availability_years_(0C)"></span><span title="Availability years (0C)" id="Availability_years_.280C.29">Lata dostępności (0C)</span>===
 
 Lotnisko jest dostępne w pierwszym i ostatnim roku. Odpowiednio 0 i FFFF są wieczne.
 
-===Best compatible TTD airport type (0D)===
+===<span id="Best_compatible_TTD_airport_type_(0D)"></span><span title="Best compatible TTD airport type (0D)" id="Best_compatible_TTD_airport_type_.280D.29">Najlepszy zgodny typ lotniska TTD (0D)</span>===
 
 Służy do kompatybilności z [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Vehicles#aircraft-info-44| vehicle var 44]]. Prawidłowe wartości:
 
@@ -88,4 +88,4 @@ Służy do kompatybilności z [[pl/Development/NewGRF/NFO Specs/VariationalActio
 
 3: oilrig
 
-== Przykład ==
+==<span id="Example" title="Example">Przykład</span>==
