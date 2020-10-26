@@ -1,12 +1,12 @@
 {{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Action0/Cargos|pl=pl/Development/NewGRF/NFO Specs/Action0/Cargos |sub=nfo}}
 <!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
-== Wprowadzenie ==
+==<span title="Introduction" id="Introduction">Wprowadzenie</span>==
 
 Przełącznik [[en/NewCargos]]<!--strony nie ma w oryginale-->  TTDPatch pozwala modyfikować istniejące 12 ładunków na klimat, a także dodawać 20 nowych ładunków na klimat. Te przedziały ładunkowe są ponumerowane od 0 do 31, gdzie przedziały 0-11 są domyślnie używane ładunki TTD, a przedziały 12-31 domyślnie zawierają niezainicjowane śmieci (więc nie możesz ufać im, że mają sensowne informacje, musisz ustawić wszystkie ich właściwości ).
 
 {{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=11ab3c4e}} OpenTTD 1.9 zwiększa liczbę ładunków do 64.
 
-== Properties ==
+==<span title="Properties" id="Properties">Właściwości</span>==
 
 {| |-
 !Numer!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Rozmiar]]!!Wersja!!Opis
@@ -54,9 +54,9 @@ Przełącznik [[en/NewCargos]]<!--strony nie ma w oryginale-->  TTDPatch pozwala
 |1D||W||{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23860}}||Pojemność <small>''(Capacity)''</small> mulitplier
 |}
 
-== Descriptions ==
+==<span title="Descriptions" id="Descriptions">Opis</span>==
 
-=== Bit number for bitmasks (08) ===
+===<span id="Bit_number_for_bitmasks_(08)"></span><span title="Bit number for bitmasks (08)" id="Bit_number_for_bitmasks_.2808.29">Numer bitu dla masek bitowych (08)</span>===
 
 Tę wartość należy zastosować w [[pl/Development/NewGRF/NFO Specs/Action3/Main Page|Action3]] oraz we właściwościach maski bitów ładunku, takich jak maski do ponownego montażu. Wartości 1C-1F powinny być bezpieczne w użyciu (jeśli nie zostały jeszcze zajęte, oczywiście), jeśli zamierzasz zachować zgodność z GRF nieświadomymi przełącznika nowego ładunku. Ponadto, zakładając, że żadne aktywne GRF nie obsługują klimatu terenowego, możesz również użyć wartości 11-1A.
 
@@ -64,37 +64,37 @@ Dodatkowo możesz użyć wartości FFh, aby wyłączyć daną szczelinę ładunk
 
 Ta właściwość dotyczy tylko GRF, które nie mają [[pl/Development/NewGRF/NFO Specs/Action0/Global Settings#cargo-translation-table-09 | cargo translation table]] . GRF z taką tabelą zazwyczaj używają indeksu ładunku w tabeli zamiast wartości tej właściwości w celu uzyskania dostępu do ładunku. Jako taka, ta właściwość jest mniej więcej wartością domyślną dla GRF bez tabeli translacji ładunku. Jeśli nie masz pewności, jaką wartość przypisać tej właściwości, ustaw ją na tę samą wartość, co ID slotu ładunkowego .
 
-=== TextID for the cargo type name (09) ===
+===<span id="TextID_for_the_cargo_type_name_(09)"></span><span title="TextID for the cargo type name (09)" id="TextID_for_the_cargo_type_name_.2809.29">TextID dla nazwy typu ładunku (09)</span>===
 
 Ten textID powinien odnosić się do nazwy ładunku, wielkiej litery, aby pasował do stylu TTD (np. "Passengers", "Coal", "Gold Ore", "Milk")
 
 Możesz ponownie wykorzystać istniejące [[pl/Development/NewGRF/NFO Specs/TextIDs|TextIDs]] lub utworzyć niestandardowe ciągi znaków za pomocą [[pl/Development/NewGRF/NFO Specs/Action4|Action4]] z przesunięciem w zakresie DCxx. Pamiętaj, że musisz ustawić bit 7 id języka także w Action4 dla niestandardowego ciągu. (Dotyczy również właściwości od 0A do 0D)
 
-=== TextID for one unit of the type (0A) ===
+===<span id="TextID_for_one_unit_of_the_type_(0A)"></span><span title="TextID for one unit of the type (0A)" id="TextID_for_one_unit_of_the_type_.280A.29">TextID dla jednej jednostki typu (0A)</span>===
 
 Ten textID powinien odnosić się do nazwy rodzaju ładunku w liczbie pojedynczej. Obecnie ten ID jest używany tylko w komunikatach o dotacjach (na przykład "Usługa pierwszego pasażera..." <small>''~First Passenger service''</small> zamiast "Usługa pierwszych pasażerów..." <small>''~First Passengers service''</small> )
 
-=== TextID for 1 unit of cargo (0B) ===
+===<span id="TextID_for_1_unit_of_cargo_(0B)"></span><span title="TextID for 1 unit of cargo (0B)" id="TextID_for_1_unit_of_cargo_.280B.29">TextID dla 1 jednostki ładunku (0B)</span>===
 
 Ten textID zostanie użyty do wyświetlenia ilości ładunku, jeśli czeka dokładnie 1 jednostka. Chociaż czeka tylko jedna jednostka, nadal będziesz musiał użyć znaku specjalnego 7C (wydrukuj podpisane słowo) lub 87 (wydrukuj ilość w litrach i dodaj przyrostek "litry" <small>''~litres''</small> ), aby TTD usunęło kwotę ze swojego wewnętrznego stosu referencyjnego. Na przykład, jeśli masz nowy ładunek o nazwie "ruda złota" <small>''(gold ore)''</small> , powinna to być "\7C tona rudy złota" , która powiększy się do "1 tony rudy złota" . Z drugiej strony, ładunek płynny o nazwie "mleko" <small>''(milk)''</small> powinien być czymś w rodzaju "\87 mleka" , który rozszerzy się do "100 litrów mleka" lub "1000 litrów mleka" (mnożnik dla płynnych ładunków zależy od niewłaściwego sposobu .dontfixlitres. Jeśli jest włączony, mnożnik wynosi 100, w przeciwnym razie 1000)
 
-=== TextID for multiple units of cargo (0C) ===
+===<span id="TextID_for_multiple_units_of_cargo_(0C)"></span><span title="TextID for multiple units of cargo (0C)" id="TextID_for_multiple_units_of_cargo_.280C.29">TextID dla wielu jednostek ładunku (0C)</span>===
 
 Ten textID zostanie użyty do wyświetlenia ilości ładunku, jeśli oczekiwana ilość nie jest dokładnie 1. Będziesz potrzebować tych samych znaków specjalnych, jak powyżej, ale teraz będą one rozszerzane zgodnie z rzeczywistym oczekiwaniem ładunku. Trzymając się powyższego przykładu, będziesz potrzebować "\7C ton rudy złota" i "\87 mleka" , które mogą wzrosnąć odpowiednio do "42 ton rudy złota" i "42 000 litrów mleka" . Zauważ, że ładunki płynne mogą mieć ten sam textID zarówno dla właściwości 0B, jak i 0C, ponieważ zawsze używają liczby mnogiej.
 
-=== TextID for cargo type abbreviation (0D) ===
+===<span id="TextID_for_cargo_type_abbreviation_(0D)"></span><span title="TextID for cargo type abbreviation (0D)" id="TextID_for_cargo_type_abbreviation_.280D.29">TextID for cargo type abbreviation (0D)</span>===
 
 Ten textID zostanie użyty w oknie listy stacji do przedstawienia czekającego ładunku. Powinien to być dwuliterowy skrót poprzedzony znakiem specjalnym 0E, aby przełączyć się na czcionkę mikroskopową. Mikroskopowa czcionka ma wielką literę, więc wielkie litery nie są tutaj ważne. Kontynuując powyższy przykład, ruda złota może mieć to jako "GO" , a mleko jako "MK" ( "ML" jest już odbierane pocztą).
 
-=== Sprite number for icon (0E) ===
+===<span id="Sprite_number_for_icon_(0E)"></span><span title="Sprite number for icon (0E)" id="Sprite_number_for_icon_.280E.29">Numer 'sprite' dla ikony (0E)</span>===
 
 Jest to liczba ikonek starej ikonki TTD, która ma być wyświetlana w oknie stacji dla tego ładunku, lub FFFFh, jeśli ikonę należy znaleźć, wykonując akcję 3 związaną z tym ładunkiem. Ikona nie może być większa niż 10x10 pikseli. Jedna ikona będzie wyświetlana na każde 10 jednostek oczekującego ładunku, maksymalnie 23 ikony, co jest wartością maksymalną.
 
-=== Weight of one unit of the cargo (0F) ===
+===<span id="Weight_of_one_unit_of_the_cargo_(0F)"></span><span title="Weight of one unit of the cargo (0F)" id="Weight_of_one_unit_of_the_cargo_.280F.29">Waga jednej jednostki ładunku (0F)</span>===
 
 Ta właściwość określa wagę 1 jednostki z ładunku, która zostanie wykorzystana do obliczenia masy pojazdów po załadowaniu. Jednostka wynosi 1/16 tony (czyli 62,5 kg). W powyższych przykładach ruda złota powinna mieć to 16 (ponieważ 1 tona rudy złota powinna ważyć dokładnie 1 tonę), podczas gdy mleko powinno mieć to nieco powyżej 16 (mleko jest gęstsze niż woda).
 
-=== Penalty times and price factor (10,11,12) ===
+===<span id="Penalty_times_and_price_factor_(10,11,12)"></span><span title="Penalty times and price factor (10,11,12)" id="Penalty_times_and_price_factor_.2810.2C11.2C12.29">Czas kar i współczynnik ceny (10,11,12)</span>===
 
 Te trzy wartości określają, ile jest płacona za dostawę rodzaju ładunku. Współczynnik ceny podlega inflacji, ale GRF nie muszą się tym przejmować, program dostosuje dla nich cenę.
 
@@ -116,16 +116,15 @@ gdzie
     else timefactor=255-(t-T1)-(t-T1-T2)
     if the above rules result in a timefactor less than 31, 31 is used instead. 
 
-
-=== Color for the station list window (13) ===
+===<span id="Color_for_the_station_list_window_(13)"></span><span title="Color for the station list window (13)" id="Color_for_the_station_list_window_.2813.29">Kolor okna listy stacji (13)</span>===
 
 Ten indeks kolorów zostanie użyty do narysowania prostokąta reprezentującego ilość oczekującą od bieżącego rodzaju ładunku w oknie listy stacji. Indeks należy podać dla palety DOS. OpenTTD i TTDPatch automatycznie przetłumaczą indeks dla palety Windows, jeśli używają podstawowej grafiki systemu Windows.
 
-=== Color for the cargo payment list window (14) ===
+===<span id="Color_for_the_cargo_payment_list_window_(14)"></span><span title="Color for the cargo payment list window (14)" id="Color_for_the_cargo_payment_list_window_.2814.29">Kolor okna listy płatności cargo (14)</span>===
 
 Wykres bieżącego ładunku zostanie narysowany przy użyciu tego koloru na wykresie stawek opłat za ładunek. Indeks należy podać dla palety DOS, wersja TTDPatch dla Windows automatycznie przetłumaczy indeks dla palety Windows.
 
-=== CargoClasses (16) ===
+===<span id="CargoClasses_(16)"></span><span title="CargoClasses (16)" id="CargoClasses_.2816.29">CargoClasses (16)</span>===
 
 Patrz [[pl/Development/NewGRF/NFO Specs/Action0/Vehicles/Trains#cargo-classes-28-29|train prop. 28/29]] , aby uzyskać opis użyteczności tej właściwości.
 
@@ -277,7 +276,7 @@ Tylko ładunki należące do klasy 0 (pasażerowie) pojawią się na dworcach au
 
 Oświadczenie: nie ma gwarancji, że klasy nie będą się zmieniać w czasie lub między zestawami. Klasy ładunku mogą się zmieniać między różnymi wersjami określonej branży/newgrf cargo lub różne klasy dla tej samej etykiety ładunku mogą być ustawione przez różne newgrfs przemysłu/cargo. Zapraszam do korzystania z klas w swoim zestawie do wygodnego przeładowywania ładunków, ale jeśli Ty - autor pojazdu - dbasz o transport określonych ładunków w określonych pojazdach, korzystaj z przeróbek na podstawie etykiet (zmiana etykiet bez bardzo dobrego powodu jest uważana za złą praktykę ).
 
-=== Cargo label (17) ===
+===<span id="Cargo_label_(17)"></span><span title="Cargo label (17)" id="Cargo_label_.2817.29">Etykieta ładunku (17)</span>===
 
 Etykiety ładunkowe są na całym świecie [[pl/Development/NewGRF/NFO Specs/CargoTypes#cargo-labels|unique identifiers]] dla rodzaju ładunku. Służą one do tego, aby grfs pojazdów mogli łatwo obsługiwać wiele rodzajów ładunków, niezależnie od tego, czy są aktywne czy nie, i bez względu na to, jakiej szczeliny lub kawałka używają..
 
@@ -309,47 +308,47 @@ Ilość przychodzącego ładunku jest mnożona przez właściwość 19, a nastę
 
 {{pl/Development/NewGRF/ottdp|0.6-1.1|no}} W OpenTTD do 1.1 (nie 1.2) właściwość 18 wpływa również na tworzenie dotacji. Zazwyczaj subsydia dotyczą transportu towarów między dwoma branżami. W przypadku ładunków z <small>''(substitution-type)''</small> typem podstawienia 05 lub 0B miejscem docelowym będzie miasto. Niezależnie od nieruchomości 18 dotacji z miasta na miasto tworzy się tylko dla miejsca na ładunek 0 (pasażerowie).
 
-=== Callback flags (1A) ===
+===<span id="Callback_flags_(1A)"></span><span title="Callback flags (1A)" id="Callback_flags_.281A.29">Flagi 'callback' (1A)</span>===
 
 {| |-
-!Bit!!Value!!Var. 0C!!Callback
+!Bit!!Wartość!!Var. 0C!!Callback
 |-
-|0||1||39||Custom profit calculation
+|0||1||39||<span title=Custom>'Niestandardowa'</span> kalkulacja profitu
 |-
-|1||2||145||Custom station rating calculation
+|1||2||145||<span title'=Custom station rating calculation'>'Kalkulacja ratingu niestandardowej stacji'</span>
 |}
 
-=== TextID for displaying the units of a cargo (1B) ===
+===<span id="TextID_for_displaying_the_units_of_a_cargo_(1B)"></span><span title="TextID for displaying the units of a cargo (1B)" id="TextID_for_displaying_the_units_of_a_cargo_.281B.29">TextID for displaying the units of a cargo (1B)</span>===
 
 Ten ID tekstowy jest wykorzystywany przez OpenTTD do wyświetlenia formularza "krótkiego ładunku " <small>''(short cargo)''</small> dla jednostek ładunkowych, np. "10 litrów" lub "10 ton" . Ten ID  tekstowy należy ustawić po właściwości 0B. Tekst, do którego odnosi się ten ID tekstowy, powinien poprawnie obsługiwać liczbę mnogą, np. "\7B pozycja<small>''( item)''</small>\9A\15\80\9A\10\9A\11s\9A\12" .
 
 Domyślna wartość tego textID zależy od wartości domyślnej dla właściwości 0B; jeśli domyślny ciąg 0B ma "litr" , wówczas domyślnym dla tego textID będzie jednostka litrów. OpenTTD mapuje następujące ID''`y'' tekstowe, więc nie trzeba dostarczać tłumaczeń:
 
 {| |-
-!textID!!String
+!textID!!<span title='ciąg'>'String'</span>
 |-
 |004f||<num> passenger(s)
 |-
 |0050||<num> tonne(s)
 |-
-|0051||<num> bag(s)
+|0051||<num> <span title='worek(i)'>'bag(s)'</span>
 |-
 |0052||<num> litre(s)
 |-
-|0053||<num> item(s)
+|0053||<num> <span title='sztuka(i)'>'item(s)'</span>
 |-
-|0054||<num> crate(s)
+|0054||<num> <span title='skrzynia(e)'>'crate(s)'</span>
 |}
 
 Ciągi znaków "tona" i "litr" (textID 0050 i 0052) są automatycznie aktualizowane na podstawie ustawień użytkownika wyświetlacza jednostki, np. "tona" może stać się "kg". "(s)" służą do celów wyświetlania; w rzeczywistości jest to lista wyboru.
 
-=== TextID for displaying the amount of cargo (1C) ===
+===<span id="TextID_for_displaying_the_amount_of_cargo_(1C)"></span><span title="TextID for displaying the amount of cargo (1C)" id="TextID_for_displaying_the_amount_of_cargo_.281C.29">TextID do wyświetlania ilości ładunku (1C)</span>===
 
 Ten textID jest wykorzystywany przez OpenTTD do wyświetlenia formularza „długi ładunek” dla jednostek ładunkowych, np. "10 litrów wody" lub "10 ton węgla" . Ten textID należy ustawić po właściwości 0c. Tekst, do którego odnosi się ten textID , powinien poprawnie obsługiwać liczbę mnogą, np. "\7B item\9A\15\80\9A\10\9A\11s\9A\12 żywca" <small>''(livestock)''</small> .
 
 Wartość domyślna dla tego textID zależy od wartości domyślnej dla właściwości 0C, ale z obsługą liczby mnogiej. W przypadku "X litre(s)" lub "X tonne(s)" należy odpowiednio użyć kodów łańcuchowych 87 i 9A 0D .
 
-=== Capacity multiplier (1D) ===
+===<span id="Capacity_multiplier_(1D)"></span><span title="Capacity multiplier (1D)" id="Capacity_multiplier_.281D.29">Mnożnik pojemności (1D)</span>===
 
 Definiuje to pojemność (i pośrednio prędkość ładowania) pojazdów przewożących ten rodzaj ładunku, jeżeli pojazd nie ustawia określonej pojemności dla tego konkretnego rodzaju ładunku.
 
@@ -368,4 +367,4 @@ Domyślna wartość tej właściwości to:
 | xx || (wszystko inne) || 0x100 || Wszystkie inne sloty mają domyślnie wartość 0x100, czyli 1 jednostka ładunku to 1 tona węgla.
 |}
 
-== Przykład ==
+==<span title="Example" id="Example">Przykład</span>==
