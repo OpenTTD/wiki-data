@@ -1,10 +1,10 @@
 {{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/RandomAction2|pl=pl/Development/NewGRF/NFO Specs/RandomAction2 |sub=nfo}}
 <!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
-==Wprowadzenie==
+==<span id="Introduction" title="Introduction">Wprowadzenie</span>==
 
 W przeciwieństwie do [[pl/Development/NewGRF/NFO Specs/VariationalAction2/Main Page|VariationalAction2]], którego wyniki są zawsze określane na podstawie przewidywalnej decyzji, RandomAction2 może wykorzystać losowe wyniki do wybrania jednego z kilku wpisów [[pl/Development/NewGRF/NFO Specs/Action2/Main Page|Action2]].
 
-== Format ==
+==<span id="Format" title="Format" >Format</span>==
 
 Dane wyglądają następująco:
 
@@ -40,17 +40,17 @@ Od TTDPatch 2.6 r1850 i OpenTTD r12452, i '''tylko dla pojazdów''':
 |<set-ids>||W||Action 2 set-ids do wyboru z.
 |}
 
-== Description ==
+==<span id="Description" title="Description">Opis</span>==
 
-=== Sprite-number ===
+===<span id="Sprite-number" title="Sprite-number">Sprite-numer</span>===
 
 To tylko numer, na którym jesteś.
 
-=== Length ===
+===<span id="Length" title="Length">Długość</span>===
 
 Policz liczbę bajtów w tej akcji.
 
-===Feature===
+===<span id="Feature" title="Feature">Cecha</span>===
 
 Ustawia to rodzaj [[pl/Development/NewGRF/NFO Specs/Features|feature]] , który chcesz zmienić. Ustaw na:
 
@@ -88,11 +88,11 @@ Ustawia to rodzaj [[pl/Development/NewGRF/NFO Specs/Features|feature]] , który 
 |13||Tramtypy
 |}
 
-=== set-ID ===
+===<span id="set-ID" title="set-ID">set-ID</span>===
 
 Określa liczbę tego działania 2. &nbsp;ID można następnie wykorzystać jako cel w akcji 3 lub innej akcji wariacyjnej/losowej 2.
 
-=== 80/83/84 ===
+===<span id="80/83/84"></span><span title="80/83/84" id="80.2F83.2F84">80/83/84</span>===
 
 Użyj 80, aby randomizować obiekt (pojazd, stację, budynek, przemysł, obiekt) na podstawie własnych wyzwalaczy i bitów.
 
@@ -101,24 +101,24 @@ Użyj 83, aby randomizować obiekt na podstawie jego "pokrewnego" <small>''(rela
 Użyj 84, aby losowo wybrać pojazd na podstawie dowolnego pojazdu w składzie.
 
 {| |-
-!Feature!!Related object
+!<span title=Feature>'Cecha'</span>'!!Powiązany obiekt
 |-
-|Vehicles (00-03)||First vehicle of consist
+|Vehicles (00-03)||Pierwszy pojazd składu
 |-
 |Stations (04)||N/A
 |-
 |Houses (07)||N/A
 |-
-|Industry tiles (09)||Industry containing tile
+|Industry tiles (09)||Przemysł zawierający kafel
 |-
 |Industries (0A)||N/A
 |-
 |Objects (0F)||N/A
 |}
 
-=== count ===
+===<span id="count" title="count">liczenie</span>===
 
-W przypadku typu 84 określa to losowe bity pojazdu, których ten pojazd będzie używał i / lub modyfikował.
+W przypadku typu 84 określa to losowe bity pojazdu, których ten pojazd będzie używał i/lub modyfikował.
 
 Niski kąsek (bity 0-3) określa, jak daleko należy liczyć od pojazdu wyjściowego. Jeśli wynosi zero, licznik zostanie odczytany z rejestru GRF 100h zamiast tego.
 
@@ -138,21 +138,21 @@ Wysokie skubanie (w rzeczywistości bity 6-7) określa, który pojazd jest pojaz
 
 Bity 4-5 są zarezerwowane i muszą wynosić zero, więc inne wartości wysokiego skryptu nie są dozwolone.
 
-=== random-triggers ===
+===<span id="random-triggers" title="random-triggers">wyzwalacze-losowe</span>===
 
-Jest to nieco maska ​​wyzwalaczy, które powodują ponowną randomizację. Zwykle dowolny dopasowany wyzwalacz powoduje, że grafika jest ponownie losowa, ale jeśli dodasz 80 do maski bitowej, ponowna randomizacja nastąpi tylko wtedy, gdy wystąpią wyzwalacze '''wszystkie''' <small>''(all)''</small>.
+Jest to nieco maska ​​wyzwalaczy, które powodują ponowną randomizację. Zwykle dowolny dopasowany wyzwalacz powoduje, że grafika jest ponownie losowa, ale jeśli dodasz 80 do maski bitowej, ponowna randomizacja nastąpi tylko wtedy, gdy wystąpią wyzwalacze <span title=all>'''wszystkie'''</span>.
 
 Bity wyzwalające są specyficzne dla funkcji, patrz poniżej.
 
-Należy pamiętać, że ponowne losowanie występuje tylko w łańcuchu graficznym, a nie w przypadku wywołań zwrotnych. Tak więc, jeśli używasz losowej akcji tylko w ramach wywołania zwrotnego i chcesz ponownie losowo zaszyfrować bity, musisz dodać "sztuczny" <small>''(dummy)''</small> remandomizacja RA2 do łańcucha graficznego.
+Należy pamiętać, że ponowne losowanie występuje tylko w łańcuchu graficznym, a nie w przypadku wywołań zwrotnych. Tak więc, jeśli używasz losowej akcji tylko w ramach wywołania zwrotnego i chcesz ponownie losowo zaszyfrować bity, musisz dodać <span title=dummy>"sztuczną"</span> remandomizacje RA2 do łańcucha graficznego.
 
 Przykład:
  -1 * -1   02 04 02
-           80                         // random in callback
-           00                         // no triggers
-           00                         // first random bit to use
-           \b 16                      // number of cases
-           \w 10 \w 11 \w 12 \w 13    // random cases
+           80                         // losowo w callback
+           00                         // bez wyzwalaczy
+           00                         // pierwszy losowy bit do użycia
+           \b 16                      // Liczba <span title=cases>'przypadków'</span>
+           \w 10 \w 11 \w 12 \w 13    // losowe przypadki
            \w 14 \w 15 \w 16 \w 17
            \w 18 \w 19 \w 20 \w 21
            \w 22 \w 23 \w 24 \w 25
@@ -161,38 +161,38 @@ Przykład:
            85 0C 00 \wx FFFF
            01
            \w 2 \w 14 \w 14           // callback 14
-           \w 3                       // graphics chain
+           \w 3                       // <span title=chain>'łańcuch'</span> graficzny
  
  -1 * -1   02 04 00
-           80                         // dummy random outside callback
-           04                         // train arrival
-           00                         // first bit to rerandomise
-           \b 16                      // number of cases
-           \w 1 \w1 \w 1 \w1          // all cases the same, only for triggering rerandomisation
+           80                         // <span title=dummy>'fałszywe'</span> losowe callback z zewnątrz
+           04                         // przyjazd pociągu
+           00                         // pierwszy bit do rerandomise
+           \b 16                      // Liczba przypadków
+           \w 1 \w1 \w 1 \w1          // we wszystkich przypadkach takie same, tylko w wyzwoleniu  rerandomisation
            \w 1 \w1 \w 1 \w1
            \w 1 \w1 \w 1 \w1
            \w 1 \w1 \w 1 \w1
  
  -1 * -1   03 04 01 00 00 \w 0        // action 3
 
-=== randbit ===
+===<span id="randbit" title="randbit">randbit</span>===
 
 {{pl/Development/NewGRF/ottdp|no|&lt;2.5|ttdprev=alpha30}} W przypadku wersji wcześniejszych niż TTDPatch 2.0.1 alpha 30 pozostaw tę wartość na 00. Nie działa to tak, jak zamierzono (miało to umożliwić niezależne losowe łańcuchy, ale obecnie wszystko jest ponownie losowe w tym samym czasie, tym samym pokonując ten mechanizm ).
 
 {{pl/Development/NewGRF/ottdp| |2.5|ttdprev=alpha 30}} Od wersji TTDPatch 2.0.1 alpha 30 tylko te bity, które zostaną uruchomione, zostaną ponownie zrandomizowane. Poprzednie wersje zawsze randomizowały wszystkie bity. Umożliwi to posiadanie niezależnych zestawów bitów dla niezależnych wyzwalaczy (lub bitów niesprawdzonych, ustawianych tylko w momencie zakupu). Ustawienie randbit określa pierwszy bit, który ma zostać ponownie zrandomizowany, a także opiera się na losowej grafice. Łączna liczba użytych bitów to 2-logarytm liczby nr i poniżej (np. Dla nrand = 16 używane są 4 bity).
 
-=== nrand ===
+===<span id="nrand" title="nrand">nrand</span>===
 
 Liczba różnych zestawów do wyboru. &nbsp;Musi to być potęga 2, tj. 2, 4, 8, 16 etc.
 
-=== set-ids ===
+===<span id="set-ids" title="set-ids">set-ids</span>===
 
 ID''`y'' Akcji 2 do losowego wyboru
 
-== Triggers ==
+==<span title="Triggers" id="Triggers">Wyzwalacze</span>==
 
 {| border=1 |-
-!rowspan="2"|Feature
+!rowspan="2"|<span title=cecha>'Feature'</span>
 !colspan="2"|Losowe bity
 !rowspan="2"|<span title=Triggers>'Wyzwalacze'</span>
 |-
@@ -200,7 +200,7 @@ ID''`y'' Akcji 2 do losowego wyboru
 |-
 |Pojazdy||8||8 tylko-odczyt||tak
 |-
-|valign=middle|Stacje||valign=middle|16 + 4 <!--<ref name="stationshared">-->{{pl/Development/NewGRF/NFO Specs/refs|name=stationshared|text=16 bitów współdzielonych dla całej stacji/lotniska (lotnisko i stacja dzielą te same bity). 4 bity na kafel.|1}}<!--</ref>--><!--<ref>-->{{pl/Development/NewGRF/NFO Specs/refs|text=TTDPatch faktycznie implementuje tylko 8 współdzielonych losowych bitów (plus 4 na kafelek). Bity 8-15 są zawsze zerowe.|2}}<!--</ref>-->
+|valign=middle|Stacje||valign=middle|16 + 4 <!--<ref name="stationshared">-->{{pl/Development/NewGRF/NFO Specs/refs|name=stationshared|text=16 bitów współdzielonych dla całej stacji/lotniska (lotnisko i stacja dzielą te same bity). 4 bity na kafel.|1}}<!--</ref>--><!--<ref>-->{{pl/Development/NewGRF/NFO Specs/refs|text=TTDPatch faktycznie implementuje tylko 8 współdzielonych losowych bitów (plus 4 na kafel). Bity 8-15 są zawsze zerowe.|2}}<!--</ref>-->
 |nie||tak
 |-
 |Kanały||8||nie||nie
@@ -230,14 +230,14 @@ ID''`y'' Akcji 2 do losowego wyboru
   -->{{pl/Development/NewGRF/NFO Specs/refs|name=stationshared|<!--3--><!--1-1-->przypis}}<!-- 1-1
   -->{{pl/Development/NewGRF/NFO Specs/refs|name=stationshared|<!--4--><!--1-2-->przypis}}<!-- 1-2
  -->{{pl/Development/NewGRF/NFO Specs/przypisy|222012}}<!-- 2
-  -->{{pl/Development/NewGRF/NFO Specs/refs|text=TTDPatch faktycznie implementuje tylko 8 współdzielonych losowych bitów (plus 4 na kafelek). Bity 8-15 są zawsze zerowe.|<!--2-->przypis}}<!-- 2 -->
+  -->{{pl/Development/NewGRF/NFO Specs/refs|text=TTDPatch faktycznie implementuje tylko 8 współdzielonych losowych bitów (plus 4 na kafel). Bity 8-15 są zawsze zerowe.|<!--2-->przypis}}<!-- 2 -->
 
-=== Vehicles ===
+===<span id="Vehicles" title="Vehicles">Pojazdy</span>===
 
 Pojazdy mają 8 losowych bitów i następujące wyzwalacze:
 
 {| |-
-!Bit!!Wartość!!Wersja!!Wyzwalacz <small>''(Trigger)''</small>
+!Bit!!Wartość!!Wersja!!<span title=aktywator>'Wyzwalacz'</span> <small>''(Trigger)''</small>
 |-
 |0||01||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||Pojazd otrzymuje nowy ładunek ładunku (dopiero po opróżnieniu)
 |-
@@ -255,12 +255,12 @@ Bity wyzwalające konsolę 2 i 3 umożliwiają ponowną randomizację za każdym
 Pojazdy mogą odczytywać losowe fragmenty innych pojazdów (przy użyciu akcji losowej typu 83 lub 84), ale mogą jedynie uruchamiać
 reandandomizacja ich własnych bitów. Nie określaj żadnych wyzwalaczy ponownej randomizacji podczas uzyskiwania dostępu do losowych bitów innych pojazdów (via typ 83 lub 84), nie zrobi to, co myślisz.
 
-=== Stations ===
+===<span id="Stations" title="Stations">Stacje</span>===
 
-Stacje mają 16 + 4 losowych bitów. Bity od 0 do 15 są własnością stacji jako całości, a bity od 16 do 19 są różne dla każdej płytki. &nbsp;Aby uzyskać losowość opartą na kafelkach, dlatego użyj randbit=10 i nrand nie więcej niż 16 (ponieważ tylko 4 losowe bity są dostępne na płytkę).
+Stacje mają 16 + 4 losowych bitów. Bity od 0 do 15 są własnością stacji jako całości, a bity od 16 do 19 są różne dla każdego kafla. &nbsp;Aby uzyskać losowość opartą na kaflach, dlatego użyj randbit=10 i nrand nie więcej niż 16 (ponieważ tylko 4 losowe bity są dostępne na kafla).
 
 {| |-
-!Bit!!Value!!Version!!Trigger
+!Bit!!Wartość!!Wersja!!Wyzwalacz
 |-
 |0||01||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||nowy ładunek czeka
 |-
@@ -272,17 +272,17 @@ Stacje mają 16 + 4 losowych bitów. Bity od 0 do 15 są własnością stacji ja
 |-
 |4||10||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||train ładuje lub rozładowuje ładunek
 |-
-|5||20||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||platforma rezerwuje train (przy użyciu PBS)
+|5||20||{{pl/Development/NewGRF/ottdp|1.3|2.5}}||platforma rezerwuje 'train' (przy użyciu PBS)
 |}
 
 Zauważ też, że żaden z powyższych wyzwalaczy nie uruchomi się, chyba że zostanie podparty. 12 ma co najmniej jeden ustawiony bit. &nbsp;Wyzwalacze 01 zostaną uruchomione dla dowolnego rodzaju ładunku ustawionego w rekwizytach. 12, ale wyzwalacz 02 zostanie aktywowany tylko wtedy, gdy wszystkie typy ładunków nie będą już czekały na ładunek. Wyzwalacze 04, 08 i 20 są uruchamiane bez względu na rodzaj ładunku przewożonego przez pociąg, o ile podpora. 12 nie jest zerem.
 
 Wyzwalacze 04, 08, 10 i 20 wpływają tylko na platformę, na której występują, a także na losowe bity stacji, ale nie na inne platformy.
 
-Ponieważ 'występujące wyzwalacze' <small>''(occured triggers)''</small>  są przechowywane tylko raz na stację (bez rozróżniania rodzajów płytek lub rodzajów ładunku), co dodaje 80 do
+Ponieważ 'występujące wyzwalacze' <small>''(occured triggers)''</small>  są przechowywane tylko raz na stację (bez rozróżniania rodzajów kafli lub rodzajów ładunku), co dodaje 80 do
 losowe wyzwalacze nie mają większego sensu.
 
-=== Town building triggers ===
+===<span id="Town_building_triggers" title="Town building triggers">Wyzwalacze budowy miejscowości</span>===
 
 Budynki miejskie mają 8 losowych bitów.
 
@@ -291,25 +291,25 @@ Budynki miejskie mają 8 losowych bitów.
 |-
 |0||01||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||kafel budowlany jest przetwarzany w cyklicznej pętli przetwarzania kafli
 |-
-|1||02||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||górna płytka budynku jest przetwarzana w cyklicznej pętli przetwarzania kafli
+|1||02||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||górny kafel budynku jest przetwarzany w cyklicznej pętli przetwarzania kafli
 |}
 
-Okresowa pętla przetwarzania kafelków nieprzerwanie przetwarza kafelki mapy, przetwarzając każdy kafelek co 256 tyknięć (ok. 3,5 dnia TTD). Ponieważ żadne "prawdziwe" <small>''(real)''</small> wydarzenie nie zdarzyło się w budynkach miejskich, masz tylko tę okazję, aby ponownie randomizować wygląd swojego budynku.
+Okresowa pętla przetwarzania kafli nieprzerwanie przetwarza kafle mapy, przetwarzając każdy kafel co 256 tyknięć (ok. 3,5 dnia TTD). Ponieważ żadne "prawdziwe" <small>''(real)''</small> wydarzenie nie zdarzyło się w budynkach miejskich, masz tylko tę okazję, aby ponownie 'randomizować' wygląd swojego budynku.
 
-Jeśli każde 3,5 dnia jest dla Ciebie za szybkie, możesz pomnożyć limit czasu, ustawiając właściwość 16 dla danego kafelka. Limit czasu wynosi 256 ticks*(prop. 16+1), więc 0 oznacza co 3,5 dni, 1 oznacza co 7 dni, 2 oznacza co 10,5 dnia i tak dalej.
+Jeśli każde 3,5 dnia jest dla Ciebie za szybkie, możesz pomnożyć limit czasu, ustawiając właściwość 16 dla danego kafla. Limit czasu wynosi 256 ticks*(prop. 16+1), więc 0 oznacza co 3,5 dni, 1 oznacza co 7 dni, 2 oznacza co 10,5 dnia i tak dalej.
 
-Jeśli aktywowany jest wyzwalacz 02, wszystkie części budynku, które mają ten zestaw wyzwalaczy, otrzymają te same losowe bity, co pozwoli ci na losowanie budynku z wieloma płytkami jako jednej jednostki. Z drugiej strony, jeśli płytki budynku wielopłytkowego mają wyzwalacz 1 zestaw, wszystkie płytki zostaną losowo wybrane indywidualnie. Zauważ, że wszystkie płytki budynku wielopłytkowego mają tę samą wartość podczas budowania budynku.
+Jeśli aktywowany jest wyzwalacz 02, wszystkie części budynku, które mają ten zestaw wyzwalaczy, otrzymają te same losowe bity, co pozwoli ci na losowanie budynku z wieloma kaflami jako jednej jednostki. Z drugiej strony, jeśli kafle budynku 'wielokaflowego' mają wyzwalacz 1 zestaw, wszystkie  kafle zostaną losowo wybrane indywidualnie. Zauważ, że wszystkie kafle budynku 'wielokaflowego' mają tę samą wartość podczas budowania budynku.
 
-=== Industry tile triggers ===
+===<span id="Industry_tile_triggers" title="Industry tile triggers">Aktywatory kafli przemysłu</span>===
 
-Płytki przemysłowe mają 8+16 losowych bitów. Dostęp do akcji losowej 2 typu 80 daje 8 bitów specyficznych dla kafelków, a dostęp do akcji losowej 2 typu 83 , - 16 bitów branżowych. Wyzwalacze są takie same dla obu. Wyzwalacze 02 i 04 są uruchamiane jednocześnie dla wszystkich kafelków branży. Każdy kafelek może zmienić losowo zarówno swoje losowe bity, jak i te z branży. Oznacza to, że każdy kafelek może określać niektóre bity branży do ponownego losowania, a unia wszystkich tych bitów zostanie ponownie przypisana na końcu.
+Kafle przemysłowe mają 8+16 losowych bitów. Dostęp do akcji losowej 2 typu 80 daje 8 bitów specyficznych dla kafli, a dostęp do akcji losowej 2 typu 83 , - 16 bitów branżowych. Wyzwalacze są takie same dla obu. Wyzwalacze 02 i 04 są uruchamiane jednocześnie dla wszystkich kafli branży. Każdy kafel może zmienić losowo zarówno swoje losowe bity, jak i te z branży. Oznacza to, że każdy kafel może określać niektóre bity branży do ponownego losowania, a unia wszystkich tych bitów zostanie ponownie przypisana na końcu.
 
 {| |-
-!Bit!!Wartość!!Wersja!!<span title=Trigger>'Wyzwalacz'</span>
+!Bit!!Wartość!!Wersja!!<span title='Trigger'>'Wyzwalacz'</span>
 |-
-|0||01||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||valign=middle|płytka budowlana jest przetwarzana w cyklicznej pętli przetwarzania płytek<!--<ref>-->{{pl/Development/NewGRF/NFO Specs/refs|text={{pl/Development/NewGRF/ottdp|no| |}} Randandomizacja współdzielonych bitów przemysłu nie przebiega prawidłowo w obecnym TTDPatch.|<!--1-->31}}<!--</ref>-->
+|0||01||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||valign=middle|kafel budowlany jest przetwarzany w cyklicznej pętli przetwarzania kafli<!--<ref>-->{{pl/Development/NewGRF/NFO Specs/refs|text={{pl/Development/NewGRF/ottdp|no| |}} Randandomizacja współdzielonych bitów przemysłu nie przebiega prawidłowo w obecnym TTDPatch.|<!--1-->31}}<!--</ref>-->
 |-
-|1||02||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||uruchamia się jednocześnie dla wszystkich kafelków branży co 256 tyknięć. Jeśli branża jest podstawowa, ładunek wyjściowy jest generowany w tym samym czasie.
+|1||02||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||uruchamia się jednocześnie dla wszystkich kafli branży co 256 tyknięć. Jeśli branża jest podstawowa, ładunek wyjściowy jest generowany w tym samym czasie.
 |-
 |2||04||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||ładunek jest dostarczany do przemysłu. Jeśli przemysł jest przetwórczy, ładunek wyjściowy jest generowany w tym samym czasie.
 |}
@@ -318,45 +318,44 @@ Płytki przemysłowe mają 8+16 losowych bitów. Dostęp do akcji losowej 2 typu
 
 Trigger 1 działa podobnie do wyzwalacza 1 dla domów, tyle że nie można pomnożyć limitu czasu: zawsze jest to 256 tyknięć.
 
-Kafelki branżowe mogą przeklasyfikować zarówno swoje losowe bity, jak i losowe bity branży (za pomocą losowego typu akcji 83).
-Zapamiętane wyzwalacze dla ponownej randomizacji z 80 dodanymi do wyzwalaczy są w obu przypadkach takie same na płytkę.
+Kafle branżowe mogą przeklasyfikować zarówno swoje losowe bity, jak i losowe bity branży (za pomocą losowego typu akcji 83).
+Zapamiętane wyzwalacze dla ponownej randomizacji z 80 dodanymi do wyzwalaczy są w obu przypadkach takie same na kafel.
 
-Branże mają losowe bity. Można je jednak ponownie przypisać tylko za pomocą płytek.
+Branże mają losowe bity. Można je jednak ponownie przypisać tylko za pomocą kafli.
 
-=== Canals ===
+===<span id="Canals" title="Canals">Kanały</span>===
 
 Kanały / Rzeki mają 8 losowych bitów.
 
 Obecnie nie ma sposobu wpływania na losowe tworzenie bajtów za pomocą wyzwalaczy, wewnętrznie bity są przesyłane z VarAction2Canals var 83, który jest ustawiany podczas budowania kanału. Id funkcji nie obsługiwane przez VarAction2Canals są niezdefiniowane i nigdy nie powinny być używane.
 
-=== Objects ===
+===<span id="Objects" title="Objects">Obiekty</span>===
 
-Obiekty mają 8 losowych bitów na płytkę obiektu.
+Obiekty mają 8 losowych bitów na kafel obiektu.
 
 Jednak nie ma żadnych wyzwalaczy dla obiektów.
 
-Należy również pamiętać, że losowe bity są unikalne dla każdego kafelka w obiekcie i nie są wspólne dla całego obiektu.
+Należy również pamiętać, że losowe bity są unikalne dla każdego kafla w obiekcie i nie są wspólne dla całego obiektu.
 
-=== Railtypes ===
+===<span title="Railtypes" id="Railtypes">Railtypy</span>===
 
-Płytki szynowe mają 2 pseudolosowe bity, w zależności od ich położenia.
+Kafle szynowe mają 2 pseudolosowe bity, w zależności od ich położenia.
 
-Brak wyzwalaczy <small>''(triggers)''</small> .
+Brak <span title=triggers>'wyzwalaczy'</span> .
 
-=== Roadtypes ===
+===<span id="Roadtypes" title="Roadtypes">Typy dróg</span>===
 
-Płytki drogowe mają 2 pseudolosowe bity, w zależności od położenia kafelków.
-
-Brak wyzwalaczy.
-
-=== Tramtypes ===
-
-Płytki tramwajowe mają 2 pseudolosowe bity, w zależności od położenia kafelków.
+Kafle drogowe mają 2 pseudolosowe bity, w zależności od położenia kafli.
 
 Brak wyzwalaczy.
 
-=== Other features ===
+===<span id="Tramtypes" title="Tramtypes">Tramtypy</span>===
+
+Kafle tramwajowe mają 2 pseudolosowe bity, w zależności od położenia kafli.
+
+Brak wyzwalaczy.
+
+===<span id="Other_features" title="Other features">Inne cechy</span>===
 
 Wszystkie funkcje niewymienione na powyższej liście nie mają ani losowych bitów, ani wyzwalaczy, w tym miast (które byłyby dostępne przy użyciu losowej akcji 2 typu 83 dla stacji i branż).
-
-<!--==--><H2>Przykład</H2><!--==-->
+<!--==--><H2 id="Example" title="Example">Przykład</H2><!--==-->
