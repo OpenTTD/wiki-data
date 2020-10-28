@@ -82,7 +82,7 @@ Możesz po prostu użyć innych klas niż powyższe, o ile nie jest (więcej ni�
 
 Gdy zbudowana zostanie stacja WAYP, nie będzie ona przyjmować ładunku ani nie będzie ładunku z pobliskich gałęzi przemysłu lub miast. &nbsp;Pociągi nie zatrzymują się na stacjach WAYP, niezależnie od kolejności non-stop i/lub przełącznika non-stop.
 
-=== Sprite layout (09) ===
+===<span id="Sprite_layout_(09)"></span><span title="Sprite layout (09)" id="Sprite_layout_.2809.29">Układ sprite (09)</span>===
 Kontroluje to, które 'sprites' są wyświetlane, gdzie są wyświetlane i w jakiej kolejności. &nbsp;Właściwość jest zmiennej wielkości i zawiera dane dla wszystkich 8 możliwych typów kafelków stacji. &nbsp;Jeśli ta właściwość jest ustawiona, liczba w odpowiedniej [[pl/Development/NewGRF/NFO Specs/Action1|action 1]] nie musi być równa 12 (hex), może to być dowolna liczba, a dowolna liczba 'sprites' może być wyświetlana w dowolnej kolejności.
 
 W ten sposób dane są określone jako dane dla wszystkich ośmiu kafli:
@@ -90,14 +90,14 @@ W ten sposób dane są określone jako dane dla wszystkich ośmiu kafli:
 <pre>&lt;num&gt; &lt;data1&gt; &lt;data2&gt; ... &lt;datan&gt;</pre>
 
 {| |-
-!Size!!Name!!Meaning
+!Rozmiar!!Nazwa!!Znaczenie
 |-
-|B*||num||Number of different tiles supported (see below)
+|B*||num||Liczba różnych obsługiwanych kafelków (patrz poniżej)
 |-
-|V||data1...||The variable size data for each of the &lt;num&gt; tiles, as specified below
+|V||data1...||Dane o zmiennej wielkości dla każdego z plików &lt;num&gt; kafli, jak określono poniżej
 |}
 
-===== Number of tiles supported =====
+=====<span id="Number_of_tiles_supported" title="Number of tiles supported">Liczba obsługiwanych kafli</span>=====
 * Zwykle jest to 8, ale możesz też podać mniej
 * Korzystanie z flagi oddzwaniania bit 1, określenie więcej też ma sens
 * Ta wartość musi być taka sama dla wszystkich stacji ustawionych przez tę akcję 0, nawet jeśli musi zostać powtórzona dla śmigła. 09 definicja każdego ID stacji
@@ -107,13 +107,13 @@ W ten sposób dane są określone jako dane dla wszystkich ośmiu kafli:
 Zawartość każdego (zwykle ośmiu) zestawów danych jest albo nowym układem ikonek:
 
 {| |-
-!Size!!Name!!Meaning
+!Rozmiar!!Nazwa!!Znaczenie
 |-
-|D||groundsprite||the sprite to draw for the rails; this is by default a TTD sprite, but with bit 31 set an [[pl/Development/NewGRF/NFO Specs/Action1|action 1]] sprite (42D+X) may be specified
+|D||groundsprite||sprite do rysowania po szynach; jest to domyślnie sprite TTD, ale z bitem 31 ustawionym można określić [[pl/Development/NewGRF/NFO Specs/Action1|action 1]] sprite (42D + X)
 |-
-|V||spritedata||the data for station sprites, see below; each has a size of 10 bytes, and there may be several
+|V||spritedata||dane dla 'sprites' stacji, patrz poniżej; każdy ma rozmiar 10 bajtów, a może być ich kilka
 |-
-|B||80||a literal 80 ends the list of sprites for this tile
+|B||80||dosłowne 80 kończy listę sprite'ów dla tego kafla
 |}
 lub, alternatywnie, instrukcja użycia układu TTD przy użyciu czterech bajtów zerowych 00 00 00 00 zamiast bajtów dna naziemnego. Możesz użyć  [http://www.bytetransfer.de/projects/ttdpatch/docs/spriteidmapping.php the online sprite ID converter] , aby wyszukać ID''`y'' 'sprite', których możesz użyć dla wszystkich klimatów.
 
@@ -122,41 +122,41 @@ Można narysować dwa rodzaje 'sprites' . &nbsp;Jeden typ to taki, który ustana
 Spritedata ikonek z własnym obwiednią ma ten format:
 
 {| |-
-!Size!!Name!!Meaning
+!Rozmiar!!Nazwa!!Znaczenie
 |-
-|B||xofs||x-offset from northern tile corner
+|B||xofs||x-offset od północnego narożnika kafla
 |-
 |B||yofs||y-offset from northern tile corner
 |-
 |B||zofs||z-offset from northern tile corner
 |-
-|B||xextent||size of sprite in x direction
+|B||xextent||rozmiar sprite'a w kierunku x
 |-
 |B||yextent||size of sprite in y direction
 |-
 |B||zextent||size of sprite in z direction
 |-
-|D||sprite||sprite number to draw
+|D||sprite||numer 'sprite' do narysowania
 |}
 
 Spritedata 'sprites' dzielących obwiednię ma ten format:
 
 {| |-
-!Size!!Name!!Meaning
+!Rozmiar!!Nazwa!!Znaczenie
 |-
-|B||xofs||x-offset relative to previous sprite
+|B||xofs||x-offset w stosunku do poprzedniego 'sprite'
 |-
 |B||yofs||y-offset relative to previous sprite
 |-
-|B||80||a literal 80
+|B||80||dosłowne 80
+|-
+|B||00||(ignorowane)
 |-
 |B||00||(ignored)
 |-
 |B||00||(ignored)
 |-
-|B||00||(ignored)
-|-
-|D||sprite||sprite number to draw
+|D||sprite||numer 'sprite' do narysowania
 |}
 
 Od OpenTTD r18959 możesz narysować wiele 'sprite' ziemi na płytkę, co jest przydatne, jeśli chcesz użyć zwykłej płytki podłogowej szyny / trawy / betonu, ale nadal musisz dodać do niej funkcje bez korzystania z nowej ramki ograniczającej. Aby to zrobić, użyj składni ikonek współużytkujących poprzednią ramkę ograniczającą, ale użyj jej przed definicją pierwszej ramki ograniczającej. xpixeloffset i ypixeloffset odnoszą się do zwykłego miejsca płytek naziemnych. Ta sama funkcja jest również częściowo obsługiwana w TTDPatch, ponieważ TTDPatch 2.6 r2312: TTDPatch ignoruje pola xofs i yofs i zawsze używa (0,0) dla offsetu. Jeśli tworzysz GRF, który musi być zgodny zarówno z OpenTTD, jak i TTDPatch, zawsze powinieneś utrzymywać xofs i yofs zero, aby uzyskać ten sam efekt w obu grach.
@@ -165,15 +165,15 @@ Zauważ jednak, że obie implementacje nie biorą pod uwagę  [[pl/Development/N
 Liczba ikonek może mieć następujące wartości (pamiętaj, aby używać małego endiana, tj. Odwróconej kolejności bajtów):
 
 {| |-
-!Number!!Sprite
+!Numer!!Sprite
 |-
-|0000042D+X||use sprite X from the corresponding [[pl/Development/NewGRF/NFO Specs/Action1|action 1]] block (i.e. 0000042D for the first, 0000042E for the second, etc.)
+|0000042D+X||użyj sprite X z odpowiedniego bloku [[pl/Development/NewGRF/NFO Specs/Action1|action 1]] (tj. 0000042D dla pierwszego, 0000042E dla drugiego, etc.)
 |-
-|0000842D+X||same, but draw it using company colour translation
+|0000842D+X||to samo, ale narysuj to, używając firmowej translacji kolorów
 |-
-|0322442D+X||same, but draw in transparent mode (actual colours of the sprite are disregarded entirely); supported in station construction window display since TTDPatch 2.6 r1683
+|0322442D+X||to samo, ale rysuj w trybie przezroczystym (rzeczywiste kolory 'sprite' są całkowicie pomijane); obsługiwane w wyświetlaniu okna konstrukcji stacji od wersji TTDPatch 2.6 r1683
 |-
-|RRRR842D+X||draw sprite with colour translation defined in sprite RRRR; available since TTDPatch 2.6 r1683
+|RRRR842D+X||rysuj sprite'a z translacją koloru zdefiniowanym w sprite RRRR; dostępny od TTDPatch 2.6 r1683
 |}
 
 Przy ustawionym bicie 31 ten 'sprites' będzie odnosił się do 'sprite' TTD, a nie 'sprite' akcji 1. Dla pierwszego 'sprite' naziemnego obowiązuje odwrotne znaczenie.
@@ -185,9 +185,9 @@ W zależności od rodzaju szyny sprajty mogą uzyskać dodatkowe przesunięcia <
 |-
 |TTD sprites || 0 || 82 || 164
 |-
-|Action 1 sprite (first ground sprite) || 0 || 1 || 2
+|Action 1 sprite (pierwszy grunt sprite) || 0 || 1 || 2
 |-
-|Action 1 sprite (other sprites in the layout) || 0 || 0 || 0
+|Action 1 sprite (inne 'sprites' w układzie) || 0 || 0 || 0
 |}
 
 Tak więc 'sprites' TTD i pierwszy 'sprite' naziemny są pod wpływem typu szyny, podczas gdy inne 'sprites' akcji 1 w układzie nie są. Przesunięcie "82" odnosi się do przesunięcia między domyślnymi 'sprites' torowymi TTD; jeśli używasz niedziałających naziemnych ikonek, które nie pochodzą z akcji 1, musisz dostarczyć fałszywe numery ikon, które zapobiegawczo odwrócą przesunięcia (to znaczy, potrzebujesz różnych układów ikon dla każdego typu linii, dla którego twoja stacja jest dostępna).
