@@ -1,24 +1,24 @@
 <noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Random_production_change|pl=pl/Development/NewGRF/NFO Specs/Callback/Random production change}}
-</noinclude>== Random production change (29) ==
+</noinclude>==<span id="Random_production_change_(29)"></span><span title="Random production change (29)" id="Random_production_change_.2829.29">Losowa zmiana produkcji (29)</span>==
 
-Wywoływany, gdy TTD wybiera branżę dla losowej zmiany produkcji. Zmienna 18 zawiera 32 losowe bity, aby pomóc w losowaniu decyzji. Oddzwonienie musi zwrócić jeden z następujących wyników:
+Wywoływany, gdy TTD wybiera branżę dla losowej zmiany produkcji. Zmienna 18 zawiera 32 losowe bity, aby pomóc w losowaniu decyzji. <span title='Wywołanie zwrotne'>'Callback'</span> musi zwrócić jeden z następujących wyników:
 
 {| |-
-!Value!!Version!!Znaczenie
+!Wartość!!Wersja!!Znaczenie
 |-
-|00||{{pl/Development/NewGRF/ottdp| | }}||Do nothing||
+|00||{{pl/Development/NewGRF/ottdp| | }}||Nic nie robi||
 |-
-|01||{{pl/Development/NewGRF/ottdp| | }}||Halve industry production. If production goes below the quarter of the default, the industry is closed instead, as if you returned 03.||
+|01||{{pl/Development/NewGRF/ottdp| | }}||Zmniejszyć o połowę produkcję przemysłową. Jeśli produkcja spadnie poniżej jednej czwartej wartości domyślnej, branża zostanie zamknięta, tak jakbyś zwrócił 03.||
 |-
-|02||{{pl/Development/NewGRF/ottdp| | }}||Double industry production if it hasn't reached eight times of the original yet.||
+|02||{{pl/Development/NewGRF/ottdp| | }}||Podwójna produkcja przemysłowa, jeśli nie osiągnęła jeszcze ośmiokrotnie większej niż oryginał.||
 |-
-|03||{{pl/Development/NewGRF/ottdp| | }}||The industry announces imminent closure, and is physically removed from the map next month.||
+|03||{{pl/Development/NewGRF/ottdp| | }}||Branża ogłasza rychłe zamknięcie i jest fizycznie usuwana z mapy w przyszłym miesiącu.||
 |-
-|04||{{pl/Development/NewGRF/ottdp| | }}||Do the standard random production change as if this industry was a primary one.||
+|04||{{pl/Development/NewGRF/ottdp| | }}||Wykonaj standardową, losową zmianę produkcji, tak jakby ta branża była głównym.||
 |-
 |05||{{pl/Development/NewGRF/ottdp| | }}||Divide production by 4||
 |-
-|06||{{pl/Development/NewGRF/ottdp| | }}||Divide production by 8||
+|06||{{pl/Development/NewGRF/ottdp| | }}||Podziel produkcję przez 8||
 |-
 |07||{{pl/Development/NewGRF/ottdp| | }}||Divide production by 16||
 |-
@@ -26,30 +26,30 @@ Wywoływany, gdy TTD wybiera branżę dla losowej zmiany produkcji. Zmienna 18 z
 |-
 |09||{{pl/Development/NewGRF/ottdp| | }}||Multiply production by 4||
 |-
-|0A||{{pl/Development/NewGRF/ottdp| | }}||Multiply production by 8||
+|0A||{{pl/Development/NewGRF/ottdp| | }}||Pomnóż produkcję przez 8||
 |-
 |0B||{{pl/Development/NewGRF/ottdp| | }}||Multiply production by 16||
 |-
 |0C||{{pl/Development/NewGRF/ottdp| | }}||Multiply production by 32||
 |-
-|0D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ottdrev=r11532|ttdprev=r2046}}||Decrement production by 1
+|0D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ottdrev=r11532|ttdprev=r2046}}||Zmniejsz produkcję o 1
 |-
-|0E||{{pl/Development/NewGRF/ottdp|0.6|2.6|ottdrev=r11532|ttdprev=r2046}}||Increment production by 1
+|0E||{{pl/Development/NewGRF/ottdp|0.6|2.6|ottdrev=r11532|ttdprev=r2046}}||Zwiększ produkcję o 1
 |-
-|0F||{{pl/Development/NewGRF/ottdp|0.7|2.6|ottdrev=r14561|ttdprev=r2068}}||Set production as returned in bits 16..23 of register 0x100 (clamped to 4..128)
+|0F||{{pl/Development/NewGRF/ottdp|0.7|2.6|ottdrev=r14561|ttdprev=r2068}}||Ustaw produkcję jako zwróconą w bitach 16..23 rejestru 0x100 (zaciśnięta do 4..128)
 |}
 
 Od wersji TTDPatch 2.5 beta 1 możesz ustawić bit 7 tej wartości, aby ukryć komunikat informujący o zmianie produkcji.
 Uważaj na to, szczególnie w przypadku zamkniętych wiadomości; większość graczy nie chciałaby, aby te były tłumione.
 
 W przypadku wartości zwrotnych 05..0C wyświetlane są komunikaty informacyjne z podwójną/połową. Prawdopodobnie powinieneś zastąpić wartości domyślne tekstem, który
-nie mówi wprost "podwójnie" <small>''(double)''</small>  ani "o połowę" <small>''(halve)''</small> ani nie używa funkcji zastępowania wiadomości (patrz poniżej). Jeśli operacja dzielenia przynosi
+nie mówi wprost <span title=double>"podwójnie"</span>  ani <span title=halve>"o połowę"</span> ani nie używa funkcji zastępowania wiadomości (patrz poniżej). Jeśli operacja dzielenia przynosi
 produkcja poniżej jednej czwartej wartości domyślnej, zamiast tego branża jest zamknięta. Pomnóż operacje, które przyniosą produkcję
 ponad 8 razy oryginał zwiększy go tylko do tej wartości.
 
 Od wersji TTDPatch r1306 możesz zastąpić domyślne wiadomości, które pojawiają się po zmianach produkcyjnych. Aby to zrobić, musisz ustawić bit 8 z
 zwrócił wynik i wstawił textID do niskiego słowa rejestru GRF 100h (wysokie słowo rejestru jest ignorowane).
-TextID może mieć domyślny tekst TTD lub tekst DCxx; '''nie może''' <small>''(cannot)''</small> być tekstem D0xx. Jeśli podana akcja wygeneruje komunikat,
+TextID może mieć domyślny tekst TTD lub tekst DCxx; <span title=cannot>'''nie może'''</span> być tekstem D0xx. Jeśli podana akcja wygeneruje komunikat,
 będzie to ten, który podałeś. Może jednak wcale nie generować komunikatów; na przykład operacja 04 może postanowić nie zmieniać
 produkcja, a następnie twoja wiadomość nie będzie wyświetlana. Jest jeden wyjątek: operacja 00 nigdy nie wygeneruje komunikatu,
 ale nadal tak będzie, gdy ustawiony jest bit 8. Jest to przydatne w połączeniu z [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#monthly-random-production-change-35 |callback 35]] , aby poinformować gracza o rzeczach, które nie
