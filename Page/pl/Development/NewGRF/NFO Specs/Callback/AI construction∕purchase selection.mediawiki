@@ -2,9 +2,9 @@
 |pl=pl/Development/NewGRF/NFO Specs/Callback/AI construction∕purchase selection
 }}
 <!--{{-}}<br>{{ambox | text = w trakcie edycji.}}--></noinclude><!--
--->== AI construction/purchase selection (18) ==
+-->==<span id="AI_construction/purchase_selection_(18)"></span><span title="AI construction/purchase selection (18)" id="AI_construction.2Fpurchase_selection_.2818.29">Wybór konstrukcji/zakupu AI (18)</span>==
 
-Ta funkcja zwrotna funkcji ogólnej jest wywoływana w celu podjęcia różnych decyzji, gdy sztuczna inteligencja buduje nową trasę. Na przykład, AI zazwyczaj ma ustaloną na stałe listę wagonów dla każdego rodzaju ładunku, ale dzięki temu wywołaniu zwrotnemu możesz uzależnić wybór od branż źródłowych i docelowych, a także odległości między usługami.
+Ta funkcja <span title=callback>'zwrotna'</span> funkcji ogólnej jest wywoływana w celu podjęcia różnych decyzji, gdy <span title='sztuczna inteligencja'>'SI'</span> buduje nową trasę. Na przykład, AI zazwyczaj ma ustaloną na stałe listę wagonów dla każdego rodzaju ładunku, ale dzięki temu wywołaniu zwrotnemu możesz uzależnić wybór od branż źródłowych i docelowych, a także odległości między usługami.
 
 Ponieważ pojazd nie został jeszcze kupiony, nie możesz używać zwykłych zmiennych pojazdu 40+x lub 80+x, zamiast tego masz następujące:
 
@@ -42,39 +42,39 @@ Ponieważ pojazd nie został jeszcze kupiony, nie możesz używać zwykłych zmi
 {| |-
 !Grupa!!Cecha!!Var.86!!Typ!!Opis
 |-
-|Trains||00||00||Check||Regular rail engine
+|<span title=koleje>'Trains'</span>||00||00||<span title=sparawdzenie>'Check'</span>||Zwykły silnik kolejowy
 |-
-||| ||01||Check||Electric rail engine
+||| ||01||Check||Elektryczna lokomotywa
 |-
 ||| ||02||Check||Monorail engine
 |-
 ||| ||03||Check||Maglev engine
 |-
-||| ||08||Get||Regular rail wagon
+||| ||08||<span title=Otrzymanie>'Get'</span>||Zwykły wagon kolejowy
 |-
-||| ||09||Get||Electric rail wagon
+||| ||09||Get||Elektryczny wagon kolejowy
 |-
 ||| ||0A||Get||Monorail wagon
 |-
 ||| ||0B||Get||Maglev wagon
 |-
-||| ||0F||Get||Track type to build
+||| ||0F||Get||Typ toru do zbudowania
 |-
-|Road Vehicles||01||00||Check||Road vehicle
+|Pojazdy drogowe||01||00||Check||Pojazd drogowy
 |-
-||| ||01||Get||First road vehicle ID to try
+||| ||01||Get||Pierwszy ID pojazdu drogowego do wypróbowania
 |-
-||| ||02||Get||Number of road vehicles to try
+||| ||02||Get||Liczba pojazdów drogowych do wypróbowania
 |-
 |Ships||02||00||Check||Ship
 |-
-||| ||01||Get||First ship ID to try
+||| ||01||Get||Pierwszy ID statku do wypróbowania
 |-
-||| ||02||Get||Number of ships to try
+||| ||02||Get||Liczba statków do wypróbowania
 |-
-|Aircraft||03||00||Check||Aircraft
+|<span title=Aircraft>'Samolot'</span>||03||00||Check||Samolot
 |-
-|Stations||04||00||Get||Station ID
+|Stacje||04||00||Get||ID stacji
 |}
 
 Notes:
@@ -82,7 +82,7 @@ Notes:
 * "Pobierz" <small>''(Get)''</small> oznacza dowiedzieć się, którego ID (itp.) Użyć. Wartość domyślna w var.82 będzie używana, jeśli wywołanie zwrotne nie powiedzie się.
 * W przypadku silników pociągów i samolotów AI zawsze sprawdza wszystkie dostępne silniki.
 * W przypadku pojazdów drogowych i statków, AI ma wbudowaną listę pojazdów do wypróbowania, możesz użyć zdarzenia oddzwaniania 01 i 02, aby zmienić tę listę.
-* W przypadku pociągów typy torów (0=regular, 1=electric, 2=monorail, 3=maglev) <small>''(electrifiedrailways/unifiedmaglev)''</small> są automatycznie mapowane odpowiednio w zależności od przełączników zelektryfikowanych/zunifikowanych. Aby uzyskać najlepsze wyniki, załóż, że wszystkie cztery są dostępne. Gra użyje wtedy poprawnego, jeśli nie jest dostępny.
+* W przypadku pociągów typy torów (0=<span title="normalny">'regular'</span>, 1=electric, 2=monorail, 3=maglev) <small>''(electrifiedrailways/unifiedmaglev)''</small> są automatycznie mapowane odpowiednio w zależności od przełączników zelektryfikowanych/zunifikowanych. Aby uzyskać najlepsze wyniki, załóż, że wszystkie cztery są dostępne. Gra użyje wtedy poprawnego, jeśli nie jest dostępny.
 
 To wywołanie zwrotne jest "powiązane" <small>''(chained)''</small> , tzn. Jeśli wynik nie jest wynikiem wywołania zwrotnego (wysoki bit nie jest ustawiony), wówczas żądanie jest przekazywane do poprzedniej ogólnej procedury obsługi wywołania zwrotnego, tj. Są sprawdzane w odwrotnej kolejności. Umożliwia to pozostawienie niektórych decyzji poprzedniemu programowi obsługi i pozwala na pewną współpracę między kilkoma plikami .grf.
 
