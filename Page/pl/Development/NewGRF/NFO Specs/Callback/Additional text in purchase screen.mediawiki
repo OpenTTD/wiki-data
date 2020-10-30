@@ -1,27 +1,27 @@
 <noinclude>{{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Callback:_Additional_text_in_purchase_screen|pl=pl/Development/NewGRF/NFO Specs/Callback/Additional text in purchase screen}}
-</noinclude>== Additional text in purchase screen (23) ==
+</noinclude>==<span id="Additional_text_in_purchase_screen_(23)"></span><span title="Additional text in purchase screen (23)" id="Additional_text_in_purchase_screen_.2823.29">Dodatkowy tekst na ekranie zakupu (23)</span>==
 
-Oddzwonienia można użyć do dodania tekstu poniżej informacji o pojeździe na ekranie zakupu. Oddzwanianie jest zawsze używane, gdy jest zdefiniowane, nie trzeba ustawiać bitu we właściwości akcji 0, aby ją aktywować.
+<span title="Wywołanie zwrotne">'Callback'</span> można użyć do dodania tekstu poniżej informacji o pojeździe na ekranie zakupu. <span title="Wywołanie zwrotne">'Callback'</span> jest zawsze używane, gdy jest zdefiniowane, nie trzeba ustawiać bitu we właściwości akcji 0, aby ją aktywować.
 
-Przed użyciem tego wywołania zwrotnego należy zdefiniować ciąg tekstowy dla funkcji z zakresu D0XX. Wartość powrót tego zwrotnego jest XX ID D0XX łańcucha. 
+Przed użyciem tego <span title=callback>'wywołania zwrotnego'</span> należy zdefiniować ciąg tekstowy dla funkcji z zakresu D0XX. Wartość <span title=return>'zwracana'</span> tego callback jest XX ID D0XX <span title=string>'łańcucha'</span>. 
 
-Począwszy od r1908, można również zwrócić identyfikatory tekstowe D100..D3FF.
+Począwszy od r1908, można również zwrócić <span title=identyfikatory>'ID'</span> tekstowe D100..D3FF.
 
-{{pl/Development/NewGRF/grfFrom|8}} Od wersji 8 GRF wartość 400 może zostać zwrócona, aby nie wyświetlać tekstu. W starszych wersjach konieczne jest niepowodzenie wywołania zwrotnego.
+{{pl/Development/NewGRF/grfFrom|8}} Od wersji 8 GRF wartość 400 może zostać <span title=returned >'zwrócona'</span>, aby nie wyświetlać tekstu. W starszych wersjach konieczne jest <span title='fail the callback'>'niepowodzenie wywołania zwrotnego'</span>.
 
 {{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23045}} Od wersji OpenTTD R23045 zawartość rejestrów 100h..105h jest kopiowana na stos tekstowy.
 
 
-Lines są zawijane automatycznie lub mogą zostać jawnie rozbite przy użyciu znaku nowej linii 0D. Liczba dostępnych linii zależy od rodzaju pojazdu i jego innych właściwości, na przykład obecności lub braku linii "nadającej się do" <small>''(refittable to)''</small> lub wagonów silnikowych itp.. 
+<span title=Lines>'Linie'</span> są zawijane automatycznie lub mogą zostać jawnie rozbite przy użyciu znaku nowej linii 0D. Liczba dostępnych linii zależy od rodzaju pojazdu i jego innych właściwości, na przykład obecności lub braku wagonów <span title="nadającej się do linii">'refittable to line'</span> lub z napędem etc.. 
 
-Jeśli ładunek FF (ikona menu kup) jest obsługiwany jawnie dla pojazdu, wówczas obsługa wariantu 2  [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#additional-text-in-purchase-screen-23 |callback 23]] musi być włączony łańcuch <small>''(chain)''</small> Kup menu wariant 2.
+Jeśli ładunek FF (ikona menu kup) jest obsługiwany jawnie dla pojazdu, wówczas obsługa wariantu 2  [[pl/Development/NewGRF/NFO Specs/Callback/Main Page#additional-text-in-purchase-screen-23 |callback 23]] musi być włączony łańcuch <small>''(chain)''</small> kupna menu wariant 2.
 
 
 Przykład ustawienia dodatkowego tekstu dla pojazdu drogowego:
 
- // Define string with ID D001 for featur 01. Bit 7 of the language byte must be set to 1, because the string ID is a word.
+ // Definiuje ciąg o ID D001 dla cechy 01. Bit 7 bajtu języka musi być ustawiony na 1,<br>// ponieważ ID ciągu to słowo.
  4 * 32 04 01 83 01 \wxD001 "Hint: This is a " 0D "new line." 00
- // The callback
+ // callback
  5 * 14 02 01 10 85 0C 00 \wxFFFF 01 \wx8001 \wx23 \wx23 02 00
 
 <!--[[Category:Callbacks]]-->[[Category:pl/User/extrazi/Callbacks]]
