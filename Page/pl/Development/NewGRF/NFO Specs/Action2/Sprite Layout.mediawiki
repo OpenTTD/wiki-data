@@ -1,6 +1,6 @@
 {{pl/Development/NewGRF/inne strony|en=newgrf-specs.tt-wiki.net/wiki/Action2/Sprite_Layout|pl=pl/Development/NewGRF/NFO Specs/Action2/Sprite Layout |sub=nfo}}
 <!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
-= Action2 Sprite Layout =
+=<span id="Action2_Sprite_Layout" title="Action2 Sprite Layout">Układ Sprite Action2</span>=
 {| |-
 !Cecha !! Wersja
 |-
@@ -13,48 +13,48 @@
 |Kafle Lotniska || {{pl/Development/NewGRF/ottdp|1.1|no}}
 |}
 
-Ta Action2 definiuje spriteayout dla kafelka. Dostępne są trzy formaty:
+Ta Action2 definiuje spriteayout dla kafla. Dostępne są trzy formaty:
 * Podstawowy format dla jednego 'sprite' naziemnego i jednego 'sprite' budowlanego.
 * Rozszerzony format łączenia wielu 'sprites'.
 * Zaawansowany format z przesunięciami rejestru <small>''(register offsets)''</small>
 
-== Basic format for tiles with a single building sprite ==
+==<span id="Basic_format_for_tiles_with_a_single_building_sprite" title="Basic format for tiles with a single building sprite">Bazowy format dla kafli z pojedynczym sprite budynku</span>==
 
 <pre> &lt;Sprite-number&gt; * &lt;Length&gt; 02 07/09/0F/11 &lt;set-id&gt; 00 &lt;groundsprite&gt; &lt;buildingsprite&gt; &lt;xoffset&gt; &lt;yoffset&gt; &lt;xextent&gt; &lt;yextent&gt; &lt;zextent&gt;</pre>
 
 {|
-!Element!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Size]]!!Description
+!Element!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Rozmiar]]!!Opis
 |-
-|&lt;[[#sprite-number|Sprite-number]]&gt;||dec||A sequential sprite number
+|&lt;[[#sprite-number|Sprite-number]]&gt;||dec||Kolejny numer 'sprite'
 |-
-|&lt;[[#length|length]]&gt;||dec||The total number of bytes used in this action
+|&lt;[[#length|length]]&gt;||dec||Całkowita liczba bajtów użytych w tej akcji
 |-
-|02||B||Defines action 02
+|02||B||Definiuje akcję 02
 |-
-|07/09/0F/11||B||feature 7=town buildings, 9=industry tiles, 0F = objects, or 11 airport tiles
+|07/09/0F/11||B||cecha 7=budynki miejskie, 9=kafle przemysłu, 0F=obiekty lub 11 kafli lotnisk
 |-
-|&lt;[[#set-id|set-id]]&gt;||B||ID for this definition
+|&lt;[[#set-id|set-id]]&gt;||B||ID tej definicji
 |-
-|00||B||Literal 0 (to distinguish this definition from random/variational lists)
+|00||B||Dosłowne 0 (aby odróżnić tę definicję od list losowych/wariacyjnych)
 |-
-|&lt;[[#sprite-definition-for-ground-and-building-sprites|groundsprite]]&gt;||D||Ground sprite for the building (see format below)
+|&lt;[[#sprite-definition-for-ground-and-building-sprites|groundsprite]]&gt;||D||'Sprite' naziemny dla budynku (patrz format poniżej)
 |-
-|&lt;[[#sprite-definition-for-ground-and-building-sprites|buildingsprite]]&gt;||D||The sprite of the building (see format below), can be zero to indicate that no building sprite should be displayed (useful for early building stages)
+|&lt;[[#sprite-definition-for-ground-and-building-sprites|buildingsprite]]&gt;||D||Duszek budynku (patrz format poniżej) może mieć wartość zero, aby wskazać, że nie powinien być wyświetlany żaden duszek budynku (przydatne na wczesnych etapach budowania)
 |-
-|&lt;xofs&gt;||B||x-offset from northern tile corner (as a signed byte)
+|&lt;xofs&gt;||B||Przesunięcie x od północnego rogu kafla (jako <span title='ze znakiem'>'signed'</span> bajt)
 |-
-|&lt;yofs&gt;||B||y-offset from northern tile corner (as a signed byte)
+|&lt;yofs&gt;||B||Przesunięcie y od północnego narożnika kafla (jako <span title='ze znakiem'>'signed'</span> bajt)
 |-
-|&lt;xextent&gt;||B||size of sprite in x direction
+|&lt;xextent&gt;||B||rozmiar sprite'a w kierunku x
 |-
-|&lt;yextent&gt;||B||size of sprite in y direction
+|&lt;yextent&gt;||B||rozmiar sprite'a w kierunku y
 |-
-|&lt;zextent&gt;||B||size of sprite in z direction
+|&lt;zextent&gt;||B||rozmiar sprite'a w kierunku z
 |}
 
-Na powyższym xofs, yofs, xextent, yextent i zextent definiują obwiednię 3D 'sprite' budynku, nie uwzględniając 'sprite' ziemi. Przesunięcie Z wynosi zawsze zero dla budynków (TTD nie obsługuje budynków pływających). Uwaga: pary xofs/xextent i yofs/yextent, które umieszczają obwiednię poza kafelkiem, nie są zalecane.
+Na powyższym xofs, yofs, xextent, yextent i zextent definiują obwiednię 3D 'sprite' budynku, nie uwzględniając 'sprite' ziemi. Przesunięcie Z wynosi zawsze zero dla budynków (TTD nie obsługuje budynków pływających). Uwaga: pary xofs/xextent i yofs/yextent, które umieszczają obwiednię poza kaflem, nie są zalecane.
 
-== Extended format using multiple combined sprites ==
+==<span id="Extended_format_using_multiple_combined_sprites" title="Extended format using multiple combined sprites">Rozszerzony format wykorzystujący wiele połączonych sprites</span>==
 
 {{pl/Development/NewGRF/ottdp|0.6|2.5|ttdprev=2.0.1 alpha 55 vcs 3}} Ponieważ TTDPatch 2.0.1 alpha 55 vcs 3, domy, kafle przemysłowe (i obiektowe) obsługują również rozszerzoną składnię, która wygląda następująco:
 
@@ -63,48 +63,48 @@ Na powyższym xofs, yofs, xextent, yextent i zextent definiują obwiednię 3D 's
 {|
 !Element!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Rozmiar]]!!Opis
 |-
-|&lt;[[#sprite-number|Sprite-number]]&gt;||dec||A sequential sprite number
+|&lt;[[#sprite-number|Sprite-number]]&gt;||dec||Kolejny numer 'sprite'
 |-
-|&lt;[[#length|length]]&gt;||dec||The total number of bytes used in this action
+|&lt;[[#length|length]]&gt;||dec||Całkowita liczba bajtów użytych w tej akcji
 |-
-|02||B||Defines action 02
+|02||B||Definiuje akcję 02
 |-
-|07/09/0F/11||B||feature 7=town buildings, 9=industry tiles, 0F = objects, or 11 = airport tiles
+|07/09/0F/11||B||cecha 7=budynki miejskie, 9=kafle przemysłu, 0F=obiekty lub 11=kafle lotnisk
 |-
-|&lt;[[#set-id|set-id]]&gt;||B||ID for this definition
+|&lt;[[#set-id|set-id]]&gt;||B||ID tej definicji
 |-
-|&lt;num-sprites&gt;||B||Number of following building sprites (the groundsprite mustn't be counted). Allowed range: 1 to 63 (0x01 to 0x3F). {{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22518}} Adding 0x40 makes the layout an Advanced Spritelayout with register modifiers ( [[pl/Development/NewGRF/NFO Specs/Action2/Advanced Sprite Layout| see below]] ).
+|&lt;num-sprites&gt;||B||Liczba kolejnych sprite'ów budujących (nie liczy się gruntu). Dozwolony zakres: od 1 do 63 (0x01 do 0x3F). {{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r22518}} Dodanie 0x40 powoduje, że układ staje się zaawansowanym układem Spritelayout z modyfikatorami rejestru ( [[pl/Development/NewGRF/NFO Specs/Action2/Advanced Sprite Layout| patrz poniżej]] ).
 |-
-|&lt;[[#sprite-definition-for-ground-and-building-sprites|groundsprite]]&gt;||D||Ground sprite for the building (see format below)
+|&lt;[[#sprite-definition-for-ground-and-building-sprites|groundsprite]]&gt;||D||Duszek naziemny dla budynku (patrz format poniżej)
 |-
-|&lt;[[#sprite-definition-for-ground-and-building-sprites|buildingsprite]]&gt;||D||The sprite to be drawn. Unlike the basic format, zero isn't allowed here.
+|&lt;[[#sprite-definition-for-ground-and-building-sprites|buildingsprite]]&gt;||D||Sprite do narysowania. W przeciwieństwie do podstawowego formatu, zero nie jest tutaj dozwolone.
 |-
 !colspan="3"| -- dla 'sprites' definiujących nowe obwiednię --
 |-
-|&lt;xofs&gt;||B||x-offset from northern tile corner (as a signed byte)
+|&lt;xofs&gt;||B||<span title=offset>'Przesunięcie'</span>-x od północnego rogu kafla (jako <span title='ze znakiem'>'signed'</span> bajt)
 |-
-|&lt;yofs&gt;||B||y-offset from northern tile corner (as a signed byte)
+|&lt;yofs&gt;||B||Przesunięcie-y od północnego rogu kafla (jako <span title='ze znakiem'>'signed'</span> bajt)
 |-
-|&lt;zofs&gt;||B||z-offset from the ground
+|&lt;zofs&gt;||B||Z-offset od ziemi
 |-
-|&lt;xextent&gt;||B||size of sprite in x direction
+|&lt;xextent&gt;||B||rozmiar sprite'a w kierunku x
 |-
-|&lt;yextent&gt;||B||size of sprite in y direction
+|&lt;yextent&gt;||B||rozmiar sprite'a w kierunku y
 |-
-|&lt;zextent&gt;||B||size of sprite in z direction
+|&lt;zextent&gt;||B||rozmiar sprite'a w kierunku z
 |-
 !colspan="3"| -- dla 'sprites' dzielących obwiednię z poprzednim 'sprite' --
 |-
-|&lt;xpixeloffset&gt;||B||x offset from the top left corner of the previous sprite
+|&lt;xpixeloffset&gt;||B||x <span title=offset>'odsunięcie'</span> od lewego górnego rogu poprzedniego 'sprite'
 |-
-|&lt;ypixeloffset&gt;||B||y offset from the top left corner of the previous sprite
+|&lt;ypixeloffset&gt;||B||y odsunięty od lewego górnego rogu poprzedniego 'sprite'
 |-
-|80||B||a literal 80h byte to distinguish from new-bounding-box definitions
+|80||B||dosłowny bajt 80-godzinny do odróżnienia od definicji nowego pola ograniczającego
 |}
 
 Note: ograniczenia dla 'sprites' dzielących ich obwiednię są takie same, jak wyjaśniono dla [[pl/Development/NewGRF/NFO Specs/Action0/Stations#sprite-layout-09|station tiles.]]
 
-{{pl/Development/NewGRF/ottd|0.7|r18959}} Od OpenTTD r18959 możesz narysować wiele 'sprite' ziemi na płytkę, co jest przydatne, jeśli chcesz użyć zwykłej płytki podłogowej z trawy/wody/betonu <small>''(grass/water/concrete)''</small> , ale nadal musisz dodać do niej funkcje bez korzystania z nowej ramki ograniczającej. Aby to zrobić, użyj składni ikonek współużytkujących poprzednią ramkę ograniczającą, ale użyj jej przed definicją pierwszej ramki ograniczającej. xpixeloffset i ypixeloffset odnoszą się do zwykłego miejsca płytek naziemnych.
+{{pl/Development/NewGRF/ottd|0.7|r18959}} Od OpenTTD r18959 możesz narysować wiele 'sprite' ziemi na kafla, co jest przydatne, jeśli chcesz użyć zwykłego <span title=groundtile>'kafla gruntowego'</span> z trawy/wody/betonu <small>''(grass/water/concrete)''</small> , ale nadal musisz dodać do niej funkcje bez korzystania z nowej ramki ograniczającej. Aby to zrobić, użyj składni ikonek współużytkujących poprzednią ramkę ograniczającą, ale użyj jej przed definicją pierwszej ramki ograniczającej. xpixeloffset i ypixeloffset odnoszą się do zwykłego miejsca <span title=groundtiles>'kafli naziemnych'</span>.
 
 {{pl/Development/NewGRF/ttdp|2.6|r2313}} Ta sama funkcja jest również częściowo obsługiwana w TTDPatch, ponieważ TTDPatch 2.6 r2313: TTDPatch ignoruje pola xpixeloffset i ypixeloffset i zawsze używa (0,0) dla offsetu. Jeśli tworzysz GRF, który musi być zgodny zarówno z OpenTTD, jak i TTDPatch, zawsze powinieneś zachować zero xpixeloffset i ypixeloffset zero, aby uzyskać ten sam efekt w obu grach.
 
