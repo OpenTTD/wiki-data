@@ -165,34 +165,34 @@ Typ dostępu określa zarówno wielkość dostępu do zmiennych, jak i wybiera m
 Każda zmienna określa jej rozmiar. Nie każda zmienna jest podwójnym słowem.
 Jeśli dostępna zmienna jest mniejsza niż podany tutaj rozmiar, dodatkowe bity mogą zawierać śmieci i powinny być <and-masked>.
 
-=== Variable ===
+===<span id="Variable" title="Variable">Zmienna</span>===
 
 Działanie wariacyjne 2 umożliwia dostęp do tych zmiennych:
 
 {| |-
-!'''Number'''!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Size''']]!!Version!!'''Meaning'''
+!'''Numer'''!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Rozmiar''']]!!Wersja!!'''Znaczenie'''
 |-
-|00-3F|| || ||See [[pl/Development/NewGRF/NFO Specs/GlobalVariables| global variables page]].
+|00-3F|| || ||Zobacz [[pl/Development/NewGRF/NFO Specs/GlobalVariables| global variables page]].
 |-
-|40+x||D|| ||specially calculated feature-specific variable, see following feature-specific pages
+|40+x||D|| ||specjalnie obliczona zmienna charakterystyczna dla funkcji, patrz następujące strony dotyczące funkcji
 |-
-|5F||D||{{pl/Development/NewGRF/ottdp|0.7|2.6|ttdprev=r1928}}||Feature-specific random data: triggers in low byte, bits in other three bytes. Bits of the variable not associated with random or trigger bits are reserved.
+|5F||D||{{pl/Development/NewGRF/ottdp|0.7|2.6|ttdprev=r1928}}||Dane losowe specyficzne dla funkcji: wyzwalacze w młodszym bajcie, bity w pozostałych trzech bajtach. Bity zmiennej niezwiązane z bitami losowymi lub wyzwalającymi są zarezerwowane.
 |-
-|60+x||D|| ||similar to 40+x variables, but the variable number must be followed by a byte, which will be given to the variable handler as parameter.
+|60+x||D|| ||podobny do 40+x zmiennych, ale po numerze zmiennej musi następować bajt, który zostanie przekazany do obsługi zmiennej jako parametr.
 |-
-|7B||-||{{pl/Development/NewGRF/ottdp|1.1|2.6|ottdrev=r21604|ttdprev=r2359}}||A special 60+x variable to be used in Advanced Variational Action 2. It allows to evaluate any other 60+x variable using a non-constant parameter from a register. The parameter of variable 7B specifies another 60+x variable which is evaluated. The parameter for that variable is read from the accumulator ('val1'), i.e. the result from the preceding operations of the same Advanced Variational Action 2. Hence variable 7B may not be the first variable used in the calculation. Variable 7B itself and 7E (procedure call) are not allowed to be used as parameter for variable 7B.
+|7B||-||{{pl/Development/NewGRF/ottdp|1.1|2.6|ottdrev=r21604|ttdprev=r2359}}||Specjalna zmienna 60 + x do użycia w zaawansowanej akcji wariacyjnej 2. Umożliwia ocenę dowolnej innej zmiennej 60+x przy użyciu niestałego parametru z rejestru. Parametr zmiennej 7B określa inną zmienną 60+x, która jest oceniana. Parametr dla tej zmiennej jest odczytywany z akumulatora ('val1'), tj. Wynik z poprzednich operacji tego samego zaawansowanego działania wariacyjnego 2. Dlatego zmienna 7B nie może być pierwszą zmienną używaną w obliczeniach. Zmienna 7B i 7E (wywołanie procedury) nie mogą być używane jako parametry dla zmiennej 7B.
 
-{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23138}} Since OpenTTD r23138 you can use this to pass 32 bit parameters to 60+x variables. Currently this is only useful for a few variables, e.g. vehicle variable 60. For most variables the higher bits of the parameter are considered reserved. So, make sure to mask the higher bits in the preceding calculations.
+{{pl/Development/NewGRF/ottdp|1.2|no|ottdrev=r23138}} Od OpenTTD r23138 możesz używać tego do przekazywania 32-bitowych parametrów do 60+x zmiennych. Obecnie jest to przydatne tylko w przypadku kilku zmiennych, np. zmienna pojazdu 60. W przypadku większości zmiennych wyższe bity parametru uważa się za zarezerwowane. Dlatego pamiętaj o zamaskowaniu wyższych bitów w poprzednich obliczeniach.
 |-
-|7C||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1315}}||A special 60+x variable used to access values stored in the registers of [[pl/Development/NewGRF/NFO Specs/Storages#persistent-storage|persistent storage]].
+|7C||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1315}}||Specjalna zmienna 60+x używana do uzyskiwania dostępu do wartości przechowywanych w rejestrach [[pl/Development/NewGRF/NFO Specs/Storages#persistent-storage|persistent storage]].
 |-
-|7D||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1246}}||A special 60+x variable used to access values stored in the registers of [[pl/Development/NewGRF/NFO Specs/Storages#temporary-storage|temporary storage]]. Available in the purchase list.
+|7D||D||{{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1246}}||Specjalna zmienna 60+x używana do uzyskiwania dostępu do wartości przechowywanych w rejestrach [[pl/Development/NewGRF/NFO Specs/Storages#temporary-storage|temporary storage]]. Dostępne na liście zakupów.
 |-
-|7E||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||A special 60+x variable indicating a [[pl/Development/NewGRF/NFO Specs/VarAction2Advanced#using-procedures|procedure call]]. Available in the purchase list.
+|7E||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Specjalna zmienna 60+x wskazująca [[pl/Development/NewGRF/NFO Specs/VarAction2Advanced#using-procedures|procedure call]]. Dostępne na liście zakupów.
 |-
-|7F||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||A special 60+x variable that reads GRF parameter whose number is given by the 60+x parameter. Available in the purchase list.
+|7F||D||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Specjalna zmienna 60+x odczytująca parametr GRF, którego numer jest określony przez parametr 60 + x. Dostępne na liście zakupów.
 |-
-|80+x|| || ||Feature-specific variable, see following feature-specific pages. While most of these variables actually refer to raw memory locations of original TTD structures, you cannot rely on that. Some variables were added later, some were moved or replaced. Only the variables listed in the specs are somewhat set to not be changed in the future.
+|80+x|| || ||Zmienna charakterystyczna dla funkcji, zobacz następujące strony dotyczące funkcji. Chociaż większość z tych zmiennych w rzeczywistości odnosi się do surowych lokalizacji pamięci oryginalnych struktur TTD, nie można na tym polegać. Niektóre zmienne zostały dodane później, inne zostały przeniesione lub zastąpione. Tylko zmienne wymienione w specyfikacjach są w pewnym stopniu ustawione tak, aby nie ulegały zmianie w przyszłości.
 |}
 
 W przypadku wszystkich funkcji zmienne 80+x są przesunięte w odpowiednią strukturę w danych gry TTD. &nbsp;Zmienne 40+x i 60+x są specjalnymi zmiennymi, które są obliczane w locie i nie są tak naprawdę nigdzie przechowywane w pamięci, chyba że podano inaczej. Dlatego należy ich używać tak mało, jak to konieczne, aby nie spowalniać zbytnio gry przy obliczaniu tych zmiennych (które można nazwać tysiące razy na sekundę, ilekroć porusza się pojazd).
