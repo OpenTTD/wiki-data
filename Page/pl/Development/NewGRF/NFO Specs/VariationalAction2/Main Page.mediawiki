@@ -208,31 +208,31 @@ Dostosuj zmienną do bardziej użytecznego zakresu. Ma następujący format:
 <pre>  <shift-num> <and-mask> <nowiki>[<add-val> <divide-val>/<modulo-val>]</nowiki></pre>
 
 {| |-
-!'''Element'''!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Size''']]!!'''Description'''
+!'''Element'''!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Rozmiar''']]!!'''Opis'''
 |-
-|shift-num||B||value to right-shift the variable, and some special bits. See below.
+|shift-num||B||value, aby przesunąć zmienną w prawo i kilka specjalnych bitów. Zobacz poniżej.
 |-
-|and-mask||B/W/D||value with which to AND the variable after shifting. Return this value if neither bit 6 nor bit 7 of shift-num are set.
+|and-mask||B/W/D||wartość, za pomocą której ORAZ zmienną po przesunięciu. Zwróć tę wartość, jeśli ani bit 6, ani bit 7 funkcji shift-num nie są ustawione.
 |-
-|add-val||B/W/D||value to add to the variable after ANDing. Only present if bits 6 or 7 are set in shift-num.
+|add-val||B/W/D||wartość do dodania do zmiennej po wykonaniu operacji AND. Występuje tylko wtedy, gdy bity 6 lub 7 są ustawione w shift-num.
 |-
-|divide-val||B/W/D||return the sum divided by this value. Only present if bit 6 is set in shift-num.
+|divide-val||B/W/D||zwraca sumę podzieloną przez tę wartość. Występuje tylko wtedy, gdy bit 6 jest ustawiony w shift-num.
 |-
-|modulo-val||B/W/D||return the sum modulo (remainder of division by) this value. Only present if bit 7 is set in shift-num.
+|modulo-val||B/W/D||zwraca sumę modulo (reszta z dzielenia przez) tę wartość. Występuje tylko wtedy, gdy bit 7 jest ustawiony w shift-num.
 |}
 
-<shift-num> is a partial bit-mask; its bits have the following meanings:
+<shift-num> jest częściową maską-bitową; jego bity mają następujące znaczenie:
 
 {| |-
-!Bit(s)!!Value!!Version!!Meaning
+!Bit(y)!!Wartość!!Wersja!!Znaczenie
 |-
-|0..4||0..1F||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||number of bits to right shift <variable>
+|0..4||0..1F||{{pl/Development/NewGRF/ottdp|0.6|2.0}}||liczba bitów do <span title=shift>'przesunięcia;</span> w prawo <variable>
 |-
-|5||20||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||This is an [[pl/Development/NewGRF/NFO Specs/VarAction2Advanced|advanced VarAction2]]
+|5||20||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||To jest [[pl/Development/NewGRF/NFO Specs/VarAction2Advanced|advanced VarAction2]]
 |-
-|6||40||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||This is a shift-and-add-divide adjustment.
+|6||40||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Jest to regulacja typu <span title=shift-and-add-divide>'przesuń-i-dodaj-podziel'</span>.
 |-
-|7||80||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||This is a shift-and-add-modulo adjustment.
+|7||80||{{pl/Development/NewGRF/ottdp|0.6|2.5}}||Jest to regulacja typu shift-and-add-modulo.
 |}
 
 Nie można ustawić obu bitów 6 i 7. Jeśli żaden z nich nie jest ustawiony, ten varadjust jest zmianą i zmianą.
