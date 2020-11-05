@@ -2,7 +2,7 @@
 <!--{{-}}<br>--><!--{{ambox | text = w trakcie edycji.}}--><!-- -->
 = Produkcja Przemysłowa Callback =
 
-Branże nie mają bezpośrednio z nimi grafiki (mają grafikę poprzez kafelki), więc nie mogą mieć tradycyjnej akcji 2. Jednak nadal mogą używać akcji 2 do specjalnego celu: wywołań produkcyjnych. Oddzwonienie produkcyjne może dokładnie określić, w jaki sposób przemysł produkuje ładunek, ale wymaga to więcej niż 15 bitów, które może zwrócić normalny oddzwonienie.
+Branże nie mają bezpośrednio z nimi grafiki (mają grafikę poprzez kafle), więc nie mogą mieć tradycyjnej akcji 2. Jednak nadal mogą używać akcji 2 do specjalnego celu: wywołań produkcyjnych. Oddzwonienie produkcyjne może dokładnie określić, w jaki sposób przemysł produkuje ładunek, ale wymaga to więcej niż 15 bitów, które może zwrócić normalny oddzwonienie.
 
 Gdy w branży 21 są ustawione bity 1 lub 2, jego produkcja jest zmieniana. Zamiast natychmiastowego przetwarzania przychodzącego ładunku, pamięta, ile jednostek czeka i korzysta z mechanizmu zwrotnego produkcji, aby zdecydować, ile ładunku należy wyprodukować.
 
@@ -14,7 +14,8 @@ W przypadku wywołania zwrotnego produkcji dane działania 2 wyglądają następ
 
 === Format version 00 ===
 
-<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 02 0A &lt;set-id&gt; &lt;version&gt; &lt;subtract-in-1&gt; &lt;subtract-in-2&gt; &lt;subtract-in-3&gt; &lt;add-out-1&gt; &lt;add-out-2&gt; &lt;again&gt; </pre>
+<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 02 0A &lt;set-id&gt; &lt;version&gt; &lt;subtract-in-1&gt; &lt;subtract-in-2&gt; &lt;subtract-in-3&gt; 
+&lt;add-out-1&gt; &lt;add-out-2&gt; &lt;again&gt; </pre>
 
 {| class="wikitable
 |-
@@ -63,115 +64,117 @@ W przypadku wywołania zwrotnego produkcji dane działania 2 wyglądają następ
 === Format version 01 ===
 {{pl/Development/NewGRF/ottdp|0.6|2.6|ttdprev=r1307}}
 
-<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 02 0A &lt;set-id&gt; &lt;version&gt; &lt;subtract-in-1&gt; &lt;subtract-in-2&gt; &lt;subtract-in-3&gt; &lt;add-out-1&gt; &lt;add-out-2&gt; &lt;again&gt; </pre>
+<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 02 0A &lt;set-id&gt; &lt;version&gt; &lt;subtract-in-1&gt; &lt;subtract-in-2&gt; &lt;subtract-in-3&gt; 
+&lt;add-out-1&gt; &lt;add-out-2&gt; &lt;again&gt; </pre>
 
 
 {| class="wikitable"
 |-
 !'''Element'''
-![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Size''']]
-!'''Description'''
+![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Rozmiar''']]
+!'''Opis'''
 |-
 |&lt;Sprite-number&gt;
 |dec
-|A sequential sprite number
+|Kolejny numer 'sprite'
 |-
 |&lt;length&gt;
 |dec
-|The total number of bytes used in this action
+|Całkowita liczba bajtów użytych w tej akcji
 |-
 |02
 |B
-|Defines action 02
+|Definiuje akcję 02
 |-
 |0A
 |B
-|feature 0A=industries
+|funkcja 0A=branże
 |-
 |&lt;set-id&gt;
 |B
-|ID for this definition
+|ID tej definicji
 |-
 |&lt;version&gt;
 |B
-|version of the production-callback format, 01
+|wersja formatu produkcji-callback, 01
 |-
 |&lt;subtract-in-1..3&gt;
 |B
-|Numbers of registers that contain the amounts to be subtracted from the incoming cargoes waiting to be processed.
+|Liczba rejestrów zawierających kwoty do odjęcia od przychodzących ładunków oczekujących na przetworzenie.
 |-
 |&lt;add-out-1/2&gt;
 |B
-|Numbers of registers that hold the amounts to be added to the produced cargoes.
+|Numery rejestrów, które zawierają kwoty, które należy dodać do wyprodukowanych ładunków.
 |-
 |&lt;again&gt;
 |B
-|Number of &lt;again&gt; register. Repeat callback if the value of the register &nbsp;isn't zero, do not repeat otherwise
+|Numer rejestru &lt;again&gt; . Powtórz <span title='wywołanie zwrotne'>'callback'</span>, jeśli wartość rejestru &nbsp;nie jest zerem, inaczej nie powtarzaj
 |}
 
 === Format version 02 ===
 {{pl/Development/NewGRF/ottdp|1.9|no|ottdrev=e66cec8f}}
 
-<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 02 0A &lt;set-id&gt; &lt;version&gt; <numinputs> (<inputcargo> <subtract-in>)* <numoutputs> (<outputcargo> <add-out>)* &lt;again&gt; </pre>
+<pre> &lt;Sprite-number&gt; * &lt;Length&gt; 02 0A &lt;set-id&gt; &lt;version&gt; <numinputs> (<inputcargo> <subtract-in>)* 
+<numoutputs> (<outputcargo> <add-out>)* &lt;again&gt; </pre>
 
 
 {| class="wikitable"
 |-
 !'''Element'''
-![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''Size''']]
-!'''Description'''
+![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|'''rozmiar''']]
+!'''Opis'''
 |-
 |&lt;Sprite-number&gt;
 |dec
-|A sequential sprite number
+|Kolejny numer 'sprite'
 |-
 |&lt;length&gt;
 |dec
-|The total number of bytes used in this action
+|Całkowita liczba bajtów użytych w tej akcji
 |-
 |02
 |B
-|Defines action 02
+|Definiuje akcję 02
 |-
 |0A
 |B
-|feature 0A=industries
+|funkcja 0A=branże
 |-
 |&lt;set-id&gt;
 |B
-|ID for this definition
+|ID tej definicji
 |-
 |&lt;version&gt;
 |B
-|version of the production-callback format, 02
+|wersja formatu produkcja-callback, 02
 |-
 |<numinput>
 |B
-|Number of (<inputcargo> <subtract-in>) pairs to follow.
+|Liczba (<inputcargo> <subtract-in>) par do <span title=follow>'naśladowania'</span>.
 |-
 |<inputcargo>
 |B
-|Cargotype from cargo translation table.
+|Cargotyp z tabeli translacji ładunku.
 |-
 |&lt;subtract-in&gt;
 |B
-|Number of register that contain the amounts to be subtracted from the incoming cargoes waiting to be processed.
+|Numer rejestru zawierającego kwoty do odjęcia od przychodzących ładunków oczekujących na przetworzenie.
 |-
 |<numoutput>
 |B
-|Number of (<outputcargo> <add-out>) pairs to follow.
+|Liczba (<outputcargo> <add-out>) par do <span title=follow>'naśladowania'</span>.
 |-
 |<outputcargo>
 |B
-|Cargotype from cargo translation table.
+|Cargotyp z tabeli translacji ładunku.
 |-
 |&lt;add-out&gt;
 |B
-|Number of register that hold the amounts to be added to the produced cargoes.
+|Numer rejestru przechowującego kwoty, które mają być dodane do wyprodukowanych ładunków.
 |-
 |&lt;again&gt;
 |B
-|Number of &lt;again&gt; register. Repeat callback if the value of the register &nbsp;isn't zero, do not repeat otherwise
+|Numer rejestru &lt;again&gt; .  Powtórz wywołanie zwrotne, jeśli wartość rejestru &nbsp;jest różna od zera, w przeciwnym razie nie powtarzaj
 |}
 
 == Details ==
