@@ -132,73 +132,73 @@ W przypadku testów bitowych ten rozmiar jest ignorowany. Wartość musi być BY
 
 Od r1384 możliwe jest ustawienie tej wartości na 8 bajtów ze zmienną 88, umożliwiając w ten sposób użycie maski bitowej. Jest to przydatne, gdy tylko kilka bitów zmienia się w kilku plikach graficznych.
 
-=== condition-type ===
+===<span id="condition-type" title="condition-type">warunek-typu</span>===
 
-Istnieje kilka warunków, z których możesz wybrać test. Ma sekwencję zmiany znaczenia dla każdej prawidłowej wartości. Zobacz [[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed#byte-order|the discussion of escape sequences]] w celu uzyskania dalszych informacji na temat sekwencji specjalnych. Dla Twojej wygody są one podsumowane w jeszcze jednym stole:
+Istnieje kilka warunków, z których możesz wybrać test. Ma sekwencję zmiany znaczenia dla każdej prawidłowej wartości. Zobacz [[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed#byte-order|the discussion of escape sequences]] w celu uzyskania dalszych informacji na temat sekwencji specjalnych. Dla Twojej wygody są one podsumowane w jeszcze jednej tabeli:
 {|
-!Condition type!!Escape!!Version!!Description
+!Typ warunku!!Escape!!Version!!Opis
 |-
-|00||\71||{{pl/Development/NewGRF/ottdp|0.6| }}||Test for bit given by value being set
+|00||\71||{{pl/Development/NewGRF/ottdp|0.6| }}||Sprawdź bit podany przez ustawianą wartość
 |-
-|01||\70||{{pl/Development/NewGRF/ottdp|0.6| }}||Test for bit given by value being clear
+|01||\70||{{pl/Development/NewGRF/ottdp|0.6| }}||Sprawdź, czy bit podany przez wartość jest czysty
 |-
-|02||\7=||{{pl/Development/NewGRF/ottdp|0.6| }}||Parameter is equal to value
+|02||\7=||{{pl/Development/NewGRF/ottdp|0.6| }}||Parametr jest równy wartości
 |-
-|03||\7!||{{pl/Development/NewGRF/ottdp|0.6| }}||Parameter is not equal to value
+|03||\7!||{{pl/Development/NewGRF/ottdp|0.6| }}||Parametr nie jest równy wartości
 |-
-|04||\7<||{{pl/Development/NewGRF/ottdp|0.6| }}||Parameter is less than value
+|04||\7<||{{pl/Development/NewGRF/ottdp|0.6| }}||Parametr jest mniejszy niż wartość
 |-
-|05||\7>||{{pl/Development/NewGRF/ottdp|0.6| }}||Parameter is greater than value
+|05||\7>||{{pl/Development/NewGRF/ottdp|0.6| }}||Parametr jest większy niż wartość
 |-
-|06||\7G||{{pl/Development/NewGRF/ottdp|0.6| }}||GRFID (see [[pl/Development/NewGRF/NFO Specs/Action8|action 8]]) is active (for variable 88 only)
+|06||\7G||{{pl/Development/NewGRF/ottdp|0.6| }}||GRFID (zobacz [[pl/Development/NewGRF/NFO Specs/Action8|action 8]]) jest aktywne (tylko dla zmiennej 88)
 |-
-|07||\7g||{{pl/Development/NewGRF/ottdp|0.6| }}||GRFID is not active (for variable 88 only)
+|07||\7g||{{pl/Development/NewGRF/ottdp|0.6| }}||GRFID nie jest aktywny (tylko dla zmiennej 88)
 |-
-|08||\7gG||{{pl/Development/NewGRF/ottdp|0.6| }}||GRFID is not active yet but will be activated (variable 88 only)
+|08||\7gG||{{pl/Development/NewGRF/ottdp|0.6| }}||GRFID nie jest jeszcze aktywny, ale zostanie aktywowany (tylko zmienna 88)
 |-
-|09||\7GG||{{pl/Development/NewGRF/ottdp|0.6| }}||GRFID is or will be active (variable 88 only)
+|09||\7GG||{{pl/Development/NewGRF/ottdp|0.6| }}||GRFID jest lub będzie aktywny (tylko zmienna 88)
 |-
-|0A||\7gg||{{pl/Development/NewGRF/ottdp|0.6| |ottdrev=r11358}}||GRFID is not nor will it be active (variable 88 only)
+|0A||\7gg||{{pl/Development/NewGRF/ottdp|0.6| |ottdrev=r11358}}||GRFID nie jest ani nie będzie aktywny (tylko zmienna 88)
 |-
-|0B||\7c||{{pl/Development/NewGRF/ottdp|0.6| |ottdrev=r11358}}||Cargo type is not available (variable is ignored; value is the label)
+|0B||\7c||{{pl/Development/NewGRF/ottdp|0.6| |ottdrev=r11358}}||Typ ładunku nie jest dostępny (zmienna jest ignorowana; wartością jest etykieta)
 |-
-|0C||\7C||{{pl/Development/NewGRF/ottdp|0.6| |ottdrev=r11358}}||Cargo type is available (variable is ignored; value is the label)
+|0C||\7C||{{pl/Development/NewGRF/ottdp|0.6| |ottdrev=r11358}}||Typ ładunku jest dostępny (zmienna jest ignorowana; wartością jest etykieta)
 |-
-|0D|| ||{{pl/Development/NewGRF/ottdp|0.7|no|ottdrev=r15418}}||Railtype label is not defined (variable is ignored; value is the label)
+|0D|| ||{{pl/Development/NewGRF/ottdp|0.7|no|ottdrev=r15418}}||Etykieta typu szyny nie jest zdefiniowana (zmienna jest ignorowana; wartość to etykieta)
 |-
-|0E|| ||{{pl/Development/NewGRF/ottdp|0.7|no|ottdrev=r15418}}||Railtype label is defined (variable is ignored; value is the label)
+|0E|| ||{{pl/Development/NewGRF/ottdp|0.7|no|ottdrev=r15418}}||Zdefiniowano etykietę typu kolei (zmienna jest ignorowana; wartość to etykieta)
 |-
-|0F|| ||{{pl/Development/NewGRF/ottdp|1.10|no|}}||Roadtype label is not defined (variable is ignored; value is the label)
+|0F|| ||{{pl/Development/NewGRF/ottdp|1.10|no|}}||Nie zdefiniowano etykiety typu drogi (zmienna jest ignorowana; wartość to etykieta)
 |-
-|10|| ||{{pl/Development/NewGRF/ottdp|1.10|no|}}||Roadtype label is defined (variable is ignored; value is the label)
+|10|| ||{{pl/Development/NewGRF/ottdp|1.10|no|}}||Zdefiniowano etykietę typu drogi (zmienna jest ignorowana; wartość to etykieta)
 |-
-|11|| ||{{pl/Development/NewGRF/ottdp|1.10|no|}}||Tramtype label is not defined (variable is ignored; value is the label)
+|11|| ||{{pl/Development/NewGRF/ottdp|1.10|no|}}||Etykieta Tramtype nie jest zdefiniowana (zmienna jest ignorowana; wartość jest etykietą)
 |-
-|12|| ||{{pl/Development/NewGRF/ottdp|1.10|no|}}||Tramtype label is defined (variable is ignored; value is the label)
+|12|| ||{{pl/Development/NewGRF/ottdp|1.10|no|}}||Zdefiniowano etykietę Tramtype (zmienna jest ignorowana; wartość to etykieta)
 |}
 
-Zauważ, że dla znaków wielka litera oznacza dostępne, a mała litera oznacza niedostępne. W przypadku dwuznakowych sekwencji GRFID, pierwszy znak to jego obecny stan, a drugi to jego przyszły stan.
+<span title=Note>'Należy odnotować'</span>, że dla znaków wielka litera oznacza dostępne, a mała litera oznacza niedostępne. W przypadku dwuznakowych sekwencji GRFID, pierwszy znak to jego obecny stan, a drugi to jego przyszły stan.
 
 Testy dla zmiennej 88 zależą od bieżącego [[pl/Development/NewGRF/NFO Specs/GrfLoadingStages|GRF Loading Stage]] , kolejności, w jakiej GRF są ładowane, i oczywiście, czy są one obecne, czy zostały wyłączone (przez siebie lub przez inne GRF). Rozważ dwa GRF A i B (załadowane w tej kolejności):
 
-{| |-
-!rowspan="2"| Condition
-!colspan="2"| Initialisation
-!colspan="2"| Reservation/Activation
-!rowspan="2"| Tested GRF not present
+{| border=1 |-
+!rowspan="2"| <span title=Condition>'Warunek'</span>
+!colspan="2"| <span title=Inicjalizacja>'Initialisation'</span>
+!colspan="2"| Rezerwacja/Aktywacja
+!rowspan="2"| Brak testowanego GRF
 |-
-! A testing for B !! B testing for A !! A testing for B !! B testing for A
+! A <span title='testing for'>'testowanie dla'</span> B !! B testowanie dla A !! A testowanie dla B !! B testowanie dla A
 |-
 |-
-|06  \7G   || always false          || always false          || always false          || A not disabled?       || always false
+|06  \7G   ||zawsze false          || zawsze false          || zawsze false          || A nie wyłączone?       || zawsze false
 |-
-|07  \7g   || always true           || always true           || always true           || A disabled?           || always false
+|07  \7g   || zawsze true           || zawsze true           || zawsze true           || A wyłączone?           || zawsze false
 |-
-|08  \7gG  || always false          || A not (yet) disabled? || B not (yet) disabled? || always false          || always false
+|08  \7gG  || zawsze false          || <span title='A not (yet) disabled?'>'A nie (jeszcze) wyłączony?'</span> || B nie (jeszcze) wyłączony? || zawsze false          || zawsze false
 |-
-|09  \7GG  || always false          || A not (yet) disabled? || B not (yet) disabled? || A not disabled?       || always false
+|09  \7GG  || zawsze false          || A nie (jeszcze) wyłączony? || B nie (jeszcze) wyłączony? || A nie wyłączone?       || zawsze false
 |-
-|0A  \7gg  || B (already) disabled? || A (already) disabled? || B (already) disabled? || A disabled?           || always true
+|0A  \7gg  || B <span title='(already) disabled?'>'(już) wyłączone?'</span> || A (już) wyłączone? || B (już) wyłączone? || A wyłączone?           || zawsze true
 |}
 
 Jeśli testowany GRF nie jest obecny, warunki od 06 do 09 zawsze oceniają na "fałsz" <small>''(false)''</small> . Dla warunku 0A "wyłączone" <small>''(disabled)''</small> i "nieobecne" <small>''(not present)''</small> są takie same, tzn. Zawsze przyjmuje wartość "prawda" <small>''(true)''</small> .
