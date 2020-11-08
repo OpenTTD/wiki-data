@@ -1,0 +1,113 @@
+[[Translation:en/Community/Patches/Town console commands]]
+
+===<span id="Help_for_town_console_commands" title="Help for town console commands"> Pomoc dotycząca miejskich komend konsoli </span>===
+
+Poprawkę, która umożliwia te komendy, można znaleźć pod adresem http://www.tt-forums.net/viewtopic.php?f=33&t=32964
+
+===<span id="Synopsis" title="Synopsis"> Streszczenie </span>===
+
+Wywołaj komendę w określonej miejscowości{ach}.
+
+Stosowanie:
+
+ town &lt;identifier&gt; &lt;command&gt; [&lt;optional command parameters...&gt;]
+
+Komenda może być:
+{|
+|  ad_large      ||  Rozpocznij dużą kampanię reklamową w miejscowości (Alias: large_ad)
+|-
+|  ad_medium     ||  Rozpocznij średnią kampanię reklamową w miejscowości (Alias: medium_ad)
+|-
+|  ad_small      ||  Rozpocznij małą kampanię reklamową w miejscowości (Alias: small_ad)
+|-
+|  auth          ||  Otwórz okno władz miejscowości 
+|-
+|  bribe         ||  Przekupuj władze miejscowości 
+|-
+|  center        ||  Centralny widok główny na położenie miejscowości (Alias: centre)
+|-
+|  count         ||  Policz miejscowości spełniające podane kryteria. To polecenie nic nie da, ale zobaczysz, ile miejscowości pasuje do <span title=identifier>'identyfikatora'</span>
+|-
+|  delete        ||  Usuń miejscowość (tylko edytor scenariuszy)
+|-
+|  exclusive     ||  Kupuj wyłączne prawa w miejscowości
+|-
+|  expand        ||  Ekspanduj miejscowość (tylko w edytorze scenariuszy) Parametr określa liczbę powtórzeń (default 1)
+|-
+|  fund          ||  Sfinansuj konstrukcje nowych budynków (Alias: building)
+|-
+|  info          ||  Pokaż informacje o mieście na konsoli. Niektóre podstawowe statystyki, takie jak populacja, rankingi firm dla miejscowości, itp ... są drukowane w konsoli dla każdej pasującej miejscowości.
+|-
+|  open          ||  Otwórz okno miejscowości (Alias: show)
+|-
+|  print         ||  Wydrukuj nazwę miejscowości na konsoli
+|-
+|  road          ||  Ufundowanie rekonstrukcji drogi w miejscowości (Alias: reconstruction)
+|-
+|  statue        ||  Zbuduj posąg w miejscowości
+|}
+
+<span title=Identifier>'Identyfikator'</span> służy do określenia branży, w której polecenie zostanie zastosowane.
+Identyfikatorem może być:
+{|
+| '''all''' or '''*''' || dla wszystkich miejscowości
+|-
+| '''statue'''         || dla miejscowości, w których zbudowano pomnik
+|-
+| '''no_statue'''      || dla miejscowości, w których nie masz zbudowanych posągów
+|-
+| ''name of town'' or ''ID of town'' || dla konkretnej miejscowości
+|}
+Operatory '''&lt;''', '''&gt;''', '''&lt;=''', '''&gt;=''' <span title=and>'i'</span> '''&lt;&gt;''' mogą być użyte zamiast  '''=''' dla następujących dopasowań:
+{|
+| '''any_exclusive='''[value] ||  za odpowiednie miesiące pozostałych praw wyłącznych dla dowolnej firmy
+|-
+| '''currnoise='''[value] ||  do dopasowania aktualnie używanego poziomu hałasu
+|-
+| '''exclusive='''[value] ||  dla firmy kojarzącej posiadającej wyłączne prawa
+|-
+| '''fund='''[value] ||  za odpowiednie miesiące pozostałe w finansowaniu budowy
+|-
+| '''houses='''[value] ||  dla dopasowania liczby kamienic
+|-
+| '''maxnoise='''[value] ||  do dopasowania maksymalnego poziomu hałasu
+|-
+| '''my_exclusive='''[value] ||  za odpowiednie miesiące pozostałych wyłącznych praw dla Twojej firmy
+|-
+| '''noise='''[value] ||  do dopasowania pozostałego (użytecznego) poziomu hałasu
+|-
+| '''other_exclusive='''[value] ||  za odpowiednie miesiące pozostałych praw wyłącznych dla dowolnej firmy konkurencyjnej
+|-
+| '''population='''[value] ||  dla dopasowania populacji miejscowości
+|-
+| '''rating='''[value] ||  za dopasowanie oceny w miejscowości
+|-
+| '''roadworks='''[value] ||  za odpowiednie miesiące pozostałe w <span title=reconstructions>'przebudowie'</span> dróg
+|-
+| '''unwanted='''[value] ||  przez te same miesiące jesteś niechciany w mieście z powodu łapówki
+|}
+
+Przed poleceniem można określić wiele warunków dopasowania.
+Jeśli używasz więcej niż jednego warunku dopasowania, musisz oddzielić je za pomocą parametru 'and' lub '&' . Liczba warunków meczowych nie jest ograniczona.
+
+===<span id="Some_useful_examples" title="Some useful examples"> Kilka przydatnych przykładów </span>===
+
+{|
+| ''' town noise&gt;=25 print        || Wymień miejscowości, w których mogę zbudować lotnisko międzykontynentalne
+|-
+| ''' town population&gt;3000 and rating&gt;600 print || Wymień miejscowości powyżej 3000 osób, w których masz dobrą ocenę
+|-
+| ''' town population&lt;300 delete || Usuń małe miejscowości (w edytorze scenariuszy)
+|-
+| ''' town other_exclusive&gt;0 auth || Otwórz okno władz miejscowości dla miejscowości, w których ktoś inny ma wyłączne prawa
+|-
+| ''' town other_exclusive&lt;2 auth || Otwórz okno władz miejscowości dla miejscowości, w których Twoje wyłączne prawa dobiegają końca (pozostały ostatni miesiąc)
+|}
+
+Nota: Ta pomoc dotyczy wersji 18 poprawki.
+
+===<span id="See_also" title="See also"> Zobacz też </span>===
+* [[en/Community/Patches/Vehicle console commands]]
+* [[en/Community/Patches/Industry console commands]]
+
+[[Category:en/Manual/Console]][[Category:pl/Manual/Konsola]]
