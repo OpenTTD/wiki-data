@@ -229,7 +229,7 @@ Od wersji TTDPatch 2.0.1 alfa 70 duplikaty etykiet są w pełni obsługiwane. Sk
 
 Należy pamiętać, że zwykle nie jest bezpiecznie przeskakiwanie do tyłu, tj. Do wcześniejszej pozycji. Chociaż łatka z radością to zrobi, otrzymasz dziwne wyniki, jeśli niektóre działania zostaną powtórzone. Tylko działania 0, 6, 7, 9, C i D można w uzasadniony sposób wykonać więcej niż jeden raz.
 
-== Examples ==
+==<span id="Examples" title="Examples">Przykłady</span>==
 
 Zacznijmy od prostej akcji 7:
 
@@ -237,44 +237,44 @@ Zacznijmy od prostej akcji 7:
 
 Co ta akcja 7 mówi programowi do zrobienia z fikcyjnym plikiem .grf?
 {|
-!Byte!!Meaning
+!<span title=Byte>'Bajt'</span>!!Znaczenie
 |-
 |47||<sprite-number>
 |-
-|6||<length> of the action in bytes; start counting at 07 (<action>)
+|6||<length> akcji w bajtach; zacznij liczyć od 07 (<action>)
 |-
-|07||<action>: sets this pseudo-sprite to function as action 7
+|07||<action>: ustawia tego pseudo-sprite, aby działał jako action 7
 |-
-|83||<variable> 83 refers to the 4 different climates
+|83||<variable> 83 odnosi się do 4 różnych klimatów
 |-
-|01||<varsize>: amount of bytes to compare; a single byte for the climate
+|01||<varsize>: ilość bajtów do porównania; jeden bajt dla klimatu
 |-
-|03||<condition-type> 03 means skip if the variable is not equal to the <value>
+|03||<condition-type> 03 oznacza pominięcie, jeśli zmienna nie jest równa <value>
 |-
-|00||<value> 00 equals temperate climate for this variable
+|00||<value> 00 oznacza klimat umiarkowany dla tej zmiennej
 |-
-|00||<num-sprites> 00 means to skip the whole .grf file if the condition is true, i.e. for all climates except temperate in this case
+|00||<num-sprites> 00 oznacza pominięcie całego pliku .grf, jeśli warunek jest prawdziwy, tj. Dla wszystkich klimatów z wyjątkiem umiarkowanego w tym przypadku
 |}
 
 Dlatego ta akcja 7 pomija resztę pliku, jeśli jest ładowany w klimacie innym niż klimat umiarkowany.
 
-=== Check for a specific TTDPatch version ===
+===<span id="Check_for_a_specific_TTDPatch_version" title="Check for a specific TTDPatch version">Sprawdzenie konkretnej wersji TTDPatch</span>===
 
 Ponieważ akcja 7 jest pomijana podczas inicjacji, a bit ważności 7 akcji B nie działa przed TTDPatch 2.0.1 alfa 66, najlepszym sposobem sprawdzenia wymaganej wersji łatki jest następująca sekwencja:
 
-  // Check for TTDPatch 2.0.1 alpha 57, skip action B if present
+  // Sprawdź TTDPatch 2.0.1 alpha 57, pomiń działanie B, jeśli jest obecne
  1 * 9       09 8B 04 05 39 02 0A 02 01
-  // Abort with fatal action B if not (during its first activation)
+  // Przerwij z fatalną operacją B, jeśli nie (podczas pierwszej aktywacji)
  2 * 19      0B 03 1F 00 32 2E 30 2E 31 20 61 6C 70 68 61 20 35 37 00
   // Action 8
  3 * ...     08 06 ...
-  // Skip rest of file if not TTDPatch 2.0.1 alpha 57,
-  // to prevent meaningless "invalid sprite" errors
+  // Pomiń resztę pliku, jeśli nie TTDPatch 2.0.1 alpha 57,
+  // aby zapobiec bezsensownym błędom "nieprawidłowego sprite'a"
  4 * 9       09 8B 04 04 3A 02 0A 02 00
 
-W ten sposób pozycja Status GRF pokazuje właściwy komunikat o błędzie, a także poprawną nazwę i opis, ponieważ akcja 8 jest nadal przetwarzana podczas inicjalizacji, a wszystkie nieznane 'sprites' są pomijane, tak że komunikat o błędzie "invalid sprites" (nieprawidłowe 'sprity') nie jest pokazywany pierwszy ( inaczej stałby się stałym komunikatem wyświetlanym w oknie statusu GRF) .
+W ten sposób pozycja Status GRF pokazuje właściwy komunikat o błędzie, a także poprawną nazwę i opis, ponieważ akcja 8 jest nadal przetwarzana podczas <span title= initialization>'inicjalizacji'</span>, a wszystkie nieznane 'sprites' są pomijane, tak że komunikat o błędzie "invalid sprites" (nieprawidłowe 'sprity') nie jest pokazywany pierwszy ( inaczej stałby się stałym komunikatem wyświetlanym w oknie statusu GRF) .
 
-=== Bezwarunkowy skok ===
+===<span id="Unconditional_jump" title="Unconditional jump">Bezwarunkowy skok</span>===
 
 Var 9A zawsze ma ustawione wszystkie bity, więc aby wykonać bezwarunkowy skok, możesz użyć trochę testu:
 
