@@ -57,7 +57,7 @@ Może istnieć dowolna liczba nazw stylów, dopóki dosłowne "00" nie zakończy
 
 Wybór języka działa tak samo jak [[pl/Development/NewGRF/NFO Specs/Action4#language-id|action 4 language ID]] , włączając różnicę dla wersji 7 i wyższych GRF, jednak bit 7 jest ignorowany. Oznacza to, że istnieje dwuznaczność, czy wartość „00” jest terminatorem listy lub identyfikatorem języka amerykańskiego. Aby rozwiązać ten problem, pierwsza definicja nazwy stylu nigdy nie jest terminatorem listy (poczynając od TTDPatch 2.5 beta 4). Oznacza to, że definicja nazwy języka amerykańskiego musi być pierwsza na liście. Alternatywnie, ponieważ bit 7 jest ignorowany, warto również użyć wartości „80” dla identyfikatora języka amerykańskiego, ale umieszczenie go na pierwszym miejscu na liście jest preferowanym sposobem jego zdefiniowania.
 
-== Parts ==
+==<span id="Parts" title="Parts">Części</span>==
 
 Następujące pola są powtarzane dla każdej części (liczba części razy):
 
@@ -67,13 +67,13 @@ Następujące pola są powtarzane dla każdej części (liczba części razy):
 !Element!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Rozmiar]]!!Znaczenie
 
 |-
-|textcount||B||The number of possible values for this part
+|textcount||B||Liczba możliwych wartości dla tej części
 
 |-
-|firstbit||B||Number of the lowest bit that counts for determining the value of the part
+|firstbit||B||Numer najniższego bitu, który jest brany pod uwagę przy określaniu wartości części
 
 |-
-|bitcount||B||How many bits are used for determining the value of this part
+|bitcount||B||Ile bitów jest używanych do określenia wartości tej części
 |}
 
 Każde miasto ma 32 losowe bity do losowego nazywania. Możesz użyć pola <firstbit> , aby podejmować decyzje dla każdej części liniowo niezależne lub przynajmniej tak niezależne, jak to możliwe.
@@ -86,13 +86,13 @@ Następujące pola są powtarzane dla każdego tekstu (razy licznik tekstu) w ka
 !Element!![[pl/Development/NewGRF/NFO Specs/GRFActionsDetailed|Rozmiar]]!!Znaczenie
 
 |-
-|probability||B||The relative probability of the following name to appear in the bottom 7 bits. Bit 7 decides the meaning of the following field.
+|probability||B||Względne prawdopodobieństwo pojawienia się następującej nazwy na 7 ostatnich bitach. Bit 7 decyduje o znaczeniu następnego pola.
 
 |-
-|part||S||If bit 7 of probability is clear, the following field is a null-terminated string containing a name part itself. This can be an empty string (just a plain zero byte) to avoid generating this part. (This can be useful for an optional part: give a high probability to an empty part to appear, and low probablities to many non-empty parts, so you effectively decrease the chance that the part appears at all)
+|part||S||Jeśli bit 7 prawdopodobieństwa jest czysty, następujące pole jest łańcuchem <span title='null-terminated'>'zakończonym znakiem null'</span>, zawierającym samą część nazwy. Może to być pusty ciąg (zwykły bajt zerowy), aby uniknąć generowania tej części. (Może to być przydatne w przypadku części opcjonalnej: daj wysokie prawdopodobieństwo pojawienia się pustej części i niskie prawdopodobieństwo wielu <span title=n'on-empty'.'niepustych'</span> części, aby skutecznie zmniejszyć szansę, że część w ogóle się pojawi)
 
 |-
-|ID||B||If bit 7 of the probability is set, the following byte is an ID for an intermediate action F. The random name defined by the given ID is generated, then inserted into the current name as a name part. Specifying an ID that isn't defined yet results in an error and therefore disabling all town name definitions in the file.
+|ID||B||Jeśli ustawiony jest bit 7 prawdopodobieństwa, to następny bajt jest <span title=identyfikatorem>'ID'</span> akcji pośredniej F. Generowana jest losowa nazwa zdefiniowana przez dany ID, a następnie wstawiana do bieżącej nazwy jako część nazwy. Podanie <span title=identyfikatora>'ID'</span>, który nie został jeszcze zdefiniowany, powoduje błąd, a tym samym wyłączenie wszystkich definicji nazw miast w pliku.
 |}
 
 === Notes ===
