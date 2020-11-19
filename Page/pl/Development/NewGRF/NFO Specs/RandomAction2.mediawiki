@@ -151,12 +151,13 @@ Bity wyzwalające są specyficzne dla funkcji, patrz poniżej.
 Należy pamiętać, że ponowne losowanie występuje tylko w łańcuchu graficznym, a nie w przypadku wywołań zwrotnych. Tak więc, jeśli używasz losowej akcji tylko w ramach wywołania zwrotnego i chcesz ponownie losowo zaszyfrować bity, musisz dodać <span title=dummy>"sztuczną"</span> remandomizacje RA2 do łańcucha graficznego.
 
 Przykład:
+<pre>
  -1 * -1   02 04 02
-           80                         // losowo w callback
-           00                         // bez wyzwalaczy
-           00                         // pierwszy losowy bit do użycia
-           \b 16                      // Liczba <span title=cases>'przypadków'</span>
-           \w 10 \w 11 \w 12 \w 13    // losowe przypadki
+           80                         	// losowo w callback
+           00                         	// bez wyzwalaczy
+           00                         	// pierwszy losowy bit do użycia
+           \b 16                      	// Liczba 'przypadków' (cases)
+           \w 10 \w 11 \w 12 \w 13    	// losowe przypadki
            \w 14 \w 15 \w 16 \w 17
            \w 18 \w 19 \w 20 \w 21
            \w 22 \w 23 \w 24 \w 25
@@ -164,22 +165,22 @@ Przykład:
  -1 * -1   02 04 01
            85 0C 00 \wx FFFF
            01
-           \w 2 \w 14 \w 14           // callback 14
-           \w 3                       // <span title=chain>'łańcuch'</span> graficzny
+           \w 2 \w 14 \w 14           	// callback 14
+           \w 3                       	// 'łańcuch' (chain} graficzny
  
  -1 * -1   02 04 00
-           80                         // <span title=dummy>'fałszywe'</span> losowe callback z zewnątrz
-           04                         // przyjazd pociągu
-           00                         // pierwszy bit do rerandomise
-           \b 16                      // Liczba przypadków
-           \w 1 \w1 \w 1 \w1          // we wszystkich przypadkach takie same, 
+           80                         	// 'fałszywe' (dummy) losowe callback z zewnątrz
+           04                         	// przyjazd pociągu
+           00                         	// pierwszy bit do rerandomise
+           \b 16                      	// Liczba przypadków
+           \w 1 \w1 \w 1 \w1          	// we wszystkich przypadkach takie same, 
  					// tylko w wyzwoleniu  rerandomisation
            \w 1 \w1 \w 1 \w1
            \w 1 \w1 \w 1 \w1
            \w 1 \w1 \w 1 \w1
  
- -1 * -1   03 04 01 00 00 \w 0        // action 3
-
+ -1 * -1   03 04 01 00 00 \w 0        	// action 3
+</pre>
 ===<span id="randbit" title="randbit">randbit</span>===
 
 {{pl/Development/NewGRF/ottdp|no|&lt;2.5|ttdprev=alpha30}} W przypadku wersji wcześniejszych niż TTDPatch 2.0.1 alpha 30 pozostaw tę wartość na 00. Nie działa to tak, jak zamierzono (miało to umożliwić niezależne losowe łańcuchy, ale obecnie wszystko jest ponownie losowe w tym samym czasie, tym samym pokonując ten mechanizm ).
