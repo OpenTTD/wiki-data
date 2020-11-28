@@ -13,7 +13,7 @@ Podobnie jak w przypadku każdej biblioteki, zanim będzie można jej użyć, na
 
  import("pathfinder.road", "RoadPathFinder", 3);
 
-Spowoduje to zaimportowanie pathfinder wersji 3 i nadanie mu nazwy <code>RoadPathFinder</code> . Możesz teraz instalizować to jak każdą inną klasę:
+Spowoduje to zaimportowanie pathfinder wersji 3 i nadanie mu nazwy <code>RoadPathFinder</code> . Możesz teraz tworzyć instancje jak każdą inną klasę:
 
  local pathfinder = RoadPathFinder();
 
@@ -35,7 +35,7 @@ Zanim zaczniesz znajdować trasę, możesz najpierw ustawić niektóre parametry
 |-
 | cost.tile
 | 100
-| Koszt pojedynczej płytki.
+| Koszt pojedynczego kafla.
 |-
 | cost.no_existing_road
 | 40
@@ -51,15 +51,15 @@ Zanim zaczniesz znajdować trasę, możesz najpierw ustawić niektóre parametry
 |-
 | cost.bridge_per_tile
 | 150
-| Koszt za kafelek nowego mostu jest dodawany do _cost_tile.
+| Koszt za kafel nowego mostu jest dodawany do _cost_tile.
 |-
 | cost.tunnel_per_tile
 | 120
-| Koszt na kafelek nowego tunelu jest dodawany do _cost_tile.
+| Koszt na kafel nowego tunelu jest dodawany do _cost_tile.
 |-
 | cost.coast
 | 20
-| Dodatkowy koszt za płytkę wybrzeża.
+| Dodatkowy koszt za kafel wybrzeża.
 |-
 | cost.max_bridge_length
 | 10
@@ -76,11 +76,11 @@ Aby ustawić parametr, wystarczy użyć:
 
 == Planowanie trasy ==
 
-Tak więc, teraz wiemy, jak stworzyć instancję pathfindera i ustawić funkcje kosztów, nadszedł czas, aby tę wiedzę wykorzystać. Zaplanujmy naszą pierwszą drogę. Najpierw potrzebujemy jednego (lub więcej) kafelków źródła i jednego (lub więcej) kafelków celu. Na razie załóżmy, że już je mamy, ponieważ wykraczanie poza zakres tej strony wyjaśnia, jak je zdobyć. Powiedzmy na przykład, że chcemy zbudować drogę między tile_a a tile_b. Najpierw wywołujemy  <code>InitializePath</code> na naszym obiekcie pathfinder:
+Tak więc, teraz wiemy, jak stworzyć instancję pathfindera i ustawić funkcje kosztów, nadszedł czas, aby tę wiedzę wykorzystać. Zaplanujmy naszą pierwszą drogę. Najpierw potrzebujemy jednego (lub więcej) kafli źródła i jednego (lub więcej) kafli celu. Na razie załóżmy, że już je mamy, ponieważ wykraczanie poza zakres tej strony wyjaśnia, jak je zdobyć. Powiedzmy na przykład, że chcemy zbudować drogę między tile_a a tile_b. Najpierw wywołujemy  <code>InitializePath</code> na naszym obiekcie pathfinder:
 
  pathfinder.InitializePath([tile_a], [tile_b]);
 
-Pathfinder oczekuje tablicy płytek źródłowych i tablicy płytek bramkowych, ponieważ mamy tylko jedno źródło i jedną płytkę bramkową, po prostu utworzymy dwie tablice z jednym elementem. Teraz pathfinder jest gotowy do znalezienia ścieżki.
+Pathfinder oczekuje tablicy kafli źródłowych i tablicy kafli bramkowych, ponieważ mamy tylko jedno źródło i jeden kafel bramkowy, po prostu utworzymy dwie tablice z jednym elementem. Teraz pathfinder jest gotowy do znalezienia ścieżki.
 
  local path = false;
  while (path == false) {
@@ -126,7 +126,7 @@ Załóżmy, że pathfinder zwrócił ścieżkę, jak zacząć ją budować? Na p
    path = par;
  }
 
-Ten kod zapętla się na całej trasie. Dla każdego elementu sprawdza, czy jest już połączony z poprzednim kafelkiem drogą lub mostem. Jeśli nie jest połączone, próbuje zbudować drogę. Zauważ, że w prawdziwej sztucznej inteligencji prawdopodobnie będziesz chciał sprawdzić, czy <code>AIRoad.BuildRoad</code> zwraca true, a jeśli nie, ponownie uruchom wyszukiwanie ścieżki.
+Ten kod zapętla się na całej trasie. Dla każdego elementu sprawdza, czy jest już połączony z poprzednim kaflem drogą lub mostem. Jeśli nie jest połączone, próbuje zbudować drogę. Zauważ, że w prawdziwej sztucznej inteligencji prawdopodobnie będziesz chciał sprawdzić, czy <code>AIRoad.BuildRoad</code> zwraca true, a jeśli nie, ponownie uruchom wyszukiwanie ścieżki.
 
 '''Note''': nie używaj rodzica jako nazwy zmiennej dla <code>GetParent</code>, jest to słowo kluczowe, dające dziwne wyniki.
 
