@@ -1,0 +1,73 @@
+== Running multiple Game-Scripts ==
+
+Currently OpenTTD only allows running a single Game-Script.
+* This is motivated to avoid conflicts between Game-Scripts which try to control the same thing.
+* However it also prevents running Game-Scripts that would perfectly run next to each other.
+* In particular it prevents creating and combining Game-Scripts that do a single thing particulary well.
+
+== Capability-based API access ==
+
+The main idea is:
+* GS API methods are assigned to a "capability", if they change something in the game.
+* ScriptInfo is extended, so GS can specify which capabilities they need, which they need exclusively, and which they are fine with sharing.
+* The user cannot start a game with conflicting capability requirements.
+* When a GS tries to use an API function without having the capability, the call fails. (TODO command failed? crash whole script?)
+* Old GS will get a default set of capabilities depending on their API version.
+
+== API that could be shared, but are currently not ==
+
+Various APIs that could be shared in theory, are currently not shareable because the implementation assumes there is only one Game-Script:
+* ScriptCargoMonitor: Each Game-Script should be able to create their own CargoMonitors, which are not visible or affected to/by other Game-Scripts.
+* ScriptGame::Pause/Unpause: Each Game-Script should be able to pause the game, but only the pausing Game-Script is allowed to unpause.
+* ScriptGoal, ScriptStoryPage: Each Game-Script should be able to define their own goals and story book pages, which are not visible or editable to/by other Game-Scripts.
+* ScriptTown::SetText: Every Game-Script should be allowed to add its own text.
+* [[en/Development/Script/Script communication protocol]]: The SCP library adds GS-AI communication by placing signs on specific tiles. This will probably break with multiple GS, and can't be solved here.
+
+== List of capabilities ==
+
+{|
+|-
+! API !! Capability ID !! Default for old GS !! Limitation
+|-
+| ScriptCargoMonitor                                || || || no conflict in theory, but in the current implementation
+|-
+| ScriptEngine::EnableForCompany, DisableForCompany || EngineAvailability || exclusive ||
+|-
+| ScriptGame::Pause/Unpause                         || || || no conflict in theory, but in the current implementation
+|-
+| ScriptGameSettings::SetValue                      || Setting/xyz || exclusive || exclusive per setting
+|-
+| ScriptGoal                                        || || || no conflict in theory, but in the current implementation
+|-
+| ScriptIndustry::SetControlFlags                   || IndustryProduction || exclusive ||
+|-
+| ScriptIndustry::SetExclusiveSupplier              || IndustryServicing || exclusive ||
+|-
+| ScriptIndustry::SetExclusiveConsumer              || IndustryServicing || exclusive ||
+|-
+| ScriptSign                                        || || || [[en/Development/Script/Script communication protocol]] will break
+|-
+| ScriptSubsidy                                     || Subsidies || shared ||
+|-
+| ScriptViewport                                    || Viewport || shared ||
+|-
+| ScriptStoryPage                                   || || || no conflict in theory, but in the current implementation
+|-
+| ScriptTown::SetName                               || TownName || shared ||
+|-
+| ScriptTown::SetText                               || || || no conflict in theory, but in the current implementation
+|-
+| ScriptTown::SetCargoGoal                          || TownGrowth || exclusive ||
+|-
+| ScriptTown::SetGrowthRate                         || TownGrowth || exclusive ||
+|-
+| ScriptTown::ExpandTown                            || TownGrowth || exclusive ||
+|-
+| ScriptTown::FoundTown                             || TownFounding || shared ||
+|-
+| ScriptTown::ChangeRating                          || TownRating || shared ||
+|}
+
+TODO:
+* It would be nicer if the capabilities matched the API methods better.
+* Capabilities should group API methods that affect the same thing, like "TownGrowth", so they also apply to future API extensions in that area.
