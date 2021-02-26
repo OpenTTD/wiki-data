@@ -80,42 +80,42 @@ CC_day = TC / ( TL + TD ) * v_mph * 74*2/16/256/1.6
 
 '''TC''' = train capacity <small>''pojemność pociągu''</small> [w jednostkach cargo], ile ładunku może przewieźć jeden pociąg.
 
-'''v_travel''' = prędkość [w kaflach/dzień], '''v_kmh''' = prędkość [w km/h] and '''v_mph''' = prędkość [w mil/h] to prędkość pociągu.
+'''v_travel''' = prędkość [w kaflach/dzień], '''v_kmh''' = prędkość [w km/h] i '''v_mph''' = prędkość [w mil/h] to prędkość pociągu.
 
-'''TG''' = train gap <small>''przerwa kolejowa''</small> [w kaflach]. W przypadku układów torów, które nie powodują wtryskiwania pociągów do strumienia-o-dużej-gęstości, jest to krytyczna luka w pociągach.
+'''TG''' = train gap <small>''przerwa kolejowa''</small> [w kaflach]. W przypadku układów torów, które nie powodują 'wstrzykiwania' pociągów do strumienia-o-dużej-gęstości, jest to krytyczna luka w pociągach.
 
 '''TL''' = trainlength <small>''długość pociągu''</small> [w <span title=tiles>'kaflach'</span>].
 
 [[en/Manual/Base Set/Trains/Lev4 'Chimaera'|Chimaera]] z powyższego przykładu ma nośność
 <pre>CC_day=47*6*402/16*0,0056=40 Passengers/day 
 lub
-CC_day=27*6*402/16*0,0056=23 Bags of Valuables/day</pre>
+CC_day=27*6*402/16*0,0056=23 Worków kosztowności/dzień</pre>
 [[pl/Manual/Base Set/Trains/T.I.M.]] Z powyższego przykładu ma nośność
-<pre>CC_day=40*6*150/10*0,0056=20 Passengers/day 
+<pre>CC_day=40*6*150/10*0,0056=20 Pasażerów/dzień 
 lub
 CC_day=20*6*150/10*0,0056=10 Bags of Valuables/day</pre>
 
 Prace nad tym urządzeniem są w toku.
 
 =<span id='Making your network more efficient'>Zwiększenie wydajności sieci</span>=
-Ok, więc teraz, gdy zdefiniowaliśmy parametry, które już intuicyjnie zrozumieliśmy, jak możemy ich użyć do ulepszenia naszych sieci? Złota zasada numer 1 optymalizacji sieci mówi, że pociągi w sieci nigdy nie zwalniają. Istnieją dwie możliwe części sieci, w których może się to zdarzyć, dzieli się i łączy.
+Ok, więc teraz, gdy zdefiniowaliśmy parametry, które już intuicyjnie zrozumieliśmy, jak możemy ich użyć do ulepszenia naszych sieci? Złota zasada numer 1 optymalizacji sieci mówi, że pociągi w sieci nigdy nie zwalniają. Istnieją dwie możliwe części sieci, w których może się to zdarzyć, podzielenia i łączenia.
 
-==<span id=Splits>Podział</span>==
+==<span id=Splits>Rozdzielenia</span>==
 W przypadku podziału toru należy upewnić się, że w punkcie podziału nie ma dłuższej-niż-normalna luki sygnalizacyjnej. Można temu zaradzić poprzez ostrożną lub nadmierną sygnalizację.
 
-==<span id=Merges>Łączenie</span>==
-Łączenia się stanowią dla nas wyjątkowy problem. W przypadku trywialnego połączenia pociągi na głównej linii mogą zostać potencjalnie zatrzymane przez pociąg boczny. Jest już zbiór prac na temat [http://www.openttdcoop.org/wiki/Priorities Priorities] autorstwa naszych kolegów z obwodu kooperacyjnego. Lektura tego linku powinna zapoznać Cię z zasadami fuzji priorytetowych.
+==<span id=Merges>Łączenia</span>==
+Łączenia się stanowią dla nas wyjątkowy problem. W przypadku trywialnego połączenia pociągi na głównej linii mogą zostać potencjalnie zatrzymane przez pociąg boczny. Jest już zbiór prac na temat [http://www.openttdcoop.org/wiki/Priorities Priorities] autorstwa naszych kolegów z obwodu kooperacyjnego. Lektura tego linku powinna zapoznać Cię z zasadami scalania priorytetowego.
 
 Rozważ typowe połączenie bez skrzyżowań przy wyjściu ze stacji odbioru. Na stację wjeżdża ciasno upakowany, zoptymalizowany strumień pociągów, ale z powodu różnic w czasach załadunku kolejność ta jest zakłócana na wyjściu ze stacji i kończy się na dwóch torach luźno upakowanych pociągów. Jedna z tych linii, oznaczona jako główna, będzie miała średnio luki między <span title=train-train>pociągami</span> wystarczająco duże, aby zmieścić trzeci pociąg. Proste połączenie dwóch linii nie zadziała i wymagane jest scalenie według priorytetów.
 
 Należy odnotować, że ponieważ pociągi zrzucające ładunek zawsze spędzają ten sam czas na peronie, możliwe jest zdematerializowanie i ponowne złożenie ciasno upakowanego strumienia pociągów, nawet powyżej krytycznej gęstości! (Rycina 3)
 [[File:en/Community/Diamond Stream.png|thumb|800px|none|Rysunek 3: Spadek z ponownym złożeniem strumienia]]
 
-Połączenie z pierwszym-przejściem z wykorzystaniem bloku priorytetowego zmniejszy współczynnik ruchu z 1: 1 do około 3: 1 na korzyść toru głównego (rysunek 4). Dodanie połączenia o drugim priorytecie bezpośrednio po pierwszym byłoby daremnym gestem, ponieważ pociągi na obu liniach kontynuowałyby jazdę z tą samą prędkością, a pociąg główny po prostu ponownie domagałby się pierwszeństwa. Wprowadzenie opóźnienia w postaci pętli toru, po którym nastąpi fuzja z drugim priorytetem, zredukuje linię boczną do zwykłej strużki pociągów i wypełni większość dostępnych miejsc na głównej linii. Istniejące rozwiązania wymagałyby wstępnego przyspieszenia, jednak cyklotron eliminuje potrzebę utraty pędu.
+Połączenie z pierwszym-przejściem z wykorzystaniem bloku priorytetowego zmniejszy współczynnik ruchu z 1: 1 do około 3: 1 na korzyść toru głównego (rysunek 4). Dodanie połączenia o drugim priorytecie bezpośrednio po pierwszym byłoby daremnym gestem, ponieważ pociągi na obu liniach kontynuowałyby jazdę z tą samą prędkością, a pociąg główny po prostu ponownie domagałby się pierwszeństwa. Wprowadzenie opóźnienia w postaci pętli toru, po którym nastąpi połączenie z drugim priorytetem, zredukuje linię boczną do zwykłej strużki pociągów i wypełni większość dostępnych miejsc na głównej linii. Istniejące rozwiązania wymagałyby wstępnego przyspieszenia, jednak cyklotron eliminuje potrzebę utraty pędu.
 [[File:en/Community/Priority Merge.png|frame|none|Rysunek 4: Połączenie priorytetów]]
 
 ===<span id=Cyclotrons>Cyklotrony</span>===
-Rozważ kwestię poboczną, która zapętla się z powrotem po nieudanym scaleniu priorytetów. Pociąg w tej pętli kontynuowałby ponowne testowanie głównej linii pod kątem warunków wejścia, co 8 * '''TL''  kafli, aż znalazłby wystarczająco dużo miejsca, aby połączyć się z główną linią. Po opróżnieniu cyklotronu następny czekający pociąg mógł wstępnie przyspieszyć i zostać wstrzyknięty do cyklotronu, gotowy do kontynuowania cyklu. Ten system ma jednak pewne wady, ponieważ ma pojemność jednego pociągu i będzie wiele straconych okazji, ponieważ pociąg jest w niewłaściwej pozycji na akceleratorze. '' [Usunięto uszkodzony link do Simple Cyclotron.]'' Skrzyżowania to duży i dobrze wydeptany obszar otwartego toru; Ograniczyłem się do nierozgałęzionych struktur podajników. Przekonasz się, że wysoce zoptymalizowany strumień pociągów NIE znosi dobrze skrzyżowania.
+Rozważ kwestię poboczną, która zapętla się z powrotem po nieudanym scaleniu priorytetów. Pociąg w tej pętli kontynuowałby ponowne testowanie głównej linii pod kątem warunków wejścia, co 8 * '''TL''  kafli, aż znalazłby wystarczająco dużo miejsca, aby połączyć się z główną linią. Po opróżnieniu cyklotronu następny czekający pociąg mógł wstępnie przyspieszyć i zostać 'wstrzyknięty' do cyklotronu, gotowy do kontynuowania cyklu. Ten system ma jednak pewne wady, ponieważ ma pojemność jednego pociągu i będzie wiele straconych okazji, ponieważ pociąg jest w niewłaściwej pozycji na akceleratorze. '' [Usunięto uszkodzony link do Simple Cyclotron.]'' Skrzyżowania to duży i dobrze wydeptany obszar otwartego toru; Ograniczyłem się do nierozgałęzionych struktur podajników. Przekonasz się, że wysoce zoptymalizowany strumień pociągów NIE znosi dobrze skrzyżowania.
 
 Możliwe są udoskonalenia cyklotronu. Na pętli torowej jest wystarczająco dużo miejsca, aby pomieścić dwa pociągi, a system sygnałów priorytetowych umożliwi opcjonalne wejście drugiego pociągu do cyklotronu. Przy dwóch pociągach w cyklotronie będzie podwójna szansa na wejście do slotu na głównej linii. Aby zapobiec korkom drogowym wewnątrz cyklotronu (co byłoby katastrofalne), konieczne są pewne poprawki opóźnienia, ale wynik końcowy jest niezwykle przydatny.
 
