@@ -1,0 +1,126 @@
+[[Translation:en/Archive/Community/Infrastructure maintenance]]
+
+Open TTD v.1.9.3
+<br /><br />
+'''Prośba do każdego rodzimego użytkownika języka angielskiego, o przeczytanie tekstu (en) i poprawienie wszelkich błędnych sformułowań (może być wiele^^)'''
+<br />
+
+
+
+== Włączanie konserwacji infrastruktury ==
+
+[[File:en/Archive/Community/Option infrastructure maintenance.png|left|thumb|(rys.1) W Ustawieniach]]
+<br style="clear:both" />
+
+[[File:en/Archive/Community/Settings button.png|left|frameless|border|]]
+''Opcje'' (w grze) -> ''Ustawienia'' -> ''<span title='Księgowość'>Finanse</span>''
+<br />
+<br />
+Koszty utrzymania rosną nadmiernie proporcjonalnie do rozmiaru sieci.<br />
+Dzięki temu większe firmy są bardziej obciążone niż mniejsze.
+<br />
+<br />
+W późnej fazie gry krótkie połączenia między branżami lub miastami mogą nie zarabiać, a nawet kosztować cię, podczas gdy u ciebie raporty finansowe to nadwyżka dochodu.
+Przy tym ustawieniu WŁĄCZONY , gracz nie tylko działa przeciwko niemu - konserwacja sieci, ale także inflacja, która dodatkowo zwiększa roczne koszty utrzymania. Więcej informacji można znaleźć w dziale ''"Gospodarka"'' [[pl/Manual/Ekonomia]]
+
+
+== Okno infrastruktury -Ingame- ==
+
+[[File:en/Archive/Community/Infrastucture window.png|left|thumb|(rys.2) Okno infrastruktury]]
+<br style="clear:both" />
+
+[[File:en/Archive/Community/Company finances button.png|left|frameless|border]]''Informacje o finansach firmy'' --> ''Infrastruktura''
+<br />
+'''lub'''
+<br />
+[[File:en/Manual/Company information button.png|left|frameless|border]]''Informacje o firmie'' --> ''Detale''
+<br />
+
+
+
+== Kalkulowanie rozmiaru sieci ==
+
+[[File:en/Archive/Community/Infrastructure rail count.png|thumb|left|(rys.3) Przykład skrzyżowania]]
+[[File:en/Archive/Community/Small vs spread network costs.png|thumb|middle|(rys.4) Przykład rozmiaru sieci]]
+[[File:en/Archive/Community/Road piece count.png|thumb|right|(rys.5) Przykład liczenia sztuk dróg]]
+[[File:en/Archive/Community/Tunnel piece count rails streets.png|thumb|(rys.6) Liczba sztuk w tunelu]]
+
+Koszty zależą od faktycznych kafli używanych do torów i ulic oraz liczby skrzyżowań obecnych na jednym kaflu. ''(rys.3)''<br />
+Skutkuje to wyższymi kosztami złożonych sieci na małej przestrzeni <span title='w porównaniu z'>'''vs.'''</span> rozciągniętymi sieciami z większą przestrzenią między skrzyżowaniami.''(rys.4)''
+<br /><br />
+
+'''Przykład rozjazdu torów'''<br />
+Jedna szyna na jednym kaflu liczy się jako 1 szyna (1x1)<br />
+Dwie przecinające się szyny na jednym kaflu liczą się jako 4 części szyny (2x2)<br />
+...<br />
+Sześć przecinających się szyn na jednym kaflu liczy się jako 36 sztuk szyn (6x6)
+<br />
+Prosta szyna podzielona przez ulicę liczy się jako 2 części szyny. Jak ulica.
+<br />
+<br />
+'''Podsumowanie kolei'''
+Gra rozkłada przecięcia na jednym kaflu do kwadratu i liczy wynik jako ''kawałki torów''.<br />
+Skrzyżowania ulic liczone są jako 4. Dla każdego terenu z kaflami z fragmentem drogi ''(rys.5)''
+<br />
+<br />
+'''Tunel''' ''(rys.6)''<br />
+Minimalna długość tunelu      = 2<br />
+Liczba sztuk tuneli ulicznych  = 8 (10 <span title=tiles>'kafli'</span> = 80)<br />
+Liczba sztuk w tunelu kolejowym = 4 (10 kafli = 40)<br />
+<br />
+''Taka sama liczba sztuk (rys. 6) dotyczy mostów''
+
+
+== <span title='Overpropotional cost grows'>Nadmierne rozrastanie kosztu</span> ==
+
+
+[[File:en/Archive/Community/Maglev 1x10 maintenance.png|thumb|(rys.7) 10 Koszty kolei jednoszynowej]]
+[[File:en/Archive/Community/Maglev 2x10 maintenance.png|thumb|(fig.8) 20 Monorail rail costs]]
+
+
+Oprócz mnożnika przecięć gra posiada algorytm, który nadmiernie zwiększa koszty Twojej sieci. ''(Jeśli ktoś może znaleźć algorytm, wstaw go tutaj)''<br />
+<br />
+Oto przykładowa lista wzrostu kosztów, z przybliżonym współczynnikiem, który pokazuje wzrost kosztu z jednego wiersza do drugiego. (Używane szyny Maglev)<br />
+
+{| class="wikitable"
+|-
+! Kawałki szyn !! Koszty/rok !! Współczynnik 
+|-
+| 10    || 120€     || <span title='nie uwzględnia'>'n.a.'</span>
+|-
+| 20    || 336€     || 2.80
+|-
+| 40    || 936€     || 2.78
+|-
+| 80    || 2,688€   || 2.97
+|-
+| 160   || 7,560€   || 2.81
+|-
+| 320   || 20,520€  || 2.71
+|-
+| 640   || 56,160€  || 2.74
+|-
+| 1280  || 159,840€ || 2.85
+|-
+| 2560  || 449,280€ || 2.81
+|}
+<br />
+'''Sumaryczne wzrastanie kosztu'''<br />
+Można powiedzieć, że przy każdym powieleniu ilości sztuk kolejowych koszty wzrosną o około 280%<br />
+(np. 936€ za 40 sztuk x 2,8 = koszt za 80 sztuk). ''(rys.7)(rys.8)
+
+
+
+== Obejścia ==
+
+[[File:en/Archive/Community/Space saving example.png|thumb|(rys.9) Oszczędność miejsca dzięki sztaplowaniu]]
+
+Niestety do tej pory nie znam żadnego obejścia ani ekonomicznego rozwiązania/sztuczki. Można by pomyśleć, że grę można oszukać szynami nad tunelem lub szynami pod mostem, ale nie. Te ustawienia inne niż zaoszczędzone miejsce nie zmniejszają kosztów konserwacji kafla . Mimo że żadne drogi ani tory nie przecinają się.
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+Edytorzy tej strony, starajcie się przestrzegać następujących wskazówek: Manual_of_Style [[pl/Wiki/Instrukcja Stylów]]
