@@ -13,7 +13,7 @@ jobs:
     steps:
     - name: Reload wiki
       run: |
-        aws lambda invoke --region ${{ secrets.AWS_REGION }} --function-name "${{ secrets.RELOAD_FUNCTION_NAME }}" --payload='{"secret":"${{ secrets.RELOAD_SECRET }}"}' output.txt
+        aws lambda invoke --cli-binary-format raw-in-base64-out --region ${{ secrets.AWS_REGION }} --function-name "${{ secrets.RELOAD_FUNCTION_NAME }}" --payload='{"secret":"${{ secrets.RELOAD_SECRET }}"}' output.txt
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
