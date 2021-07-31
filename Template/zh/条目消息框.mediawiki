@@ -1,0 +1,150 @@
+<noinclude>[[Translation:Template/en/Ambox]]</noinclude><!-- 
+      Wiki条目消息框代码适配
+
+--><includeonly><div style="{{#IF: {{{style|}}} | {{{style}}} | margin: 0px 10% 0px 10%; border: 1px solid #aaa; border-left: 10px solid {{#switch:{{{type|}}} 
+  | delete     =#b22222;
+  | content    =#f28500;
+  | style      =#f4c430;
+  | move       =#9932cc;
+  | protected  =#bba;
+  | #default   =#1e90ff;
+}} padding: 4px 8px; background:#efefef; min-height: 44px;"}}>
+<div style="position: absolute;">[[{{#if:{{{image|}}}
+  | File:{{{image}}}
+  | {{#switch:{{{type|}}}
+    | delete     =File:en/Deletion.png
+    | content    =File:en/Content.png
+    | style      =File:en/Edit-clear.png
+    | move       =File:en/Move.png
+    | protected  =File:en/Protection.png
+    | #default   =File:en/Notice.png
+  }}
+}}|40px]]</div>
+<div style="border: none; padding: 2px 2px 2px 62px;">
+<span style="{{#IF: {{{text-style|}}} | {{{text-style}}} | }}"> {{{text|}}} </span>
+</div></div><!-- 
+检测并报告有故障的使用情况 [[Template:Ambox#Article message box types|"type"]] parameter:
+-->{{#switch:{{{type|}}}
+|            = <!--No type fed, is also valid input --> 
+| delete     =
+| content    = 
+| style      =
+| move       =
+| protected  =
+| notice     =
+| #default   = <div style="text-align: center;">This message box is using an invalid "type={{{type|}}}" parameter and needs fixing.</div>[[Category:en/Wrong syntax]]
+}}</includeonly><noinclude>
+
+==用法==
+简单的使用例:
+<pre>
+{{zh/条目消息框| text = Some text.}}
+</pre>
+{{zh/条目消息框| text = Some text.}}
+
+OR:
+<pre>
+{{zh/条目消息框| type = content
+| text = Warning - Some text.
+}}
+</pre>
+{{zh/条目消息框| type = content | text = Warning - Some text.}}
+
+== Available List of parameters==
+<pre>
+{{ambox
+| type       = delete / content / style / notice / move / protected
+| image      = Picture.Png / Picture.Png|alt=Picture (if the parameter does not present, default type icon will be supplied)
+| text       = Text for a big box, for the top of articles.
+
+| style      = Different table style. (preferably should not be used)
+| text-style = same as the above for text.
+</pre>
+
+=== Article message box types ===
+
+The following examples use different '''type''' parameters but use no image parameters thus they use the default images for each type.
+
+
+{{zh/条目消息框| type  = delete
+| text  = type=<u>delete</u> – Deletion issues, such as {{en/S|en/Delete}}.
+}}
+{{zh/条目消息框| type  = content
+| text  = type=<u>content</u> – Content issues, such as {{en/S|en/Warning}}.
+}}
+{{zh/条目消息框| type  = style
+| text  = type=<u>style</u> – Style issues, such as {{en/S|en/Cleanup}}.
+}}
+{{zh/条目消息框| type  = notice
+| text  = type=<u>notice</u> – Article notices, such as {{en/S|en/Current}}.
+}}
+{{zh/条目消息框| type  = move
+| text  = type=<u>move</u> – Merge, split and transwiki proposals, such as {{en/S|en/Split}}.
+}}
+{{zh/条目消息框| type  = protected
+| text  = type=<u>protected</u> – Protection notices, such as {{en/S|en/Historical}}.
+}}
+
+=== Other images ===
+
+The default images shown above are mostly for convenience. In many cases it is more appropriate to use more specific images. These example use the '''image''' parameter to specify an image other than the default images.
+
+<pre>{{zh/条目消息框| type  = notice
+| image = en/Manual/OpenttdManual.png
+| text  = Something Something Something 
+}}</pre>
+
+{{zh/条目消息框| type  = notice
+| image = en/Manual/OpenttdManual.png
+| text  = Something Something Something 
+}}
+
+[[Category:en/Message boxes|A]]
+</noinclude><!--
+
+  CSS if the option will become available
+
+/* Article message box styles */
+table.ambox {
+    margin: 0px 10%;   /* 10% = Will not overlap with other elements */
+    border: 1px solid #aaa; 
+    border-left: 10px solid #1e90ff;    /* Default "notice" blue */
+    background: #fbfbfb; 
+}
+table.ambox + table.ambox {   /* Single border between stacked boxes. */
+    margin-top: -1px;
+}
+.ambox th.mbox-text, 
+.ambox td.mbox-text {            /* The message body cell(s) */
+    padding: 0.25em 0.5em;       /* 0.5em left/right */
+}
+.ambox td.mbox-image {           /* The left image cell */
+    padding: 2px 0 2px 0.5em;    /* 0.5em left, 0px right */
+}
+.ambox td.mbox-imageright {      /* The right image cell */
+    padding: 2px 0.5em 2px 0;    /* 0px left, 0.5em right */
+}
+
+table.ambox-notice {
+    border-left: 10px solid #1e90ff;    /* 蓝色*/
+}
+table.ambox-speedy {
+    border-left: 10px solid #b22222;    /* 红色*/
+    background: #fee;                   /* 粉色*/
+}
+table.ambox-delete {
+    border-left: 10px solid #b22222;    /* 红色*/
+}
+table.ambox-content {
+    border-left: 10px solid #f28500;    /* 橘色*/
+}
+table.ambox-style {
+    border-left: 10px solid #f4c430;    /* 黄色*/
+}
+table.ambox-move {
+    border-left: 10px solid #9932cc;    /* 紫色*/
+}
+table.ambox-protection {
+    border-left: 10px solid #bba;       /* 金属灰色 */
+}
+-->
