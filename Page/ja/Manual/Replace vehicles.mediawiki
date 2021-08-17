@@ -8,9 +8,9 @@
 = 手作業での交換 =
 下記の手順を踏むことで、指令リストを失わずに車両を交換することができる(同時に1台のみ)。下記の作業中は車庫ウィンドウを閉じないこと。
 #交換したい車両を車庫に回送する。
-#車両を売却(削除)する(列車の場合は気動車のみで良い)。
-#希望の車両または気動車を製造する。
-#*その際、'''最初に'''製造された車両または気動車が先ほど削除したものと同じ指令を所持する。
+#車両を売却(削除)する(列車の場合は機関車のみで良い)。
+#希望の車両または機関車を製造する。
+#*その際、'''最初に'''製造された車両または機関車が先ほど削除したものと同じ指令を所持する。
 
 = 自動置換 =
 自動置換により手作業で一台ずつ売却と購入を繰り返すことなく、まとまった車両をアップグレードすることが可能になる。例えば、40台のバス路線を運用していた時に新型車両が発売され、そのバスにアップグレードしたいと考えたとしよう。もし1台ずつアップグレードする場合はとてつもない手間になることが容易に想像できる。1台ずつバスに回送指示を出し、車庫で売却して新しくバスを買う。このような状況こそ自動置換の出番である。自動置換では列車のモデルの変更や貨車の変更も可能である。この機能は特に時代が進むにつれて新しく、速度の速い貨車を導入するような[[en/Manual/NewGRF]]で特に有用である(もし古い車両をそのまま同じモデルの車両に交換したい場合は、設定の[[en/Archive/Manual/Settings/Advanced Settings/Vehicles|老朽車両の自動交換]]を利用しよう)。
@@ -18,39 +18,31 @@
 #'''列車の自動置換'''ウィンドウにたどり着くためには置換を行いたい車両のリストを開く必要がある。下記の例では列車を利用して説明する。まずはメインメニューから'''社有の列車一覧'''をクリックして列車一覧ウィンドウを開く。
 #列車一覧ウィンドウの右下にある'''リストの管理'''をクリックしてメニューを開き、'''輸送機器更新'''を選ぶ。<br/>[[File:en/Manual/ManageList.png|frame|none|''Replace vehicles''が輸送機器更新である]]
 #''列車の自動置換''ウィンドウが表示される。<br/>[[File:en/Manual/ReplaceTrain.png|frame|none|''列車の自動置換''ウィンドウ]]
+#ウィンドウの左側は現在利用している車両の一覧で、右側はアップグレード可能な車両の一覧である。それぞれの車両をクリックすることで置換する車両を決定することができる。
+#列車をアップグレードする場合、多くの種類の列車が表示される。そこで、'''使用中の輸送機器'''の下の'''全ての鉄道車両'''をクリックすれば、鉄道車両の種類を選ぶことができる(電化車両など)。また、その右の'''機関車'''をクリックすると機関車と貨車それぞれの置換を切り替えることができる。
+#基本的には異なる種類の鉄道(例えば電化車両からモノレールなど)でのアップグレードは車庫に入った後に線路、駅、車庫の変換が必要になるため不可能である。ただし、線路(もちろん駅と車庫も)が既に電化されている場合は非電化の列車から電化車両へ自動置換することができる。
+#アップグレードする車両を決定したら、''置換開始''をクリックすると置換が始まる。
+#すべての車両が置換されると、使用中の輸送機器に表示されている旧式の車両はグレーアウトする(以下の図での''Floss 47'')。グレーアウトした車両をクリックして選択した後、''置換終了''をクリックすると使用中の輸送機器リストからその車両が消去される。<br/>[[File:en/Manual/ReplaceTrain2.png|frame|none|''Floss 47''を''SH 125''に置換完了したので、''Floss 47''がグレーアウトしている]]
 
-The left hand pane shows the vehicles you are currently using.  The right pane shows new vehicles available for you to upgrade to.  You click on the old and new types to select them define the replacement. 
+==列車の短縮==
+自動置換ウィンドウの右下に''列車の短縮''ボタンがある。これを''有効''にすると、1両編成の機関車(例えば''SH 8P'')から2両編成の機関車(例えば''SH 125'')に置換する場合に、列車の長さを維持するために貨車の先頭車両が売却される。
 
-If you are upgrading trains, there are several types available, and you can choose the type by adjusting the menu at the bottom in the middle of the window (displaying ''Electrified Rail Vehicles'' above).  For trains you may also toggle between replacing engines and wagons by clicking the ''Replacing: Engines'' button shown.
+これは列車が長くなる場合のみに動作する。つまり、2両編成の機関車から1両編成の機関車に置換する場合には働かず、1両分短くなるだけである(どの貨車を追加するかの指定ができないため)。
 
-Naturally it is not possible to upgrade between different types of train because the train would need to be able to enter a depot and leave as a new type.  The exception to this rule is upgrading from normal to electric trains (if you have electrified rails in place) since both will run on electrified rails and can be built from electrified depots.
+==点検==
+"置換開始"をクリックすると選択された種類の車両は次の移動先に到着した後、目的地を最寄りの車庫に変更する。この場合、列車が車庫に到着したことは報告されない。
 
-To begin replacing vehicles once you have made a selection, you click ''Start Replacing Vehicles''.
+もし車両のアップグレードを行うのではなく点検をしたいのならば、先ほどの車両リストの''リストの管理''から''回送して点検''を選択すれば、列車一覧ウィンドウのすべての車両か、(作成していれば)サブグループ単位で点検することができる。
 
-Once all vehicles of a type have been replaced, the old vehicle type will turn grey in the replace vehicles window (as the ''Floss 47'' is showing then).  Click on it and click ''Stop Replacing Vehicles'' to complete the procedure and it will then disappear from the list.
-[[File:en/Manual/ReplaceTrain2.png|frame|none|After replacing the ''Floss 47'' by ''SH 125''. The old vehicle type will turn grey.]]
+この方法は特に、設定⇒災害/事故⇒[[en/Archive/Manual/Settings/Difficulty#vehicle-breakdowns|車両故障]]を''なし''に設定していて、設定⇒輸送機器⇒[[en/Archive/Manual/Settings/Advanced Settings/Vehicles#disable-servicing-when-breakdowns-set-to-none|故障切ならば点検無効化]]を有効にしている場合に、車両が自動的に点検されなくなるので有用である。
 
-==Wagon removal==
-In the bottom-right corner of the replace vehicles window is a button labelled  ''Wagon removal on/off''. If this option is set to ''on'', then when a 1-unit engine (for example, the Gresley A4) is replaced with a 2-unit engine (the IC125 for example), the first carriage in the train will be sold to maintain the original length of the train. 
+車両の自動置換ウィンドウは選択された車両に応じて以下のルールに従って表示のフィルタリングがされる。
+*正しい貨物に改造できる(通常は船舶、道路車両、航空機に適用される)
+*同じインフラ上を移動できる(船舶なら水上、マグレブならマグレブ線路、道路車両なら道路、ヘリコプターならヘリパッド、など)
 
-Note that this only works one way; if you were to replace a train with two engines (e.g. IC125 or some DMUs) with a single engined train, you would shorten the overall length. It is not padded back up to the original length because you cannot specify which carriage would be used to do that.
-
-==Servicing==
-Once you select "start Replacing" the game will replace the vehicle on it's next arrival at a depot for maintenance; however this does not automatically give vehicles an order to report to a depot for maintenance.
-
-If you would like to upgrade all of the vehicles immediately instead, you can issue an order to the vehicles in question to report for maintenance by using the "Send [Vehicles] for Maintenance" option on the Vehicle manager window for the group of vehicles you selected to upgrade, or for a sub-group of those vehicles if you create one yourself. In addition you can also manually schedule individual vehicles this way by clicking each vehicle's "Send to Depot" button.
-
-The above method is especially useful when you play with the ''[[en/Archive/Manual/Settings/Advanced Settings/Vehicles#disable-servicing-when-breakdowns-set-to-none|Disable servicing when breakdowns set to none]]'' option enabled and ''[[en/Archive/Manual/Settings/Difficulty#vehicle-breakdowns|Vehicle breakdowns]]'' are set to ''None'', as the trains will not be serviced automatically.
-
-Autoreplace's list of vehicals to replace the one selected will filter itself so only vehicles matching these requirements are shown:
-** They may be refitted to the proper cargo. (Generally only applies to ships/road/air)
-** They travel on the same type of infrastructure. (ie. Ships on water, mag-levs on mag-lev track, vehicals on roads, Helecopter on Helipad, etc.)
-
-In Open TTD 1.0 and higher Auto Replace will use different rules to replace vehicles depending on your funds:
-* The company needs to have more money than (autoreplace money limit) + 2 * (price for new vehicles).
-** Auto Replace does not consider the sell price of old vehicles.
-** The auto replace money limit is the same limit as the Autorenew minimum needed money configured in Advanced Settings.
-
-
+OpenTTD1.0以降では所持金に応じた置換のルールがある。
+*所持金が(置換金額最小額) + 2 * (新しい車両の金額)以上あること。
+**自動置換では旧式車両の売却益は考慮されない。
+**置換金額最小額は設定の"自動交換時の最小資金"と同額である。
 
 [[Category:en/Manual/Vehicles]]
