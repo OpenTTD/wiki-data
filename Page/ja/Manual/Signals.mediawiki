@@ -5,16 +5,18 @@
 |Percentage = 0
 }}
 {{ja/Manual/目次}}
-''See the [[en/Manual/Building signals]] tutorial for instructions on how to carry out signal construction.''
+''信号の建設そのものについてはチュートリアルの[[ja/Manual/Building signals|信号の設置]]を参照すること。''
 
-'''[[en/Manual/Railway construction]] Signals''' are useful devices that allow you to control [[en/Manual/Trains]] movement. They do this by preventing trains from entering areas where other trains might be, and so preventing them from crashing. This usually involves taking information from the section of track following the signal. The three main types of signal are block signals, which simply deny access if the section has any trains; pre-signals, which operate similarly, but also require there to be an available exit from the section; and path signals, which compares the train's desired path to current train presence and allows access if the two do not interfere.
+'''[[ja/Manual/Railway construction|鉄道]]信号'''は[[en/Manual/Trains|列車]]運行の制御するために有用な装置である。信号は列車が進攻しようとしている場所にほかの列車が入らないようにしたり、衝突を防いだりする。これらの挙動は信号の先の線路の区間の情報を取得することで実現している。信号には大きく分けて3種類がある。1つ目が閉塞信号で、単純にその区間に列車が存在する場合に他の列車の侵入を防ぐものである。2つ目がプレ信号で、閉塞信号と似ているが、その区間からの出口が必要になる。最後がパス信号で、列車が進行しようとしている経路と他の列車がお互い干渉しないかどうかを比較してくれるものである。
+'''訳者注''':以下のスクリーンショットは右側通行である。信号は進行方向に向かって右側に設置されている(左側通行の場合、信号は進行方向の左側に設置される)。
 
 __TOC__
 {{en/-}}
-== Block signals ==
+== 閉塞信号 ==
+閉塞信号は線路を区間に分割し、列車が区間を移動するのに合わせて変化する。閉塞信号は次の区間に列車が存在する場合は次の列車を停止させるために赤を表示する。もし次の区間に列車が存在しない場合、青信号を表示する。区間は、ある信号から次の信号まで、物理的にたどり着けるすべてのタイルを同じ区間と判定する。この際、途中にいくつの分岐があるかは考慮されない。よって、ある列車が進行したとしても衝突する心配が全くない場合でも、その区間に列車が存在する場合は赤信号を表示して列車を進行させない。この点がパス信号と異なる点である。[[#パス信号|パス信号]]
 Block signals divide tracks into blocks, and operate according to the train movement on the blocks. Block signals stop the train if the next block of track is occupied by a train, and show red. If not, it allows it to pass and is green. Any and all track tiles physically reachable from the signal up to the next signal on that track are counted as the same block, regardless if there are multiple branches. Even if the expected path of the train does not collide with the path of the other train which is currently occupying the block, the block signal will not authorize the train in front of it to enter the block ahead, as opposed to [[#path-signals|path signals]].
 
-===Two-way signal===
+===二方向信号===
 [[File:en/Manual/2-way signals.png|frame|Two-way signals at a loading station]]
 <div style="float:right">
 [[File:en/Manual/Two-way signal.png]]
@@ -25,7 +27,7 @@ If a train has a choice of two or more directions, each with two-way signals on 
 
 Two-way signal was the very first and only railway signal introduced in the original ''[[en/Archive/OpenTTD/Transport Tycoon Deluxe]]''.
 {{en/-}}
-===One-way signal===
+===一方向信号===
 [[File:en/Manual/One-way signal.png|right]]
 
 One-way signals limit train movement to one direction. In the example below, the signals force the trains to move in a circle.
@@ -46,7 +48,7 @@ Although the one-way (block) signal appears there is only one side of the signal
 
 One-way signal was first introduced to ''[[en/Archive/OpenTTD/Transport Tycoon Deluxe]]''.
 
-==Path signals ==
+==パス信号==
 [[File:en/Manual/Yapp signalgui.png|frame|right|Two new signal types in the [[en/Manual/Signal GUI]].]]
 
 There is a signal type, "path signal", to overcome the limitations of the original block based signalling of ''Transport Tycoon''. These signals enable trains to reserve a path through a block until the next signal, before entering the block. If another train wants to enter the block, and succeeds in reserving a path through the block, the path signal authorizes the train to enter the signal block, even if another track of the block is used at the same time, which is impossible with the traditional block signals only and/or pre-signals setup. It is entirely possible to build a sophisticated railway network with path signals only due to their better ability in preventing junction deadlock.
