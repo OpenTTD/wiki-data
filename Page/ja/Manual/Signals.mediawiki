@@ -1,9 +1,5 @@
 [[Translation:en/Manual/Signals]]
-{{en/Translation|origin= en/Manual/Signals
-|from  = en
-|to    = ja
-|Percentage = 30
-}}
+
 {{ja/Manual/目次}}
 ''信号の建設そのものについてはチュートリアルの[[ja/Manual/Building signals|信号の設置]]を参照すること。''
 
@@ -125,103 +121,109 @@ Y型分岐周辺の''閉塞信号''
 
 設定画面に表示されないいくつかの追加のパス信号に関する設定がある。それらがどのようなものでどのように編集するかは[[en/Archive/Manual/Settings/Advanced path signal options & features|別の記事]]で解説されている。
 
-===Basic examples of path signals===
-Below are some example track layouts which use the path signals. There are also [[en/Community/Junctionary/Advanced path signal layouts|Advanced track layouts]] that are not recommended for beginners.
+===パス信号を使用した基本的な例===
+以下はパス信号を使用した基本的な線路のレイアウト例である。[[en/Community/Junctionary/Advanced path signal layouts|発展的な線路レイアウト]]にも例があるが、初心者にはおすすめできない。
 
-====Basic junction====
-This basic junction now has a much higher throughput because trains only have to wait for trains running on the same line. The train coming from the right (going up) would usually have to wait for other trains coming back from the left tracks. It would now only have to wait if it wishes to switch lines. Note the 6 bounding signals to the 'junction block', and 3 total path signals, one at each entryway.
+====基本のジャンクション====
+この基本的なジャンクションは同じ経路を走行する列車だけが待つ必要があるため、非常に高効率である。右下から左上に向かう列車は閉塞信号を使った場合は左に向かう列車の通過待ちをしなければならなかった。パス信号の場合は線路を変更しようとしている場合のみ、待つ必要がある。'分岐の場所'を設定するために6つの信号があり、そのうち3つの信号は分岐に侵入するためのパス信号である。
 
-[[File:en/Manual/Yapp basicjunction.png|frame|center|Basic junction for trains (optimised for 3-tile length). Path signals are present at all entries to the junction block. Note the use of normal signals on plain track.]]
+[[File:en/Manual/Yapp basicjunction.png|frame|center|3タイル分の長さの列車に最適化された基本のジャンクション。分岐の外では閉塞信号を使用している。]]
 
-====Basic two-way station====
-With this station layout, trains can use both platforms when coming from either direction. Because path signals do not create blocks on their reverse, the train cannot enter until there is a clear path until the signal on the ''opposite'' side of the platform (which must include the platform space), allowing it to safely stop. Note that this setup could alternatively be replicated with a set of block-exit presignals in-front of the station.
+====基本の二方向駅====
+このレイアウトの駅では、列車がどちらの方向から来た場合でもどちらのプラットフォームも利用可能である。パス信号は逆方向から来た列車には影響しないので、安全に駅に停車するためにパス信号の''先''にプラットフォーム含めて確保できるスペースが存在しない限り駅に侵入できない。このレイアウトは出口信号を駅の前に設置することで実現可能である。
 
-[[File:en/Manual/Yapp basicstation.png|frame|center|Basic station.]]
+[[File:en/Manual/Yapp basicstation.png|frame|center|基本の二方向駅]]
 
 {{en/Feature|0.7}}
 
-==Pre-signals==
-Pre-signals are a group of specialised block signals. They are so named because block entry pre-signal input comes from not just the track in the block, but any other pre-signals placed on the other side of the block (that is to say exits from that block). They are used to limit the entry of trains into blocks that cannot be obstructed or occupied. In most cases you can use path signals to solve situations where trains can choose between multiple alternatives, for instance at stations or single-track lines that are used by trains in both directions.
+==プレ信号==
+プレ信号は一組の特殊な機能を持った閉塞信号である。入口信号はその先の区間からの情報だけでなく、ほかのプレ信号(区間から出るための出口信号)の情報に応じても信号が変化する。プレ信号は区間が他の列車にふさがれないようにするために、他の列車の侵入を制限する。双方向に走行する駅や単線のような複数の選択肢があるような経路ではパス信号を使えばほぼ問題ない。
 
 <div style="float:right">
-[[File:en/Manual/Station no pre-signals.png|frame|right|A problem with block signal only setup - the left train may leave first, the train waiting behind may get stuck in the track right behind the right train.]]
-[[File:en/Manual/Station with pre-signals.png|frame|right|Solve the problem using presignals]]
+[[File:en/Manual/Station no pre-signals.png|frame|right|閉塞信号のみで構成した場合の問題。左側の列車が先に出発したとしても、右手前の列車はプラットフォームの右側が空くまで待機する。]]
+[[File:en/Manual/Station with pre-signals.png|frame|right|プレ信号を用いて解決した例]]
 </div>
-The image on the top right shows a setup where entry to a station is controlled using ordinary signals.  When at least one platform is empty, this works well, as an incoming train is always directed to a free platform. However, consider what happens when all platforms are full, as in the screenshot. All branches are showing red, so the incoming train picks the shortest path - straight on.  But suppose the train on the platform to the right is going to be in the station for some time. Meanwhile, the train on the left leaves.  The incoming train has committed itself to a platform and is stuck between the signals, waiting for a train to depart even though there is now an empty platform available. We need to stop that incoming train before the track splits so that it picks the empty platform when a train leaves. For this you can use path signals, but you can also solve this situation with pre-signals. In fact, this was the way to build stations before path signals were invented.
+右上の図は閉塞信号で駅への侵入を制御している例である。最低でも1つのプラットフォームが空いている状態では、入線する列車は空いているプラットフォームに誘導されるので、上手く動作する。しかし、図のようにすべてのプラットフォームに列車が停車している場合を考える。すべての駅に入る信号が赤を表示するので、駅に入る列車は最短距離を選択して直進する。ここで右側のプラットフォームに停車している列車が駅にしばらく停車し、左側の列車が先に出発したとする。駅に入ろうとした列車は直進してしまったので、たとえ列車が出発して空いたプラットフォームがあっても信号で停車している。このような状況ではパス信号を使えば問題なく制御できるが、プレ信号を使うことでも解決できる。事実、パス信号が発明されるまではプレ信号で制御するしかなかった。
 
-Pre-signals function as block signals, but additionally decide on which colour to show by the status of other pre-signals in the same direction down the track.  Specifically, an entry pre-signal allows trains to enter if, and only if, there is at least one green exit out of the adjacent/following block.  You, as the planner, need to identify which signals are to be the block entry pre-signals and which are to identify exits.
+プレ信号は閉塞信号と基本的な機能は同じだが、その信号の先にあるほかのプレ信号の状態に応じて信号の色を制御する。特に、入口信号はその先に最低でも1つ青の出口信号がある場合'''のみ'''列車を通過させる。信号網の設計者、つまりあなたはどれが入口信号でどれが出口信号なのかを考えて設置する必要がある。
 
-====Block Entry Pre-signal====
+{{en/-}}
+
+====入口信号====
 <div style="float:right">
 [[File:en/Manual/Entry presignal.png|60px]]
 </div>
-An entry pre-signal checks the signal aspect of all exit pre-signals of the signal block following the entry pre-signal. If there is at least one green exit pre-signal, the entry pre-signal wil also show green. If all exit pre-signals of the next block are red, then the entry pre-signal is also red.
+入口信号はその先にある区間の中のすべての出口信号の状態を監視する。その中に最低でも1つの出口信号が青ならば、入口信号は青を表示する。次の区間のすべての出口信号が赤ならば、入口信号も赤となる。
 
-This prevents trains from entering the block and obstructing it until there is an available exit. Note that depots have a built-in two way signal (it works as an entry pre-signal in a pre-signal set).
+これは列車が走行できる出口ができるまで、列車の侵入を防いでくれる。列車庫は二方向信号を内蔵している。
 
-If there are no signals designated as exits on the block directly behind the entry pre-signal, it behaves as a normal block signal. This is convenient for bi-directional pre-signals where only one direction needs pre-signal functionality.
+入口信号の先の区間に出口信号が配置されていない場合、入口信号は通常の閉塞信号として機能する。これは一方向のみにプレ信号の機能が欲しい場合に両方向プレ信号を利用する際に便利である。
 
-====Block Exit pre-signal====
+====出口信号====
 <div style="float:right">
 [[File:en/Manual/Exit presignal.png|60px]]
 </div>
-The exit pre-signals are what an entry pre-signal looks for to decide what aspect to show. They otherwise behave in the same way as a normal block signal.
+出口信号は入口信号に表示させる信号を決定するために使用する。出口信号そのものは通常の閉塞信号として機能する。
 
-To summarize: in the direction of travel you first have an entry pre-signal, then a junction where the track splits in at least two directions. After the junction there is an exit pre-signal on each branch. If the first block of each branch after the junction is occupied, then no trains will be allowed onto the junction. If at least one branch is available, then the junction will be available as well. Note that trains still can choose the occupied branch, if that is the only route to its destination. If both branches lead to the destination, then the train will choose the branch that is not occupied.
+まとめると、列車が走行していると最初に入口信号があり、その後最低でも2方向に分岐するジャンクションがある。そのジャンクションを越えると、それぞれの分岐先には出口信号が設置されている。各々の分岐の最初の区間に列車がある場合、新しく列車が分岐に侵入することができない。一つでも分岐先に空きがあれば、列車は分岐に侵入できる。ただし、占有されている側が唯一の目的地に向かう経路だった場合、そちらを選択してしまう。両方の分岐先が目的地に向かっている場合、列車は空いている方の分岐を選択する。
 
 {{en/-}}
 
-====Combo-signal====
-[[File:en/Manual/Station with pre-signals2.png|frame|Station with 1 entry pre-signal, 2 combo-signals, and 4 exit-signals]]
+====コンボ信号====
+[[File:en/Manual/Station with pre-signals2.png|frame|1つの入口信号と2つのコンボ信号、4つの出口信号が配置された駅]]
 <div style="float:right">
 [[File:en/Manual/Combo presignal.png|60px]]
 </div>
-There is a third type of pre-signal called the combo signal and simply acts as both an entry and exit signal. They effectively combine many exit signals into one signal, effectively copying their effect down the chain. Any one green exit signal will make any combo signals up the line become green, which will successively relay up to the original block entry signal. This allows you to build large "trees" of pre-signals spanning several blocks, as shown on the right. 
+3つ目のプレ信号はコンボ信号で、入口信号と出口信号の両方として機能する。コンボ信号は1つの信号から多数の出口信号に向かう場合、連鎖的に動作する。1つでも青の出口信号があれば、いずれかのコンボ信号が青となり、それらが続いて最初の入口信号を青にする。これにより、右の図のような巨大な"ツリー状"のプレ信号網を構成することができる。
 
-In a tree of pre-signals, combo-signals are placed in between the entry pre-signals and exit-signals for that reason above, the other 2 types of signals are placed at the very beginning and end of the setup respectively.
+プレ信号のツリーではコンボ信号は上記の理由により入口信号と出口信号の間に設置される。他の2つのプレ信号(入口信号と出口信号)は信号網の最初と最後にそれぞれ設置される。
 {{en/-}}
-====Building pre-signals====
-To build a pre-signal select the appropriate button in [[#signal-interface|signal selection toolbar]].
+====プレ信号の設置====
+プレ信号の設置のためには対応するボタンを'''信号選択ツールバー'''から選択する。
 
-In previous versions, first place an ordinary signal.  Then, with ''Ctrl'' held down, click the signal to cycle through the different kinds of presignal:
-*Note that you can build one way pre-signals in the same way as you build ordinary one way signals.  Remember: holding ''Ctrl'' and clicking toggles the type of (pre)signal, clicking without ''Ctrl'' changes the direction of signaling - if interface signals not enabled.
-*Remember not to hold down ''Ctrl'' when placing the signal initially or you will end up with a semaphore (see below). Also use ''Ctrl'' if you have enabled the signal interface.
+過去のバージョンでは最初に閉塞信号が設置され、次に''Ctrl''キーを押しながらクリックすることで異なる信号の種類に交換していた。
+*一方向閉塞信号のように、一方向プレ信号も設置可能である。''Ctrl''キーを押しながら既設の信号をクリックすると信号の'''種類'''が変わり、''Ctrl''キーを押さずに信号をクリックすると信号の'''向き'''が変わるので注意すること。
+*信号を設置する際には''Ctrl''キーを押さないようにすること。押しながら設置するとセマフォ(腕木式)が設置される。
 
-====Limitation====
-[[File:en/Manual/PresignalLimitation.png|frame|The problem with pre-signals...]]
-An important point to note with exit signals is that a green exit signal will trigger a green on the entry pre-signal at the beginning of the block even if it is not actually possible for a train to get to that exit signal because of the track layout (as in the image to the right with a train entering on the bottom track cannot technically exit from the top track). This can ruin more complicated pre-signaling setups, so care needs to be taken with planning.
+====制限====
+[[File:en/Manual/PresignalLimitation.png|frame|プレ信号利用時の問題]]
+出口信号を利用する際に重要な点は、出口信号が青信号の場合、その出口信号へ列車がたどり着けるかどうかに関わらず、その区間の最初の入口信号を青にしてしまうことである(右の図のように、下の線路に入った列車は上の線路の出口信号を通過できない)。この現象は複雑なプレ信号網を構築した時により考慮すべき点である。
 
-One of the bugs that are noted as "will not be solved" is: lost trains ignore (block) exit signals. If trains are lost, a random direction is chosen at each junction, so they ignore block exit signals, and may easily block junctions with pre-signals. Such case, however, can be easily resolved by replacing with [[#path-signals|path signals]].
+バグの一つとして"経路が見つけられない"という現象は迷走した列車が出口信号を無視してしまうために発生する。列車が迷走し始めると、各々の分岐でランダムに進行方向を決定するため、出口信号を無視し、プレ信号のある分岐を占有してしまう。そのような場合、パス信号に置き換えると簡単に解決できる。
+
 {{en/-}}
 
-==Directing trains==
-Signals are intended to prevent trains from crashing into each other, and to help them choose between several track sections to the same destination. If you want to direct a train to a particular destination via a certain route, you should use [[en/Manual/Waypoints]].
+==列車への経路指示==
+信号は列車が衝突するのを防ぐために利用し、同じ目的地に向かう複数の線路から経路を選択するのを手助けする。もし目的地に向かう列車に特定の経路を走行させたい場合は、信号ではなく[[en/Manual/Waypoints|通過点]]を利用する必要がある。
 
-==Signals in the game versus Signals in real life==
-Just as in game, trains in real life uses a [http://en.wikipedia.org/wiki/Signalling_block_system block system] where each length between signals is indicated as a block, but is most often limited to one track. The difference between the signaling systems, is that real trains uses signals that is connected to a large computer network (signalling control) rather than being dependent on block-by-block occupation.
+==ゲーム中の信号と現実世界の信号==
+ゲームと同様に現実世界の列車は[https://ja.wikipedia.org/wiki/%E9%96%89%E5%A1%9E_(%E9%89%84%E9%81%93) 閉塞(鉄道)]信号を使用しており、信号間を区間としているが、多くの場合単線上に限って利用している。信号システムの違いは、現実世界では信号は巨大なコンピューターネットワークに接続されて制御されており、ゲームのように区間ごとの占有状況により独立して制御されていない。
 
-There is a somewhat heated discussion between players saying that the signal system is realistic to its real life counterpart, but the differences are very clear. Real life signalling control takes all the blocks after a signal into account as to prevent a train from driving into a dead end or over to the wrong track, based on the information on all preceding trains. Some of the differences between the trains in the game and real life is that the deceleration is completely different, requiring a 52 coach train more than 2 kilometers in distance to come to a complete halt depending on the speed, weight and inclination of the ground.
+ときどきプレイヤー間で信号システムが現実的かどうかについて激論が交わされるが、違いは明確である。現実世界の信号制御は運行中の列車からの情報に基づき、列車が行き止まりに向かうか間違った経路を選択するのを防ぐために使用されている。ゲームと現実世界の列車の違いの一つは減速である。速度、重量、傾斜にもよるが、52両の客車は完全に停車するのに2km以上必要である。
 
-Real life signals uses a combination of [http://en.wikipedia.org/wiki/Application_of_railway_signals#Main_signal main signals], [http://en.wikipedia.org/wiki/Application_of_railway_signals#Distant_signal distant signals] and [http://en.wikipedia.org/wiki/Application_of_railway_signals#Shunting_signal dwarf signals] to handle traffic load and many countries' signal systems have different signals to indicate more than just a simple "Stop" or "Go".
+現実の信号は[http://en.wikipedia.org/wiki/Application_of_railway_signals#Main_signal メイン信号(英語)]、[http://en.wikipedia.org/wiki/Application_of_railway_signals#Distant_signal 遠方信号(英語)]、[http://en.wikipedia.org/wiki/Application_of_railway_signals#Shunting_signal 入換信号機(英語)]の組み合わせで交通負荷を制御している。国ごとに信号システムは異なり([https://ja.wikipedia.org/wiki/%E6%97%A5%E6%9C%AC%E3%81%AE%E9%89%84%E9%81%93%E4%BF%A1%E5%8F%B7 日本の鉄道信号])、単純に"停止"と"進行"を支持するようなものではない。
 
-'''Here's an example:'''
+'''現実との違いの例'''
 
-[[File:en/Manual/Difference between real and in game signals.png|400px|thumb|right|In game example with signals replaced with UK railway signals. Real life signals would not allow a train to have two green blocks ahead, only the specific path a train will take is lit green.]]
+[[File:en/Manual/Difference between real and in game signals.png|400px|thumb|right|ゲーム内の信号をイギリスの鉄道信号に入れ替えている。現実の信号は列車に2つの青信号の区間を表示することはなく、必ず特定の行先の信号だけが青になる。]]
 
-On the picture on the right is an in game example using real signals instead of the in game ones. The fastest train is catching up to the second train and the second train is catching up to the first. The UK railway signal system would indicate to the driver that the two blocks ahead of the train is red, by giving a double yellow. The single yellow tells the train that the next signal in the next block will indicate "Stop". By using this kind of three step system before a complete stop, the driver can slow down the train but doesn't have to bring the train to a complete stop.
+右の図は現実の信号を使っているゲームの例である。最も早い列車が2番目の列車に追いつきつつあり、2番目の列車は1番目の列車に追いつきつつある。イギリスの信号システムでは2連の黄色信号は列車の運転手に対して2区間先の信号が赤信号であることを教えている。黄色信号が1つの場合は、列車に対して次の区間の信号が"停止"を指示していることを表す。完全に停止する前にこのような3ステップを経ることで、運転手は減速することができ、かつ信号で完全に停止する必要がない。
 
-In OpenTTD, the fastest train would catch up to the slowest, forcing it to come to a complete halt for the next block that the slow train is occupying. This then forces the fast train to start from a standstill and eventually catch up with the slow train again and repeat the process. In reality, this would be a big waste of energy and the breaks of a train as it takes an enormous amount of energy to start and generates a lot of heat to stop.
+OpenTTDでは、最速の列車が最も遅い列車に追いついた場合、遅い列車が次の区間内に存在する場合は最速の列車に対して完全停止を強いる。これにより最速の列車は停止状態からの加速が必要となり、またいずれ前の列車に追いついて完全停止する、ということを繰り返す。列車の完全停止と停止状態からの加速は現実ではエネルギーとブレーキの浪費であり、大きなエネルギーのロスである。
 
-The game is also not programmed to make the slower train shunt on to a side track and allow the trains to pass unless you use time tables and waypoints to manually create this event.
+またゲームでは遅い列車が側線に対比して速い列車に追い越されるようにプログラミングされておらず、そのような動作をさせるためにはダイヤと通過点を利用して手作業で構築しなければならない。
 
-When inside a train yard (the area with many tracks found outside stations and loading areas), trains uses dwarf signals instead of block signals. The dwarf signal resembles the in game path signal as it requires the driver to request permission to pass it if the junction ahead is not completely clear. Dwarf signals may also allow a train to pass over an occupied junction on its free track even if a train is blocking the parallel track.
+車両基地(駅や積載場所以外の多数の線路がある場所)の中では、列車は閉塞信号ではなく入換信号を利用する。入換信号は行先の分岐が完全に空いていない場合に通過してよいかの許可を要求する点がゲーム内のパス信号と似ている。入換信号は並行の線路に列車がいる場合に占有されている分岐を使って列車を追い越す場合にも利用される。
 
-There is also no real life equivalent of the entry signals, combo signals or exit signals. The signalling control system will indicate green when a train is allowed to go into the next block based on trains' schedules. After exiting a track of block signals entering for example: a station, dwarf signals are used to give instructions on which track to shunt to.
+入口信号、コンボ信号、出口信号と同じ機能の信号は現実世界には存在しない。信号制御システムは列車のスケジュールに応じて次の区間に侵入してよいかどうか(青信号を表示するかどうか)を決めている。閉塞区間を出た後に入る場所の例としては、入換信号を使用して方向を指示する駅構内などがある。
 
-The biggest comparison between the game and real train signals is that the game is a "control free" system based on workload and occupation, whereas the real life signal system is automated to be able to create much more complex tasks and handling of trains as to allow a fluid movement. The in game system also does not require any interaction from the train driver since the signals handles all the commands whereas in real life, train drivers have much more to say to the control system and can request complex routes.
+現実の列車の信号との最も大きな違いは、ゲームでは占有されているかどうかによって制御されるものであり、現実世界のようにより複雑で大量の列車の運行を制御するようになっていないことである。ゲームシステムは列車の運転手との相互作用を考慮していない一方で、現実世界では列車の運転手は制御システムとの連携により複雑な経路を制御している。
 
+'''Wikipediaには現実の列車の信号についての詳しい解説が多数ある。'''
 
-'''Read more about real life train signals on Wikipedia:'''
+[https://ja.wikipedia.org/wiki/%E6%97%A5%E6%9C%AC%E3%81%AE%E9%89%84%E9%81%93%E4%BF%A1%E5%8F%B7 日本の鉄道信号]
+
+以下は英語版Wikipediaへのリンクである。
 
 [https://en.wikipedia.org/wiki/Railway_signal Railway signal]
 
@@ -241,10 +243,10 @@ The biggest comparison between the game and real train signals is that the game 
 
 [https://en.wikipedia.org/wiki/Japanese_railway_signals Japanese railway signals]
 
-==See Also==
+==参考==
 * [[en/Community/Junctionary/Advanced signalling examples|Examples of advanced presignal setups]]
-* [[en/Manual/Building depots]]
-* [[:Category:en/Manual/Train Junctions]] for examples of complex junctions that take advantage of pre-signals.
+* [[ja/Manual/Building depots]]
+* [[:Category:en/Manual/Train Junctions]] 複雑な構成のジャンクションの例
 * [http://www.darkcoding.net/misc/openttd-trains-and-signals-for-beginners-a-tutorial/ Signals for the complete beginner]
 * [http://kokolokus.de/?s=blog&v=6 A tutorial written by domsson, on the forums] [http://www.tt-forums.net/viewtopic.php?f=29&t=51395 here]
 
