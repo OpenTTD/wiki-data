@@ -95,16 +95,17 @@ Y型分岐周辺の''閉塞信号''
 |'''一方通行パス信号'''(1W PS) : 信号の反対側から来た列車は'''進行できない'''。反対向きの列車に向いて永遠に赤信号があるのと同義である。
 |}
 
-Most of the time it will be sufficient to use a default path signal, as passing a path signal from the back is penalised by the pathfinder, unless the destination (station or waypoint) is right after the path signal facing backward. However, one-way path signals might be useful in certain specific cases.
+通常はデフォルトのパス信号を利用するのが最も効率的である。経路探索アルゴリズムでは、パス信号を後ろから通過することにはペナルティが発生するからである(ただし、目的地(駅や通過点)がパス信号のすぐ前(パス信号を背面から通過した直後)にある場合はその限りではない)。しかし、状況によっては一方通行パス信号の方が便利な場合もある。
 
-The two new signal types behave a bit differently than standard block signal types. The path signals are red by default, and will only show green as soon as a train can reserve a path to the next safe waiting position on its route. Safe waiting positions are - by definition - in front of signals, depots and track ends. The back of a path signal is not considered a safe waiting position, and therefore paths are reserved through these signals.
+2つの新しい信号は通常の閉塞信号とは異なった挙動を示す。パス信号は通常は赤信号を表示し、列車がパス信号に到着したときに次の場所まで安全に走行できることが確認できたときのみ青信号となる。安全に走行できる、とは定義上は次の信号の前、列車庫、線路の終端である。パス信号の後ろは安全に走行できる場所とは考慮されず、経路はパス信号を通して予約される。
 
-Because the front of every signal is defined as a safe waiting position, you would normally not want to place a signal immediately behind a junction, only in front of a junction. This is because it is only safe for a train to wait in front of a junction. It is not safe for a a train to wait at a signal immediately after a junction before the whole train has cleared the junction, as it would be blocking the junction while waiting, as illustrated in the example below. This is a major advantage against traditional block signals, where you had to place signals before and after junctions, which caused trains to block junctions while waiting.
+全ての信号の前は安全に待機できる場所と定義されているため、通常は分岐の直後は信号の設置場所に適しておらず、分岐の直前のみ適している。これは分岐の前で列車が待機する方が安全だからである。下の例(例は右側通行である)のように、列車が分岐を完全に通過する前に信号に遭遇して待機することで列車が分岐にかかってしまうのは問題である。これがパス信号が閉塞信号より優れている点である。
+
 {|class=wikitable style="margin:auto"
 |style="background:#fee"|[[File:en/Manual/Yapp unsafewaitinglocation.png|center]]
-'''Bad''': The signal indicated by the arrow is a bad waiting location, as the train in the junction now blocks the otherwise free path of the train coming from the top. There's a second bad waiting location in this picture. Can you find it?
+'''悪い例''': 矢印で示している信号の配置は悪い例である。分岐内で停車している列車が存在するため、上から来た列車が通過できない。この画像にはもう一つ、配置すべきでない場所に配置されている信号がある。発見できるだろうか？
 |style="background:#efe"|[[File:en/Manual/Yappgoodexample.png|center]]
-'''Good''': Here there is enough space after the juction for a train to wait. As long as this space is unavailable, the next train will wait before the junction rather than blocking it. This allows the train coming from the top to proceed.
+'''良い例''': 分岐の後に列車が待つのに十分なスペースがある。このスペースに侵入できない場合、後から来た列車は分岐の前で停車するので分岐をふさがない。これにより、上から来た列車は分岐を無事に通過できる。
 |}
 
 This is one other example of what you can do with those path signals. This works far better than using pre-signals because you can have two trains leaving the station at the same time AND share the same depot (there is no way to make it with pre-signals, because of the block share). In this case there are one-way path signals for trains leaving the station, and simple path signal for trains leaving the depot.
