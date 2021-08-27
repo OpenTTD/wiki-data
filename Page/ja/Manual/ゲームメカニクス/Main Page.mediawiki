@@ -226,215 +226,208 @@
 街の評判についてのコードは town.h, town_cmd.c, tree_cmd.c, road_cmd.cに記載されている。
 
 ==乗客と郵便物の生成==
-Towns and the company headquarters generate passengers and mail, while oil rigs only generate passengers. 
-===街の乗客の生成===
-In each periodic processing (i.e. every 256 ticks), a random value 0<=X<=255 is generated for each house tile. If X isn't smaller than the population of the tile, no passengers are generated. Otherwise, X/8+1 passengers are generated (rounded down). If there is a recession going on, the number of generated passengers is halved, but this division gets rounded up instead of down. Mail generation happens in a similar manner, but with a new random value, and checking against the mail generation multiplier instead of the population. See the full list of default values for HouseProps: [https://newgrf-specs.tt-wiki.net/wiki/DefaultHouseProps]
+街と企業の本社ビルは乗客と郵便物を生成する。一方、海上油田は乗客のみ生成する。
+
+===街による乗客の生成===
+周期的に(256 tickごとに)、各家タイルごとに乱数X(0-255)が生成される。その乱数Xが家の人口より小さかった場合、その家は乗客を生成しない。乱数Xが家の人口より大きかった場合は、X/8+1の乗客を生成する(小数点以下切り捨て)。景気後退時には、生成された乗客の人数が半分になるが、小数点以下は切り上げられる。郵便物もほぼ同様の計算で産出されるが、新しい乱数を生成し、人口ではなく郵便物の生成量と比較する。各家の生成量やデフォルト値についての詳細は[https://newgrf-specs.tt-wiki.net/wiki/DefaultHouseProps]を参照のこと。
+
 ===本社ビル===
-The Company Headquarters is a unique structure that generates passengers and mail depending on it's level which is dependent on the performance rating of the company. Higher level company HQs generate more passengers and mail, the output of the headquarters is evenly distributed over all four tiles on a per tile basis as per the following formulas:
+本社ビルには企業の格付に応じたレベルがあり、乗客や郵便物を生成する特殊な建物である。本社ビルのレベルが高ければより多くの乗客や郵便物を生み出し、その生成量は本社ビルの4タイルそれぞれに均等に分配される、タイルごとの生成量は以下の式で求めることができる。
 
-Passengers: 256 / 4 tiles / (6 - company HQ Level (a value between 1 and 5) )
 
-Mail: 196 / 4 tiles / (6 - company HQ Level (a value between 1 and 5) )
+乗客: 256 / 4 タイル / (6 - 本社ビルレベル (1から5) )
 
-==産業の生産==
-Here is how the game determines how much cargo an industry produces per month.  Production of raw materials happens 8 or 9 times per month.  (It happens every 256 ticks.  There are 74 ticks in a day, and 28 to 31 days in a month ([https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/date_type.h#L30 date_type.h]).  This means that only about 9% of industries will produce 9 times in a 28-day February, but about 96% of industries will produce 9 times in a 31-day month like March.)  The production will always be a multiple of 8 or 9, unless the industry changed production during that month.
+郵便物 : 196 / 4 タイル / (6 - 本社ビルレベル (1から5) )
 
-This table lists possible starting productions governed by the [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|smooth economy]] patch.  These numbers are multiples of 8.  When the game generates a new map, each industry produced 8 times and had no production changes in the December before the game started.
+==産業の生産量==
+ここでは各産業が毎月の生産量をどのように決定しているかを解説する。資源の生産は毎月8回または9回発生する。(正確には256 tickごとに発生する。1日は74 tickで1か月は28日から31日である([https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/date_type.h#L30 date_type.h])。このことから、2月の28日間には9%の産業が9回生産を行うが、3月などの31日ある月には96%の産業が9回生産を行うことが分かる)。生産量は月内に生産量の変動がなければ、常に8か9の倍数である。
+
+以下の表は[[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|なだらかな経済変動]]の設定でゲームを始めた際の生産量の初期値である。すべての数字は8の倍数である。ゲームが新しくマップを生成したとき、ゲーム開始直前の12月にすべての産業が8回生産を行い、生産変動が発生しないためである。
 
 {| {{en/Wikitable}}
 |- style="background:#efefef"
-!Raw Material Industry!!Produced Cargo!!Initial production range
+!一次産業!!供給貨物!!初期の生産量範囲
 |-
-|[[en/Manual/Base Set/Industries/Coal Mine]]||Coal||56 to 176
+|[[en/Manual/Base Set/Industries/Coal Mine|鉱山]]||石炭||56 から 176
 |-
-|[[en/Manual/Base Set/Industries/Forest]]||Wood||48 to 152
+|[[en/Manual/Base Set/Industries/Forest|森林]]||原木||48 から 152
 |-
-|[[en/Manual/Base Set/Industries/Oil Rig]]||Oil||56 to 176
+|[[en/Manual/Base Set/Industries/Oil Rig|海上油田]]||石油||56 から 176
 |-
-|[[en/Manual/Base Set/Industries/Farm]]||Grain and Livestock||40 to 112
+|[[en/Manual/Base Set/Industries/Farm|農場]]||穀物と家畜||40 から 112
 |-
-|[[en/Manual/Base Set/Industries/Copper Ore Mine]]||Copper Ore||56 to 112
+|[[en/Manual/Base Set/Industries/Copper Ore Mine|銅鉱山]]||銅鉱石||56から to 112
 |-
-|[[en/Manual/Base Set/Industries/Oil Wells]]||Oil||48 to 152
+|[[en/Manual/Base Set/Industries/Oil Wells|油田]]||石油||48 から 152
 |-
-|[[en/Manual/Base Set/Industries/Iron Ore Mine]]||Iron Ore||40 to 112
+|[[en/Manual/Base Set/Industries/Iron Ore Mine|鉄鉱山]]||鉄鉱石||40 から 112
 |-
-|[[en/Manual/Base Set/Industries/Bank]] (temperate)||Valuables||24 to 64
-|-
-|colspan="5"|
-|-
-|[[en/Manual/Base Set/Industries/Gold Mine]]||Gold||24 to 80
+|[[en/Manual/Base Set/Industries/Bank|銀行]] (温帯)||貴重品||24 から 64
 |-
 |colspan="5"|
 |-
-|[[en/Manual/Base Set/Industries/Diamond Mine]]||Diamonds||24 to 80
-|-
-|[[en/Manual/Base Set/Industries/Fruit Plantation]]||Fruit||40 to 112
-|-
-|[[en/Manual/Base Set/Industries/Rubber Plantation]]||Rubber||40 to 112
-|-
-|[[en/Manual/Base Set/Industries/Water Supply]]||Water||48 to 152
-|-
-|[[en/Manual/Base Set/Industries/Farm]]||Maize||40 to 128
-|-
-|[[en/Manual/Base Set/Industries/Lumber Mill]]||Wood||180 or 225 (if trees available)
+|[[en/Manual/Base Set/Industries/Gold Mine|金山]]||金||24 から 80
 |-
 |colspan="5"|
 |-
-|[[en/Manual/Base Set/Industries/Candyfloss Forest]]||Cotton Candy||48 to 152
+|[[en/Manual/Base Set/Industries/Diamond Mine|ダイヤモンド鉱山]]||ダイヤモンド||24 から 80
 |-
-|[[en/Manual/Base Set/Industries/Battery Farm]]||Batteries||40 to 128
+|[[en/Manual/Base Set/Industries/Fruit Plantation|果物農園]]||果物||40 から 112
 |-
-|[[en/Manual/Base Set/Industries/Cola Wells]]||Cola||48 to 136
+|[[en/Manual/Base Set/Industries/Rubber Plantation|ゴム園]]||ゴム||40 から 112
 |-
-|[[en/Manual/Base Set/Industries/Plastic Fountains]]||Plastic||56 to 160
+|[[en/Manual/Base Set/Industries/Water Supply|水源施設]]||水||48 から 152
 |-
-|[[en/Manual/Base Set/Industries/Bubble Generator]]||Bubbles||48 to 152
+|[[en/Manual/Base Set/Industries/Farm|農場]]||コーン||40 から 128
 |-
-|[[en/Manual/Base Set/Industries/Toffee Quarry]]||Toffee||40 to 112
+|[[en/Manual/Base Set/Industries/Lumber Mill|製材所]]||原木||180 または 225 (木がある場合)
 |-
-|[[en/Manual/Base Set/Industries/Sugar Mine]]||Sugar||40 to 128
+|colspan="5"|
+|-
+|[[en/Manual/Base Set/Industries/Candyfloss Forest|綿菓子の森]]||綿菓子||48 から 152
+|-
+|[[en/Manual/Base Set/Industries/Battery Farm|電池農園]]||電池||40 から 128
+|-
+|[[en/Manual/Base Set/Industries/Cola Wells|コーラ井戸]]||コーラ||48 から 136
+|-
+|[[en/Manual/Base Set/Industries/Plastic Fountains|プラスチック泉]]||プラスチック||56 から 160
+|-
+|[[en/Manual/Base Set/Industries/Bubble Generator|発砲所]]||泡||48 から 152
+|-
+|[[en/Manual/Base Set/Industries/Toffee Quarry|タフィー鉱山]]||タフィー||40 から 112
+|-
+|[[en/Manual/Base Set/Industries/Sugar Mine|砂糖鉱山]]||砂糖||40 から 128
 |}
 
-(To calculate this table, look under [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/table/build_industry.h#L1198 _origin_industry_specs] in table/build_industry.h for the industry and its cargo.  The sugar mine has <code>CT_SUGAR, 11</code>, so the production starts at 11.  Apply the formula from [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/industry_cmd.cpp#L1643 DoCreateNewIndustry()] in industry_cmd.cpp: multiply the production by a random integer from 128 to 383, then divide by 256, rounding down.  So 11 becomes 5 to 16.  Finally, multiply it by 8 to get 40 to 128.)
+(この表の産業と貨物について計算したい場合は、[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/table/build_industry.h#L1198 _origin_industry_specs]にあるbuild_industry.hを参照のこと。例えば砂糖鉱山は<code>CT_SUGAR, 11</code>となっているため、11から始まる。そこで、industry_cmd.cppの[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/industry_cmd.cpp#L1643 DoCreateNewIndustry()]にある計算式を使用すると、上記の数字に128から383のランダムに生成された整数を掛け算して、256で割り、小数点以下を切り捨てる。すると、11を入力すると5から16になる。最終的にこれに8をかけることで、40から128となる)
 
 ===生産量の変動===
-Each month the game randomly changes some industry productions.
-====デフォルト、TTD風の経済ルール====
-For 256x256 tile maps there is one change per month possible (only 1 industry changes). Number scales nicely with map size since the introduction of "Daily production changes" function in trunk (r14332). 
+毎月いくつかの産業の生産量がランダムに変化する。
+
+====オリジナル(TTD風の経済ルール)====
+256x256タイルのマップでは、毎月1つの産業の生産量が変動する可能性がある。この数字はマップサイズに比例しており、"Daily production changes"という関数に記載されている(r14332)。
+
+*なだらかな経済では、産業は毎月8回か9回生産を行う。
+しかし、生産量自体は6つのレベルに制限されている。最低、低い、普通(新規ゲーム開始時か産業を新設した場合はこのレベル)、多い、2倍多い、最多の6つである。
+生産量の変動はこのレベルの間で行われ、半分になるか2倍になるかである。
+
+*例
+**炭鉱の場合:最低(毎月32tまたは40t)、低い(64または72)、普通(120または135)、多い(240または270)、2倍多い(480または540)、最多(960または1080)
+**森林の場合:最低(毎月32tまたは64)、低い(35または70)、普通(78または117)、多い(208または260)、2倍多い(416または468)、最多(832または936)
+**金山の場合:最低(毎月12袋または18袋)、低い(32または40)、普通(56または63)、多い(112または126)、2倍多い(224または252)、最多(448または504)
+
+簡単に考えるため、256x256のマップで最大でも毎月1つの産業の生産量が変動する場合を考える。
+
+*毎月の生産変動の可能性は、
+**50%は<code>only_decrease</code>(減少のみ)の産業で生産量が減少する(現在は温帯マップの油田のみ)、または
+**50%は1/3の確率(つまり、16.7%)でその他の産業(<code>only_decrease</code>ではない産業)の生産量が変動する。
+
+*生産量の変動が発生した場合(毎月16.7%の確率で発生する)
+**産業の評価が悪い、または輸送サービスがない場合(輸送済みの貨物量が60%未満の場合): '''33%'''の確率で生産量が増え、'''67%'''の確率で生産量が減少する。
+**産業の評価が良い(60%以上)の場合: '''67%'''の確率で生産量が増え、'''33%'''の確率で生産量が減少する。
+**デフォルトの経済環境ではすばらしいになっていても追加の変動はない。
+
+*ある特定の変化が起きる確率は以下の通りである。(つまり、ベースは50% * 1/3 * 33% = 5.56%である):
+**評価が悪いの場合:毎月'''5.56%'''の確率で生産量が増加し、毎月'''11.12%'''の確率で生産量が減少する。
+**評価が良いの場合:毎月'''11.12%'''の確率で生産量が増加し、毎月'''5.56%'''の確率で生産量が減少する。
 
 
-*As with smooth economy, industries produce cargo 8 or 9 times per month.
-However - productions are limited to 6 production levels: lowest, lower, normal (with a new game started or a new industry built), higher, 2x higher and the highest.
-Production changes between these levels are either a 50% decrease (half) or a 100% increase (double).
-
-*Examples:
-**A Coal Mine: lowest (32 or 40 t per month), lower (64 or 72), normal (120 or 135), higher (240 or 270), 2x higher (480 or 540) and the highest (960 or 1080).
-**A Forest:    lowest (32 or 64 t per month), lower (35 or 70), normal (78 or 117), higher (208 or 260), 2x higher (416 or 468) and the highest (832 or 936).
-**A Gold Mine: lowest (12 or 18 bags/month), lower (32 or 40), normal (56 or  63), higher (112 or 126), 2x higher (224 or 252) and the highest (448 or  504).
-
-
-To make things simple, let's look what are the chances for 256x256 maps (max. 1 change per month = max. 1 industry per month changes production):
-
-*The chance for a production change each month is:
-** 50% for <code>only_decrease</code> industry to decrease (currently only Temperate terrain Oil Wells) or
-** 50% for 1/3 chance (=16.7%) that other industry (non <code>only_decrease</code>) changes production.
-
-
-*If a production change does occur (~16.7% chance per month):
-** For an industry that has poor or no service (less than 60% of its cargo is transported): '''33%''' chance of increase, '''67%''' chance of decrease.
-** For an industry that has good (greater than 60%) service: '''67%''' chance of increase, '''33%''' chance of decrease.
-** There is no bonus for excellent service with default economy.
-
-
-*To calculate the chance for a particular change, i.e. 50% * 1/3 * 33% = 5.56%:
-** Poor service: '''5.56%''' that 1 possible change per month is an increase and '''11.12%''' that 1 possible change per month is a decrease.
-** Good service: '''11.12%''' that 1 possible change per month is an increase and '''5.56%''' that 1 possible change per month is a decrease.
-
-====なだらかな経済変化====
+====なだらかな経済変化の場合====
 
 {{en/Outdated|難易度設定とAdvanced settingは設定に置き換えられている}}
+''過去の設定では、Advanced SettingにはSmooth economy、難易度設定にはSteady economyがあり、別の設定だった''
 
-:''Distinguish [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|Smooth economy]] (advanced setting) and [[en/Archive/Manual/Settings/Difficulty|Steady economy]] (difficulty setting)''
+*毎月の生産量変動の可能性は'''4.5%'''である。つまり、産業リストにある産業の4.5%が生産量を変動させる。
 
-*The chance for a production change each month is '''4.5%''', i.e. 4.5% of producing industries from industry list change production.
+*生産量の変動が発生した場合:
+**<code>only_decrease</code>(減少のみ)の産業(現在は温帯マップの油田のみ):'''0%'''の確率で生産量が増え、'''100%'''の確率で生産量が減少する。
+**産業の評価が悪い、または輸送サービスがない場合(輸送済みの貨物量が60%未満の場合): '''33%'''の確率で生産量が増え、'''67%'''の確率で生産量が減少する。
+**産業の評価が良い(60%以上)の場合: '''67%'''の確率で生産量が増え、'''33%'''の確率で生産量が減少する。
+**産業の評価がすばらしい(80%以上)の場合: '''83%'''の確率で生産量が増え、'''17%'''の確率で生産量が減少する。
 
+*以下の数字は互いに掛け算される(たとえば、4.5% * 33% = 1.5%)
+**<code>only_decrease</code>(減少のみ)の産業:'''0%'''の確率で生産量増加、'''4.5%'''の確率で生産量減少。
+**産業の評価が悪い場合:'''1.5%'''の確率で生産量増加、'''3.0%'''の確率で生産量減少。
+**産業の評価が良い場合:'''3.0%'''の確率で生産量増加、'''1.5%'''の確率で生産量減少。
+**産業の評価がすばらしい場合:'''3.75%'''の確率で生産量増加、'''0.75%'''の確率で生産量減少。
 
-*If a production change does occur:
-** For an <code>only_decrease</code> industry (currently only Temperate terrain Oil Wells) '''0%''' chance of increase, '''100%''' chance of decrease.
-** For an industry that has poor or no service (less than 60% of its cargo is transported): '''33%''' chance of increase, '''67%''' chance of decrease.
-** For an industry that has good (greater than 60%) service: '''67%''' chance of increase, '''33%''' chance of decrease.
-** For an industry that has excellent (greater than 80%) service: '''83%''' chance of increase, '''17%''' chance of decrease.
-
-
-*These two are multiplied together, i.e. 4.5% * 33% = 1.5%:
-** <code>only_decrease</code> industry: '''0%''' chance to increase and '''4.5%''' chance to decrease
-** Poor service: '''1.5%''' chance to increase and '''3.0%''' chance to decrease
-** Good service: '''3.0%''' chance to increase and '''1.5%''' chance to decrease
-** Excellent service: '''3.75%''' chance to increase and '''0.75%''' chance to decrease
-
-
-*With the [[en/Archive/Manual/Settings/Smooth economy]] option enabled, production changes per month are between 3% and 23%
-**Industries with very low productions, (i.e. 12-40 tonnes per month) will have higher changes.
-**Primary industries produce cargo 8 or 9 times a month. Monthly production is an industries 'base value' multiplied times 8 or 9.  For example, the base value for a coal mine is 15 tons, so the monthly production is 120 or 135 tons. This base value is capped at 255, so the maximum possible monthly production for any industry is 2040 or 2295. [http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
+*エコノミータイプをなだらかに設定している場合、毎月の生産量変動は3%から23%の間である。
+**生産量が非常に少ない産業(毎月12から40トン)は、より大きく変動する。
+**一次産業は毎月8回か9回生産する。毎月の生産量は各産業の'基本値'を8倍または9倍して算出されている。例えば、炭鉱の基本値が15トンの場合、毎月の生産量は120または135トンになる。この基本値の上限は255なので、すべての産業の最大生産量は2040または2295である。[http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 参考]
 
 =====特殊な場合=====
 
-*[[en/Manual/Base Set/Industries/Oil Rig]] passenger production is limited to 16 passengers per production event, meaning a maximum of 144 or 128 passengers per month. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L2597-L2602]
-*[[en/Manual/Base Set/Industries/Lumber Mill]] is technically not a producing industry and is classified as a secondary industry in the code. Four or five times a month it will search outward in a 40 by 40 area in a spiral pattern looking for a fully-grown tree to cut down. If it finds one, the tile will be [[en/Manual/Landscaping|demolished]] and 45 tons of wood will be output. This means it has a maximum production of 225 or 180 tons of wood per month, solely dependent on the availability of trees.[https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L1094-L1111]
-*Temperate climate [[en/Manual/Base Set/Industries/Bank|Banks]] never change production (except due to the 8 vs 9 production events per month).
+*[[en/Manual/Base Set/Industries/Oil Rig|海上油田]]の乗客生成は生成ごとに16が上限であり、毎月128または144の乗客が上限である。[https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L2597-L2602]
+*[[en/Manual/Base Set/Industries/Lumber Mill|製材所]]は資源を算出しない二次産業としてコードには記述されている。しかし、月に4，5回製材所は自信を中心に40x40タイルを渦巻き状に最大値まで成長している木を探して伐採する。もしそのような木が見つかった場合、そのタイルは更地となり、45トンの原木を生成する。つまり、木の存在に依存するが、製材所が225か180トンの原木を生産することになる。[https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L1094-L1111]
+*温帯マップの[[en/Manual/Base Set/Industries/Bank|銀行]]は生産を変動させない(月に8回か9回生産することによる変動は除く)。
 
 ====例====
-If a coal mine has 70% of its output transported, there is a '''3%''' chance (4.5% * 67%) of a production increase from 3-23% and a '''1.5%''' chance (4.5% * 33%) of a production decrease from 3-23% (but 13% on average).
+炭鉱から石炭が70%輸送されている場合、生産量が3-23%上昇する確率が'''3%'''(4.5% * 67%)あり、3-23%(平均13%)減少する確率が'''1.5%'''(4.5% * 33%)ある。
 
+よって、
 (1 + (0.03 - 0.015) * 0.13) ^ 12 - 1 = 0.0237 or '''2.37%'''
 
-The coal mine will grow an average of 2.37% on average after the first year.<br>
-(1.0237 ^ 20) - 1 = 59.6% after twenty years<br>
-(1.0237 ^ 50) - 1 = 321.8% or '''3.22x''' after fifty years<br>
-(1.0237 ^ 100) - 1 = '''10.35x''' after one hundred years<br>
+つまり、炭鉱は2年目以降平均2.37%ずつ生産量を増加させる。
+(1.0237 ^ 20) - 1 = 59.6% : 20年後には平均して59.6%増加させる。<br>
+(1.0237 ^ 50) - 1 = 321.8% : 20年後には平均して321.8%または'''3.22倍'''となる。<br>
+(1.0237 ^ 100) - 1 = '''10.35x''' : 100年後には'''10.35倍'''となる。<br>
 
+産業の評価が80%以上の場合、生産量を増価させる確率は'''3.75%'''であり、減少させる確率は'''0.75%である。<br>
+(1 + (0.0375 - 0.0075) * 0.13) ^ 12 - 1 = 0.0478 または '''4.78%'''
 
-For an industry with rating of more than 80%, there is a '''3.75%''' chance of increase and '''0.75%''' chance of decrease:<br>
-(1 + (0.0375 - 0.0075) * 0.13) ^ 12 - 1 = 0.0478 or '''4.78%'''
+つまり、2年目以降平均して4.78%生産量が増加する。
+(1.0478 ^ 20) - 1 = '''2.54x''' : 20年後には'''2.54倍'''になる。<br>
+(1.0478 ^ 50) - 1 = '''10.32x''' : 50年後には'''10.32倍'''になる。<br>
+(1.0478 ^ 100) - 1 = '''106.62x''' : 100年後には'''100.62倍'''になる。<br>
 
-The industry will grow approximately 4.78% on average after the first year.<br>
-(1.0478 ^ 20) - 1 = '''2.54x''' after twenty years<br>
-(1.0478 ^ 50) - 1 = '''10.32x''' after fifty years<br>
-(1.0478 ^ 100) - 1 = '''106.62x''' after one hundred years<br>
+<code>only_decrease</code>の設定になっている産業(温帯マップの油田)は、'''4.5%'''の確率で減少する<br>
+(1 + (0 - 0.045) * 0.13) ^ 12 - 1 = (0.99415) ^ 12 -1 = -0.068 または '''-6.8%'''
 
+つまり、2年目以降平均して6.8ずつ生産量を減少させる。
+(0.9320 ^ 20) = '''24.46%''' : 20年後には初期の生産量の'''24.46%'''になる。<br>
+(0.9320 ^ 50) = '''2.96%''' : 50年後には初期の生産量の'''2.96%'''になる。s<br>
 
-For an industry with the <code>only_decrease</code> flag set (currently Temperate Oil Wells), there is only a '''4.5%''' chance of decrease:<br>
-(1 + (0 - 0.045) * 0.13) ^ 12 - 1 = (0.99415) ^ 12 -1 = -0.068 or '''-6.8%'''
+ln(0.5) / ln(0.99415) = 118.1か月、または'''9.84年'''が<code>only_decrease</code>の産業の半減期である。<br>
+ln(8 / 48) / ln(0.99415) = 305.9か月、または'''25.4年'''は48単位/月で開始した油田の平均寿命である。<br>
+ln(8 / 152) / ln(0.99415) = 501.8か月、または'''41.8年'''は152単位/月で開始した油田の平均寿命である。<br>
 
-The industry will shrink on average by approximately 6.8% after the first year.<br>
-(0.9320 ^ 20) = '''24.46%''' of initial production after twenty years<br>
-(0.9320 ^ 50) = '''2.96%''' of initial production after fifty years<br>
+"良い"評価の産業では、平均して'''29.6'''年で生産量が'''2倍'''になり、"すばらしい"評価では'''14.8年'''で'''2倍'''`になる。ゲーム中の1日が2.36秒の場合、'''生産量が2倍になる時間'''は"良い"評価で'''7.1時間'''であり、"すばらしい評価"では'''3.6時間'''である。ほぼ最低値の100程度の生産量の産業が最大値の2040または2295になるには"良い"評価で'''130年'''、"すばらしい"評価で'''65'''年かかる。
 
-ln(0.5) / ln(0.99415) = 118.1 months or '''9.84 years''' is the half life of an <code>only_decrease</code> industry.<br>
-ln(8 / 48) / ln(0.99415) = 305.9 months or '''25.4 years''' is the mean lifetime of a temperate Oil Wells (starting at 48 oil/month).<br>
-ln(8 / 152) / ln(0.99415) = 501.8 months or '''41.8 years''' is the mean lifetime of a temperate Oil Wells (starting at 152 oil/month).<br>
+しかし、実際のゲーム中での生産量変動の割合はランダムである。上記の確率はただの参考であって、長い目で見た時の確率であると理解しないとストレスになるだろう。各々の産業は上記の平均から大きく逸脱することもある。統計的に言えば、6/10の産業は最高の評価を65年続けても100から2040-2295の生産量まで成長しない。1/9の産業は60-80%の評価を50年続けても、生産量を減少させる。
 
+より産業の評価を高めるためには、産業の生産量に適した貨車の数(最低レベルの生産量の産業では2台の貨車で十分だろう)を利用することだ。[満載]の指示は通常そのような貨物列車に利用する。
 
-For good service, it takes '''29.6 years''' on average '''to double'''; with excellent service, it takes '''14.8 years'''. If in the game's time a day is 2.36 seconds, then the '''doubling time''' with good service is '''7.1 hours'''; with excellent service, the doubling time is '''3.6 hours'''. For production to go from near bottom of 100 to near maximum of 2040 or 2295 takes '''130 years''' with good service and '''65 years''' with excellent service.
-
-However, in game you will find industries changing their production rate very randomly. It must be stressed the above examples are only true when observing many industries over the long-term; individual industries may greatly deviate from these averages. Statistically speaking, 6 out of 10 industries will not go from 100 to 2040-2295 even with the best service during 65 years. About 1 out of 9 industries will even lower their production when being served at 60-80% cargo transported for 50 years. 
-
-For more responsiveness from industries, adapt the number of wagons to industry production (for the lowest production, you should use two wagons). [Full Load] orders are usually used for such cargo trains.
-
-
-'''Note:'''  The exact formula can be seen under "[https://github.com/OpenTTD/OpenTTD/blob/master/src/industry_cmd.cpp#L2598 ChangeIndustryProduction()]" in industry_cmd.cpp.
+'''注意:'''正確な計算式はindustry_cmd.cppの"[https://github.com/OpenTTD/OpenTTD/blob/master/src/industry_cmd.cpp#L2598 ChangeIndustryProduction()]"に記載されている。
 
 ==運送報酬の相場==
-The amount you get paid for delivering cargo is based on 4 factors: the amount of cargo you deliver, the value of the cargo, the distance you deliver it, and how on-time you deliver it.
-
+貨物を輸送した際の収益は4つの要因から計算される。その4つの要因は、輸送した貨物量、貨物の価値、輸送した距離、どれだけ時間通りだったか、である。
 {| {{en/Wikitable}}
 |- style="background:#efefef"
-!Cargo!!Units!!Early Delivery<br> Time (days)!!Late Delivery<br> Time (days)!!Initial cargo <br> payment (pounds)
+!貨物!!単位!!早着時間<br>(日数)!!遅延時間<br>(日数)!!初期の貨物価格<br>(ポンド)
 |-
-|[[en/Manual/Base Set/Cargos/Passengers]]|| ||Immediate||24||£39
+|[[en/Manual/Base Set/Cargos/Passengers|旅客]]|| ||即時||24||£39
 |-
-|[[en/Manual/Base Set/Cargos/Valuables]]||Bags||1||32||£91
+|[[en/Manual/Base Set/Cargos/Valuables|貴重品]]||袋||1||32||£91
 |-
-|[[en/Manual/Base Set/Cargos/Livestock]]||Items||4||18||£53
+|[[en/Manual/Base Set/Cargos/Livestock|家畜]]||頭||4||18||£53
 |-
-|[[en/Manual/Base Set/Cargos/Grain]]||Tons||4||40||£58
+|[[en/Manual/Base Set/Cargos/Grain|穀物]]||トン||4||40||£58
 |-
-|[[en/Manual/Base Set/Cargos/Goods]]||Crates||5||28||£75
+|[[en/Manual/Base Set/Cargos/Goods|商品]]||箱||5||28||£75
 |-
-|[[en/Manual/Base Set/Cargos/Coal]]||Tons||7||None||£72
+|[[en/Manual/Base Set/Cargos/Coal|石炭]]||トン||7||なし||£72
 |-
-|[[en/Manual/Base Set/Cargos/Steel]]||Tons||7||None||£69
+|[[en/Manual/Base Set/Cargos/Steel|鋼鉄]]||トン||7||なし||£69
 |-
-|[[en/Manual/Base Set/Cargos/Iron Ore]]||Tons||9||None||£62
+|[[en/Manual/Base Set/Cargos/Iron Ore|鉄鉱石]]||トン||9||なし||£62
 |-
-|[[en/Manual/Base Set/Cargos/Wood]]||Tons||15||None||£61
+|[[en/Manual/Base Set/Cargos/Wood|原木]]||トン||15||なし||£61
 |-
-|[[en/Manual/Base Set/Cargos/Oil]]||Kiloliters||25||None||£54
+|[[en/Manual/Base Set/Cargos/Oil|石油]]||キロリットル||25||なし||£54
 |-
-|[[en/Manual/Base Set/Cargos/Mail]]||Bags||20||90||£55
+|[[en/Manual/Base Set/Cargos/Mail|郵便物]]||袋||20||90||£55
 |- style="background:#efefef"
-!colspan="5" align="center"|Arctic specific
+!colspan="5" align="center"|亜寒帯マップ
 |-
 |[[en/Manual/Base Set/Cargos/Wheat]]||Tons||4||40||£58
 |-
@@ -444,7 +437,7 @@ The amount you get paid for delivering cargo is based on 4 factors: the amount o
 |-
 |[[en/Manual/Base Set/Cargos/Food]]||Tons||Immediate||30||£69
 |- style="background:#efefef"
-!colspan="5" align="center"|Tropical specific
+!colspan="5" align="center"|亜熱帯マップ
 |-
 |[[en/Manual/Base Set/Cargos/Rubber]]||Kiloliters||2||20||£54
 |-
@@ -460,7 +453,7 @@ The amount you get paid for delivering cargo is based on 4 factors: the amount o
 |-
 |[[en/Manual/Base Set/Cargos/Diamonds]]||Bags||10||None||£71
 |- style="background:#efefef"
-!colspan="5" align="center"|Toyland specific
+!colspan="5" align="center"|おもちゃの国
 |-
 |[[en/Manual/Base Set/Cargos/Sugar]]||Tons||20||None||£54
 |-
@@ -483,75 +476,71 @@ The amount you get paid for delivering cargo is based on 4 factors: the amount o
 |[[en/Manual/Base Set/Cargos/Fizzy Drinks]]|| ||30||50||£76
 |}
 
-Initial cargo payment values are for delivering 100 pieces of cargo 1 tile.  Payment goes up with inflation as the game progresses.
+初期の貨物価格は貨物100単位を1タイル輸送した場合の収益である。収益はゲームの進行に伴ってインフレする。
 
+遅延配送によるペナルティは以下である。
+*早着時間以降、1日につき0.4%のペナルティ
+*遅延時間以降、1日につき追加で0.4%のペナルティ
+*最大ペナルティは88%
 
-Late delivery penalties:
-*For each day after the Early Delivery time that you deliver the cargo, you are penalized 0.4%.
-*For each day after the Late Delivery time that you deliver the cargo, you are penalized an additional 0.4%.
-*Maximum penalty is 88%.
+'''例'''(インフレがない場合):<br>
+200,000リットルの石油を10日で20タイル輸送した場合:<br>
+2 * £54 * 20タイル * 100% = £2160
 
+100袋の郵便物を100日で100タイル輸送した場合<br>
+£55 * 100タイル * (1 - 0.80*0.4 - 0.10*0.4) = £3520
 
-'''Examples''' (no inflation):<br>
-Deliver 200,000 liters of oil 20 squares in 10 days:<br>
-2 * £54 * 20 squares * 100% = £2160
+'''計算を簡単にするヒント''':<br>
+収益 = 貨物量 * 貨物の単価 * 0.4<br>
+貨物の単価はゲーム中の運送報酬の相場グラフから実際に輸送した日数をX軸に取って読み取る。<br>
+これにより、5%刻みで大体の収益を予想することができる。
 
-Deliver 100 bags of mail 100 squares in 100 days:<br>
-£55 * 100 squares * (1 - 0.80*0.4 - 0.10*0.4) = £3520
+'''注意:'''
+*経験則として輸送距離は輸送速度の1-2倍にするとよい。つまり、200km/hの列車は300タイル前後の距離の輸送が理想的である。よく考えられた鉄道網では若干遠くへ輸送できるが、予期しない遅延により価値のある長距離輸送を破綻させてしまう。巨大なマップでは12%の最低値を利用することも一つの手段である。商品が超長距離を輸送される場合、とにかく遠くへ運べばよい。
 
-'''HINT calculate easy''':<br>
-Income = cargo units * cargo value * 0.4<br>
-[[en/Cargo value]] comes from the Y-axis on the specific transported goods graph in-game<br>
-measure your real delivery time in days and plot on x-axis
-This result will give you an easy estimation of your income with 5% deviation
+*正式な計算式は複雑であるが、大きな離散値の丸め誤差が発生してしまうため、より正確である。詳細についてはeconomy.cpp([https://github.com/OpenTTD/OpenTTD/blob/master/src/economy.cpp#L958 GetTransportedGoodsIncome()])と[[en/Manual/Game Mechanics/Cargo income|貨物による収益]]を参照のこと。
 
-'''Notes:'''
-* A useful thumbrule is around 1-2x the transport speed. Ie. for a 200kph train around 300 tiles distance is ideal. Well tuned train networks can push a little further, but any unexpected delays will destroy your value for long distance haulage. Really large maps can exploit the 12% value floor; if your goods are on a long delay anyways, long distance is the only thing that matters.
+*距離は駅の名前が記載されているタイルから計測し、産業からの距離や、車両が実際に走行した距離ではない。距離はタイル数のxとyそれぞれの差を合計することで計算([http://en.wikipedia.org/wiki/Manhattan_distance manhattan distance])されていて、直線距離ではない。
 
-* The exact formula is much more complicated and slightly more accurate, due to rounding error when converting from larger discrete values.  See economy.cpp ([https://github.com/OpenTTD/OpenTTD/blob/master/src/economy.cpp#L958 GetTransportedGoodsIncome()]) and [[en/Manual/Game Mechanics/Cargo income]].
-
-* Distance is measured between the name-labeled tiles of the stations, not from the industries or by vehicle distance traveled.  It is computed by adding the differences in x and y tiles ([http://en.wikipedia.org/wiki/Manhattan_distance manhattan distance]), not straight-line distance.
-
-* Each cargo has a characteristic time at which payment is maximized, assuming you can keep it moving away from the source station at a constant speed.  For a cargo with a "late delivery" penalty, this time is typically around 70 days; for one without, this is typically around 130 days.
+*それぞれの貨物には収益が最大化される日数が設定されている。その数値は算出された駅から一定の速度で常に輸送を続けることで推測することができる。"遅延時間"のペナルティを受ける貨物は大体70日であり、そうでない貨物は大体130日である。
 
 ==車両の速度==
-Internally OpenTTD works with a unit called "km-ish/h", which is equal to "mph*1.6". 
-The conversion factor from km-ish/h to km/h is 1.00584, and the conversion factor from km-ish/h to mph is 1.6.
+OpenTTDの内部では"km-ish/h"(時速っぽい速度)で演算されている(km-ish/h = mph*1.6である)。
+km-ish/hからkm/hへの変換は1.00584をかければよい。
 
-A tile is, for vehicle speed purposes 664.(216) km-ish, 668 km or 415 miles long. This is based on the following facts: 
-*A tile has 16 sub locations per X/Y axis.
-*A vehicle has stores remainder of tile movement in a byte called subspeed, thus has 256 different values.
-*The vehicle's (raw) speed is added to subspeed. The resulting number is divided by 256, the remainder is stored in subspeed and the vehicle is moved quotient sub locations forward. For trains and aircraft the raw speed is in km-ish/h, for road vehicles/ships in 0.5 km-ish/h. For trains and aircraft this step is done twice a tick, whereas ships and road vehicles do it once a tick.
-*A day contains 74 ticks, and takes 24 hours.
-Now assume a vehicle going 1 km-ish/hour: (1 * 16 * 256) / (74 * 2) * 24 = 664.(216).
+1タイルは車両速度から664.(216) km-ishであり、668kmまたは415マイルである。これは以下の事実より導き出される。
+*1タイルはX/Y軸にそれぞれ16分割されている
+*車両はsubspeedと呼ばれるメモリに1 byte分の移動したタイルの履歴を記録しているため、256個の異なる値が格納されている。
+*車両の(実際の)速度がsubspeedに加えられる。結果を256で割ることで、subspeedと車両はその割り算の省の分だけ移動する。列車と航空機の実際の速度は　km-ish/hであり、道路車両と船舶は0.5 km-ish/hである。列車と航空機では1tickに2回この計算を実施し、航空機と道路車両は1tickに1回計算する。
+*1日は74tickなので、24時間に換算する。
+よって、1km-ish/hの車両は:(1 * 16 * 256) / (74 * 2) * 24 = 664.(216) km-ish移動する。
 
-The net result is that 100 km/hour is ~3.6 tiles/day.
-
+結果的に100km/hの車両は1日に3.6タイル移動する。
 
 ==== 航空機 ====
-*By default aircraft fly at a quarter of their listed speed (this can be changed in advanced settings).
-*Aircraft acceleration varies per aircraft, between 144 km-ish/h/day and 400 km-ish/h/day.
-*Broken down planes fly at 320 km-ish/h.
-*Airport taxi speed is 150 km-ish/h.
+*初期設定では航空機は記載されている速度の1/4の速度で飛行する(設定で変更可能である)。
+*航空機の加速度は航空機ごとに異なり、144 km-ish/h/日から400 km-ish/h/日である。
+*故障した飛行機は320 km-ish/hで飛行する。
+*空港内での移動速度は150 km-ish/hである。
 
 ==== 道路車両 ====
-*Road vehicles accelerate at 37 km-ish/h/day.
-*Road vehicles go around corners at half their max speed.
-*Road vehicles accelerate an additional 74 km-ish/h/day downhill.
-*When going uphill, road vehicles slow down 10% 4 times per tile.  This balances out with acceleration at 34-ish km/h for all road vehicles.
+*道路車両の加速度は37 km-ish/h/日である。
+*道路車両が交差点を曲がる速度は最高速度の半分である。
+*道路車両は下り坂で74 km-ish/h/日の追加の加速度を得る。
+*上り坂では1タイル当たり4回、速度を10%低下させる。これは全ての道路車両について34km-ish/hの速度の車両とバランスをとっている。
 
-(Note: This does not apply when using the improved road vehicle acceleration model.)
+(注意:これらの数値は道路車両の加減速モデルがリアルの場合は適用されない)
 
 ==== 船舶====
-*Ships accelerate at 37 km-ish/h/day.
-*A "stopped" ship resumes its last speed instantly.
+*船舶の加速度は37 km-ish/h/日である。
+*"停止"している船舶は元々の速度に即復帰する。
 
 ==== 列車 ==== 
-(with the [[en/Archive/Manual/Settings/Realistic acceleration|realistic train acceleration patch]])<br>
-*Trains are not affected going up or down hills if they are powerful enough.
-*Trains are limited to entering and exiting a depot and making 90° turns at 61 km/h.
-*Trains can make one 45° turn or two 45° turns in opposite directions at a time without slowing down.
-*When making two or more 45° turns in the same direction, the max speed is limited as follows:
+列車の加減速モデルがリアルの場合<br>
+*機関車が十分にパワフルならば、上り坂と下り坂の影響を受けない。
+*列車庫の出入りと、90度に曲がる際には速度が61km/hに制限される。
+*45度に1回曲がるのと、45度に2回逆方向に(つまりS字に)曲がる場合は減速しない。
+*45度に2回以上同じ方向に曲がる場合、最高速度は下記のように制限される。
 
 {| style="margin: 1em 1em 1em 0;"    <!-- begin nested tables -->
 |-
@@ -559,17 +548,17 @@ The net result is that 100 km/hour is ~3.6 tiles/day.
 |    <!-- metric -->
 {| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #efefff;"
 |-
-!rowspan=2  style="background:#efefef"  | Curvature
-!colspan=3  style="background:#dfdfff"  | Max speed (km/h)
+!rowspan=2  style="background:#efefef"  | 曲率
+!colspan=3  style="background:#dfdfff"  | 最高速度 (km/h)
 |-
-!   style="background:#dfdfff"      | Railroad
-!   style="background:#dfdfff"      | Monorail
-!   style="background:#dfdfff"      | Maglev
+!   style="background:#dfdfff"      | 線路
+!   style="background:#dfdfff"      | モノレール
+!   style="background:#dfdfff"      | マグレブ
 |-
-| style="background:#f8f8ff"    | 0 (90° turn)  
+| style="background:#f8f8ff"    | 0 (90度ターン)  
 |    61||91||121
 |-
-| style="background:#f8f8ff"    | 1 (2x45° turn)
+| style="background:#f8f8ff"    | 1 (2x45度ターン)
 |     88||132||176
 |-
 | style="background:#f8f8ff"    | 2
@@ -609,12 +598,12 @@ The net result is that 100 km/hour is ~3.6 tiles/day.
 |    <!-- imperial -->
 {| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #ffefef;"
 |-
-!rowspan=2  style="background:#efefef"  | Curvature
-!colspan=3  style="background:#efdfdf"  | Max speed (mph)
+!rowspan=2  style="background:#efefef"  | 曲率
+!colspan=3  style="background:#efdfdf"  | 最高速度 (mph)
 |-
-!   style="background:#efdfdf"      | Railroad
-!   style="background:#efdfdf"      | Monorail
-!   style="background:#efdfdf"      | Maglev
+!   style="background:#efdfdf"      | 線路
+!   style="background:#efdfdf"      | モノレール
+!   style="background:#efdfdf"      | マグレブ
 |-
 | style="background:#f8f8ff"    | 0
 |     37|| 56|| 75 
@@ -654,20 +643,20 @@ The net result is that 100 km/hour is ~3.6 tiles/day.
 |}
 
 |}  <!-- end nested tables -->
-"Curvature" means the average number of wagons of the train between turns. However, very sharp turns (curvatures 0 and 1) are not averaged out in longer trains.
+"曲率"は曲がり角の間の列車の平均貨車数である。非常に鋭いカーブ(曲率が0と1)の場合、長い編成の列車には平均の長さは無効である。
 
-*New railtypes can specify custom maximum curve speeds in the same steps as the three default types in the table.
-*Tilting trains gain an additional bonus of 20% on the maximum speed.
-*Train acceleration and max speed are affected by engine power, maximum tractive effort (all engines and powered wagons combined), current speed, air drag, total train mass, and wagons/engines on slopes.
-*Non maglev train Acceleration spreadsheet can be found on tt-forums: [http://www.tt-forums.net/viewtopic.php?f=31&t=55972&p=960678#p960672 tt-forums]
-*Braking is twice acceleration except when entering a depot or a station.
+*新しい線路種は3つのデフォルトの線路主と同様の方法でカーブの最高速度を設定することができる。
+*チルト(傾斜)可能な列車は最高速度を制限速度から20%増加可能である。
+*列車の加速度と最高速度は出力、最大牽引力(連結されているすべての機関車とエンジン付き貨車を合計する)、現在の速度、空気抵抗、列車の合計重量、斜面上にあるかどうか、で決まる。
+*tt-forumsにマグレブ以外の列車の加速に関するスプレッドシートがある。[http://www.tt-forums.net/viewtopic.php?f=31&t=55972&p=960678#p960672 tt-forums]
+*減速時は列車庫に入るときや駅で停車するときを除き、加速度の2倍である。
 [[File:en/Manual/Game Mechanics/Speed-limits.png]]
 
-''See also: [[en/Archive/Manual/Settings/Realistic acceleration]] and [[en/Community/Corners]].''
+''参考 : [[en/Archive/Manual/Settings/Realistic acceleration]]と[[en/Community/Corners]]''
 
-See ground_vehicle.cpp, aircraft_cmd.cpp, roadveh_cmd.cpp, ship_cmd.cpp, train_cmd.cpp, vechicle.cpp for code.
+より詳細なコードはground_vehicle.cpp, aircraft_cmd.cpp, roadveh_cmd.cpp, ship_cmd.cpp, train_cmd.cpp, vechicle.cppを参照のこと。
 
-As of OpenTTD 1.6.1, given power in hp, max tractive effort in kN, total weight of the train in tonnes, the number train parts (engines and wagons), the air drag value of the first engine in the train (NewGRF setting, defaults to <code>min(192,max(1,floor(2048/max_speed)))</code>, meaning faster trains are built more aerodynamically), the combined weight of any train parts (engines or wagons) currently on an up-slope, the combined weight of any train parts (engines or wagons) currently on a down-slope, the slope steepness (game setting [1-10], default 3), and the current speed of the train in km/h, the acceleration of a non-maglev train can be calculated as follows:
+OpenTTD 1.6.1では出力はhp、最大けん引力はkN、列車の合計重量はトン、列車の連結数(機関車と貨車)、先頭車両の空気抵抗(NewGRF設定ではデフォルトは<code>min(192,max(1,floor(2048/max_speed)))</code>であり、速い列車ほどより流線形にできていると設定されている)、上り坂にある列車の連結重量(機関車と貨車)、下り坂にある列車の連結重量(機関車と貨車)、斜面の角度(設定により1-10の間の値になる、デフォルトは3)、そして列車の現在速度のkm/hを利用し、マグレブでない列車の加速度は下記のように計算される。
 
 ; force = min((max_te * 1000), floor((power * 746) / (current_speed * 5/18)))    [N]
 ; slope_force = weight_on_upslope * slope_steepness * 100 - weight_on_downslope * slope_steepness * 100    [N]
@@ -677,9 +666,10 @@ As of OpenTTD 1.6.1, given power in hp, max tractive effort in kN, total weight 
 ; air_drag = floor(air_drag_coefficient * current_speed^2)   [N]
 ; acceleration = (force - (slope_force + axle_friction + rolling_friction + air_drag)) / (total_weight * 4) [256th of a km/h per half-tick]
 
-Note: air_drag_coefficient is twice that if any part of the train is in a tunnel.
+注意:空気抵抗係数は列車の一部分でもトンネル内にある場合は2倍の値になる。
 
-Given the same values, the equilibrium speed, e.g. the speed the train would eventually settle on if the same conditions continued indefinitely, can be calculated as follows [Assuming a constant <code>rolling_friction</code> (i.e. the speed stays below 512 km/h), and ignoring the flooring of <code>force</code> and <code>air_drag</code> to an integer value]:
+同じ値を利用して平衡速度も算出可能である。平衡速度とは同じ状態が続いたときに出せる列車の速度であり、下記の計算式で算出する。(定数として<code>rolling_friction</code>(つまり、速度は512km/h以下である)と仮定し、浮動小数点値の<code>force</code>と<code>air_drag</code>を無視して整数として扱う。)
+
 
 ; p = (slope_force + axle_friction + rolling_friction) / air_drag_coefficient
 ; q = (-power * 746 * 18/5) / air_drag_coefficient
@@ -688,6 +678,6 @@ Given the same values, the equilibrium speed, e.g. the speed the train would eve
 
 == 街の成長 ==
 
-See [[en/Manual/Towns#town-growth]].
+[[ja/Manual/街]]を参照のこと。
 
 [[Category:en/Manual/Playing]]
