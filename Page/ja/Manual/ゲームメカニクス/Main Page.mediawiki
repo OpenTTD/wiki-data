@@ -3,7 +3,7 @@
 
 ここではOpenTTD内でどのような計算が行われているかの情報を得ることができる。
 
-駅の評判がどう算出されているか、商品がどのように分配されているか知りたいだろう？ここにはその全てがある。
+駅の評価がどう算出されているか、商品がどのように分配されているか知りたいだろう？ここにはその全てがある。
 
 ==企業の格付==
 企業の格付に関するそれぞれの項目は線形に影響する。つまり、ある項目の50%を達成していたら、その項目に割り当てられている点数の50%を得ることができる。金額が含まれている項目では、ゲームで利用している通貨に換算される。ゲーム内では通貨はポンドで計算されている。
@@ -125,41 +125,39 @@
 |-
 |社長の彫像が駅のある街にある||ある||26|| 10%
 |- style="background:#ddd"
-!Event!!Condition!!Rating point change!!Rating % change
+!イベント!!条件!!レーティング変化(点数)!!レーティング(%の値)変化
 |-
-|Small advertising campaign bought||Station within 10 tiles of town center||+64|| +25pp
+|小規模広告キャンペーンを実施||街の中心から10タイル以内の駅||+64|| +25pp
 |-
-|Medium advertising campaign bought||Station within 15 tiles of town center||+112|| +44pp
+|中規模広告キャンペーンを実施||街の中心から15タイル以内の駅||+112|| +44pp
 |-
-|Large advertising campaign bought||Station within 20 tiles of town center||+160|| +63pp
+|大規模広告キャンペーンを実施||街の中心から20タイル以内の駅||+160|| +63pp
 |-
-|Road vehicle crashed||Station within 22 tiles of crash ||-160|| -63pp
+|道路車両の自己||事故地点から22タイル以内の駅||-160|| -63pp
 |-
-|Train crashed||Station within 30 tiles of crash ||-160|| -63pp
+|列車事故||事故地点から30タイル以内の駅||-160|| -63pp
 |-
-|Town bribe failed||Station within town influence||-255||-100pp
+|賄賂の発覚||街の影響範囲内の駅||-255||-100pp
 |}
-Divide the total rating points by 255 to get the percent rating. The maximum possible rating is 100%.
+点数の合計値を255で割ると、パーセント表記のレーティングとなる。レーティングの最大値は100%である。
+駅の評価は2.5日ごと([https://github.com/OpenTTD/OpenTTD/blob/0d599e155f335e922ad2be738a3ab73d1dea346b/src/date_type.h#L34 185 ticks])に計算される。イベント内の項目が発生した場合を除き、駅の評価は2.5日のサイクルごとに2点(0.78%)以上は変化しない。イベントは近隣の駅に対して即座に一時的な評価の上昇(または悪化)を起こす。評価は緩やかに(2.5日に2点ずつ)元の値に戻っていく。
 
-Every 2.5 days ([https://github.com/OpenTTD/OpenTTD/blob/0d599e155f335e922ad2be738a3ab73d1dea346b/src/date_type.h#L34 185 ticks]), station ratings are computed; ratings can't change by more than 2 points (0.78%) per cycle, except due to items under "Event".
-Events give an instant, temporary boost (or penalty) to ratings of nearby stations. The rating will gradually return to normal, following the 2 point per 2.5 days rule.
+産業からどれだけの量の貨物が輸送されたかに駅の評価はかかっている。これは、ある産業に対して駅が一つしか存在しなかった場合、駅の業過の%の値がそのまま産業の生産量に掛け算されて供給されることを意味する。つまり、産業から算出される貨物の量が少ないということは、駅の評価が低いということを意味する。
 
-The amount of cargo that can be transported from an industry is fully reliant on the station rating. This means that if there is exactly one station serving an industry, on ticks when the industry produces cargo, exactly station rating % of the cargo will be moved to the station. So if the amount of cargo transported from an industry is low, it is probably because the station rating is low, too. 
+'''注意:''' 正確な計算式はstation_cmd.cppの"[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3262 UpdateStationRating()]"に記載されている。この計算式にはeconomy.cppの"[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/economy.cpp#L1595 LoadUnloadVehicle()]"にある値が使用されている。
 
+'''注意:''' 駅の評価が50%未満になると、駅は貨物を廃棄し始める。
 
-'''Note:'''  The exact formula can be seen under "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3262 UpdateStationRating()]" in station_cmd.cpp. This uses some values calculated in "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/economy.cpp#L1595 LoadUnloadVehicle()]" in economy.cpp.
+'''注意:''' 積載待ちの貨物が4,096以上(または4,096,000リットル以上)になると、駅は同様に貨物を廃棄し始める。さらに、駅に待機できる貨物は32,768単位が上限である。これ以上の貨物は2，3日ごとに消滅する。[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3380-L3393]
 
-'''Note:'''  If the rating gets to be less than 50%, the station starts losing cargo.
+==駅への貨物配分==
 
-'''Note:'''  If the amount of cargo waiting is greater than 4096 units (or 4,096,000 liters), the station also starts losing cargo. There is a hard cap of 32,768 units of cargo that can be waiting at a station. Any more than that completely disappears every few days. [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3380-L3393]
+商品は駅の評価に応じて分配される。
 
-==Cargo delivery to stations==
+駅が一つしか存在しない場合、2.5日ごとに駅の評価のパーセンテージを掛け合わせた量の商品を供給する。
 
-Goods are distributed to stations according to station rating.
+複数の駅が存在する場合、商品は評価を基準に分配される。複数の企業の駅が存在する場合、商品はまずそれぞれの企業で最も良い評価の駅を持つ企業に分配される。企業Cに分配される商品の量は、すべての会社の最も良い評価の駅の合計に対する、企業Cの最も良い評価の駅の割合に等しくなる。その後、各企業に割り当てられた数量に応じて各駅に商品が分配される。企業Cの所有する駅Sは全ての企業Cの駅の評価の合計に対する駅Sの評価の割合を基準としていくらかのばらつきをもって受け取る。
 
-If there is only only station around, then a percentage of available goods equal to the station's rating is distributed to it every 2.5 day cycle.
-
-If multiple stations are present, then goods are divided between them based on rating. If there are stations belonging to more than one company, then goods are first divided between companies according to the best station of each company: the proportion of goods allocated to a company C is equal to the best station rating of C over the sum of all best station ratings for all companies. Note that this will be equal to 100% if all stations belong to one company. Then each company's allocation is subdivided among its stations. A station S belonging to C receives a fraction of C's company allocation equal to the rating of S over the sum of the ratings of all stations belonging to C.
 
 ==Local authority rating==
 Ratings limit some player actions; they start at +500 and can change based on some actions.
