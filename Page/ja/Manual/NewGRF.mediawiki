@@ -1,0 +1,95 @@
+[[Translation:en/Manual/NewGRF]]
+{{ja/Manual/目次}}
+
+NewGRFはNew Graphics Resource Fileの略であり、ゲームのMODの一般的なインターフェースである。OpenTTD 1.2.0時点では32bitグラフィックがNewGRFを通して供給されている。
+
+'''NewGRF'''はOpenTTDに新規のグラフィック、車両、建物、貨物、線路の種類、オブジェクト、産業を追加、または既存のそれらを変更するものである。NewGRFファイルはその機能の導入のために新規ゲームの作成前にダウンロードして有効化する必要がある。ゲーム中でも変更可能な設定と異なり、NewGRFをゲーム中で正しく動作させるためにはゲーム開始前に導入する。"NewGRF"という名前にはグラフィックやゲームの機能を有効活用するために、(Transport Tycoonのリソースファイルである)GRFに新機能を追加するという意味が込められている。NewGRFはOpenTTDと[[en/Archive/OpenTTD/TTDPatch]]と共通のフォーマットであり、両者にはほぼ互換性がある。
+
+OpenTTDでのGRF関連の共通の不具合については、[[en/Archive/Community/NewGRF FAQ| NewGRF FAQ]]を参照のこと。
+
+==NewGRFの入手==
+=== オンラインコンテンツ ===
+もっとも一般的で便利なNewGRFの入手方法はゲーム中の[[en/Manual/Online content|オンラインコンテンツの確認]]機能を利用することである。大体のNewGRFはそこで見つけることができる。NewGRF [http://www.tt-forums.net/viewforum.php?f=26 <nowiki>development forum</nowiki>]では開発中のNewGRFを探すことができる。同様にwiki [[en/Community/NewGRF/Main Page]]でもNewGRFやその他のリポジトリとのリンクを得ることができる。
+
+=== マニュアルインストール ===
+''オンラインコンテンツの確認''から入手できないために、その他の手段で入手したNewGRFを利用したい場合は、正しい場所に保存することでインストールする。一つのNewGRFは拡張子.grfの一つのファイルである(例えば、"grvts.grf")。NewGRFは以下の手順でインストールする。\
+#NewGRF (.grf)ファイルをダウンロードする。
+#解凍してOpenTTDをインストールしたディレクトリのnewgrfフォルダに移動する。
+:*OSごとに、通常下記のフォルダになる。
+::C:\My Documents\newgrf (Windows 95, 98, ME)
+::C:\Documents and Settings\<username>\My Documents\OpenTTD\newgrf (Windows 2000, XP)
+::C:\Users\<ユーザー名>\Documents\OpenTTD\newgrf (Windows Vista, 7, 10)
+::~/.openttd/newgrf (Linux, BSD)
+::~/Documents/OpenTTD/newgrf (OSX)
+::(訳者注:Steam版も同じフォルダを利用する)
+
+==NewGRFの有効化==
+# ゲームメニューで"NewGRFの設定"をクリックする。[[File:en/Manual/Main window (NewGRF Settings).png|Main window (NewGRF Settings)|center]]
+# 下段の'非アクティブなNewGRF'から追加したいNewGRFを選択して"追加"をクリックし、'アクティブなNewGRF'へ移動させる。英語版は以下のようなウィンドウである(ディスプレイの解像度によって異なる)。[[File:en/Manual/Newgrf addnew.png|NewGRF settings window (small)|center]][[File:en/Manual/Newgrf config big.png|NewGRF settings window (big)|center]]
+# 必要に応じてNewGRFのパラメータ設定を行う。パラメータを設定するには、'アクティブなNewGRF'から設定したいファイルを選択し、'パラメータ設定'ボタンをクリックする。NewGRFによって異なるが、以下の図のようなウィンドウが表示される。[[File:en/Manual/Newgrf parameter.png|NewGRF parameter window|center]]
+# 現在の'アクティブなNewGRF'リストをプリセットとして保存(パラメータ設定も保存される)、またはロードすることができる。[[File:en/Manual/Newgrf preset.png|Saving a NewGRF preset|center]]
+
+== 同時利用について ==
+OpenTTDは各ゲーム開始時に59種類までのNewGRFを利用できる。しかし、どのNewGRFを利用するかをランダムに決定することはできず、ある程度計画的に利用しなければならない。すべてのNewGRFに互換性があるわけではなく、場合によっては複数のNewGRFが競合を起こす。以下は異なる種類のNewGRFを利用する際に考慮すべきことを記載している。
+;車両
+*鉄道セット、道路車両セット、船舶セット、航空機セットそれぞれにつき1種類のみ使用するのが無難である。
+*複数の種類の利用は可能だが、それにより劇的なコスト増加や他の不都合を引き起こすおそれがある。
+*導入できる車両の上限は各種類(鉄道、道路車両、船舶、航空機)につき、65535種のまでである。
+;駅
+*255の異なる駅種別の上限までは好きなだけ利用可能である
+;水路/河川
+*一度に1種類まで
+;橋
+*複数導入すると、上書きされる。これにより不具合は発生しないので、好きなだけ試して構わない。
+*橋のセットは常に道路と鉄道の橋両方を変更する。これは両者が同じものを利用しているためである。
+*導入できる上限は13種までである(デフォルトの橋の種類と同じ数)。
+;家
+*1種類のみ利用するのが無難である。
+*複数種の同時導入は可能だが、一つのNewGRFにつき255まで、家の酒類全体では512までである。
+;産業
+*同時に1種類のみだが、ECSベクターのみ1つまたは複数導入可能である。
+*いくつかの産業NewGRFはデフォルトの産業を変更する。そのような場合でも、1種類のみ導入可能なルールは適用される。決してほかの産業NewGRFと併用しないように。
+*ほとんどの産業NewGRFはデフォルトの車両ではサポートされていない新しい貨物種を追加する。そのような産業を利用する場合はサポートされている車両セットを導入すること。
+*ECSを利用せずとも、いくつかの産業セットはほかの専業セットを変更または補完する。
+*NewGRF一つ当たりの産業数の上限は128であり、合計240までである。貨物種は64種類までで、各産業ごとに供給、受入可能な貨物の種類は16種までである。
+;空港
+*128種までならいくつでも導入可能である。
+;オブジェクト
+
+; Airports
+* As much as you want until you reach the upper limit of 128 different airports.
+; Objects
+* As much as you want until you reach the upper limit of 64000 different objects and 255 different object classes.
+; Railtypes (track sets)
+* As much as you want until you reach the upper limit of 64 different railtypes. This includes the four default railtypes, which cannot all be undefined.
+* Some track sets are specifically designed for specific train sets.
+; Roadtypes (road and tramway sets)
+* As much as you want until you reach the upper limit of 64 different roadtypes. This includes the default road and tram types, which cannot be undefined.
+* Some road and tramway sets are specifically designed for specific road vehicle sets.
+
+Many NewGRFs will warn if you make invalid combinations and will possibly disable themselves. It is recommended to check the NewGRF configuration after starting a new game (via Tools menu). If there are problems, it is recommended to abandon the game, fix the problems, and start a new game. For random games you can regenerate the same map when using the same random seed and keeping the other settings identical in the map generator. After starting a game you can obtain its random seed by typing <code>getseed</code> in the [[en/Manual/Console]].
+
+== 8 bit vs 32 bit graphics ==
+{{en/Feature|1.2}}
+As of OpenTTD 1.2.0, NewGRFs can contain not only the usual 8 bit graphics, but also 32 bit graphics. With this change, NewGRFs are in fact the only way to supply 32 bit graphics to OpenTTD 1.2.0 or newer. From this point forward, NewGRFs are also able to supply different graphics for the different zoom levels.
+
+See the [[en/Community/NewGRF/Playing with 32 bpp graphics]] for a list of 32 bit graphics available to OpenTTD 1.2.0 and newer.
+
+==Closing remarks==
+Now, whenever you start a new game, the choice of NewGRFs will become active, and whatever changes they make to the game will become effective. However changing these settings will have no effect on existing savegames as newgrfs are an integral part of a savegame and the list of used newgrfs is stored within it.
+
+[[File:en/Manual/Newgrfexampless.png|thumb|600px|center|A screenshot showing use of newgrf files including UKRS and Newstations]]
+
+The order of (active) NewGRFs is important in determining how different NewGRFs interact. A NewGRF lower in the list overrides the effects of a NewGRF further up in the list. Some NewGRFs will even disable themselves if you load them in the wrong order (such as ECS Vectors, as shown below).
+
+[[File:en/Manual/ECS wrong load order.png|thumb|579px|center|What happens if you load NewGRFs in the wrong order?]]
+
+== External links ==
+
+* [http://grfcrawler.tt-forums.net/ GRFCrawler] A non-comprehensive database of available NewGRFs
+* [http://newgrf-specs.tt-wiki.net/wiki/Main_Page NewGraphicSpecs] Specs of the GRF Format
+* [http://www.tt-forums.net/viewforum.php?f=66 NewGRF forum]
+
+
+
+[[Category:en/Manual/Settings & Preferences]]
