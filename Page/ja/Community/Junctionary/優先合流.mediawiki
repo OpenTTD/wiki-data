@@ -1,0 +1,48 @@
+[[Translation:en/Community/Junctionary/Priority Merge]]
+
+{{ja/Community/Junctionary/Navigation}}
+2つの線路が一つの交通量の多い線路に合流する際、それぞれの線路の列車は停車して順番待ちをしたり、合流する線路へカーブを曲がって入ることがある。
+これは良い方法に聞こえるが、列車が停車状態から動き出す際に、全体の交通を劇的に減速させてしまう。鉄道網を考えたとき、どちらかの線路に優先権(より交通量の多い方が好ましいだろう)を与えることで、最高速度で走る列車がいないときに合流するのが大体の場合は良いアイディアとなる。
+
+専用の信号を利用することで、合流する列車がスムーズな交通を邪魔することなく入れるように調整することができる。
+
+==基本の優先付け==
+[[File:en/Community/Junctionary/Basic priority.png|none|frame|もっとも単純な優先付け('''右側通行''')]]
+両方向プレ信号だけで、本線上のコンボ信号または出口信号の前にすでに列車がいる場合に合流する側の列車を停車させることができる。この構成の不利な部分は2つの信号間距離より遠くに優先権を付与できないことである。
+
+==追加の線路を利用した優先合流==
+[[File:en/Community/Junctionary/Priority merges.png|none|frame|異なる信号タイプを利用した優先合流('''右側通行)]]
+より長い優先順位付けは線路を接続して本線の合流信号を上流へ有効化させることによって実現できる。優先順位の高い線路を走行する列車が未使用の線路に接続するタイルに入ると、それにより合流線の信号を赤にする。この構造はパス信号でも通常の閉塞信号でも構築可能である。パス信号の場合は合流線側に1つの閉塞信号だけが必要で、閉塞信号の場合は列車が信号により停車しないようにするために未使用の線路でプレ信号が必要である。
+
+優先合流は最も短い列車に合わせて建築するようにしなければならない。中間地点にスペースがありすぎると、列車は合流信号を有効化せずにその区間を一時的に占有してしまい、合流する列車が本線に入ってきて交通を乱す。これはより長い優先権を細分化することで軽減することができる。
+[[File:en/Community/Junctionary/Flawed priority.png|none|frame|欠陥のある優先合流では優先度の低いスペースが多すぎると合流されてしまう。本線の列車が中央部にいるときに合流側の信号が青になっている。]]
+[[File:en/Community/Junctionary/Fixed priority.png|none|frame|長い優先合流が細分化されることで修正された例。5タイルの長さの列車が本線にいても合流側の信号は赤である。]]
+
+==高速合流==
+Sometimes you just don't want your traffic flow to get disrupted period.  Using ordinary priorities where a train can join track after braking means that if you want to prevent the joining train from causing other trains already moving at maximum speed to come near it while it's accelerating and force those trains to brake, you need to extend the length of the priority to accommodate the joining train's entire acceleration room needed to reach maximum speed from stationary.  Priorities can get extremely long and they also result in long gaps between trains on the merged track, lowering its efficient traffic capacity.
+
+[[File:en/Community/Junctionary/Full-length priority.png|none|frame|Length a regular priority needs to be in order to prevent any traffic disruption for these particular 3-tile trains.  If the back priority here were any shorter, the train behind the joining train would bump into it and be forced to brake as the joining train took time to accelerate to maximum speed itself.  All priority merges in reality also need a bit of prioritized track in front of the merge as well as behind in order to prevent the occurrence of a joining train approaching too close to another in front of it on the merged track.]]
+
+
+Instead, you can prevent a train from accessing the merge at all (and braking) if the priority is occupied.  Red two-way signals are the ultimate train pathfinding penalty in OpenTTD: a train will choose any other track option available to it in order to avoid one even if it contradicts its orders and ends up getting it lost.  You can use this to your advantage by disallowing trains from even attempting to access a prioritized merge (and ending up braking) if there is currently traffic running on it.  By placing a two-way signal at a merge with another track option continuing after it, trains will ignore the merge entirely when the priority signals that it is occupied and continue on their way using the other track option.
+[[File:en/Community/Junctionary/High-speed merge.png|none|frame|High-speed track merge.  A train will avoid merging when another is detected on the priority and the entry signal reads red, and instead will continue moving along the lower track.  The entry signal being two-way instead of one-way is the key.  Note how much shorter the track priority can be when trains can only join at full speed.  Necessary priority length is also not affected by the acceleration time of the trains like this; only train length determines it.]]
+
+An extra signaling mechanism is needed in order to prevent the occurrence of a train braking at the merge point.  Thus, pre-signals must be a part of these constructions.
+[[File:en/Community/Junctionary/High-speed merge flaw.png|none|frame|Flaw in high-speed merge design.  A train on the prioritized track entered the priority just after the merging train had already chosen the merging track pathway, due to the entry signal reading green when it was at the track split.  Now the merging train is forced to brake.]]
+[[File:en/Community/Junctionary/High-speed merge fix.png|none|frame|High-speed merge design fixed with an extra signaling mechanism.  An extra exit signal allows the entry signal at the merge to read green even when the other exit signal on the priority is red.  Moving the two-way entry signal half a tile further up is crucial for giving the train room to deactivate the exit signal monitoring its presence.  In effect, once the merging train passes a certain point near the merge, it signals to itself to keep the merge "unlocked", even when another train is on an early part of the track priority.]]
+
+By taking the alternative track for when a train does not enter the merge and looping it back on itself it is possible to give a train continuous opportunities to merge while keeping it in full-speed motion.
+[[File:en/Community/Junctionary/High-speed merge loop.png|none|frame|Looping the failure-to-join track back on itself.]]
+
+==Right-of-way Merging onto Dual Main Line==
+[[File:en/Community/Junctionary/Rightofwaymerge.png|none|frame|One method of merging onto dual main line without disrupting traffic.]]
+
+All signals are combo signals except at points A and B which are entry signals, and the top right, which are exit signals. Adjust the length of the signal chain according to train length and speed.
+
+Trains joining at point A must wait for the presignal chain along the inside lane to be clear. If a train arrives at point B before train A is out of the way then it will switch to the outer lane (at no speed penalty), but only if the presignal chain for the outside lane is clear. If it is not, the presignals at point B ensure that train B will take the line which clears first.
+
+The connection of the presignal chains at point C is optional. It allows A to continue if the presignal chain for the outside lane is clear, even if the inside lane is not, as the train on the inside will probably be able move to the outside to let A out. When the lane-change is north of Signal B, A will always wait for the inside lane to clear, regardless of the state of the outside lane.
+
+Other uses for this include [[en/Community/Junctionary/Right-of-way Lane Change]] and [[en/Manual/Building depots]].
+
+[[Category:ja/Manual/Train Junctions]]
