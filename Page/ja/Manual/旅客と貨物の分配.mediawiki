@@ -1,0 +1,59 @@
+[[Translation:en/Manual/Passenger and cargo distribution]]
+
+'''[[en/Manual/Base Set/Cargos/Passengers|旅客]]と[[en/Manual/Cargo|貨物]]の分配'''は以前は"'''Cargodist'''"と呼ばれており、旅客や郵便物、その他すべての貨物を特定の目的地に向かわせる機能である。貨物はそれらの目的地に向かう車両にのみ積載される。
+貨物分配はもともと[[en/Community/Patches/Patches|パッチ]]の機能だったが、OpenTTD 1.4.0より正式に実装された。
+
+==はじめに==
+
+元々のOpenTTDではある1か所で生み出された貨物を複数の目的地に分配するのは難しかった。そのようなことを実現するためには、それぞれの目的地ごとに異なる車両を利用するか、複雑な指令を組むかしかなかった。例えば街Aと街Bの間を往復する列車があったとしよう。それぞれの街にはいくつかのバス停からなるバス網があり、列車の駅もそれに含まれている。このようなとき、街Aのバス停や列車の駅から旅客を街Bのバス停や列車駅に届けたい、またはその逆を行いたいと考えたとする。元々のOpenTTDでは、街Aを走るバスが旅客を集め、列車の駅で転送することができる。その後、列車がその旅客を積載し、街Bの列車駅に転送する。さらに列車駅と統合されているバス停でバスが旅客を積載し、列車駅のバス停を中心としたスター型のバス網を組むことで、街Bの各バス停に旅客を輸送することができる。それぞれの車両は"転載して空荷のまま出発"の指示を持つことになり、この方法だと街Bの各バス停から街Aに向かうことはできないし、駅間や街中のバス停間で旅客の輸送ができない。もちろん、複雑な指令を組み合わせて追加のルートを走らせることで実現することはできる。しかし、駅や車両が増えるとこのような複雑なシステムを組むのは不可能に近くなる。
+
+Cargodistは転送の処理と旅客の目的地の選択を自動的に行う。上記の例のような"転載して空荷のまま出発"のような指示は必要ないし、スター型のバス網を組む必要もない。街Aや街Bのバス網は列車の駅が指令に含まれていればシンプルなもので構わない。旅客はそれぞれ自分がどの車両でどこに行きたいかを考えており、これにより駅でより多くの旅客が待って混雑しているのを見ることになりかもしれない。
+
+過去には様々なパッチによりこのような機能を実現しようとしていた。[[en/Community/Patches/Passenger and cargo destinations|Cargod'''e'''st]]プロジェクトとは対照的に、Cargod'''i'''stでは、貨物のルート設定と異なるルートを選択することによる貨物量のバランスを取ることは切り離せないものとみなされていたため、一緒に解決された。また、輸送需要の定義は、上記の問題を解決するための前提条件と見なされ、最初に処理される。[http://www.tt-forums.net/viewtopic.php?f=33&t=54253 YACD]との主な違いは、Cargodistはマップ全体ではなく、たどり着ける目的地のみ考慮し、パフォーマンス上の理由からルート計画全体を別のスレッドで事前に計算される。
+
+[http://www.tt-forums.net/viewtopic.php?f=33&t=41992&start=0 forum]にはさらに詳細の情報がある。もしCargodistに関して質問がある場合はtt-forumへ投稿して質問すると良い。(訳者注 : 英語のみ。最終投稿は2019年)
+
+==動作モード==
+[[File:en/Manual/Cargodist-overlays.png|frame|リンクグラフを表示したゲーム画面]]
+[[File:en/Manual/Cargodist-station.png|frame|駅情報ウィンドウ]]
+
+Cargodistでは貨物と旅客の分配について3つの異なるモードがある。設定にある"環境⇒貨物配送先"からどのモードを選択するか設定することができる。
+* "無効"では貨物は自動的に分配されなくなる。Cargodistを使用していないのと同じである。
+* "対称"では分配アルゴリズムは貨物や旅客を2つの駅間に同じ量を送ろうとする。これは常に上手くいくわけではない。一つの大きな駅がほかのすべての駅よりはるかに多くの旅客を集めている場合、対称な分配は不可能である。アルゴリズムの正確性には"対称分配での戻り量"の設定を変えることで影響を与えることができる。100%より小さい値にすると、１方向に向かう貨物より、ほかの方向に向かう貨物のほうが少なくなる。
+* "非対称"では貨物や旅客はネットワーク内で上記のような制限なく分配される。
+
+==小マップやメイン画面での機能追加==
+
+小マップとメイン画面にリンクグラフを重ねて表示することができる。これは駅と有効な輸送リンクを表示するものである。リンクは容量に対して運ばれている貨物量に応じて異なる色の線で表示される。黄色と赤の影は選択した貨物でCargodistが有効になっている場合にのみ表示され、リンクグラフの計算はそこで輸送されている貨物量が少なすぎる場合に使われる。白や薄い緑の影はそこで輸送されている貨物量が多すぎる場合に使われる。その場合、いくつかの車両をそのルートから引き上げることができる。このようなリンクの場合は、貨物を輸送した後に空荷で戻ってきていることを意味するためである。
+
+駅はプレイヤーの色の四角形で表示される。四角形がより大きいと、より多くの旅客や貨物が周辺の産業と家に生成、供給されていることを意味する。メイン画面のリンクグラフにの凡例は"マップ"メニューから開くことができる。そこではプレイヤーと貨物を選択することができる。小マップでのリンクグラフは自社のものに限られる。メニューに貨物を選択するための新しいサブメニューが追加されている。
+
+==駅情報ウィンドウの機能追加==
+The station GUI shows the sources, next hops and estimated destinations of the cargo waiting as well as those of the planned cargo flows through the station. Final destinations are only estimated. Don't expect each packet of cargo to go exactly that way. Cargo packets are never split for routing but they may be split to fit into vehicles of different sizes. That means it would be very hard to give the exact numbers here. In the long run everything is still sent to the proper destinations, though.
+
+You can group the cargo by source station, next hop and destination in any order with the "Group by" drop down in the top menu. The subgroups are opened and closed by clicking the little "+" and "-" buttons at the end of the line. You can sort entries within the groups and subgroups by the station they represent or by the amount of cargo displayed. The dropdown above the one for grouping order combines the selection of sort criteria with the selection of mode to be shown (planned or waiting cargo).
+
+==設定==
+
+When switching on automatic distribution for some cargo it will take a few game days until the cargo is actually distributed. This is because the distribution is periodically calculated and the effect can only be seen after the first calculation. The calculation is done based on link graphs. A link graph is a connected component for one cargo in your network. In the introductory example all stations in the towns A and B would form one link graph. If there is another bus network in a town C which isn't connected to A or B then that forms a different link graph. The more link graphs exist in a game the longer it takes until all of them are calculated.
+
+You can influence how often a new link graph calculation shall be started and how much time to allow for each calculation with the respective settings in the "Cargo Distribution" group of the advanced settings. Indirectly this determines the maximum number of link graphs to calculated in parallel at any time. Link graph calculations are done in separate threads, decoupled from the main game. Those threads are joined at predefined times to maintain network synchronization. For most games on most computers both the interval and the time settings can be decreased quite a bit to reduce the delay between changes to orders and reactions of the link graph. If you set them too low, the game will periodically "hang" while waiting for some link graph calculation thread to finish, though. The default settings are tailored to extremely large games on slow computers so that this never happens. There is another setting which determines the accuracy of link graph calculations. The more accurate the calculation the longer it takes to finish. If you change it you should balance it against the "time" setting.
+
+The setting for the effect of distance on demands determines how much more cargo is sent to nearby stations than to far away stations. You probably don't want to change the short path saturation settings, except for debugging purposes.
+
+==制限==
+
+Cargodist used to not take some orders with "unload all", "transfer", "no unloading" or "no loading" attributes into account when building the link graph. It still cannot estimate the capacity of related links correctly if you have both vehicles with such modifications and without them on the same route. It will find out if the orders allow cargo from any source to be transported on those links at all, though. That means you shouldn't be able to produce unroutable cargo with those orders.
+
+Conditional orders are problematic by definition. You can create an [http://en.wikipedia.org/wiki/Undecidable_problem undecidable problem] for the link graph creation algorithm by having a vehicle's orders depend on load percentage. The shape of the link graph determines which cargo a vehicle will load. The cargo loaded then determines which way it goes and that in turn determines the shape of the link graph. Some of the other conditions' outcomes are very hard to predict in advance without simulating the whole game up to the point when they are to be evaluated normally. The link graph creation and cargo routing algorithms handle that pragmatically and always load greedily. That means they'll load cargo for any station that can potentially be reached with the given conditionals and they won't unload cargo that goes to one of those stations.
+
+The algorithm used to evaluate the conditions and load/unload based on that but this strategy was suboptimal as the same cargo would be loaded and unloaded at the same station.
+
+With the latest changes (in OpenTTD 1.4) you can do things like this, without creating any problems:
+
+ Go to LOADING STATION
+ Go to DROP1
+ If load percentage equals 0 go to LOADING STATION
+ Go to DROP2
+ If load percentage equals 0 go to LOADING STATION
+ Go to DROP3
