@@ -103,67 +103,67 @@ Questa sezione mostra i fattori che influenzano la valutazione della stazione. T
 |-
 | 0 || 33 || 13%
 |-
-|rowspan="4"|Giorni dall'ultimo ritiro del carico <br> Moltiplica i giorni nella colonna "Condizione" per 4 se l'ultimo veicolo era una nave.<br><small>(Nota: se un veicolo era pronto per il ritiro del carico ma non c'era carico, è considerato comunque un ritiro merci)</small>|| 30 to 52,5 || 25 || 10%
+|rowspan="4"|Giorni dall'ultimo ritiro del carico <br> Moltiplica i giorni nella colonna "Condizione" per 4 se l'ultimo veicolo era una nave.<br><small>(Nota: se un veicolo era pronto caricare ma non c'era merce, è considerato comunque un ritiro merci)</small>||da 30 a 52,5 || 25 || 10%
 |-
-| 15 to 30 || 50 || 20%
+| da 15 a 30 || 50 || 20%
 |-
-| 7.5 to 15  || 95 || 37%
+| da 7.5 a 15  || 95 || 37%
 |-
-| less than 7.5 || 130 || 51%
+| meno di 7.5 || 130 || 51%
 |-
 |rowspan="6"|Unità di carico in attesa alla stazione || più di 1500 || -90 || -35%
 |-
-| 1001 to 1500 || -35 || -14%
+| da 1001 a 1500 || -35 || -14%
 |-
-| 601 to 1000 || 0 || 0%
+| da 601 a 1000 || 0 || 0%
 |-
-| 301 to 600 || 10 || 4%
+| da 301 a 600 || 10 || 4%
 |-
-| 101 to 300 || 30 || 12%
+| da 101 a 300 || 30 || 12%
 |-
 | meno di 100 || 40 || 16%
 |-
 |Statua nella città della stazione||Costruita||26|| 10%
 |-
-|Piccola campagna pubblicitaria||Stazioni entro 10 caselle dal centro città||+64|| +25%
+|Piccola campagna pubblicitaria||Influenza le stazioni entro 10 caselle dal centro città||+64|| +25%
 |-
-|Campagna pubblicitaria media||Stazioni entro 15 caselle dal centro città||+112|| +44%
+|Campagna pubblicitaria media||Influenza le stazioni entro 15 caselle dal centro città||+112|| +44%
 |-
-|Grande campagna pubblicitaria||Stazioni entro 15 caselle dal centro città||+160|| +63%
+|Grande campagna pubblicitaria||Influenza le stazioni entro 15 caselle dal centro città||+160|| +63%
 |-
-|Incidente stradale||Stazioni entro 22 caselle dall'incidente ||-160|| -63%
+|Incidente stradale||Influenza le stazioni entro 22 caselle dall'incidente ||-160|| -63%
 |-
-|Incidente ferroviario||Station within 30 tiles of crash ||-160|| -63%
+|Incidente ferroviario||Influenza le stazioni entro 30 caselle dall'incidente ||-160|| -63%
 |}
-Divide the total rating points by 255 to get the percent rating.  The maximum possible rating is 100%.  Advertising campaigns give an instant, temporary boost to ratings of nearby stations. The boost will gradually fall down to the calculated rating. 
+Dividere i punti di valutazione totali per 255 per ottenere la valutazione percentuale. La valutazione massima possibile è del 100%. Le campagne pubblicitarie danno un incremento istantaneo e temporaneo alle valutazioni delle stazioni vicine. Il bonus diminuirà gradualmente fino ad attestarsi valutazione calcolata.
 
-The amount of cargo that can be transported from an industry is fully reliant on the station rating. So if the amount of cargo transported from an industry is low, it is probably because the station rating is low, too. 
+La quantità di carico che può essere trasportata da un'industria dipende completamente dalla classificazione della stazione. Quindi, se la quantità di merci trasportate da un'industria è bassa, è probabilmente perché anche la valutazione della stazione è bassa.
 
-Every 2.5 days station ratings are computed; ratings can't change by more than 2 points per cycle, except after crashes.
+Ogni 2,5 giorni vengono calcolate le valutazioni delle stazioni; le valutazioni non possono cambiare di più di 2 punti per ciclo, tranne che dopo gli arresti anomali (crashes).
 
-'''Note:'''  The exact formula can be seen under "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3262 UpdateStationRating()]" in station_cmd.cpp. This uses some values calculated in "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/economy.cpp#L1595 LoadUnloadVehicle()]" in economy.cpp.
+'''Note:'''  La formula esatta può essere vista sotto "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3262 UpdateStationRating()]" in station_cmd.cpp. Questo utilizza alcuni valori calcolati in "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/economy.cpp#L1595 LoadUnloadVehicle()]" in economy.cpp.
 
-'''Note:'''  If the rating gets less than 50%, the station starts losing cargo.
+'''Nota:''' Se la valutazione scende al di sotto del 50%, la stazione inizia a perdere il carico.
 
-==Cargo delivery to stations==
-During each cycle of 2.5 days for each cargo type of the delivering industry a maximum of 2 stations can get cargo assigned. If there are more than 2 possible stations with the same maximum rating value for the current cargo type then it depends on internal ordering of the stations which ones get the cargo.
+==Consegna del carico alle stazioni==
+Per ogni ciclo di 2,5 giorni, per ogni tipo di carico e per ogni industria che lo consegna, un massimo di 2 stazioni possono prelevare il carico prodotto. Se ci sono più di 2 possibili stazioni con la stessa classificazione per il tipo di carico in questione, l'ottenimento del carico dipenderà dall'ordine interno delle stazioni.
 
-If there's only one possible station then the delivered amount is: produced_amount * station_rating_in_percent, rounded up to the next integer value.
+Se c'è solo una stazione possibile, l'importo consegnato è: importo_prodotto * valutazione_stazione_in_percentuale, arrotondato per eccesso al valore intero successivo.
 
-For two possible stations the calculation is more complex. First the rating in points of station 2 is divided by 2 for the further local calculations. The amount available to station 1 is calculated as follows: (station_rating_in_points1 * (amount + 1)) / (station_rating_in_points1 + station_rating_in_points2); for similar ratings this is about 2/3 of the production, it increases for larger differences. The result is subject to the same calculation as in the single station case. This is delivered to station 1. If station 1 doesn't get the full amount available to it then that part won't be transported at all. The remaining amount of the production, if any, is subject to the same calculation as in the single station case and delivered to station 2.
+Se invece ci sono due stazioni possibili il calcolo è più complesso. Innanzitutto, il punteggio della seconda stazione viene diviso per 2 per calcoli successivi. La quantità disponibile alla prima stazione è calcolata come segue: (valutazione_della_stazione1_in_punti * (importo + 1)) / (valutazione_stazione1_in_punti + valutazione_stazione2_in_punti); se le valutazione delle due stazioni sono simili si tratterà di circa i 2/3 della produzione che riceverà quella "vincitrice", la proporzione aumenta per differenze maggiori di valutazione tra le stazioni. Il risultato è soggetto allo stesso calcolo visto nel caso della stazione singola. Questo verrà consegnato alla prima stazione. Se la prima stazione non ottiene tutta la quantità disponibile, quella parte non verrà consegnata affatto. Il resto della produzione, se presente, è soggetto allo stesso calcolo del caso della singola stazione e consegnato alla seconda stazione.
 
-==Local authority rating==
-Ratings limit some player actions; they start at +500 and can change based on some actions.
+==Valutazione dell'autorità locale==
+Queste valutazioni limitano alcune azioni del giocatore; iniziano a +500 e possono cambiare in base ad alcune azioni. 
 
-Currently you can exploit the game by planting about 200 trees within a town's influence radius. You may need to clear an area first, in order to have somewhere to plant them, but planting 200 will raise even a minimum rating of -1000 to 220. If your rating is Mediocre or lower, planting 30 trees will approximately wipe out the rating penalty from building one station. Planting trees while at a rating of Very Good or better has no effect.
+Attualmente puoi sfruttare il gioco piantando circa 200 alberi nel raggio di influenza di una città. Potrebbe essere necessario prima ripulire un'area, in modo da avere un posto dove piantarli, ma piantarne 200 aumenterà anche una valutazione minima da -1000 a 220. Se il tuo punteggio è Mediocre o inferiore, piantare 30 alberi eliminerà approssimativamente la penalità data dalla valutazione e sarà possibile costruzione una stazione. Piantare alberi con un punteggio di Molto buono o migliore non ha alcun effetto.
 
 <table>
 <tr valign="top"><td style="background:none; border:0px">
 {| {{en/Wikitable}}
 |- style="background:#efefef"
-!Rating points!!Rating
+!punti valutazione!!Valutazione
 |-
-| -1000 to -400 || Atrocious <!--As of updated OpenTTD client-->
+| da -1000 a -400 || Terribile <!--As of updated OpenTTD client-->
 |-
 | -399 to -200 || Very Poor
 |-
