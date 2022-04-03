@@ -220,7 +220,19 @@ Un giocatore ha un punteggio di -300, (molto scarso), 2 stazioni attive e 1 staz
 
 Il codice per le valutazioni delle città è in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
 
-{{it/In attesa di traduzione}}
+==Generazione passeggeri e posta==
+Le città e la sede principale dell'azienda generano passeggeri e posta, mentre le piattaforme petrolifere generano solo passeggeri.
+
+===Generazione di passeggeri della città===
+In ogni elaborazione periodica (cioè ogni 256 tick), viene generato un valore casuale 0<=X<=255 per ogni casella casa. Se X non è inferiore alla popolazione della casella, non vengono generati passeggeri. In caso contrario, vengono generati X/8+1 passeggeri (arrotondati per difetto). Se è in corso una recessione, il numero di passeggeri generati viene dimezzato, ma questa divisione viene arrotondata per eccesso anziché per difetto. La generazione della posta avviene in modo simile, ma con un nuovo valore casuale e confrontando il moltiplicatore di generazione della posta anziché quello della popolazione. Vedi l'elenco completo dei valori predefiniti per HouseProps: [https://newgrf-specs.tt-wiki.net/wiki/DefaultHouseProps]
+
+===Sede aziendale===
+La sede principale della compagnia è una struttura unica che genera passeggeri e posta a seconda del suo livello che dipende a sua volta dalla valutazione delle prestazioni della compagnia.
+
+Le sedi aziendali delle società di livello superiore generano più passeggeri e posta, l'output della sede principale è distribuito uniformemente su tutte e quattro le caselle sulla base della singola casella secondo le seguenti formule:
+
+Passeggeri: 256 / 4 caselle / (6 - livello_sede_azienda  (un valore compreso tra 1 e 5) )
+Posta: 196 / 4 casella / (6 - livello_sede_azienda  (un valore compreso tra 1 e 5) )
 
 ==Produzione industriale==
 Di seguito è spiegato come il gioco determina la quantità di carico prodotta da un'industria al mese. La produzione delle materie prime avviene 8 o 9 volte al mese. (Succede ogni 256 tick. Ci sono 74 tick in un giorno e da 28 a 31 giorni in un mese ([https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/date_type.h#L30 date_type.h]). Ciò significa che solo circa il 9% delle industrie produrrà 9 volte in un 28 giorni di febbraio, ma circa il 96% delle industrie produrrà 9 volte in un mese di 31 giorni come marzo.) La produzione sarà sempre un multiplo di 8 o 9, a meno che l'industria non abbia cambiato produzione durante quel mese. 
@@ -261,9 +273,9 @@ In questa tabella sono elencate le possibili produzioni di partenza disciplinate
 |-
 |[[it/Manuale/Set base/Industrie/Falda acquifera]]||Acqua||da 48k a 152k l 
 |-
-|[[it/Manuale/Set base/Industrie/Fattoria]] sub-tropicale||Mais||da 40 a 128 t
+|[[it/Manuale/Set base/Industrie/Fattoria]] (sub-tropicale)||Mais||da 40 a 128 t
 |-
-|[[it/Manuale/Set base/Industrie/Falegnameria]]| sub-tropicale|Legname||da 180 a 225 t (se ci sono alberi)
+|[[it/Manuale/Set base/Industrie/Falegnameria]] (sub-tropicale)||Legname||da 180 a 225 t (se ci sono alberi)
 |-
 |colspan="5"|
 |-
@@ -287,9 +299,10 @@ In questa tabella sono elencate le possibili produzioni di partenza disciplinate
 ===Cambio di produzione===
 Ogni mese il gioco cambia casualmente alcune produzioni dell'industria.
 
+[[File:it/Manuale/Impostazioni tipo di economia.png]]
+
 ====Regole economia originale/simili a TTD====
-Di seguito è spiegato come funziona l'economia impostata con l'opzione '''Originale'''
-Per le mappe 256x256 è possibile una modifica al mese (solo un'industria cambia). Il numero cresce proporzionalmente alla dimensione della mappa dall'introduzione della funzione "Cambiamenti Giornalieri della Produzione" nella versione r14332
+Di seguito è spiegato come funziona l'economia impostata con l'opzione '''Originale'''. Per le mappe 256x256 è possibile una modifica al mese (solo un'industria cambia). Il numero cresce proporzionalmente alla dimensione della mappa dall'introduzione della funzione "Cambiamenti Giornalieri della Produzione" nella versione r14332
 
 *Come per l'economia morbida, le industrie consegnano il carico alle stazioni 8, 9 o 10 volte al mese (10 solo per le foreste con produzione di oltre 400 t). Tuttavia, le produzioni sono limitate a 6 livelli di produzione: minimo, basso, normale (con un gioco appena iniziato o se viene costruita una nuova industria), alto, alto x2 e massimo.
 
@@ -301,25 +314,23 @@ Le variazioni di produzione tra questi livelli sono una diminuzione del 50% (met
 **Una Miniera d'oro: minimo (12 o 18 sacchi/mese), basso (32 o 40), normale (56 o  63), alto (112 o 126), alto x2 (224 o 252) e massimo (448 o  504).
 
 Per semplificare le cose, diamo un'occhiata alle possibilità per le mappe 256x256 (max. 1 modifica al mese = max. 1 industria al mese cambia produzione):
-*La possibilità di un cambio di produzione ogni mese è:
 
-**50% per le industrie in contrazione (attualmente solo pozzi petroliferi nel clima temperato) o
-**50% per 1/3 di possibilità (=16,7%) che un altra industria (non solo tra in quelle in calo) modifichi la produzione.
+*La possibilità di un cambio di produzione ogni mese è:
+**50% per le industrie <code>only_decrease</code> (attualmente solo pozzi petroliferi nel clima temperato) o
+**50% per 1/3 di possibilità (=16,7%) che un altra industria (tra quelle non <code>only_decrease</code>) modifichi la produzione.
+
 
 *Se si verifica un cambiamento di produzione (~16.7% possibilità al mese):
-** Per un'industria che ha un servizio scarso o nullo (meno del 60% del suo carico viene trasportato): ''33%''' possibilità di aumento, '67%'' possibilità di diminuzione.
-** Per un settore che ha un buon servizio (superiore al 60%): ''67%'' possibilità di aumento', '33%'' possibilità di diminuzione.
+** Per un'industria che ha un servizio scarso o nullo (meno del 60% del suo carico viene trasportato): '''33%''' possibilità di aumento, '''67%''' possibilità di diminuzione.
+** Per un settore che ha un buon servizio (superiore al 60%): '''67%''' possibilità di aumento, '''33%''' possibilità di diminuzione.
 ** Non c'è bonus per un servizio eccellente con l'economia originale.
 
+
 *Per calcolare la possibilità di un cambiamento particolare, ovvero 50% * 1/3 * 33% = 5,56%:
-**Servizio scadente: il '''5,56%''' di una possibile modifica al mese è un aumento e l''''11,12%''' di una possibile modifica al mese è una diminuzione.
-**Buon servizio: '''11,12%''' che una possibile modifica al mese è un aumento e '''5,56%''' che una possibile modifica al mese è una diminuzione.
+**Servizio scadente: il '''5,56%''' di possibilità mensile che si verifichi un aumento e l''''11,12%''' che si verifichi una diminuzione.
+**Buon servizio: '''11,12%''' di possibilità mensile che si verifichi un aumento e il '''5,56%''' che si verifichi una diminuzione.
 
 ====Regole economia morbida====
-<!---
-:''Distinguish [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|Smooth economy]] (advanced setting) and [[en/Archive/Manual/Settings/Difficulty|Steady economy]] (difficulty setting)''
--->
-
 *La possibilità di un cambio di produzione al mese è del '''4,5%''', ad es. Il 4,5% delle industrie produttrici nell'elenco delle industrie cambierà produzione.
 
 *Se si verifica un cambio di produzione:
@@ -336,25 +347,41 @@ Per semplificare le cose, diamo un'occhiata alle possibilità per le mappe 256x2
 **Le industrie con produzioni molto basse, (p. es. 12-40 tonnellate al mese) subiranno variazioni maggiori.
 **Le industrie primarie producono merci 8 o 9 volte al mese (10 volte possibile solo per le foreste ad alta produzione). La produzione mensile è un "valore di base" dell'industria moltiplicato per 8 o 9 (o 10 per le foreste ad alta produzione). Ad esempio, il valore base di una miniera di carbone è di 15 tonnellate, quindi la produzione mensile è di 120 o 135 tonnellate. Questo valore di base è limitato a 255, quindi la produzione mensile massima per un settore è 2040 o 2295 (o, sempre per le sole foreste ad alta produzione, 2550). [http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
 
+=====Casi speciali=====
+*La produzione di passeggeri delle [[it/Manuale/Set base/Industrie/Piattaforma petrolifera|piattaforme petrolifere]] è limitata a 16 passeggeri per evento di produzione, il che significa un massimo di 144 o 128 passeggeri al mese. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L2597-L2602]
+*la [[it/Manuale/Set base/Industrie/Falegnameria]] tecnicamente non è un'industria di produzione ed è classificata come industria secondaria nel codice. Quattro o cinque volte al mese effettuerà verso l'esterno, in un'area di 40 x 40 con uno schema a spirale, la ricerca di un albero adulto da abbattere. Se lo trova la casella sarà [[en/Manual/Landscaping|demolished]] e verranno prodotte 45 tonnellate di legno. Ciò significa che ha una produzione massima di 225 o 180 tonnellate di legno al mese, che dipende esclusivamente dalla disponibilità degli alberi. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L1094-L1111]
+*Nel clima temperato [[it/Manuale/Set base/Industrie/Banca|le banche]] non cambiano mai la produzione (tranne che per gli 8 o 9 eventi produttivi al mese).
+
 ====Esempi====
 Se una miniera di carbone ha trasportato il 70% della sua produzione, c'è una possibilità del '''3%''' (4,5% * 67%) di un aumento della produzione del 3-23% e un '''1,5%''' possibilità (4,5% * 33%) di una diminuzione della produzione del 3-23% (ma in media del 13%).
 
-(1 + (0.03 - 0.015) * 0.13) ^12 - 1 = 0.0237 o '''2.37%'''
+(1 + (0.03 - 0.015) * 0.13) ^ 12 - 1 = 0.0237 o '''2.37%'''
 
 La miniera di carbone crescerà in media del 2,37% dopo il primo anno<br>
-(1.0237 ^20) - 1 = 59,6% dopo vent'anni<br>
-(1,0237 ^50) - 1 = 321,8% o '''3,22x''' dopo cinquant'anni<br>
-(1.0237 ^100) - 1 = '''10.35x''' dopo cento anni<br>
+(1.0237 ^ 20) - 1 = 59,6% dopo vent'anni<br>
+(1,0237 ^ 50) - 1 = 321,8% o '''3,22x''' dopo cinquant'anni<br>
+(1.0237 ^ 100) - 1 = '''10.35x''' dopo cento anni<br>
 
 Per un'industria con una valutazione superiore all'80%, esiste una possibilità di '''3,75%''' di aumento e una possibilità dello '''0,75%''' di diminuzione:<br>
-(1 + (.0375 - 0,0075) * .13) ^12 - 1 = 0,0478 o '''4,78%'''
+(1 + (.0375 - 0,0075) * .13) ^ 12 - 1 = 0,0478 o '''4,78%'''
 
 L'industria crescerà di circa il 4,78% dopo il primo anno<br>
-(1.0478 ^20) - 1 = '''2.54x''' dopo vent'anni<br>
-(1.0478 ^50) - 1 = '''10.32x''' dopo cinquant'anni<br>
-(1.0478 ^100) - 1 = '''106.62x''' dopo cento anni<br>
+(1.0478 ^ 20) - 1 = '''2.54x''' dopo vent'anni<br>
+(1.0478 ^ 50) - 1 = '''10.32x''' dopo cinquant'anni<br>
+(1.0478 ^ 100) - 1 = '''106.62x''' dopo cento anni<br>
 
-Per un buon servizio, ci vorranno in media  '''29,6 anni''' '''per raddoppiare'''; con un servizio eccellente, ci vorranno solo '''14,8 anni'''. Se durante il gioco un giorno dura 2,36 secondi, allora il '''per raddoppiare''' con un buon servizio è '''7,1 ore'''; con un servizio eccellente, il per raddoppiare è di ''3,6 ore'''. Perché la produzione passi da circa 100 a circa il massimo di 2100, occorrono quasi '''130 anni''' con un buon servizio e '''65 anni''' con un servizio eccellente.
+Per un'industria settata con la flag <code>only_decrease</code>, (attualmente Pozzi di petrolio nel clima temperato), c'è solo una possibilità di diminuzione del '''4,5%''':<br> 
+(1 + (0 - 0.045) * 0.13) ^ 12 - 1 = (0.99415) ^ 12 -1 = -0.068 o '''-6.8%'''
+
+L'industria calerà in media di circa il 6,8% dopo il primo anno.<br>
+(0.9320 ^ 20) = '''24.46%''' della produzione iniziale dopo vent'anni<br>
+(0.9320 ^ 50) = '''2.96%''' della produzione iniziale dopo cinquant'anni<br>
+
+ln(0.5) / ln(0.99415) = 118.1 mesi o '''9.84 anni''' è il tempo di dimezzamento di un'industria <code>only_decrease</code>.<br>
+ln(8 / 48) / ln(0.99415) = 305.9 mesi o '''25.4 anni''' è la vita media di un pozzo petrolifero nel clima temperato (che produce ad inizio partita, o quando viene costruito, 48 petrolio/mese).<br>
+ln(8 / 152) / ln(0.99415) = 501.8 mesi o '''41.8 anni''' è la vita media di un pozzo petrolifero nel clima temperato (che produce ad inizio partita, o quando viene costruito, 152 petrolio/mese).<br>
+
+Un'industria servita bene '''per raddoppiare''' impiega in media '''29,6 anni'''; con un servizio eccellente ci vorranno solo '''14,8 anni'''. Se durante il gioco un giorno dura 2,36 secondi, allora l'industria '''per raddoppiare''' con un buon servizio impiega '''7,1 ore'''; con un servizio eccellente, il tempo per raddoppiare è di '''3,6 ore'''. Perché la produzione passi da 100 a circa il massimo di 2100, occorrono quasi '''130 anni''' con un buon servizio e '''65 anni''' con un servizio eccellente.
 
 Tuttavia, nel gioco troverai industrie che cambiano il loro tasso di produzione in modo molto casuale. Va sottolineato che gli esempi di cui sopra sono veri solo quando si osservano molte industrie a lungo termine; le singole industrie possono discostarsi notevolmente da queste medie. Statisticamente, 6 industrie su 10 non passeranno da 100 a 2100, anche con il miglior servizio, in 65 anni. Circa 1 industria su 9 vedrà addirittura diminuire la propria produzione quando sarà servita al 60-80% di merci trasportate in 50 anni.
 
@@ -363,7 +390,7 @@ Per una maggiore reattività da parte delle industrie, adatta il numero di carri
 '''Nota:''' La formula esatta può essere vista sotto "[http://vcs.openttd.org/svn/browser/trunk/src/industry_cmd.cpp#L2373 ChangeIndustryProduction()]" in industry_cmd.cpp.
 
 
-
+{{it/In attesa di traduzione}}
 
 
 ==Tassi di pagamento alla consegna==
