@@ -223,47 +223,47 @@ Il codice per le valutazioni delle città è in town.h, town_cmd.c, tree_cmd.c, 
 {{it/In attesa di traduzione}}
 
 ==Produzione industriale==
-Here is how the game determines how much cargo an industry produces per month.  Production of raw materials happens 8 or 9 times per month.  (It happens every 256 ticks.  There are 74 ticks in a day, and 28 to 31 days in a month ([https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/date_type.h#L30 date_type.h]).  This means that only about 9% of industries will produce 9 times in a 28-day February, but about 96% of industries will produce 9 times in a 31-day month like March.)  The production will always be a multiple of 8 or 9, unless the industry changed production during that month.
+Di seguito è spiegato come il gioco determina la quantità di carico prodotta da un'industria al mese. La produzione delle materie prime avviene 8 o 9 volte al mese. (Succede ogni 256 tick. Ci sono 74 tick in un giorno e da 28 a 31 giorni in un mese ([https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/date_type.h#L30 date_type.h]). Ciò significa che solo circa il 9% delle industrie produrrà 9 volte in un 28 giorni di febbraio, ma circa il 96% delle industrie produrrà 9 volte in un mese di 31 giorni come marzo.) La produzione sarà sempre un multiplo di 8 o 9, a meno che l'industria non abbia cambiato produzione durante quel mese. 
 
-This table lists possible starting productions governed by the [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|smooth economy]] patch.  These numbers are multiples of 8.  When the game generates a new map, each industry produced 8 times and had no production changes in the December before the game started.
+In questa tabella sono elencate le possibili produzioni di partenza disciplinate dalla impostazione [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|smooth economy]]. Questi numeri sono multipli di 8. Quando il gioco genera una nuova mappa, ogni settore ha prodotto 8 volte e non ha subito modifiche alla produzione nel dicembre prima dell'inizio della partita.
 
 {| {{en/Wikitable}}
 |- style="background:#efefef"
-!Raw Material Industry!!Produced Cargo!!Initial production range
+!Industria di materie prime!!Carico prodotto!!Gamma di produzione iniziale
 |-
-|[[en/Manual/Base Set/Industries/Coal Mine]]||Coal||56 to 176
+|[[it/Manuale/Set base/Industrie/Miniera di carbone]]||Carbone||da 56 a 176 t
 |-
-|[[en/Manual/Base Set/Industries/Forest]]||Wood||48 to 152
+|[[it/Manuale/Set base/Industrie/Foresta]]||Legname||da 48 a 152 t
 |-
-|[[en/Manual/Base Set/Industries/Oil Rig]]||Oil||56 to 176
+|[[it/Manuale/Set base/Industrie/Piattaforma petrolifera]]||Petrolio|| da 56k a 176k l 
 |-
-|[[en/Manual/Base Set/Industries/Farm]]||Grain and Livestock||40 to 112
+|[[it/Manuale/Set base/Industrie/Fattoria]]||Grano e bestiame|| da 40 a 112 t/capi
 |-
-|[[en/Manual/Base Set/Industries/Copper Ore Mine]]||Copper Ore||56 to 112
+|[[it/Manuale/Set base/Industrie/Miniera di rame]]||Rame|| da 56 a 112 t
 |-
-|[[en/Manual/Base Set/Industries/Oil Wells]]||Oil||48 to 152
+|[[it/Manuale/Set base/Industrie/Pozzo petrolifero]]||Petrolio|| da 48k a 152k l
 |-
-|[[en/Manual/Base Set/Industries/Iron Ore Mine]]||Iron Ore||40 to 112
+|[[it/Manuale/Set base/Industrie/Miniera di ferro]]||Ferro|| da 40 a 112 t
 |-
-|[[en/Manual/Base Set/Industries/Bank]] (temperate)||Valuables||24 to 64
-|-
-|colspan="5"|
-|-
-|[[en/Manual/Base Set/Industries/Gold Mine]]||Gold||24 to 80
+|[[it/Manuale/Set base/Industrie/Banca]] (temperato)||Valori|| da 24 a 64 borse
 |-
 |colspan="5"|
 |-
-|[[en/Manual/Base Set/Industries/Diamond Mine]]||Diamonds||24 to 80
+|[[it/Manuale/Set base/Industrie/Miniera d'oro]]||Oro|| da 24 a 80 sacchi
 |-
-|[[en/Manual/Base Set/Industries/Fruit Plantation]]||Fruit||40 to 112
+|colspan="5"|
 |-
-|[[en/Manual/Base Set/Industries/Rubber Plantation]]||Rubber||40 to 112
+|[[it/Manuale/Set base/Industrie/Miniera di diamanti]]||Diamanti||da 24 a 80 sacchi
 |-
-|[[en/Manual/Base Set/Industries/Water Supply]]||Water||48 to 152
+|[[it/Manuale/Set base/Industrie/Frutteto]]||Frutta||da 40 a 112 t
 |-
-|[[en/Manual/Base Set/Industries/Farm]]||Maize||40 to 128
+|[[it/Manuale/Set base/Industrie/Piantagione di gomma]]||Gomma||da 40k a 112k l
 |-
-|[[en/Manual/Base Set/Industries/Lumber Mill]]||Wood||180 or 225 (if trees available)
+|[[it/Manuale/Set base/Industrie/Falda acquifera]]||Acqua||da 48k a 152k l 
+|-
+|[[it/Manuale/Set base/Industrie/Fattoria]] sub-tropicale||Mais||da 40 a 128 t
+|-
+|[[it/Manuale/Set base/Industrie/Falegnameria]]| sub-tropicale|Legname||da 180 a 225 t (se ci sono alberi)
 |-
 |colspan="5"|
 |-
@@ -282,90 +282,89 @@ This table lists possible starting productions governed by the [[en/Archive/Manu
 |[[en/Manual/Base Set/Industries/Sugar Mine]]||Sugar||40 to 128
 |}
 
-(To calculate this table, look under [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/table/build_industry.h#L1198 _origin_industry_specs] in table/build_industry.h for the industry and its cargo.  The sugar mine has <code>CT_SUGAR, 11</code>, so the production starts at 11.  Apply the formula from [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/industry_cmd.cpp#L1643 DoCreateNewIndustry()] in industry_cmd.cpp: multiply the production by a random integer from 128 to 383, then divide by 256, rounding down.  So 11 becomes 5 to 16.  Finally, multiply it by 8 to get 40 to 128.)
+(Per i calcoli di questa tabella vedi [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/table/build_industry.h#L1198 _origin_industry_specs] in table/build_industry.h per il tipo di industria e il suo relativo carico prosotto. La miniera di zucchero mostra <code>CT_SUGAR, 11</code>, quindi la produzione parte da 11. Applicare la formula da [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/industry_cmd.cpp#L1643 DoCreateNewIndustry()] in industry_cmd.cpp: moltiplicare la produzione per un numero intero casuale da 128 a 383, quindi dividere per 256, arrotondando per difetto. Quindi 11 diventa 5 a 16. Infine, moltiplicalo per 8 per ottenere 40 a 128.)
 
-===Production change===
-Each month the game randomly changes some industry productions.
-====Default / TTD-like Economy Rules====
-For 256x256 tile maps there is one change per month possible (only 1 industry changes). Number scales nicely with map size since the introduction of "Daily production changes" function in trunk (r14332). 
+===Cambio di produzione===
+Ogni mese il gioco cambia casualmente alcune produzioni dell'industria.
 
+====Regole economia originale/simili a TTD====
+Di seguito è spiegato come funziona l'economia impostata con l'opzione '''Originale'''
+Per le mappe 256x256 è possibile una modifica al mese (solo un'industria cambia). Il numero cresce proporzionalmente alla dimensione della mappa dall'introduzione della funzione "Cambiamenti Giornalieri della Produzione" nella versione r14332
 
-*As with smooth economy, industries produce cargo 8 or 9 times per month.
-However - productions are limited to 6 production levels: lowest, lower, normal (with a new game started or a new industry built), higher, 2x higher and the highest.
-Production changes between these levels are either a 50% decrease (half) or a 100% increase (double).
+*Come per l'economia morbida, le industrie consegnano il carico alle stazioni 8, 9 o 10 volte al mese (10 solo per le foreste con produzione di oltre 400 t). Tuttavia, le produzioni sono limitate a 6 livelli di produzione: minimo, basso, normale (con un gioco appena iniziato o se viene costruita una nuova industria), alto, alto x2 e massimo.
 
-*Examples:
-**A Coal Mine: lowest (32 or 40 t per month), lower (64 or 72), normal (120 or 135), higher (240 or 270), 2x higher (480 or 540) and the highest (960 or 1080).
-**A Forest:    lowest (32 or 64 t per month), lower (35 or 70), normal (78 or 117), higher (208 or 260), 2x higher (416 or 468) and the highest (832 or 936).
-**A Gold Mine: lowest (12 or 18 bags/month), lower (32 or 40), normal (56 or  63), higher (112 or 126), 2x higher (224 or 252) and the highest (448 or  504).
+Le variazioni di produzione tra questi livelli sono una diminuzione del 50% (metà) o un aumento del 100% (doppio).
 
+*Esempi:
+**Una Miniera di carbone: minimo (32 o 40 t ogni mese), basso (64 o 72), normale (120 o 135), alto (240 o 270), alto x2 (480 o 540) e massimo (960 o 1080).
+**Una Foresta: minimo (32 o 64 t ogni month), basso (35 o 70), normale (78 o 117), alto (208 o 260), alto x2 (416 o 468) e massimo (832 o 936).
+**Una Miniera d'oro: minimo (12 o 18 sacchi/mese), basso (32 o 40), normale (56 o  63), alto (112 o 126), alto x2 (224 o 252) e massimo (448 o  504).
 
-To make things simple, let's look what are the chances for 256x256 maps (max. 1 change per month = max. 1 industry per month changes production):
+Per semplificare le cose, diamo un'occhiata alle possibilità per le mappe 256x256 (max. 1 modifica al mese = max. 1 industria al mese cambia produzione):
+*La possibilità di un cambio di produzione ogni mese è:
 
-*The chance for a production change each month is:
-** 50% for only_decrease industry to decrease (currently only Temperate terrain Oil Wells) or
-** 50% for 1/3 chance (=16.7%) that other industry (non only_decrease) changes production.
+**50% per le industrie in contrazione (attualmente solo pozzi petroliferi nel clima temperato) o
+**50% per 1/3 di possibilità (=16,7%) che un altra industria (non solo tra in quelle in calo) modifichi la produzione.
 
+*Se si verifica un cambiamento di produzione (~16.7% possibilità al mese):
+** Per un'industria che ha un servizio scarso o nullo (meno del 60% del suo carico viene trasportato): ''33%''' possibilità di aumento, '67%'' possibilità di diminuzione.
+** Per un settore che ha un buon servizio (superiore al 60%): ''67%'' possibilità di aumento', '33%'' possibilità di diminuzione.
+** Non c'è bonus per un servizio eccellente con l'economia originale.
 
-*If a production change does occur (~16.7% chance per month):
-** For an industry that has poor or no service (less than 60% of its cargo is transported): '''33%''' chance of increase, '''67%''' chance of decrease.
-** For an industry that has good (greater than 60%) service: '''67%''' chance of increase, '''33%''' chance of decrease.
-** There is no bonus for excellent service with default economy.
+*Per calcolare la possibilità di un cambiamento particolare, ovvero 50% * 1/3 * 33% = 5,56%:
+**Servizio scadente: il '''5,56%''' di una possibile modifica al mese è un aumento e l''''11,12%''' di una possibile modifica al mese è una diminuzione.
+**Buon servizio: '''11,12%''' che una possibile modifica al mese è un aumento e '''5,56%''' che una possibile modifica al mese è una diminuzione.
 
-
-*To calculate the chance for a particular change, i.e. 50% * 1/3 * 33% = 5.56%:
-** Poor service: '''5.56%''' that 1 possible change per month is an increase and '''11.12%''' that 1 possible change per month is a decrease.
-** Good service: '''11.12%''' that 1 possible change per month is an increase and '''5.56%''' that 1 possible change per month is a decrease.
-
-====Smooth Economy Rules====
+====Regole economia morbida====
+<!---
 :''Distinguish [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|Smooth economy]] (advanced setting) and [[en/Archive/Manual/Settings/Difficulty|Steady economy]] (difficulty setting)''
+-->
 
-*The chance for a production change each month is '''4.5%''', i.e. 4.5% of producing industries from industry list change production.
+*La possibilità di un cambio di produzione al mese è del '''4,5%''', ad es. Il 4,5% delle industrie produttrici nell'elenco delle industrie cambierà produzione.
+
+*Se si verifica un cambio di produzione:
+** Per un'industria che ha un servizio scadente o inesistente (viene trasportato meno del 60% del suo carico): '''33%''' di possibilità di aumento, '''67%''' di possibilità di diminuzione
+** Per un'industria che offre un buon servizio (maggiore del 60%): '''67%''' di possibilità di aumento, '''33%''' di possibilità di diminuzione
+** Per un'industria che offre un servizio eccellente (maggiore dell'80%): '''83%''' di possibilità di aumento, '''17%''' di possibilità di diminuzione
+
+*Questi due fattori vengono moltiplicati insieme, ad es. 4,5% * 33% = 1,5%:
+** Servizio scadente: aumento dell''''1,5%''' e diminuzione del '''3,0%'''
+** Buon servizio: aumento del '''3.0%''' e diminuzione dell''''1.5%'''
+** Servizio eccellente: aumento del '''3,75%''' e diminuzione dello '''0,75%'''
+
+*Con l'opzione [[en/Archive/Manual/Settings/Smooth economy]] abilitata, le variazioni di produzione  mensili sono comprese tra il 3 e il 23%
+**Le industrie con produzioni molto basse, (p. es. 12-40 tonnellate al mese) subiranno variazioni maggiori.
+**Le industrie primarie producono merci 8 o 9 volte al mese (10 volte possibile solo per le foreste ad alta produzione). La produzione mensile è un "valore di base" dell'industria moltiplicato per 8 o 9 (o 10 per le foreste ad alta produzione). Ad esempio, il valore base di una miniera di carbone è di 15 tonnellate, quindi la produzione mensile è di 120 o 135 tonnellate. Questo valore di base è limitato a 255, quindi la produzione mensile massima per un settore è 2040 o 2295 (o, sempre per le sole foreste ad alta produzione, 2550). [http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
+
+====Esempi====
+Se una miniera di carbone ha trasportato il 70% della sua produzione, c'è una possibilità del '''3%''' (4,5% * 67%) di un aumento della produzione del 3-23% e un '''1,5%''' possibilità (4,5% * 33%) di una diminuzione della produzione del 3-23% (ma in media del 13%).
+
+(1 + (0.03 - 0.015) * 0.13) ^12 - 1 = 0.0237 o '''2.37%'''
+
+La miniera di carbone crescerà in media del 2,37% dopo il primo anno<br>
+(1.0237 ^20) - 1 = 59,6% dopo vent'anni<br>
+(1,0237 ^50) - 1 = 321,8% o '''3,22x''' dopo cinquant'anni<br>
+(1.0237 ^100) - 1 = '''10.35x''' dopo cento anni<br>
+
+Per un'industria con una valutazione superiore all'80%, esiste una possibilità di '''3,75%''' di aumento e una possibilità dello '''0,75%''' di diminuzione:<br>
+(1 + (.0375 - 0,0075) * .13) ^12 - 1 = 0,0478 o '''4,78%'''
+
+L'industria crescerà di circa il 4,78% dopo il primo anno<br>
+(1.0478 ^20) - 1 = '''2.54x''' dopo vent'anni<br>
+(1.0478 ^50) - 1 = '''10.32x''' dopo cinquant'anni<br>
+(1.0478 ^100) - 1 = '''106.62x''' dopo cento anni<br>
+
+Per un buon servizio, ci vorranno in media  '''29,6 anni''' '''per raddoppiare'''; con un servizio eccellente, ci vorranno solo '''14,8 anni'''. Se durante il gioco un giorno dura 2,36 secondi, allora il '''per raddoppiare''' con un buon servizio è '''7,1 ore'''; con un servizio eccellente, il per raddoppiare è di ''3,6 ore'''. Perché la produzione passi da circa 100 a circa il massimo di 2100, occorrono quasi '''130 anni''' con un buon servizio e '''65 anni''' con un servizio eccellente.
+
+Tuttavia, nel gioco troverai industrie che cambiano il loro tasso di produzione in modo molto casuale. Va sottolineato che gli esempi di cui sopra sono veri solo quando si osservano molte industrie a lungo termine; le singole industrie possono discostarsi notevolmente da queste medie. Statisticamente, 6 industrie su 10 non passeranno da 100 a 2100, anche con il miglior servizio, in 65 anni. Circa 1 industria su 9 vedrà addirittura diminuire la propria produzione quando sarà servita al 60-80% di merci trasportate in 50 anni.
+
+Per una maggiore reattività da parte delle industrie, adatta il numero di carri alla produzione industriale (per la produzione più bassa, dovresti usare due soli vagoni). Gli ordini [Pieno carico] vengono solitamente utilizzati per tali treni merci.
+
+'''Nota:''' La formula esatta può essere vista sotto "[http://vcs.openttd.org/svn/browser/trunk/src/industry_cmd.cpp#L2373 ChangeIndustryProduction()]" in industry_cmd.cpp.
 
 
-*If a production change does occur:
-** For an industry that has poor or no service (less than 60% of its cargo is transported): '''33%''' chance of increase, '''67%''' chance of decrease
-** For an industry that has good (greater than 60%) service: '''67%''' chance of increase, '''33%''' chance of decrease
-** For an industry that has excellent (greater than 80%) service: '''83%''' chance of increase, '''17%''' chance of decrease
 
 
-*These two are multiplied together, i.e. 4.5% * 33% = 1.5%:
-** Poor service: '''1.5%''' to increase and '''3.0%''' to decrease
-** Good service: '''3.0%''' to increase and '''1.5%''' to decrease
-** Excellent service: '''3.75%''' to increase and '''0.75%''' to decrease
-
-
-*With the [[en/Archive/Manual/Settings/Smooth economy]] option enabled, production changes per month are between 3 and 23%
-**Industries with very low productions, (ie. 12-40 tonnes per month) will have higher changes.
-**Primary industries produce cargo 8 or 9 times a month. Monthly production is an industries 'base value' multiplied times 8 or 9.  For example, the base value for a coal mine is 15 tons, so the monthly production is 120 or 135 tons. This base value is capped at 255, so the maximum possible monthly production for any industry is 2040 or 2295. [http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
-
-====Examples====
-If a coal mine has 70% of its output transported, there is a '''3%''' chance (4.5% * 67%) of a production increase from 3-23% and a '''1.5%''' chance (4.5% * 33%) of a production decrease from 3-23% (but 13% on average).
-
-(1 + (0.03 - 0.015) * 0.13) ^12 - 1 = 0.0237 or '''2.37%'''
-
-The coal mine will grow an average of 2.37% after the first year<br>
-(1.0237 ^20) - 1 = 59.6% after twenty years<br>
-(1.0237 ^50) - 1 = 321.8% or '''3.22x''' after fifty years<br>
-(1.0237 ^100) - 1 = '''10.35x''' after one hundred years<br>
-
-
-For an industry with rating of more than 80%, there is a '''3.75%''' chance of increase and '''0.75%''' chance of decrease:<br>
-(1 + (.0375 - 0.0075) * .13) ^12 - 1 = 0.0478 or '''4.78%'''
-
-The industry will grow approximately 4.78% after first year<br>
-(1.0478 ^20) - 1 = '''2.54x''' after twenty years<br>
-(1.0478 ^50) - 1 = '''10.32x''' after fifty years<br>
-(1.0478 ^100) - 1 = '''106.62x''' after one hundred years<br>
-
-For good service, it takes '''29.6 years''' on average '''to double'''; with excellent service, it takes '''14.8 years'''. If in the game's time a day is 2.36 seconds, then the '''doubling time''' with good service is '''7.1 hours'''; with excellent service, the doubling time is '''3.6 hours'''. For production to go from near bottom of 100 to near maximum of 2100 takes '''130 years''' with good service and '''65 years''' with excellent service.
-
-However, in game you will find industries changing their production rate very randomly. It must be stressed the above examples are only true when observing many industries over the long-term; individual industries may greatly deviate from these averages. Statistically speaking, 6 out of 10 industries will not go from 100 to 2100 even with the best service during 65 years. About 1 out of 9 industries will even lower their production when being served at 60-80% cargo transported for 50 years. 
-
-For more responsiveness from industries, adapt the number of wagons to industry production (for the lowest production, you should use two wagons). [Full Load] orders are usually used for such cargo trains.
-
-
-'''Note:'''  The exact formula can be seen under "[http://vcs.openttd.org/svn/browser/trunk/src/industry_cmd.cpp#L2373 ChangeIndustryProduction()]" in industry_cmd.cpp.
 
 ==Tassi di pagamento alla consegna==
 The amount you get paid for delivering cargo is based on 4 factors: the amount of cargo you deliver, the value of the cargo, the distance you deliver it, and how on-time you deliver it.
