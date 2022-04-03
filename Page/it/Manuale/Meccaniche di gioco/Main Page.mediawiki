@@ -1,9 +1,5 @@
-{{it/Traduzione|en/Manual/Game Mechanics/Main Page}}
-
 [[Translation:en/Manual/Game Mechanics/Main Page]]
 {{it/Manuale/Menu}}
-
-
 
 Qui puoi trovare informazioni su come OpenTTD calcola i dati in gioco.
 
@@ -11,8 +7,6 @@ Hai sempre voluto sapere come è stata costruita la valutazione della stazione? 
 
 ==Valutazione della Compagnia==
 Ogni parte della valutazione aziendale è una funzione lineare, ad es. guadagnare il 50% del target per una componente darà il 50% dei punti assegnati per quella componente. Laddove i componenti coinvolgano importi monetari, questi vengono convertiti nella valuta del gioco corrente; internamente questi importi vengono memorizzati come importo in sterline.
-
-
 
 {| {{en/Wikitable}}
 |- style="background:#efefef"
@@ -212,7 +206,6 @@ Ogni mese le valutazioni dei giocatori cambiano automaticamente:
 * La valutazione aumenta di 12 per ogni stazione che ha trasferito merci negli ultimi 50 giorni.
 * Il punteggio scende di 15 per ogni stazione che non ha trasferito merci negli ultimi 50 giorni.
 
-
 '''Esempi:'''<br>
 Un giocatore ha un punteggio di -300, (molto scarso), 2 stazioni attive e 1 stazione inattiva in una città.<br>
 5pti + 2 * 12pti - 15pti = 14 punti guadagnati al mese.<br>
@@ -319,12 +312,10 @@ Per semplificare le cose, diamo un'occhiata alle possibilità per le mappe 256x2
 **50% per le industrie <code>only_decrease</code> (attualmente solo pozzi petroliferi nel clima temperato) o
 **50% per 1/3 di possibilità (=16,7%) che un altra industria (tra quelle non <code>only_decrease</code>) modifichi la produzione.
 
-
 *Se si verifica un cambiamento di produzione (~16.7% possibilità al mese):
 ** Per un'industria che ha un servizio scarso o nullo (meno del 60% del suo carico viene trasportato): '''33%''' possibilità di aumento, '''67%''' possibilità di diminuzione.
 ** Per un settore che ha un buon servizio (superiore al 60%): '''67%''' possibilità di aumento, '''33%''' possibilità di diminuzione.
 ** Non c'è bonus per un servizio eccellente con l'economia originale.
-
 
 *Per calcolare la possibilità di un cambiamento particolare, ovvero 50% * 1/3 * 33% = 5,56%:
 **Servizio scadente: il '''5,56%''' di possibilità mensile che si verifichi un aumento e l''''11,12%''' che si verifichi una diminuzione.
@@ -388,10 +379,6 @@ Tuttavia, nel gioco troverai industrie che cambiano il loro tasso di produzione 
 Per una maggiore reattività da parte delle industrie, adatta il numero di carri alla produzione industriale (per la produzione più bassa, dovresti usare due soli vagoni). Gli ordini [Pieno carico] vengono solitamente utilizzati per tali treni merci.
 
 '''Nota:''' La formula esatta può essere vista sotto "[http://vcs.openttd.org/svn/browser/trunk/src/industry_cmd.cpp#L2373 ChangeIndustryProduction()]" in industry_cmd.cpp.
-
-
-{{it/In attesa di traduzione}}
-
 
 ==Tassi di pagamento alla consegna==
 L'importo che si riceve per la consegna del carico si basa su 4 fattori: la quantità di carico che consegnato, il valore del carico, la distanza dalla stazione in cui si è caricata la mercei e la puntualità della consegna.
@@ -473,7 +460,6 @@ L'importo che si riceve per la consegna del carico si basa su 4 fattori: la quan
 
 I valori iniziali di pagamento del carico si riferiscono alla consegna di 100 pezzi di carico a 1 casella. Il pagamento aumenta con l'inflazione man mano che la partita procede.
 
-
 Penali per ritardata consegna:
 *Per ogni giorno successivo al tempo di '''Consegna anticipata''' in cui consegni la merce, sei penalizzato dello 0,4%.
 *Per ogni giorno successivo al termine di '''Consegna in ritardo''' in cui consegni la merce, sei penalizzato di un ulteriore 0,4%.
@@ -519,27 +505,29 @@ Il risultato netto è che 100 km/ora sono ~3.6 caselle/giorno.
 *Gli aerei in panne volano a 320 km-ish/h.
 *La velocità di spostamento, al suolo, nell'aeroporto è di 150 km-ish/h.
 
+==== Automezzi ====
+*Gli automezzi accelerano a 37 km-ish/h/giorno.
+*Gli automezzi effettuano le curve a metà della loro velocità massima.
+*Gli automezzi accelerano di ulteriori 74 km-ish/h/giorno in discesa.
+*In salita, gli automezzi rallentano del 10% 4 volte per casella. Questo si bilancia con l'accelerazione a 34-ish km/h per tutti gli automezzi.
 
+(Nota: questo non si applica quando si utilizza l'impostazione '''modello di accelerazione realistica''' degli automezzi, vedi l'immagine sotto.)
 
+[[File:it/Manuale/Impostazioni accel realistica automezzi.png]]
 
-==== Road Vehicles ====
-*Road vehicles accelerate at 37 km-ish/h/day.
-*Road vehicles go around corners at half their max speed.
-*Road vehicles accelerate an additional 74 km-ish/h/day downhill.
-*When going uphill, road vehicles slow down 10% 4 times per tile.  This balances out with acceleration at 34-ish km/h for all road vehicles.
+==== Navi ====
+*Le navi accelerano a 37 km-ish/h/giorno.
+*Una nave "fermata" riprende istantaneamente la sua ultima velocità.
 
-(Note: This does not apply when using the improved road vehicle acceleration model.)
+==== Treni ==== 
+(con la [[en/Archive/Manual/Settings/Realistic acceleration|realistic train acceleration patch]] vedi immagine sotto)<br>
 
-==== Ships ====
-*Ships accelerate at 37 km-ish/h/day.
-*A "stopped" ship resumes its last speed instantly.
+[[File:it/Manuale/Impostazioni accel realistica treni.png]]
 
-==== Trains ==== 
-(with the [[en/Archive/Manual/Settings/Realistic acceleration|realistic train acceleration patch]])<br>
-*Trains are not affected going up or down hills if they are powerful enough.
-*Trains are limited to entering and exiting a depot at 61km/h.
-*Trains can make one 45° turn without slowing down.
-*When making two or more 45° turns in the same direction, the max speed is limited as follows:
+*I treni non ne sono influenzati, in salita o in discesa, se sono abbastanza potenti.
+*I treni sono limitati all'ingresso e all'uscita da un deposito a 61 km/h.
+*I treni possono effettuare una svolta di 45° senza rallentare.
+*Quando si effettuano due o più svolte di 45° nella stessa direzione, la velocità massima è limitata come segue:
 
 {| style="margin: 1em 1em 1em 0;"    <!-- begin nested tables -->
 |-
@@ -547,17 +535,17 @@ Il risultato netto è che 100 km/ora sono ~3.6 caselle/giorno.
 |    <!-- metric -->
 {| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #efefff;"
 |-
-!rowspan=2  style="background:#efefef"  | Curvature
-!colspan=3  style="background:#dfdfff"  | Max speed (km/h)
+!rowspan=2  style="background:#efefef"  | Curvatura
+!colspan=3  style="background:#dfdfff"  | velocità max (km/h)
 |-
-!   style="background:#dfdfff"      | Railroad
+!   style="background:#dfdfff"      | Ferrovia
 !   style="background:#dfdfff"      | Monorail
 !   style="background:#dfdfff"      | Maglev
 |-
-| style="background:#f8f8ff"    | 0 (90° turn)  
+| style="background:#f8f8ff"    | 0 (curva di 90°)  
 |    61||91||121
 |-
-| style="background:#f8f8ff"    | 1 (2x45° turn)
+| style="background:#f8f8ff"    | 1 (2 curve di 45°)
 |     88||132||176
 |-
 | style="background:#f8f8ff"    | 2
@@ -597,10 +585,10 @@ Il risultato netto è che 100 km/ora sono ~3.6 caselle/giorno.
 |    <!-- imperial -->
 {| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #ffefef;"
 |-
-!rowspan=2  style="background:#efefef"  | Curvature
-!colspan=3  style="background:#efdfdf"  | Max speed (mi/h)
+!rowspan=2  style="background:#efefef"  | Curvatura
+!colspan=3  style="background:#efdfdf"  | Velocità max (mi/h)
 |-
-!   style="background:#efdfdf"      | Railroad
+!   style="background:#efdfdf"      | Ferrovia
 !   style="background:#efdfdf"      | Monorail
 !   style="background:#efdfdf"      | Maglev
 |-
@@ -642,21 +630,25 @@ Il risultato netto è che 100 km/ora sono ~3.6 caselle/giorno.
 |}
 
 |}  <!-- end nested tables -->
-"Curvature" means the average number of wagons of the train between turns. However, very sharp turns (curvatures 0 and 1) are not averaged out in longer trains.
+'''Curvatura''' indica il numero medio di vagoni del treno tra le curve. Tuttavia, le curve molto strette (curvature 0 e 1) non vengono calcolate in media nei treni più lunghi.
 
-*New railtypes can specify custom maximum curve speeds in the same steps as the three default types in the table.
-*Tilting train gain an additional bonus of 20% on the maximum speed.
-*Train acceleration and max speed are affected by engine power, maximum tractive effort (all engines and powered wagons combined), current speed, air drag, total train mass, and wagons/engines on slopes.
-*Non maglev train Acceleration spreadsheet can be found on tt-forums: [http://www.tt-forums.net/viewtopic.php?f=31&t=55972&p=960678#p960672 tt-forums]
-*Braking is twice acceleration except when entering a depot or a station.
-[[File:en/Manual/Game Mechanics/Speed-limits.png]]
+*I nuovi tipi di binari possono specificare velocità massime di curva personalizzate negli stessi passaggi dei tre tipi predefiniti nella tabella.
+*Il treno inclinabile ottiene un bonus aggiuntivo del 20% sulla velocità massima.
+*L'accelerazione e la velocità massima del treno sono influenzate dalla potenza del motore, dallo sforzo di trazione massimo (all engines and powered wagons combined), dalla velocità attuale, dalla resistenza aerodinamica, dalla massa totale del treno e dai vagoni/motrici sui pendii (cioè quando una parte del convoglio si trova ancora su un pendio e il resto su terreno pianeggiante, questa pozione di convoglio influisce sull'accelerazione "tirando indietro" (rallentando) se in salita e "spingendo in avanti" (accelerando) se in discesa).
+*Il foglio di calcolo dell'accelerazione del treno non maglev può essere trovato su [http://www.tt-forums.net/viewtopic.php?f=31&t=55972&p=960678#p960672 tt-forums]: 37 *(0,55 * Potenza/Velocità - 1,3 * Peso + 60 * #cazzozza + 0,0035 * Peso * Vitesse + 0,24 * Velocità^2 - 60 * Peso delle vetture in salita + 60 * Peso delle vetture in discesa) / Peso (km/h/giorno)
+Accelerazione di un treno MagLev = 37 * (0,022 * Potenza - 0,24 * Velocità^2 - 60 * Peso delle vetture in salita + 60 * Peso delle vetture in discesa) / Peso (km/h/giorno)  
+*La frenata è il doppio dell'accelerazione, tranne quando si entra in un deposito o in una stazione.
+I limiti di velocità si applicano solo quando tutte le svolte sono coprese nella lunghezza del treno, vedi [[it/Manuale/Costruzione binari#connessione-a-45| connessione a 45°]] e [[it/Community/Curve#regole-di-base|curve]]. L'immagine sotto mostra gli effetti di quanto detto in precedenza:
 
-''See also: [[en/Archive/Manual/Settings/Realistic acceleration]] and [[en/Community/Corners]].''
+[[File:en/Manual/Game Mechanics/Speed-limits.png|center|frame| Il treno 1 affronta le svolte contemporaneamente perchè la sua lunghezza è superiore a quella del tracciato con le svolte e subisce un rallentamento di 70 km/h rispetto al treno 2, che essendo più corto del tracciato delle svolte non me risente e viaggia alla massima velocità.]]
 
-See ground_vehicle.cpp, aircraft_cmd.cpp, roadveh_cmd.cpp, ship_cmd.cpp, train_cmd.cpp, vechicle.cpp for code.
+Vedi ground_vehicle.cpp, aircraft_cmd.cpp, roadveh_cmd.cpp, ship_cmd.cpp, train_cmd.cpp, vechicle.cpp per il codice.
 
-As of OpenTTD 1.6.1, given power in hp, max tractive effort in kN, total weight of the train in tonnes, the number train parts (engines and wagons), the air drag value of the first engine in the train (NewGRF setting, defaults to <code>min(192,max(1,floor(2048/max_speed)))</code>, meaning faster trains are built more aerodynamically), the combined weight of any train parts (engines or wagons) currently on an up-slope, the combined weight of any train parts (engines or wagons) currently on a down-slope, the slope steepness (game setting [1-10], default 3), and the current speed of the train in km/h, the acceleration of a non-maglev train can be calculated as follows:
+A partire da OpenTTD 1.6.1, data la potenza in CV, lo sforzo di trazione massimo in kN, il peso totale del treno in tonnellate, il numero di parti del treno (motrici e vagoni), il valore della resistenza aerodinamica della prima motrice del treno
 
+(Impostazione NewGRF, il valore predefinito è <code>min(192,max(1,floor(2048/max_speed)))</code>, il che significa che i treni più veloci sono costruiti in modo più aerodinamico), il peso combinato di qualsiasi parte del treno (motrici o vagoni) attualmente in salita, il peso combinato di tutte le parti del treno (motori o vagoni) attualmente in discesa, la ripidità della pendenza (impostazione di gioco [1-10], default 3) e la velocità attuale del treno in km/h, l'accelerazione di un treno non maglev può essere calcolata come segue:
+
+<code>
 ; force = min((max_te * 1000), floor((power * 746) / (current_speed * 5/18)))    [N]
 ; slope_force = weight_on_upslope * slope_steepness * 100 - weight_on_downslope * slope_steepness * 100    [N]
 ; axle_friction = total_weight * 10    [N]
@@ -664,18 +656,21 @@ As of OpenTTD 1.6.1, given power in hp, max tractive effort in kN, total weight 
 ; air_drag_coefficient = 14 * floor(air_drag_value * (1 + number_of_parts * 3/20)) / 1000
 ; air_drag = floor(air_drag_coefficient * current_speed^2)   [N]
 ; acceleration = (force - (slope_force + axle_friction + rolling_friction + air_drag)) / (total_weight * 4) [256th of a km/h per half-tick]
+</code>
 
-Note: air_drag_coefficient is twice that if any part of the train is in a tunnel
+Nota: air_drag_coefficient è il doppio se una parte del treno si trova in un tunnel
 
-Given the same values, the equilibrium speed, eg the speed the train would eventually settle on if the same conditions continued indefinitely, can be calculated as follows [Assuming a constant <code>rolling_friction</code> (ie the speed stays below 512 km/h), and ignoring the flooring of <code>force</code> and <code>air_drag</code> to an integral value]:
+Dati gli stessi valori, la velocità di equilibrio, ad esempio la velocità alla quale il treno si stabilirebbe se le stesse condizioni continuassero indefinitamente, può essere calcolata come segue (Supponendo un <code>rolling_friction</code> costante - cioè la velocità rimane al di sotto di 512 km/h - e ignorando il floor di <code>force</code> e <code>air_drag</code> a un valore intero):
 
+<code>
 ; p = (slope_force + axle_friction + rolling_friction) / air_drag_coefficient
 ; q = (-power * 746 * 18/5) / air_drag_coefficient
 ; C = (27/2*q + ((27/2*q)^2 + 27*p^3)^(1/2))^(1/3)
 ; equilibrium = min(max_speed, p/C - C/3, max(0, max_te * 1000 / air_drag_coefficient - p)^(1/2))
+</code>
 
 == Crescita delle città ==
 
-Vedi [[it/Città#crescita-delle-citta|Crescita delle città]].
+Vedi [[it/Manuale/Città#crescita-della-citta|Crescita delle città]].
 
 [[Category:it/Manuale/Giocare]]
