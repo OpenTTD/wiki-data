@@ -1,59 +1,197 @@
 {{it/Manuale/Menu}}
 {{it/Manuale/Settaggi/MenuImp}}
 [[File:it/Manuale/Impostazioni generazione mondo.png|thumb|343px|right|La sezione ''Generazione del mondo''.]]
-La sezione '''Generazione del mondo''' è l'undicesima dellalbero delle impostazioni di gioco. Permette di gestire le impostazioni predefinite per la generazione delle mappe come la loro dimensione, clima e morfologia, dimensioni e diffusione delle aree marine ed acquatichee ed ancora alcuni parametri per le città, i veicoli e l'economia, infine la durata della partita.
+La sezione '''Generazione del mondo''' è l'undicesima dellalbero delle impostazioni di gioco. Permette di gestire le impostazioni predefinite per la generazione delle mappe come la loro dimensione, clima e morfologia, dimensioni e diffusione delle aree marine ed acquatiche ed ancora alcuni parametri per le città, i veicoli e l'economia, infine la durata della partita.
 ==Storia==
+Questa sezione fu introdotta con la versione ''1.5.0-beta1''. La maggior parte delle impostazioni presenti duplicano quelle presenti anche nella finestra per la generazione di una nuova partita, introdotta con la versione ''0.5.0-RC1'', mentre altre ancora erano presenti nella originaria GUI per la scelta del livello di difficoltà.
 ==Impostazioni disponibili==
 Ci sono 17 impostazioni che gestisce questa sezione:
 *'''Generazione del mondo'''
 **[[it/Manuale/Settaggi/Generazione del mondo#paesaggio|Paesaggio]]
-**Generatore terreno
-**Tipo di terreno
-**Irregolarità del terreno
-**Varietà del terreno
-**Aree innevate
-**Altezza delle nevi perenni
-**Aree desrtiche
-**Quantità di fiumi
-**Algoritmo di piazzamento degli alberi
-**Automezzi
-**Città che diventano metropoli
-**Moltiplicatore iniziale dimensione metropoli
-**Disposizione delle strade per le nuove città
-**Densità delle industrie
+**[[it/Manuale/Settaggi/Generazione del mondo#generatore-terreno|Generatore terreno]]
+**[[it/Manuale/Settaggi/Generazione del mondo#tipo-di-terreno|Tipo di terreno]]
+**[[it/Manuale/Settaggi/Generazione del mondo#irregolarita-del-terreno|Irregolarità del terreno]]
+**[[it/Manuale/Settaggi/Generazione del mondo#varieta-del-terreno|Varietà del terreno]]
+**[[it/Manuale/Settaggi/Generazione del mondo#aree-innevate|Aree innevate]]
+**[[it/Manuale/Settaggi/Generazione del mondo#altezza-delle-nevi-perenni|Altezza delle nevi perenni]]
+**[[it/Manuale/Settaggi/Generazione del mondo#aree-desertiche|Aree desertiche]]
+**[[it/Manuale/Settaggi/Generazione del mondo#quantita-di-fiumi|Quantità di fiumi]]
+**[[it/Manuale/Settaggi/Generazione del mondo#algoritmo-di-piazzamento-degli-alberi|Algoritmo di piazzamento degli alberi]]
+**[[it/Manuale/Settaggi/Generazione del mondo#automezzi|Automezzi]]
+**[[it/Manuale/Settaggi/Generazione del mondo#citta-che-diventano-metropoli|Città che diventano metropoli]]
+**[[it/Manuale/Settaggi/Generazione del mondo#moltiplicatore-iniziale-dimensione-metropoli|Moltiplicatore iniziale dimensione metropoli]]
+**[[it/Manuale/Settaggi/Generazione del mondo#disposizione-delle-strade-per-le-nuove-citta|Disposizione delle strade per le nuove città]]
+**[[it/Manuale/Settaggi/Generazione del mondo#densita-delle-industrie|Densità delle industrie]]
 **Metti in pausa all'inizio di una nuova partita
 **Punteggi a fine anno
 
 ==Generazione del mondo==
 ===Paesaggio===
-<!-- 
-{{it/Funzione|1.1|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 1.1.0#1-1-0-beta1-2010-12-24|1.1.0-beta1]] FS#4292, r21480)}}
-Seleziona quali azioni si possono compiere mentre la partita è in pausa.
-
+{{it/Funzione|1.5|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 1.5.0#1-5-0-beta1-2014-12-24|1.5.0-beta1]])}}
+I paesaggi definiscono scenari predefiniti di gioco. Differiscono per i carichi disponibili e per i requisiti di crescita delle città. Tuttavia NewGRF e Script offrono possibilità di controllo più fine su questi aspetti.
+<pre style="width: 50%">Impostazione che duplica quelle presenti nella GUI principale e in quella per la generazione di una nuova partita. In pratica corrisponde alle immagini cliccabili per selezionare il tipo di paesaggio.</pre>
 :''Possibili impostazioni:''
-*<span style="color:red">'''Nessuna'''</span>
-*<span style="color:darkorange">'''Tutte tranne quelle di costruzione'''</span>
-*<span style="color:darkorange">'''Tutte tranne quelle di modifica del terreno'''</span>
-*<span style="color:#00693E">'''Tutte'''</span>
+*<span style="color:#00693E">'''Paesaggio "temperato"'''</span>
+*<span style="color:#00693E">'''Paesaggio "subartico"'''</span>
+*<span style="color:#00693E">'''Paesaggio "subtropicale"'''</span>
+*<span style="color:#00693E">'''Paesaggio "città dei giocattoli"'''</span>
 :''Tipo:'' '''impostazione di gioco''' 
-:''Valore predefinito:'' <span style="color:darkorange">'''Tutte tranne quelle di costruzione'''</span>  
-:''In Openttd.cfg config file:'' ([construction] command_pause_level = <0|1|2|3>) ''predefinito :'' '''1'''
+:''Valore predefinito:'' <span style="color:#00693E">'''Paesaggio "temperato"'''</span>  
+:''In Openttd.cfg config file:'' ([game_creation] landscape = <temperate|arctic|tropic|toyland>) ''predefinito :'' '''temperate'''
 {{en/-}}
--->
-<!-- <pre style="width: 50%"></pre> -->
 ===Generatore terreno===
+{{it/Funzione|0.5|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 0.5.0#0-5-0-rc1-2006-12-21|0.5.0-RC1]] r5946)}}
+Il generatore originale dipende dal pacchetto grafico di base e si limita a comporre insieme frammenti di paesaggio di forma fissa. TerraGenesis è un generatore basato sul Rumore di Perlin che offre impostazioni più fini.
+<pre style="width: 50%">Impostazione che duplica quella presente nella GUI per la generazione di una nuova partita.</pre>
+:''Possibili impostazioni:''
+*<span style="color:blue">'''Originale'''</span>
+*<span style="color:#00693E">'''TerraGenesis'''</span>
+:''Tipo:'' '''impostazione di gioco''' 
+:''Valore predefinito:'' <span style="color:#00693E">'''TerraGenesis'''</span>  
+:''In Openttd.cfg config file:'' ([game_creation] land_generator = <0|1>) ''predefinito :'' '''1'''
+{{en/-}}
 ===Tipo di terreno===
+{{it/Funzione|0.5|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 0.5.0#0-5-0-rc1-2006-12-21|0.5.0-RC1]] r5946)}}
+(Solo con TerraGenesis) Tipo di dislivelli presenti nel paesaggio.
+<pre style="width: 50%">Impostazione che duplica quella presente nella GUI per la generazione di una nuova partita. Proviene dalla originaria GUI ''Livello di difficoltà''</pre>
+:''Possibili impostazioni:''
+*<span style="color:#00693E">'''Molto pianeggiante'''</span>
+*<span style="color:#00693E">'''Pianeggiante'''</span>
+*<span style="color:darkorange">'''Collinare'''</span>
+*<span style="color:red">'''Montuoso'''</span>
+*<span style="color:red">'''Alpino'''</span>
+*<span style="color:darkgoldenrod">'''Personalizzato'''</span>
+:''Tipo:'' '''impostazione di gioco''' 
+:''Valore predefinito:'' <span style="color:#00693E">'''Pianeggiante'''</span>  
+:''In Openttd.cfg config file:'' ([difficulty] terrain_type = <0|1|2|3|4|5>) ''predefinito :'' '''1'''
+{{en/-}}
 ===Irregolarità del terreno===
+{{it/Funzione|0.5|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 0.5.0#0-5-0-rc1-2006-12-21|0.5.0-RC1]] r5946)}}
+(Solo con TerraGenesis) Seleziona la frequenza delle colline. I paesaggi morbidi presentano poche colline di forma allargata. I paesaggi accidentati hanno molte colline, che potrebbero apparire ripetitive.
+<pre style="width: 50%">Impostazione che duplica quella presente nella GUI per la generazione di una nuova partita, qui però ha mantenuto l'originaria denominazione ''Levigatezza''.</pre>
+:''Possibili impostazioni:''
+*<span style="color:#00693E">'''Molto morbido'''</span>
+*<span style="color:#00693E">'''Morbido'''</span>
+*<span style="color:darkorange">'''Accidentato'''</span>
+*<span style="color:red">'''Molto accidentato'''</span>
+:''Tipo:'' '''impostazione di gioco''' 
+:''Valore predefinito:'' <span style="color:#00693E">'''Morbido'''</span> 
+:''In Openttd.cfg config file:'' ([game_creation] tgen_smoothness = <0|1|2|3>) ''predefinito :'' '''1'''
+{{en/-}}
 ===Varietà del terreno===
+{{it/Funzione|1.5|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 1.5.0#1-5-0-beta1-2014-12-24|1.5.0-beta1]])}}
+(Solo con TerraGenesis) Determina in quale misura la mappa affianca aree montuose ed aree pianeggianti. Poiché questa impostazione agisce abbassando progressivamente la quota del terreno, le altre impostazioni dovrebbero essere impostate per un terreno montuoso.
+<pre style="width: 50%">Impostazione che duplica quella presente nella GUI per la generazione di una nuova partita.</pre>
+:''Possibili impostazioni:''
+*<span style="color:slategrey">'''Nessuna'''</span>
+*<span style="color:#00693E">'''Molto bassa'''</span>
+*<span style="color:#00693E">'''Bassa'''</span>
+*<span style="color:darkorange">'''Media'''</span>
+*<span style="color:red">'''Alta'''</span>
+*<span style="color:darkred">'''Molto alta'''</span>
+:''Tipo:'' '''impostazione di gioco''' 
+:''Valore predefinito:'' <span style="color:slategrey">'''Nessuna'''</span> 
+:''In Openttd.cfg config file:'' ([game_creation] variety = <0|1|2|3|4|5>) ''predefinito :'' '''0'''
+{{en/-}}
 ===Aree innevate===
+{{it/Funzione|0.5|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 0.5.0#0-5-0-rc1-2006-12-21|0.5.0-RC1]])}}
+Regola la quantità approssimativa di neve presente nel paesaggio subartico. La neve influisce anche sulla generazione dell'industria e sui requisiti di crescita della città. Si può impostare solo durante la generazione della mappa o nelle impostazioni prima dell'inizio di una nuova partita. La terra appena sopra il livello del mare non è mai innevata.
+<pre style="width: 50%">Impostazione che duplica quella presente nella GUI per la generazione di una nuova partita nel paesaggio subartico.</pre>
+:''Possibili impostazioni:''
+*da <span style="color:red">'''0%'''</span> fino al <span style="color:#00693E">'''100%'''</span>
+:''Tipo:'' '''impostazione di gioco''' 
+:''Valore predefinito:'' <span style="color:#00693E">'''40%'''</span>
+:''In Openttd.cfg config file:'' ([game_creation] snow_coverage = <0|1...100>) ''predefinito :'' '''40'''
+{{en/-}}
 ===Altezza delle nevi perenni===
-===Aree desrtiche===
+{{it/Funzione|0.5|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 0.5.0#0-5-0-rc1-2006-12-21|0.5.0-RC1]])}}
+Determina la quota alla quale appare la neve nei paesaggi subartici. La neve ha anche l'effetto di influenzare la generazione delle industrie e i requisiti per la crescita delle città. Può essere modificato solo tramite l'Editor di scenari o altrimenti calcolato tramite "Aree innevate".
+<pre style="width: 50%">Dalla versione ''1.11.0'' #8991 è stata sostituita dall'impostazione ''Aree innevate'' che la determina in automatico, per cui non è più possibile impostarla in maniera indipendente se non tramite l'editor di scenari.</pre>
+:''Possibili impostazioni:''
+*<span style="color:slategrey">'''Calcolata in automatico tramite "Aree innevate"'''</span>
+:''Tipo:'' '''impostazione di gioco''' 
+:''Valore predefinito:'' <span style="color:#00693E">'''-'''</span>
+:''In Openttd.cfg config file:'' ([game_creation] snow_line_height = <-|->) ''predefinito :'' '''-'''
+{{en/-}}
+===Aree desertiche===
+{{it/Funzione|1.5|float=right|text=(dalla 1.11.0 #8891)}}
+Regola la quantità approssimativa di deserto nei paesaggi tropicali. Il deserto influenza anche la generazione di industrie. Si può impostare solo durante la generazione della mappa o nelle impostazioni prima dell'inizio di una nuova partita.
+<pre style="width: 50%">Impostazione che duplica quella presente nella GUI per la generazione di una nuova partita nel paesaggio subtropicale.</pre>
+:''Possibili impostazioni:''
+*da <span style="color:red">'''0%'''</span> fino al <span style="color:#00693E">'''100%'''</span>
+:''Tipo:'' '''impostazione di gioco''' 
+:''Valore predefinito:'' <span style="color:#00693E">'''50%'''</span>
+:''In Openttd.cfg config file:'' ([game_creation] desert_coverage = <0|1...100>) ''predefinito :'' '''50'''
+{{en/-}}
 ===Quantità di fiumi===
+{{it/Funzione|1.2|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 1.2.0#1-2-0-beta1-2011-12-24|1.2.0-beta1]] r22767)}}
+Imposta la quantità di fiumi da generare.
+<pre style="width: 50%">Impostazione che duplica quella presente nella GUI per la generazione di una nuova partita.</pre>
+:''Possibili impostazioni:''
+*<span style="color:red">'''Nessuno'''</span>
+*<span style="color:#00693E">'''Pochi'''</span>
+*<span style="color:#00693E">'''Normali'''</span>
+*<span style="color:#00693E">'''Molti'''</span>
+:''Tipo:'' '''impostazione di gioco''' 
+:''Valore predefinito:'' <span style="color:#00693E">'''Normali'''</span>
+:''In Openttd.cfg config file:'' ([game_creation] amount_of_rivers = <0|1|2|3>) ''predefinito :'' '''2'''
+{{en/-}}
 ===Algoritmo di piazzamento degli alberi===
+{{it/Funzione|0.5|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 0.5.0#0-5-0-rc1-2006-12-21|0.5.0-RC1]])}}
+Seleziona la modalità di distribuzione degli alberi sulla mappa: "Originale" pianta gli alberi spargendoli in modo uniforme, "Migliorato" li pianta in gruppi.
+<pre style="width: 50%">Impostazione che duplica quella presente nella GUI per la generazione di una nuova partita.</pre>
+:''Possibili impostazioni:''
+*<span style="color:red">'''Nessuno'''</span>
+*<span style="color:blue">'''Originale'''</span>
+*<span style="color:#00693E">'''Migliorato'''</span>
+:''Tipo:'' '''impostazione di gioco''' 
+:''Valore predefinito:'' <span style="color:#00693E">'''Migliorato'''</span>
+:''In Openttd.cfg config file:'' ([game_creation] tree_placer = <0|1|2>) ''predefinito :'' '''2'''
+{{en/-}}
 ===Automezzi===
+{{it/Funzione|1.5|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 1.5.0#1-5-0-beta1-2014-12-24|1.5.0-beta1]])}}
+Seleziona il lato di guida.
+<pre style="width: 50%">Originariamente questa impostazione era presente nelle opzioni di gioco.</pre>
+:''Possibili impostazioni:''
+*<span style="color:#00693E"">'''Guida a sinistra'''</span>
+*<span style="color:#00693E">'''Guida a destra'''</span>
+:''Tipo:'' '''impostazione di gioco''' 
+:''Valore predefinito:'' <span style="color:#00693E">'''Guida a destra'''</span>
+:''In Openttd.cfg config file:'' ([game_creation] road_side = <left|right>) ''predefinito :'' '''right'''
+{{en/-}}
 ===Città che diventano metropoli===
+{{it/Funzione|0.6|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 0.6.0#0-6-0-beta1-2007-11-18|0.6.0-beta1]] r9667)}}
+Numero di città che diventeranno metropoli, ovvero città che gia inizialmente saranno più grandi e durante la partita cresceranno più velocemente delle altre.
+:''Possibili impostazioni:''
+*<span style="color:red">'''Nessuna'''</span> (zero), <span style="color:#00693E">'''1 su 1'''</span>, <span style="color:#00693E">'''1 su 2'''</span> ... <span style="color:#00693E">'''1 su 255'''</span>
+:''Tipo:'' '''impostazione di gioco''' 
+:''Valore predefinito:'' <span style="color:#00693E">'''1 su 4'''</span>
+:''In Openttd.cfg config file:'' ([economy] larger_towns = <0|1...255>) ''predefinito :'' '''4'''
+{{en/-}}
 ===Moltiplicatore iniziale dimensione metropoli===
+{{it/Funzione|0.6|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 0.6.0#0-6-0-beta1-2007-11-18|0.6.0-beta1]] r9667)}}
+Dimensione media delle metropoli in rapporto alle normali città all'inizio della partita.
+:''Possibili impostazioni:''
+*da <span style="color:#00693E">'''1'''</span> fino a <span style="color:#00693E">'''10'''</span>
+:''Tipo:'' '''impostazione di gioco''' 
+:''Valore predefinito:'' <span style="color:#00693E">'''3'''</span>
+:''In Openttd.cfg config file:'' ([economy] initial_city_size = <1|2...10>) ''predefinito :'' '''2'''
+{{en/-}}
 ===Disposizione delle strade per le nuove città===
+{{it/Funzione|0.5|float=right|text=(dalla [[en/Archive/OpenTTD/OpenTTD 1.0.0#1-0-0-beta1-2009-12-24|1.0.0-beta1]])}}
+Organizzazione della rete stradale delle città.
+:''Possibili impostazioni:''
+*<span style="color:#00693E">'''Predefinita'''</span>
+*<span style="color:#00693E">'''Migliorata'''</span>
+*<span style="color:#00693E">'''2x2'''</span>
+*<span style="color:#00693E">'''3x3'''</span>
+*<span style="color:slategrey">'''Casuale'''</span>
+:''Tipo:'' '''impostazione di gioco''' 
+:''Valore predefinito:'' <span style="color:#00693E">'''Predefinita'''</span>
+:''In Openttd.cfg config file:'' ([economy] town_layout = <0|1|2|3|4>) ''predefinito :'' '''0'''
+{{en/-}}
+
+
 ===Densità delle industrie===
 ===Metti in pausa all'inizio di una nuova partita===
 ===Punteggi a fine anno===
