@@ -1,5 +1,4 @@
 [[Translation:en/Manual/Airports]]
-{{it/Traduzione|en/Manual/Airports}}
 {{it/TOCleft}}
 Gli aeroporti sono le [[it/Manuale/Stazioni]] per [[it/Manuale/Aeromobili|aeroplani]] e [[it/Manuale/Aeromobili|elicotteri]]. Possono anche contenere un hangar in cui è possibile costruire e riparare gli aeromobili. Per i diversi tipi di aeroporto, vedi sotto.
 
@@ -100,22 +99,31 @@ Gli aeroplani hanno una piccola possibilità (0,07%) di schiantarsi ogni volta c
 Vedere la tabella di [[it/Manuale/Set base/Aeromobili/Comparazione aerei|comparazione degli aeromobili]] per un elenco di aeroplani piccoli che possono in sicurezza in piccoli aeroporti, così da poter pianificare un piano di sviluppo nel corso del tempo.
 
 ==Rumorosità degli aeroporti==
-If the patch option "Airport placement controlled by noise level" (available since [[en/Archive/OpenTTD/OpenTTD 0.7.0]]) is activated, the number of airports which can be placed in the vicinity of a town is not fixed to two, instead it depends upon the noise level of the airports, their distance to the town centre and the town's attitude.
+Gli aeroporti possono essere un problema per le popolazioni locali a causa della rumorosità che producono gli aerei. Per questo motivo dalla versione 0.7.0 ([[en/Archive/OpenTTD/OpenTTD 0.7.0#0-7-0-beta1-2009-02-16|0.7.0-beta1 r13226]]) esiste una impostazione che permette di gestire come questo problema può essere affrontato dalla Compagnia. Tramite l'impostazione [[it/Manuale/Settaggi/Ambiente#consenti-controllo-rumore-aeroporti-da-parte-delle-citta|consenti controllo rumore aeroporti da parte delle città]] possiamo due o più aeroporti nei pressi di una città. Se disattivata, ossia se l'autorità cittadina non può interferire in alcun modo con la nostra intenzione di costruire aeroporti, possiamo averne solo due al massimo. Per contro se lasciamo che l'autorità locale possa decidere se farci costruire o meno aeroporti in questo caso possiamo averne teoricamente quanti ne vogliamo ma dovremo "convincere" l'autorità locale a rilasciarci i permessi rispettando alcuni parametri. Il parametro più importante da tenere sotto controllo è la rumorosità dell'aeroporto, direttamente connesso con il secondo parametro, la distanza dell'aeroporto dal centro cittadino, perché più ci allontaniamo più diminuisce la rumorosità percepita dalla città e questo ci fa guadagnare la possibilità di costruire aeroporti più grandi, infine, ma non meno importanteun'altra impostazione, l'[[it/Manuale/Settaggi/Ambiente#atteggiamento-della-citta-in-merito-alle-modifiche|atteggiamento della città]] nei confronti della Compagnia. Queste impostazioni sono modificabili nel corso della partita e ci permettono di adattarle alle strategie che intendiamo adottare di volta in volta.
 
-The noise level added is the noise level given in the airport description less a distance modificator. The distance modificator is distance divided by (8 + 4 * council's permissiveness (0 for permissive, 1 for tolerant, 2 for hostile). The minimum increase in noise level is at least one per airport.
+===Calcolo soglia di rumore===
+Il '''livello di rumore supplementare''' è dato dal livello di ''rumore dell'aeroporto'', fornito nella sua descrizione, meno un ''modificatore di distanza''. 
 
- modificator := 8 + 4 * council's permissiveness (0 for permissive, 1 for tolerant, 2 for hostile)
- effective noise := airport noise - distance/modificator
+Il '''modificatore di distanza''' è la distanza divisa per (8 + 4 * permissività del consiglio (0 per permissivi, 1 per tollerante, 2 per ostile). L'aumento minimo del livello di rumore è almeno uno per aeroporto.
 
-The town's maximum permitted noise level is 3 plus the population divided by a constant. The constant is settable through the openttd.cfg file, and defaults to 800 for permissive, 2000 for tolerant, and 4000 for hostile.
-{{en/Feature|0.7}}
+  modificatore := 8 + 4 * permissività del consiglio (0 per permissiva, 1 per tollerante, 2 per ostile)
+  rumore effettivo := rumore dell'aeroporto - distanza/modificatore
 
-==Changing Airport Introduction Dates==
-While the vanilla game does not provide any options that allow you to change the airport introduction dates, the [https://www.tt-forums.net/viewtopic.php?t=56544 OpenGFX+ Airports] NewGRF allows you to change this (available in the in 'Check Online Content' menu in game). The option can be found under the 'Set Parameters' menu. [[File:en/Manual/ChangingAirportIntroDates.png|none|thumb|400px|Changing the parameters]]
+Il livello di rumore massimo consentito in città è 3 più la popolazione divisa per una costante. La costante è impostabile tramite il file openttd.cfg e per impostazione predefinita è 800 per permissiva, 2000 per tollerante e 4000 per ostile.
 
-==See also==
+ ''in openttd.cfg''
+ [economy]
+ town_noise_population[0] = 800
+ town_noise_population[1] = 2000
+ town_noise_population[2] = 4000
+
+==Cambiare le date di introduzione dell'aeroporto==
+Il gioco vanilla non fornisce alcuna opzione che permetta di modificare le date di introduzione degli aeroporti, ma la NewGRF [https://www.tt-forums.net/viewtopic.php?t=56544 OpenGFX+ Airports] offre questa possibilità (disponibile nel menu "Contenuti online" nel gioco). L'opzione si trova nel menu "Imposta parametri". [[File:en/Manual/ChangingAirportIntroDates.png|none|thumb|400px|Changing the parameters]]
+
+
+==Vedi anche==
 *[[en/Air Traffic Patterns]]
 *[[en/Manual/Airport construction]]
-*[[en/Manual/Stations]]
+*[[it/Manuale/Stazioni]]
 
 [[Category:it/Manuale/Aeromobili]]
