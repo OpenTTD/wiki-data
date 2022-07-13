@@ -10,11 +10,13 @@ We assume that you read the [[en/Development/Script/Introduction|Introduction]],
 Of course the first thing you want to do, is name your company. You want to promote yourself, won't you? To change your company name, you need to load up the AICompany class. In Squirrel all classes are pre-loaded, so you can use it directly.
 
 Now let's change our company name. The function to do this, as the API tells us, is <code>SetName</code>. The parameter is a string. So we get:
- 
- function MyNewAI::Start()
- {
-   AICompany.SetName("MyNewAI");
- }
+
+<syntaxhighlight lang="cpp">
+function MyNewAI::Start()
+{
+  AICompany.SetName("MyNewAI");
+}
+</syntaxhighlight>
  
 Now if you payed a bit of attention, you immediately notice that this goes against a rule you learn in the [[en/Development/Script/Introduction|Introduction]]: the <code>Start()</code> returns, therefore your AI dies. But, this is just for illustration, so it will do fine for now.
 
@@ -24,15 +26,17 @@ Start OpenTTD, start a new map, and see how your AI now makes the company name c
 
 But now what happens if your AI starts two times. You can't have two AIs with the same company-name. If you run it, you will see that the second name stays ''Unnamed''. That sucks. Lucky we can check the result of the function if it went okay. So let's extend it a bit, and check the result. If it fails, let's find ourselves an other name.
 
- function MyNewAI::Start()
- {
-   if (!AICompany.SetName("MyNewAI")) {
-     local i = 2;
-     while (!AICompany.SetName("MyNewAI #" + i)) {
-       i = i + 1;
-     }
-   }
- }
+<syntaxhighlight lang="cpp">
+function MyNewAI::Start()
+{
+  if (!AICompany.SetName("MyNewAI")) {
+    local i = 2;
+    while (!AICompany.SetName("MyNewAI #" + i)) {
+      i = i + 1;
+    }
+  }
+}
+</syntaxhighlight>
 
 What happens here, is that if naming the AI to ''MyNewAI'' fails, it tries ''MyNewAI #2''. If that fails, it tries ''MyNewAI #3'', etc etc. At some point it should work, or rather, that is the idea. So there you have it, your first AI that does something ingame.
 
@@ -47,17 +51,19 @@ To print output to the [[en/Development/Script/Need To Know#logging-and-debug-pa
 
 The event system is a simple poll system. You will need to poll the event-controller once in a while to see if there are any relevant events for you on the stack. Doing this is relative easy:
 
- while (AIEventController.IsEventWaiting()) {
-   local e = AIEventController.GetNextEvent();
-   switch (e.GetEventType()) {
-     case AIEvent.ET_VEHICLE_CRASHED:
-       local ec = AIEventVehicleCrashed.Convert(e);
-       local v  = ec.GetVehicleID();
-       AILog.Info("We have a crashed vehicle (" + v + ")");
-       /* Handle the crashed vehicle */
-       break;
-   }
- }
+<syntaxhighlight lang="cpp">
+while (AIEventController.IsEventWaiting()) {
+  local e = AIEventController.GetNextEvent();
+  switch (e.GetEventType()) {
+    case AIEvent.ET_VEHICLE_CRASHED:
+      local ec = AIEventVehicleCrashed.Convert(e);
+      local v  = ec.GetVehicleID();
+      AILog.Info("We have a crashed vehicle (" + v + ")");
+      /* Handle the crashed vehicle */
+      break;
+  }
+}
+</syntaxhighlight>
 
 ==Now what?==
 
