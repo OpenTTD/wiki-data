@@ -14,11 +14,11 @@ What is simple to some might appear very complicated to others. Documentation he
 * Function names use [http://www.wikipedia.org/wiki/Camelcase CamelCase] without underscores.
 * Opening curly bracket '''{''' for a function starts on the next line.
 * Use Foo() instead of Foo(void).
-<pre>
+<syntaxhighlight lang="cpp">
 void ThisIsAFunction()
 {
 }
-</pre>
+</syntaxhighlight>
 === Variables ===
 * Variable names are all lowercase, and use "_" as separator.
 * Global variables are preceded by an underscore. ("_") Use descriptive names because leading underscores are often used for system / compiler variables.
@@ -30,7 +30,7 @@ void ThisIsAFunction()
 * Declare variables upon first usage.
 * Declare iterators in their loop.
 * There is a space between '*' and 'const' in "const pointers"
-<pre>
+<syntaxhighlight lang="cpp">
 int     number         = 10;
 Vehicle *u_first_wagon = v->next;
 int     value          = v->value;
@@ -48,14 +48,14 @@ protected:
 	char protected_array[10];
 
 for (int i = 0;;);
-</pre>
+</syntaxhighlight>
 *Give the variables expedient names, this increases the readability of the code
-<pre>
+<syntaxhighlight lang="cpp">
 bool is_maglev_train = true;
 if (!is_maglev_train) DoSomething();
-</pre>
+</syntaxhighlight>
 *Some people like to introduce copies of variables to increase readability, which can waste memory. However, in some cases, especially in code pieces which are often called, it makes sense to cache some calculated variables.
-<pre>
+<syntaxhighlight lang="cpp">
 /* Unoptimized code:
  * foo is not touched inside the loop!
  */
@@ -74,7 +74,7 @@ for (uint8 i = 0; i < 100000; i++) {
 	if (value_to_check == bar) DoSomething();
 	/* Do something else */
 }
-</pre>
+</syntaxhighlight>
 
 === Enumerations / static consts ===
 *Enumerations store integers that belong logically together (railtypes, string IDs, etc.). 
@@ -88,7 +88,7 @@ for (uint8 i = 0; i < 100000; i++) {
 *The invalid always has 0xFF, 0xFFFF, 0xFFFFFFFF as a value.
 *Other special values are consecutively less than the invalid.  
 *Variables that hold enumerators should have the type of the enumeration.
-<pre>
+<syntaxhighlight lang="cpp">
 enum DiagDirection {
 	DIAGDIR_BEGIN = 0,
 	DIAGDIR_NE  = 0,
@@ -108,14 +108,14 @@ enum {
 };
 
 DiagDirection enterdir = DIAGDIR_NE;
-</pre>
+</syntaxhighlight>
 *Numbers that store single or uncorrelated data are static consts. Those may use the naming conventions of enums.
 Example:
-<pre>
+<syntaxhighlight lang="cpp">
 static const int MAXIMUM_STATIONS = 42;
-</pre>
+</syntaxhighlight>
 *Enums are useful in GUI code: When widgets are enumerated, they are easier to access during many operations. Additionally changes caused by modified widget sequences require less code adapting. If a widget is used like this, its enum name should be present in a comment behind the corresponding widget definition.
-<pre>
+<syntaxhighlight lang="cpp">
 /** Enum referring to the widgets of the build rail depot window */
 enum BuildRailDepotWidgets {
 	BRDW_CLOSEBOX = 0,
@@ -138,9 +138,9 @@ static const Widget _build_depot_widgets[] = {
 {      WWT_PANEL,   RESIZE_NONE,    14,     3,    68,    17,    66, 0x0,      STR_..},   // BRDW_DEPOT_NW
 {   WIDGETS_END},
 };
-</pre>
+</syntaxhighlight>
 *Comments on the enum values should start with "///<" to enable doxygen documentation
-<pre>
+<syntaxhighlight lang="cpp">
 enum SomeEnumeration {
 	SE_BEGIN = 0,        ///< Begin of the enumeration, used for iterations
 	SE_FOO = 0,          ///< Used for xy
@@ -148,7 +148,7 @@ enum SomeEnumeration {
 	SE_SUB,              ///< Special case for z
 	SE_END,              ///< End of the enumeration, used for iterations
 };
-</pre>
+</syntaxhighlight>
 
 === Control flow ===
 * Put a space before the parentheses in '''if''', '''switch''', '''for''' and '''while''' statements.
@@ -159,7 +159,7 @@ enum SomeEnumeration {
 * The NOT_REACHED() macro can be used in default constructs that should never be reached.
 * Unconditional loops are written with '''for (;;) {'''
 
-<pre>
+<syntaxhighlight lang="cpp">
 if (a == b) {
 	Foo();
 } else {
@@ -207,7 +207,7 @@ for (int i = 0; i < 10; i++) {
 	Foo();
 	Bar();
 }
-</pre>
+</syntaxhighlight>
 
 === Classes===
 * Classes names also use CamelCase. 
@@ -218,7 +218,7 @@ for (int i = 0; i < 10; i++) {
 * All those sorting rules sometimes conflict which one another. Please use common sense what increases legibility of the code in such a case.
 * The method implementation should indicate if it is virtual or similar by using a comment.
 * Very short methods can have one-line definition (if defined in the class scope).
-<pre>
+<syntaxhighlight lang="cpp">
 class ThisIsAClass {
 public:
 	typedef Titem_   *ItemPtr;
@@ -239,16 +239,16 @@ public:
 {
 	this->size *= 2;
 }
-</pre>
+</syntaxhighlight>
 
 === Templates ===
 Templates are a very powerful C++ tool, but they can easily confuse beginners. Thus:
 * Templates are to be documented in a very clear and verbose manner. Never assume anything in the documentation.
 * the template keyword and the template layout get a separate line. typenames are either "T" or preceded by a "T", integers get a single capital letter or a descriptive name preceded by "T".
-<pre>
+<syntaxhighlight lang="cpp">
 template <typename T, typename Tsomething, int N, byte Tnumber_of_something>
 int Func();
-</pre>
+</syntaxhighlight>
 
 * If you are writing one or more template class in the dedicated header file, use file.hpp for its name instead of file.h. This will let others know that it is template library (includes also implementation), not just header with declarations.
 
@@ -274,20 +274,22 @@ int Func();
 We use [http://doxygen.org/ Doxygen] to automatically generate documentation from the source code. It scans the source files for ''recognizable'' comments. 
 *'''Make your comments recognizable.'''
 Doxygen only comments starting with the following style:
- /**
- ///<
+<syntaxhighlight lang="cpp">
+/**
+///<
+</syntaxhighlight>
 Use /** for multi-line comment blocks. Use ///< for single line comments for variables. Use //!< for single-line comments in the NoAI .hpp files.
 For comments blocks inside a function always use /* */ or //. Use // only if the comment is on the same line as an instruction, otherwise use /* */.
 
 === Files ===
 *Put a @file command in a JavaDoc style comment at the start of the file, followed by a description.
-<pre>
+<syntaxhighlight lang="cpp">
 /** 
  * @file
  * This is the brief description.
  * This is the detailed description here and on the following lines.
  */
-</pre>
+</syntaxhighlight>
 {{en/Warning|If a file lacks a '''file comment block''' then NO entities in that file will be documented by Doxygen!}}
 
 === Functions ===
@@ -298,7 +300,7 @@ For comments blocks inside a function always use /* */ or //. Use // only if the
 *Completely document larger functions.
 *Document obvious parameters and return values too!
 
-<pre>
+<syntaxhighlight lang="cpp">
 /**
  * A brief explanation of what the function does and/or what purpose it serves.
  * Then follows a more detailed explanation of the function that can span multiple lines.
@@ -320,11 +322,11 @@ static int FooBar(int foo, int bar)
 {
 	return foo + bar;
 }
-</pre>
+</syntaxhighlight>
 
 === Classes ===
 *Document structs similarly to functions:
-<pre>
+<syntaxhighlight lang="cpp">
 /**
  * A short description of the struct.
  * More detailed description of the its usage.
@@ -333,7 +335,7 @@ static int FooBar(int foo, int bar)
  */
 struct foo {
 }
-</pre>
+</syntaxhighlight>
 
 === JavaDoc structural commands ===
 
@@ -393,19 +395,24 @@ It also supports more comment styles but those two are the ones which are standa
 
 
 The general structure of a JavaDoc style comment is
- /**
-  * This is the brief description. And this sentence contains some further explanations that will appear in the detailed description only.
-  */
+<syntaxhighlight lang="cpp">
+/**
+ * This is the brief description. And this sentence contains some further explanations that will appear in the detailed description only.
+ */
+</syntaxhighlight>
 and the resulting descriptions of that block would be:
 *''Brief description'': This is the brief description.
 *''Detailed description'': This is the brief description. And this sentence contains some further explanations that will appear in the detailed description only.
-The distinction between the brief and detailed descriptions is made by the dot followed by a space/newline, so if you want to use that inside the brief description you need to escape the space/newline: 
- /**
-  * This is a brief description (e.g.\ using only a few words). Details go here.
-  */
-
+The distinction between the brief and detailed descriptions is made by the dot followed by a space/newline, so if you want to use that inside the brief description you need to escape the space/newline:
+<syntaxhighlight lang="cpp"> 
+/**
+ * This is a brief description (e.g.\ using only a few words). Details go here.
+ */
+</syntaxhighlight>
 If you're doing a one-line comment, use:
- int i; ///< This is the description.
+<syntaxhighlight lang="cpp">
+int i; ///< This is the description.
+</syntaxhighlight>
 
 Also in the comment block you can include so-called structural commands which tell Doxygen what follows. In general, their area of effect begins after the command word and ends when a blank line or some other command is encountered. Also, multiple occurrences of the same structural command within a comment block or the referring entity will be joined in the documentation output usually.
 
@@ -413,9 +420,10 @@ Also in the comment block you can include so-called structural commands which te
 To achieve a coherent whole and to make changelog writing easier, here are some guidelines for commit messages.
 There is a check-script on the git server (also available for clients, see below) to make sure we all follow those rules.
 
-The first line of a message must match: 
- <keyword>( #<issue>| <commit>(, (<keyword> #<issue>|<commit>))*)?: ([<section])? <Details>
-
+The first line of a message must match:
+<pre>
+<keyword>( #<issue>| <commit>(, (<keyword> #<issue>|<commit>))*)?: ([<section])? <Details>
+</pre>
 Keywords are:
 * Add, Feature: Adding new stuff. Difference between "Feature" and "Add" is somewhat subjective. "Feature" for user-point-of-view stuff, "Add" for other.
 * Change: Changing behaviour from user-point-of-view.
@@ -449,21 +457,20 @@ Complete examples:
 ==Other tips==
 ===Remove trailing whitespace===
 To find out if/where you have trailing whitespace, you can use the following (unix/bash) command:
-<pre>grep -n -R --include "*.[ch]" '[ 	]$' * | grep --invert-match ".diff" | grep --invert-match ".patch"</pre>
+ grep -n -R --include "*.[ch]" '[ 	]$' * | grep --invert-match ".diff" | grep --invert-match ".patch"
 Automatically removing whitespace is also possible with the following shell script (Note that it only checks .c, .cpp, .h, .hpp and .mm files):
-<pre>
-#!/bin/sh
-IFS='
-'
-for i in Makefile `find . -name \*.c -o -name \*.cpp -o -name \*.h -o -name \*.hpp -o -name \*.mm`
-do
-  (
-    echo '%s/[ 	]\{1,\}$/'
-    echo w
-    echo q
-  ) | ed $i 2> /dev/null > /dev/null
-done
-</pre>
+
+ #!/bin/sh
+ IFS='
+ '
+ for i in Makefile `find . -name \*.c -o -name \*.cpp -o -name \*.h -o -name \*.hpp -o -name \*.mm`
+ do
+   (
+     echo '%s/[ 	]\{1,\}$/'
+     echo w
+     echo q
+   ) | ed $i 2> /dev/null > /dev/null
+ done
 
 ===Install the client-side git commit hooks===
 
@@ -474,6 +481,8 @@ The client-side hooks perform various checks when you commit changes locally.
 Get the hooks:
  git clone https://github.com/OpenTTD/OpenTTD-git-hooks.git openttd_hooks
 Install the hooks, assuming "openttd" is your work tree folder:
- cd openttd/.git/hooks
- ln -s -t . ../../../openttd_hooks/hooks/*
+<pre>
+cd openttd/.git/hooks
+ln -s -t . ../../../openttd_hooks/hooks/*
+</pre>
 
