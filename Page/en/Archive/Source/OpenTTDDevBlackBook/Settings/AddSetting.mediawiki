@@ -52,7 +52,7 @@ These variables should be placed in a natural place - I put them just after <cod
 ===Variable declaration and settings section - ''settings_type.h''===
 The declaration of the variables are found in [http://svn.openttd.org/trunk/src/settings_type.h settings_type.h]. We need to find a suitable category - these are the choices:
 
-<code>
+<syntaxhighlight lang="cpp">
  struct GameSettings {
  	 DifficultySettings   difficulty;         ///< settings related to the difficulty
  	 GameCreationSettings game_creation;      ///< settings used during the creation of a game (map)
@@ -69,18 +69,19 @@ The declaration of the variables are found in [http://svn.openttd.org/trunk/src/
  	 StationSettings      station;            ///< settings related to station management
  	 LocaleSettings       locale;             ///< settings related to used currency/unit system in the current game
  };
-</code>
+</syntaxhighlight>
 
 <code>EconomySettings</code> looks good - search for <code>struct EconomySettings</code> and add the declarations of the two variables:
 
-<code>
+
+<syntaxhighlight lang="cpp">
  /** Settings related to the economy. */
  struct EconomySettings {
      // lots of other variables
      bool godzilla_mode;            ///< Enables Godzilla mode
      uint8 number_godzillas;        ///< Number of Godzillas
  }
-</code>
+</syntaxhighlight>
 
 Note that the comments has a <code>/<</code> prefix for creating documentation with [http://docs.openttd.org/ doxygen]. 
 
@@ -89,14 +90,14 @@ The name that the variable will have in [[en/Archive/Manual/Settings/Openttd.cfg
 
 The Economy->Town looks like a good match, so we'll add these entries to <code>_settings_economy_towns[]</code>:
 
-<code>
+<syntaxhighlight lang="cpp">
  SettingsPage *towns = environment->Add(new SettingsPage(STR_CONFIG_SETTING_ENVIRONMENT_TOWNS));
  {
      \\ lots of other entries
      towns->Add(new SettingEntry("economy.godzilla_mode"));
      towns->Add(new SettingEntry("economy.number_godzillas"));
  }
-</code>
+</syntaxhighlight>
 
 ===Variable specifics - ''settings.ini''===
 
@@ -104,7 +105,8 @@ We need to add a set of instructions to OpenTTD so that it handles the data in t
 
 There are different data structures and advanced topics on this area, but we will focus on '''SDT_VAR''' and '''SDT_BOOL''' - the two most common used. Below is a sample configuration for our variables:
 
-<code>
+
+<syntaxhighlight lang="ini">
  [SDT_VAR]
  base     = GameSettings
  var      = economy.number_godzillas
@@ -120,7 +122,7 @@ There are different data structures and advanced topics on this area, but we wil
  str      = STR_CONFIG_SETTING_NUMBER_GODZILLAS
  strhelp  = STR_CONFIG_SETTING_NUMBER_GODZILLAS_HELPTEXT
  strval   = STR_JUST_INT
-</code>
+</syntaxhighlight>
 
 Basically:
 
@@ -130,32 +132,36 @@ Basically:
 *default value is 10, min->max is 0-100 and each step is 5.
 *''STR_JUST_INT'' tells the game how to represent the data on screen.
 
- [SDT_BOOL]
- base     = GameSettings
- var      = economy.godzilla_mode
- from     = 189
- to       = SL_MAX_VERSION
- guiflags = 0
- def      = false
- str      = STR_CONFIG_SETTING_ENABLE_GODZILLA
- strhelp  = STR_CONFIG_SETTING_ENABLE_GODZILLA_HELPTEXT
+<syntaxhighlight lang="ini">
+[SDT_BOOL]
+base     = GameSettings
+var      = economy.godzilla_mode
+from     = 189
+to       = SL_MAX_VERSION
+guiflags = 0
+def      = false
+str      = STR_CONFIG_SETTING_ENABLE_GODZILLA
+strhelp  = STR_CONFIG_SETTING_ENABLE_GODZILLA_HELPTEXT
+</syntaxhighlight>
 
 The only change from above is that there is no gui flag - this setting may be altered inside a game. 
 
 Otherwise, if not specified, default values are used:
 
- [defaults]
- flags    = 0
- guiflags = 0
- interval = 0
- str      = STR_NULL
- strhelp  = STR_CONFIG_SETTING_NO_EXPLANATION_AVAILABLE_HELPTEXT
- strval   = STR_NULL
- proc     = NULL
- load     = NULL
- from     = 0
- to       = SL_MAX_VERSION
- cat      = SC_ADVANCED
+<syntaxhighlight lang="ini">
+[defaults]
+flags    = 0
+guiflags = 0
+interval = 0
+str      = STR_NULL
+strhelp  = STR_CONFIG_SETTING_NO_EXPLANATION_AVAILABLE_HELPTEXT
+strval   = STR_NULL
+proc     = NULL
+load     = NULL
+from     = 0
+to       = SL_MAX_VERSION
+cat      = SC_ADVANCED
+</syntaxhighlight>
 
 Try to find a natural place in the file for your settings. I placed it right below the ''economy.initial_city_size'' block.
 
