@@ -13,7 +13,7 @@ Each part of the company rating is a linear function, i.e. earning 50% of the ta
 |- style="background:#efefef"
 ! Component !! Target !! Points (min) !! Points (max) !! Percentage
 |-
-|Number of company-owned vehicles that turned profit last year||>=120||0 points for 0 vehicles||100 points for at least 120 vehicles||0 to 10%
+|Number of company-owned vehicles that turned a profit last year||>=120||0 points for 0 vehicles||100 points for at least 120 vehicles||0 to 10%
 |-
 |Number of recently-served station parts that the company owns||>=80||0 points for 0 parts||100 points for at least 80 parts||0 to 10%
 |-
@@ -54,7 +54,7 @@ Each part of the company rating is a linear function, i.e. earning 50% of the ta
 |-
 |640 to 767||Chief Executive
 |-
-|768 to 895||Chairman
+|768 to 895||Chairperson
 |-
 |896 to 959||President
 |-
@@ -67,7 +67,7 @@ Each part of the company rating is a linear function, i.e. earning 50% of the ta
 |-
 !Rating!!Title
 |-
-|0 to 319||Businessman
+|0 to 319||Businessperson
 |-
 |320 to 447||Entrepreneur
 |-
@@ -90,7 +90,7 @@ This section shows the factors that affect the station rating. All calculations 
 |- style="background:#ddd"
 !Factor!!Condition!!Rating points!!Rating %
 |-
-| Max speed of last vehicle to load cargo (to a max of 255 km/h) <br> Divide speed by 2 if it was a road vehicle. || Above 85 km/h (52 mph)|| (Speed (km/h) - 85) / 4 || 0% to 17%
+| Max speed of last vehicle to load cargo (with a limit of 255 km/h) <br> Divide speed by 2 if it was a road vehicle. || Above 85 km/h (52 mph)|| (Speed (km/h) - 85) / 4 || 0% to 17%
 |-
 |rowspan="3"|Age in years of last vehicle to load cargo || 2 || 10|| 4%
 |-
@@ -150,22 +150,22 @@ The amount of cargo that can be transported from an industry is fully reliant on
 
 '''Note:'''  The exact formula can be seen under "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3262 UpdateStationRating()]" in station_cmd.cpp. This uses some values calculated in "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/economy.cpp#L1595 LoadUnloadVehicle()]" in economy.cpp.
 
-'''Note:'''  If the rating gets to be less than 50%, the station starts losing cargo.
+'''Note:'''  If the rating is less than 50%, the station starts losing cargo.
 
 '''Note:'''  If the amount of cargo waiting is greater than 4096 units (or 4,096,000 liters), the station also starts losing cargo. There is a hard cap of 32,768 units of cargo that can be waiting at a station. Any more than that completely disappears every few days. [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3380-L3393]
 
 ==Cargo delivery to stations==
 
-Goods are distributed to stations according to station rating.
+Goods are distributed to stations according to their rating.
 
-If there is only only station around, then a percentage of available goods equal to the station's rating is distributed to it every 2.5 day cycle.
+If there is only one station around, then a percentage of available goods equal to the station's rating is distributed to it every 2.5 day cycle.
 
 If multiple stations are present, then goods are divided between them based on rating. If there are stations belonging to more than one company, then goods are first divided between companies according to the best station of each company: the proportion of goods allocated to a company C is equal to the best station rating of C over the sum of all best station ratings for all companies. Note that this will be equal to 100% if all stations belong to one company. Then each company's allocation is subdivided among its stations. A station S belonging to C receives a fraction of C's company allocation equal to the rating of S over the sum of the ratings of all stations belonging to C.
 
 ==Local authority rating==
 Ratings limit some player actions; they start at +500 and can change based on some actions.
 
-Currently you can exploit the game by planting about 200 trees within a town's influence radius. You may need to clear an area first, in order to have somewhere to plant them, but planting 200 will raise even a minimum rating of -1000 to 220. If your rating is Mediocre or lower, planting 30 trees will approximately wipe out the rating penalty from building one station. Planting trees while at a rating of Very Good or better has no effect.
+Currently you can exploit the game by planting about 200 trees within a town's influence radius. You may need to clear an area first, in order to have somewhere to plant them, but planting 200 will raise even a minimum rating of -1000 to 220. If your rating is Mediocre or lower, planting 30 trees will approximately wipe out the rating penalty from building one station, depending on the size of the station and how forested the area was. Planting trees while at a rating of Very Good or better has no effect.
 
 <table>
 <tr valign="top"><td style="background:none; border:0px">
@@ -204,7 +204,7 @@ Currently you can exploit the game by planting about 200 trees within a town's i
 |-
 |Destroy building**|| 40 to 300 ||-40 to -300
 |-
-|Plant tree on clear square|| n/a ||+7, up to 220.
+|Plant tree on a clear square|| n/a ||+7, up to 220.
 |-
 |Clear a tile with trees|| n/a ||-35
 |-
@@ -212,25 +212,25 @@ Currently you can exploit the game by planting about 200 trees within a town's i
 |-
 |Unsuccessful bribe|| n/a ||Set to -50.
 |}
-<nowiki>*</nowiki> "Required rating" is listed for the settings Permissive / Neutral / Hostile of<br>the [[en/Archive/Manual/Settings/Difficulty]] option ''City council attitude towards area restructuring''.<br><nowiki>**</nowiki> For default buildings. NewGRFs can set this number from 0 to >1000,<br>which effectively makes the building unremovable.
+<nowiki>*</nowiki> "Required rating" is listed for the settings Lenient / Neutral / Hostile of<br>the [[en/Archive/Manual/Settings/Difficulty]] option ''Local authority attitude''.<br><nowiki>**</nowiki> For default buildings. NewGRFs can set this number from 0 to >1000,<br>which effectively makes the building unremovable.
 </td></tr></table>
 
-Each month players' ratings automatically change:
+Each month, the ratings for all companies automatically change:
 * Rating goes up by 5 if it is less than 200.
 * Rating goes up by 12 for each station that has transferred cargo in the last 50 days.
 * Rating goes down by 15 for each station that has not transferred cargo in the last 50 days.
 
 
 '''Example:'''<br>
-A player has a rating of -300, (Very Poor), 2 active stations and 1 inactive station at a town.<br>
+A company has a rating of -300, (Very Poor), 2 active stations and 1 inactive station at a town.<br>
 5pts + 2 * 12pts - 15pts = 14pts points gain per month.<br>
-(-200 - -300)pts / 14pts/mo = 8 months before the town will let him build another station.
+(-200 - -300)pts / 14pts/mo = 8 months before the town will let the company build another station.
 
 Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
-==Passenger and Mail generation==
-Towns and the company headquarters generate passengers and mail, while oil rigs only generate passengers. 
+==Passenger and Mail Generation==
+Towns and company headquarters generate passengers and mail, while oil rigs only generate passengers. 
 ===Town Passenger Generation===
-In each periodic processing (i.e. every 256 ticks), a random value 0<=X<=255 is generated for each house tile. If X isn't smaller than the population of the tile, no passengers are generated. Otherwise, X/8+1 passengers are generated (rounded down). If there is a recession going on, the number of generated passengers is halved, but this division gets rounded up instead of down. Mail generation happens in a similar manner, but with a new random value, and checking against the mail generation multiplier instead of the population. See the full list of default values for HouseProps: [https://newgrf-specs.tt-wiki.net/wiki/DefaultHouseProps]
+In each round of periodic processing (i.e. every 256 ticks), a random value 0<=X<=255 is generated for each house tile. If X isn't smaller than the population of the tile, no passengers are generated. Otherwise, X/8+1 passengers are generated (rounded down). If there is a recession going on, the number of generated passengers is halved, but this division gets rounded up instead of down. Mail generation happens in a similar manner, but with a new random value, and checking against the mail generation multiplier instead of the population. See the full list of default values for HouseProps: [https://newgrf-specs.tt-wiki.net/wiki/DefaultHouseProps]
 ===Company Headquarters===
 The Company Headquarters is a unique structure that generates passengers and mail depending on it's level which is dependent on the performance rating of the company. Higher level company HQs generate more passengers and mail, the output of the headquarters is evenly distributed over all four tiles on a per tile basis as per the following formulas:
 
@@ -339,11 +339,11 @@ To make things simple, let's look what are the chances for 256x256 maps (max. 1 
 
 :''Distinguish [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|Smooth economy]] (advanced setting) and [[en/Archive/Manual/Settings/Difficulty|Steady economy]] (difficulty setting)''
 
-*The chance for a production change each month is '''4.5%''', i.e. 4.5% of producing industries from industry list change production.
+*The chance for a production change each month is '''4.5%'''; in other words, an average of 4.5% of producing industries from the industry list change production.
 
 
 *If a production change does occur:
-** For an <code>only_decrease</code> industry (currently only Temperate terrain Oil Wells) '''0%''' chance of increase, '''100%''' chance of decrease.
+** For an <code>only_decrease</code> industry (currently only Temperate Oil Wells) '''0%''' chance of increase, '''100%''' chance of decrease.
 ** For an industry that has poor or no service (less than 60% of its cargo is transported): '''33%''' chance of increase, '''67%''' chance of decrease.
 ** For an industry that has good (greater than 60%) service: '''67%''' chance of increase, '''33%''' chance of decrease.
 ** For an industry that has excellent (greater than 80%) service: '''83%''' chance of increase, '''17%''' chance of decrease.
@@ -358,13 +358,13 @@ To make things simple, let's look what are the chances for 256x256 maps (max. 1 
 
 *With the [[en/Archive/Manual/Settings/Smooth economy]] option enabled, production changes per month are between 3% and 23%
 **Industries with very low productions, (i.e. 12-40 tonnes per month) will have higher changes.
-**Primary industries produce cargo 8 or 9 times a month. Monthly production is an industries 'base value' multiplied times 8 or 9.  For example, the base value for a coal mine is 15 tons, so the monthly production is 120 or 135 tons. This base value is capped at 255, so the maximum possible monthly production for any industry is 2040 or 2295. [http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
+**Primary industries produce cargo 8 or 9 times a month. Monthly production is an industries 'base value' multiplied by 8 or 9.  For example, the base value for a coal mine is 15 tons, so the monthly production is 120 or 135 tons. This base value is capped at 255, so the maximum possible monthly production for any industry is 2040 or 2295. [http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
 
 =====Special Cases=====
 
 *[[en/Manual/Base Set/Industries/Oil Rig]] passenger production is limited to 16 passengers per production event, meaning a maximum of 144 or 128 passengers per month. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L2597-L2602]
-*[[en/Manual/Base Set/Industries/Lumber Mill]] is technically not a producing industry and is classified as a secondary industry in the code. Four or five times a month it will search outward in a 40 by 40 area in a spiral pattern looking for a fully-grown tree to cut down. If it finds one, the tile will be [[en/Manual/Landscaping|demolished]] and 45 tons of wood will be output. This means it has a maximum production of 225 or 180 tons of wood per month, solely dependent on the availability of trees.[https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L1094-L1111]
-*Temperate climate [[en/Manual/Base Set/Industries/Bank|Banks]] never change production (except due to the 8 vs 9 production events per month).
+*[[en/Manual/Base Set/Industries/Lumber Mill]] is technically not a producing industry and is classified as a secondary industry in the code. Four or five times a month, it will search outward in a 40 by 40 area in a spiral pattern looking for a fully-grown tree to cut down. If it finds one, the tile will be [[en/Manual/Landscaping|demolished]] and 45 tons of wood will be output. This means it has a maximum production of 225 or 180 tons of wood per month, solely dependent on the availability of trees.[https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L1094-L1111]
+*Temperate climate [[en/Manual/Base Set/Industries/Bank|banks]] never change production (except due to the 8 or 9 production events per month).
 
 ====Examples====
 If a coal mine has 70% of its output transported, there is a '''3%''' chance (4.5% * 67%) of a production increase from 3-23% and a '''1.5%''' chance (4.5% * 33%) of a production decrease from 3-23% (but 13% on average).
@@ -402,7 +402,7 @@ For good service, it takes '''29.6 years''' on average '''to double'''; with exc
 
 However, in game you will find industries changing their production rate very randomly. It must be stressed the above examples are only true when observing many industries over the long-term; individual industries may greatly deviate from these averages. Statistically speaking, 6 out of 10 industries will not go from 100 to 2040-2295 even with the best service during 65 years. About 1 out of 9 industries will even lower their production when being served at 60-80% cargo transported for 50 years. 
 
-For more responsiveness from industries, adapt the number of wagons to industry production (for the lowest production, you should use two wagons). [Full Load] orders are usually used for such cargo trains.
+For more responsiveness from industries, adapt the number of wagons to industry production and service frequency (for the lowest production with good frequency, you should use two wagons). [Full Load] orders are usually used for such cargo trains.
 
 
 '''Note:'''  The exact formula can be seen under "[https://github.com/OpenTTD/OpenTTD/blob/master/src/industry_cmd.cpp#L2598 ChangeIndustryProduction()]" in industry_cmd.cpp.
@@ -503,12 +503,12 @@ Deliver 100 bags of mail 100 squares in 100 days:<br>
 
 '''HINT calculate easy''':<br>
 Income = cargo units * cargo value * 0.4<br>
-[[en/Cargo value]] comes from the Y-axis on the specific transported goods graph in-game<br>
+Cargo value comes from the Y-axis on the specific transported goods graph in-game<br>
 measure your real delivery time in days and plot on x-axis
 This result will give you an easy estimation of your income with 5% deviation
 
 '''Notes:'''
-* A useful thumbrule is around 1-2x the transport speed. Ie. for a 200kph train around 300 tiles distance is ideal. Well tuned train networks can push a little further, but any unexpected delays will destroy your value for long distance haulage. Really large maps can exploit the 12% value floor; if your goods are on a long delay anyways, long distance is the only thing that matters.
+* A useful rule of thumb is around 1-2x the transport speed. I.e. for a 200 km/h train, around 300 tiles distance is ideal. Well tuned train networks can push a little further, but any unexpected delays will destroy your value for long distance haulage. Really large maps can exploit the 12% value floor; if your goods are on a long delay anyways, long distance is the only thing that matters.
 
 * The exact formula is much more complicated and slightly more accurate, due to rounding error when converting from larger discrete values.  See economy.cpp ([https://github.com/OpenTTD/OpenTTD/blob/master/src/economy.cpp#L958 GetTransportedGoodsIncome()]) and [[en/Manual/Game Mechanics/Cargo income]].
 
@@ -658,8 +658,8 @@ The net result is that 100 km/hour is ~3.6 tiles/day.
 |}  <!-- end nested tables -->
 "Curvature" means the average number of wagons of the train between turns. However, very sharp turns (curvatures 0 and 1) are not averaged out in longer trains.
 
-*New railtypes can specify custom maximum curve speeds in the same steps as the three default types in the table.
-*Tilting trains gain an additional bonus of 20% on the maximum speed.
+*New rail types can specify custom maximum curve speeds in the same steps as the three default types in the table.
+*Tilting trains can take curves 20% faster than non-tilting trains.
 *Train acceleration and max speed are affected by engine power, maximum tractive effort (all engines and powered wagons combined), current speed, air drag, total train mass, and wagons/engines on slopes.
 *Non maglev train Acceleration spreadsheet can be found on tt-forums: [http://www.tt-forums.net/viewtopic.php?f=31&t=55972&p=960678#p960672 tt-forums]
 *Braking is twice acceleration except when entering a depot or a station.
