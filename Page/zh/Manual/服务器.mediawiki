@@ -1,0 +1,52 @@
+[[Translation:en/Manual/Server]]
+
+{{zh/翻译|origin=en/Manual/Server
+|from=en
+|to=zh
+|Percentage=20
+}}
+
+如果你想建立[[zh/Manual/多人游戏|多人网络游戏]]，你需要在你的计算机上建立一个OpenTTD '''服务器'''。如果所有玩家将连接至您的家庭网络，请跳至"开启服务器"一节。
+== 如果你使用防火墙 ==
+为了您的安全，千万''不要''完全禁用防火墙。相反，将其配置为允许 UDP 和 TCP 连接到端口'''3979''' ("开放端口")。如果你希望你的服务器在[http://www.openttd.org/en/servers 公共服务器列表(en)]可见（推荐），还需要打开'''3978'''端口到仅限UDP连接。
+== 如果您通过路由器连接到互联网 ==
+You need to tell the router to send game data from players outside of your home network to the computer that will be running your OpenTTD server. Else, the data will simply be discarded before it ever reaches the server. This is an example of [https://www.wikipedia.org/wiki/Port forwarding port forwarding]; in this case, '''UDP and TCP''' connections to port '''3979''' will need to be forwarded. (If you can't use port 3979 for some reason, you can make OpenTTD use another port by entering "server_port <number>" into the game's console.)
+
+You will need to consult your router manual or search for instructions specific to your router. Not all router firmware includes this functionality, unfortunately; you will need to purchase a replacement router or install unofficial firmware if this is the case.
+
+Make sure you've instructed the router to send the game data to the correct computer. If you want your server to be visible on the public [http://www.openttd.org/en/servers server list] (recommended), you will also need to forward '''UDP''' connections to port '''3978'''.
+
+== 开启服务器 ==
+[[File:en/Manual/Ottdmulti6.png|right]]
+'''1''' From the Main Menu, click '''Multiplayer'''
+
+'''2''' Click '''Start Server'''
+
+'''3''' Pick a name for your game to help others identify it, and enter it into the '''Game name''' box
+
+'''4''' Configure the additional settings:
+*'''Set Password''' sets a password for the server so that only users who know the password can join your game.
+*'''Connection''' specifies whether the server is for local/private use only, or advertises itself to the master server so it is visible in the internet server list.
+*'''Language Spoken''' is for requesting that users speak a certain language on your server.
+*'''Max clients''' limits the total number of clients (players and spectators) that can connect.
+*'''Max companies''' limits the number of companies at game.
+*'''Max spectators''' limits the number of clients who can connect to watch but not play (not-players).
+
+'''5''' Click '''New Game''' (to generate random new game), or '''Load Game''' (to continue an saved game), or '''Play Scenario''', or '''Play Heightmap''', or '''Cancel'''.
+
+
+==连接到服务器==
+Players connected to your home network should immediately see your server on the server list and be able to connect easily.
+
+If some players are connecting via the public Internet, however, your server will only appear if you have chosen "Internet (advertise)" under "Connection" (there may be a delay of several minutes before it is visible). Otherwise, they will need to know your router's IP address, or your computer's if you aren't using a router. This can be obtained by visiting https://www.whatismyip.com/.
+
+==专用服务器==
+If you are expecting many players and aren't going to be using the computer running the server to play yourself, you can start OpenTTD as a [[en/Manual/Dedicated server]] instead of the usual interactive graphical version.
+
+If you run your server on ubuntu/debian and you want to automatically start/stop and save your game, check out the init.d scripts at https://bitbucket.org/frodus/openttd-init
+
+[[Category:en/Manual/Multiplayer]]
+
+
+==管理员端口==
+If you want to remotely control your OpenTTD server using a stand-alone program/script, the recommended way is to use the [[en/Development/Server admin port|Admin Port]].
