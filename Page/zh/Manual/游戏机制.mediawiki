@@ -105,7 +105,8 @@ This section shows the factors that affect the station rating. All calculations 
 |-
 | 0 || 33 || 13%
 |-
-|rowspan="4"|Days since last cargo pickup <br> Multiply days in "Condition" column by 4 if last vehicle was a ship.<br><small>(Note: If a vehicle was ready to pick up a cargo but there was no cargo, or if it was full, it is still regarded as a cargo pickup. [https://github.com/OpenTTD/OpenTTD/issues/7430 This may be a bug].)</small>|| 30 to 52.5 || 25 || 10%
+|rowspan="4"|Days since last cargo pickup <br> Multiply days in "Condition" column by 4 if last vehicle was a ship.<br><small>Note:If a vehicle was ready to pick up cargo but there was no cargo, it still counts as a cargo pickup.
+If a vehicle is full when arriving however, no cargo pickup is ever recorded and the timer does not reset.<!--注：如果车辆抵达时有空运载货物但无货可运，仍视为一次运货；但若车辆抵达时已满载，不会被视作运货并且将继续计时。--></small>|| 30 to 52.5 || 25 || 10%
 |-
 | 15 to 30 || 50 || 20%
 |-
@@ -143,7 +144,9 @@ This is triggered when the game truncates cargo (<tt>waiting_changed = true</tt>
 |-
 |Road vehicle crashed||Station within 22 tiles of crash ||-160|| -63pp
 |-
-|Train crashed||Station within 30 tiles of crash ||-160|| -63pp
+|Train or aircraft crashed||Station within 30 tiles of crash ||-160|| -63pp
+|-
+|Aircraft crashed<br><small>This also immediately removes all cargo stored at the station where the plane crashed. [https://github.com/OpenTTD/OpenTTD/blob/afc3d71fd080aab6a7c8d852016fb18bab5dd5d5/src/aircraft_cmd.cpp#L1375]</small>||Station is site of plane crash||-255||-100pp
 |-
 |Town bribe failed||Station within town influence||-255||-100pp
 |}
