@@ -8,13 +8,11 @@ on:
 jobs:
   reload:
     name: Reload wiki
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Reload wiki
-      run: |
-        aws lambda invoke --cli-binary-format raw-in-base64-out --region ${{ secrets.AWS_REGION }} --function-name "${{ secrets.RELOAD_FUNCTION_NAME }}" --payload='{"secret":"${{ secrets.RELOAD_SECRET }}"}' output.txt
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      if: github.actor != 'DorpsGek'
+    # No need to reload on a commit made by the wiki.
+    if: ${{ github.actor != 'wiki-backend' }}
+    uses: OpenTTD/actions/.github/workflows/rw-nomad-reload.yml@v4
+    secrets:
+      RELOAD_SECRET: ${{ secrets.RELOAD_SECRET }}
+      NOMAD_SERVICE_KEY: ${{ secrets.NOMAD_SERVICE_PROD_KEY }}
+    with:
+      service: wiki
