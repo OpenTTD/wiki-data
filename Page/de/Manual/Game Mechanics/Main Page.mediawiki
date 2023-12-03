@@ -104,7 +104,13 @@ Dieser Abschnitt zeigt die Faktoren welche die Stationsbewertung beeinflussen. A
 |-
 | weniger als 7.5 || 130 || 51%
 |-
-|rowspan="6"|Frachteinheiten die in der Station warten<br><small>(Bemerkung: Wenn Fracht zu anderen Stationen transferiert wird, dann zählt die Menge die an der Transferstation mit den meisten Einheiten liegt.)</small>|| Mehr als 1500 || -90 || -35%
+|rowspan="6"|Frachteinheiten die in der Station warten<br><small>(Bemerkung: (Wenn Fracht zu anderen Stationen transferiert wurde, KÖNNTE unter Umständen das Spiel den Höchstwert der wartenden Fracht an einer dieser Stationen als die wartende Fracht für die Quellstation betrachten: [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3276 TruncateCargo()]. Dies wird ausgelöst, wenn das Spiel die Fracht abschneidet (waiting_changed = true), was passiert, wenn eine der Stationen die folgenden Bedingungen erfüllt:
+* Fracht wurde seit 637,5 Tagen von keiner dieser Stationen abgeholt. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3300-L3306]
+* Die Station hat eine Bewertung von weniger als oder gleich 25% UND es warten mehr als 200 Einheiten Fracht. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3379-L3386]
+* Die Station hat eine Bewertung von weniger als 50% UND es warten mehr als 0 Einheiten Fracht, dies geschieht mit einer ZUFÄLLIGEN WAHRSCHEINLICHKEIT proportional zur Stationsbewertung. D. h. wenn die Stationsbewertung 49% beträgt, besteht eine ~1% Chance, bei einer Bewertung von 25% besteht eine ~50% Chance und bei einer Stationsbewertung von 0% besteht eine 100% Chance. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3388-L3396]
+* Die Station hat mehr als 4096 Einheiten Fracht, die wartet. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3398-L3411].
+  </small>
+|| Mehr als 1500 || -90 || -35%
 |-
 | 1001 bis 1500 || -35 || -14%
 |-
@@ -116,20 +122,23 @@ Dieser Abschnitt zeigt die Faktoren welche die Stationsbewertung beeinflussen. A
 |-
 | weniger als 100 || 40 || 16%
 |-
-|Statue in town of station||Built||26|| 10%
+|Statue in der Bahnhofsstadt||Gebaut||26|| 10%
 |-
-|Small advertising campaign||Station within 10 tiles of town center||+64|| +25%
+|Kleine Werbekampagne||Bahnhof innerhalb von 10 Tiles vom Stadtzentrum||+64|| +25%
 |-
-|Medium advertising campaign||Station within 15 tiles of town center||+112|| +44%
+|Mittelgroße Werbekampagne||Bahnhof innerhalb von 15 Tiles vom Stadtzentrum||+112|| +44%
 |-
-|Large advertising campaign||Station within 20 tiles of town center||+160|| +63%
+|Große Werbekampagne||Bahnhof innerhalb von 20 Tiles vom Stadtzentrum||+160|| +63%
 |-
-|Road vehicle crashed||Station within 22 tiles of crash ||-160|| -63%
+|Straßenfahrzeugsunfall||Bahnhof im Umkreis von 22 Tiles um den Unfall||-160|| -63%
 |-
-|Train crashed||Station within 30 tiles of crash ||-160|| -63%
+|Zug- oder Flugzeugunfall||Bahnhof im Umkreis von 30 Tiles um den Unfall||-160|| -63%
 |-
-|Town bribe failed<br><small>(Note: Only stations that belong to the company bribing the town in question are affected.)</small>||Station within town influence||-255||-100%
+|Flugzeug abgestürzt <br><small>Dadurch wird auch sofort die gesamte Fracht entfernt, die in der Station gelagert wurde, in der das Flugzeug abgestürzt ist. [https://github.com/OpenTTD/OpenTTD/blob/afc3d71fd080aab6a7c8d852016fb18bab5dd5d5/src/aircraft_cmd.cpp#L1375]</small>||Bahnhof ist Ort des Flugzeugabsturzes||-255||-100pp
+|-
+|Stadtbestechung gescheitert||Bahnhof innerhalb der Stadt Einfluss||-255||-100pp
 |}
+Teilen Sie die Gesamtzahl der Bewertungspunkte durch 255, um die prozentuale Bewertung zu erhalten. Die maximal mögliche Bewertung ist 100%.
 <!-----------------------------------------------------------------------------------------------------------------------------------------
 
 
