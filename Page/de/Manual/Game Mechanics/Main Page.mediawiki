@@ -139,6 +139,10 @@ Dieser Abschnitt zeigt die Faktoren welche die Stationsbewertung beeinflussen. A
 |Stadtbestechung gescheitert||Bahnhof innerhalb der Stadt Einfluss||-255||-100pp
 |}
 Teilen Sie die Gesamtzahl der Bewertungspunkte durch 255, um die prozentuale Bewertung zu erhalten. Die maximal mögliche Bewertung ist 100%.
+
+Alle 2,5 Tage ([https://github.com/OpenTTD/OpenTTD/blob/0d599e155f335e922ad2be738a3ab73d1dea346b/src/date_type.h#L34 185 ticks]) werden die Stationsbewertungen berechnet; Bewertungen können sich pro Zyklus nicht um mehr als 2 Punkte (0,78 %) ändern, außer aufgrund von Items unter der Kategorie „Event“. Events bewirken eine sofortige, vorübergehende Erhöhung (oder einen Abzug) der Bewertungen von Stationen in der Nähe. Die Bewertung kehrt allmählich auf den Normalwert zurück, gemäß der 2 Punkte pro 2,5 Tage Regel.
+
+Die Menge an Fracht, die von einer Industrie transportiert werden kann, hängt vollständig von der Stationsbewertung ab. Das heißt, wenn es genau einen Bahnhof gibt, der eine Industrie bedient, wird in den Ticks, in denen die Industrie Fracht produziert, genau x Prozent basierend auf der Stationsbewertung der Fracht zu diesem Bahnhof transportiert. Wenn also die Menge an Fracht, die von einer Industrie transportiert wird, niedrig ist, liegt das wahrscheinlich daran, dass auch die Stationsbewertung niedrig ist. 
 <!-----------------------------------------------------------------------------------------------------------------------------------------
 
 
