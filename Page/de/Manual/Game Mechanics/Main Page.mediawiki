@@ -143,6 +143,49 @@ Teilen Sie die Gesamtzahl der Bewertungspunkte durch 255, um die prozentuale Bew
 Alle 2,5 Tage ([https://github.com/OpenTTD/OpenTTD/blob/0d599e155f335e922ad2be738a3ab73d1dea346b/src/date_type.h#L34 185 ticks]) werden die Stationsbewertungen berechnet; Bewertungen können sich pro Zyklus nicht um mehr als 2 Punkte (0,78 %) ändern, außer aufgrund von Items unter der Kategorie „Event“. Events bewirken eine sofortige, vorübergehende Erhöhung (oder einen Abzug) der Bewertungen von Stationen in der Nähe. Die Bewertung kehrt allmählich auf den Normalwert zurück, gemäß der 2 Punkte pro 2,5 Tage Regel.
 
 Die Menge an Fracht, die von einer Industrie transportiert werden kann, hängt vollständig von der Stationsbewertung ab. Das heißt, wenn es genau einen Bahnhof gibt, der eine Industrie bedient, wird in den Ticks, in denen die Industrie Fracht produziert, genau x Prozent basierend auf der Stationsbewertung der Fracht zu diesem Bahnhof transportiert. Wenn also die Menge an Fracht, die von einer Industrie transportiert wird, niedrig ist, liegt das wahrscheinlich daran, dass auch die Stationsbewertung niedrig ist. 
+
+
+'''Notiz:''' Die exakte Formel kann man unter "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3262 UpdateStationRating()]" in station_cmd.cpp. sehen. Dieses benutzt Werte, welche in "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/economy.cpp#L1595 LoadUnloadVehicle()]" unter economy.cpp. ausgerechnet wurden.    
+
+'''Notiz:'''  Wenn die Bewertung weniger als 50% ist, beginnt die Station Fracht zu verlieren. 
+
+'''Notiz:''' Wenn die Menge der wartenden Fracht größer als 4096 Einheiten (oder 4.096.000 Liter) ist, beginnt die Station auch, Fracht zu verlieren. Es gibt eine feste Obergrenze von 32.768 Frachteinheiten, die an einem Bahnhof warten können. Alles, was darüber hinausgeht, verschwindet alle paar Tage komplett.  [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3380-L3393]
+
+==Frachtlieferung zu den Stationen==
+
+Die Waren werden entsprechend ihrer Bewertung auf die Stationen verteilt.
+
+Wenn es nur einen Bahnhof gibt, wird alle 2,5 Tage ein Prozentsatz der verfügbaren Waren, der der Bewertung des Bahnhofs entspricht, an ihn verteilt.
+
+Sind mehrere Bahnhöfe vorhanden, so werden die Waren auf der Grundlage der Bewertung auf die einzelnen Bahnhöfe aufgeteilt. Wenn es Bahnhöfe gibt, die zu mehr als einem Unternehmen gehören, werden die Waren zunächst zwischen den Unternehmen entsprechend dem besten Bahnhof jedes Unternehmens aufgeteilt: Der Anteil der Waren, der einem Unternehmen C zugeteilt wird, ist gleich der besten Bahnhofsbewertung von C gegenüber der Summe aller besten Bahnhofsbewertungen für alle Unternehmen. Dies ist gleich 100%, wenn alle Stationen zu einem Unternehmen gehören. Dann wird die Zuteilung eines jeden Unternehmens auf seine Stationen aufgeteilt. Eine Station S, die zu C gehört, erhält einen Anteil an der Unternehmenszuweisung von C, der der Bewertung von S gegenüber der Summe der Bewertungen aller zu C gehörenden Stationen entspricht.
+
+==Bewertung der lokalen Behörde==
+Wertungen schränken einige Spieleraktionen ein; sie beginnen bei +500 und können sich aufgrund einiger Aktionen ändern.
+
+Derzeit kann man das Spiel ausnutzen, indem man etwa 200 Bäume im Einflussradius einer Stadt pflanzt. Es kann sein, dass Sie zuerst ein Gebiet räumen müssen, um einen Platz zum Pflanzen zu haben, aber das Pflanzen von 200 Bäumen wird sogar eine Mindestbewertung von -1000 auf 220 anheben. Wenn Ihr Rating mittelmäßig oder niedriger ist, können Sie durch das Pflanzen von 30 Bäumen den Ratingabzug für den Bau einer Station annähernd ausgleichen, je nachdem, wie groß die Station ist und wie bewaldet das Gebiet war. Das Pflanzen von Bäumen bei einer Bewertung von Sehr gut oder besser hat keinen Effekt. 
+
+<table>
+<tr valign="top"><td style="background:none; border:0px">
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Rating points!!Rating
+|-
+| -1000 to -400 || Atrocious <!--As of updated OpenTTD client-->
+|-
+| -399 to -200 || Very Poor
+|-
+| -199 to 0 || Poor
+|-
+| 0 to 200 || Mediocre
+|-
+| 201 to 400 || Good
+|-
+| 401 to 600 || Very Good
+|-
+| 601 to 800 || Excellent
+|-
+| 801 to 1000 || Outstanding
+|}
 <!-----------------------------------------------------------------------------------------------------------------------------------------
 
 
