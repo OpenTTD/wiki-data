@@ -230,6 +230,70 @@ Städte und Firmensitze erzeugen Passagiere und Post, während Ölplattformen nu
 In jeder Runde der periodischen Verarbeitung (d. h. alle 256 Ticks) wird ein Zufallswert 0<=X<=255 für jeden Haustile erzeugt.Wenn X nicht kleiner ist als die Bevölkerung des Tiles, werden keine Passagiere erzeugt. Andernfalls werden X/8+1 Fahrgäste erzeugt (abgerundet). Im Falle einer Rezession halbiert sich die Zahl der generierten Passagiere, aber diese Division wird auf- statt abgerundet. Die Generierung von Mails erfolgt auf ähnliche Weise, allerdings mit einem neuen Zufallswert und einem Abgleich mit dem Mailgenerierungsmultiplikator statt mit der Grundgesamtheit. Siehe die vollständige Liste der Standardwerte für HouseProps: [https://newgrf-specs.tt-wiki.net/wiki/DefaultHouseProps]
 ===Unternehmenshauptquartier===
 Der Unternehmenshauptquartier ist eine einzigartige Struktur, die Passagiere und Post generiert, je nach dem, wie hoch die Leistung des Unternehmens ist. Höhere Unternehmenshauptquartiere erzeugen mehr Passagiere und Post, der Output des Hauptquartiers wird gleichmäßig auf alle vier Tiles verteilt, und zwar pro Tile gemäß den folgenden Formeln:
+
+Passagiere: 256 / 4 Tiles / (6 - Unternehmens-HQ-Level (ein Wert zwischen 1 und 5) )
+
+Post: 196 / 4 Tiles / (6 - HQ-Stufe des Unternehmens (ein Wert zwischen 1 und 5) )
+
+==Industrieproduktion==
+So bestimmt das Spiel, wie viel Fracht eine Industrie pro Monat produziert.  Die Produktion von Rohstoffen erfolgt 8 oder 9 Mal pro Monat.  (Sie findet alle 256 Ticks statt.  Ein Tag hat 74 Ticks, und ein Monat hat 28 bis 31 Tage. ([https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/date_type.h#L30 date_type.h]). Das bedeutet, dass nur etwa 9 % der Wirtschaftszweige in einem 28-Tage-Februar 9 Mal produzieren, aber etwa 96 % der Wirtschaftszweige in einem 31-Tage-Monat wie dem März 9 Mal produzieren).  Die Produktion ist immer ein Vielfaches von 8 oder 9, es sei denn, die Branche hat ihre Produktion in diesem Monat umgestellt. 
+
+In dieser Tabelle sind die möglichen Ausgangsproduktionen aufgeführt, geregelt durch das [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|smooth economy]] Update. Diese Zahlen sind Vielfache von 8. Wenn das Spiel eine neue Karte erstellt, hat jeder Wirtschaftszweig 8 Mal produziert und im Dezember vor Spielbeginn keine Produktionsänderungen erfahren.
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Raw Material Industry!!Produced Cargo!!Initial production range
+|-
+|[[en/Manual/Base Set/Industries/Coal Mine]]||Coal||56 to 176
+|-
+|[[en/Manual/Base Set/Industries/Forest]]||Wood||48 to 152
+|-
+|[[en/Manual/Base Set/Industries/Oil Rig]]||Oil||56 to 176
+|-
+|[[en/Manual/Base Set/Industries/Farm]]||Grain and Livestock||40 to 112
+|-
+|[[en/Manual/Base Set/Industries/Copper Ore Mine]]||Copper Ore||56 to 112
+|-
+|[[en/Manual/Base Set/Industries/Oil Wells]]||Oil||48 to 152
+|-
+|[[en/Manual/Base Set/Industries/Iron Ore Mine]]||Iron Ore||40 to 112
+|-
+|[[en/Manual/Base Set/Industries/Bank]] (temperate)||Valuables||24 to 64
+|-
+|colspan="5"|
+|-
+|[[en/Manual/Base Set/Industries/Gold Mine]]||Gold||24 to 80
+|-
+|colspan="5"|
+|-
+|[[en/Manual/Base Set/Industries/Diamond Mine]]||Diamonds||24 to 80
+|-
+|[[en/Manual/Base Set/Industries/Fruit Plantation]]||Fruit||40 to 112
+|-
+|[[en/Manual/Base Set/Industries/Rubber Plantation]]||Rubber||40 to 112
+|-
+|[[en/Manual/Base Set/Industries/Water Supply]]||Water||48 to 152
+|-
+|[[en/Manual/Base Set/Industries/Farm]]||Maize||40 to 128
+|-
+|[[en/Manual/Base Set/Industries/Lumber Mill]]||Wood||180 or 225 (if trees available)
+|-
+|colspan="5"|
+|-
+|[[en/Manual/Base Set/Industries/Candyfloss Forest]]||Cotton Candy||48 to 152
+|-
+|[[en/Manual/Base Set/Industries/Battery Farm]]||Batteries||40 to 128
+|-
+|[[en/Manual/Base Set/Industries/Cola Wells]]||Cola||48 to 136
+|-
+|[[en/Manual/Base Set/Industries/Plastic Fountains]]||Plastic||56 to 160
+|-
+|[[en/Manual/Base Set/Industries/Bubble Generator]]||Bubbles||48 to 152
+|-
+|[[en/Manual/Base Set/Industries/Toffee Quarry]]||Toffee||40 to 112
+|-
+|[[en/Manual/Base Set/Industries/Sugar Mine]]||Sugar||40 to 128
+|}
 <!-----------------------------------------------------------------------------------------------------------------------------------------
 
 
