@@ -193,24 +193,43 @@ Derzeit kann man das Spiel ausnutzen, indem man etwa 200 Bäume im Einflussradiu
 |-
 |Bau eine Station|| -200 || n/a
 |-
-|Zerstörung eines "Randstücks" der Straße|| 16 / 64 / 112 ||-18, down to -100.
+|Zerstörung eines "Randstücks" der Straße|| 16 / 64 / 112 ||-18, bis zu -100.
 |-
-|Zerstörung eines "inneren" Straßenstücks|| 16 / 64 / 112 ||-50, down to -100.
+|Zerstörung eines "inneren" Straßenstücks|| 16 / 64 / 112 ||-50, bis zu -100.
 |-
-|Zerstöre einen Tunnel oder eine Brücke in der Stadt|| 144 / 208 / 400 ||-250, down to 0.
+|Zerstöre einen Tunnel oder eine Brücke in der Stadt|| 144 / 208 / 400 ||-250, bis zu 0.
 |-
-|Gebäude zerstören**|| 40 to 300 ||-40 to -300
+|Gebäude zerstören**|| 40 zu 300 ||-40 zu -300
 |-
-|Baum auf einem freien Platz pflanzen|| n/a ||+7, up to 220.
+|Baum auf einem freien Platz pflanzen|| n/a ||+7, hoch bis 220.
 |-
 |Ein Feld mit Bäumen abräumen|| n/a ||-35
 |-
-|Erfolgreiche Bestechung|| n/a ||+200, up to 800.
+|Erfolgreiche Bestechung|| n/a ||+200, hoch bis 800.
 |-
-|Erfolglose Bestechung|| n/a ||Set to -50.
+|Erfolglose Bestechung|| n/a ||gesetzt zu -50.
 |}
-<nowiki>*</nowiki> "Required rating" is listed for the settings Lenient / Neutral / Hostile of<br>the [[en/Archive/Manual/Settings/Difficulty]] option ''Local authority attitude''.<br><nowiki>**</nowiki> For default buildings. NewGRFs can set this number from 0 to >1000,<br>which effectively makes the building unremovable.
+<nowiki>*</nowiki> "Benötigte Bewertung" ist für die Einstellungen Nachsichtig / Neutral / Feindlich von<br> [[en/Archive/Manual/Settings/Difficulty]] Option "Einstellung der lokalen Behörden".<br><nowiki>**</nowiki> Für Standardgebäude. NewGRFs können diese Zahl von 0 bis >1000 setzen,<br>wodurch das Gebäude praktisch unabbaubar wird.
 </td></tr></table>
+
+Jeden Monat ändern sich die Bewertungen für alle Unternehmen automatisch:
+* Die Bewertung erhöht sich um 5, wenn sie weniger als 200 beträgt.
+* Die Bewertung erhöht sich um 12 für jede Station, die in den letzten 50 Tagen Fracht umgeladen hat.
+* Die Bewertung sinkt um 15 für jede Station, die in den letzten 50 Tagen keine Fracht umgeschlagen hat.
+
+
+'''Beispiel:'''<br>
+Ein Unternehmen hat eine Bewertung von -300 (sehr schlecht), 2 aktive Stationen und 1 inaktive Station in einer Stadt.<br>
+5pts + 2 * 12pts - 15pts = 14pts Punktgewinn pro Monat.<br>
+(-200 - -300)pts / 14pts/mo = 8 Monate, bevor die Stadt dem Unternehmen den Bau eines weiteren Bahnhofs gestattet.
+
+Der Code für Stadtbewertungen ist in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
+==Generierung von Passagieren und Post==
+Städte und Firmensitze erzeugen Passagiere und Post, während Ölplattformen nur Passagiere erzeugen. 
+===Stadt Passagier Generation===
+In jeder Runde der periodischen Verarbeitung (d. h. alle 256 Ticks) wird ein Zufallswert 0<=X<=255 für jeden Haustile erzeugt.Wenn X nicht kleiner ist als die Bevölkerung des Tiles, werden keine Passagiere erzeugt. Andernfalls werden X/8+1 Fahrgäste erzeugt (abgerundet). Im Falle einer Rezession halbiert sich die Zahl der generierten Passagiere, aber diese Division wird auf- statt abgerundet. Die Generierung von Mails erfolgt auf ähnliche Weise, allerdings mit einem neuen Zufallswert und einem Abgleich mit dem Mailgenerierungsmultiplikator statt mit der Grundgesamtheit. Siehe die vollständige Liste der Standardwerte für HouseProps: [https://newgrf-specs.tt-wiki.net/wiki/DefaultHouseProps]
+===Unternehmenshauptquartier===
+Der Unternehmenshauptquartier ist eine einzigartige Struktur, die Passagiere und Post generiert, je nach dem, wie hoch die Leistung des Unternehmens ist. Höhere Unternehmenshauptquartiere erzeugen mehr Passagiere und Post, der Output des Hauptquartiers wird gleichmäßig auf alle vier Tiles verteilt, und zwar pro Tile gemäß den folgenden Formeln:
 <!-----------------------------------------------------------------------------------------------------------------------------------------
 
 
