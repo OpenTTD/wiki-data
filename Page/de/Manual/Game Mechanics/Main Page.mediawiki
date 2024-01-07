@@ -244,7 +244,7 @@ In dieser Tabelle sind die möglichen Ausgangsproduktionen aufgeführt, geregelt
 |- style="background:#efefef"
 !Raw Material Industry!!Produced Cargo!!Initial production range
 |-
-|[[en/Manual/Base Set/Industries/Kohlebergwerk]]||Kohlel||56 to 176
+|[[en/Manual/Base Set/Industries/Coal Mine]]||Kohlel||56 to 176
 |-
 |[[en/Manual/Base Set/Industries/Forest]]||Wood||48 to 152
 |-
@@ -334,7 +334,7 @@ Schauen wir uns zur Vereinfachung die Chancen für 256x256-Karten an (max. 1 Än
 
 {{en/Outdated|Difficulty setting and Advanced setting have been replaced by Settings}}
 
-:''Unterscheiden Sie zwischen [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|Smooth economy]] (erweiterte Einstellung) und [[en/Archive/Manual/Settings/ Schwierigkeit|Stetige Wirtschaft]] (Schwierigkeitseinstellung)''
+:''Unterscheiden Sie zwischen [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|Smooth economy]] (advanced setting) und [[en/Archive/Manual/Settings/Difficulty|Steady economy]] (difficulty setting)''
 
 *Die Wahrscheinlichkeit einer Produktionsänderung pro Monat beträgt „4,5 %“; Mit anderen Worten, durchschnittlich 4,5 % der produzierenden Industrien aus der Branchenliste verändern die Produktion.
 
@@ -355,7 +355,40 @@ Schauen wir uns zur Vereinfachung die Chancen für 256x256-Karten an (max. 1 Än
 
 *Wenn die Option [[en/Archive/Manual/Settings/Smooth economy]] aktiviert ist, betragen die Produktionsänderungen pro Monat zwischen 3 % und 23 %.
 **Industrien mit sehr geringer Produktion (d. h. 12–40 Tonnen pro Monat) werden größere Veränderungen erfahren.
-**Primärindustrien produzieren 8 bis 9 Mal pro Monat Fracht. Die monatliche Produktion ist der „Basiswert“ einer Branche, multipliziert mit 8 oder 9. Beispielsweise beträgt der Basiswert für ein Kohlebergwerk 15 Tonnen, also beträgt die monatliche Produktion 120 oder 135 Tonnen. Dieser Basiswert ist auf 255 begrenzt, sodass die maximal mögliche monatliche Produktion für jede Branche 2040 oder 2295 beträgt.
+**Primärindustrien produzieren 8 bis 9 Mal pro Monat Fracht. Die monatliche Produktion ist der „Basiswert“ einer Branche, multipliziert mit 8 oder 9. Beispielsweise beträgt der Basiswert für ein Kohlebergwerk 15 Tonnen, also beträgt die monatliche Produktion 120 oder 135 Tonnen. Dieser Basiswert ist auf 255 begrenzt, sodass die maximal mögliche monatliche Produktion für jede Branche 2040 oder 2295 beträgt.  [http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Ref]
+
+=====Sonderfälle=====
+
+*[[en/Manual/Base Set/Industries/Oil Rig]] Die Passagierproduktion ist auf 16 Passagiere pro Produktionsveranstaltung begrenzt, was einem Maximum von 144 oder 128 Passagieren pro Monat entspricht. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L2597-L2602]
+*[[en/Manual/Base Set/Industries/Lumber Mill]] ist technisch gesehen keine produzierende Industrie und wird im Code als sekundäre Industrie eingestuft. Vier- bis fünfmal im Monat sucht er spiralförmig in einem 40 x 40 großen Bereich nach außen und sucht nach einem ausgewachsenen Baum, den er fällen kann. Wenn eine gefunden wird, wird die Fliese abgerissen und es werden 45 Tonnen Holz ausgegeben. Dies bedeutet, dass es eine maximale Produktion von 225 oder 180 Tonnen Holz pro Monat gibt, die ausschließlich von der Verfügbarkeit der Bäume abhängt.[https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp# L1094-L1111]
+*Gemäßigtes Klima [[en/Manual/Base Set/Industries/Bank|banks]] ändert nie die Produktion (außer aufgrund der 8 oder 9 Produktionsereignisse pro Monat).
+
+====Beispiele====
+Wenn eine Kohlemine 70 % ihrer Produktion transportiert, besteht eine Chance von „3 %“ (4,5 % * 67 %) für eine Produktionssteigerung von 3–23 % und eine Chance von „1,5 %“. Wahrscheinlichkeit (4,5 % * 33 %) eines Produktionsrückgangs von 3-23 % (aber durchschnittlich 13 %).
+
+(1 + (0,03 – 0,015) * 0,13) ^ 12 – 1 = 0,0237 oder „2,37 %“
+
+Das Kohlebergwerk wird nach dem ersten Jahr durchschnittlich um 2,37 % wachsen.<br>
+(1,0237 ^ 20) - 1 = 59,6 % nach zwanzig Jahren<br>
+(1,0237 ^ 50) - 1 = 321,8 % oder „3,22x“ nach fünfzig Jahren<br>
+(1,0237 ^ 100) - 1 = '''10,35x'' nach hundert Jahren<br>
+
+
+Für eine Branche mit einer Bewertung von mehr als 80 % besteht eine Chance von „3,75 %“ für einen Anstieg und „0,75 %“ für einen Rückgang:<br>
+(1 + (0,0375 – 0,0075) * 0,13) ^ 12 – 1 = 0,0478 oder „4,78 %“
+
+Die Branche wird nach dem ersten Jahr durchschnittlich um etwa 4,78 % wachsen.<br>
+(1,0478 ^ 20) - 1 = '''2,54x''' nach zwanzig Jahren<br>
+(1,0478 ^ 50) - 1 = '''10,32x'' nach fünfzig Jahren<br>
+(1,0478 ^ 100) - 1 = '''106,62x'' nach hundert Jahren<br>
+
+
+Für eine Branche, in der das Flag <code>only_decrease</code> gesetzt ist (derzeit Ölquellen in gemäßigten Klimazonen), besteht nur eine Wahrscheinlichkeit von „4,5 %“ für einen Rückgang:<br>
+(1 + (0 - 0,045) * 0,13) ^ 12 - 1 = (0,99415) ^ 12 -1 = -0,068 oder '''-6,8%''
+
+Die Branche wird nach dem ersten Jahr im Durchschnitt um etwa 6,8 % schrumpfen.<br>
+(0,9320 ^ 20) = „24,46 %“ der Anfangsproduktion nach zwanzig Jahren<br>
+(0,9320 ^ 50) = '''2,96 %'' der Anfangsproduktion nach fünfzig Jahren<br>
 <!-----------------------------------------------------------------------------------------------------------------------------------------
 
 
