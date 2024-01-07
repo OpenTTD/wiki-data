@@ -294,6 +294,41 @@ In dieser Tabelle sind die möglichen Ausgangsproduktionen aufgeführt, geregelt
 |-
 |[[en/Manual/Base Set/Industries/Sugar Mine]]||Sugar||40 to 128
 |}
+
+(Um diese Tabelle zu berechnen, suche unter [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/table/build_industry.h#L1198 _origin_industry_specs] in table/build_industry.h nach der Branche und Ladung. Die Zuckermine hat <code>CT_SUGAR, 11</code>, daher beginnt die Produktion bei 11. Wende die Formel von [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/industry_cmd.cpp#L1643 DoCreateNewIndustry an ()] in industrial_cmd.cpp: Multipliziere die Produktion mit einer zufälligen Ganzzahl von 128 bis 383, dividiere dann durch 256 und runde ab. So wird aus 11 5 bis 16. Multipliziere es schließlich mit 8, um 40 bis 128 zu erhalten.)
+
+===Produktionsänderung===
+Jeden Monat ändert das Spiel zufällig einige Industrieproduktionen.
+====Standard-/TTD-ähnliche Economy-Regeln====
+Für 256x256 Kachelkarten ist ein Wechsel pro Monat möglich (nur 1 Branchenwechsel). Seit der Einführung der Funktion „Tägliche Produktionsänderungen“ im Stamm (r14332) lässt sich die Zahl gut mit der Kartengröße skalieren.
+
+
+*Wie in einer reibungslosen Wirtschaft produzieren Industrien 8 oder 9 Mal pro Monat Fracht.
+Allerdings sind die Produktionen auf 6 Produktionsstufen beschränkt: niedrigste, niedrigere, normale (bei Beginn eines neuen Spiels oder Aufbau einer neuen Industrie), höhere, 2x höhere und höchste.
+Produktionsänderungen zwischen diesen Niveaus bedeuten entweder einen Rückgang um 50 % (Hälfte) oder einen Anstieg um 100 % (Verdoppelung).
+
+*Beispiele:
+**Eine Kohlemine: niedrigste (32 oder 40 t pro Monat), niedrigere (64 oder 72), normale (120 oder 135), höhere (240 oder 270), 2x höhere (480 oder 540) und höchste (960 oder 1080).
+**Ein Wald: niedrigster (32 oder 64 t pro Monat), niedrigerer (35 oder 70), normaler (78 oder 117), höherer (208 oder 260), 2x höherer (416 oder 468) und höchster (832 oder 936). ).
+**Eine Goldmine: niedrigste (12 oder 18 Säcke/Monat), niedrigste (32 oder 40), normale (56 oder 63), höhere (112 oder 126), 2x höhere (224 oder 252) und höchste (448 oder 504).
+
+
+Schauen wir uns zur Vereinfachung die Chancen für 256x256-Karten an (max. 1 Änderung pro Monat = max. 1 Branche pro Monat ändert die Produktion):
+
+*Die Möglichkeit einer Produktionsänderung pro Monat beträgt:
+** 50 % für die <code>only_decrease</code>-Industrie (derzeit nur Ölquellen in gemäßigtem Gelände) oder
+** 50 % für 1/3 Chance (=16,7 %), dass andere Branchen (nicht <code>only_decrease</code>) die Produktion ändern.
+
+
+*Wenn es zu einer Produktionsänderung kommt (~16,7 % Chance pro Monat):
+** Für eine Branche mit schlechtem oder gar keinem Service (weniger als 60 % ihrer Fracht werden transportiert): Wahrscheinlichkeit eines Anstiegs „‚33 %‘‘, Wahrscheinlichkeit eines Rückgangs ‚‘67 %‘‘.
+** Für eine Branche mit gutem (mehr als 60 %) Service: Steigerungswahrscheinlichkeit „67 %“, Rückgangswahrscheinlichkeit „33 %“.
+** Es gibt keinen Bonus für exzellenten Service bei Standard-Economy.
+
+
+*Um die Wahrscheinlichkeit für eine bestimmte Änderung zu berechnen, d. h. 50 % * 1/3 * 33 % = 5,56 %:
+** Schlechter Service: „5,56 %“, dass 1 mögliche Änderung pro Monat eine Erhöhung darstellt, und „11,12 %“, dass 1 mögliche Änderung pro Monat eine Verringerung darstellt.
+** Guter Service: „11,12 %“, dass 1 mögliche Änderung pro Monat eine Erhöhung darstellt, und „5,56 %“, dass 1 mögliche Änderung pro Monat eine Verringerung darstellt.
 <!-----------------------------------------------------------------------------------------------------------------------------------------
 
 
