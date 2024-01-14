@@ -545,6 +545,150 @@ Das Nettoergebnis ist, dass 100 Stundenkilometer ~3,6 Kacheln/Tag entsprechen.
 *Schiffe beschleunigen mit einer Geschwindigkeit von etwa 37 km/h/Tag.
 *Ein "gestopptes" Schiff nimmt seine letzte Geschwindigkeit sofort wieder auf.
 
+==== Züge ==== 
+(with the [[en/Archive/Manual/Settings/Realistic acceleration|realistic train acceleration patch]])<br>
+*Die Züge werden beim Bergauf- und Bergabfahren nicht beeinträchtigt, wenn sie stark genug sind.
+*Die Züge können nur in ein Depot ein- und ausfahren und 90°-Wendungen mit 61 km/h durchführen.
+*Die Züge können eine 45°-Wendung oder zwei 45°-Wendungen in entgegengesetzter Richtung machen, ohne langsamer zu werden.
+*Bei zwei oder mehr 45°-Wendungen in dieselbe Richtung ist die Höchstgeschwindigkeit wie folgt begrenzt:
+
+{| style="margin: 1em 1em 1em 0;"    <!-- begin nested tables -->
+|-
+
+|    <!-- metric -->
+{| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #efefff;"
+|-
+!rowspan=2  style="background:#efefef"  | Krümmung
+!colspan=3  style="background:#dfdfff"  | Max Geschwindigkeit (km/h)
+|-
+!   style="background:#dfdfff"      | Eisenbahn
+!   style="background:#dfdfff"      | Einschienenbahn
+!   style="background:#dfdfff"      | Magnetschwebebahn
+|-
+| style="background:#f8f8ff"    | 0 (90° turn)  
+|    61||91||121
+|-
+| style="background:#f8f8ff"    | 1 (2x45° turn)
+|     88||132||176
+|-
+| style="background:#f8f8ff"    | 2
+|    111||166||221
+|-
+| style="background:#f8f8ff"    | 3
+|    132||198||264
+|-
+| style="background:#f8f8ff"    | 4
+|    151||226||301
+|-
+| style="background:#f8f8ff"    | 5
+|    168||252||336
+|-
+| style="background:#f8f8ff"    | 6
+|    183||274||365
+|-
+| style="background:#f8f8ff"    | 7
+|    196||294||392
+|-
+| style="background:#f8f8ff"    | 8
+|    207||310||413
+|-
+| style="background:#f8f8ff"    | 9
+|    216||324||432
+|-
+| style="background:#f8f8ff"    | 10
+|    223||334||445
+|-
+| style="background:#f8f8ff"    | 11
+|    228||342||456
+|-
+| style="background:#f8f8ff"    | 12+
+|    231||346||461
+|}
+
+|    <!-- imperial -->
+{| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #ffefef;"
+|-
+!rowspan=2  style="background:#efefef"  | Krümmung
+!colspan=3  style="background:#efdfdf"  | Max Geschwindigkeit (mph)
+|-
+!   style="background:#efdfdf"      |Eisenbahn
+!   style="background:#efdfdf"      | Einschienenbahn
+!   style="background:#efdfdf"      |Magnetschwebebahn
+|-
+| style="background:#f8f8ff"    | 0
+|     37|| 56|| 75 
+|-
+| style="background:#f8f8ff"    | 1
+|     54|| 82||109 
+|-
+| style="background:#f8f8ff"    | 2
+|     68||103||137 
+|-
+| style="background:#f8f8ff"    | 3
+|     82||123||164 
+|-
+| style="background:#f8f8ff"    | 4
+|     93||140||187 
+|-
+| style="background:#f8f8ff"    | 5
+|    104||156||208 
+|-
+| style="background:#f8f8ff"    | 6
+|    113||170||226 
+|-
+| style="background:#f8f8ff"    | 7
+|    121||182||243 
+|-
+| style="background:#f8f8ff"    | 8
+|    128||192||256 
+|-
+| style="background:#f8f8ff"    | 9
+|    134||201||268 
+|-
+| style="background:#f8f8ff"    | 10    ||138||207||276 
+|-
+| style="background:#f8f8ff"    | 11    ||141||212||283 
+|-
+| style="background:#f8f8ff"    | 12+   ||143||214||286 
+|}
+
+|}  <!-- end nested tables -->
+
+*Neue Schienentypen können benutzerdefinierte maximale Kurvengeschwindigkeiten in denselben Schritten wie die drei Standardtypen in der Tabelle angeben.
+*Neigezüge können Kurven etwa 20% schneller nehmen als andere Züge (variiert bei einigen Motoren).
+*Zugbeschleunigung und Höchstgeschwindigkeit werden von der Motorleistung, der maximalen Zugkraft (alle Motoren und angetriebenen Wagen zusammen), der aktuellen Geschwindigkeit, dem Luftwiderstand, der Gesamtzugmasse und den Wagen/Triebwerken an Steigungen beeinflusst.
+*Die Tabelle für die Beschleunigung von Nicht-Magnetschwebebahnen finden Sie in den tt-Foren: [http://www.tt-forums.net/viewtopic.php?f=31&t=55972&p=960678#p960672 tt-forums]
+*Bremsung ist doppelte Beschleunigung, außer beim Einfahren in ein Depot oder einen Bahnhof.
+[[Datei:de/Manual/Game Mechanics/Speed-limits.png]]
+''See also: [[en/Archive/Manual/Settings/Realistic acceleration]] and [[en/Community/Corners]].''
+
+Siehe ground_vehicle.cpp, aircraft_cmd.cpp, roadveh_cmd.cpp, ship_cmd.cpp, train_cmd.cpp, vechicle.cpp for code.
+
+Ab OpenTTD 1.6.1 werden die Leistung in PS, die maximale Zugkraft in kN, das Gesamtgewicht des Zuges in Tonnen, die Anzahl der Zugteile (Lokomotiven und Waggons), der Luftwiderstandswert der ersten Lokomotive im Zug (NewGRF-Einstellung, Standardwert ist  <code>min(192,max(1,floor(2048/max_speed)))</code>, d.h. schnellere Züge sind aerodynamischer gebaut), das kombinierte Gewicht aller Zugteile (Lokomotiven oder Wagen), die sich gerade auf einer Steigung befinden, das kombinierte Gewicht aller Zugteile (Lokomotiven oder Wagen), die sich gerade auf einer Abfahrt befinden, die Steilheit der Steigung (Spieleinstellung [1-10], Standardwert 3) und die aktuelle Geschwindigkeit des Zuges in km/h, kann die Beschleunigung eines Zuges, der nicht auf einer Steigung fährt, wie folgt berechnet werden:
+
+; force = min((max_te * 1000), floor((power * 746) / (current_speed * 5/18)))    [N]
+; slope_force = weight_on_upslope * slope_steepness * 100 - weight_on_downslope * slope_steepness * 100    [N]
+; axle_friction = total_weight * 10    [N]
+; rolling_friction = floor((current_speed + 512) * 15 / 512) * total_weight    [N]
+; air_drag_coefficient = 14 * floor(air_drag_value * (1 + number_of_parts * 3/20)) / 1000
+; air_drag = floor(air_drag_coefficient * current_speed^2)   [N]
+; acceleration = (force - (slope_force + axle_friction + rolling_friction + air_drag)) / (total_weight * 4) [256th of a km/h per half-tick]
+
+Hinweis: Wenn sich ein Teil des Zuges in einem Tunnel befindet, ist  air_drag_coefficient zweimal der Fall.
+
+Bei gleichen Werten lässt sich die Gleichgewichtsgeschwindigkeit, d. h. die Geschwindigkeit, auf die sich der Zug schließlich einpendeln würde, wenn die gleichen Bedingungen unbegrenzt andauern würden, wie folgt berechnen [Unter der Annahme einer konstanten <code>rolling_friction</code> (d. h. die Geschwindigkeit bleibt unter 512 km/h), wobei die Bodenbildung  von <code>force</code> und <code>air_drag</code> auf einen ganzzahligen Wert ignoriert wird]:
+
+; p = (slope_force + axle_friction + rolling_friction) / air_drag_coefficient
+; q = (-power * 746 * 18/5) / air_drag_coefficient
+; C = (27/2*q + ((27/2*q)^2 + 27*p^3)^(1/2))^(1/3)
+; equilibrium = min(max_speed, p/C - C/3, max(0, max_te * 1000 / air_drag_coefficient - p)^(1/2))
+
+== Wachstum der Stadt ==
+
+Siehe [[en/Manual/Towns#town-growth]].
+
+[[Category:en/Manual/Playing]]
+
 
 <!-----------------------------------------------------------------------------------------------------------------------------------------
 
