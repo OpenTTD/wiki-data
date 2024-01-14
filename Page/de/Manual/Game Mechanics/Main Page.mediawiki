@@ -402,7 +402,150 @@ Im Spiel werden Sie jedoch feststellen, dass Industrien ihre Produktionsrate seh
 Um die Reaktionsfähigkeit der Industrie zu erhöhen, passen Sie die Anzahl der Waggons an die Industrieproduktion und die Servicehäufigkeit an (für die niedrigste Produktion mit guter Häufigkeit sollten Sie zwei Waggons verwenden). Für solche Güterzüge werden in der Regel [Full Load]-Aufträge verwendet.
 
 
-'''Hinweis:'' Die genaue Formel finden Sie unter „[https://github.com/OpenTTD/OpenTTD/blob/master/src/industry_cmd.cpp#L2598 ChangeIndustryProduction()]“ in industrial_cmd.cpp.
+'''Hinweis:''' Die genaue Formel finden Sie unter „[https://github.com/OpenTTD/OpenTTD/blob/master/src/industry_cmd.cpp#L2598 ChangeIndustryProduction()]“ in industrial_cmd.cpp.
+
+==Zahlungssätze bei Lieferung==
+Der Betrag, den Sie für die Zustellung von Fracht erhalten, hängt von 4 Faktoren ab: der Menge der von Ihnen zugestellten Fracht, dem Wert der Fracht, der Entfernung, die Sie zurücklegen, und der Pünktlichkeit der Zustellung.
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Fracht!!Menge!!Frühe Lieferung<br> Zeit (Tage)!!Späte Lieferung<br> Zeit (Tage)!!Ursprüngliche <br> Bezahlung (pounds)
+|-
+|[[en/Manual/Base Set/Cargos/Passengers]]|| ||sofort||24||£39
+|-
+|[[en/Manual/Base Set/Cargos/Valuables]]||Bags||1||32||£91
+|-
+|[[en/Manual/Base Set/Cargos/Livestock]]||Items||4||18||£53
+|-
+|[[en/Manual/Base Set/Cargos/Grain]]||Tons||4||40||£58
+|-
+|[[en/Manual/Base Set/Cargos/Goods]]||Crates||5||28||£75
+|-
+|[[en/Manual/Base Set/Cargos/Coal]]||Tons||7||Nichts||£72
+|-
+|[[en/Manual/Base Set/Cargos/Steel]]||Tons||7||Nichts||£69
+|-
+|[[en/Manual/Base Set/Cargos/Iron Ore]]||Tons||9||Nichts||£62
+|-
+|[[en/Manual/Base Set/Cargos/Wood]]||Tons||15||Nichts||£61
+|-
+|[[en/Manual/Base Set/Cargos/Oil]]||Kiloliters||25||Nichts||£54
+|-
+|[[en/Manual/Base Set/Cargos/Mail]]||Bags||20||90||£55
+|- style="background:#efefef"
+!colspan="5" align="center"|Arktis-spezifisch
+|-
+|[[en/Manual/Base Set/Cargos/Wheat]]||Tons||4||40||£58
+|-
+|[[en/Manual/Base Set/Cargos/Paper]]||Tons||7||60||£66
+|-
+|[[en/Manual/Base Set/Cargos/Gold]]||Bags||10||40||£71
+|-
+|[[en/Manual/Base Set/Cargos/Food]]||Tons||sofort||30||£69
+|- style="background:#efefef"
+!colspan="5" align="center"|Tropenspezifisch
+|-
+|[[en/Manual/Base Set/Cargos/Rubber]]||Kiloliters||2||20||£54
+|-
+|[[en/Manual/Base Set/Cargos/Fruit]]||Tons||sofort||15||£51
+|-
+|[[en/Manual/Base Set/Cargos/Maize]]||Tons||4||40||£53
+|-
+|Tropical [[en/Manual/Base Set/Cargos/Wood]]||Tons||15||Nichts||£97
+|-
+|[[en/Manual/Base Set/Cargos/Copper Ore]]||Tons||12||Nichts||£59
+|-
+|[[en/Manual/Base Set/Cargos/Water]]||Kiloliters||20||80||£57
+|-
+|[[en/Manual/Base Set/Cargos/Diamonds]]||Bags||10||Nichts||£71
+|- style="background:#efefef"
+!colspan="5" align="center"|Spielzeugland spezifisch
+|-
+|[[en/Manual/Base Set/Cargos/Sugar]]||Tons||20||Nichts||£54
+|-
+|[[en/Manual/Base Set/Cargos/Toys]]|| ||25||Nichts||£68
+|-
+|[[en/Manual/Base Set/Cargos/Batteries]]|| ||2||30||£53
+|-
+|[[en/Manual/Base Set/Cargos/Sweets]]||Tons||8||40||£75
+|-
+|[[en/Manual/Base Set/Cargos/Toffee]]||Tons||14||60||£58
+|-
+|[[en/Manual/Base Set/Cargos/Cola]]||Kiloliters||5||75||£59
+|-
+|[[en/Manual/Base Set/Cargos/Candyfloss]]||Tons||10||25||£61
+|-
+|[[en/Manual/Base Set/Cargos/Bubbles]]|| ||20||80||£62
+|-
+|[[en/Manual/Base Set/Cargos/Plastic]]||Kiloliters||30||Nichts||£54
+|-
+|[[en/Manual/Base Set/Cargos/Fizzy Drinks]]|| ||30||50||£76
+|}
+
+Die anfänglichen Frachtpreise gelten für die Lieferung von 100 Frachtstücken für 1 Kachel.  Die Bezahlung steigt mit der Inflation im Laufe des Spiels.
+
+Strafen für verspätete Zustellung:
+*Für jeden Tag nach der Frühzustellungszeit, an dem Sie die Fracht zustellen, werden Sie mit 0,4 % bestraft.
+*Für jeden Tag nach der Spätzustellungszeit, an dem Sie die Fracht zustellen, werden Sie um weitere 0,4 % bestraft.
+*Die maximale Strafe beträgt 88%.
+
+'''Beispiele''' (keine Inflation):<br>
+Liefere 200,000 Liter Öl 20 Squares in 10 Tagen:<br>
+2 * £54 * 20 Squares * 100% = £2160
+
+Zustellung von 100 Postsäcken mit 100 Quadraten in 100 Tagen:<br>
+£55 * 100 Quadrate * (1 - 0,80*0,4 - 0,10*0,4) = £3520
+
+'''TIPP Berechnen Sie einfach''':<br>
+Einkommen = Frachteinheiten * Frachtwert * 0,4<br>
+Der Ladungswert kommt von der Y-Achse auf der Grafik der spezifischen Transportgüter im Spiel.<br>
+Messen Sie Ihre tatsächliche Lieferzeit in Tagen und tragen Sie diese auf der X-Achse ein.
+Dieses Ergebnis gibt Ihnen eine einfache Schätzung Ihres Einkommens mit 5% Abweichung
+
+'''Anmerkungen:'''
+* Eine nützliche Faustregel ist etwa das 1-2-fache der Transportgeschwindigkeit. D.h. für einen 200 km/h schnellen Zug ist eine Entfernung von 300 Kacheln ideal. Gut abgestimmte Zugnetze können etwas weiter reichen, aber unerwartete Verspätungen zerstören Ihren Wert für Langstreckentransporte. Wirklich große Karten können die Wertuntergrenze von 12 % ausnutzen; wenn Ihre Waren ohnehin eine große Verspätung haben, ist die große Entfernung das Einzige, was zählt.
+
+* Die exakte Formel ist viel komplizierter und etwas genauer, was auf Rundungsfehler bei der Umrechnung von größeren diskreten Werten zurückzuführen ist.  Siehe economy.cpp ([https://github.com/OpenTTD/OpenTTD/blob/master/src/economy.cpp#L958 GetTransportedGoodsIncome()]) and [[en/Manual/Game Mechanics/Cargo income]].
+
+* Die Entfernung wird zwischen den mit Namen versehenen Kacheln der Stationen gemessen, nicht nach Branchen oder zurückgelegter Strecke.  Sie wird berechnet, indem die Differenzen der x- und y-Kacheln addiert werden ([http://en.wikipedia.org/wiki/Manhattan_distance manhattan distance]), not straight-line distance.
+
+* Die Zeit wird gemessen als die Gesamtzeit, die die Ladung in einem Fahrzeug verbracht hat, vom Moment des Beladens bis zum Moment des Entladens. Fracht, die an Bahnhöfen wartet, altert nicht. Standardmäßig altern alle Fahrzeuge ihre Ladung mit der gleichen Geschwindigkeit, aber das kann sich mit NewGRFs ändern.
+
+* Für jede Fracht gibt es eine charakteristische Zeit, zu der die Zahlung maximiert wird, vorausgesetzt, Sie können sie mit konstanter Geschwindigkeit von der Ausgangsstation wegbewegen.  Für eine Fracht mit einer "Verspätungsstrafe" beträgt diese Zeit typischerweise etwa 70 Tage; für eine Fracht ohne Verspätungsstrafe beträgt sie typischerweise etwa 130 Tage.
+
+==Fahrzeuggeschwindigkeiten==
+Intern arbeitet OpenTTD mit einer Einheit namens "km-ish/h", die gleich "mph*1.6" ist. 
+Der Umrechnungsfaktor von km-ish/h zu km/h ist 1,00584, und der Umrechnungsfaktor von km-ish/h zu mph ist 1,6.
+
+Ein Tile ist für die Zwecke der Fahrzeuggeschwindigkeit 664 (216) km lang, also 668 km oder 415 Meilen. Dies beruht auf den folgenden Fakten: 
+*Ein Tile hat 16 Unterpositionen pro X/Y-Achse.
+*Ein Fahrzeug speichert den Rest der Kachelbewegung in einem Byte namens Subspeed, hat also 256 verschiedene Werte.
+*Die (Roh-)Geschwindigkeit des Fahrzeugs wird zu subspeed addiert. Die sich daraus ergebende Zahl wird durch 256 geteilt, der Rest wird in subspeed gespeichert, und das Fahrzeug wird um den Quotienten der Unterpositionen vorwärts bewegt. Bei Zügen und Flugzeugen wird die Rohgeschwindigkeit in km-ish/h angegeben, bei Straßenfahrzeugen/Schiffen in 0,5 km-ish/h. Bei Zügen und Flugzeugen wird dieser Schritt zweimal pro Tick ausgeführt, bei Schiffen und Straßenfahrzeugen einmal pro Tick.
+*Ein Tag umfasst 74 Ticks und dauert 24 Stunden.
+Nehmen wir nun an, ein Fahrzeug fährt 1 km/h: (1 * 16 * 256) / (74 * 2) * 24 = 664.(216).
+
+Das Nettoergebnis ist, dass 100 Stundenkilometer ~3,6 Kacheln/Tag entsprechen.
+
+
+==== Flugzeuge ====
+*Standardmäßig fliegen die Flugzeuge mit einem Viertel ihrer angegebenen Geschwindigkeit (dies kann in den erweiterten Einstellungen geändert werden).
+*Die Beschleunigung der Flugzeuge variiert von Flugzeug zu Flugzeug zwischen 144 km/h und 400 km/h.
+*Abgestürzte Flugzeuge fliegen mit 320 km-ish/h.
+*Die Rollgeschwindigkeit auf dem Flughafen beträgt 150 km-ish/h.
+
+==== Straßenfahrzeuge ====
+*Straßenfahrzeuge beschleunigen mit etwa 37 km/h/Tag.
+*Straßenfahrzeuge fahren mit der Hälfte ihrer Höchstgeschwindigkeit um Kurven.
+*Straßenfahrzeuge beschleunigen bergab zusätzlich 74 km/h/Tag.
+*Wenn es bergauf geht, bremsen Straßenfahrzeuge 4 Mal pro Kachel um 10 % ab.  Dies gleicht sich mit einer Beschleunigung von etwa 34 km/h für alle Straßenfahrzeuge aus.
+
+(Hinweis: Dies gilt nicht, wenn das verbesserte Modell für die Beschleunigung von Straßenfahrzeugen verwendet wird).
+
+==== Schiffe ====
+*Schiffe beschleunigen mit einer Geschwindigkeit von etwa 37 km/h/Tag.
+*Ein "gestopptes" Schiff nimmt seine letzte Geschwindigkeit sofort wieder auf.
+
+
 <!-----------------------------------------------------------------------------------------------------------------------------------------
 
 
