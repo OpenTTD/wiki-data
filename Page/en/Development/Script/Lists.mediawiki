@@ -27,6 +27,15 @@ After you have applied a valuator, you can modify (remove items, sort, etc.) the
 
 To start, <code>AIList()</code> is the most primary list we have. It doesn't depend in any way on the OpenTTD core. It is a simple list you can fill with items and make valuators for them. As <code>AITownList()</code> is a good example of a bit more complex <code>AIList()</code>, we will discuss that one rather then <code>AIList()</code>.
 
+=== AICargoList() ===
+
+Despite only having one value, the Cargo ID, you still need to call <code>foreach</code> with two parameters:
+
+ local allCargo = AICargoList()
+ foreach(cargo, unused in allCargo) {
+  AILog.Info("Evaluating " + AICargo.GetName(cargo))
+ }
+
 === AITownList() ===
 
 Of course you want to know which towns are in the map, and most likely: which town has to most population, and what the location is. For that we have <code>AITownList()</code>. If you create an instance of it, it immediately fills itself with all towns. You can walk them like this:
