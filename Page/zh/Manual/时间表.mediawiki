@@ -1,7 +1,13 @@
 [[Translation:en/Manual/Timetable]]
 
+{{zh/翻译|origin=en/Manual/Timetable
+|from=en
+|to=zh
+|Percentage=50
+}}
+
 == 界面 ==
-时间表自[[en/Archive/OpenTTD/OpenTTD 0.6.0]]-beta2面世（[https://github.com/OpenTTD/OpenTTD/commit/cf0118ee63603132dc1d08d7f7e800b26e53fc97 r10236]）。时间表按钮可在指令窗口的右上角找到，选定车辆的所有指令都有显示在时间表窗口里。你可以选择车辆要在站点停留多久（以天数或周期-可在[[en/Archive/Manual/Settings/Advanced Settings/Interface#show-timetable-in-ticks-rather-than-days |进阶设置]]修改）以及车辆在两站之间要开多久（包括设定某段路城的最高时速），此外有个计数器用来显示车辆是否准点或出现误点情形。
+时间表自[[en/Archive/OpenTTD/OpenTTD 0.6.0]]-beta2引入（[https://github.com/OpenTTD/OpenTTD/commit/cf0118ee63603132dc1d08d7f7e800b26e53fc97 r10236]）。时间表按钮可在指令窗口的右上角找到，选定车辆的所有指令都有显示在时间表窗口里。你可以选择车辆要在站点停留多久（以天数或周期-可在[[en/Archive/Manual/Settings/Advanced Settings/Interface#show-timetable-in-ticks-rather-than-days |进阶设置(en)]]修改）以及车辆在两站之间要开多久（包括设定某段路城的最高时速），此外有个计数器用来显示车辆是否准点或出现误点情形。
 
 [[File:en/Manual/Orders-timetable.png|center|frame|时间表界面，可从指令窗口进入]]
 
@@ -38,7 +44,7 @@
 |在下次运转时自动填满时间表，不调整等待时间
 |当你更新时间表的运行时间时还蛮有用的（例如在旧路线使用跑比较快的车辆）
 |}
-{{en/Warning|Enabling autofill clears any previous timetable. Be sure to use non-destructive autofill, turned on by ctrl+clicking on an autofill button}}
+{{zh/警告|启用“自动制表”会清除之前的任何时间表。尽可能使用非破坏性的“自动制表”，它可以通过在点击“自动制表”时同时按下Ctrl键来启用。}}
 
 == 使用时间表 ==
 时间表可以避免车辆全部"黏在一起"，分散你的车辆可以协助各站间的货物流更均匀，不过故障丶车流量等致延迟的因素还是可能会让车辆全部挤在某个路段。
@@ -57,6 +63,40 @@
 [[File:en/Manual/Timetable-slack.png|center|frame|修改时间让时间表排松一点]]
 
 现在发动公车群！你可能会想让游戏暂停确保它们在同一时间发动，不然你为了分散它们而作的努力就全白费了。
+
+Chances are, at least at first, you got the slack time wrong. Timetabling is still a bit of a learned craft, and far from a magical "automatically spread out vehicles with same orders" option ([http://bugs.openttd.org/task/1128 yet]). Let the buses run for a while (it needs to be long enough for a few breakdowns---a year should do), and see what their timetable windows say.
+[[File:en/Manual/Timetable-runninglate.png|center|frame|Without enough slack, breakdowns and other delays will lead to accumulating lateness.]]
+Oh dear. Although eight days isn't much, the differences in lateness mean that our buses aren't so nicely spread out any more. Add a little more slack to the timetable. '''Don't''' click the '''Reset Late Counter''' button---that will make the buses forget how far they are from their evenly-spaced objective, and make them instead try to match how they are currently bunched.
+{{en/Note|If your buses are never late, and seem to be spending a lot of time waiting about at stations without transferring passengers, you probably added too much slack instead.}}
+
+Your buses should now be pretty happily set up, and safe to be left to their own devices while you go work on some other route. Here's how our example looks after five years on fast-forward:
+[[File:en/Manual/Timetable-fiveyears.png|center|frame|With enough slack, the buses are still nicely spread out after five years.]]
+
+Despite repeated breakdowns, they are still evenly spaced around the loop. But what happens when a new bus type is released, and they [[en/Manual/Replace vehicles|get upgraded]]?
+[[File:en/Manual/Timetable-newbus.png|center|frame|New, faster vehicles will limit themselves to the unmodified timetable by waiting around at stations.]]
+The good news is that the timetable will continue to work, and your stations will still see regular buses, rather than hours of waiting and then three at once. The bad news is that your new, faster buses will be sitting around waiting for time to pass so that they've synchronised with a timetable set up for old, slow buses. Because this isn't ''wrong'', as such (the buses still keep their spacing, deliver cargo, and make money), you won't get any warnings about it, either.
+
+So that's the downside of timetables---''you need to update your timetables when you get new vehicles''. How much work this is will depend on how much you use multiple vehicles which are not already rate-controlled by some other mechanism, such as [[en/Manual/Orders#full-load|full load]], and how skilled you get at estimating required slack. I suggest you keep it to just buses, and possibly mail trucks.
+
+The upside is that one of the big, big factors when calculating your [[en/Manual/Game Mechanics/Main Page#station-rating|station ratings]] is how long it has been since the last vehicle showed up. People do not like to be kept waiting for the bus, even if the bus is actually a road train of five large, fast buses which will whisk away all nine-hundred passengers without strain. After about ten years (and a little cheating to skip forward to new bus designs for the above), here are the station ratings for our trivial route:
+[[File:en/Manual/Timetable-ratings.png|center|frame|Regular buses keeps ratings higher than an infrequent hairball, even if they can't keep up with production.]]
+Three buses is nowhere near enough to service Overnfield city station, but we avoid a terrible rating (and subsequent local authority obstruction of anything we do nearby) by at least offering a frequent service.
+
+=== Limitations ===
+The way that timetables are currently implemented, there is no global frame of reference for a vehicle's timetable.  Each timetable is relative to the time that vehicle's timetable was last reset.  This makes some tasks, for which real world timetables might be used, difficult or impossible:
+* Scheduling one vehicle to depart slightly after a connecting service arrives
+* Scheduling a free platform at a station for an express service
+* Scheduling trains through a busy junction such that few, if any, must wait
+In fact, most scheduling tasks other than creating headway between the vehicles operating to a single set of shared orders are difficult.
+
+=== Summary ===
+* Timetabling is tuned to a particular route and vehicle speed. Use it for things like buses; trains are better served by being instructed to wait for a full load. Use shared orders.
+* Use '''Autofill''' to get an initial measurement to base your timetable upon.
+* Manually spread out your vehicles. Reset any late time once in position.
+* Add and tune a little slack time to allow them to catch up after delays.
+* Start the vehicles at the same time.
+* Repeat the tuning when upgrading to faster vehicles.
+
 
 == 自动分隔 ==
 从1.4.0版本开始可以利用时间表功能让各车辆自动分散。
@@ -79,12 +119,14 @@
 * 在指令区点跳过直到下一个站点为列表的第一站
 * 取消自动制表，然後在时间表的每个点排松一点，因为第一次驶进这些站点是没有乘客装载的，因此你需要自行增加装载时间
 * 完成时间表後，决定你要让多少台公车跑这条路线
-* 同时按Ctro+按下复制车辆键，被复制的车辆会共享同个指令及时间表
+* 同时按Ctrl+按下复制车辆键，被复制的车辆会共享同个指令及时间表
 * 复制完後，点第一台车并同时按Ctrl+点实施日期
 * 设定实施日期，最好让车辆在时间表实施前就在第一站等候发车
 * 发出所有车辆，虽然它们会全部挤在第一站，但它们会一个一个依班距发车，直到全部隔开为止
 * 你可以透过每辆车的时间表查看实施日期都有确实隔开
 
 你可能会在时间表完成填充後按下暂停键来复制车辆并设定好时间表，这样就不用担心因游戏进行而让第一台车越跑越远。
+
+It's not strictly necessary to set a start date in the future or to even stop the first vehicle. Provided there is a little slack in the timetable, the vehicles will speed up and slow down as needed and will eventually space out evenly. The above is just the simplest method I have found.
 
  [[Category:en/Manual/Tutorial]]
