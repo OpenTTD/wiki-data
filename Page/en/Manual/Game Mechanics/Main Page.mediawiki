@@ -491,9 +491,14 @@ Initial cargo payment values are for delivering 100 pieces of cargo 1 tile.  Pay
 
 
 Late delivery penalties:
-*For each day after the Early Delivery time that you deliver the cargo, you are penalized 0.4%.
-*For each day after the Late Delivery time that you deliver the cargo, you are penalized an additional 0.4%.
-*Maximum penalty is 88%.
+* For each day after the Early Delivery time that you deliver the cargo, you are penalized 0.4%.
+* For each day after the Late Delivery time that you deliver the cargo, you are penalized an additional 0.4%.
+* Maximum penalty is 88%, after which you are penalized further based on how long after the max penalty it takes for you to deliver the cargo.
+
+Extremely late delivery penalty:
+* The penalty is an additional factor of 31 / (x + 32) multiplied onto the existing payment, where x is the number of days in transit after the regular late delivery penalty reaches its maximum.
+* This translates into another 50% reduction at 30 days past the maximum penalty, increasing to 75% at 92 days past the maximum penalty, and to 88% at 216 days past the maximum penalty.
+* This penalty is effectively unbounded and can be found here: [https://github.com/OpenTTD/OpenTTD/blob/2097719f269edf2e42ada3ebe7854534d27b4e11/src/economy.cpp#L1027]
 
 
 '''Examples''' (no inflation):<br>
@@ -510,7 +515,7 @@ measure your real delivery time in days and plot on x-axis
 This result will give you an easy estimation of your income with 5% deviation
 
 '''Notes:'''
-* A useful rule of thumb is around 1-2x the transport speed. I.e. for a 200 km/h train, around 300 tiles distance is ideal. Well tuned train networks can push a little further, but any unexpected delays will destroy your value for long distance haulage. Really large maps can exploit the 12% value floor; if your goods are on a long delay anyways, long distance is the only thing that matters.
+* A useful rule of thumb is around 1-2x the transport speed. I.e. for a 200 km/h train, around 300 tiles distance is ideal. Well tuned train networks can push a little further, but any unexpected delays will destroy your value for long distance haulage.
 
 * The exact formula is much more complicated and slightly more accurate, due to rounding error when converting from larger discrete values.  See economy.cpp ([https://github.com/OpenTTD/OpenTTD/blob/master/src/economy.cpp#L958 GetTransportedGoodsIncome()]) and [[en/Manual/Game Mechanics/Cargo income]].
 
