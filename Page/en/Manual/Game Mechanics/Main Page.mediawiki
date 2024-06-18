@@ -7,7 +7,7 @@ You always wanted to know how the station-rating was built up? How goods-distrib
 
 ==Company rating==
 
-Each part of the company rating is a linear function, i.e. earning 50% of the target for a component will give 50% of the points allocated for that component. Where components involve monetary amounts, these are converted to the currency of the current game; internally these amounts are stored as the pound amount.
+Each part of the company rating is a linear function, i.e. earning 50% of the target for a component will give 50% of the points allocated for that component. Where components involve monetary amounts, these are converted to the currency of the current game; internally these amounts are stored as the pound amount. Where components involve times and the game uses wallclock timekeeping, these are converted to minutes at the rate of 12 minutes per year, one minute per month, and 2 seconds per day.
 
 {| {{en/Wikitable}}
 |- style="background:#efefef"
@@ -98,17 +98,17 @@ This section shows the factors that affect the station rating. All calculations 
 |-
 | 0 || 33 || 13%
 |-
-|rowspan="4"|Days since last cargo pickup <br> Multiply days in "Condition" column by 4 if last vehicle was a ship.<br><small>Note: If a vehicle was ready to pick up cargo but there was no cargo, it still counts as a cargo pickup.<br>If a vehicle is full when arriving however, no cargo pickup is ever recorded and the timer does not reset.</small>|| 30 to 52.5 || 25 || 10%
+|rowspan="4"|Seconds since last cargo pickup <br> Multiply seconds in "Condition" column by 4 if last vehicle was a ship.<br><small>Note: If a vehicle was ready to pick up cargo but there was no cargo, it still counts as a cargo pickup.<br>If a vehicle is full when arriving however, no cargo pickup is ever recorded and the timer does not reset.</small>|| 60 to 105 || 25 || 10%
 |-
-| 15 to 30 || 50 || 20%
+| 30 to 60 || 50 || 20%
 |-
-| 7.5 to 15  || 95 || 37%
+| 15 to 30  || 95 || 37%
 |-
-| less than 7.5 || 130 || 51%
+| less than 15 || 130 || 51%
 |-
 |rowspan="6"|Units of cargo waiting at station<br><small>Note: if cargo has been transferred to other stations, then the game MAY consider the maximum cargo waiting at any of those stations as the waiting cargo for the source station: [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3276 TruncateCargo()].
 This is triggered when the game truncates cargo (<tt>waiting_changed = true</tt>), which occurs when any of the stations meet the following conditions:
-* Cargo has not been picked up from any of those stations in 637.5 days. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3300-L3306]
+* Cargo has not been picked up from any of those stations in 637.5 days (21 minutes and 15 seconds). [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3300-L3306]
 * Station has rating less than or equal to 25% AND has more than 200 units of cargo waiting. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3379-L3386]
 * Station has rating less than 50% AND has more than 0 units of cargo waiting, happening with RANDOM PROBABILITY proportional to the station rating. I.E. if station rating is 49%, there is a ~1% chance, at 25% rating there is a ~50% chance, and at 0% station rating there is a 100% chance. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3388-L3396]
 * Station has more than 4096 units of cargo waiting. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3398-L3411].</small>
@@ -144,8 +144,8 @@ This is triggered when the game truncates cargo (<tt>waiting_changed = true</tt>
 |}
 Divide the total rating points by 255 to get the percent rating. The maximum possible rating is 100%.
 
-Every 2.5 days ([https://github.com/OpenTTD/OpenTTD/blob/0d599e155f335e922ad2be738a3ab73d1dea346b/src/date_type.h#L34 185 ticks]), station ratings are computed; ratings can't change by more than 2 points (0.78%) per cycle, except due to items under "Event".
-Events give an instant, temporary boost (or penalty) to ratings of nearby stations. The rating will gradually return to normal, following the 2 point per 2.5 days rule.
+Every 2.5 days (5 seconds or [https://github.com/OpenTTD/OpenTTD/blob/0d599e155f335e922ad2be738a3ab73d1dea346b/src/date_type.h#L34 185 ticks]), station ratings are computed; ratings can't change by more than 2 points (0.78%) per cycle, except due to items under "Event".
+Events give an instant, temporary boost (or penalty) to ratings of nearby stations. The rating will gradually return to normal, following the 2 points every 2.5 days or 5 seconds rule.
 
 The amount of cargo that can be transported from an industry is fully reliant on the station rating. This means that if there is exactly one station serving an industry, on ticks when the industry produces cargo, exactly station rating % of the cargo will be moved to the station. So if the amount of cargo transported from an industry is low, it is probably because the station rating is low, too. 
 
@@ -160,7 +160,7 @@ The amount of cargo that can be transported from an industry is fully reliant on
 
 Goods are distributed to stations according to their rating.
 
-If there is only one station around, then a percentage of available goods equal to the station's rating is distributed to it every 2.5 day cycle.
+If there is only one station around, then a percentage of available goods equal to the station's rating is distributed to it every 2.5 days (5 seconds).
 
 If multiple stations are present, then goods are divided between them based on rating. If there are stations belonging to more than one company, then goods are first divided between companies according to the best station of each company: the proportion of goods allocated to a company C is equal to the best station rating of C over the sum of all best station ratings for all companies. Note that this will be equal to 100% if all stations belong to one company. Then each company's allocation is subdivided among its stations. A station S belonging to C receives a fraction of C's company allocation equal to the rating of S over the sum of the ratings of all stations belonging to C.
 
@@ -217,16 +217,16 @@ Currently you can exploit the game by planting about 200 trees within a town's i
 <nowiki>*</nowiki> "Required rating" is listed for the settings Lenient / Neutral / Hostile of<br>the [[en/Archive/Manual/Settings/Difficulty]] option ''Local authority attitude''.<br><nowiki>**</nowiki> For default buildings. NewGRFs can set this number from 0 to >1000,<br>which effectively makes the building unremovable.
 </td></tr></table>
 
-Each month, the ratings for all companies automatically change:
+Every month (or minute), the ratings for all companies automatically change:
 * Rating goes up by 5 if it is less than 200.
-* Rating goes up by 12 for each station that has transferred cargo in the last 50 days.
-* Rating goes down by 15 for each station that has not transferred cargo in the last 50 days.
+* Rating goes up by 12 for each station that has transferred cargo in the last 50 days (100 seconds).
+* Rating goes down by 15 for each station that has not transferred cargo in the last 50 days (100 seconds).
 
 
 '''Example:'''<br>
 A company has a rating of -300, (Very Poor), 2 active stations and 1 inactive station at a town.<br>
 5pts + 2 * 12pts - 15pts = 14pts points gain per month.<br>
-(-200 - -300)pts / 14pts/mo = 8 months before the town will let the company build another station.
+(-200 - -300)pts / 14pts/mo = 8 months (or minutes) before the town will let the company build another station.
 
 Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
 ==Passenger and Mail Generation==
@@ -400,7 +400,7 @@ ln(8 / 48) / ln(0.99415) = 305.9 months or '''25.4 years''' is the mean lifetime
 ln(8 / 152) / ln(0.99415) = 501.8 months or '''41.8 years''' is the mean lifetime of a temperate Oil Wells (starting at 152 oil/month).<br>
 
 
-For good service, it takes '''29.6 years''' on average '''to double'''; with excellent service, it takes '''14.8 years'''. If in the game's time a day is 2.22 seconds, then the '''doubling time''' with good service is '''6.7 hours'''; with excellent service, the doubling time is '''3.3 hours'''. For production to go from near bottom of 100 to near maximum of 2040 or 2295 takes '''130 years''' with good service and '''65 years''' with excellent service.
+For good service, it takes '''29.6 years''' on average '''to double'''; with excellent service, it takes '''14.8 years'''. If in the game's time a day is 2 seconds, then the '''doubling time''' with good service is about '''6 hours'''; with excellent service, the doubling time is about '''3 hours'''. For production to go from near bottom of 100 to near maximum of 2040 or 2295 takes '''130 years''' with good service and '''65 years''' with excellent service.
 
 However, in game you will find industries changing their production rate very randomly. It must be stressed the above examples are only true when observing many industries over the long-term; individual industries may greatly deviate from these averages. Statistically speaking, 6 out of 10 industries will not go from 100 to 2040-2295 even with the best service during 65 years. About 1 out of 9 industries will even lower their production when being served at 60-80% cargo transported for 50 years. 
 
@@ -523,7 +523,7 @@ This result will give you an easy estimation of your income with 5% deviation
 
 * Time is measured as the total time the cargo is spent inside a vehicle, from the moment of loading to the moment of unloading. Cargo waiting at stations does not age. By default, all vehicles age their cargo at the same speed, but this may change with NewGRFs.
 
-* Each cargo has a characteristic time at which payment is maximized, assuming you can keep it moving away from the source station at a constant speed.  For a cargo with a "late delivery" penalty, this time is typically around 70 days; for one without, this is typically around 130 days.
+* Each cargo has a characteristic time at which payment is maximized, assuming you can keep it moving away from the source station at a constant speed.  For a cargo with a "late delivery" penalty, this time is typically around 70 days or 2 minutes; for one without, this is typically around 130 days or 4 minutes.
 
 ==Vehicle speeds==
 Internally OpenTTD works with a unit called "km-ish/h", which is equal to "mph*1.6". 
@@ -536,7 +536,7 @@ A tile is, for vehicle speed purposes 664.(216) km-ish, 668 km or 415 miles long
 *A day contains 74 ticks, and takes 24 hours.
 Now assume a vehicle going 1 km-ish/hour: (1 * 16 * 256) / (74 * 2) * 24 = 664.(216).
 
-The net result is that 100 km/hour is ~3.6 tiles/day.
+The net result is that 100 km/hour is ~3.6 tiles/day (1.8 tiles/sec).
 
 
 ==== Aircraft ====
