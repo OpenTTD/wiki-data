@@ -1,0 +1,84 @@
+[[Translation:en/Manual/FAQ multiplayer]]
+
+
+
+'''关于 OpenTTD 多人游戏方面的问题'''，如加入服务器、创建服务器、进行游戏。
+
+__FORCETOC__
+
+=====同一场 OpenTTD 游戏可以有多少个玩家加入？=====
+:* 一场多人游戏最多可有 255 名玩家参与，但你只能开设 15 家公司。 每名玩家都可以玩自己的公司，加入其他公司([[en/Community/Play Style/Cooperative gameplay]])或观看游戏([[en/Archive/Manual/Spectator mode]]).
+
+=====我要如何进行多人游戏？=====
+:* 你可以参照[[zh/Manual/多人游戏]]进行，或使用下列命令行：
+<pre>openttd -n IP[:port][#CompanyID]</pre>
+示例:
+<pre>openttd -n 192.168.0.1:3979#1</pre> 将会连接到 192.168.0.1 的 3979 端口，并加入公司 1。
+
+=====可以跨平台联机吗？=====
+:* 可以。例如，你可以在 MacOS 上启动一个服务器，然后其他使用 Windows、Linux 或其他操作系统的玩家均可以加入到服务器。
+
+=====OpenTTD 使用哪个端口？=====
+:* 默认端口号使用 3979，但你在搭建服务器时可以将其修改成任何你喜欢的数字。如果你的服务器架设在路由器内网中，并且想要人们能够通过 IP 直连服务器，那你需要在路由器内设置端口转发，TCP 和 UDP 都需要设置转发。
+:* 如果你使用的服务器版本是 12.0 或以上，你不需要转发任何端口；连接逻辑会自动处理。
+:* 游戏协调器使用 3979 端口通过 UDP (入站 + 出站) 进行双向通信和 3978 端口通过 UDP (仅出站)单向通信
+:* 如果你只是加入服务器，你无需转发任何端口，因为连接的通信仅涉及出站。
+
+=====我可以使用专用服务器来创建一个游戏服务器吗？=====
+:* 可以使用'<code>-D</code>'命令创建专用服务器。参考 [[en/Manual/Dedicated server|"Dedicated Server"]] 获得更多信息。
+
+=====游戏会占用多少带宽？=====
+:* 每个客户端的上传速度约为 1.5 千字节每秒(KB/s)，下载速度为 1.5 KB/s。 根据这个数字进行乘法运算，10名玩家的服务器会占用大约 15 KB/s的上传和 15 KB/s的下载(实际数字还需要考虑重传次数等等)。因此，一个能容纳 10 名玩家，24 小时运行的服务器，假设 10 名玩家从不下线，那么一个月就会消耗 60 GB 的流量(30 GB 的下载和 30 GB 的上传)。对于一个客户端，连接一小时的服务器，就会消耗约 5-8 MB 的带宽，再加上你需要下载的东西。
+:* 实际带宽使用情况会根据连接的客户端数量和运行情况以及 <code>frame_freq</code> 和 <code>sync_freq</code>而有所不同。
+
+=====人们在加入时断开，怎么解决？=====
+当新玩家连接时，他需要下载整张地图。如果你禁用了''pause_on_join''，那游戏同时会继续运行。等到他下载完毕后，他还需要从开始下载的那一刻同步地图的变化到当前时刻。
+显然，新加入的玩家需要有一个快速的网络(设备也是)，否则他永远也无法同步到当前时刻。
+
+为了让你控制这个步骤的时长，可以设置下列变量：
+{| class="wikitable" style="text-align:left"
+|+Timing variables for network-play
+|-
+! 变量 !! 值 !! 含义
+|-
+| max_join_time || 0-32000 || 客户端在加入游戏时同步所需的最长时间（以游戏时间ticks为单位）。
+|-
+| pause_on_join || true/false || 当有人加入游戏时暂停游戏。
+|-
+| max_download_time || 0-32000 || 客户端下载地图所需的最长时间（以游戏时间ticks为单位）。
+|-
+| max_password_time || 0-32000 || 客户端输入密码的最长时间（以游戏时间ticks为单位）。
+|-
+| max_lag_time || 0-32000 || 客户端与服务器的最大延迟时间（以游戏时间ticks为单位）。
+|}
+注意所有的值都以游戏时间为单位，也就是，1 游戏日的 1/74 (1秒的 1/33.33).
+
+Increase the values until your users can connect normally. If you set them too long however, there is an increased danger that people take too long to connect, and just waste bandwidth.
+
+For larger maps, it is highly recommended to enable ''pause_on_join'', as it eliminates the need to catch-up with the game after map downloading.
+
+=====I am having trouble with cheating. Help!=====
+:* There is a guide to shielding yourself from the worst elements of [[en/Community/Multiplayer cheating]]. Also, check the [[en/Community/Play Style/Multiplayer Rules]].
+
+=====Are there any rules?=====
+:* There are some rules, yes. You can see the article [[en/Community/Play Style/Multiplayer Rules]]. However, the servers are not run by the OpenTTD Team, and they have no control over them what-so-ever. As such if you have any problems you should contact the person who runs the server.
+
+=====Can console commands be executed automatically?=====
+:* Yes, this is possible, and can be pretty handy. The page [[en/Manual/Running Startup Scripts]] will explain this in more detail.
+
+=====I started a new server. However, my game doesn't show up in my friends' game list, even after inserting the server manually on the list. Why does this happen?=====
+:* There seems to be a problem when starting a new server from a computer connected to Internet via a router, you can fix this by forwarding port number 3979, both UDP and TCP.
+
+=====What is a desync error?=====
+:* See [[en/Manual/Multiplayer#desync-error|Desync error]].
+
+=====My NewGRFs are not appearing at my server=====
+Best approach is to use a normal desktop game to construct a configuration file, and then copy that file with the NewGRFs to your server.
+Some things to watch out for:
+
+:* Don't copy the config file while the server is running (OpenTTD writes its config file on exit by default, overwriting the just copied file).
+:* Fix the paths of the NewGRFs, \ is not a directory separator at a Unix system.
+
+
+[[Category:zh/Manual/游玩过程]]
+[[Category:zh/Manual/多人游戏]]
