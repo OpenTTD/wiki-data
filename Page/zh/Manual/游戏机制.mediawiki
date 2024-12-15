@@ -238,17 +238,17 @@ A player has a rating of -300, (Very Poor), 2 active stations and 1 inactive sta
 
 Code for town ratings is in town.h, town_cmd.c, tree_cmd.c, and road_cmd.c.
 
-== 旅客与邮件的生成 ==
-Towns and the company headquarters generate passengers and mail, while oil rigs only generate passengers. 
+== 乘客与邮件的生成 ==
+城镇和公司总部会生成乘客和邮件，钻井平台只会生成乘客。
 
-===Town Passenger Generation===
-In each periodic processing (i.e. every 256 ticks), a random value 0<=X<=255 is generated for each house tile. If X isn't smaller than the population of the tile, no passengers are generated. Otherwise, X/8+1 passengers are generated (rounded down). If there is a recession going on, the number of generated passengers is halved, but this division gets rounded up instead of down. Mail generation happens in a similar manner, but with a new random value, and checking against the mail generation multiplier instead of the population. See the full list of default values for HouseProps: [https://newgrf-specs.tt-wiki.net/wiki/DefaultHouseProps]
-===Company Headquarters===
+===城镇乘客生成===
+每个轮询周期中(即每经过 256 个 tick)，每格房屋会生成一个 0<=X<=255 的随机数。如果 X 大于该格上的人口数量，则不会生成乘客。如果小于，则会生成 X/8 + 1 名乘客(向下取整)。如果遇到经济衰退，生成的乘客数量减半，同时得到的数值改为向上取整。邮件的生成类似，但是采用另外的随机数进行计算，并且是根据邮件的生成系数计算而不是人口。。See the full list of default values for HouseProps: [https://newgrf-specs.tt-wiki.net/wiki/DefaultHouseProps]
+===公司总部===
 The Company Headquarters is a unique structure that generates passengers and mail depending on it's level which is dependent on the performance rating of the company. Higher level company HQs generate more passengers and mail, the output of the headquarters is evenly distributed over all four tiles on a per tile basis as per the following formulas:
 
-Passengers: 256 / 4 tiles / (6 - company HQ Level (a value between 1 and 5) )
+乘客: 256 / 4 tiles / (6 - company HQ Level (a value between 1 and 5) )
 
-Mail: 196 / 4 tiles / (6 - company HQ Level (a value between 1 and 5) )
+邮件: 196 / 4 tiles / (6 - company HQ Level (a value between 1 and 5) )
 
 == 工业生产 ==
 Here is how the game determines how much cargo an industry produces per month.  Production of raw materials happens 8 or 9 times per month.  (It happens every 256 ticks.  There are 74 ticks in a day, and 28 to 31 days in a month ([https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/date_type.h#L30 date_type.h]).  This means that only about 9% of industries will produce 9 times in a 28-day February, but about 96% of industries will produce 9 times in a 31-day month like March.)  The production will always be a multiple of 8 or 9, unless the industry changed production during that month.
@@ -257,7 +257,7 @@ This table lists possible starting productions governed by the [[en/Archive/Manu
 
 {| {{en/Wikitable}}
 |- style="background:#efefef"
-!Raw Material Industry!!Produced Cargo!!Initial production range
+!原材料工业设施!!生产货物!!初始产量范围
 |-
 |[[en/Manual/Base Set/Industries/Coal Mine]]||Coal||56 to 176
 |-
