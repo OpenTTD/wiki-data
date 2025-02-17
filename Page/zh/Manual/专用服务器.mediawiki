@@ -7,44 +7,44 @@
 |Percentage=0
 }}
 
-[[File:en/Manual/Dedicated server.png|right|frame|Dedicated server window]]A '''dedicated server''' is a OpenTTD network game [[en/Manual/Server]] that does not have a local client taking part in the game. A dedicated server can run in the background on a computer.
+[[File:en/Manual/Dedicated server.png|right|frame|Dedicated server window]]
+'''专用服务器'''是一个没有本地客户端加入的 OpenTTD 网络[[zh/Manual/服务器]]。专用服务器可以在计算机后台运行。
 
-==Starting a dedicated server==
-Run the OpenTTD executable using the {{en/C|-D|}} (capital D!) [[en/Manual/Command line]] option. 
+==启动专用服务器==
+用[[en/Manual/Command line | 命令行选项(en)]] {{en/C|-D|}} （大写的 D！）启动 OpenTTD 可执行文件。
 
-===In Windows===
-Method 1:
-*Create a shortcut to {{en/C|openttd.exe|}}
-*Right-click on the shortcut and click Properties
-*Add {{en/C|-D|}} onto the end of the Target line
-*Click Apply
-*Run the shortcut
+===在 Windows===
+方法 1:
+*创建一个到 {{en/C|openttd.exe|}} 的快捷方式
+*右键点击快捷方式，点击属性
+*在目标一栏末尾添加 {{en/C|-D|}}
+*点击应用
+*运行快捷方式
 
+方法 2:
+*在开始菜单点击运行（按 Win键+R 组合键也可以）
+*输入：{{en/C|"c:\(到OpenTTD游戏文件夹的路径)\openttd.exe" -D|}}
+*点击确定
 
-Method 2:
-*On the start menu click Run
-*Enter: {{en/C|"c:\(path to openttd)\openttd.exe" -D|}}
-*Click OK
+===在 Linux===
+*在终端运行 {{en/C|openttd -D|}} 。如果你通过 SSH 连接到服务器，并且希望游戏在你注销时继续运行，可使用 [http://www.gnu.org/software/screen/ GNU Screen] 或者 [http://dtach.sourceforge.net/ dtach]。
 
-===In Linux===
-*Run {{en/C|openttd -D|}} in a terminal. If you are connecting to the server via SSH and would like the game to run when you logout you should use [http://www.gnu.org/software/screen/ GNU Screen] or [http://dtach.sourceforge.net/ dtach].
+你也可以用 -f 选项启动 OpenTTD ，此时进程会在后台运行，但没有控制台可用。所有的日志都会被写入 openttd.log 文件。你可以用 tail 命令查看该文件以跟踪事件：'''tail -f openttd.log''' 。
 
-You can also start openttd with -f option. It means that the process will run in the background, but no console will be available. All output will be sent to the file openttd.log. You can display the log with tail : tail -f openttd.log to follow events.
+===在 OS/2===
+*运行 {{en/C|dedicated.cmd|}} 文件。因为如果你运行 {{en/C|openttd -D|}} 的话你就看不到控制台窗口，不能为程序提供命令。
 
-===In OS/2===
-*Run the {{en/C|dedicated.cmd|}} file. If you run {{en/C|openttd -D|}}, you will not see a console window and will be unable to provide commands to the program.
+===在 Mac OS X===
+*打开终端。
+*用 cd 切换到包含 OpenTTD 的目录
+*输入 '''cd OpenTTD.app/Contents/MacOS/'''
+*输入 '''./openttd -D'''
+*OpenTTD 此时应该启动为专用服务器
 
-===In Mac OS X===
-*Open Terminal.
-*cd into the directory with OpenTTD
-*type cd OpenTTD.app/Contents/MacOS/
-*type ./openttd -D
-*OpenTTD should start up in Dedicated Server.
+===在 Docker.io ===
+* 查阅 https://registry.hub.docker.com/r/bateau/openttd/ 以获得更多详情。
 
-===In Docker.io ===
-* See https://registry.hub.docker.com/r/bateau/openttd/ for more details
-
-==Configuring the server==
+==配置服务器==
 There are 3 ways to change the game options:
 *Launch a single player game, change the settings, and close the game.
 *Use the [[en/Manual/Console#server-commands|console commands]] to control the server while it is running.
@@ -61,7 +61,7 @@ Change the network settings in the Network section of [[en/Archive/Manual/Settin
 *If you have multiple network interfaces make sure you set [[en/Archive/Manual/Settings/Server bind ip]].
 *If you are behind a router, make sure that you forward the port specified by [[en/Archive/Manual/Settings/Server port]] (both TCP and UDP)
 
-==Controlling the server with rcon==
+==用rcon控制服务器==
 Configure the dedicated server to accept [[en/Manual/Console#server-commands|rcon]] commands:
 *In the dedicated server window, type {{en/C|rcon_pw <password>|}}. 
 :Example: {{en/C|rcon_pw x8na7f|}}
@@ -74,7 +74,7 @@ Connect to the server as a client:
 *Type {{en/C|rcon <password> "<command>"|}}. 
 :Example: {{en/C|rcon x8na7f "kick 5"|}}
 
-==Installing online content==
+==安装在线内容==
 If you want to install content using the in-game content download facility, you can do that from the console in your dedicated server. The benefit of using this compared to copying the files manually to your server is that it will automatically get all dependencies that the content author has declared when uploading it to the content system.
 
 *First, you need to load the list of available content from the content server:
@@ -95,7 +95,7 @@ If you want to install content using the in-game content download facility, you 
 
 Hint: If you use nightly r26000+ or stable 1.4+, you can type {{en/C|content state city|}} to only list content that contain the word 'city' in their name.
 
-==Loading a game==
+==加载游戏==
 In the dedicated server window (or with rcon):
 *Type {{en/C|ls|}} to list the files of the current directory, a number will be beside each one, which represents {{en/C|<number>|}} below.
 *Type {{en/C|cd <number>|}} to go to that directory.
@@ -104,7 +104,7 @@ In the dedicated server window (or with rcon):
 *You can also load savegames and scenarios with the {{en/C|-g "<filename>"|}}, command line option. 
 :Example: {{en/C|openttd.exe -D -g "scenario/echo.scn"|}}.
 
-== Automatically start/stop and save your game ==
+==自动启动/停止服务器并保存游戏==
 If you do not want to run docker: Run your dedicated server in ubuntu/debian you can download and install a init.d script
 You will get the following functions:
 * Automatically startup when your server box bootup
@@ -118,7 +118,7 @@ https://registry.hub.docker.com/r/bateau/openttd/
 Mind that this is a pre-configured virtual machine and packaging is done by 3rd party.
 
 
-==See also==
+==另请参见==
 *[[en/Archive/Manual/Settings/Autoclean companies|Autoclean companies]]   in order to specify what happens when a player logs off during a game and a company becomes inactive
 *A short intro on Firewalls for  Dedicated Servers [http://www.uk2.net/blog/why-is-a-firewall-important-for-your-dedicated-server-2/]
 
