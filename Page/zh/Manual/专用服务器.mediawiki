@@ -73,52 +73,53 @@
 :比如: {{en/C|rcon x8na7f "kick 5"|}}
 
 ==安装在线内容==
-If you want to install content using the in-game content download facility, you can do that from the console in your dedicated server. The benefit of using this compared to copying the files manually to your server is that it will automatically get all dependencies that the content author has declared when uploading it to the content system.
+如果你想用游戏内的内容下载功能，你可以用专用服务器的控制台进行操作。这种方法比起手动将文件复制到服务器的好处是，该功能可以自动同时下载所有作者在上传文件到内容系统时声明的依赖。
 
-*First, you need to load the list of available content from the content server:
-:{{en/C|content update|}}
-:Wait until "Content server connection closed" is printed in the console.
+*首先，你需要从内容服务器加载所有可用内容：
+:输入 {{en/C|content update|}}
+:等待 "Content server connection closed" 出现在控制台。
 
-*List all available content
-:{{en/C|content state|}}
-:A list of available content is now printed. Find the content you like to download and read its ID which is written in the beginning of the line. Eg. 2947 for Simple City Builder.
+*列出所有可用内容：
+:输入 {{en/C|content state|}}
+:可用内容的列表会被打印在窗口上。从中找到你想要下载的内容并记下行首的 ID。比如控制台打印：
+:2947, Game script, Not selected, Simple City Builder, ...
+:则你记下 2947（仅作举例，实际 ID 请以在窗口上看到的为准）
 
-*Next, select the content to download using its id:
-:{{en/C|content select 2947|}}
+*然后，用刚刚记下的 ID 选择要下载的内容：
+:输入 {{en/C|content select 2947|}} （2947为你刚刚记下的 ID ）
 
-*You can add more content by repeating the {{en/C|content select|}} command.
+*如果你记下了多个 ID 多次输入 {{en/C|content select|}} 将它们全部选择
 
-*Then download all selected content:
-:{{en/C|content download|}}
+*然后下载所有选择的内容：
+:输入 {{en/C|content download|}}
 
-Hint: If you use nightly r26000+ or stable 1.4+, you can type {{en/C|content state city|}} to only list content that contain the word 'city' in their name.
+提示：如果你的游戏版本为nightly r26000以上或稳定版1.4以上，你可以输入 {{en/C|content state city|}} 来筛选名字中含有 "city" 的内容。
 
 ==加载游戏==
-In the dedicated server window (or with rcon):
-*Type {{en/C|ls|}} to list the files of the current directory, a number will be beside each one, which represents {{en/C|<number>|}} below.
-*Type {{en/C|cd <number>|}} to go to that directory.
-*Type {{en/C|load <number>|}} to load that file.
+在专用服务器窗口（或者用 rcon 命令）：
+*输入 {{en/C|ls|}} 来列出当前目录的文件，每个文件左边会有一个编号，下文用 {{en/C|<编号>|}} 表示。
+*输入 {{en/C|cd <编号>|}} 来切换到该目录。
+*输入 {{en/C|load <编号>|}} 来加载该文件。
 
-*You can also load savegames and scenarios with the {{en/C|-g "<filename>"|}}, command line option. 
-:Example: {{en/C|openttd.exe -D -g "scenario/echo.scn"|}}.
+*你也可以用命令行选项 {{en/C|-g "<文件名>"|}} 来加载存档与场景。
+:比如：{{en/C|openttd.exe -D -g "scenario/echo.scn"|}}.
 
 ==自动启动/停止服务器并保存游戏==
-If you do not want to run docker: Run your dedicated server in ubuntu/debian you can download and install a init.d script
-You will get the following functions:
-* Automatically startup when your server box bootup
-* Automatically shutdown when you server box is shutdown
-* Automatically saving your game at a defined interval
-For more functions, install guide and download, visit: https://bitbucket.org/frodus/openttd-init
+如果你不想运行 docker：要在 ubuntu/debian 运行你的专用服务器，你可以下载安装一个 init.d 脚本，然后你会获得如下功能：
+* 主机启动时专用服务器自动启动
+* 主机关机时专用服务器自动关机
+* 每隔一段时间自动保存
+更多功能介绍，安装指南和下载请见：https://bitbucket.org/frodus/openttd-init
 
-With a ready-made docker container you get a tested and working environment for openttd.
-In ubuntu 14.04 or newer you can run: sudo apt-get install docker.io and then read documentation on the following url
-https://registry.hub.docker.com/r/bateau/openttd/
-Mind that this is a pre-configured virtual machine and packaging is done by 3rd party.
+用一个预制的docker容器，你会得到经过测试可用的 OpenTTD 专用服务器环境。
+在 ubuntu 14.04 及以上版本，你可以运行：'''sudo apt-get install docker.io''' 并阅读下方链接：
+:https://registry.hub.docker.com/r/bateau/openttd/
+:注意：这是一个由第三方打包的预先配置好的虚拟机。
 
 
 ==另请参见==
-*[[en/Archive/Manual/Settings/Autoclean companies|Autoclean companies]]   in order to specify what happens when a player logs off during a game and a company becomes inactive
-*A short intro on Firewalls for  Dedicated Servers [http://www.uk2.net/blog/why-is-a-firewall-important-for-your-dedicated-server-2/]
+*[[en/Archive/Manual/Settings/Autoclean companies|Autoclean companies]]    in order to specify what happens when a player logs off during a game and a company becomes inactive
+*一个对专用服务器防火墙的简短介绍 [http://www.uk2.net/blog/why-is-a-firewall-important-for-your-dedicated-server-2/]
 
 [[Category:zh/Manual/多人游戏]]
 [[Category:zh/Manual/教程]]
