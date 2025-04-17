@@ -1,0 +1,100 @@
+[[Translation:de/Manual/Komandozeile]]
+
+Die '''Befehlszeile''' ist der Betriebssystembefehl zum Starten des Spiels. Sie kann Parameter zur Anpassung des Spielablaufs enthalten. Alle Versionen von [[de/Manual/Main Page|OpenTTD]] unterstützen Befehlszeilenoptionen.
+
+== Eingabeaufforderungsoptionen ==
+Verwende {{en/C|openttd [Parameter(e)]|}}.
+
+{| border=1 width=100%
+!width="225"|Parameter
+!Beschreibung
+|-
+|{{en/C|-h|}}|| Listet OpenTTD-Befehlsoptionen auf.
+|-
+|{{en/C|-v <Treiber>|}}|| Legt den OpenTTD-Grafiktreiber fest. Abhängig von Ihrem Build können folgende Treiber gültig sein:<br />
+{{en/C|null|}} für kein Video (Absturz)<br />
+{{en/C|sdl|}} für SDL-Video<br />
+{{en/C|win32|}} für Windows-Video
+|-
+|{{en/C|-s <Treiber>|}}|| Legt den OpenTTD-Soundtreiber fest. Abhängig von Ihrem Build können folgende Treiber gültig sein:<br />
+{{en/C|null|}} für kein Ton<br />
+{{en/C|sdl|}} für SDL-Sound<br />
+{{en/C|win32|}} für Windows-Sound
+|-
+|{{en/C|-m <Treiber>|}}|| Legt den OpenTTD-Musiktreiber fest. Abhängig von Ihrem Build können folgende Treiber gültig sein:<br />
+{{en/C|null|}} für keine Musik<br />
+{{en/C|dmusic|}} für DirectMusic<br />
+{{en/C|win32|}} für Windows MIDI<br />
+{{en/C|extmidi|}} für externes MIDI<br />
+{{en/C|bemidi|}} für BeOS MIDI
+|-
+|{{en/C|-I <set>|}}|| Legt fest, welches Basisgrafikset verwendet werden soll.
+|-
+|{{en/C|-S <set>|}}|| Legt fest, welches Soundeffektset verwendet werden soll.
+|-
+|{{en/C|-M <set>|}}|| Legt fest, welches Musikset verwendet werden soll.
+|-
+<!-- |{{c|-b <driver>|}}|| Legt fest, welcher Blitter verwendet werden soll. Abhängig von Ihrem Build können bis zu 13 Blitter verfügbar sein.
+|- -->
+|{{en/C|-r <xres>x<yres>|}}|| Legt die OpenTTD-Auflösung fest.
+|-
+|{{en/C|-t <year>|}}|| Legt das Startdatum fest.
+|-
+|{{en/C|-d <level>|}}
+:{{en/C|1=-d ai=<level>|2=}}
+:{{en/C|1=-d driver=<level>|2=}}
+:{{en/C|1=-d grf=<level>|2=}}
+:{{en/C|1=-d misc=<level>|2=}}
+:{{en/C|1=-d net=<level>|2=}}
+:{{en/C|1=-d spritecache=<level>|2=}}
+|Legt die Debug-Stufe fest. Verwenden Sie eine beliebige Zahl zwischen 0 und 9, wobei 9 die höchste Empfindlichkeit aufweist.
+:Nur für KI-Debugging-Informationen
+:Für Treiber-Debugging-Informationen (Sound, Musik, Grafik)
+:Nur für NewGRF-Debugging-Informationen
+:Für sonstige Debugging-Informationen
+:Nur für Netzwerk-Debugging-Informationen
+:Nur für Spritecache-Debugging-Informationen
+|-
+|{{en/C|-l <IP:Port>|}}|| Leitet die Debugging-Ausgabe über eine Netzwerkverbindung statt über die Konsole um.
+|-
+|{{en/C|-e|}}|| Startet den Szenario-Editor.
+|-
+|{{en/C|-q <Spiel>|}}|| Zeigt Informationen zu einem gespeicherten Spielstand an (OpenTTD-Version, verwendete NewGRFs, ob das Spiel jemals von einer modifizierten OpenTTD-Version verwendet wurde oder ein NewGRF entfernt wurde) und beendet das Spiel.
+|-
+|{{en/C|-g [Spiel]|}}|| Wenn kein Spiel angegeben ist, wird sofort ein neues Spiel gestartet. Wenn ein Spiel angegeben ist, wird dieses sofort geladen. Hinweis: {{en/C|-g|}} kann sowohl Spielstände als auch Szenarien laden.
+|-
+|{{en/C|-G <seed>|}}|| Legt den Zufallsstartwert fest.
+|-
+|{{en/C|-n [IP:Port#Firma]|}}|| Startet das Netzwerkspiel.
+|-
+|{{en/C|-p <Passwort>|}}|| Verwende dieses Passwort, um dich mit dem Server zu verbinden, wenn du dem Spiel beitrittst.
+|-
+|{{en/C|-P <Passwort>|}}|| Verwende dieses Passwort, um dich mit der Firma zu verbinden, wenn du dem Spiel beitrittst.
+|-
+|{{en/C|-D [IP:Port]|}}|| Starte den dedizierten Server.
+|-
+|{{en/C|-f|}}|| Verzweige in den Hintergrund (dediziert, nur Nicht-Windows).
+|-
+|{{en/C|-c <Datei>|}}|| Verwenden Sie eine andere Konfigurationsdatei als {{en/C|openttd.cfg|}}.
+|-
+|{{en/C|-x|}}|| Änderungen an der Konfigurationsdatei werden beim Beenden von OpenTTD nicht gespeichert.
+|}
+
+==Hilfe für Windows-Benutzer==
+Es gibt zwei Möglichkeiten, Befehlszeilenparameter hinzuzufügen:
+
+===Die Verknüpfungsmethode===
+*Erstellen Sie eine Verknüpfung zu {{en/C|openttd.exe|}}.
+*Klicken Sie mit der rechten Maustaste auf die Verknüpfung und wählen Sie „Eigenschaften“. Das erste Feld sollte etwa so lauten: {{en/C|C:\Games\openttd.exe|}}
+*Setzen Sie den Text in doppelte Anführungszeichen: {{en/C|"C:\Games\openttd.exe"|}}
+*Fügen Sie Parameter anschließend außerhalb der Anführungszeichen hinzu: {{en/C|"C:\Games\openttd.exe" -m|}}
+*Um Modifikatoren hinzuzufügen, fügen Sie diese ein Leerzeichen nach dem Parameter ein: {{en/C|"C:\Games\openttd.exe" -n 127.12.13.1|}}
+*Trennen Sie mehrere Parameter durch Leerzeichen: {{en/C|"C:\Games\Openttd.exe" -m -s null|}}
+*Wenn Sie fertig sind, starten Sie das Spiel über die Tastenkombination.
+
+===Die Kommandozeilenmethode ("DOS") ===
+*Starten Sie cmd.exe (die Windows-Eingabeaufforderung). COMMAND.COM (die MS-DOS-Eingabeaufforderung) kann ebenfalls verwendet werden, ist aber eingeschränkter.
+*Geben Sie '''cd <Verzeichnis\Ihre openttd.exe\ist in\>''' ein und drücken Sie die Eingabetaste (Beispiel: '''cd C:\Programme\OpenTTD\''').
+*Geben Sie '''openttd.exe <-param1 Wert1 -param2 Wert2 ... >''' wie oben ein (aber ohne Anführungszeichen!) und drücken Sie die Eingabetaste.
+
+[[Category:en/Manual/Settings & Preferences]]
