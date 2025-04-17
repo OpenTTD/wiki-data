@@ -1,0 +1,158 @@
+[[Translation:en/Community/Railway Designs]]
+{{en/Split|Hier scheinen zwei Themen, Netzkapazität und Netzoptimierung, behandelt zu werden, die besser in separaten (und kürzeren) Artikeln behandelt werden sollten.}}
+
+{{de/Manual/Inhaltsverzeichnis}}
+
+=Tragfähigkeit Ihres Netzes=
+Diese Seite dient ausschließlich der theoretischen Behandlung der Tragfähigkeit. Knotenpunkte und die Vernetzung sind viel wichtiger. Nach dem Haftungsausschluss betrachten wir nun die verschiedenen Faktoren, die Ihre Tragfähigkeit beeinflussen.
+
+==Signalabstand (SD)==
+Das ist ziemlich offensichtlich. Weit auseinander liegende Signale führen zu einer geringeren Tragfähigkeit. Bei einem '''SD''' von einem Signal alle N Kacheln kann der Mindestabstand zwischen zwei Zügen mit voller Geschwindigkeit niemals kleiner als N+1 sein (Abbildung 1). Auf diagonalen Gleisen mit einem Signal alle 2N "halben Kacheln" oder N "ganzen Kacheln" kann der Mindestabstand nicht kleiner als 2N+1 "halben Kacheln" oder N+1/2 "ganzen Kacheln" sein. Bei so dichtem Zugabstand ist die theoretische maximale Zugdichte erreicht. In der Praxis ist diese Dichte jedoch nicht zu erreichen.
+
+[[File:en/Community/Pat Fig1.png|frame|none|Abbildung 1: Mindestabstand von fünf Zügen bei einem Signalabstand von vier]]
+
+[[File:en/Community/Pat Fig2.png|frame|right|Abbildung 2: Ineffizienz des Signalabstands]]
+Ein wichtiger Aspekt ist die Konsistenz. Die Kapazität eines Gleises wird durch den jeweils größten Signalabstand bestimmt. Ein Gleis mit einem Signal alle zwei Kacheln, das einen anomalen einmaligen Abstand von drei oder vier Kacheln aufweist, weist daher eine stark reduzierte Kapazität auf und kann möglicherweise Staus verursachen und gegen Regel 1 verstoßen (Abbildung 2). Dies gilt auch für Kurven und Teilungen/Zusammenführungen.
+
+===Diagonales Gleis===
+
+In OpenTTD fahren Züge auf abgewinkelten Gleisen langsamer (danke, SmatZ!) und benötigen daher eine höhere Signaldichte, um Engpässe zu vermeiden. Es ist wichtig, dass der Zugabstand (nicht '''SD''') auf geraden und diagonalen Gleisen möglichst ähnlich ist. Andernfalls können sich Züge entweder beim Übergang von geraden zu diagonalen oder von diagonalen zu geraden Gleisen verklemmen.
+
+Ein kurzer Versuch zeigte, dass Züge auf diagonalen Gleisen genau 25 % langsamer fahren. Wenn Sie also eine bestimmte Autosignaleinstellung verwenden, müssen Sie die Signaldichte auf allen vorhandenen abgewinkelten Gleisen wahrscheinlich manuell erhöhen.
+
+Die folgenden Beispiele basieren auf der Annahme, dass sich die Zuglänge auch auf diagonalen Gleisen ändert. Dies scheint nur für einige NewGRFs zuzutreffen! (Wenn ich mich recht erinnere, trifft dies auf das JapanSet zu, ist aber für die Standardzüge falsch.)
+
+* Eine Autosignaleinstellung von 3 ergibt einen minimalen Zugabstand von 4. Dies entspricht einem minimalen diagonalen Zugabstand von 6 „Halbfeldern“, der durch die Platzierung von Signalen im Abstand von 5 „Halbfeldern“ (oder durch zweimaliges Platzieren von Signalen mit einer Autosignaleinstellung von 5) erreicht werden kann.
+
+* Eine Autosignaleinstellung von 2 ergibt einen minimalen Zugabstand von 3. Dies entspricht einem minimalen diagonalen Zugabstand von 4,5 Halbkacheln. Ein diagonaler Zugabstand von 5 Halbkacheln kann durch die Platzierung von Signalen im Abstand von 4 Halbkacheln oder mit einer Autosignaleinstellung von etwa 2 erreicht werden. Ein diagonaler Zugabstand von 4 Halbkacheln kann durch die Platzierung von Signalen im Abstand von 3 Halbkacheln (oder durch zweimaliges Platzieren von Signalen mit einer Autosignaleinstellung von 3) erreicht werden. Obwohl diese '''SD''' kein exaktes Gegenstück auf diagonalen Gleisen hat, beträgt die Abweichung zwischen geraden und diagonalen Gleisen nur 1/3 Kachel, und die gleiche Autosignaleinstellung kann für gerade und diagonale Gleise verwendet werden.
+
+* Eine Autosignaleinstellung von 1 ergibt einen minimalen Zugabstand von 2. Dies entspricht einem minimalen diagonalen Zugabstand von 3 Halbkacheln. Dieser kann durch die Platzierung von Signalen mit einem Abstand von 2 Halbkacheln oder mit einer Autosignaleinstellung von 1 erreicht werden. Die gleiche Autosignaleinstellung gilt auch hier für gerade und diagonale Gleise.
+
+===Welchen Signalabstand sollte ich also verwenden?===
+* Zwei Kacheln <BR>Eine '''SD''' von zwei ergibt einen minimalen Abstand von 3 und ist die optimale praktische Lösung.
+
+* Eine Kachel <BR>Eine '''SD''' von eins ist problematisch. Selbst eine Gleisteilung verursacht einen Signalabstand. Es wäre möglich, abgewinkelte Schienen mit einem Signalabstand von 1 zu verbinden, aber dies würde den Bauaufwand erheblich erhöhen.
+
+* Halbkachel <BR>Abgewinkelte Gleise ermöglichen die doppelte Signaldichte. Dies kann theoretisch interessant sein oder dazu dienen, eine Beinaheunfallsituation um einige Millimeter zu verkürzen. Der größte Nachteil einer halben Gleislänge ist offensichtlich, dass jedes gerade Gleisstück eine größere Gleislänge hat.
+
+Egal welche Gleislänge Sie wählen, denken Sie daran, dass Sie konsistent bleiben müssen. Ein Netz mit einer Gleislänge von 2 und einer Signallücke von 3 auf einem häufig genutzten Gleis kann zu Staus führen. Daher kann die Kapazität geringer sein als bei einem Netz mit einer konstanten Gleislänge von 3! <br style="clear:both;">
+
+==Zuglänge (TL)==
+Dies ist ein zweischneidiges Schwert. Ein längerer Zug erhöht die Wahrscheinlichkeit eines realistischen Beschleunigungsverlusts, wodurch der Bau ausgedehnter und komplexer wird. Eine längere Gleislänge erhöht jedoch die maximale Ladekapazität Ihres Netzes. Beachten Sie, dass bei Lokomotiven mit einem vorderen und einem hinteren Abschnitt die zusätzliche halbe Kachel kürzere Zuglängen noch ungünstiger macht.
+
+Für Hochgeschwindigkeitsnetze sind typische Werte von drei bis fünf Kacheln üblich, wobei vier besonders beliebt sind, da auf einer Strecke mit einer SD von 2 eine Linie von TL-4-Zügen, die aus dem Stand beschleunigen, eine kürzere Reaktionszeit hat als Züge mit ungleichmäßiger TL.
+
+==Quantifizierung der Beförderungskapazität==
+===Zugdichte (TD)===
+Ihr Netz wird eine bestimmte Anzahl von Zügen befördern. Unter der Annahme einer standardisierten Zuglänge können wir einige Kennzahlen definieren. Die Zugdichte (TD) für eine Strecke wird in Zügen pro tausend Kacheln angegeben und kann berechnet werden, indem die Anzahl der Züge auf dieser Strecke gezählt und durch die Streckenlänge geteilt wird.
+
+Typische Messwerte für ein nicht optimiertes Netz mit 4-Kacheln-Zügen liegen bei einer TD von 25 (Züge pro 1000 Kacheln).
+
+Die maximale TD, bevor sich Staus selbst ausbreiten, lässt sich ermitteln, indem man eine Zugschlange aus dem Stand beschleunigen lässt und anschließend den Zug-Zug-Abstand misst, wenn alle Züge ihre volle Geschwindigkeit erreicht haben. Die Formel lautet:
+
+'''1000 / (TL + Zuglücke)'''
+
+Diese kritische TD hängt von der Leistung und Anzahl der Lokomotiven, dem Gewicht des Zuges, der Höchstgeschwindigkeit, der SD und der Zuglänge ab. Da diese kritische Dichte Informationen über Beschleunigung und Zeit bis zum Erreichen der Höchstgeschwindigkeit enthält, kann sie auch Aufschluss über die praktische Maximalkapazität Ihres Netzes geben. Beispielsweise erleichtert der Einsatz von Zügen mit geringerer Höchstgeschwindigkeit die Netzwerkdichte. Die durchschnittliche Zug-Zug-Lücke ist bei Schienenverkehr deutlich geringer als bei Einschienenbahnen oder Magnetschwebebahnen. Langsam heißt jedoch nicht besser, da die geringere Streckendichte durch schnelle Umschlagzeiten mehr als ausgeglichen wird.
+
+Beispielsweise wurde für eine voll beladene 4-Kacheln-[[en/Manual/Base Set/Trains/Lev4 'Chimaera'|Chimaera]] (Top-End-[[en/Manual/Base Set/MagLev]]) ein Zug-Zug-Abstand von 12 ermittelt, was eine kritische Dichte von 1000/16 bzw. 62,5 ergibt. Wiederholt man das vorherige Beispiel, verwendet aber die elektrische Eisenbahn [[en/Manual/Base Set/Trains/T.I.M.]], ergibt sich ein Zug-Zug-Abstand von nur 6 und eine kritische Dichte von 100.
+
+Es ist möglich, ein Netz mit einer höheren als der kritischen Dichte zu betreiben, aber es ist nicht ratsam.
+
+===Theoretische maximale Zugdichte===
+Vereinfacht ausgedrückt ist dies die Zugdichte, wenn Ihr Netz vollständig mit Zügen mit minimalem Abstand zueinander gefüllt ist. Diesen Wert werden Sie nie erreichen.
+
+Dies ergibt sich aus ''' 1000 / (TL + SD + 1) '''.
+
+Beispielsweise ergeben Züge mit 4 Gleisfeldern und einem Signalabstand von 2 eine theoretische maximale Zugdichte von 140.
+
+==Transportkapazität (CC)==
+Da '''TL''' die Transportkapazität einer Strecke verändert, ist ein Vergleich der '''TD''' über verschiedene '''TL''' hinweg sinnlos. Um Effizienzwerte zwischen verschiedenen persönlichen Präferenzen zu vergleichen, benötigen wir eine neue Metrik. Diese neue Metrik misst lediglich, wie viele Gütereinheiten Ihr Netz pro Jahr und Gleis transportiert. Sie ist direkt proportional zur durchschnittlichen Gütermenge pro Gleisfeld und auch zur Geschwindigkeit dieser Güter.
+
+<pre>
+CC_day = TC / (TL + TD) * v_travel
+CC_day = TC / (TL + TD) * v_km/h * 74*2/16/256*1,00584
+CC_day = TC / (TL + TD) * v_mph * 74*2/16/256/1,6
+</pre>
+
+'''CC_day''' = Transportkapazität [in Frachteinheiten pro Tag] – die Menge an Fracht, die jedes Feld an einem Tag passieren kann. Diese Frachtmenge kann am Anfang der Linie zugeführt und am Ende der Linie abgeliefert werden.
+
+'''TC''' = Zugkapazität [in Frachteinheiten] – die Menge an Fracht, die ein Zug transportieren kann.
+
+'''v_travel''' = Geschwindigkeit [in Feldern/Tag], '''v_km/h''' = Geschwindigkeit [in km/h] und '''v_mph''' = Geschwindigkeit [in mph] – die Geschwindigkeit des Zuges.
+
+'''TG''' = Zuglücke [in Kacheln]. Für Gleisanlagen, die keine Züge einschleusen, um einen dichten Zugstrom zu bilden, ist dies die kritische Zuglücke.
+
+'''TL''' = Zuglänge [in Kacheln].
+
+Die [[en/Manual/Base Set/Trains/Lev4 'Chimaera'|Chimaera]] aus dem obigen Beispiel hat eine Beförderungskapazität von
+<pre>CC_day=47*6*402/16*0,0056=40 Passagieren/Tag
+oder
+CC_day=27*6*402/16*0,0056=23 Wertsäcken/Tag</pre>
+Die [[en/Manual/Base Set/Trains/T.I.M.]] aus dem obigen Beispiel hat eine Beförderungskapazität von
+<pre>CC_day=40*6*150/10*0,0056=20 Passagieren/Tag
+oder
+CC_day=20*6*150/10*0,0056=10 Wertsäcken/Tag</pre>
+
+Die Arbeiten an dieser Einheit stehen noch aus.
+
+=Effizienteres Netz=
+Okay, nachdem wir nun die Parameter definiert haben, die wir bereits intuitiv verstanden haben, wie können wir sie nutzen, um unsere Netze zu verbessern? Die goldene Regel Nummer 1 der Netzoptimierung lautet, dass Züge im Netz niemals langsamer werden. Dies kann an zwei Stellen im Netz passieren: an Gleisaufteilungen und an Zusammenführungen.
+
+==Gleisaufteilungen==
+Bei einer Gleisaufteilung muss sichergestellt werden, dass an der Gleisaufteilungsstelle keine länger als übliche Signallücke entsteht. Dies kann durch sorgfältige oder übermäßige Signalisierung vermieden werden.
+
+==Zusammenführungen==
+Zusammenführungen stellen uns vor ein einzigartiges Problem. Bei einer trivialen Zusammenführung könnten Züge auf der Hauptstrecke möglicherweise von einem Nebenzug angehalten werden. Die Lösung besteht darin, Zügen auf dem Hauptgleis mit einem [[en/Community/Junctionary/Priority Merge]] Vorrang vor den einmündenden Zügen einzuräumen.
+
+Stellen Sie sich eine typische Zusammenführung ohne Knotenpunkt am Ausgang eines Abholbahnhofs vor. Ein dicht gedrängter, optimierter Zugstrom fährt in den Bahnhof ein. Aufgrund unterschiedlicher Ladezeiten wird diese Reihenfolge jedoch am Ausgang des Bahnhofs unterbrochen, sodass sich zwei Gleise mit locker gedrängten Zügen ergeben. Auf einer dieser Strecken, der Hauptstrecke, gibt es im Durchschnitt so große Lücken zwischen den Zügen, dass ein dritter Zug hineinpasst. Eine einfache Verbindung der beiden Strecken funktioniert nicht, daher ist eine vorrangige Zusammenführung erforderlich.
+
+Da Züge, die Güter abladen, immer gleich lange an einem Bahnsteig stehen, ist es möglich, einen dicht gedrängten Zugstrom, selbst über der kritischen Dichte, zu entmaterialisieren und neu zusammenzuführen. (Abbildung 3)
+[[File:en/Community/Diamond Stream.png|thumb|800px|none|Abbildung 3: Ausstieg mit Zusammenführung]]
+
+Eine erste Zusammenführung mit einem Vorrangblock reduziert das Verkehrsverhältnis von 1:1 auf etwa 3:1 zugunsten des Hauptgleises (Abbildung 4). Eine zweite Vorrangzusammenführung direkt nach der ersten wäre sinnlos, da die Züge auf beiden Strecken mit gleicher Geschwindigkeit weiterfahren würden und der Hauptzug einfach wieder Vorrang beanspruchen würde. Eine Verzögerung durch eine Gleisschleife, gefolgt von einer zweiten Vorrangzusammenführung, reduziert den Nebengleisverkehr auf ein Minimum und füllt die meisten verfügbaren Plätze auf dem Hauptgleis. Bestehende Lösungen würden ein Vorbeschleunigungsgleis beinhalten, ein Zyklotron hingegen vermeidet den notwendigen Schwungverlust.
+[[File:en/Community/Priority Merge.png|thumb|800px|none|Abbildung 4: Vorrangige Zusammenführung]]
+
+===Zyklotrone===
+
+'''Siehe Hauptartikel [[en/Community/Junctionary/Cyclotron]]'''
+
+Ein Zyklotron ist eine Vorrang-Zusammenführung mit einer Schleife, sodass ein Zug mit voller Geschwindigkeit auf einen Platz auf der Hauptstrecke warten kann.
+
+[[File:en/Community/Simple Cyclotron.png|thumb|800px|none|Einfaches Zyklotron]]
+
+===Trigger===
+Mit einem Trigger lässt sich steuern, wann ein Zug den Bahnhof verlassen darf. Dadurch erhöht sich die Kapazität der Strecke erheblich. Mit dem Trigger können Sie mehrere Züge in einem definierten Zeitabstand den Bahnhof verlassen lassen. Nachdem sie beschleunigt haben, können Sie sie zu einem einzigen Gleis zusammenführen. Da der Abstand zwischen den Zügen stets gleich ist, gelingt die Zusammenführung immer.
+
+Diese Screenshots zeigen den Trigger selbst. Die Hauptkomponente ist ein Kreisgleis (A). Es ist durch pfadbasierte Signale in vier Segmente unterteilt. Ein Zug fährt den Kreis (B). Zwei Wegpunkte dienen zur Fortbewegung. Der Zug ist so lang, dass er fast drei Segmente des Kreises abdeckt. Jedes Segment verfügt über eine Ausfahrt (C). Zur Veranschaulichung des Konzepts wurde jedem Gleis eine Ampel hinzugefügt. Wenn der Zug fährt, springt jede Ampel kurz auf Grün.
+
+[[File:en/Community/Trigger-a.png|frame|none|A: Segmentiertes Kreisgleis]] [[File:en/Community/Trigger-b.png|frame|none|B: Segmentiertes Kreisgleis mit Zug]] [[File:en/Community/Trigger-c.png|frame|none|C: Letzter Trigger mit Sammlern]]
+
+Der Trigger ist nun mit einem Bahnhof mit hoher Ausbeute verbunden. Der Bahnhof verfügt über 16 Bahnsteige mit je 9 Kacheln Länge. Vier Gleise führen vom Bahnhof ab. Später werden sie zu zwei Gleisen zusammengeführt:
+
+[[File:en/Community/Trigger-d.png|thumb|800px|none|Letzter Trigger mit Bahnhof verbunden]]
+
+Beachten Sie, wie die Einschienenbahn und die Magnetbahnen verbunden sind. Jedes Gleis, das den Bahnhof verlässt, ist mit einem Segment des Triggers verbunden. Direkt hinter dieser Verbindung wird ein normales Signal platziert. So kann der Trigger Züge am Verlassen des Bahnhofs hindern.
+
+Das Timing ist in diesem Aufbau entscheidend! Je nach Art und Größe der Züge muss die genaue Größe des Triggers angepasst werden. Stahlzüge sind schwer. Daher muss der Trigger langsam sein. Dies wird durch sehr scharfe Kurven in den Kreisgleisen des Triggers erreicht. Dadurch fährt der Zug mit 131 km/h.
+
+In einem ähnlichen Bahnhof gibt es ebenfalls 16 Bahnsteige mit jeweils 9 Kacheln. Die Züge transportieren jedoch Güter, die viel leichter als Stahl sind. Daher können die Zeitintervalle des Triggers kürzer sein. Dies wird durch ein Kreisgleis mit weniger scharfen Kurven erreicht. Der Zug fährt daraufhin mit 226 km/h.
+
+[[File:en/Community/Trigger-e.png|frame|none|Schnellerer Trigger]]
+
+=== Schrittweises Zusammenführen ===
+Ein schrittweises Zusammenführen ist eine einfache Möglichkeit, mehrere Gleise, üblicherweise von einem Bahnhof aus, nach und nach miteinander zu verbinden, bis nur noch das Hauptgleis übrig ist.
+
+Die erste Aufgabe besteht darin, Züge so schnell wie möglich aus dem Bahnhof zu bringen. Bahnsteigplatz ist kostbar, und ein Zug muss den Bahnhof vollständig verlassen haben, bevor der nächste einfahren kann. Dies erreichen wir, indem wir für jeden Bahnsteig eine Ausfahrspur einrichten, die etwa 150 % der Länge des längsten Zuges betragen sollte. Fügen Sie am ersten Gleis hinter dem Bahnhof ein Wegsignal hinzu, um den Bahnsteig für den nächsten Zug freizumachen. Häufige Fehler sind das Übersehen eines der Wegweiser oder die zu lange oder zu kurze Auslegung der Ausfahrspuren.
+
+[[File:en/Community/Step by step merge station exit.jpeg|frame|none|Stellen Sie sicher, dass die Züge das Depot schnell verlassen können]]
+
+Als Nächstes beginnen wir mit einem Zusammenführen. Sie können auf gerader Strecke zusammenführen, am einfachsten und meist auch am effizientesten ist es jedoch, in einer Kurve zusammenzuführen. Stellen Sie sicher, dass auf jeder Ausfahrspur ein Wegsignal so nah wie möglich an der Zusammenführung platziert wird – aber kein Signal nach der Zusammenführung. Stellen Sie sicher, dass nach jedem Zusammenführen ausreichend Platz zum Beschleunigen der Züge vorhanden ist, etwa 150 % des längsten Zuges. Platzieren Sie hier keine zusätzlichen Signale, auch keine Wegsignale. Alle folgenden Zusammenführungen sind nach dem gleichen Prinzip aufgebaut.
+
+[[File:en/Community/Step by step merge step one.jpeg|frame|left|Zusammenführung von 8 auf 4]]
+[[File:en/Community/Step by step merge step two.jpeg|frame|none|Zusammenführung von 4 auf 2]]
+
+Das Beste an dieser Zusammenführungsanordnung ist, dass sie bei hohem Verkehrsaufkommen oder sogar Staus optimal funktioniert: Sobald ein Zug [A] die Zusammenführungsstrecke passiert hat, kann Zug [B] auf dem anderen Gleis beschleunigen. Der erste Zug hat jedoch auch sein eigenes Segment freigegeben, sodass ein Zug [C] aus der dahinterliegenden Zusammenführung beschleunigen kann. So beschleunigen zwei Züge gleichzeitig. Die Züge fahren bis zum Bahnhof synchron.
+
+[[File:en/Community/Step by step merge advantage.jpeg|thumb|400px|none|Zug A ermöglicht B und C synchrones Beschleunigen]]
+
+Das hier gezeigte Beispiel behandelt den Verkehr von 80 Zügen und 25.000 Warenkisten.
