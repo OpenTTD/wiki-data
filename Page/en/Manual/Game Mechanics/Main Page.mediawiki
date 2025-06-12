@@ -234,11 +234,10 @@ Towns and company headquarters generate passengers and mail, while oil rigs only
 ===Town Passenger Generation===
 In each round of periodic processing (i.e. every 256 ticks), a random value 0<=X<=255 is generated for each house tile. If X isn't smaller than the population of the tile, no passengers are generated. Otherwise, X/8+1 passengers are generated (rounded down). If there is a recession going on, the number of generated passengers is halved, but this division gets rounded up instead of down. Mail generation happens in a similar manner, but with a new random value, and checking against the mail generation multiplier instead of the population. See the full list of default values for HouseProps: [https://newgrf-specs.tt-wiki.net/wiki/DefaultHouseProps]
 ===Company Headquarters===
-The Company Headquarters is a unique structure that generates passengers and mail depending on it's level which is dependent on the performance rating of the company. Higher level company HQs generate more passengers and mail, the output of the headquarters is evenly distributed over all four tiles on a per tile basis as per the following formulas:
+The Company Headquarters is a unique structure that generates passengers and mail depending on its level, which itself is dependent on the performance rating of the company. Higher-level company HQs generate more passengers and mail, the output of the headquarters is evenly distributed over all four tiles on a per tile basis as per the following formulas:
 
-Passengers: 256 / 4 tiles / (6 - company HQ Level (a value between 1 and 5) )
-
-Mail: 196 / 4 tiles / (6 - company HQ Level (a value between 1 and 5) )
+*Passengers: 256 / 4 tiles / (6 - company HQ Level [a value between 1 and 5] )
+*Mail: 196 / 4 tiles / (6 - company HQ Level)
 
 ==Industry production==
 Here is how the game determines how much cargo an industry produces per month.  Production of raw materials happens 8 or 9 times per month.  (It happens every 256 ticks.  There are 74 ticks in a day, and 28 to 31 days in a month ([https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/date_type.h#L30 date_type.h]).  This means that only about 9% of industries will produce 9 times in a 28-day February, but about 96% of industries will produce 9 times in a 31-day month like March.)  The production will always be a multiple of 8 or 9, unless the industry changed production during that month.
