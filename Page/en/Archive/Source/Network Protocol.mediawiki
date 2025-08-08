@@ -47,11 +47,11 @@ The network protocol is 100% endian safe. We made that possible by creating our 
 
 == LAN-detection ==
 
-OpenTTD has a function which can detect LAN-servers. This is done via UDP. At the moment you select LAN-mode on the server, the server also starts an UDP-listener. When a client on the same LAN presses Find Server in LAN-mode, it sends an UDP-broadcast. This is one of the best things UDP has: broadcast. The server receives it, and sends his game_info back to the client. This way the client can discover a server on the local LAN. This is the only place where UDP is used.
+OpenTTD has a function which can detect LAN-servers. This is done via UDP. At the moment you select LAN-mode on the server, the server also starts an UDP-listener. When a client on the same LAN presses Find Server in LAN-mode, it sends an UDP-broadcast. This is one of the best things UDP has: broadcast. The server receives it, and sends their game_info back to the client. This way the client can discover a server on the local LAN. This is the only place where UDP is used.
 
 == Joining ==
 
-When a client joins, it first fetches some data from the server (game-info). Then it verifies itself, gives his name and, if needed, passwords. Then it asks for a copy of the current map. We do this, because we need a start. In the map is also saved the random-seeds, and we also send which frame the map is of. So the server makes the copy of the map, starts sending it to the client. At that moment, the server queues all new DoCommands for this client. When the client is done receiving and tells the server that it is also done loading the map, the servers dequeues all the DoCommands, and the client is given some time to get back to the frame the server is currently on (of course time passed between starting receiving and done loading. Even more on slow connections). When the client indicates it is done with the dequeue, the client is in sync and can enjoy playing.
+When a client joins, it first fetches some data from the server (game-info). Then it verifies itself, gives their name and, if needed, passwords. Then it asks for a copy of the current map. We do this, because we need a start. In the map is also saved the random-seeds, and we also send which frame the map is of. So the server makes the copy of the map, starts sending it to the client. At that moment, the server queues all new DoCommands for this client. When the client is done receiving and tells the server that it is also done loading the map, the servers dequeues all the DoCommands, and the client is given some time to get back to the frame the server is currently on (of course time passed between starting receiving and done loading. Even more on slow connections). When the client indicates it is done with the dequeue, the client is in sync and can enjoy playing.
 
 == TODO ==
 
@@ -154,7 +154,7 @@ Some information:
 ! Packet name !! Info !! Data
 |-
 | PACKET_SERVER_CLIENT_INFO
-| Sends info about a client (you receive this packet during the whole game (whenever someone joins or changes his name)
+| Sends info about a client (you receive this packet during the whole game (whenever someone joins or changes their name)
 |
   - Uint8: The index of the client (always unique on a server. 1 = server)
   - Uint8: As which player the client is playing
@@ -201,7 +201,7 @@ Some information:
   - Uint8: Type of password (game-password (0) or company-password (1))
 |-
 | PACKET_SERVER_WELCOME
-| The client is joined and ready to receive his map
+| The client is joined and ready to receive their map
 |
   - Uint8: own ClientID (unique number per server session)
 |-
