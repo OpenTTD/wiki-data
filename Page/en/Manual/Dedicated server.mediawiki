@@ -3,7 +3,10 @@
 [[File:en/Manual/Dedicated server.png|right|frame|Dedicated server window]]A '''dedicated server''' is a OpenTTD network game [[en/Manual/Server]] that does not have a local client taking part in the game. A dedicated server can run in the background on a computer.
 
 ==Starting a dedicated server==
-Run the OpenTTD executable using the {{en/C|-D|}} (capital D!) [[en/Manual/Command line]] option. 
+Run the OpenTTD executable using the {{en/C|-D|}} (capital D!) [[en/Manual/Command line]] option.
+
+To load a specific save file, add {{en/C|-g savename|}}.
+
 
 ===In Windows===
 Method 1:
@@ -68,17 +71,17 @@ Connect to the server as a client:
 :Example: {{en/C|rcon x8na7f "kick 5"|}}
 
 ==Installing online content==
-If you want to install content using the in-game content download facility, you can do that from the console in your dedicated server. The benefit of using this compared to copying the files manually to your server is that it will automatically get all dependencies that the content author has declared when uploading it to the content system.
+Online content (NewGRFs) can be added to the server from the console using the {{en/C|content|}} command. This is preferable to manual installation, because it includes dependencies and updating.
 
 *First, you need to load the list of available content from the content server:
 :{{en/C|content update|}}
 :Wait until "Content server connection closed" is printed in the console.
 
-*List all available content
-:{{en/C|content state|}}
-:A list of available content is now printed. Find the content you like to download and read its ID which is written in the beginning of the line. Eg. 2947 for Simple City Builder.
+*Find your content
+:{{en/C|content state [filter]|}}
+:This will list all content that matches {{en/C|filter|}}. If you omit the filter, it will list all content on the server.
 
-*Next, select the content to download using its id:
+*Next, select the content to download using its id, which is the first number listed in the previous command's output:
 :{{en/C|content select 2947|}}
 
 *You can add more content by repeating the {{en/C|content select|}} command.
@@ -86,7 +89,7 @@ If you want to install content using the in-game content download facility, you 
 *Then download all selected content:
 :{{en/C|content download|}}
 
-Hint: If you use nightly r26000+ or stable 1.4+, you can type {{en/C|content state city|}} to only list content that contain the word 'city' in their name.
+Note: This will not activate the content, you will need to modify the game settings to use it.
 
 ==Loading a game==
 In the dedicated server window (or with rcon):
