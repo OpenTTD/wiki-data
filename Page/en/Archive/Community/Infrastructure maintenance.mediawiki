@@ -1,8 +1,7 @@
 Open TTD v.1.9.3
 <br /><br />
-'''Please any native english speaker, read through my text and correct any miswording (could be a lot^^)'''
+Edited for grammar and legibility. Additional assessment is needed for formatting and correctness.
 <br />
-
 
 
 == Enable Infrastructure Maintenance ==
@@ -14,11 +13,11 @@ Open TTD v.1.9.3
 ''Options'' (ingame) --> ''Settings'' --> ''Accounting''
 <br />
 <br />
-The maintenance costs grow exponentially with the network size. This means that larger companies pay more proportionally than smaller ones.
+When enabled, company maintenance costs grow exponentially with their network size. This means that larger companies are affected more than smaller ones.
 <br />
 <br />
-In late game short connections between industries or cities may not earn money or even be net negative even though your finance reports are show income.
-With this setting ON the player has network maintenance costs working against them, but also inflation, further driving costs higher. For more information look through ''"Economy"'' [[en/Manual/Economy]]
+In the late game, short connections between industries or cities may not earn money. They can even be a net negative despite finance reports showing income.
+With this setting ON, players must manage rising network maintenance costs, which are further compounded by inflation. For more information see [[en/Manual/Economy]].
 
 
 
@@ -39,40 +38,28 @@ With this setting ON the player has network maintenance costs working against th
 
 == Network Size Calculation ==
 
-[[File:en/Archive/Community/Infrastructure rail count.png|thumb|left|(fig.3) Intersection example]]
-[[File:en/Archive/Community/Small vs spread network costs.png|thumb|middle|(fig.4) Network size example]]
-[[File:en/Archive/Community/Road piece count.png|thumb|right|(fig.5) Road piece count example]]
-[[File:en/Archive/Community/Tunnel piece count rails streets.png|thumb|(fig.6) Tunnel piece count]]
+[[File:en/Archive/Community/Small vs spread network costs.png|thumb|right|(fig.3) Network size example]]
+Network size is determined by the number of track and road pieces used and the complexity of those used tiles, not by the distance or tiles covered. This results in higher costs for dense networks that require more complex intersections than diffused networks with more space between junctions.''(fig.3)'' <br />
 
-The costs depend on your actual tiles you use for rails and streets, and the number of intersections present on one tile. ''(fig.3)''<br />
-This results in higher costs for complex networks in a small space '''vs.''' stretched out networks with more space between intersections.''(fig.4)''
+[[File:en/Archive/Community/Infrastructure rail count.png|thumb|right|(fig.4) Intersection example]]
+'''Intersection Complexity Calculation'''<br />
+The number of rail pieces counted is not the same as the number of rails placed ''(fig.4)''. The number of rail pieces in a tile is modeled by: n², where n is the number of rails used. On one tile:
+* One rail counts as 1 rail piece (1x1)<br />
+* Two rails counts as 4 rail pieces (2x2)<br />
+* Six rails counts as 36 rail pieces (6x6) <br />
+
+A straight rail divided by a street counts as 2 rail pieces.
+<br />
+Street intersections are counted by the number of sides the intersection touches.
 <br /><br />
 
-'''Rail Intersection Example'''<br />
-One rail on one tile counts as 1 rail piece (1x1)<br />
-Two intersecting rails on one tile counts as 4 rail  pieces (2x2)<br />
-...<br />
-Six intersecting rails on one tile counts as 36 rail pieces (6x6)
-<br />
-A straight rail devided by a street counts as 2 rail pieces. Like the street.
-<br />
-<br />
-'''Rail Summary'''
-The game squares the intersections on one tile and counts the result as ''rail pieces''.<br />
-Street intersections are counted as 4. For each tile site with a road piece ''(fig.5)''
-<br />
-<br />
-'''Tunnel''' ''(fig.6)''<br />
-Minimum tunnel lenght      = 2<br />
-Street tunnel piece count  = 8 (10 tiles = 80)<br />
-Railway tunnel piece count = 4 (10 tiles = 40)<br />
-<br />
-''The same piece count (fig.6) goes for bridges''
+'''Tunnels and Bridges'''<br />
+The calculation for tunnel and bridge pieces is identical. For roads, the tunnel piece count is multiplied by a factor of 8, and for rails it is a factor of 4. A street tunnel or bridge of length 10 will count as (10 x 8), or 80 street pieces. A railway tunnel or bridge of length 10 will count as (10 x 4), or 40 rail pieces.
 
 
 == Non-linear cost increase ==
 
-Besides the intersection multiplier to count rail piecies, the game multiplies the cost by square root of total rail piece count. The complete formula is:<br />
+The game multiplies the cost by the square root of the total rail piece count, as determined by the intersection complexity process described above. The complete formula is:<br />
 <br />
 ''Cost = Nt * Ct * sqrt(Na)''<br />
 <br />
@@ -87,13 +74,13 @@ When only a single rail type is in use, this can be simplified to ''Cost = C * N
 [[File:en/Archive/Community/Maglev 1x10 maintenance.png|thumb|(fig.7) 10 Monorail rail costs]]
 [[File:en/Archive/Community/Maglev 2x10 maintenance.png|thumb|(fig.8) 20 Monorail rail costs]]
 
-Here is an example list for the cost increase, with an rough factor to show the cost increase from one row to the next. (Used Maglev rails)<br />
+Here is an example list for the cost increase, with a rough factor to show the cost increase from one row to the next. (Used Maglev rails)<br />
 
 {| class="wikitable"
 |-
 ! Rail Pieces !! Costs/yr !! Factor
 |-
-| 10    || 120€     || n.a.
+| 10    || 120€     || 1
 |-
 | 20    || 336€     || 2.80
 |-
@@ -113,21 +100,8 @@ Here is an example list for the cost increase, with an rough factor to show the 
 |}
 <br />
 '''Summary cost increase'''<br />
-You can say with every rail piece amount double, the costs increase around 280%<br />
+As the number of rails doubles, we can expect a cost increase of 280%<br />
 (exp. 936€ for 40 pieces x 2.8 = costs for 80 pieces). ''(fig.7)(fig.8)
 
-
-
-== Workarounds ==
-
-[[File:en/Archive/Community/Space saving example.png|thumb|(fig.9) Space saving by stacking]]
-
-Unfortunately to this date I know no workaround or economical solution/trick. One may think that the game can be tricked with rails over a tunnel or rails under a bridge, but no. These setups other than the saved space do not reduce the maintenance for the tile. Even though no roads or track are intercepting.
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
+<br /><br /><br /><br /><br /><br />
 Editors of this page, try to follow these guide lines: Manual_of_Style [[en/Wiki/Manual of Style]]
