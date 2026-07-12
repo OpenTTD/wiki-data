@@ -1,0 +1,705 @@
+[[Translation:en/Manual/Game Mechanics/Main Page]]
+{{tr/Manual/İçindekiler}}
+
+Burada OpenTTD'nin oyun içi rakamları nasıl hesapladığı hakkında bilgi bulabilirsiniz.
+
+İstasyon puanının nasıl oluştuğunu her zaman bilmek istediniz mi? Mal dağıtımının nasıl çalıştığını? İşte burada bulabilirsiniz!
+
+==Şirket puanı==
+
+Şirket puanının her parçası doğrusal bir işlevdir; yani bir bileşen için hedefin %50'sini kazanmak, o bileşene ayrılan puanların %50'sini verir. Bileşenler parasal tutarlar içeriyorsa, bunlar mevcut oyunun para birimine dönüştürülür; dahili olarak bu tutarlar pound tutarı olarak saklanır. Bileşenler zaman içeriyorsa ve oyun duvar saati zaman ölçümü kullanıyorsa, bunlar yılda 12 dakika, ayda bir dakika ve günde 2 saniye oranında dakikaya dönüştürülür.
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+! Bileşen !! Hedef !! Puan (min) !! Puan (maks) !! Yüzde
+|-
+|Geçen yıl kâr eden şirket sahibi araç sayısı||>=120||0 araç için 0 puan||en az 120 araç için 100 puan||0 ile %10
+|-
+|Şirketin sahip olduğu yakın zamanda hizmet verilen istasyon parçası sayısı||>=80||0 parça için 0 puan||en az 80 parça için 100 puan||0 ile %10
+|-
+|En az iki yaşındaki araçların en düşük kârı||>=£10.000||zarar veya £0 için 0 puan||en az £10.000 için 100 puan||0 ile %10
+|-
+|Son 3 yılda kazanılan en düşük üç aylık gelir||>=£50k||£0 için 0 puan||en az £50k için 50 puan||0 ile %5
+|-
+|Son 3 yılda kazanılan en yüksek üç aylık gelir||>=£100k||£0 için 0 puan||en az £100k için 100 puan||0 ile %10
+|-
+|Geçen yıl teslim edilen kargo birimi||>=40.000||0 birim için 0 puan||en az 40.000 birim için 400 puan||0 ile %40
+|-
+|Geçen çeyrekte teslim edilen kargo türü sayısı||>=8||0 kargo türü için 0 puan||en az 8 kargo türü için 50 puan||0 ile %5
+|-
+|Bankadaki mevcut nakit||>=£10m||£0 için 0 puan||en az £10m için 50 puan||0 ile %5
+|-
+|Bankadan mevcut kredi||£0||&ge;£250k için 0 puan||£0 için 50 puan||0 ile %5
+|- style="background:#efefef"
+! Toplamlar !!!! 0 puan !! 1000 puan !! 0 ile %100
+|}
+
+<table>
+<tr valign="top"><td style="background:none; border:0px">
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!colspan="2"|Şirket Lig Tablosu puanları
+|- style="background:#efefef"
+!Puan!!Unvan
+|-
+|0 ile 127||Mühendis
+|-
+|128 ile 255||Trafik Müdürü
+|-
+|256 ile 383||Ulaşım Koordinatörü
+|-
+|384 ile 511||Rota Denetçisi
+|-
+|512 ile 639||Direktör
+|-
+|640 ile 767||Genel Müdür
+|-
+|768 ile 895||Başkan
+|-
+|896 ile 959||Cumhurbaşkanı
+|-
+|960 ile 1000||Kodaman
+|}
+</td><td style="background:none; border:0px">
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!colspan="2"|2050 Yüksek Skor puanları
+|-
+!Puan!!Unvan
+|-
+|0 ile 319||İş insanı
+|-
+|320 ile 447||Girişimci
+|-
+|448 ile 575||Sanayici
+|-
+|576 ile 703||Kapitalist
+|-
+|704 ile 831||Magnat
+|-
+|832 ile 959||Mogul
+|-
+|960 ile 1000||Yüzyılın Kodamanı
+|}
+</td></tr></table>
+
+==İstasyon puanı==
+Bu bölüm, istasyon puanını etkileyen faktörleri gösterir. Tüm hesaplamalar her kargo türü için ayrı ayrı yapılır.
+
+{| {{en/Wikitable}}
+|- style="background:#ddd"
+!Faktör!!Koşul!!Puan puanı!!Puan %
+|-
+| Kargo yükleyen son aracın azami hızı (255 km/s sınırıyla) <br> Kara taşıtıysa hızı 2'ye, uçaksa 12,8'e bölün. || 85 km/s (52 mph) üzerinde|| (Hız (km/s) - 85) / 4 || %0 ile %17
+|-
+|rowspan="3"|Kargo yükleyen son aracın yaş (yıl) || 2 || 10|| %4
+|-
+| 1 || 20 || %8
+|-
+| 0 || 33 || %13
+|-
+|rowspan="4"|Son kargo alımından beri saniye <br> Son araç gemiyse "Koşul" sütunundaki saniyeleri 4 ile çarpın.<br><small>Not: Bir araç kargo almaya hazırdıysa ancak kargo yoksa, bu yine de kargo alımı sayılır.<br>Ancak bir araç dolu olarak geldiğinde, hiçbir kargo alımı kaydedilmez ve zamanlayıcı sıfırlanmaz.</small>|| 60 ile 105 || 25 || %10
+|-
+| 30 ile 60 || 50 || %20
+|-
+| 15 ile 30  || 95 || %37
+|-
+| 15'ten az || 130 || %51
+|-
+|rowspan="6"|İstasyonda bekleyen kargo birimi<br><small>Not: kargo diğer istasyonlara aktarılmışsa, oyun BEKLEYEN kargo olarak bu istasyonlardan herhangi birindeki azami bekleyen kargoyu kaynak istasyon için dikkate ALABİLİR: [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3276 TruncateCargo()].
+Bu, oyun kargoyu kıstığında tetiklenir (<tt>waiting_changed = true</tt>); istasyonlardan herhangi biri şu koşulları sağladığında olur:
+* Bu istasyonlardan herhangi birinden 637,5 gündür (21 dakika 15 saniye) kargo alınmamıştır. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3300-L3306]
+* İstasyon puanı %25 veya daha düşük VE 200'den fazla kargo birimi bekliyor. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3379-L3386]
+* İstasyon puanı %50'den düşük VE 0'dan fazla kargo birimi bekliyor; bu, istasyon puanıyla orantılı RASTGELE OLASILIKLA gerçekleşir. Yani istasyon puanı %49 ise ~%1 şans, %25 puanda ~%50 şans ve %0 istasyon puanında %100 şans vardır. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3388-L3396]
+* İstasyonda 4096'dan fazla kargo birimi bekliyor. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/station_cmd.cpp#L3398-L3411].</small>
+|| 1500'den fazla || -90 || -%35
+|-
+| 1001 ile 1500 || -35 || -%14
+|-
+| 601 ile 1000 || 0 || %0
+|-
+| 301 ile 600 || 10 || %4
+|-
+| 101 ile 300 || 30 || %12
+|-
+| 100'den az || 40 || %16
+|-
+|İstasyonun kasabasındaki heykel||İnşa edilmiş||26|| %10
+|- style="background:#ddd"
+!Olay!!Koşul!!Puan değişimi!!Puan % değişimi
+|-
+|Küçük reklam kampanyası satın alındı||İstasyon kasaba merkezinin 10 karesi içinde||+64|| +25pp
+|-
+|Orta reklam kampanyası satın alındı||İstasyon kasaba merkezinin 15 karesi içinde||+112|| +44pp
+|-
+|Büyük reklam kampanyası satın alındı||İstasyon kasaba merkezinin 20 karesi içinde||+160|| +63pp
+|-
+|Kara taşıtı kaza yaptı||İstasyon kazanın 22 karesi içinde ||-160|| -63pp
+|-
+|Tren veya uçak kaza yaptı||İstasyon kazanın 30 karesi içinde ||-160|| -63pp
+|-
+|Uçak kaza yaptı<br><small>Bu ayrıca uçağın kaza yaptığı istasyonda depolanan tüm kargoyu derhal kaldırır. [https://github.com/OpenTTD/OpenTTD/blob/afc3d71fd080aab6a7c8d852016fb18bab5dd5d5/src/aircraft_cmd.cpp#L1375]</small>||İstasyon uçak kazasının yeri||-255||-100pp
+|-
+|Kasaba rüşveti başarısız||İstasyon kasaba etkisi içinde||-255||-100pp
+|}
+Yüzde puanı elde etmek için toplam puan puanlarını 255'e bölün. Olası azami puan %100'dür.
+
+Her 2,5 günde bir (5 saniye veya [https://github.com/OpenTTD/OpenTTD/blob/0d599e155f335e922ad2be738a3ab73d1dea346b/src/date_type.h#L34 185 tick]), istasyon puanları hesaplanır; puanlar döngü başına 2 puandan (%0,78) fazla değişemez; "Olay" altındaki maddeler hariç.
+Olaylar, yakındaki istasyonların puanlarına anlık, geçici bir artış (veya ceza) verir. Puan, 2,5 günde veya 5 saniyede 2 puan kuralını izleyerek kademeli olarak normale döner.
+
+Bir endüstriden taşınabilecek kargo miktarı tamamen istasyon puanına bağlıdır. Bu, bir endüstriye hizmet veren tam olarak bir istasyon varsa, endüstrinin kargo ürettiği tick'lerde kargonun tam olarak istasyon puanı %'sinin istasyona taşınacağı anlamına gelir. Yani bir endüstriden taşınan kargo miktarı düşükse, muhtemelen istasyon puanı da düşüktür.
+
+
+'''Not:'''  Tam formül station_cmd.cpp içinde "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3262 UpdateStationRating()]" altında görülebilir. Bu, economy.cpp içindeki "[https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/economy.cpp#L1595 LoadUnloadVehicle()]" içinde hesaplanan bazı değerleri kullanır.
+
+'''Not:'''  Puan %50'nin altındaysa, istasyon kargo kaybetmeye başlar.
+
+'''Not:'''  Bekleyen kargo miktarı 4096 birimden (veya 4.096.000 litre) fazlaysa, istasyon da kargo kaybetmeye başlar. Bir istasyonda bekleyebilecek kargo için 32.768 birimlik sert bir üst sınır vardır. Bundan fazlası her birkaç günde bir tamamen yok olur. [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/station_cmd.cpp#L3380-L3393]
+
+==İstasyonlara kargo teslimatı==
+
+Mallar, puanlarına göre istasyonlara dağıtılır.
+
+Çevrede yalnızca bir istasyon varsa, her 2,5 günde bir (5 saniye) mevcut malların istasyon puanına eşit bir yüzdesi ona dağıtılır.
+
+Birden fazla istasyon varsa, mallar puana göre aralarında bölünür. Birden fazla şirkete ait istasyonlar varsa, mallar önce her şirketin en iyi istasyonuna göre şirketler arasında bölünür: bir C şirketine tahsis edilen mal oranı, C'nin en iyi istasyon puanının tüm şirketlerin en iyi istasyon puanları toplamına oranına eşittir. Tüm istasyonlar tek bir şirkete aitse bunun %100 olacağını unutmayın. Ardından her şirketin tahsisi istasyonları arasında alt bölümlere ayrılır. C'ye ait bir S istasyonu, C'nin şirket tahsisinin, S'nin puanının C'ye ait tüm istasyonların puanları toplamına oranına eşit bir kesrini alır.
+
+==Yerel yönetim puanı==
+Puanlar bazı oyuncu eylemlerini sınırlar; +500'de başlarlar ve bazı eylemlere göre değişebilirler.
+
+Şu anda bir kasabanın etki yarıçapı içinde yaklaşık 200 ağaç dikerek oyunu istismar edebilirsiniz. Dikmek için yer açmak amacıyla önce bir alanı temizlemeniz gerekebilir, ancak 200 ağaç dikmek -1000'lik asgari bir puanı bile 220'ye yükseltir. Puanınız Orta veya daha düşükse, 30 ağaç dikmek yaklaşık olarak bir istasyon inşa etmenin puan cezasını siler; istasyonun boyutuna ve alanın ne kadar ormanlık olduğuna bağlıdır. Çok İyi veya daha iyi bir puandayken ağaç dikmenin etkisi yoktur.
+
+<table>
+<tr valign="top"><td style="background:none; border:0px">
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Puan puanı!!Puan
+|-
+| -1000 ile -400 || Berbat <!--Güncellenmiş OpenTTD istemcisi itibarıyla-->
+|-
+| -399 ile -200 || Çok Kötü
+|-
+| -199 ile 0 || Kötü
+|-
+| 0 ile 200 || Orta
+|-
+| 201 ile 400 || İyi
+|-
+| 401 ile 600 || Çok İyi
+|-
+| 601 ile 800 || Mükemmel
+|-
+| 801 ile 1000 || Olağanüstü
+|}
+</td><td style="background:none; border:0px">
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Oyuncu eylemi!!Gerekli puan*!!Puan üzerindeki etki
+|-
+|İstasyon inşa et|| -200 || y/d
+|-
+|Yolun 'kenar' parçasını yok et|| 16 / 64 / 112 ||-18, -100'e kadar.
+|-
+|Yolun 'iç' parçasını yok et|| 16 / 64 / 112 ||-50, -100'e kadar.
+|-
+|Şehir tüneli veya köprüsünü yok et|| 144 / 208 / 400 ||-250, 0'a kadar.
+|-
+|Bina yok et**|| 40 ile 300 ||-40 ile -300
+|-
+|Boş bir kareye ağaç dik|| y/d ||+7, 220'ye kadar.
+|-
+|Ağaçlı bir kareyi temizle|| y/d ||-35
+|-
+|Yakındaki bir nehir karesini yok et || y/d ||-200
+|-
+|Başarılı rüşvet|| y/d ||+200, 800'e kadar.
+|-
+|Başarısız rüşvet|| y/d ||-50'ye ayarla.
+|}
+<nowiki>*</nowiki> "Gerekli puan", [[en/Archive/Manual/Settings/Difficulty]] seçeneği ''Yerel yönetim tutumu'' için Hoşgörülü / Tarafsız / Düşmanca ayarları için listelenmiştir.<br><nowiki>**</nowiki> Varsayılan binalar için. NewGRF'ler bu sayıyı 0 ile >1000 arasında ayarlayabilir;<br>bu da binayı fiilen kaldırılamaz hale getirir.
+</td></tr></table>
+
+Her ay (veya dakika), tüm şirketlerin puanları otomatik olarak değişir:
+* Puan 200'den azsa 5 artar.
+* Son 50 günde (100 saniye) kargo aktarmış her istasyon için puan 12 artar.
+* Son 50 günde (100 saniye) kargo aktarmamış her istasyon için puan 15 azalır.
+
+
+'''Örnek:'''<br>
+Bir şirketin bir kasabada -300 (Çok Kötü) puanı, 2 aktif istasyonu ve 1 pasif istasyonu vardır.<br>
+5p + 2 * 12p - 15p = ayda 14p puan kazancı.<br>
+(-200 - -300)p / 14p/ay = kasabanın şirketin başka bir istasyon inşa etmesine izin vermesinden önce 8 ay (veya dakika).
+
+Kasaba puanı kodu town.h, town_cmd.c, tree_cmd.c ve road_cmd.c içindedir.
+==Yolcu ve Posta Üretimi==
+Kasabalar ve şirket merkezleri yolcu ve posta üretirken, petrol platformları yalnızca yolcu üretir.
+===Kasaba Yolcu Üretimi===
+Periyodik işlemenin her turunda (yani her 256 tick'te), her ev karesi için 0<=X<=255 rastgele bir değer üretilir. X karenin nüfusundan küçük değilse yolcu üretilmez. Aksi halde X/8+1 yolcu üretilir (aşağı yuvarlanır). Durgunluk varsa, üretilen yolcu sayısı yarıya iner; ancak bu bölme aşağı yerine yukarı yuvarlanır. Posta üretimi benzer şekilde gerçekleşir, ancak yeni bir rastgele değerle ve nüfus yerine posta üretim çarpanına karşı kontrol edilerek. HouseProps için varsayılan değerlerin tam listesine bakın: [https://newgrf-specs.tt-wiki.net/wiki/DefaultHouseProps]
+===Şirket Merkezi===
+Şirket Merkezi, seviyesine bağlı olarak yolcu ve posta üreten benzersiz bir yapıdır; seviye de şirketin performans puanına bağlıdır. Daha yüksek seviyeli şirket merkezleri daha fazla yolcu ve posta üretir; merkezin çıktısı, aşağıdaki formüllere göre kare başına dört kareye eşit dağılır:
+
+*Yolcular: 256 / 4 kare / (6 - şirket merkezi Seviyesi [1 ile 5 arasında bir değer] )
+*Posta: 196 / 4 kare / (6 - şirket merkezi Seviyesi)
+
+==Endüstri üretimi==
+Oyun, bir endüstrinin ayda ne kadar kargo üreteceğini şöyle belirler. Hammadde üretimi ayda 8 veya 9 kez gerçekleşir. (Her 256 tick'te gerçekleşir. Bir günde 74 tick ve bir ayda 28 ile 31 gün vardır ([https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/date_type.h#L30 date_type.h]). Bu, endüstrilerin yalnızca yaklaşık %9'unun 28 günlük Şubat'ta 9 kez üreteceği, ancak yaklaşık %96'sının Mart gibi 31 günlük bir ayda 9 kez üreteceği anlamına gelir.) Üretim her zaman 8 veya 9'un katı olacaktır; o ay endüstri üretimi değişmediyse.
+
+Bu tablo, [[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|pürüzsüz ekonomi]] yamasıyla yönetilen olası başlangıç üretimlerini listeler. Bu sayılar 8'in katlarıdır. Oyun yeni bir harita oluşturduğunda, her endüstri 8 kez üretmiş ve oyun başlamadan önceki Aralık'ta üretim değişikliği olmamıştır.
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Hammadde endüstrisi!!Üretilen kargo!!Başlangıç üretim aralığı
+|-
+|[[tr/Manual/Base Set/Industries/Kömür madeni|Kömür madeni]]||Kömür||56 ile 176
+|-
+|[[tr/Manual/Base Set/Industries/Orman|Orman]]||Kereste||48 ile 152
+|-
+|[[tr/Manual/Base Set/Industries/Petrol platformu|Petrol platformu]]||Petrol||56 ile 176
+|-
+|[[tr/Manual/Base Set/Industries/Çiftlik|Çiftlik]]||Tahıl ve Canlı hayvan||40 ile 112
+|-
+|[[tr/Manual/Base Set/Industries/Bakır madeni|Bakır madeni]]||Bakır cevheri||56 ile 112
+|-
+|[[tr/Manual/Base Set/Industries/Petrol kuyuları|Petrol kuyuları]]||Petrol||48 ile 152
+|-
+|[[tr/Manual/Base Set/Industries/Demir madeni|Demir madeni]]||Demir cevheri||40 ile 112
+|-
+|[[tr/Manual/Base Set/Industries/Banka|Banka]] (ılıman)||Değerli eşyalar||24 ile 64
+|-
+|colspan="5"|
+|-
+|[[tr/Manual/Base Set/Industries/Altın madeni|Altın madeni]]||Altın||24 ile 80
+|-
+|colspan="5"|
+|-
+|[[tr/Manual/Base Set/Industries/Elmas madeni|Elmas madeni]]||Elmaslar||24 ile 80
+|-
+|[[tr/Manual/Base Set/Industries/Meyve plantasyonu|Meyve plantasyonu]]||Meyve||40 ile 112
+|-
+|[[tr/Manual/Base Set/Industries/Kauçuk plantasyonu|Kauçuk plantasyonu]]||Kauçuk||40 ile 112
+|-
+|[[tr/Manual/Base Set/Industries/Su kaynağı|Su kaynağı]]||Su||48 ile 152
+|-
+|[[tr/Manual/Base Set/Industries/Çiftlik|Çiftlik]]||Mısır||40 ile 128
+|-
+|[[tr/Manual/Base Set/Industries/Kereste fabrikası|Kereste fabrikası]]||Kereste||180 veya 225 (ağaç varsa)
+|-
+|colspan="5"|
+|-
+|[[tr/Manual/Base Set/Industries/Pamuk şeker ormanı|Pamuk şeker ormanı]]||Pamuk şeker||48 ile 152
+|-
+|[[tr/Manual/Base Set/Industries/Pil çiftliği|Pil çiftliği]]||Piller||40 ile 128
+|-
+|[[tr/Manual/Base Set/Industries/Kola kuyuları|Kola kuyuları]]||Kola||48 ile 136
+|-
+|[[tr/Manual/Base Set/Industries/Plastik çeşmeleri|Plastik çeşmeleri]]||Plastik||56 ile 160
+|-
+|[[tr/Manual/Base Set/Industries/Baloncuk üreteci|Baloncuk üreteci]]||Baloncuklar||48 ile 152
+|-
+|[[tr/Manual/Base Set/Industries/Toffee ocağı|Toffee ocağı]]||Toffee||40 ile 112
+|-
+|[[tr/Manual/Base Set/Industries/Şeker madeni|Şeker madeni]]||Şeker||40 ile 128
+|}
+
+(Bu tabloyu hesaplamak için, endüstri ve kargosu için table/build_industry.h içindeki [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/table/build_industry.h#L1198 _origin_industry_specs] altına bakın. Şeker madeninin <code>CT_SUGAR, 11</code> değeri vardır, dolayısıyla üretim 11'de başlar. industry_cmd.cpp içindeki [https://github.com/OpenTTD/OpenTTD/blob/97c0594cedcad866bbdea8a0f86406b5c38694a3/src/industry_cmd.cpp#L1643 DoCreateNewIndustry()] formülünü uygulayın: üretimi 128 ile 383 arasında rastgele bir tamsayıyla çarpın, sonra 256'ya bölün, aşağı yuvarlayın. Böylece 11, 5 ile 16 olur. Son olarak 8 ile çarparak 40 ile 128 elde edin.)
+
+===Üretim değişimi===
+Her ay oyun bazı endüstri üretimlerini rastgele değiştirir.
+====Varsayılan / TTD benzeri Ekonomi Kuralları====
+256x256 kare haritalar için ayda bir değişiklik mümkündür (yalnızca 1 endüstri değişir). Sayı, trunk'ta (r14332) "Günlük üretim değişiklikleri" işlevinin getirilmesinden beri harita boyutuyla güzel ölçeklenir.
+
+
+*Pürüzsüz ekonomide olduğu gibi, endüstriler ayda 8 veya 9 kez kargo üretir.
+Ancak - üretimler 6 üretim seviyesiyle sınırlıdır: en düşük, daha düşük, normal (yeni bir oyun başlatıldığında veya yeni bir endüstri inşa edildiğinde), daha yüksek, 2x daha yüksek ve en yüksek.
+Bu seviyeler arasındaki üretim değişiklikleri ya %50 azalma (yarıya) ya da %100 artıştır (iki katına).
+
+*Örnekler:
+**Bir Kömür Madeni: en düşük (ayda 32 veya 40 t), daha düşük (64 veya 72), normal (120 veya 135), daha yüksek (240 veya 270), 2x daha yüksek (480 veya 540) ve en yüksek (960 veya 1080).
+**Bir Orman:    en düşük (ayda 32 veya 64 t), daha düşük (35 veya 70), normal (78 veya 117), daha yüksek (208 veya 260), 2x daha yüksek (416 veya 468) ve en yüksek (832 veya 936).
+**Bir Altın Madeni: en düşük (ayda 12 veya 18 torba), daha düşük (32 veya 40), normal (56 veya  63), daha yüksek (112 veya 126), 2x daha yüksek (224 veya 252) ve en yüksek (448 veya  504).
+
+
+İşleri basitleştirmek için, 256x256 haritalar için şanslara bakalım (ayda maks. 1 değişiklik = ayda maks. 1 endüstri üretim değiştirir):
+
+*Her ay bir üretim değişikliği şansı:
+** <code>only_decrease</code> endüstrisinin azalması için %50 (şu anda yalnızca Ilıman arazi Petrol Kuyuları) veya
+** diğer endüstrinin (<code>only_decrease</code> olmayan) üretim değiştirmesi için 1/3 şans (= %16,7) için %50.
+
+
+*Bir üretim değişikliği olursa (ayda ~%16,7 şans):
+** Zayıf veya hiç hizmeti olmayan bir endüstri için (kargosunun %60'ından azı taşınıyor): '''%33''' artış şansı, '''%67''' azalma şansı.
+** İyi ( %60'tan fazla) hizmeti olan bir endüstri için: '''%67''' artış şansı, '''%33''' azalma şansı.
+** Varsayılan ekonomide mükemmel hizmet için bonus yoktur.
+
+
+*Belirli bir değişiklik şansını hesaplamak için, örn. %50 * 1/3 * %33 = %5,56:
+** Zayıf hizmet: ayda 1 olası değişikliğin artış olması '''%5,56''' ve azalma olması '''%11,12'''.
+** İyi hizmet: ayda 1 olası değişikliğin artış olması '''%11,12''' ve azalma olması '''%5,56'''.
+
+====Pürüzsüz Ekonomi Kuralları====
+
+{{en/Outdated|Zorluk ayarı ve Gelişmiş ayar, Ayarlar ile değiştirilmiştir}}
+
+:''[[en/Archive/Manual/Settings/Advanced Settings/Economy#enable-smooth-economy-more-smaller-changes|Pürüzsüz ekonomi]] (gelişmiş ayar) ile [[en/Archive/Manual/Settings/Difficulty|Dengeli ekonomi]] (zorluk ayarı) ayırt edin''
+
+*Her ay bir üretim değişikliği şansı '''%4,5'''tir; başka bir deyişle, endüstri listesindeki üreten endüstrilerin ortalama %4,5'i üretim değiştirir.
+
+
+*Bir üretim değişikliği olursa:
+** Bir <code>only_decrease</code> endüstrisi için (şu anda yalnızca Ilıman Petrol Kuyuları) '''%0''' artış şansı, '''%100''' azalma şansı.
+** Zayıf veya hiç hizmeti olmayan bir endüstri için (kargosunun %60'ından azı taşınıyor): '''%33''' artış şansı, '''%67''' azalma şansı.
+** İyi ( %60'tan fazla) hizmeti olan bir endüstri için: '''%67''' artış şansı, '''%33''' azalma şansı.
+** Mükemmel ( %80'den fazla) hizmeti olan bir endüstri için: '''%83''' artış şansı, '''%17''' azalma şansı.
+
+
+*Bu ikisi çarpılır, örn. %4,5 * %33 = %1,5:
+** <code>only_decrease</code> endüstrisi: '''%0''' artış ve '''%4,5''' azalma şansı
+** Zayıf hizmet: '''%1,5''' artış ve '''%3,0''' azalma şansı
+** İyi hizmet: '''%3,0''' artış ve '''%1,5''' azalma şansı
+** Mükemmel hizmet: '''%3,75''' artış ve '''%0,75''' azalma şansı
+
+
+*[[en/Archive/Manual/Settings/Smooth economy]] seçeneği etkinken, ay başına üretim değişiklikleri %3 ile %23 arasındadır
+**Çok düşük üretimli endüstriler (örn. ayda 12-40 ton) daha yüksek değişikliklere sahip olacaktır.
+**Birincil endüstriler ayda 8 veya 9 kez kargo üretir. Aylık üretim, bir endüstrinin 'temel değeri'nin 8 veya 9 ile çarpımıdır. Örneğin, bir kömür madeninin temel değeri 15 tondur, dolayısıyla aylık üretim 120 veya 135 tondur. Bu temel değer 255 ile sınırlıdır, dolayısıyla herhangi bir endüstri için olası azami aylık üretim 2040 veya 2295'tir. [http://www.tt-forums.net/viewtopic.php?p=163733&sid=2128541ce7feb1a96a454f56152123a2#p163733 Kaynak]
+
+=====Özel Durumlar=====
+
+*[[tr/Manual/Base Set/Industries/Petrol platformu|Petrol platformu]] yolcu üretimi üretim olayı başına 16 yolcuyla sınırlıdır; yani ayda azami 144 veya 128 yolcu. [https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L2597-L2602]
+*[[tr/Manual/Base Set/Industries/Kereste fabrikası|Kereste fabrikası]] teknik olarak üreten bir endüstri değildir ve kodda ikincil endüstri olarak sınıflandırılır. Ayda dört veya beş kez, kesilecek olgun bir ağaç aramak için 40'a 40'lık bir alanda spiral desende dışa doğru arama yapar. Bir tane bulursa, kare [[tr/Manual/Çevre düzeni|yıkılır]] ve 45 ton kereste çıkarılır. Bu, yalnızca ağaç mevcudiyetine bağlı olarak ayda azami 225 veya 180 ton kereste üretimi olduğu anlamına gelir.[https://github.com/OpenTTD/OpenTTD/blob/1.9.2/src/industry_cmd.cpp#L1094-L1111]
+*Ilıman iklim [[tr/Manual/Base Set/Industries/Banka|bankaları]] asla üretim değiştirmez (ayda 8 veya 9 üretim olayı dışında).
+
+====Örnekler====
+Bir kömür madeninin çıktısının %70'i taşınıyorsa, %3-23 arası üretim artışı için '''%3''' şans (%4,5 * %67) ve %3-23 arası (ama ortalama %13) üretim azalması için '''%1,5''' şans (%4,5 * %33) vardır.
+
+(1 + (0,03 - 0,015) * 0,13) ^ 12 - 1 = 0,0237 veya '''%2,37'''
+
+Kömür madeni ilk yıldan sonra ortalama %2,37 büyür.<br>
+(1,0237 ^ 20) - 1 = yirmi yıl sonra %59,6<br>
+(1,0237 ^ 50) - 1 = elli yıl sonra %321,8 veya '''3,22x'''<br>
+(1,0237 ^ 100) - 1 = yüz yıl sonra '''10,35x'''<br>
+
+
+%80'den fazla puana sahip bir endüstri için '''%3,75''' artış ve '''%0,75''' azalma şansı vardır:<br>
+(1 + (0,0375 - 0,0075) * 0,13) ^ 12 - 1 = 0,0478 veya '''%4,78'''
+
+Endüstri ilk yıldan sonra ortalama yaklaşık %4,78 büyür.<br>
+(1,0478 ^ 20) - 1 = yirmi yıl sonra '''2,54x'''<br>
+(1,0478 ^ 50) - 1 = elli yıl sonra '''10,32x'''<br>
+(1,0478 ^ 100) - 1 = yüz yıl sonra '''106,62x'''<br>
+
+
+<code>only_decrease</code> bayrağı ayarlı bir endüstri için (şu anda Ilıman Petrol Kuyuları), yalnızca '''%4,5''' azalma şansı vardır:<br>
+(1 + (0 - 0,045) * 0,13) ^ 12 - 1 = (0,99415) ^ 12 -1 = -0,068 veya '''-%6,8'''
+
+Endüstri ilk yıldan sonra ortalama yaklaşık %6,8 küçülür.<br>
+(0,9320 ^ 20) = yirmi yıl sonra başlangıç üretiminin '''%24,46'''sı<br>
+(0,9320 ^ 50) = elli yıl sonra başlangıç üretiminin '''%2,96'''sı<br>
+
+ln(0,5) / ln(0,99415) = 118,1 ay veya '''9,84 yıl''', bir <code>only_decrease</code> endüstrisinin yarı ömrüdür.<br>
+ln(8 / 48) / ln(0,99415) = 305,9 ay veya '''25,4 yıl''', ılıman Petrol Kuyularının ortalama ömrüdür (ayda 48 petrol ile başlayarak).<br>
+ln(8 / 152) / ln(0,99415) = 501,8 ay veya '''41,8 yıl''', ılıman Petrol Kuyularının ortalama ömrüdür (ayda 152 petrol ile başlayarak).<br>
+
+
+İyi hizmet için ortalama '''iki katına çıkmak''' '''29,6 yıl''', mükemmel hizmet için '''14,8 yıl''' sürer. Oyunun zamanında bir gün 2 saniye ise, iyi hizmetle '''ikiye katlanma süresi''' yaklaşık '''6 saat''', mükemmel hizmetle yaklaşık '''3 saat'''tir. Üretimin 100'ün altından 2040 veya 2295'in azamiye yakın değerine gitmesi iyi hizmetle '''130 yıl''', mükemmel hizmetle '''65 yıl''' sürer.
+
+Ancak oyunda endüstrilerin üretim oranlarını çok rastgele değiştirdiğini göreceksiniz. Yukarıdaki örneklerin yalnızca uzun vadede birçok endüstri gözlemlendiğinde doğru olduğu vurgulanmalıdır; bireysel endüstriler bu ortalamalardan büyük ölçüde sapabilir. İstatistiksel olarak konuşursak, 10 endüstriden 6'sı en iyi hizmetle bile 65 yıl içinde 100'den 2040-2295'e gitmeyecektir. Yaklaşık 9 endüstriden 1'i, 50 yıl boyunca %60-80 kargo taşınarak hizmet verildiğinde bile üretimini düşürecektir.
+
+Endüstrilerden daha fazla duyarlılık için vagon sayısını endüstri üretimine ve hizmet sıklığına uyarlayın (iyi sıklıkla en düşük üretim için iki vagon kullanmalısınız). Bu tür kargo trenleri için genellikle [Tam Yükle] talimatları kullanılır.
+
+
+'''Not:'''  Tam formül industry_cmd.cpp içinde "[https://github.com/OpenTTD/OpenTTD/blob/master/src/industry_cmd.cpp#L2598 ChangeIndustryProduction()]" altında görülebilir.
+
+==Teslimat ödeme oranları==
+Kargo teslimi için aldığınız ödeme 4 faktöre dayanır: teslim ettiğiniz kargo miktarı, kargonun değeri, teslim ettiğiniz mesafe ve ne kadar zamanında teslim ettiğiniz.
+
+{| {{en/Wikitable}}
+|- style="background:#efefef"
+!Kargo!!Birim!!Erken teslimat<br> süresi (gün)!!Geç teslimat<br> süresi (gün)!!Başlangıç kargo <br> ödemesi (pound)
+|-
+|[[tr/Manual/Base Set/Cargos/Yolcular|Yolcular]]|| ||Anında||24||£39
+|-
+|[[tr/Manual/Base Set/Cargos/Değerli eşyalar|Değerli eşyalar]]||Torba||1||32||£91
+|-
+|[[tr/Manual/Base Set/Cargos/Canlı hayvan|Canlı hayvan]]||Adet||4||18||£53
+|-
+|[[tr/Manual/Base Set/Cargos/Tahıl|Tahıl]]||Ton||4||40||£58
+|-
+|[[tr/Manual/Base Set/Cargos/Mallar|Mallar]]||Kasa||5||28||£75
+|-
+|[[tr/Manual/Base Set/Cargos/Kömür|Kömür]]||Ton||7||Yok||£72
+|-
+|[[tr/Manual/Base Set/Cargos/Çelik|Çelik]]||Ton||7||Yok||£69
+|-
+|[[tr/Manual/Base Set/Cargos/Demir cevheri|Demir cevheri]]||Ton||9||Yok||£62
+|-
+|[[tr/Manual/Base Set/Cargos/Kereste|Kereste]]||Ton||15||Yok||£61
+|-
+|[[tr/Manual/Base Set/Cargos/Petrol|Petrol]]||Kilolitre||25||Yok||£54
+|-
+|[[tr/Manual/Base Set/Cargos/Posta|Posta]]||Torba||20||90||£55
+|- style="background:#efefef"
+!colspan="5" align="center"|Kutup özel
+|-
+|[[tr/Manual/Base Set/Cargos/Buğday|Buğday]]||Ton||4||40||£58
+|-
+|[[tr/Manual/Base Set/Cargos/Kağıt|Kağıt]]||Ton||7||60||£66
+|-
+|[[tr/Manual/Base Set/Cargos/Altın|Altın]]||Torba||10||40||£71
+|-
+|[[tr/Manual/Base Set/Cargos/Gıda|Gıda]]||Ton||Anında||30||£69
+|- style="background:#efefef"
+!colspan="5" align="center"|Tropikal özel
+|-
+|[[tr/Manual/Base Set/Cargos/Kauçuk|Kauçuk]]||Kilolitre||2||20||£54
+|-
+|[[tr/Manual/Base Set/Cargos/Meyve|Meyve]]||Ton||Anında||15||£51
+|-
+|[[tr/Manual/Base Set/Cargos/Mısır|Mısır]]||Ton||4||40||£53
+|-
+|Tropikal [[tr/Manual/Base Set/Cargos/Kereste|Kereste]]||Ton||15||Yok||£97
+|-
+|[[tr/Manual/Base Set/Cargos/Bakır cevheri|Bakır cevheri]]||Ton||12||Yok||£59
+|-
+|[[tr/Manual/Base Set/Cargos/Su|Su]]||Kilolitre||20||80||£57
+|-
+|[[tr/Manual/Base Set/Cargos/Elmaslar|Elmaslar]]||Torba||10||Yok||£71
+|- style="background:#efefef"
+!colspan="5" align="center"|Oyuncak diyarı özel
+|-
+|[[tr/Manual/Base Set/Cargos/Şeker|Şeker]]||Ton||20||Yok||£54
+|-
+|[[tr/Manual/Base Set/Cargos/Oyuncaklar|Oyuncaklar]]|| ||25||Yok||£68
+|-
+|[[tr/Manual/Base Set/Cargos/Piller|Piller]]|| ||2||30||£53
+|-
+|[[tr/Manual/Base Set/Cargos/Şekerleme|Şekerleme]]||Ton||8||40||£75
+|-
+|[[tr/Manual/Base Set/Cargos/Şekerleme (toffee)|Toffee]]||Ton||14||60||£58
+|-
+|[[tr/Manual/Base Set/Cargos/Kola|Kola]]||Kilolitre||5||75||£59
+|-
+|[[tr/Manual/Base Set/Cargos/Pamuk şeker|Pamuk şeker]]||Ton||10||25||£61
+|-
+|[[tr/Manual/Base Set/Cargos/Baloncuklar|Baloncuklar]]|| ||20||80||£62
+|-
+|[[tr/Manual/Base Set/Cargos/Plastik|Plastik]]||Kilolitre||30||Yok||£54
+|-
+|[[tr/Manual/Base Set/Cargos/Gazlı içecekler|Gazlı içecekler]]|| ||30||50||£76
+|}
+
+Başlangıç kargo ödeme değerleri, 100 parça kargoyu 1 kare mesafeye teslim etmek içindir. Oyun ilerledikçe ödeme enflasyonla artar.
+
+
+Geç teslimat cezaları:
+* Erken Teslimat süresinden sonra kargoyu teslim ettiğiniz her gün için %0,4 ceza alırsınız.
+* Geç Teslimat süresinden sonra kargoyu teslim ettiğiniz her gün için ek %0,4 ceza alırsınız.
+* Azami ceza %88'dir; bundan sonra azami cezadan ne kadar sonra teslim ettiğinize göre daha fazla ceza alırsınız.
+
+Aşırı geç teslimat cezası:
+* Ceza, mevcut ödemeye çarpılan ek bir 31 / (x + 32) faktörüdür; burada x, düzenli geç teslimat cezası azamiye ulaştıktan sonra transitte geçen gün sayısıdır.
+* Bu, azami cezadan 30 gün sonra ek %50 indirime, 92 gün sonra %75'e ve 216 gün sonra %88'e dönüşür.
+* Bu ceza fiilen sınırsızdır ve burada bulunabilir: [https://github.com/OpenTTD/OpenTTD/blob/2097719f269edf2e42ada3ebe7854534d27b4e11/src/economy.cpp#L1027]
+
+
+'''Örnekler''' (enflasyon yok):<br>
+10 günde 20 kare mesafeye 200.000 litre petrol teslim et:<br>
+2 * £54 * 20 kare * %100 = £2160
+
+100 günde 100 kare mesafeye 100 torba posta teslim et:<br>
+£55 * 100 kare * (1 - 0,80*0,4 - 0,10*0,4) = £3520
+
+'''İPUCU kolay hesapla''':<br>
+Gelir = kargo birimi * kargo değeri * 0,4<br>
+Kargo değeri, oyun içi belirli taşınan mallar grafiğindeki Y ekseninden gelir<br>
+gerçek teslimat sürenizi gün olarak ölçün ve x eksenine çizin
+Bu sonuç, %5 sapmayla gelirinizin kolay bir tahminini verir
+
+'''Notlar:'''
+* Yararlı bir kural, taşıma hızının yaklaşık 1-2 katıdır. Yani 200 km/s'lik bir tren için yaklaşık 300 kare mesafe idealdir. İyi ayarlanmış tren ağları biraz daha ileri gidebilir, ancak beklenmedik gecikmeler uzun mesafe taşımacılığında değerinizi yok eder.
+
+* Tam formül, daha büyük kesikli değerlerden dönüştürürken yuvarlama hatası nedeniyle çok daha karmaşık ve biraz daha doğrudur. economy.cpp ([https://github.com/OpenTTD/OpenTTD/blob/master/src/economy.cpp#L958 GetTransportedGoodsIncome()]) ve [[tr/Manual/Game Mechanics/Kargo geliri]] sayfalarına bakın.
+
+* Mesafe, endüstrilerden veya aracın kat ettiği mesafeden değil, istasyonların isim etiketli kareleri arasında ölçülür. x ve y kare farklarının toplanmasıyla hesaplanır ([http://en.wikipedia.org/wiki/Manhattan_distance Manhattan mesafesi]), düz çizgi mesafesi değildir.
+
+* Zaman, yükleme anından boşaltma anına kadar kargonun bir araç içinde geçirdiği toplam süre olarak ölçülür. İstasyonlarda bekleyen kargo yaşlanmaz. Varsayılan olarak tüm araçlar kargolarını aynı hızda yaşlandırır, ancak bu NewGRF'lerle değişebilir.
+
+* Her kargonun, kaynak istasyondan sabit hızda uzaklaştırılabildiği varsayıldığında ödemenin azamiye çıktığı karakteristik bir süresi vardır. "Geç teslimat" cezası olan bir kargo için bu süre tipik olarak yaklaşık 70 gün veya 2 dakikadır; olmayan için tipik olarak yaklaşık 130 gün veya 4 dakikadır.
+
+==Araç hızları==
+Dahili olarak OpenTTD "km-ish/h" adlı bir birimle çalışır; bu "mph*1,6"ya eşittir.
+km-ish/h'den km/s'ye dönüşüm faktörü 1,00584, km-ish/h'den mph'ye dönüşüm faktörü 1,6'dır.
+
+Araç hızı amaçları için bir kare 664,(216) km-ish, 668 km veya 415 mil uzunluğundadır. Bu şu gerçeklere dayanır:
+*Bir karenin X/Y ekseni başına 16 alt konumu vardır.
+*Bir araç, kare hareketinin kalanını subspeed adlı bir baytta saklar; dolayısıyla 256 farklı değere sahiptir.
+*Aracın (ham) hızı subspeed'e eklenir. Ortaya çıkan sayı 256'ya bölünür, kalan subspeed'de saklanır ve araç bölüm alt konumları kadar ileri hareket ettirilir. Trenler ve uçaklar için ham hız km-ish/h cinsindendir, kara taşıtları/gemiler için 0,5 km-ish/h cinsindendir. Trenler ve uçaklar için bu adım tick başına iki kez yapılırken, gemiler ve kara taşıtları tick başına bir kez yapar.
+*Bir günde 74 tick vardır ve 24 saat sürer.
+Şimdi 1 km-ish/saat giden bir araç varsayalım: (1 * 16 * 256) / (74 * 2) * 24 = 664,(216).
+
+Net sonuç, 100 km/saatin ~3,6 kare/gün (1,8 kare/sn) olduğudur.
+
+
+==== Uçak ====
+*Varsayılan olarak uçaklar listelenen hızlarının dörtte birinde uçar (bu gelişmiş ayarlarda değiştirilebilir).
+*Uçak ivmesi uçağa göre değişir, günde 144 km-ish/h ile 400 km-ish/h arasındadır.
+*Arızalı uçaklar 320 km-ish/h hızında uçar.
+*Havaalanı taksi hızı 150 km-ish/h'dir.
+
+==== Kara taşıtları ====
+*Kara taşıtları günde 37 km-ish/h ivmelenir.
+*Kara taşıtları köşeleri azami hızlarının yarısında döner.
+*Kara taşıtları yokuş aşağı günde ek 74 km-ish/h ivmelenir.
+*Yokuş yukarı giderken kara taşıtları kare başına 4 kez %10 yavaşlar. Bu, tüm kara taşıtları için yaklaşık 34 km/s ivmeyle dengelenir.
+
+(Not: Bu, geliştirilmiş kara taşıtı ivme modeli kullanılırken geçerli değildir.)
+
+==== Gemiler ====
+*Gemiler günde 37 km-ish/h ivmelenir.
+*"Durmuş" bir gemi son hızına anında döner.
+
+==== Trenler ====
+([[en/Archive/Manual/Settings/Realistic acceleration|gerçekçi tren ivmesi yaması]] ile)<br>
+*Trenler yeterince güçlüyse yokuş yukarı veya aşağı gitmekten etkilenmez.
+*Trenler bir depoya girerken ve çıkarken ve 90° dönüşlerde 61 km/s ile sınırlıdır.
+*Trenler yavaşlamadan bir 45° dönüş veya zıt yönlerde iki 45° dönüş yapabilir.
+*Aynı yönde iki veya daha fazla 45° dönüş yaparken azami hız şu şekilde sınırlanır:
+
+{| style="margin: 1em 1em 1em 0;"    <!-- begin nested tables -->
+|-
+
+|    <!-- metric -->
+{| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #efefff;"
+|-
+!rowspan=2  style="background:#efefef"  | Eğrilik
+!colspan=3  style="background:#dfdfff"  | Azami hız (km/s)
+|-
+!   style="background:#dfdfff"      | Demiryolu
+!   style="background:#dfdfff"      | Tek ray
+!   style="background:#dfdfff"      | Maglev
+|-
+| style="background:#f8f8ff"    | 0 (90° dönüş)
+|    61||91||121
+|-
+| style="background:#f8f8ff"    | 1 (2x45° dönüş)
+|     88||132||176
+|-
+| style="background:#f8f8ff"    | 2
+|    111||166||221
+|-
+| style="background:#f8f8ff"    | 3
+|    132||198||264
+|-
+| style="background:#f8f8ff"    | 4
+|    151||226||301
+|-
+| style="background:#f8f8ff"    | 5
+|    168||252||336
+|-
+| style="background:#f8f8ff"    | 6
+|    183||274||365
+|-
+| style="background:#f8f8ff"    | 7
+|    196||294||392
+|-
+| style="background:#f8f8ff"    | 8
+|    207||310||413
+|-
+| style="background:#f8f8ff"    | 9
+|    216||324||432
+|-
+| style="background:#f8f8ff"    | 10
+|    223||334||445
+|-
+| style="background:#f8f8ff"    | 11
+|    228||342||456
+|-
+| style="background:#f8f8ff"    | 12+
+|    231||346||461
+|}
+
+|    <!-- imperial -->
+{| border="2" width="auto" cellspacing="4" cellpadding="3" rules="all" style="margin: 0; border: solid 1px #AAAAAA; background-color: #ffefef;"
+|-
+!rowspan=2  style="background:#efefef"  | Eğrilik
+!colspan=3  style="background:#efdfdf"  | Azami hız (mph)
+|-
+!   style="background:#efdfdf"      | Demiryolu
+!   style="background:#efdfdf"      | Tek ray
+!   style="background:#efdfdf"      | Maglev
+|-
+| style="background:#f8f8ff"    | 0
+|     37|| 56|| 75
+|-
+| style="background:#f8f8ff"    | 1
+|     54|| 82||109
+|-
+| style="background:#f8f8ff"    | 2
+|     68||103||137
+|-
+| style="background:#f8f8ff"    | 3
+|     82||123||164
+|-
+| style="background:#f8f8ff"    | 4
+|     93||140||187
+|-
+| style="background:#f8f8ff"    | 5
+|    104||156||208
+|-
+| style="background:#f8f8ff"    | 6
+|    113||170||226
+|-
+| style="background:#f8f8ff"    | 7
+|    121||182||243
+|-
+| style="background:#f8f8ff"    | 8
+|    128||192||256
+|-
+| style="background:#f8f8ff"    | 9
+|    134||201||268
+|-
+| style="background:#f8f8ff"    | 10    ||138||207||276
+|-
+| style="background:#f8f8ff"    | 11    ||141||212||283
+|-
+| style="background:#f8f8ff"    | 12+   ||143||214||286
+|}
+
+|}  <!-- end nested tables -->
+"Eğrilik", tren vagonlarının dönüşler arasındaki ortalama sayısı anlamına gelir. Ancak çok keskin dönüşler (eğrilik 0 ve 1) daha uzun trenlerde ortalamaya alınmaz.
+
+*Yeni ray türleri, tablodaki üç varsayılan türle aynı adımlarda özel azami viraj hızları belirtebilir.
+*Eğimli trenler, diğer trenlerden yaklaşık %20 daha hızlı viraj alabilir (bazı motorlarla değişir).
+*Tren ivmesi ve azami hız, motor gücü, azami [[tr/Manual/Game Mechanics/Çekiş gücü|çekiş gücü]] (tüm motorlar ve güçlendirilmiş vagonlar birleşik), mevcut hız, hava direnci, toplam tren kütlesi ve yokuştaki vagon/motorlardan etkilenir.
+*Maglev olmayan tren ivme e-tablosu tt-forums'da bulunabilir: [http://www.tt-forums.net/viewtopic.php?f=31&t=55972&p=960678#p960672 tt-forums]
+*Frenleme, bir depoya veya istasyona girerken hariç ivmenin iki katıdır.
+[[File:en/Manual/Game Mechanics/Speed-limits.png]]
+
+''Ayrıca bakınız: [[en/Archive/Manual/Settings/Realistic acceleration]] ve [[en/Community/Corners]].''
+
+Kod için ground_vehicle.cpp, aircraft_cmd.cpp, roadveh_cmd.cpp, ship_cmd.cpp, train_cmd.cpp, vechicle.cpp dosyalarına bakın.
+
+OpenTTD 1.6.1 itibarıyla, hp cinsinden güç, kN cinsinden azami çekiş gücü, ton cinsinden trenin toplam ağırlığı, tren parçası sayısı (motorlar ve vagonlar), trendeki ilk motorun hava direnci değeri (NewGRF ayarı, varsayılan <code>min(192,max(1,floor(2048/max_speed)))</code>, yani daha hızlı trenler daha aerodinamik inşa edilir), şu anda yokuş yukarı olan herhangi bir tren parçasının (motor veya vagon) birleşik ağırlığı, şu anda yokuş aşağı olan herhangi bir tren parçasının birleşik ağırlığı, yokuş dikliği (oyun ayarı [1-10], varsayılan 3) ve km/s cinsinden trenin mevcut hızı verildiğinde, maglev olmayan bir trenin ivmesi şu şekilde hesaplanabilir:
+
+; force = min((max_te * 1000), floor((power * 746) / (current_speed * 5/18)))    [N]
+; slope_force = weight_on_upslope * slope_steepness * 100 - weight_on_downslope * slope_steepness * 100    [N]
+; axle_friction = total_weight * 10    [N]
+; rolling_friction = floor((current_speed + 512) * 15 / 512) * total_weight    [N]
+; air_drag_coefficient = 14 * floor(air_drag_value * (1 + number_of_parts * 3/20)) / 1000
+; air_drag = floor(air_drag_coefficient * current_speed^2)   [N]
+; acceleration = (force - (slope_force + axle_friction + rolling_friction + air_drag)) / (total_weight * 4) [yarı-tick başına km/s'nin 256'da biri]
+
+Not: trenin herhangi bir parçası tüneldeyse air_drag_coefficient iki katıdır.
+
+Aynı değerler verildiğinde denge hızı, yani aynı koşullar süresiz devam ederse trenin sonunda oturacağı hız, şu şekilde hesaplanabilir [Sabit bir <code>rolling_friction</code> varsayarak (yani hız 512 km/s'nin altında kalır) ve <code>force</code> ile <code>air_drag</code>'in tamsayıya yuvarlanmasını yok sayarak]:
+
+; p = (slope_force + axle_friction + rolling_friction) / air_drag_coefficient
+; q = (-power * 746 * 18/5) / air_drag_coefficient
+; C = (27/2*q + ((27/2*q)^2 + 27*p^3)^(1/2))^(1/3)
+; equilibrium = min(max_speed, p/C - C/3, max(0, max_te * 1000 / air_drag_coefficient - p)^(1/2))
+
+== Kasaba büyümesi ==
+
+Bkz. [[tr/Manual/Kasabalar#kasaba-buyumesi]].
+
+[[Category:tr/Manual/Oynanış]]

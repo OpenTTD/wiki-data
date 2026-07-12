@@ -1,0 +1,244 @@
+[[Translation:en/Manual/Signals]]
+{{tr/Manual/İçindekiler}}
+''Sinyal inşaatının nasıl yapılacağına ilişkin talimatlar için [[tr/Manual/Sinyal inşa etmek]] öğreticisine bakın.''
+
+''Bu sayfa çok güncel değildir ve yol sinyallerinin yıllardır varsayılan seçim kabul edildiğini, diğer sinyal türlerinin kayıtlı oyun uyumluluğu için miras olduğunu düzgün yansıtacak şekilde güncellenmemiştir.''
+
+'''[[tr/Manual/Demiryolu inşaatı]] Sinyalleri''' [[tr/Manual/Trenler]]in hareketini kontrol etmenizi sağlayan yararlı cihazlardır. Bunu trenlerin başka trenlerin olabileceği alanlara girmesini engelleyerek ve böylece çarpışmalarını önleyerek yaparlar. Bu genellikle sinyalin ardından gelen ray bölümünden bilgi almayı içerir. En kullanışlı sinyal türü, trenlerin ray bölümlerini rezerve edip paylaşmasına izin veren yol sinyalidir. İki miras sinyal türü, bölümde herhangi bir tren varsa erişimi basitçe reddeden blok sinyalleri ve benzer şekilde çalışan ancak ayrıca bölümden kullanılabilir bir çıkış olmasını gerektiren ön-sinyallerdir.
+
+__TOC__
+==Yol sinyalleri ==
+[[File:en/Manual/Yapp signalgui.png|frame|right|[[tr/Manual/Sinyal arayüzü]]nde iki yeni sinyal türü.]]
+
+''Transport Tycoon'''un orijinal blok tabanlı sinyallemesinin sınırlamalarını aşmak için "yol sinyali" adlı bir sinyal türü vardır. Bu sinyaller trenlerin bloğa girmeden önce bir sonraki sinyale kadar blok boyunca bir yol rezerve etmesini sağlar. Başka bir tren bloğa girmek isterse ve blok boyunca bir yol rezerve etmeyi başarırsa, yol sinyali trene sinyal bloğuna girmesi için yetki verir; bloğun başka bir hattı aynı anda kullanılsa bile - bu yalnızca geleneksel blok sinyaller ve/veya ön-sinyaller kurulumunda imkânsızdır. Kavşak kilitlenmesini önlemedeki daha iyi yetenekleri nedeniyle yalnızca yol sinyalleriyle sofistike bir demiryolu ağı inşa etmek tamamen mümkündür.
+
+[[File:en/Manual/Difference block path signals.png|frame|center|Bu örnekte gösterildiği gibi blok sinyal kurulumu ile yol sinyal kurulumu arasındaki en önemli fark: iki paralel hat bir çapraz bağlantıyla bağlanmıştır.
+<ul>
+<li>Blok sinyal kurulumunda sinyal, alt trenin sinyal bloğuna girmesine izin vermez; çünkü şu anda üst tren tarafından işgal edilmiştir; alt trenin geçmesine izin vermenin hiçbir riski olmasa bile.</li>
+<li>Yol sinyal kurulumunda alt tren, üst tren üst hattan alta geçmediği sürece kavşaktan geçmeye yetkilendirilir.</li>
+</ul>]]
+
+Yol sinyallemesi daha gerçekçi bir [[en/Archive/Community/Realistic Path Based Signalling|yol tabanlı sinyalleme (PBS) sistemi]] simüle etme girişimidir; çünkü:
+# Gerçek sinyal sürekli kırmızıdır ve yalnızca önüne bir tren yaklaştığında ve öndeki yol başka bir trenin yoluyla çarpışmadığında geçici olarak yeşildir. Gerçekçi bir kavşak kurulumunda, [https://www.wikipedia.org/wiki/railroad switch demiryolu makası] trenin kavşağın hangi tarafına döneceğini sınırladığı için aynı bloğun kesişiminde birden fazla trenin güvenle yan yana geçmesine izin vermek mümkündür.
+# ''Transport Tycoon'''da başka bir trenin girmesi için kavşak bloğunu hızla serbest bırakmak için kullanılan kavşaktan hemen sonraki çıkış sinyali (genel blok sinyali veya ön-sinyal kurulumundaki çıkış sinyali) gerçek dünya sinyalleme sisteminde yoktur; çünkü trenin tam kavşakta sıkışma riski bir kilitlenme yaratır.
+# Tek tarafa bakan tek bir sinyal gerçek dünyada mutlaka tek yönlü değildir (oyuncu geçiş yönünü sınırlamak için özellikle "tek yönlü yol sinyali" kullanmadıkça). Tren hâlâ arkadan sinyalli hattan, sinyal yokmuş gibi geçebilir. Önceki noktada belirtildiği gibi çıkış sinyali gerçek dünyada yoktur. Bu özellikle bir kavşağın önünde tek taraflı giriş/çıkışlı bir istasyon için önemlidir; (tek yönlü olmayan) yol sinyali istasyon çıkışının önüne, istasyon tarafına bakacak şekilde yerleştirilir.
+
+İşte bir örnek:
+{|class=wikitable
+!style="background:white"|Kavşağın çok ötesinde blok sinyaller
+!Kavşağın hemen ardından blok sinyaller
+!style="background:white"|Kavşaktan önce yol sinyali
+|-
+|style="background:white"|Burada üç sinyal arasında bir Y bloğumuz var.
+Sağ hat bir tren tarafından kullanılıyor. Alt hattan bir tren geliyor ve sol hata gitmek istiyor. Standart bir blok sinyali tüm bloğun dolu olduğunu düşünür (sol hat boş olsa bile).
+|Bir çözüm, kavşağın ardından sinyaller ekleyerek bu bloğu daha küçük bloklara bölmektir. İki ek blok sinyaliyle ''Y'' üç bloğa bölünmüştür: sağ kol, sol kol ve kavşak.
+|style="background:white"|Buna karşılık yol sinyali alttan gelen trene Y bloğuna girmesi için yetki verir; çünkü rezerve etmeye çalıştığı yol boştur (sol hat). Bloğu daha küçük bloklara bölmeye gerek yoktur (yani kavşağın hemen ardından sinyallere gerek yoktur).
+|-
+|style="background:white"|[[File:en/Manual/Signal bloc.png]]
+Üç ''blok sinyali'' arasında Y bloğu.
+|[[File:en/Manual/Multiples standard.png]]
+İki ek blok sinyaliyle Y üç bloğa bölünmüştür: sağ kol, sol kol ve kavşak.
+|style="background:white"|[[File:en/Manual/Chemin.png|Chemin.png]]
+Bir ''yol sinyali'' ile iki ''blok sinyali'' arasında Y bloğu.
+|}
+
+Bu sinyal hakkında bilmeniz gereken iki şey vardır:
+* Yalnızca trenlerin kavşakları engellemeden durup bekleyebileceği yerlere yerleştirin;
+* Bu sinyal yalnızca bir yönde çalışır. Diğer yönde ya yok sayılır ya da sinyal yoluna bağlı olarak tek yönlü sinyal kabul edilir (aşağıya bakın).
+{|class=wikitable style="width:600px; margin:auto"
+|[[File:en/Manual/Yapp pbssignal.png]]
+|'''Yol Sinyali''' (PS): trenler bu sinyalin arka tarafından geçebilir. Tek yönlü (blok) sinyalle karıştırılmamalıdır.
+|-
+|[[File:en/Manual/Yapp onewaypbssignal.png]]
+|'''Tek yönlü Yol Sinyali''' (1W PS): trenler bu sinyalin arka tarafından '''geçemez'''; sanki karşı tarafa bakan kalıcı kırmızı başka bir sinyal varmış gibi.
+|}
+Çoğu zaman varsayılan bir yol sinyali kullanmak yeterli olacaktır; çünkü bir yol sinyalinin arkasından geçmek yol bulucu tarafından cezalandırılır; hedefin (istasyon veya yol noktası) geriye bakan yol sinyalinin hemen ardından olması durumu hariç. Ancak tek yönlü yol sinyalleri belirli özel durumlarda yararlı olabilir.
+
+İki yeni sinyal türü standart blok sinyal türlerinden biraz farklı davranır. Yol sinyalleri varsayılan olarak kırmızıdır ve yalnızca bir tren rotasındaki bir sonraki güvenli bekleme konumuna bir yol rezerve edebildiğinde yeşil gösterir. Güvenli bekleme konumları - tanım gereği - sinyallerin, depoların ve hat sonlarının önündedir. Bir yol sinyalinin arkası güvenli bir bekleme konumu kabul edilmez ve bu yüzden yollar bu sinyaller üzerinden rezerve edilir.
+
+Her sinyalin önü güvenli bir bekleme konumu olarak tanımlandığı için normalde bir sinyali kavşağın hemen arkasına değil, yalnızca kavşağın önüne yerleştirmek istersiniz. Bunun nedeni bir trenin yalnızca bir kavşağın önünde beklemesinin güvenli olmasıdır. Tüm tren kavşağı temizlemeden önce kavşağın hemen ardından bir sinyalde beklemesi güvenli değildir; çünkü beklerken kavşağı engeller; aşağıdaki örnekte gösterildiği gibi. Bu, sinyalleri kavşaklardan önce ve sonra yerleştirmeniz gereken geleneksel blok sinyallere karşı büyük bir avantajdır; o da trenlerin beklerken kavşakları engellemesine neden olurdu.
+{|class=wikitable style="margin:auto"
+|style="background:#fee"|[[File:en/Manual/Yapp unsafewaitinglocation.png|center]]
+'''Kötü''': Okla gösterilen sinyal kötü bir bekleme konumudur; çünkü kavşaktaki tren şimdi üstten gelen trenin aksi takdirde boş olan yolunu engeller. Bu resimde ikinci bir kötü bekleme konumu daha var. Bulabilir misiniz?
+|style="background:#efe"|[[File:en/Manual/Yappgoodexample.png|center]]
+'''İyi''': Burada kavşaktan sonra bir trenin beklemesi için yeterli alan vardır. Bu alan kullanılamadığı sürece bir sonraki tren kavşağı engellemek yerine kavşağın önünde bekler. Bu üstten gelen trenin ilerlemesine izin verir.
+|}
+
+Yol sinyalleriyle yapabileceklerinizin başka bir örneği budur. Bu, ön-sinyaller kullanmaktan çok daha iyi çalışır; çünkü aynı anda iki trenin istasyondan ayrılmasını VE aynı depoyu paylaşmasını sağlayabilirsiniz (ön-sinyallerle bunu yapmanın yolu yoktur; blok paylaşımı nedeniyle). Bu durumda istasyondan ayrılan trenler için tek yönlü yol sinyalleri ve depodan ayrılan trenler için basit yol sinyali vardır.
+[[File:en/Manual/Pathsignal station exit.png|frame|center|İki çıkışlı istasyon. Depoların önündeki sinyallerin gerekli olmadığını unutmayın; çünkü depoların yerleşik sinyalleri vardır. Ancak bunun gibi depoların önündeki yol sinyalleri, depodan çıkan trenlere depoya girmek isteyen trenler üzerinde öncelik verir.]]
+
+Yukarıdaki ekran görüntüsü göstermese de, giriş hatlarının kavşak önündeki sinyali yol sinyali türündeyse, geçiş istasyonu girişi ile kavşak arasına herhangi bir sinyal yerleştirmeye gerek yoktur (geleneksel blok sinyal kurulumunda esasen bir "çıkış sinyali").
+
+[[File:en/Manual/Rpbs img10.png|center|frame|Tüm sinyaller yol sinyali türündeyse geçiş istasyonu, istasyon girişinin önünde çıkış sinyali gerektirmez.]]
+
+====Gelişmiş Ayarlar====
+[[File:en/Manual/Yapp patch-options.png|frame|right|YAPP Gelişmiş Ayarlar]]
+Yol sinyalleriyle ilgili üç [[en/Archive/Manual/Settings/Advanced Settings|Gelişmiş Ayar]] vardır.
+
+Bir seçenek rezerve edilmiş hatları vurgulamaktır. Bu seçenek yol sinyalli kavşaklarınızda sorun gidermek için kullanışlıdır; çünkü trenlerin bir kavşak boyunca hangi yolları rezerve ettiğini görebilirsiniz.
+
+Diğer iki seçenek sinyal inşa aracının nasıl davranması gerektiğini kontrol eder. Sinyal aracıyla yeni bir sinyal inşa ederken varsayılan olarak hangi sinyal türünün inşa edilmesi gerektiğini ayarlayabilir ve zaten var olan bir sinyale ctrl-tıklandığında hangi sinyal türlerinin döngüye alınacağını değiştirebilirsiniz.
+
+Gelişmiş Ayarlar penceresinden kullanılamayan birkaç yol sinyaliyle ilgili seçenek daha vardır. Bu seçeneklerin neler olduğu ve nasıl düzenleneceği [[en/Archive/Manual/Settings/Advanced path signal options & features]] altında ele alınmıştır.
+
+===Yol sinyallerinin temel örnekleri===
+Aşağıda yol sinyallerini kullanan bazı örnek hat düzenleri yer alır. Ayrıca yeni başlayanlara önerilmeyen [[en/Community/Junctionary/Advanced path signal layouts|Gelişmiş hat düzenleri]] de vardır.
+
+====Temel kavşak====
+Bu temel kavşak artık çok daha yüksek verime sahiptir; çünkü trenler yalnızca aynı hatta giden trenleri beklemek zorundadır. Sağdan gelen (yukarı giden) tren normalde soldan geri gelen diğer trenleri beklemek zorunda kalırdı. Artık yalnızca hat değiştirmek isterse beklemek zorundadır. 'Kavşak bloğuna' 6 sınırlayıcı sinyale ve her girişte bir tane olmak üzere toplam 3 yol sinyaline dikkat edin.
+
+[[File:en/Manual/Yapp basicjunction.png|frame|center|Trenler için temel kavşak (3 kare uzunluk için optimize edilmiş). Yol sinyalleri kavşak bloğunun tüm girişlerinde mevcuttur. Düz hatta normal sinyallerin kullanımına dikkat edin.]]
+
+====Temel iki yönlü istasyon====
+Bu istasyon düzeniyle trenler her iki yönden gelirken her iki peronu da kullanabilir. Yol sinyalleri terslerinde blok oluşturmadığı için tren, peronun ''karşı'' tarafındaki sinyale kadar net bir yol olana kadar (peron alanını da içermelidir) giremez; böylece güvenle durabilir. Bu kurulumun alternatif olarak istasyonun önünde bir dizi blok-çıkış ön-sinyaliyle de çoğaltılabileceğini unutmayın.
+
+[[File:en/Manual/Yapp basicstation.png|frame|center|Temel istasyon.]]
+
+{{en/Feature|0.7}}
+
+{{en/-}}
+== Miras Blok sinyalleri ==
+Blok sinyalleri hatları bloklara böler ve bloklardaki tren hareketine göre çalışır. Blok sinyalleri bir sonraki hat bloğu bir tren tarafından işgal edilmişse treni durdurur ve kırmızı gösterir. Değilse geçmesine izin verir ve yeşildir. Sinyalden fiziksel olarak ulaşılabilen tüm hat kareleri, o hattan sonraki sinyale kadar, birden fazla dal olsa bile aynı blok sayılır. Trenin beklenen yolu, bloğu şu anda işgal eden diğer trenin yoluyla çarpışmasa bile, blok sinyali önündeki trene öndeki bloğa girmesi için yetki vermez; [[#path-signals|yol sinyalleri]]nin aksine.
+
+===İki yönlü sinyal===
+[[File:en/Manual/2-way signals.png|frame|Bir yükleme istasyonunda iki yönlü sinyaller]]
+<div style="float:right">
+[[File:en/Manual/Two-way signal.png]]
+</div>
+İki yönlü sinyaller, aynı hatta her iki yönde tren hareketi olan bir demiryolunda kullanılır.  En yaygın kullanım, trenlerin istasyonun aynı ucundan girip çıktığı hat sonu istasyonlarındadır.  Sağdaki örnekte sinyaller bir sonraki treni boş yükleme alanına yönlendirir.  Ayrıca başka bir tren yoldaysa trenin yükleme alanından ayrılmasını engellerler.
+
+Bir trenin her biri iki yönlü sinyalli iki veya daha fazla yön seçeneği varsa yeşil sinyalli yönü seçer.  Tüm sinyaller kırmızıysa en kolay yönü seçer ve sinyalin değişmesini bekler.
+
+İki yönlü sinyal, orijinal ''[[en/Archive/OpenTTD/Transport Tycoon Deluxe]]''da tanıtılan en ilk ve tek demiryolu sinyaliydi.
+{{en/-}}
+===Tek yönlü sinyal===
+[[File:en/Manual/One-way signal.png|right]]
+
+Tek yönlü sinyaller tren hareketini bir yöne sınırlar. Aşağıdaki örnekte sinyaller trenleri bir daire içinde hareket etmeye zorlar.
+
+[[File:en/Manual/1-way signal loop.png|frame|center|Bir döngüde tek yönlü sinyaller]]
+
+Bu sinyallerin basit blok sinyallerden daha kullanışlı olduğu iki ana durum vardır:
+*[[tr/Manual/Demiryolu istasyonu inşa etmek#single-stations|RoRo istasyonları]] trenlerin geri dönüp girişi engellemeden bir istasyonda durmasına izin verir. Bu trenlerin istasyonlara daha verimli girmesini ve çıkmasını sağlar.
+*Çift hatlar 2'den fazla trenin birbirine ters dönmeden seyahat etmesine izin verir. Tek hatlı bir hatta bir tren varsa, bir noktada çarpışacakları için karşı yönde hiçbir tren hareket edemez. Çift hatlı bir hatta herhangi bir tren bir yön alabilir ve asla çarpışmazlar; yani trenlerin diğer trenleri beklemesi gerekmez ve o hatta her zaman hareket edebilirler.
+
+Bir tren tek yönlü bir sinyalin yanlış tarafına varırsa engellenir ve oyuncu bunu gelişmiş sinyal seçeneklerinde devre dışı bırakmadıkça hemen geri döner. Tek yönlü sinyaller kullanırken ''hepsinin'' doğru yöne baktığından emin olun. Yeni sinyallenmiş hatta çalıştırdığınız ilk treni hedefine kadar izlemek iyi bir fikirdir; herhangi bir hata yapmadığınızdan emin olmak için. 
+
+Mevcut bir iki yönlü sinyale tıklayarak tek yönlü sinyale geçiş yapın. Yönünü değiştirmek için tekrar tıklayın (tek yönlü bırakarak); üçüncü tıklama iki yönlü sinyale geri döndürür.
+
+Bir trenin her biri tek yönlü sinyalli hat seçenekleri varsa hedefine giden hattı seçer (yani sinyallerden biri kırmızıysa yeşil olan hangisiyse onu almak yerine hedefine giden hattan sinyal yeşile dönene kadar bekler).  Bu iki yönlü sinyallerin aksinedir.
+
+Tek yönlü (blok) sinyal yalnızca geçiş yönüne bakan bir taraf varmış gibi görünse de teknik olarak diğer tarafın kaybolan sinyali hâlâ vardır ve o taraftan girişi engellemek için kalıcı kırmızıdır. Bu görünüm gerçek dünya sinyalleme sisteminde doğru değildir ve daha gerçekçi ve kavşak trafiğini idare etmede daha verimli olan daha gelişmiş [[#path-signals|yol sinyalleme sistemi]]nin kullanımını öğrenmek isteyen oyuncular için yanıltıcıdır.
+
+Tek yönlü sinyal ilk olarak ''[[en/Archive/OpenTTD/Transport Tycoon Deluxe]]''da tanıtıldı.
+
+==Miras Ön-sinyaller==
+Ön-sinyaller özel blok sinyallerden oluşan bir gruptur. Bu adla anılırlar çünkü blok giriş ön-sinyal girdisi yalnızca bloktaki hattan değil, bloğun diğer tarafına yerleştirilmiş diğer ön-sinyallerden de gelir (yani o bloktan çıkışlar). Trenlerin engellenemeyecek veya işgal edilemeyecek bloklara girişini sınırlamak için kullanılırlar. Çoğu durumda trenlerin birden fazla alternatif arasında seçim yapabileceği durumları (örneğin istasyonlar veya her iki yönde trenler tarafından kullanılan tek hatlı hatlar) çözmek için yol sinyalleri kullanabilirsiniz.
+
+<div style="float:right">
+[[File:en/Manual/Station no pre-signals.png|frame|right|Yalnızca blok sinyal kurulumunda bir sorun - sol tren önce ayrılabilir; arkada bekleyen tren sağ trenin hemen arkasındaki hatta sıkışabilir.]]
+[[File:en/Manual/Station with pre-signals.png|frame|right|Ön-sinyaller kullanarak sorunu çözme]]
+</div>
+Sağ üstteki görüntü, bir istasyona girişin sıradan sinyallerle kontrol edildiği bir kurulumu gösterir.  En az bir peron boşken bu iyi çalışır; çünkü gelen bir tren her zaman boş bir perona yönlendirilir. Ancak tüm peronlar doluyken ne olduğunu düşünün; ekran görüntüsündeki gibi. Tüm dallar kırmızı gösteriyor; bu yüzden gelen tren en kısa yolu seçer - düz.  Ama sağdaki perondaki trenin bir süre istasyonda kalacağını varsayalım. Bu arada soldaki tren ayrılır.  Gelen tren kendini bir perona adamıştır ve artık boş bir peron olmasına rağmen bir trenin ayrılmasını bekleyerek sinyaller arasında sıkışmıştır. Gelen treni hat ayrılmadan önce durdurmamız gerekir; böylece bir tren ayrıldığında boş peronu seçer. Bunun için yol sinyalleri kullanabilirsiniz; ama bu durumu ön-sinyallerle de çözebilirsiniz. Aslında yol sinyalleri icat edilmeden önce istasyon inşa etmenin yolu buydu.
+
+Ön-sinyaller blok sinyalleri gibi işlev görür; ancak ayrıca aynı yönde hat boyunca diğer ön-sinyallerin durumuna göre hangi rengi göstereceklerine karar verirler.  Özellikle bir giriş ön-sinyali, yalnızca ve yalnızca bitişik/sonraki bloktan en az bir yeşil çıkış varsa trenlerin girmesine izin verir.  Planlayıcı olarak hangi sinyallerin blok giriş ön-sinyalleri, hangilerinin çıkışları tanımlayacağını belirlemeniz gerekir.
+
+====Blok Giriş Ön-sinyali====
+<div style="float:right">
+[[File:en/Manual/Entry presignal.png|60px]]
+</div>
+Bir giriş ön-sinyali, giriş ön-sinyalini izleyen sinyal bloğunun tüm çıkış ön-sinyallerinin sinyal görünümünü kontrol eder. En az bir yeşil çıkış ön-sinyali varsa giriş ön-sinyali de yeşil gösterir. Sonraki bloğun tüm çıkış ön-sinyalleri kırmızıysa giriş ön-sinyali de kırmızıdır.
+
+Bu, kullanılabilir bir çıkış olana kadar trenlerin bloğa girip engellemesini önler. Depoların yerleşik iki yönlü sinyale sahip olduğunu unutmayın (ön-sinyal setinde giriş ön-sinyali gibi çalışır).
+
+Giriş ön-sinyalinin hemen arkasındaki blokta çıkış olarak belirlenmiş sinyal yoksa normal bir blok sinyali gibi davranır. Bu, yalnızca bir yönün ön-sinyal işlevselliğine ihtiyaç duyduğu çift yönlü ön-sinyaller için uygundur.
+
+====Blok Çıkış ön-sinyali====
+<div style="float:right">
+[[File:en/Manual/Exit presignal.png|60px]]
+</div>
+Çıkış ön-sinyalleri, bir giriş ön-sinyalinin hangi görünümü göstereceğine karar vermek için baktığı şeydir. Aksi takdirde normal bir blok sinyali gibi davranırlar.
+
+Özetlemek gerekirse: seyahat yönünde önce bir giriş ön-sinyali, ardından hattın en az iki yöne ayrıldığı bir kavşak vardır. Kavşağın ardından her dalda bir çıkış ön-sinyali vardır. Kavşağın ardından her dalın ilk bloğu doluysa kavşağa hiçbir tren izin verilmez. En az bir dal müsaitse kavşak da müsait olur. Trenlerin hedefine giden tek rota buysa hâlâ dolu dalı seçebileceğini unutmayın. Her iki dal da hedefe götürüyorsa tren dolu olmayan dalı seçer.
+
+{{en/-}}
+
+====Kombo-sinyal====
+[[File:en/Manual/Station with pre-signals2.png|frame|1 giriş ön-sinyali, 2 kombo-sinyal ve 4 çıkış sinyalli istasyon]]
+<div style="float:right">
+[[File:en/Manual/Combo presignal.png|60px]]
+</div>
+Kombo sinyali adı verilen üçüncü bir ön-sinyal türü vardır ve hem giriş hem çıkış sinyali olarak hareket eder. Etkili bir şekilde birçok çıkış sinyalini tek bir sinyale birleştirir; etkilerini zincir boyunca kopyalar. Herhangi bir yeşil çıkış sinyali hattın yukarısındaki herhangi bir kombo sinyalini yeşil yapar; bu da art arda orijinal blok giriş sinyaline kadar iletilir. Bu, sağda gösterildiği gibi birkaç bloğu kapsayan büyük ön-sinyal "ağaçları" inşa etmenize izin verir. 
+
+Bir ön-sinyal ağacında kombo-sinyaller yukarıdaki nedenle giriş ön-sinyalleri ile çıkış sinyalleri arasına yerleştirilir; diğer 2 tür sırasıyla kurulumun en başında ve en sonunda yerleştirilir.
+{{en/-}}
+====Ön-sinyal inşa etmek====
+Bir ön-sinyal inşa etmek için [[#signal-interface|sinyal seçim araç çubuğunda]] uygun düğmeyi seçin.
+
+Önceki sürümlerde önce sıradan bir sinyal yerleştirin.  Ardından ''Ctrl'' basılıyken sinyale tıklayarak farklı ön-sinyal türleri arasında döngü yapın:
+*Sıradan tek yönlü sinyaller inşa ettiğiniz gibi tek yönlü ön-sinyaller de inşa edebileceğinizi unutmayın.  Unutmayın: ''Ctrl'' basılı tutup tıklamak (ön)sinyal türünü değiştirir; ''Ctrl'' olmadan tıklamak sinyalleme yönünü değiştirir - arayüz sinyalleri etkin değilse.
+*Sinyali başlangıçta yerleştirirken ''Ctrl'' basılı tutmamayı unutmayın; yoksa bir semafor elde edersiniz (aşağıya bakın). Sinyal arayüzünü etkinleştirdiyseniz de ''Ctrl'' kullanın.
+
+====Sınırlama====
+[[File:en/Manual/PresignalLimitation.png|frame|Ön-sinyallerle ilgili sorun...]]
+Çıkış sinyalleriyle ilgili önemli bir nokta, yeşil bir çıkış sinyalinin, hat düzeni nedeniyle bir trenin o çıkış sinyaline gerçekten ulaşması mümkün olmasa bile (sağdaki görüntüde alt hattan giren bir tren teknik olarak üst hattan çıkamaz) bloğun başındaki giriş ön-sinyalinde yeşili tetiklemesidir. Bu daha karmaşık ön-sinyalleme kurulumlarını bozabilir; bu yüzden planlamada dikkatli olunmalıdır.
+
+"Çözülmeyecek" olarak not edilen hatalardan biri şudur: kayıp trenler (blok) çıkış sinyallerini yok sayar. Trenler kayıpsa her kavşakta rastgele bir yön seçilir; bu yüzden blok çıkış sinyallerini yok sayarlar ve ön-sinyalli kavşakları kolayca engelleyebilirler. Böyle bir durum ise [[#path-signals|yol sinyalleri]]yle değiştirilerek kolayca çözülebilir.
+{{en/-}}
+
+==Trenleri yönlendirme==
+Sinyaller trenlerin birbirine çarpmasını önlemek ve aynı hedefe giden birkaç hat bölümü arasında seçim yapmalarına yardımcı olmak içindir. Bir treni belirli bir rotadan belirli bir hedefe yönlendirmek istiyorsanız [[tr/Manual/Yol noktaları]] kullanmalısınız.
+
+==Oyundaki sinyaller ile gerçek hayattaki sinyaller==
+Oyundaki gibi gerçek hayatta da trenler bir [http://en.wikipedia.org/wiki/Signalling_block_system blok sistemi] kullanır; sinyaller arasındaki her uzunluk bir blok olarak belirtilir; ancak çoğu zaman tek bir hatla sınırlıdır. Sinyalleme sistemleri arasındaki fark, gerçek trenlerin blok-blok işgale bağlı olmak yerine büyük bir bilgisayar ağına (sinyalleme kontrolü) bağlı sinyaller kullanmasıdır.
+
+Sinyal sisteminin gerçek hayattaki karşılığına gerçekçi olduğunu söyleyen oyuncular arasında biraz hararetli bir tartışma vardır; ancak farklar çok açıktır. Gerçek hayat sinyalleme kontrolü, bir trenin çıkmaz sokağa veya yanlış hata sürmesini önlemek için bir sinyalden sonraki tüm blokları dikkate alır; önceki tüm trenlerin bilgisine dayalı olarak. Oyundaki trenler ile gerçek hayat arasındaki farklardan bazıları yavaşlamanın tamamen farklı olmasıdır; 52 vagonlu bir trenin tamamen durması için hıza, ağırlığa ve zemin eğimine bağlı olarak 2 kilometreden fazla mesafe gerekir.
+
+Gerçek hayat sinyalleri trafik yükünü idare etmek için [http://en.wikipedia.org/wiki/Application_of_railway_signals#Main_signal ana sinyaller], [http://en.wikipedia.org/wiki/Application_of_railway_signals#Distant_signal uzak sinyaller] ve [http://en.wikipedia.org/wiki/Application_of_railway_signals#Shunting_signal cüce sinyaller] kombinasyonu kullanır ve birçok ülkenin sinyal sistemleri basit bir "Dur" veya "Git"ten daha fazlasını belirtmek için farklı sinyallere sahiptir.
+
+'''İşte bir örnek:'''
+
+[[File:en/Manual/Difference between real and in game signals.png|400px|thumb|right|Sinyallerin İngiltere demiryolu sinyalleriyle değiştirildiği oyun içi örnek. Gerçek hayat sinyalleri bir trenin önünde iki yeşil blok olmasına izin vermez; yalnızca bir trenin alacağı belirli yol yeşil yakılır.]]
+
+Sağdaki resimde oyun içi sinyaller yerine gerçek sinyaller kullanan bir oyun içi örnek vardır. En hızlı tren ikinci trene yetişiyor ve ikinci tren birincisine yetişiyor. İngiltere demiryolu sinyal sistemi sürücüye trenin önündeki iki bloğun kırmızı olduğunu, çift sarı vererek belirtirdi. Tek sarı trene bir sonraki bloktaki bir sonraki sinyalin "Dur" belirteceğini söyler. Tam durmadan önce bu tür üç adımlı bir sistem kullanarak sürücü treni yavaşlatabilir ama tam durdurmak zorunda değildir.
+
+OpenTTD'de en hızlı tren en yavaşa yetişir ve yavaş trenin işgal ettiği bir sonraki blok için tam durmaya zorlar. Bu ardından hızlı treni durağan halden başlamaya zorlar ve sonunda yavaş trene yeniden yetişip süreci tekrarlar. Gerçekte bu büyük bir enerji israfı olur ve trenin frenleri için de; çünkü başlamak muazzam enerji alır ve durmak çok ısı üretir.
+
+Oyun ayrıca daha yavaş trenin yan bir hata makas yapmasını ve zaman çizelgeleri ile yol noktaları kullanarak bu olayı elle yaratmadığınız sürece trenlerin geçmesine izin vermek üzere programlanmamıştır.
+
+Bir tren sahasında (istasyonların ve yükleme alanlarının dışında bulunan çok hatlı alan) trenler blok sinyaller yerine cüce sinyaller kullanır. Cüce sinyal, sürücünün öndeki kavşak tamamen net değilse geçmek için izin istemesini gerektirdiği için oyundaki yol sinyaline benzer. Cüce sinyaller ayrıca paralel hat bir tren tarafından engellenmiş olsa bile serbest hattında dolu bir kavşaktan bir trenin geçmesine izin verebilir.
+
+Giriş sinyalleri, kombo sinyaller veya çıkış sinyallerinin de gerçek hayat karşılığı yoktur. Sinyalleme kontrol sistemi, trenlerin programlarına dayalı olarak bir trenin bir sonraki bloğa girmesine izin verildiğinde yeşil belirtir. Örneğin bir istasyona giren bir blok sinyal hattından çıktıktan sonra hangi hata makas yapılacağına ilişkin talimatlar vermek için cüce sinyaller kullanılır.
+
+Oyun ile gerçek tren sinyalleri arasındaki en büyük karşılaştırma, oyunun iş yükü ve işgale dayalı "kontrolsüz" bir sistem olması; gerçek hayat sinyal sisteminin ise çok daha karmaşık görevler ve tren idaresi oluşturmak, akıcı hareket sağlamak için otomatikleştirilmiş olmasıdır. Oyun içi sistem ayrıca tren sürücüsünden herhangi bir etkileşim gerektirmez; çünkü sinyaller tüm komutları idare eder; gerçek hayatta ise tren sürücülerinin kontrol sistemine söyleyecek çok daha fazla şeyi vardır ve karmaşık rotalar talep edebilirler.
+
+
+'''Gerçek hayat tren sinyalleri hakkında Wikipedia'da daha fazla okuyun:'''
+
+[https://en.wikipedia.org/wiki/Railway_signal Demiryolu sinyali]
+
+[https://en.wikipedia.org/wiki/Signalling_control Sinyalleme kontrolü]
+
+[https://en.wikipedia.org/wiki/Signalling_block_system Sinyalleme blok sistemi]
+
+[https://en.wikipedia.org/wiki/Dutch_railway_signalling Hollanda demiryolu sinyallemesi; Avrupa'nın en basitlerinden biri olarak tasarlanmıştır]
+
+[https://en.wikipedia.org/wiki/UK_railway_signalling İngiltere demiryolu sinyallemesi]
+
+[https://en.wikipedia.org/wiki/North_American_railroad_signals Kuzey Amerika demiryolu sinyalleri]
+
+[https://en.wikipedia.org/wiki/German_railway_signalling Alman demiryolu sinyallemesi]
+
+[https://en.wikipedia.org/wiki/Swedish_railway_signalling İsveç demiryolu sinyallemesi]
+
+[https://en.wikipedia.org/wiki/Japanese_railway_signals Japon demiryolu sinyalleri]
+
+==Ayrıca Bakınız==
+* [[en/Community/Junctionary/Advanced signalling examples|Gelişmiş ön-sinyal kurulumları örnekleri]]
+* [[tr/Manual/Depo inşa etmek]]
+* Ön-sinyallerden yararlanan karmaşık kavşak örnekleri için [[:Category:en/Manual/Train Junctions]].
+* [http://www.darkcoding.net/misc/openttd-trains-and-signals-for-beginners-a-tutorial/ Tam yeni başlayanlar için sinyaller]
+* [http://kokolokus.de/?s=blog&v=6 domsson tarafından yazılmış bir öğretici, forumlarda] [http://www.tt-forums.net/viewtopic.php?f=29&t=51395 burada]
+
+[[Category:en/Manual/Railways]]
+[[Category:en/Manual/Construction]]

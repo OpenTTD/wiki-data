@@ -1,0 +1,135 @@
+[[Translation:en/Manual/Game Mechanics/Cargo income]]
+
+==Genel bakış==
+
+Bir [[tr/Manual/Cargo|kargo]] teslim edildiğinde kazanılan para miktarı dört faktöre göre belirlenir: tür, miktar, mesafe ve transitte geçen günler. Başka bir deyişle, kargo ödeme oranı, kargo miktarı, transit mesafesi ve transitte geçen günlere göre belirlenen zaman faktörünün çarpımıdır.
+
+OpenTTD 1.0/r17437 öncesinde, [[tr/Manual/Base Set/Cargos/Değerli eşyalar|Değerli eşyaları]] 10 kareden daha kısa bir mesafeye taşımak hiç para getirmezdi.
+
+Transit mesafesi, kaynak istasyon ile varış istasyonu arasındaki [http://en.wikipedia.org/wiki/Manhattan_distance Manhattan mesafesi] olarak ölçülür. Bunun sonucu, istasyonlarınızı bilerek birbirinden daha uzağa inşa ederek (yani gerçek hayatta yapmayacağınız gibi endüstrilerin uzak taraflarına yerleştirerek :-P) kazanılan parayı artırabileceğinizdir.
+
+Zaman ölçekleyicisi yavaş taşımayı cezalandırır. Her kargo türünün "hızlı", "orta" ve "yavaş" arasındaki sınırları belirleyen days1 ve days2 adlı iki sayısı vardır.
+
+'''Not:''' Bu sayfadaki bir "gün" aslında oyundaki 2,5 gündür. Yani days_in_transit = 4 ise, aşağıdaki hesaplamalarda 4 kullanırsınız, ancak kargo aslında 10 gündür transittir.
+
+<!--
+<math>
+I(c,a,d,t)=c_\mathrm{Base} \cdot a \cdot d \cdot \max\left(31,
+\begin{cases}
+255 & t \le c_\mathrm{Days1} \\
+255 - (t-c_\mathrm{Days1}) & c_\mathrm{Days1} < t \le c_\mathrm{Days1} + c_\mathrm{Days2} \\
+255 - 2(t-c_\mathrm{Days1}) + c_\mathrm{Days2} & t > c_\mathrm{Days1} + c_\mathrm{Days2} 
+\end{cases}\right)\cdot\frac{1}{2^{21}}
+</math>
+-->
+
+[[File:en/Manual/Game Mechanics/Income Formula.png|Income Formula.png]]
+
+Gelir(kargo, miktar, mesafe, zaman) = kargo ödeme oranı ...
+
+Bu işlev şu forma sahiptir:
+
+[[File:en/Manual/Game Mechanics/Income vs time.png]]
+
+==Sabitler==
+
+{| class="wikitable sortable" style="text-align:right"
+! Kargo türü !! Temel ödeme oranı !! Days1 !! Days2
+|-
+|[[tr/Manual/Base Set/Cargos/Piller|Piller]]||4322||2||30
+|-
+|[[tr/Manual/Base Set/Cargos/Baloncuklar|Baloncuklar]]||5077||20||80
+|-
+|[[tr/Manual/Base Set/Cargos/Pamuk şeker|Pamuk şeker]]||5005||10||25
+|-
+|[[tr/Manual/Base Set/Cargos/Kömür|Kömür]]||5916||7||255
+|-
+|[[tr/Manual/Base Set/Cargos/Kola|Kola]]||4892||5||75
+|-
+|[[tr/Manual/Base Set/Cargos/Bakır cevheri|Bakır cevheri]]||4892||12||255
+|-
+|[[tr/Manual/Base Set/Cargos/Elmaslar|Elmaslar]]||5802||10||255
+|-
+|[[tr/Manual/Base Set/Cargos/Gazlı içecekler|Gazlı içecekler]]||6250||30||50
+|-
+|[[tr/Manual/Base Set/Cargos/Gıda|Gıda]]||5688||0||30
+|-
+|[[tr/Manual/Base Set/Cargos/Meyve|Meyve]]||4209||0||15
+|-
+|[[tr/Manual/Base Set/Cargos/Altın|Altın]]||5802||10||40
+|-
+|[[tr/Manual/Base Set/Cargos/Mallar|Mallar]]||6144||5||28
+|-
+|[[tr/Manual/Base Set/Cargos/Tahıl|Tahıl]]||4778||4||40
+|-
+|[[tr/Manual/Base Set/Cargos/Demir cevheri|Demir cevheri]]||5120||9||255
+|-
+|[[tr/Manual/Base Set/Cargos/Canlı hayvan|Canlı hayvan]]||4322||4||18
+|-
+|[[tr/Manual/Base Set/Cargos/Posta|Posta]]||4550||20||90
+|-
+|[[tr/Manual/Base Set/Cargos/Mısır|Mısır]]||4322||4||40
+|-
+|[[tr/Manual/Base Set/Cargos/Petrol|Petrol]]||4437||25||255
+|-
+|[[tr/Manual/Base Set/Cargos/Petrol|Petrol (subtropikal)]]||4892||25||255
+|-
+|[[tr/Manual/Base Set/Cargos/Kağıt|Kağıt]]||5461||7||60
+|-
+|[[tr/Manual/Base Set/Cargos/Yolcular|Yolcular]]||3185||0||24
+|-
+|[[tr/Manual/Base Set/Cargos/Plastik|Plastik]]||4664||30||255
+|-
+|[[tr/Manual/Base Set/Cargos/Kauçuk|Kauçuk]]||4437||2||20
+|-
+|[[tr/Manual/Base Set/Cargos/Çelik|Çelik]]||5688||7||255
+|-
+|[[tr/Manual/Base Set/Cargos/Şeker|Şeker]]||4437||20||255
+|-
+|[[tr/Manual/Base Set/Cargos/Şekerleme|Şekerleme]]||6144||8||40
+|-
+|[[tr/Manual/Base Set/Cargos/Şekerleme (toffee)|Toffee]]||4778||14||60
+|-
+|[[tr/Manual/Base Set/Cargos/Oyuncaklar|Oyuncaklar]]||5574||25||255
+|-
+|[[tr/Manual/Base Set/Cargos/Değerli eşyalar|Değerli eşyalar]]||7509||1||32
+|-
+|[[tr/Manual/Base Set/Cargos/Su|Su]]||4664||20||80
+|-
+|[[tr/Manual/Base Set/Cargos/Buğday|Buğday]]||4778||4||40
+|-
+|[[tr/Manual/Base Set/Cargos/Kereste|Kereste]]||5005||15||255
+|-
+|[[tr/Manual/Base Set/Cargos/Kereste|Kereste (subtropikal)]]||7964||15||255
+|}
+
+==Görselleştirme==
+
+Aşağıdaki grafik, 20 yolcuyu 100 kare mesafeye çeşitli hızlarda teslim etmenin gelirini gösterir. Dikey eksen £ cinsinden gelir, yatay eksen ise km/s cinsinden hızdır.
+
+[[File:en/Manual/Game Mechanics/Speed vs income.png]]
+
+Gördüğünüz gibi, aracın hızı yaklaşık 50 km/s'ye kadar dramatik bir etkiye sahiptir; bu noktadan sonra düzleşmeye başlar. (Büyüme [https://en.wikipedia.org/wiki/Logarithmic_growth logaritmiktir].) Yukarıdaki denkleme göre, 100 km/s'de teslim edilen yolcuların geliri, 600 km/s'de teslim edilen gelirin %96,2'sine eşittir. Hızı artırmak azalan getiriler ürettiğinden, diğer faktörleri optimize etmek — özellikle uçaklarla (grafiğin sağında, ne olursa olsun) veya daha kısa rotalarla (hızın etkisi daha küçük olduğunda, yakında göreceğimiz gibi) uğraşırken — genellikle daha iyidir; örneğin bir aracın kargo kapasitesi.
+
+Daha uzun mesafeler hıza daha duyarlıdır. '''500''' kare üzerinden yolcu teslimatına bakın:
+
+[[File:en/Manual/Game Mechanics/Speed1.png]]
+
+Bu kez 100 km/s geliri, 600 km/s gelirinin %67,1'idir; yani daha hızlı bir araç gelirimizi önemli ölçüde artıracaktır.
+
+Ayrıca aynı 20 yolcuyu '''100''' km/s hızda mesafe ile geliri çizdiğimizde çok ilginç bir grafik elde ederiz:
+
+[[File:en/Manual/Game Mechanics/Distance vs income.png]]
+
+Yaklaşık 600 karede ''daha az'' para kazanmaya başlarsınız; çünkü kargonun yaşına bağlı değer düşüşü, daha uzun mesafeye bağlı değer artışını aşar. Ayrıca yukarıdaki denkleme dikkatle bakarsanız, bir kargoyu teslim etmek çok uzun sürerse zaman bileşeninin asla 31'in altına inmeyeceğini fark edersiniz. Bu, çok uzun rotalarda mesafe bileşeninin zaman bileşenini aştığı ve transitteki günleri fiilen anlamsız kıldığı anlamına gelir. (Bunun alınan rotanın mesafesi değil, yukarıda belirtildiği gibi iki istasyon arasındaki [http://en.wikipedia.org/wiki/Manhattan_distance ''en kısa'' mesafe] olduğunu unutmayın.)
+
+Ayrıca araç daha hızlıysa, gelirde düşüş olmadan daha büyük mesafelere ulaşılabilir. İşte '''300''' km/s hızdaki bir araç için çeşitli mesafelerde geliri gösteren bir örnek:
+
+[[File:en/Manual/Game Mechanics/Distance vs income2.png]]
+
+Benzer grafikler oyun içinde [http://www.tt-forums.net/viewtopic.php?f=33&t=31984 new graphs yaması] ile çizilebilir.
+
+==Ayrıca bakınız==
+
+*[[tr/Manual/Game Mechanics/Main Page#teslimat-odeme-oranlari|Oyun mekanikleri – Teslimat ödeme oranları]]
+*[https://smart-calculators.net/en-US/tools/openttd-cargo-income-calculator Etkileşimli kargo gelir hesaplayıcısı — economy.cpp'deki tamsayı formülünü yeniden üretir; transit dönemleri, zaman faktörü ve kare başına gelir dökümüyle]
