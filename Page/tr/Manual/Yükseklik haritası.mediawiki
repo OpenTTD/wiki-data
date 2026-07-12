@@ -1,0 +1,86 @@
+[[Translation:en/Manual/Heightmap]]
+{{tr/Manual/İçindekiler}}
+
+Bir '''yükseklik haritası''', piksel parlaklığına dayalı haritalar oluşturmak için kullanılabilecek bir bilgisayar görüntüsüdür (Bkz. [https://www.wikipedia.org/wiki/Heightmap wikipedia]).
+
+==Yükseklik Haritalarını Kullanma==
+Bir yükseklik haritası, en parlak beyazın ('''#FFFFFF''''e en yakın) haritanın en yüksek noktası, en koyu siyahın ('''#000000''''e en yakın) haritanın en alçak noktası kabul edildiği bir gri tonlamalı görüntü olarak düşünülebilir. Daha doğru bilgi için aşağıdaki [[#grayscale-table|gri tonlama tablosuna]] bakın.
+
+1:1 görüntü-harita dönüşümünde, görüntü dosyasındaki bir piksel 4 karenin bir köşesini temsil eder. Bu yüzden bir bütün kareyi alçaltmak/yükseltmek isterseniz, çevresindeki 2x2 pikseli daha parlak/daha koyu yapmanız gerekir.
+
+Harita kenarları deniz seviyesinde olmalıdır (en az bir kare); yükseklik haritası sınırı 2 piksel genişliğinde görülebilir.
+
+===Desteklenen dosya biçimleri===
+* [https://www.wikipedia.org/wiki/Bitmap_Image BMP]
+* [https://www.wikipedia.org/wiki/PNG PNG]
+
+===Örnek===
+<gallery>
+File:en/Manual/Heightmap img.png|Bu dosyadan bir yükseklik haritası oluşturursanız...
+File:en/Manual/Heightmap map.png|... elde edeceğiniz şey budur
+</gallery>
+
+==Gri tonlama tablosu==
+
+NOT: r27010'dan beri OpenTTD 255'e kadar yükseklik seviyelerini desteklemektedir (Deniz Seviyesi dahil); ve 8-bit palet aşağıdaki 16 seviyeyi üretmeye zorlanmaz.
+Bu nedenle 16'dan fazla yükseklik seviyesi etkinleştirildiğinde bu tablo geçersizdir.
+Seviyeler arasındaki renk aralığı artık ayarlarda belirtilen yükseklik seviyesi sayısına göre 255/n olarak bölünür... Veya Değer * yükseklik_seviyeleri / 255, (255 bir 8 bit değerin sınırıdır)...
+
+{|
+! hex
+! yükseklik
+|-
+| 00 - 0F
+| 0m (deniz)
+|-
+| 10 - 1F
+| 30m
+|-
+| 20 - 2F
+| 70m
+|-
+| 30 - 3F
+| 100m
+|-
+| 40 - 4F
+| 130m
+|-
+| 50 - 5F
+| 170m
+|-
+| 60 - 6F
+| 200m
+|-
+| 70 - 7F
+| 230m
+|-
+| 80 - 8F
+| 270m
+|-
+| 90 - 9F
+| 300m
+|-
+| A0 - AF
+| 330m
+|-
+| B0 - BF
+| 370m
+|-
+| C0 - CF
+| 400m
+|-
+| D0 - DF
+| 430m
+|-
+| E0 - EF
+| 470m
+|-
+| F0 - FF
+| 500m
+|}
+
+==Dış bağlantılar==
+*[http://www.tt-forums.net/viewtopic.php?t=27052 Nasıl Yapılır: Mükemmel Yükseklik Haritaları Oluşturun :)]
+*[http://www.tt-forums.net/download/file.php?id=92633 sootynz tarafından HowTo'nun güncellenmiş sürümü (Haz 2008) (Word Belgesi)]
+*[http://www.tt-forums.net/viewtopic.php?t=29323 Forumda yükseklik haritaları (mevcut ve istek üzerine)]
+*[https://github.com/bunburya/bother Bother - gerçek dünya yükseklik verilerinden yükseklik haritaları oluşturma aracı]
