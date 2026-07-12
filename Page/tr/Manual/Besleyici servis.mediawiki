@@ -1,0 +1,74 @@
+[[Translation:en/Manual/Feeder service]]
+{{tr/Manual/İçindekiler}}
+
+{{en/Note|Bu makale, tek yönlü bir besleyici servisi ''manuel'' olarak nasıl kuracağınızı açıklar. OpenTTD v1.4 veya sonrasında [[tr/Manual/Yolcu ve kargo dağılımı]] etkinse bu gerekli değildir.}}
+
+{{en/Note|[[tr/Manual/İki yönlü besleyici servis]] oluşturmak istiyorsanız oraya bakın. Bu sayfada açıklanan yöntem yalnızca tek yönde çalışır.}}
+
+Bir '''besleyici servis''', basitçe, araçların kargo ile bir "röle" gerçekleştirdiği servistir. Örneğin bir otobüs, yolcuları kasaba dışındaki bir havaalanına aktarabilir; böylece harita boyunca uçurularak daha fazla gelir elde edilebilir.
+
+Belirli durumlarda araçlar, kârlı bir zincirin önemli parçaları olsalar bile [[tr/Manual/Besleyici serviste negatif gelir|negatif gelir]] gösteriyor gibi görünebilir.
+
+[[File:en/Manual/Feeder service.png|right|thumb|400px|Otobüsler yakındaki bir kasabadan yolcu ile bir havaalanını besliyor]]
+
+Örneğin yolcular otobüs durağına varır ve bir otobüs onları alır; otobüs onları genellikle yolcu kabul etmeyen kasaba dışındaki yerel havaalanına götürür. Otobüs havaalanında ''Aktar ve boş bırak'' olarak ayarlanmıştır; yolcular otobüsten iner ve onları alacak bir uçak bekler.
+
+Her olası güzergâh için noktadan noktaya bir servis kurmak her zaman mantıklı değildir. Genellikle hub tabanlı bir sistem daha mantıklıdır; çünkü ağınızdaki yükü azaltır ve yolcuların ile kargonun A'dan B'ye daha verimli hareket etmek için farklı taşımacılık türlerini kullanmasını sağlar. Aktarım düğmesi bunun içindir.
+
+==Bir aktarım güzergâhı nasıl kurulur==
+Diyelim ki kasabada bir [[tr/Manual/Havaalanları|havaalanı]] var ve kasaba merkezinden havaalanına yolcu getirmek için bir [[en/Manual/Base Set/Road Vehicles/Buses|otobüs]] kullanmak istiyorsunuz. Bu kolayca gerçekleştirilebilir:
+
+Öncelikle otobüs durağı, havaalanına doğrudan bitişik (dokunacak şekilde) inşa edilmelidir. İstasyonlar arasında boşluk varsa oyun otobüs durağı için farklı bir ad görüntüler ve aktarım çalışmaz. Veya istasyonu yerleştirirken CTRL tuşunu basılı tutun, istasyonu yerleştirmek istediğiniz yere tıklayın, ardından görünen listeden havaalanı istasyonunu seçin. Bunu nasıl yapacağınız hakkında daha fazla bilgi için bkz. [[tr/Manual/İstasyonlar#combining-stations|istasyonları birleştirme]].
+
+[[File:en/Manual/Feeder service wrong.png|none|frame|İki ayrı istasyon nedeniyle bu çalışmaz]]
+
+[[tr/Manual/İnşaat|Güzergâhı]] normal şekilde kurun ve yolcuların uçuş için havaalanında beklemesini söylemek için ''Aktar'' düğmesini seçin. Otobüsün uçağın yolcularını çalmasını önlemek için ayrıca ''Boşalt''ı seçin. OpenTTD 0.7.0'dan itibaren açılır menülerden ''Yükleme yapma'' ve ''Aktar''ı seçin. Talimat artık ''Aktar ve Boş Bırak'' okur.
+
+[[File:en/Manual/Feeder service correct.png|none|frame|Doğru kurulduğunda istasyon artık otobüs ve uçak simgelerini görüntüler]]
+
+Bu şekilde otobüs her zaman yolcuları daha ileri taşıma için havaalanına taşır.
+
+==Daha karmaşık bir sistem nasıl kurulur==
+[[File:en/Manual/Complex feeder system.png|right|thumb|400px|Karmaşık besleyici sistemi. Otobüsler yolcuları yakındaki bir tren istasyonuna getirir. Servis treni onları alır ve havaalanına taşır.]]
+''Aktarım''ı ''tam yükle'' ve ''boşalt'' (veya sırasıyla ''yükleme yapma'') ile birleştirebildiğinizi fark etmiş (ve nedenini merak etmiş) olabilirsiniz. Bu, daha karmaşık besleyici servisler kurmak için kullanılabilir.
+Yukarıdaki örnekteki aynı havaalanına sahip olduğunuzu hayal edin. Bu havaalanın etrafında bir dizi [[tr/Manual/Kasabalar|kasaba]] vardır ve yolcu toplamak için tüm köylerden geçen bir servis [[tr/Manual/Trenler|treni]] istersiniz.
+
+* İlk köy normal (işaretlenmemiş) bir talimat alır ve böylece bir miktar insan biner.
+* İkinci köyde insanların binmesini, kimsenin inmemesini istersiniz. Bu yüzden yolcuları boşaltan ancak ardından yeniden yükleyen bir ''aktar ve kargo al'' talimatı ayarlarsınız; yani: Yalnızca Al.
+* Sonraki tüm duraklar aynı talimatı alır.
+* Havaalanı ''aktar ve boş bırak'' alır.
+
+Bu şekilde tüm duraklardan tüm insanlar havaalanında indirilir ve uçaklarına biner.
+
+Başka bir çekici yön, kasabanın her yerinden yolcu almak için yerel bir otobüs ağı kullanarak merkezi bir tren istasyonuna götürmektir. Aktar ve kargo al, bir aracın birkaç bölgesel istasyondan kargo alıp ardından gerçek hayattaki trenler gibi uzak bir varış noktasına teslim etmesi gerektiğinde de yararlıdır.
+
+=== Karmaşık bir besleyici servisi hızlandırma ===
+[[File:en/Manual/No unload take cargo.png|right]]
+'''Sürüm 0.7.0''''dan itibaren servis vagonlarınıza tüm köylerde ''Boşaltma yapma ve kargo al'' talimatı verebilirsiniz. Bu, ''aktar ve kargo al'' ile aynı şeyi yapar (yukarıdaki örneğe bakın); ancak yolcuların inmesini (yani ''aktarım'') ve yeniden binmesini engeller. Bu, besleyici servisi daha da hızlı ve daha gerçekçi yapar; çünkü tren yalnızca yeni yolcuları alırken önceki istasyonlardan gelen yolcular içinde kalır.
+{{en/Feature|0.7}}
+
+
+== Dağıtıcı servis ==
+
+
+[[File:en/Manual/Distributor-food.png|right|thumb|400px|Gıda için dağıtıcı servis]]
+
+[[File:en/Manual/Distributor-service.png|right|thumb|400px|Mühendislik malzemeleri için dağıtıcı servis]]
+
+
+Bir dağıtıcı servis, besleyici servisin tersidir. Kargo bir dağıtıcı istasyona aktarılır ve son varış noktasına taşıyan bir veya daha fazla yerel servis tarafından alınır. Tipik olarak kaynaktan aktarım istasyonuna güzergâh mesafenin çoğunu kapsar ve en çok parayı kazandırır. Ancak sıradan aktarım servislerinde olduğu gibi gelir, son teslimatı yapan araçlar adına sayılabilir.
+
+Dağıtıcı servisler yolcular için pek mantıklı değildir; ancak bazı durumlarda kargo teslimatları için çok yararlıdır:
+
+* [[tr/Manual/İklimler#sub-arctic|Yarı-arktik]] ve [[tr/Manual/İklimler#sub-tropical|yarı-tropik]] iklimlerde bazı kasabalar büyümek için aylık teslimatlar gerektirir. Gıda veya su gibi kargo daha az sıklıkla geliyorsa, kasaba yakınındaki bir istasyona aktarmak ve bir kamyonun onu varış noktasına teslim etmesi mantıklıdır. Kamyon tipik olarak kargo partisini kaynağından taşıyan araçtan çok daha düşük kapasiteye sahip olduğundan, teslimat zaman içinde daha eşit yayılır.
+
+* [[en/Community/NewGRF/FIRS|FIRS ekonomisinde]] bazı endüstriler üretimlerini büyük ölçüde artırmak için küçük miktarda kargo (mühendislik malzemeleri gibi) gerektirir. Limitin üzerinde sağlanan kargo hâlâ kabul edilir; ancak etkin olarak boşa gider; çünkü diğer endüstrileri güçlendirmek için kullanılabilir. Bir dağıtım servisi büyük bir partiyi yakındaki birkaç endüstri arasında bölebilir. Ayrıca bkz. [[en/Community/NewGRF/FIRS#feeder-systems]].
+
+* Bazı haritalarda yalnızca birkaç tedarikçi (ör. [[en/Manual/Base Set/Industries/Gold Mine|altın madenleri]]) olabilir; ancak tedarikçilerden uzak kümelenmiş birçok, çok sayıda tüketici (ör. [[en/Manual/Base Set/Industries/Bank|bankalar]]) olabilir. Tüketicilerin tümüne verimli bir şekilde hizmet vermek istiyorsanız, kargoyu tüketiciler arasında eşit bölmek için bir dağıtıcı servis kullanmak, birçok servisin kargoyu tedarikçiden tüketiciye doğrudan bireysel teslim etmesinden daha iyidir.
+
+== Besleyici sistemler inşa eden YZ'ler ==
+* [http://www.tt-forums.net/viewtopic.php?f=65&t=41518 PAXLink] havaalanlarını yolcu ile beslemek için yerel otobüsler kullanır.
+
+[[Category:tr/Manual/Playing]]
+[[Category:tr/Manual/Vehicles]]
+[[Category:tr/Manual/Settings & Preferences]]
