@@ -1,0 +1,122 @@
+[[Translation:en/Manual/Dedicated server]]
+{{tr/Manual/İçindekiler}}
+[[File:en/Manual/Dedicated server.png|right|frame|Özel sunucu penceresi]]Bir '''özel sunucu''', yerel bir istemcinin oyuna katılmadığı bir OpenTTD ağ oyunu [[tr/Manual/Sunucu|sunucusudur]]. Bir özel sunucu bir bilgisayarda arka planda çalışabilir.
+
+==Özel sunucu başlatma==
+OpenTTD yürütülebilir dosyasını {{en/C|-D|}} (büyük D!) [[tr/Manual/Komut satırı]] seçeneğiyle çalıştırın.
+
+Belirli bir kayıt dosyasını yüklemek için {{en/C|-g savename|}} ekleyin.
+
+
+===Windows'ta===
+Yöntem 1:
+*{{en/C|openttd.exe|}} için bir kısayol oluşturun
+*Kısayola sağ tıklayın ve Özellikler'e tıklayın
+*Hedef satırının sonuna {{en/C|-D|}} ekleyin
+*Uygula'ya tıklayın
+*Kısayolu çalıştırın
+
+
+Yöntem 2:
+*Başlat menüsünde Çalıştır'a tıklayın
+*Şunu girin: {{en/C|"c:\(openttd yolu)\openttd.exe" -D|}}
+*Tamam'a tıklayın
+
+===Linux'ta===
+*Bir terminalde {{en/C|openttd -D|}} çalıştırın. Sunucuya SSH ile bağlanıyorsanız ve oturumu kapattığınızda oyunun çalışmaya devam etmesini istiyorsanız [http://www.gnu.org/software/screen/ GNU Screen] veya [http://dtach.sourceforge.net/ dtach] kullanmalısınız.
+
+OpenTTD'yi -f seçeneğiyle de başlatabilirsiniz. Bu, sürecin arka planda çalışacağı anlamına gelir; ancak konsol kullanılamaz. Tüm çıktı openttd.log dosyasına gönderilir. Olayları izlemek için tail -f openttd.log ile günlüğü görüntüleyebilirsiniz.
+
+===OS/2'de===
+*{{en/C|dedicated.cmd|}} dosyasını çalıştırın. {{en/C|openttd -D|}} çalıştırırsanız bir konsol penceresi görmezsiniz ve programa komut veremezsiniz.
+
+===Mac OS X'te===
+*Terminal'i açın.
+*OpenTTD'nin bulunduğu dizine cd yapın
+*cd OpenTTD.app/Contents/MacOS/ yazın
+*./openttd -D yazın
+*OpenTTD Özel Sunucu modunda başlamalıdır.
+
+===Docker.io'da ===
+* Daha fazla ayrıntı için bkz. https://registry.hub.docker.com/r/bateau/openttd/
+
+==Sunucuyu yapılandırma==
+Oyun seçeneklerini değiştirmenin 3 yolu vardır:
+*Tek oyunculu bir oyun başlatın, ayarları değiştirin ve oyunu kapatın.
+*Sunucu çalışırken kontrol etmek için [[tr/Manual/Konsol#server-commands|konsol komutlarını]] kullanın.
+*[[en/Archive/Manual/Settings/Openttd.cfg]] dosyasını elle düzenleyin. Bazı yardım için bkz. [[en/Archive/Manual/Settings/Diff custom]].
+Kullanılabilir Araçlar:
+*[http://www.tt-forums.net/viewtopic.php?f=29&t=33967 Web Arayüzü]
+*[http://olex.biz/en/software/spiele/openttd-webconfig OpenTTD WebConfig]
+
+
+[[en/Archive/Manual/Settings/Openttd.cfg]] dosyasının Ağ bölümünde ağ ayarlarını değiştirin:
+*[[en/Archive/Manual/Settings/Lan internet]] değerini 0 yapın.
+*Sunucuyu tanımlayabilmek için [[en/Archive/Manual/Settings/Server name|Sunucu adını]] değiştirin,
+*[[en/Server list|Sunucu listesinde]] görünmesi için [[en/Archive/Manual/Settings/Server advertise]] değerini true yapın
+*Birden fazla ağ arayüzünüz varsa [[en/Archive/Manual/Settings/Server bind ip]] değerini ayarladığınızdan emin olun.
+*Bir yönlendiricinin arkasındaysanız, [[en/Archive/Manual/Settings/Server port]] ile belirtilen bağlantı noktasını (hem TCP hem UDP) yönlendirdiğinizden emin olun
+
+==Sunucuyu rcon ile kontrol etme==
+Özel sunucuyu [[tr/Manual/Konsol#server-commands|rcon]] komutlarını kabul edecek şekilde yapılandırın:
+*Özel sunucu penceresinde {{en/C|rcon_pw <password>|}} yazın.
+:Örnek: {{en/C|rcon_pw x8na7f|}}
+
+
+Sunucuya istemci olarak bağlanın:
+*OpenTTD'yi normal şekilde başlatın.
+*Çoklu oyuncu listesinde sunucunuzu bulun ve bağlanın.
+*Konsolu açın (~ tuşu).
+*{{en/C|rcon <password> "<command>"|}} yazın.
+:Örnek: {{en/C|rcon x8na7f "kick 5"|}}
+
+==Çevrimiçi içerik yükleme==
+Çevrimiçi içerik (NewGRF'ler) sunucuya konsoldan {{en/C|content|}} komutu kullanılarak eklenebilir. Bu, bağımlılıkları ve güncellemeyi içerdiği için elle yüklemeye tercih edilir.
+
+*Öncelikle kullanılabilir içerik listesini içerik sunucusundan yüklemeniz gerekir:
+:{{en/C|content update|}}
+:Konsolda "Content server connection closed" yazdırılana kadar bekleyin.
+
+*İçeriğinizi bulun
+:{{en/C|content state [filter]|}}
+:Bu, {{en/C|filter|}} ile eşleşen tüm içeriği listeler. Filtreyi atarsanız sunucudaki tüm içeriği listeler.
+
+*Ardından önceki komutun çıktısında listelenen ilk sayı olan kimliğini kullanarak indirilecek içeriği seçin:
+:{{en/C|content select 2947|}}
+
+*{{en/C|content select|}} komutunu tekrarlayarak daha fazla içerik ekleyebilirsiniz.
+
+*Ardından seçili tüm içeriği indirin:
+:{{en/C|content download|}}
+
+Not: Bu içeriği etkinleştirmez; kullanmak için oyun ayarlarını değiştirmeniz gerekir.
+
+==Oyun yükleme==
+Özel sunucu penceresinde (veya rcon ile):
+*Geçerli dizinin dosyalarını listelemek için {{en/C|ls|}} yazın; her birinin yanında aşağıda {{en/C|<number>|}}'ı temsil eden bir sayı olacaktır.
+*O dizine gitmek için {{en/C|cd <number>|}} yazın.
+*O dosyayı yüklemek için {{en/C|load <number>|}} yazın.
+
+*Kayıtlı oyunları ve senaryoları {{en/C|-g "<filename>"|}} komut satırı seçeneğiyle de yükleyebilirsiniz.
+:Örnek: {{en/C|openttd.exe -D -g "scenario/echo.scn"|}}.
+
+== Oyununuzu otomatik başlatma/durdurma ve kaydetme ==
+Docker çalıştırmak istemiyorsanız: Ubuntu/debian'da özel sunucunuzu çalıştırın; bir init.d betiği indirip yükleyebilirsiniz
+Aşağıdaki işlevleri elde edersiniz:
+* Sunucu kutunuz açıldığında otomatik başlatma
+* Sunucu kutunuz kapatıldığında otomatik kapatma
+* Tanımlı bir aralıkta oyununuzu otomatik kaydetme
+Daha fazla işlev, yükleme kılavuzu ve indirme için: https://bitbucket.org/frodus/openttd-init
+
+Hazır bir docker konteyneriyle openttd için test edilmiş ve çalışan bir ortam elde edersiniz.
+Ubuntu 14.04 veya daha yenisinde şunu çalıştırabilirsiniz: sudo apt-get install docker.io ve ardından aşağıdaki URL'deki belgelere bakın
+https://registry.hub.docker.com/r/bateau/openttd/
+Bunun 3. taraf tarafından paketlenmiş, önceden yapılandırılmış bir sanal makine olduğunu unutmayın.
+
+
+==Ayrıca bakınız==
+*[[en/Archive/Manual/Settings/Autoclean companies|Şirketleri otomatik temizleme]] — bir oyuncu oyun sırasında oturumu kapattığında ve bir şirket etkin değil hale geldiğinde ne olacağını belirtmek için
+*Özel Sunucular için Güvenlik Duvarları hakkında kısa bir giriş [http://www.uk2.net/blog/why-is-a-firewall-important-for-your-dedicated-server-2/]
+
+[[Category:tr/Manual/Multiplayer]]
+[[Category:tr/Manual/Tutorial]]
